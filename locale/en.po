@@ -224,6 +224,9 @@ msgstr ""
 msgid "Automation"
 msgstr ""
 
+msgid "Automation: Jobs"
+msgstr ""
+
 msgid "Automation: Notifications"
 msgstr ""
 
@@ -809,6 +812,9 @@ msgid "Escalation time"
 msgstr ""
 
 msgid "Event"
+msgstr ""
+
+msgid "Event Based"
 msgstr ""
 
 msgid "Events"
@@ -2473,6 +2479,9 @@ msgstr ""
 msgid "is to large (max {0})."
 msgstr ""
 
+msgid "Jobs"
+msgstr ""
+
 msgid "Keywords"
 msgstr ""
 
@@ -2504,6 +2513,9 @@ msgid "Last Login"
 msgstr ""
 
 msgid "Last Name"
+msgstr ""
+
+msgid "Last Run"
 msgstr ""
 
 msgid "Legend"
@@ -2904,6 +2916,11 @@ msgstr ""
 
 msgid "Number"
 msgstr ""
+
+#, fuzzy
+#| msgid "Number of Config Items"
+msgid "Number of Actions"
+msgstr "Number of Assets"
 
 msgid "Number of Config Items"
 msgstr "Number of Assets"
@@ -3614,6 +3631,9 @@ msgid "Ticket: Types"
 msgstr ""
 
 msgid "Ticket unlocked."
+msgstr ""
+
+msgid "Time Based"
 msgstr ""
 
 msgid "Title"

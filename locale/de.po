@@ -228,6 +228,11 @@ msgstr "zu ändernde Attribute:"
 msgid "Automation"
 msgstr "Automatisierung"
 
+#, fuzzy
+#| msgid "Automation"
+msgid "Automation: Jobs"
+msgstr "Automatisierung"
+
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
@@ -816,6 +821,11 @@ msgstr "Eskalationszeit"
 
 msgid "Event"
 msgstr "Event"
+
+#, fuzzy
+#| msgid "Events"
+msgid "Event Based"
+msgstr "Events"
 
 msgid "Events"
 msgstr "Events"
@@ -2620,6 +2630,9 @@ msgstr "Ungültiges Datum bei 'Warten bis'"
 msgid "is to large (max {0})."
 msgstr ""
 
+msgid "Jobs"
+msgstr ""
+
 msgid "Keywords"
 msgstr "Schlagworte"
 
@@ -2652,6 +2665,11 @@ msgstr "Letzte Anmeldung"
 
 msgid "Last Name"
 msgstr "Nachname"
+
+#, fuzzy
+#| msgid "Last Login"
+msgid "Last Run"
+msgstr "Letzte Anmeldung"
 
 msgid "Legend"
 msgstr "Legende"
@@ -3051,6 +3069,11 @@ msgstr "Keine Version verfügbar"
 
 msgid "Number"
 msgstr "Nummer"
+
+#, fuzzy
+#| msgid "Number of ratings"
+msgid "Number of Actions"
+msgstr "Anzahl Bewertungen"
 
 msgid "Number of Config Items"
 msgstr "Anzahl Assets"
@@ -3772,6 +3795,9 @@ msgstr "Ticket: Typen"
 
 msgid "Ticket unlocked."
 msgstr "Ticket entsperrt."
+
+msgid "Time Based"
+msgstr ""
 
 msgid "Title"
 msgstr "Titel"
