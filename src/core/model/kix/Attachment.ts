@@ -7,7 +7,14 @@
  * --
  */
 
-export class Attachment {
+import { KIXObject } from "./KIXObject";
+import { KIXObjectType } from "./KIXObjectType";
+
+export class Attachment extends KIXObject {
+
+    public ObjectId: string | number;
+
+    public KIXObjectType: KIXObjectType = KIXObjectType.ATTACHMENT;
 
     public ID: number;
 
@@ -28,8 +35,10 @@ export class Attachment {
     public Disposition: string;
 
     public constructor(attachment?: Attachment) {
+        super(attachment);
         if (attachment) {
             this.ID = attachment.ID;
+            this.ObjectId = this.ID;
             this.ContentAlternative = attachment.ContentAlternative;
             this.ContentID = attachment.ContentID;
             this.ContentType = attachment.ContentType;
@@ -38,6 +47,17 @@ export class Attachment {
             this.FilesizeRaw = attachment.FilesizeRaw;
             this.Content = attachment.Content;
             this.Disposition = attachment.Disposition;
+
+            this.prepareContentType();
+        }
+    }
+
+    public prepareContentType(): void {
+        if (this.ContentType && this.ContentType.indexOf(';') !== -1) {
+            const attributes = this.ContentType.split(';');
+            if (attributes.length) {
+                this.ContentType = attributes[0].trim();
+            }
         }
     }
 

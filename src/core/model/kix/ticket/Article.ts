@@ -10,10 +10,10 @@
 import { KIXObject } from '../KIXObject';
 import { ArticleFlag } from './ArticleFlag';
 import { ArticleReceiver } from './ArticleReceiver';
-import { Attachment } from './Attachment';
 import { SenderType } from './SenderType';
 import { KIXObjectType } from '..';
 import { DynamicField } from '../dynamic-field';
+import { Attachment } from '../Attachment';
 
 export class Article extends KIXObject<Article> {
 

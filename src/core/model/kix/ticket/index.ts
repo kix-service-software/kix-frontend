@@ -12,7 +12,6 @@ export { Article } from './Article';
 export { ArticleFlag } from './ArticleFlag';
 export { ArticleReceiver } from './ArticleReceiver';
 export { ArticleProperty } from './ArticleProperty';
-export { Attachment } from './Attachment';
 export { SenderType } from './SenderType';
 export { StateType } from './StateType';
 export { Ticket } from './Ticket';

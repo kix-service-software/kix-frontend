@@ -8,12 +8,12 @@
  */
 
 import {
-    FAQArticleProperty, Attachment, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions, FAQVisibility,
+    FAQArticleProperty, FAQArticleAttachmentLoadingOptions, CreateFAQVoteOptions, FAQVisibility,
 } from "../../../model/kix/faq";
 import { KIXObjectService } from "./KIXObjectService";
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    KIXObjectSpecificCreateOptions, Error
+    KIXObjectSpecificCreateOptions, Error, Attachment
 } from "../../../model";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
 import { LoggingService } from "../LoggingService";

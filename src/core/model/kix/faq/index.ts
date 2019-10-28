@@ -7,7 +7,6 @@
  * --
  */
 
-export { Attachment } from './Attachment';
 export { FAQArticle } from './FAQArticle';
 export { FAQHistory } from './FAQHistory';
 export { FAQVote } from './FAQVote';
