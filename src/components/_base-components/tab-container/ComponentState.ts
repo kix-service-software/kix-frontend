@@ -22,7 +22,7 @@ export class ComponentState extends AbstractComponentState {
         public contextType: ContextType = null,
         public showSidebar: boolean = false,
         public contentActions: IAction[] = [],
-        public loading: boolean = true
+        public prepared: boolean = false
     ) {
         super();
     }

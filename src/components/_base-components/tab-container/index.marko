@@ -13,13 +13,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         contentActions=state.contentActions
         title=state.activeTabTitle>
         <@headerContent>
-            <if(!state.loading)>
+            <if(state.prepared)>
                 <ul.tab-list class={
                     "show-object": state.tabWidgets
                 }>
                     <for|tab| of=state.tabWidgets>
                         <li
-                            title=state.translations[tab.configuration.title]
+                            title=component.getTitle(tab)
                             class={
                                                         active: component.isActiveTab(tab.instanceId)
                                                     }
@@ -27,7 +27,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             <if(component.getIcon(tab))>
                                 <icon icon=component.getIcon(tab) showUnknown=false/>
                             </if>
-                            <span>${state.translations[tab.configuration.title]}</span>
+                            <span>${component.getTitle(tab)}</span>
                         </li>
                     </for>
                 </ul>
