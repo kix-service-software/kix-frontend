@@ -60,8 +60,4 @@ export class MailFilterSetTableFactory extends TableFactory {
 
         return tableConfiguration;
     }
-
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
-    }
 }

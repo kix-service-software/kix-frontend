@@ -188,9 +188,7 @@ class LinkDialogComponent {
                 LinkObjectDialogContext.CONTEXT_ID, true, null, true
             );
             table.addColumns([
-                new DefaultColumnConfiguration(
-                    'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
-                )
+                TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
             ]);
 
             this.tableSubscriber = {

@@ -127,9 +127,8 @@ export class FAQArticleTableFactory extends TableFactory {
     }
 
     public getColumnFilterValues<T extends KIXObject>(
-        rows: IRow[], column: IColumn
+        rows: IRow[], column: IColumn, values: Array<[T, number]> = []
     ): Array<[T, number]> {
-        let values: Array<[T, number]> = [];
         if (column.getColumnId() === FAQArticleProperty.VOTES) {
             rows.forEach((r) => {
                 const cell = r.getCell(column.getColumnId());
@@ -151,6 +150,10 @@ export class FAQArticleTableFactory extends TableFactory {
                     } else {
                         values.push([vote as any, 1]);
                     }
+                }
+                const childRows = r.getChildren();
+                if (childRows && !!childRows.length) {
+                    this.getColumnFilterValues(childRows, column, values);
                 }
             });
         } else {

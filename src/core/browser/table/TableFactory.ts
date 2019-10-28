@@ -53,6 +53,11 @@ export abstract class TableFactory implements ITableFactory {
                     property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
                 );
                 break;
+            case 'LinkedAs':
+                config = new DefaultColumnConfiguration(
+                    property, true, false, true, false, 120, true, true, true, DataType.STRING
+                );
+                break;
             default:
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
         }
@@ -63,8 +68,9 @@ export abstract class TableFactory implements ITableFactory {
         return TableFactory.getColumnFilterValues(rows, column);
     }
 
-    public static getColumnFilterValues<T extends KIXObject = any>(rows: IRow[], column: IColumn): Array<[T, number]> {
-        const values: Array<[T, number]> = [];
+    public static getColumnFilterValues<T extends KIXObject = any>(
+        rows: IRow[], column: IColumn, values: Array<[T, number]> = []
+    ): Array<[T, number]> {
         rows.forEach((r) => {
             const cell = r.getCell(column.getColumnId());
             if (cell) {
@@ -90,6 +96,10 @@ export abstract class TableFactory implements ITableFactory {
                     }
                 });
 
+            }
+            const childRows = r.getChildren();
+            if (childRows && !!childRows.length) {
+                TableFactory.getColumnFilterValues(childRows, column, values);
             }
         });
 

@@ -69,7 +69,7 @@ export class PermissionsTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, null, tableColumns,  true, false, null, null,
+                KIXObjectType.USER, null, null, tableColumns, true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -84,6 +84,7 @@ export class PermissionsTableFactory extends TableFactory {
         let config;
         switch (property) {
             case PermissionProperty.RoleID:
+            case PermissionProperty.TYPE_ID:
                 config = new DefaultColumnConfiguration(
                     property, true, false, true, false, 150, true, true, true,
                     DataType.STRING, true, null, null, false
@@ -92,12 +93,6 @@ export class PermissionsTableFactory extends TableFactory {
             case 'ICON':
                 config = new DefaultColumnConfiguration(
                     property, false, true, false, false, null, false, false, false, undefined, false
-                );
-                break;
-            case PermissionProperty.TYPE_ID:
-                config = new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, true,
-                    DataType.STRING, true, null, null, false
                 );
                 break;
             case PermissionProperty.TARGET:
@@ -135,7 +130,7 @@ export class PermissionsTableFactory extends TableFactory {
                 );
                 break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }
