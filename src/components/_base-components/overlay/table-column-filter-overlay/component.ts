@@ -37,10 +37,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         } else {
             this.state.hasListFilter = false;
+            const filterText = this.column.getFilter()[0];
+            if (filterText) {
+                this.state.filterText = filterText;
+            }
             setTimeout(() => {
                 const inputElement = (this as any).getEl('column-filter-input');
                 if (inputElement) {
                     inputElement.focus();
+                    if (this.state.filterText) {
+                        inputElement.selectionStart = inputElement.selectionEnd = this.state.filterText.length;
+                    }
                 }
             }, 100);
         }

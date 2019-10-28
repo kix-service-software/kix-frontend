@@ -49,6 +49,8 @@ export enum KIXObjectType {
 
     DYNAMIC_FIELD = 'DynamicField',
 
+    EXEC_PLAN = 'ExecPlan',
+
     FAQ_ARTICLE = 'FAQArticle',
 
     FAQ_ARTICLE_ATTACHMENT = 'Attachment',
@@ -67,6 +69,8 @@ export enum KIXObjectType {
 
     GENERAL_CATALOG_CLASS = 'GeneralCatalogClass',
 
+    JOB = 'Job',
+
     LINK = 'Link',
 
     LINK_OBJECT = 'LINK_OBJECT',
@@ -74,6 +78,10 @@ export enum KIXObjectType {
     LINK_TYPE = 'LINK_TYPE',
 
     LOG_FILE = 'LogFile',
+
+    MACRO = 'Macro',
+
+    MACRO_ACTION = 'MacroAction',
 
     MAIL_ACCOUNT = 'MailAccount',
 

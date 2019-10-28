@@ -49,6 +49,14 @@ class Extension implements IAdminModuleExtension {
                             new UIComponentPermission('system/communication/notifications', [CRUD.CREATE], true),
                             new UIComponentPermission('system/communication/notifications/*', [CRUD.UPDATE], true)
                         ]
+                    ),
+                    new AdminModule(
+                        null, 'jobs', 'Translatable#Jobs', null,
+                        KIXObjectType.JOB, 'admin-jobs',
+                        [
+                            new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true),
+                            new UIComponentPermission('system/automation/jobs/*', [CRUD.UPDATE], true)
+                        ]
                     )
                 ]
             )

@@ -22,6 +22,10 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('admin-module-component', 'core/browser/modules/ui-modules/AdminUIModule', []),
         new UIComponent('system-module-component', 'core/browser/modules/ui-modules/SystemUIModule', [
             new UIComponentPermission('system/config/*', [CRUD.UPDATE], true)
+        ]),
+        new UIComponent('job-module-component', 'core/browser/modules/ui-modules/JobsUIModule', [
+            new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true),
+            new UIComponentPermission('system/automation/jobs/*', [CRUD.UPDATE], true)
         ])
     ];
 
@@ -73,7 +77,9 @@ class Extension implements IKIXModuleExtension {
             'notification/admin/table/notification-filter-cell-content',
             []
         ),
-        new UIComponent('edit-notification-dialog', 'notification/admin/dialogs/edit-notification-dialog', [])
+        new UIComponent('edit-notification-dialog', 'notification/admin/dialogs/edit-notification-dialog', []),
+
+        new UIComponent('admin-jobs', 'admin/jobs', []),
     ];
 
 }
