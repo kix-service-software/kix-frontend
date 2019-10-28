@@ -8,7 +8,7 @@
  */
 
 import { IKIXObjectFactory } from '../kix';
-import { Attachment } from '../../model/kix/faq';
+import { Attachment } from '../../model';
 
 export class FAQArticleAttachmentBrowserFactory implements IKIXObjectFactory<Attachment> {
 

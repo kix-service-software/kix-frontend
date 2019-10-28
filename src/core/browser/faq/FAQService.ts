@@ -10,11 +10,11 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty, TableFilterCriteria
+    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty, TableFilterCriteria, Attachment
 } from "../../model";
 import { ContextService } from "../context";
 import {
-    FAQArticleProperty, Attachment, FAQCategory, FAQCategoryProperty, FAQArticle,
+    FAQArticleProperty, FAQCategory, FAQCategoryProperty, FAQArticle,
     FAQArticleAttachmentLoadingOptions, FAQVote
 } from "../../model/kix/faq";
 import { SearchOperator } from "../SearchOperator";
