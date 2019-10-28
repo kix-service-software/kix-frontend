@@ -95,7 +95,7 @@ class TabLaneComponent implements IEventSubscriber {
             }
         }
 
-        this.state.loading = false;
+        this.state.prepared = true;
     }
 
     public onDestroy(): void {
@@ -195,8 +195,16 @@ class TabLaneComponent implements IEventSubscriber {
         }
     }
 
+    public getTitle(tab: ConfiguredWidget): string {
+        return this.tabTitles.has(tab.instanceId)
+            ? this.tabTitles.get(tab.instanceId)
+            : this.state.translations[tab.configuration.title];
+    }
+
     public getIcon(tab: ConfiguredWidget): string | ObjectIcon {
-        return this.tabIcons.has(tab.instanceId) ? this.tabIcons.get(tab.instanceId) : tab.configuration.icon;
+        return this.tabIcons.has(tab.instanceId)
+            ? this.tabIcons.get(tab.instanceId)
+            : tab.configuration.icon;
     }
 }
 
