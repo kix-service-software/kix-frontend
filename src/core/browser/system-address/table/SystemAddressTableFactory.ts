@@ -82,9 +82,4 @@ export class SystemAddressTableFactory extends TableFactory {
 
         return tableConfiguration;
     }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
-    }
 }

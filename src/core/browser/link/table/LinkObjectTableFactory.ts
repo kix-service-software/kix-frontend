@@ -51,7 +51,7 @@ export class LinkObjectTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(KIXObjectType.LINK_OBJECT,
-                null, 10, tableColumns,  true, false, null,
+                null, 10, tableColumns, true, false, null,
                 null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {
@@ -59,11 +59,6 @@ export class LinkObjectTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 
 }

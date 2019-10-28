@@ -47,7 +47,7 @@ export class FAQArticleHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns,  null, null, null, null,
+                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns, null, null, null, null,
                 TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {
@@ -55,11 +55,6 @@ export class FAQArticleHistoryTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 
 }

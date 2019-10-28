@@ -110,7 +110,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable?: boolean
+        property: string, value: string | number, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
         switch (property) {

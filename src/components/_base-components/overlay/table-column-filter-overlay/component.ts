@@ -58,7 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onDestroy(): void {
-        // nothing
+        TreeService.getInstance().removeTreeHandler(this.state.treeId);
     }
 
     private async prepareListFilter(objectType: KIXObjectType): Promise<void> {
@@ -78,13 +78,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const node = new TreeNode(fv[0], label, icon, null);
 
             const filter = this.column.getFilter();
-            const hasFilterValue = filter[1].some((f) => (f.value as []).some((v: any) => {
-                if (v instanceof KIXObject) {
-                    return v.equals(fv[0]);
-                } else {
-                    return v === fv[0];
-                }
-            }));
+            const hasFilterValue = filter && filter[1] && filter[1].some(
+                (f) => (f.value as []).some((v: any) => {
+                    if (v instanceof KIXObject) {
+                        return v.equals(fv[0]);
+                    } else {
+                        return v === fv[0];
+                    }
+                })
+            );
             if (hasFilterValue) {
                 node.selected = true;
             }

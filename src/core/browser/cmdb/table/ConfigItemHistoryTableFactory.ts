@@ -52,7 +52,7 @@ export class ConfigItemHistoryTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_HISTORY, null, null, tableColumns,  null, null, null, null,
+                KIXObjectType.CONFIG_ITEM_HISTORY, null, null, tableColumns, null, null, null, null,
                 TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {
@@ -60,11 +60,6 @@ export class ConfigItemHistoryTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 
 }

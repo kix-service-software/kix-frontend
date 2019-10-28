@@ -10,10 +10,10 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, TableConfiguration, TableHeaderHeight, TableRowHeight,
-    WidgetService, TableFactoryService, DefaultColumnConfiguration, TableEventData,
+    WidgetService, TableFactoryService, TableEventData,
     TableEvent, AbstractMarkoComponent
 } from '../../../core/browser';
-import { KIXObjectType, Link, KIXObject, WidgetType, ContextType, DataType } from '../../../core/model';
+import { KIXObjectType, Link, KIXObject, WidgetType, ContextType } from '../../../core/model';
 import { LinkUtil } from '../../../core/browser/link';
 import { EventService, IEventSubscriber } from '../../../core/browser/event';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
@@ -100,9 +100,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
                 if (table) {
                     table.addColumns([
-                        new DefaultColumnConfiguration(
-                            'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
-                        )
+                        TableFactoryService.getInstance().getDefaultColumnConfiguration(lot[1], 'LinkedAs')
                     ]);
 
                     objectsCount += objects.length;

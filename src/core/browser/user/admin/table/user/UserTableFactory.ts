@@ -100,9 +100,4 @@ export class UserTableFactory extends TableFactory {
 
         return tableConfiguration;
     }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
-    }
 }

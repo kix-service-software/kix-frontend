@@ -12,7 +12,7 @@ import { RoutingConfiguration } from "../../router";
 import { ConfigItemDetailsContext } from "../context";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
-    ToggleOptions, TableRowHeight, IColumnConfiguration
+    ToggleOptions, TableRowHeight
 } from "../../table";
 import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
 import { TableFactory } from "../../table/TableFactory";
@@ -113,10 +113,5 @@ export class ConfigItemTableFactory extends TableFactory {
 
         tableConfiguration.objectType = KIXObjectType.CONFIG_ITEM;
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 }

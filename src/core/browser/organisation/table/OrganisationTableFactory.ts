@@ -84,7 +84,7 @@ export class OrganisationTableFactory extends TableFactory {
                 config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
                 break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = super.getDefaultColumnConfiguration(property);
         }
         return config;
     }
