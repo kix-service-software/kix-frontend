@@ -95,37 +95,38 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
             if (objectOption) {
                 const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
-                if (treeHandler && !nodes) {
-                    nodes = treeHandler.getTree();
-                }
+                if (treeHandler) {
+                    const selectedNodes = [];
 
-                const selectedNodes = [];
-                if (nodes && !!nodes.length) {
-                    objectIds.forEach((oid) => {
-                        const node = this.findNode(oid, nodes);
-                        if (node) {
-                            node.selected = true;
-                            selectedNodes.push(node);
+                    if (!this.autocomplete) {
+                        if (!nodes) {
+                            nodes = treeHandler.getTree();
                         }
-                    });
-                    this.nodesChanged(selectedNodes);
-                }
-
-                if (this.autocomplete) {
-                    const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
-                    if (objects && !!objects.length) {
-                        nodes = [];
-                        for (const object of objects) {
-                            const node = await this.createTreeNode(object);
-                            node.selected = true;
-                            nodes.push(node);
-                            selectedNodes.push(node);
+                        if (nodes && !!nodes.length) {
+                            objectIds.forEach((oid) => {
+                                const node = this.findNode(oid, nodes);
+                                if (node) {
+                                    node.selected = true;
+                                    selectedNodes.push(node);
+                                }
+                            });
+                            this.nodesChanged(selectedNodes);
                         }
-                        this.nodesChanged(selectedNodes);
+                    } else {
+                        const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
+                        if (objects && !!objects.length) {
+                            for (const object of objects) {
+                                const node = await this.createTreeNode(object);
+                                node.selected = true;
+                                nodes.push(node);
+                                selectedNodes.push(node);
+                            }
+                            this.nodesChanged(selectedNodes);
+                        }
                     }
-                }
 
-                treeHandler.setSelection(selectedNodes, true);
+                    treeHandler.setSelection(selectedNodes, true, false, true);
+                }
             }
         }
     }
