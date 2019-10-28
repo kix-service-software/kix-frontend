@@ -63,18 +63,14 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public searchFinished<T extends KIXObject = KIXObject>(): void {
-        this.state.table = null;
-
-        setTimeout(() => {
-            const cache = SearchService.getInstance().getSearchCache();
-            if (cache) {
-                this.state.noSearch = false;
-                const category = SearchService.getInstance().getActiveSearchResultExplorerCategory();
-                this.initWidget(category ? category.objectType : cache.objectType, cache);
-            } else {
-                this.state.noSearch = true;
-            }
-        }, 100);
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            this.state.noSearch = false;
+            const category = SearchService.getInstance().getActiveSearchResultExplorerCategory();
+            this.initWidget(category ? category.objectType : cache.objectType, cache);
+        } else {
+            this.state.noSearch = true;
+        }
     }
 
     private async initWidget(
@@ -145,11 +141,13 @@ class Component implements IKIXObjectSearchListener {
 
             await this.prepareActions(table);
 
-            this.state.table = table;
-            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-            this.setActionsDirty();
+            setTimeout(() => {
+                this.state.table = table;
+                EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+                EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+                EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+                this.setActionsDirty();
+            }, 50);
         } else {
             this.state.resultIcon = null;
             const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
