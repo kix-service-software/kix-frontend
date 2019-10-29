@@ -60,7 +60,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             on-nodesChanged("treeValueChanged", dynamicValue)/>
                     </if>
                     <else-if(dynamicValue.isDate)>
-                        <span.dynamic-form-date-time-input class={
+                        <span.dynamic-form-date-input class={
                             between: dynamicValue.isBetween
                         }>
                             <input.input-style
@@ -71,7 +71,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 value=dynamicValue.date
                                 disabled=(dynamicValue.readonly && !dynamicValue.changeable)
                                 on-change("setDateValue", dynamicValue)/>
-                            <if(dynamicValue.isBetweenDate)>
+                            <if(dynamicValue.isBetween)>
                                 <div.between-space>
                                     <translation-string pattern="Translatable#and"/>
                                 </div>
