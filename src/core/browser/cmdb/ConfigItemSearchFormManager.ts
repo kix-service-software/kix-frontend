@@ -11,7 +11,7 @@ import { AbstractDynamicFormManager } from "../form";
 import {
     KIXObjectType, VersionProperty, KIXObjectProperty, ConfigItemProperty, CRUD, InputFieldTypes,
     TreeNode, ObjectIcon, KIXObjectLoadingOptions, InputDefinition, FilterCriteria, FilterDataType,
-    FilterType, GeneralCatalogItem, ConfigItem
+    FilterType, GeneralCatalogItem, ConfigItem, Contact, Organisation
 } from "../../model";
 import { LabelService } from "../LabelService";
 import { SearchProperty } from "../SearchProperty";
@@ -176,7 +176,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
             || property === KIXObjectProperty.CHANGE_TIME;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
         switch (property) {
             case ConfigItemProperty.CLASS_ID:
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
@@ -191,10 +191,23 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
 
                 if (input) {
                     if (input.Type === 'GeneralCatalog') {
-                        const items = await this.getGeneralCatalogItems(input);
+                        const items = await this.getGeneralCatalogItems(input, objectIds);
                         return items.map((item) => new TreeNode(
                             item.ItemID, item.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
                         ));
+                    } else if (input.Type === 'Organisation' && objectIds) {
+                        const organisations = await KIXObjectService.loadObjects<Organisation>(
+                            KIXObjectType.ORGANISATION, objectIds
+                        );
+                        return await KIXObjectService.prepareTree(organisations);
+                    } else if (input.Type === 'Contact' && objectIds) {
+                        const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds);
+                        return await KIXObjectService.prepareTree(contacts);
+                    } else if (input.Type === 'CIClassReference' && objectIds) {
+                        const items = await KIXObjectService.loadObjects<ConfigItem>(
+                            KIXObjectType.CONFIG_ITEM, objectIds
+                        );
+                        return await KIXObjectService.prepareTree(items);
                     }
                 }
         }
@@ -244,7 +257,9 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         return tree;
     }
 
-    private async getGeneralCatalogItems(input: InputDefinition): Promise<GeneralCatalogItem[]> {
+    private async getGeneralCatalogItems(
+        input: InputDefinition, objectIds?: Array<string | number>
+    ): Promise<GeneralCatalogItem[]> {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING,
@@ -253,7 +268,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         ]);
 
         const items = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-            KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
+            KIXObjectType.GENERAL_CATALOG_ITEM, objectIds, loadingOptions, null, false
         );
         return items;
     }

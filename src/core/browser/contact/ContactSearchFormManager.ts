@@ -8,7 +8,9 @@
  */
 
 import { AbstractDynamicFormManager } from "../form";
-import { KIXObjectType, ContactProperty, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode } from "../../model";
+import {
+    KIXObjectType, ContactProperty, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode, Organisation
+} from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { LabelService } from "../LabelService";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
@@ -104,8 +106,20 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
         return true;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        const nodes = await ContactService.getInstance().getTreeNodes(property, true);
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        let nodes = [];
+        switch (property) {
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                if (objectIds) {
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, objectIds
+                    );
+                    nodes = await KIXObjectService.prepareTree(organisations);
+                }
+                break;
+            default:
+                nodes = await ContactService.getInstance().getTreeNodes(property, true);
+        }
         return nodes;
     }
 

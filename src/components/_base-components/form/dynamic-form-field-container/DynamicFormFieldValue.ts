@@ -257,7 +257,7 @@ export class DynamicFieldValue {
                         currentValues.push(new TreeNode(object.ObjectId, label, icon));
                     }
                 }
-            } else if (this.isDropdown) {
+            } else if (this.isDropdown && !this.isAutocomplete) {
                 const valueNodes = this.valueTreeHandler.getTree();
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
                 for (const v of selectValues) {
@@ -266,6 +266,10 @@ export class DynamicFieldValue {
                         currentValues.push(node);
                     }
                 }
+            } else if (this.isDropdown && this.isAutocomplete) {
+                const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
+                const nodes = await this.manager.getTreeNodes(this.value.property, selectValues);
+                this.valueTreeHandler.setSelection(nodes, true, false, true);
             } else if (this.isDate) {
                 if (this.isBetween) {
                     const date = new Date(this.value.value[0]);

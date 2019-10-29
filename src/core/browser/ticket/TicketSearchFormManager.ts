@@ -8,7 +8,9 @@
  */
 
 import { AbstractDynamicFormManager } from "../form";
-import { KIXObjectType, TicketProperty, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode } from "../../model";
+import {
+    KIXObjectType, TicketProperty, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode, Contact, Organisation
+} from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
@@ -182,8 +184,26 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
         return true;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        const nodes = await TicketService.getInstance().getTreeNodes(property, true);
+    public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        let nodes = [];
+        switch (property) {
+            case TicketProperty.CONTACT_ID:
+                if (objectIds) {
+                    const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, objectIds);
+                    nodes = await KIXObjectService.prepareTree(contacts);
+                }
+                break;
+            case TicketProperty.ORGANISATION_ID:
+                if (objectIds) {
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, objectIds
+                    );
+                    nodes = await KIXObjectService.prepareTree(organisations);
+                }
+                break;
+            default:
+                nodes = await TicketService.getInstance().getTreeNodes(property, true, objectIds);
+        }
         return nodes;
     }
 
