@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-10-29 13:31+0000\n"
+"PO-Revision-Date: 2019-10-29 13:51+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -228,10 +228,8 @@ msgstr "zu ändernde Attribute:"
 msgid "Automation"
 msgstr "Automatisierung"
 
-#, fuzzy
-#| msgid "Automation"
 msgid "Automation: Jobs"
-msgstr "Automatisierung"
+msgstr "Automatisierung: Jobs"
 
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
@@ -822,10 +820,8 @@ msgstr "Eskalationszeit"
 msgid "Event"
 msgstr "Event"
 
-#, fuzzy
-#| msgid "Events"
 msgid "Event Based"
-msgstr "Events"
+msgstr "Eventgesteuert"
 
 msgid "Events"
 msgstr "Events"
@@ -2666,10 +2662,8 @@ msgstr "Letzte Anmeldung"
 msgid "Last Name"
 msgstr "Nachname"
 
-#, fuzzy
-#| msgid "Last Login"
 msgid "Last Run"
-msgstr "Letzte Anmeldung"
+msgstr "Letzte Ausführung"
 
 msgid "Legend"
 msgstr "Legende"
@@ -3070,10 +3064,8 @@ msgstr "Keine Version verfügbar"
 msgid "Number"
 msgstr "Nummer"
 
-#, fuzzy
-#| msgid "Number of ratings"
 msgid "Number of Actions"
-msgstr "Anzahl Bewertungen"
+msgstr "Anzahl Aktionen"
 
 msgid "Number of Config Items"
 msgstr "Anzahl Assets"
@@ -3797,7 +3789,7 @@ msgid "Ticket unlocked."
 msgstr "Ticket entsperrt."
 
 msgid "Time Based"
-msgstr ""
+msgstr "Zeitgesteuert"
 
 msgid "Title"
 msgstr "Titel"
