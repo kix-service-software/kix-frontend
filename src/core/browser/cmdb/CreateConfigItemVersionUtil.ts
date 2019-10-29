@@ -8,7 +8,8 @@
  */
 
 import {
-    VersionProperty, FormField, FormFieldOptions, InputFieldTypes, IFormInstance, DateTimeUtil, Attachment
+    VersionProperty, FormField, FormFieldOptions, InputFieldTypes, IFormInstance, DateTimeUtil,
+    Attachment, ConfigItemProperty
 } from "../../model";
 import { FormService } from "../form";
 import { BrowserUtil } from "../BrowserUtil";
@@ -40,6 +41,8 @@ export class CreateConfigItemVersionUtil {
                 case VersionProperty.INCI_STATE_ID:
                     parameter.push([property, value]);
                     break;
+                case ConfigItemProperty.LINKS:
+                    continue;
                 default:
                     data = await CreateConfigItemVersionUtil.prepareData(data, formField, formInstance);
             }
