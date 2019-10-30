@@ -30,7 +30,7 @@ export class WebformDetailsContext extends Context {
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const webform = await this.getObject<Webform>();
-        const objectName = await TranslationService.translate('Translatable#Webform');
+        const objectName = await TranslationService.translate('Translatable#Communication: Webform');
         const suffix = webform && webform.title ? `: ${webform.title}` : '';
         return new BreadcrumbInformation(
             this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}${suffix}`

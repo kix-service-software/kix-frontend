@@ -51,7 +51,8 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldValue(true)
                 ),
                 new FormField(
-                    'Translatable#Agent Preferences Tooltip', NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP, null
+                    'Translatable#Agent Preferences Tooltip', NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP,
+                    null, false, 'Translatable#Helptext_Admin_NotificationCreate_PreferencesTooltip'
                 ),
                 new FormField(
                     'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
@@ -61,8 +62,8 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Validity', KIXObjectProperty.VALID_ID,
                     'object-reference-input', true, 'Translatable#Helptext_Admin_NotificationCreate_Validity', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ], new FormFieldValue(1)
                 )
             ]);
             const eventGroup = new FormGroup('Translatable#Events', [
@@ -84,61 +85,61 @@ export class Extension implements IConfigurationExtension {
                 new FormField(
                     'Translatable#Send to', NotificationProperty.DATA_RECIPIENTS, 'default-select-input', false,
                     'Translatable#Helptext_Admin_NotificationCreate_SendTo', [
-                        new FormFieldOption(DefaultSelectInputFormOption.NODES, [
-                            new TreeNode(NotificationRecipientTypes.AGENT_OWNER, 'Translatable#TicketOwner'),
-                            new TreeNode(
-                                NotificationRecipientTypes.AGENT_RESPONSIBLE,
-                                'Translatable#TicketResponsible'
-                            ),
-                            new TreeNode(
-                                NotificationRecipientTypes.AGENT_READ_PERMISSIONS,
-                                'Translatable#All agents with read permissions for the ticket'
-                            ),
-                            new TreeNode(
-                                NotificationRecipientTypes.AGENT_WRITE_PERMISSIONS,
-                                'Translatable#All agents with update permission for the ticket'
-                            ),
-                            new TreeNode(
-                                NotificationRecipientTypes.AGENT_MY_QUEUES,
-                                "Translatable#All agents subscribed to the ticket's queue"
-                            ),
-                            new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact')
-                        ]),
-                        new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
-                    ]
+                    new FormFieldOption(DefaultSelectInputFormOption.NODES, [
+                        new TreeNode(NotificationRecipientTypes.AGENT_OWNER, 'Translatable#TicketOwner'),
+                        new TreeNode(
+                            NotificationRecipientTypes.AGENT_RESPONSIBLE,
+                            'Translatable#TicketResponsible'
+                        ),
+                        new TreeNode(
+                            NotificationRecipientTypes.AGENT_READ_PERMISSIONS,
+                            'Translatable#All agents with read permissions for the ticket'
+                        ),
+                        new TreeNode(
+                            NotificationRecipientTypes.AGENT_WRITE_PERMISSIONS,
+                            'Translatable#All agents with update permission for the ticket'
+                        ),
+                        new TreeNode(
+                            NotificationRecipientTypes.AGENT_MY_QUEUES,
+                            "Translatable#All agents subscribed to the ticket's queue"
+                        ),
+                        new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact')
+                    ]),
+                    new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
+                ]
                 ),
                 new FormField(
                     'Translatable#Send to these agents', NotificationProperty.DATA_RECIPIENT_AGENTS,
                     'object-reference-input', false, 'Translatable#Helptext_Admin_NotificationCreate_SendToAgents', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
 
-                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                            new KIXObjectLoadingOptions([
-                                new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                )
-                            ])
-                        ),
-                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
-                    ]
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            )
+                        ])
+                    ),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                ]
                 ),
                 new FormField(
                     'Translatable#Send to all role members', NotificationProperty.DATA_RECIPIENT_ROLES,
                     'object-reference-input', false,
                     'Translatable#Helptext_Admin_NotificationCreate_SendToRoleMembers', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
 
-                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                            new KIXObjectLoadingOptions([
-                                new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                )
-                            ])
-                        ),
-                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
-                    ]
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            )
+                        ])
+                    ),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                ]
                 ),
                 new FormField(
                     'Translatable#Send despite out of office', NotificationProperty.DATA_SEND_DESPITE_OOO,
@@ -162,21 +163,21 @@ export class Extension implements IConfigurationExtension {
             const messageGroup = new FormGroup('Translatable#Notification Methods', [
                 new FormField(
                     'Translatable#Email', null, null, false, null, null, null, [
-                        new FormField(
-                            'Translatable#Additional recipients',
-                            NotificationProperty.DATA_RECIPIENT_EMAIL,
-                            'notification-input-email-recipient', false,
-                            'Translatable#Helptext_Admin_NotificationCreate_AdditionalRecipient',
-                            null, null, null, null, null, null, null, null, null, null, null, null, null,
-                            'Translatable#Email Addresses'
-                        ),
-                        new FormField(
-                            'Translatable#Subject with Ticketnumber', NotificationProperty.DATA_RECIPIENT_SUBJECT,
-                            'checkbox-input', false,
-                            'Translatable#Helptext_Admin_NotificationCreate_SubjectWithTicketNumber',
-                            undefined, new FormFieldValue(true)
-                        )
-                    ], null, null, null, null, null, null, null, true, true
+                    new FormField(
+                        'Translatable#Additional recipients',
+                        NotificationProperty.DATA_RECIPIENT_EMAIL,
+                        'notification-input-email-recipient', false,
+                        'Translatable#Helptext_Admin_NotificationCreate_AdditionalRecipient',
+                        null, null, null, null, null, null, null, null, null, null, null, null, null,
+                        'Translatable#Email Addresses'
+                    ),
+                    new FormField(
+                        'Translatable#Subject with Ticketnumber', NotificationProperty.DATA_RECIPIENT_SUBJECT,
+                        'checkbox-input', false,
+                        'Translatable#Helptext_Admin_NotificationCreate_SubjectWithTicketNumber',
+                        undefined, new FormFieldValue(true)
+                    )
+                ], null, null, null, null, null, null, null, true, true
                 )
             ]);
 

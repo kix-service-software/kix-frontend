@@ -10,6 +10,7 @@
 import { OverlayService } from "./OverlayService";
 import { OverlayType, StringContent, ComponentContent, ToastContent, ConfirmOverlayContent } from "../model";
 import { RefreshToastSettings } from "./RefreshToastSettings";
+import { TranslationService } from "./i18n/TranslationService";
 
 export class BrowserUtil {
 
@@ -22,7 +23,7 @@ export class BrowserUtil {
     public static async openSuccessOverlay(message: string): Promise<void> {
         setTimeout(() => {
             const content = new ComponentContent('toast', new ToastContent('kix-icon-check', message));
-            OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
+            OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, 'Translatable#Success!');
         }, 500);
     }
 

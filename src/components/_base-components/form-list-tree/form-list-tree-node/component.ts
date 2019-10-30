@@ -59,11 +59,6 @@ class TreeNodeComponent {
         return title;
     }
 
-    public getToolTip(): string {
-        const tooltip = this.state.node.tooltip;
-        return tooltip;
-    }
-
     public nodeClicked(): void {
         if (this.treeHandler) {
             this.treeHandler.setSelection([this.state.node], !this.state.node.selected);
@@ -74,6 +69,10 @@ class TreeNodeComponent {
         if (this.treeHandler) {
             this.treeHandler.toggleNode(this.state.node);
         }
+    }
+
+    public getToolTip(): string {
+        return this.state.node.tooltip;
     }
 
 }

@@ -12,14 +12,15 @@ import { ContextMode, KIXObjectType, ContactProperty } from '../../../../core/mo
 import { ContactDetailsContext } from '../../../../core/browser/contact';
 import { RoutingConfiguration } from '../../../../core/browser/router';
 import { AbstractNewDialog } from '../../../../core/browser/components/dialog';
+import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractNewDialog {
 
-    public onCreate(): void {
+    public async onCreate(): Promise<void> {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Create Contact',
-            'Translatable#Contact successfully created.',
+            await TranslationService.translate('Translatable#Create Contact'),
+            await TranslationService.translate('Translatable#Contact successfully created.'),
             KIXObjectType.CONTACT,
             new RoutingConfiguration(
                 ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
