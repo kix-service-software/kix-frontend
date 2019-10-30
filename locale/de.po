@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-10-29 13:51+0000\n"
+"PO-Revision-Date: 2019-10-30 15:47+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -222,10 +222,8 @@ msgstr "Anhänge"
 msgid "Attributes"
 msgstr "Attribute"
 
-#, fuzzy
-#| msgid "attributes to change:"
 msgid "Attributes to be edited"
-msgstr "zu ändernde Attribute:"
+msgstr "Zu ändernde Attribute"
 
 msgid "Automation"
 msgstr "Automatisierung"
@@ -831,8 +829,6 @@ msgstr "Ausführen"
 msgid "Execute console command"
 msgstr "Kommando ausführen"
 
-#, fuzzy
-#| msgid "Execute now!"
 msgid "Execute now"
 msgstr "Jetzt ausführen"
 
@@ -1285,13 +1281,11 @@ msgstr ""
 msgid "Helptext_Admin_NotificationCreate_Name"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
 msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
 msgstr ""
-"Die Benachrichtigung wird an alle Agenten versendet, die als Empfänger "
-"ausgewählt sind. Ist diese Option aktiviert, können diese Agenten diese "
-"Benachrichtigung in ihren persönlichen Einstellungen aktivieren."
+"Hier können Sie zusätzliche Informationen oder Erläuterungen zu dieser "
+"Benachrichtigung eingeben, die den Agenten in ihren persönlichen "
+"Einstellungen angezeigt werden."
 
 msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
 msgstr ""
@@ -3163,10 +3157,8 @@ msgstr "Übersicht Tickets"
 msgid "Overview Ticket States"
 msgstr "Tickets nach Status"
 
-#, fuzzy
-#| msgid "Overview Organisations"
 msgid "Overview Versions"
-msgstr "Übersicht Kunden"
+msgstr "Versionsübersicht"
 
 msgid "Owner"
 msgstr "Bearbeiter"
@@ -3358,8 +3350,6 @@ msgstr "Relevante Assets"
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
-#, fuzzy
-#| msgid "Deactivate dependency to organisation"
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zu Kunden auflösen"
 
@@ -3885,10 +3875,8 @@ msgstr "Entsperrzeit"
 msgid "Unlock Timeout (min)"
 msgstr "Entsperrzeit (min)"
 
-#, fuzzy
-#| msgid "unread"
 msgid "Unread"
-msgstr "ungelesen"
+msgstr "Ungelesen"
 
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
