@@ -38,7 +38,7 @@ export class ContactTableDependingAction extends AbstractAction {
 
         if (context) {
             if (this.isActive) {
-                this.text = 'Translatable#Deactivate dependency to organisation';
+                this.text = 'Translatable#Remove dependency to organisation';
                 this.icon = 'kix-icon-dependence-remove';
             } else {
                 this.text = 'Translatable#Activate dependency to organisation';

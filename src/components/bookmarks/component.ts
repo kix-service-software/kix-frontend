@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ActionFactory } from '../../core/browser';
-import { TreeNode, Bookmark, SortUtil, SortOrder, TreeHandler, TreeService } from '../../core/model';
+import { TreeNode, Bookmark, SortUtil, SortOrder, TreeHandler, TreeService, Translation } from '../../core/model';
 import { TranslationService } from '../../core/browser/i18n/TranslationService';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 import { BookmarkService } from '../../core/browser/bookmark/BookmarkService';
@@ -50,7 +50,10 @@ class Component {
         this.bookmarks = BookmarkService.getInstance().getBookmarks();
         for (const b of this.bookmarks) {
             if (await AuthenticationSocketClient.getInstance().checkPermissions(b.permissions)) {
-                availableBookmarks.push(new TreeNode('bookmark-' + b.title, b.title, b.icon));
+                const bookmarkTooltip = await TranslationService.translate(b.title);
+                availableBookmarks.push(new TreeNode('bookmark-' + b.title, b.title, b.icon, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    bookmarkTooltip));
             }
         }
         availableBookmarks.sort((a, b) => SortUtil.compareString(a, b, SortOrder.UP));

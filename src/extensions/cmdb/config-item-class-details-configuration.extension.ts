@@ -68,7 +68,7 @@ export class Extension implements IConfigurationExtension {
 
         const ciClassVersionsWidget = new ConfiguredWidget(
             'ci-class-versions-widget', new WidgetConfiguration(
-                'table-widget', 'Translatable#Version Details',
+                'table-widget', 'Translatable#Overview Versions',
                 [], new TableWidgetSettings(
                     KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
                     [ConfigItemClassDefinitionProperty.VERSION, SortOrder.DOWN],

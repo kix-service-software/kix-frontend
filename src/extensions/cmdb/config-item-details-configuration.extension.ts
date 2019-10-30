@@ -99,7 +99,7 @@ export class Extension implements IConfigurationExtension {
 
         const configItemVersionLane = new ConfiguredWidget('config-item-version-widget',
             new WidgetConfiguration(
-                'table-widget', "Translatable#Version Details",
+                'table-widget', "Translatable#Overview Versions",
                 ['config-item-version-compare-action'],
                 new TableWidgetSettings(KIXObjectType.CONFIG_ITEM_VERSION), false, true, WidgetSize.BOTH, true
             ),

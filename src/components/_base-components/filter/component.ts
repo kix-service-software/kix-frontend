@@ -52,6 +52,12 @@ class Component {
         this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
         this.setFilterCount(input.filterCount);
 
+        const nds = this.treeHandler.getTree();
+        nds.forEach(async (n) => {
+            n.tooltip = await TranslationService.translate(n.tooltip);
+        });
+        this.treeHandler.setTree(nds);
+
         this.update(input);
     }
 

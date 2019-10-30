@@ -107,7 +107,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     ? article.bccList[0].email : article.bccList.map((bcc) => bcc.email).join(', ') : '';
                 break;
             case ArticleProperty.ARTICLE_INFORMATION:
-                displayValue = article.isUnread() ? 'Transaltable#Unread' : 'Translatable#Read';
+                displayValue = article.isUnread() ? 'Translatable#Unread' : 'Translatable#Read';
                 break;
             case ArticleProperty.BODY_RICHTEXT:
                 if (article) {
