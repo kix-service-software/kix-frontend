@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-10-29 13:31+0000\n"
+"PO-Revision-Date: 2019-10-30 15:47+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -823,10 +823,8 @@ msgstr ""
 msgid "Execute console command"
 msgstr ""
 
-#, fuzzy
-#| msgid "Execute now!"
 msgid "Execute now"
-msgstr "Execute now"
+msgstr ""
 
 msgid "Execute now?"
 msgstr ""
@@ -1237,13 +1235,10 @@ msgstr ""
 msgid "Helptext_Admin_NotificationCreate_Name"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
 msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
 msgstr ""
-"The notification will be send to all agents chosen as recipients. If this "
-"option is active agents can subscribe from the notification by changing "
-"their preferences."
+"Insert additional information or explanations about this notification. This "
+"will be displayed in the agents preferences."
 
 msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
 msgstr ""
@@ -2924,10 +2919,8 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#, fuzzy
-#| msgid "Number of Config Items"
 msgid "Number of Actions"
-msgstr "Number of Assets"
+msgstr ""
 
 msgid "Number of Config Items"
 msgstr "Number of Assets"
@@ -3016,10 +3009,8 @@ msgstr ""
 msgid "Overview Ticket States"
 msgstr "Tickets by States"
 
-#, fuzzy
-#| msgid "Overview Ticket Priorities"
 msgid "Overview Versions"
-msgstr "Tickets by Priorities"
+msgstr ""
 
 msgid "Owner"
 msgstr ""
