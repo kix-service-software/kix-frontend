@@ -222,7 +222,9 @@ msgstr "Anhänge"
 msgid "Attributes"
 msgstr "Attribute"
 
-msgid "attributes to change:"
+#, fuzzy
+#| msgid "attributes to change:"
+msgid "Attributes to be edited"
 msgstr "zu ändernde Attribute:"
 
 msgid "Automation"
@@ -604,9 +606,6 @@ msgstr "Kunden Dashboard"
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
-msgid "Deactivate dependency to organisation"
-msgstr "Abhängigkeit zu Kunden auflösen"
-
 msgid "Default"
 msgstr "Standard"
 
@@ -832,7 +831,9 @@ msgstr "Ausführen"
 msgid "Execute console command"
 msgstr "Kommando ausführen"
 
-msgid "Execute now!"
+#, fuzzy
+#| msgid "Execute now!"
+msgid "Execute now"
 msgstr "Jetzt ausführen"
 
 msgid "Execute now?"
@@ -1283,6 +1284,14 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_Name"
 msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
+msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
+msgstr ""
+"Die Benachrichtigung wird an alle Agenten versendet, die als Empfänger "
+"ausgewählt sind. Ist diese Option aktiviert, können diese Agenten diese "
+"Benachrichtigung in ihren persönlichen Einstellungen aktivieren."
 
 msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
 msgstr ""
@@ -3154,6 +3163,11 @@ msgstr "Übersicht Tickets"
 msgid "Overview Ticket States"
 msgstr "Tickets nach Status"
 
+#, fuzzy
+#| msgid "Overview Organisations"
+msgid "Overview Versions"
+msgstr "Übersicht Kunden"
+
 msgid "Owner"
 msgstr "Bearbeiter"
 
@@ -3344,6 +3358,11 @@ msgstr "Relevante Assets"
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
+#, fuzzy
+#| msgid "Deactivate dependency to organisation"
+msgid "Remove dependency to organisation"
+msgstr "Abhängigkeit zu Kunden auflösen"
+
 msgid "Remove parameter"
 msgstr "Parameter entfernen"
 
@@ -3492,9 +3511,6 @@ msgstr "Senden"
 
 msgid "Send despite out of office"
 msgstr "Trotz „nicht im Büro“ senden"
-
-msgid "Sender"
-msgstr "Absender"
 
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
@@ -3869,6 +3885,11 @@ msgstr "Entsperrzeit"
 msgid "Unlock Timeout (min)"
 msgstr "Entsperrzeit (min)"
 
+#, fuzzy
+#| msgid "unread"
+msgid "Unread"
+msgstr "ungelesen"
+
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
 
@@ -3992,9 +4013,6 @@ msgstr "Wert wurde erfolgreich angelegt."
 msgid "Version"
 msgstr "Version"
 
-msgid "Version Details"
-msgstr "Versionsdetails"
-
 msgid "Visibility"
 msgstr "Sichtbarkeit"
 
@@ -4069,6 +4087,12 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Sender"
+#~ msgstr "Absender"
+
+#~ msgid "Version Details"
+#~ msgstr "Versionsdetails"
 
 #~ msgid "All Tickets"
 #~ msgstr "Alle Tickets"
@@ -4912,9 +4936,6 @@ msgstr "PLZ"
 
 #~ msgid "Release Informationen"
 #~ msgstr "Release Informationen"
-
-#~ msgid "unread"
-#~ msgstr "ungelesen"
 
 #~ msgid "Linked Object"
 #~ msgstr "Verknüpftes Objekt"

@@ -218,7 +218,7 @@ msgstr ""
 msgid "Attributes"
 msgstr ""
 
-msgid "attributes to change:"
+msgid "Attributes to be edited"
 msgstr ""
 
 msgid "Automation"
@@ -598,9 +598,6 @@ msgstr ""
 msgid "Data has been updated."
 msgstr ""
 
-msgid "Deactivate dependency to organisation"
-msgstr ""
-
 msgid "Default"
 msgstr ""
 
@@ -826,7 +823,9 @@ msgstr ""
 msgid "Execute console command"
 msgstr ""
 
-msgid "Execute now!"
+#, fuzzy
+#| msgid "Execute now!"
+msgid "Execute now"
 msgstr "Execute now"
 
 msgid "Execute now?"
@@ -1237,6 +1236,14 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_Name"
 msgstr ""
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
+msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
+msgstr ""
+"The notification will be send to all agents chosen as recipients. If this "
+"option is active agents can subscribe from the notification by changing "
+"their preferences."
 
 msgid "Helptext_Admin_NotificationCreate_SendDespiteOutOfOffice"
 msgstr ""
@@ -3009,6 +3016,11 @@ msgstr ""
 msgid "Overview Ticket States"
 msgstr "Tickets by States"
 
+#, fuzzy
+#| msgid "Overview Ticket Priorities"
+msgid "Overview Versions"
+msgstr "Tickets by Priorities"
+
 msgid "Owner"
 msgstr ""
 
@@ -3195,6 +3207,9 @@ msgstr "Relevant Assets"
 msgid "Reminder Tickets"
 msgstr ""
 
+msgid "Remove dependency to organisation"
+msgstr ""
+
 msgid "Remove parameter"
 msgstr ""
 
@@ -3340,9 +3355,6 @@ msgid "Send"
 msgstr ""
 
 msgid "Send despite out of office"
-msgstr ""
-
-msgid "Sender"
 msgstr ""
 
 msgid "Sender Address (Email)"
@@ -3714,6 +3726,9 @@ msgstr ""
 msgid "Unlock Timeout (min)"
 msgstr ""
 
+msgid "Unread"
+msgstr ""
+
 msgid "Unread Articles"
 msgstr ""
 
@@ -3835,9 +3850,6 @@ msgid "Value successfully created."
 msgstr ""
 
 msgid "Version"
-msgstr ""
-
-msgid "Version Details"
 msgstr ""
 
 msgid "Visibility"
