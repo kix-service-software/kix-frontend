@@ -25,7 +25,7 @@ describe('Table Toggle Tests', () => {
         table = new Table('test');
         table.setContentProvider(new TestTableContentProvider(10, 3));
         table.setColumnConfiguration([
-            new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+            new DefaultColumnConfiguration(null, null, null,'0'), new DefaultColumnConfiguration(null, null, null,'1'), new DefaultColumnConfiguration(null, null, null,'2')
         ]);
         await table.initialize();
     });

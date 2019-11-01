@@ -33,7 +33,7 @@ describe('ContextFactory', () => {
     );
 
     ContextSocketClient.loadContextConfiguration = async (contextId): Promise<ContextConfiguration> => {
-        return new ContextConfiguration(contextId);
+        return new ContextConfiguration(null, null, null, contextId);
     }
 
     before(() => {

@@ -8,22 +8,25 @@
  */
 
 import { ConfiguredWidget } from "..";
+import { IConfiguration, ConfigurationType } from '../../configuration';
+import { ConfiguredDialogWidget } from "../widget";
 
-export class ContextConfiguration {
+export class ContextConfiguration implements IConfiguration {
 
     public constructor(
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
         public contextId: string,
-        public sidebars: string[] = [],
-        public sidebarWidgets: ConfiguredWidget[] = [],
-        public explorer: string[] = [],
-        public explorerWidgets: ConfiguredWidget[] = [],
-        public lanes: string[] = [],
-        public laneWidgets: ConfiguredWidget[] = [],
-        public content: string[] = [],
-        public contentWidgets: ConfiguredWidget[] = [],
+        public sidebars: ConfiguredWidget[] = [],
+        public explorer: ConfiguredWidget[] = [],
+        public lanes: ConfiguredWidget[] = [],
+        public content: ConfiguredWidget[] = [],
         public generalActions: string[] = [],
         public actions: string[] = [],
-        public overlayWidgets: ConfiguredWidget[] = []
+        public overlays: ConfiguredWidget[] = [],
+        public others: ConfiguredWidget[] = [],
+        public dialogs: ConfiguredDialogWidget[] = []
     ) { }
 
 }

@@ -32,59 +32,29 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ImportService.getInstance().registerImportManager(new ContactImportManager());
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         this.registerActions();
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const newContactContext = new ContextDescriptor(
             NewContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-contact-dialog', ['contacts'], NewContactDialogContext
         );
-        ContextService.getInstance().registerContext(newContactContext);
+        await ContextService.getInstance().registerContext(newContactContext);
 
         const editContactContext = new ContextDescriptor(
             EditContactDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-contact-dialog', ['contacts'], EditContactDialogContext
         );
-        ContextService.getInstance().registerContext(editContactContext);
+        await ContextService.getInstance().registerContext(editContactContext);
 
         const contactImportDialogContext = new ContextDescriptor(
             ContactImportDialogContext.CONTEXT_ID, [KIXObjectType.CONTACT],
             ContextType.DIALOG, ContextMode.IMPORT,
             false, 'import-dialog', ['contacts'], ContactImportDialogContext
         );
-        ContextService.getInstance().registerContext(contactImportDialogContext);
-    }
-
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-contact-dialog',
-            new WidgetConfiguration(
-                'new-contact-dialog', 'Translatable#New Contact', [], {}, false, false, 'kix-icon-man-bubble-new'
-            ),
-            KIXObjectType.CONTACT,
-            ContextMode.CREATE
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-contact-dialog',
-            new WidgetConfiguration(
-                'edit-contact-dialog', 'Translatable#Edit Contact', [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.CONTACT,
-            ContextMode.EDIT
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'contact-import-dialog',
-            new WidgetConfiguration(
-                'import-dialog', 'Translatable#Import Contacts', [], {}, false, false, 'kix-icon-man-bubble-new'
-            ),
-            KIXObjectType.CONTACT,
-            ContextMode.IMPORT
-        ));
+        await ContextService.getInstance().registerContext(contactImportDialogContext);
     }
 
     private registerActions(): void {

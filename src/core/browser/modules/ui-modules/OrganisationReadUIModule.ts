@@ -11,11 +11,7 @@ import {
     LabelService, ServiceRegistry, FactoryService, ContextService,
     ActionFactory, TableFactoryService, PlaceholderService
 } from '../../../../core/browser';
-import {
-    KIXObjectType, ContextDescriptor, ContextType, ContextMode, WidgetConfiguration,
-    ConfiguredDialogWidget
-} from '../../../../core/model';
-import { DialogService } from '../../../../core/browser/components/dialog';
+import { KIXObjectType, ContextDescriptor, ContextType, ContextMode } from '../../../../core/model';
 import {
     OrganisationFormService, OrganisationTableFactory, OrganisationLabelProvider, OrganisationService,
     OrganisationBrowserFactory, OrganisationSearchDefinition, OrganisationSearchContext,
@@ -45,35 +41,22 @@ export class UIModule implements IUIModule {
         );
         SearchService.getInstance().registerSearchDefinition(new OrganisationSearchDefinition());
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         this.registerActions();
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const organisationDetailsContext = new ContextDescriptor(
             OrganisationDetailsContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['organisations'], OrganisationDetailsContext
         );
-        ContextService.getInstance().registerContext(organisationDetailsContext);
+        await ContextService.getInstance().registerContext(organisationDetailsContext);
 
         const searchContactContext = new ContextDescriptor(
             OrganisationSearchContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-organisation-dialog', ['organisations'], OrganisationSearchContext
         );
-        ContextService.getInstance().registerContext(searchContactContext);
-    }
-
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'search-organisation-dialog',
-            new WidgetConfiguration(
-                'search-organisation-dialog', 'Translatable#Organisation Search', [], {},
-                false, false, 'kix-icon-search-man-house'
-            ),
-            KIXObjectType.ORGANISATION,
-            ContextMode.SEARCH
-        ));
+        await ContextService.getInstance().registerContext(searchContactContext);
     }
 
     private registerActions(): void {

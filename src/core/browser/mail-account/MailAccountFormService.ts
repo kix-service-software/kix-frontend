@@ -9,9 +9,11 @@
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, MailAccount, FormFieldValue, Form, MailAccountProperty, FormField, DispatchingType, FormContext
+    KIXObjectType, MailAccount, FormFieldValue, MailAccountProperty,
+    DispatchingType, FormContext
 } from "../../model";
 import { LabelService } from "../LabelService";
+import { FormConfiguration, FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
 
@@ -33,8 +35,8 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
         return kixObjectType === KIXObjectType.MAIL_ACCOUNT;
     }
 
-    protected async doAdditionalPreparations(
-        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
             groupLoop: for (const g of form.groups) {
@@ -52,14 +54,15 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
     }
 
     private async setIMAPFolderField(
-        typeField: FormField, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount?: MailAccount
+        typeField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount?: MailAccount
     ): Promise<void> {
         const label = await LabelService.getInstance().getPropertyText(
             MailAccountProperty.IMAP_FOLDER, KIXObjectType.MAIL_ACCOUNT
         );
         const value = typeof mailAccount.IMAPFolder !== 'undefined' && mailAccount.IMAPFolder !== null ?
             mailAccount.IMAPFolder : 'INBOX';
-        const folderField = new FormField(
+        const folderField = new FormFieldConfiguration(
+            'imap-field',
             label, MailAccountProperty.IMAP_FOLDER, null, false,
             'Translatable#Helptext_Admin_MailAccountEdit_IMAPFolder', undefined,
             new FormFieldValue(value)
@@ -82,7 +85,7 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
         return value;
     }
 
-    public async hasPermissions(field: FormField): Promise<boolean> {
+    public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         let hasPermissions = true;
         switch (field.property) {
             case MailAccountProperty.DISPATCHING_BY:

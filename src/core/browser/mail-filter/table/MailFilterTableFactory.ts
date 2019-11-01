@@ -55,8 +55,8 @@ export class MailFilterTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.MAIL_FILTER, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.MAIL_FILTER, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -78,20 +78,20 @@ export class MailFilterTableFactory extends TableFactory {
         let config;
         switch (property) {
             case MailFilterProperty.NAME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 200, true, true,
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
             case MailFilterProperty.STOP_AFTER_MATCH:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, false, true, true, false, 41, true, false,
                     false, DataType.NUMBER, false, null, null, false
                 );
                 break;
             case MailFilterProperty.MATCH:
             case MailFilterProperty.SET:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 300, false, false,
                     false, DataType.STRING, true, 'label-list-cell-content', null, false
                 );

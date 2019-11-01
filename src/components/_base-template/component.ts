@@ -130,12 +130,12 @@ class Component {
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', ['home'], HomeContext
         );
-        ContextService.getInstance().registerContext(homeContext);
+        await ContextService.getInstance().registerContext(homeContext);
         const releaseContext = new ContextDescriptor(
             ReleaseContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'release', ['release'], ReleaseContext
         );
-        ContextService.getInstance().registerContext(releaseContext);
+        await ContextService.getInstance().registerContext(releaseContext);
     }
 
     private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {

@@ -25,7 +25,7 @@ export class UIModule implements IUIModule {
             OrganisationContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'organisations', ['organisations', 'contacts'], OrganisationContext
         );
-        ContextService.getInstance().registerContext(organisationListContext);
+        await ContextService.getInstance().registerContext(organisationListContext);
     }
 
 }

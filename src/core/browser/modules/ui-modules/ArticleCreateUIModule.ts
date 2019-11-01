@@ -31,34 +31,21 @@ export class UIModule implements IUIModule {
 
         TicketFormService.getInstance();
 
-        this.registerContexts();
+        await this.registerContexts();
         this.registerTicketActions();
-        this.registerTicketDialogs();
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const newTicketArticleContext = new ContextDescriptor(
             NewTicketArticleContext.CONTEXT_ID, [KIXObjectType.ARTICLE], ContextType.DIALOG, ContextMode.CREATE_SUB,
             true, 'new-ticket-article-dialog', ['articles'], NewTicketArticleContext
         );
-        ContextService.getInstance().registerContext(newTicketArticleContext);
+        await ContextService.getInstance().registerContext(newTicketArticleContext);
     }
 
     private registerTicketActions(): void {
         ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);
         ActionFactory.getInstance().registerAction('article-reply-action', ArticleReplyAction);
         ActionFactory.getInstance().registerAction('article-forward-action', ArticleForwardAction);
-    }
-
-    private registerTicketDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-ticket-article-dialog',
-            new WidgetConfiguration(
-                'new-ticket-article-dialog', 'Translatable#New Article', [], {},
-                false, false, 'kix-icon-new-note'
-            ),
-            KIXObjectType.ARTICLE,
-            ContextMode.CREATE_SUB
-        ));
     }
 }

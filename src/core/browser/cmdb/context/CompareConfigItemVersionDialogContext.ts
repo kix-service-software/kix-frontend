@@ -20,11 +20,11 @@ export class CompareConfigItemVersionDialogContext extends Context {
     public async setObjectList(objectType: KIXObjectType, versions: Version[]) {
         super.setObjectList(objectType, versions);
 
-        const widget = this.getWidget('compare-ci-version-widget');
+        const widget = this.getWidgetConfiguration('compare-ci-version-widget');
         if (widget) {
-            widget.configuration.settings.tableConfiguration = new TableConfiguration();
+            widget.configuration.tableConfiguration = new TableConfiguration(null, null, null);
             const columns: IColumnConfiguration[] = [
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true,
                     'multiline-cell'
                 )
@@ -37,21 +37,20 @@ export class CompareConfigItemVersionDialogContext extends Context {
 
             versions.forEach((v) => {
                 columns.push(
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         v.VersionID.toString(), true, false, true, false, 250,
                         false, false, false, DataType.STRING, true, 'multiline-cell',
                         `Version ${this.getVersionNumber(v.VersionID, [...configItem.Versions])}`
                     )
                 );
             });
-            widget.configuration.settings.tableConfiguration.tableColumns = columns;
+            widget.configuration.tableConfiguration.tableColumns = columns;
         }
     }
 
     private getVersionNumber(versionId: number, versions: Version[]): number {
-        const index = versions
-            .sort((a, b) => a.VersionID - b.VersionID)
-            .findIndex((v) => v.VersionID === versionId);
+        versions.sort((a, b) => a.VersionID - b.VersionID);
+        const index = versions.findIndex((v) => v.VersionID === versionId);
         return index + 1;
     }
 }

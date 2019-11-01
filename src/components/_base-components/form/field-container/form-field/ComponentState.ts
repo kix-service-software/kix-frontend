@@ -7,13 +7,13 @@
  * --
  */
 
-import { FormField } from '../../../../../core/model';
 import { AbstractComponentState } from '../../../../../core/browser';
+import { FormFieldConfiguration } from '../../../../../core/model/components/form/configuration';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public field: FormField = null,
+        public field: FormFieldConfiguration = null,
         public formId: string = null,
         public minimized: boolean = false,
         public level: number = 0,

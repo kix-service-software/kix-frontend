@@ -8,10 +8,7 @@
  */
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectType, TextModule, Form, FormFieldValue, TextModuleProperty } from "../../model";
-import { ContextService } from "../context";
-import { EditTextModuleDialogContext } from "./context";
-import { KIXObjectService } from "../kix";
+import { KIXObjectType, TextModule, TextModuleProperty } from "../../model";
 
 export class TextModuleFormService extends KIXObjectFormService<TextModule> {
 

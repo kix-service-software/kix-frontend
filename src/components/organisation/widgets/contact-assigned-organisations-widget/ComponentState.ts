@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetComponentState, Contact, Organisation, AbstractAction } from "../../../../core/model";
-import { TableConfiguration, ITable } from "../../../../core/browser";
+import { WidgetComponentState, Contact, AbstractAction } from "../../../../core/model";
+import { ITable } from "../../../../core/browser";
 
-export class ComponentState extends WidgetComponentState<TableConfiguration> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public contact: Contact = null,

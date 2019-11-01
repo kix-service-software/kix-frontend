@@ -58,7 +58,6 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('ticket-info-widget', 'ticket/widgets/ticket-info-widget', []),
         new UIComponent('ticket-history-widget', 'ticket/widgets/ticket-history-widget', []),
         new UIComponent('ticket-description-widget', 'ticket/widgets/ticket-description-widget', []),
-        new UIComponent('ticket-dynamic-fields-widget', 'ticket/widgets/ticket-dynamic-fields-widget', []),
         new UIComponent('ticket-dynamic-fields-container', 'ticket/ticket-dynamic-fields-container', []),
         new UIComponent('ticket-chart-widget', 'ticket/widgets/ticket-chart-widget', []),
         new UIComponent('ticket-queue-explorer', 'ticket/widgets/ticket-queue-explorer', []),

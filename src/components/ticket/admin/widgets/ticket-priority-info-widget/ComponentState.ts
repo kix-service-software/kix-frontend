@@ -10,7 +10,7 @@
 import { TicketPriorityLabelProvider } from "../../../../../core/browser/ticket";
 import { WidgetComponentState, AbstractAction, TicketPriority } from "../../../../../core/model";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public labelProvider: TicketPriorityLabelProvider = null,

@@ -8,9 +8,10 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FormInputComponent, FormField, FormFieldValue } from '../../../../../core/model';
+import { FormInputComponent, FormFieldValue } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { FormService, IdService } from '../../../../../core/browser';
+import { FormFieldConfiguration } from '../../../../../core/model/components/form/configuration';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -40,7 +41,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListendenerId,
             updateForm: () => { return; },
-            formValueChanged: (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
+            formValueChanged: (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
                 if (formField.instanceId === this.state.field.instanceId) {
                     this.state.currentValue = value.value;
                 }

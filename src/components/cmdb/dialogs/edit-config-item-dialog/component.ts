@@ -8,7 +8,7 @@
  */
 
 import {
-    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil, AdditionalContextInformation
+    FormService, ContextService, OverlayService, ServiceRegistry, BrowserUtil
 } from '../../../../core/browser';
 import {
     ValidationSeverity, ContextType, ValidationResult, ComponentContent,
@@ -32,7 +32,6 @@ class Component {
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
-        this.setFormId();
     }
 
     public async onDestroy(): Promise<void> {
@@ -42,20 +41,6 @@ class Component {
     public async cancel(): Promise<void> {
         FormService.getInstance().deleteFormInstance(this.state.formId);
         DialogService.getInstance().closeMainDialog();
-    }
-
-    public async setFormId(): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true);
-        let formId = null;
-        const dialogContext = await ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-        if (dialogContext) {
-            const info = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            formId = info ? info : null;
-        }
-        setTimeout(() => {
-            this.state.formId = formId;
-            DialogService.getInstance().setMainDialogLoading(false);
-        }, 10);
     }
 
     public async submit(): Promise<void> {

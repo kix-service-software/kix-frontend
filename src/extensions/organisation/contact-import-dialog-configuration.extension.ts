@@ -7,9 +7,14 @@
  * --
  */
 
-import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration } from "../../core/model";
+import {
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, HelpWidgetConfiguration,
+    ConfiguredDialogWidget, KIXObjectType, ContextMode
+} from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { ContactImportDialogContext } from "../../core/browser/contact";
+import { ConfigurationType, ConfigurationDefinition } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,22 +22,44 @@ export class Extension implements IConfigurationExtension {
         return ContactImportDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const helpSettings = new HelpWidgetConfiguration(
+            'contact-import-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
+            'Translatable#Helptext_Customers_ContactImport', null
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
 
-        const helpWidget = new ConfiguredWidget('20190312-contact-import-help-widget', new WidgetConfiguration(
-            'help-widget', null, [], {
-                helpText: 'Translatable#Helptext_Customers_ContactImport'
-            },
-            false, false, 'kix-icon-query'
-        ));
+        const helpWidget = new WidgetConfiguration(
+            'contact-import-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
+            'help-widget', 'Translatable#Help', [],
+            new ConfigurationDefinition('contact-import-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            null, false, false, 'kix-icon-query'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+
+        const widget = new WidgetConfiguration(
+            'contact-import-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'import-dialog', 'Translatable#Import Contacts', [], null, null, false, false, 'kix-icon-man-bubble-new'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
         return new ContextConfiguration(
-            ContactImportDialogContext.CONTEXT_ID,
-            ['20190312-contact-import-help-widget'], [helpWidget]
+            this.getModuleId(), 'Contact Import Dialog', ConfigurationType.Context,
+            this.getModuleId(),
+            [
+                new ConfiguredWidget('contact-import-dialog-help-widget', 'contact-import-dialog-help-widget')
+            ],
+            [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'contact-import-dialog-widget', 'contact-import-dialog-widget',
+                    KIXObjectType.CONTACT, ContextMode.IMPORT
+                )
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 }

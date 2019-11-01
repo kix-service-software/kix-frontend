@@ -9,11 +9,16 @@
 
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse, ContextConfiguration, SocketEvent
+    ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
+    ContextConfiguration, SocketEvent, Error
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
-import { ConfigurationService } from '../core/services';
-import { PluginService, PermissionService } from '../services';
+import {
+    PluginService, PermissionService, ModuleConfigurationService, ContextConfigurationResolver
+} from '../services';
+import { ConfigurationType } from '../core/model/configuration';
+import { LoggingService } from '../core/services';
+import { IConfigurationExtension } from '../core/extensions';
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -43,25 +48,30 @@ export class ContextNamespace extends SocketNameSpace {
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
     ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        let configuration = ConfigurationService.getInstance().getConfiguration<ContextConfiguration>(data.contextId);
+        let configuration = await ModuleConfigurationService.getInstance().loadConfiguration(
+            ConfigurationType.Context, data.contextId
+        );
 
         if (!configuration) {
-            const configurationExtension = await PluginService.getInstance().getConfigurationExtension(data.contextId)
-                .catch(() => null);
-
-            if (configurationExtension) {
-                const moduleDefaultConfiguration = await configurationExtension.getDefaultConfiguration(data.token)
+            const configurationExtension: IConfigurationExtension =
+                await PluginService.getInstance().getConfigurationExtension(data.contextId)
                     .catch(() => null);
 
+            if (configurationExtension) {
+                const moduleDefaultConfiguration = await configurationExtension.createDefaultConfiguration(data.token)
+                    .catch((error: Error) => {
+                        LoggingService.getInstance().error(error.Message);
+                    });
+
                 if (moduleDefaultConfiguration) {
-                    ConfigurationService.getInstance().saveConfiguration(data.contextId, moduleDefaultConfiguration);
+                    ModuleConfigurationService.getInstance().saveConfiguration(moduleDefaultConfiguration);
                     configuration = moduleDefaultConfiguration;
                 } else {
                     return new SocketResponse(
                         SocketEvent.ERROR,
                         new SocketErrorResponse(
                             data.requestId,
-                            new Error(`No default configuration for context ${data.contextId} given!`)
+                            new Error('-1', `No default configuration for context ${data.contextId} given!`)
                         )
                     );
                 }
@@ -72,11 +82,13 @@ export class ContextNamespace extends SocketNameSpace {
             }
         }
 
-        configuration.contextId = data.contextId;
-        configuration = await PermissionService.getInstance().filterContextConfiguration(data.token, configuration)
-            .catch(() => configuration);
+        configuration = await PermissionService.getInstance().filterContextConfiguration(
+            data.token, configuration as ContextConfiguration
+        ).catch(() => configuration);
 
-        const response = new LoadContextConfigurationResponse(data.requestId, configuration);
+        configuration = await ContextConfigurationResolver.getInstance().resolve(configuration as ContextConfiguration);
+
+        const response = new LoadContextConfigurationResponse(data.requestId, configuration as ContextConfiguration);
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);
 
     }

@@ -7,20 +7,25 @@
  * --
  */
 
-import { FilterCriteria, KIXObjectType, KIXObjectLoadingOptions } from "../../model";
+import { KIXObjectType, KIXObjectLoadingOptions } from "../../model";
 import { RoutingConfiguration, DialogRoutingConfiguration } from "../router";
 import { ToggleOptions } from "./ToggleOptions";
 import { TableHeaderHeight } from "./TableHeaderHeight";
 import { TableRowHeight } from "./TableRowHeight";
 import { IColumnConfiguration } from "./IColumnConfiguration";
+import { IConfiguration, ConfigurationType } from "../../model/configuration";
 
-export class TableConfiguration {
+export class TableConfiguration implements IConfiguration {
 
     public constructor(
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
         public objectType?: KIXObjectType,
         public loadingOptions?: KIXObjectLoadingOptions,
         public displayLimit?: number,
         public tableColumns?: IColumnConfiguration[],
+        public tableColumnConfigurations: string[] = [],
         public enableSelection: boolean = false,
         public toggle: boolean = false,
         public toggleOptions?: ToggleOptions,

@@ -44,41 +44,24 @@ export class UIModule implements IUIModule {
         FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
         SearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         this.registerActions();
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const organisationDetailsContext = new ContextDescriptor(
             ContactDetailsContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['contacts'], ContactDetailsContext
         );
-        ContextService.getInstance().registerContext(organisationDetailsContext);
+        await ContextService.getInstance().registerContext(organisationDetailsContext);
 
         const searchContactContext = new ContextDescriptor(
             ContactSearchContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-contact-dialog', ['contacts'], ContactSearchContext
         );
-        ContextService.getInstance().registerContext(searchContactContext);
+        await ContextService.getInstance().registerContext(searchContactContext);
     }
 
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'search-contact-dialog',
-            new WidgetConfiguration(
-                'search-contact-dialog',
-                'Translatable#Contact Search',
-                [],
-                {},
-                false,
-                false,
-                'kix-icon-search-man-bubble'
-            ),
-            KIXObjectType.CONTACT,
-            ContextMode.SEARCH
-        ));
-    }
 
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-search-action', ContactSearchAction);

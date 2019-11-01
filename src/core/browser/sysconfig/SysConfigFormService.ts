@@ -9,14 +9,13 @@
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, SysConfigOptionDefinition, Form, FormFieldValue,
-    SysConfigOptionDefinitionProperty,
-    FormField,
-    KIXObjectProperty
+    KIXObjectType, SysConfigOptionDefinition, FormFieldValue,
+    SysConfigOptionDefinitionProperty, KIXObjectProperty
 } from "../../model";
 import { SysConfigOption } from "../../model/kix/sysconfig/SysConfigOption";
 import { ContextService, KIXObjectService } from "..";
 import { EditSysConfigDialogContext } from ".";
+import { FormConfiguration, FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> {
 
@@ -38,7 +37,7 @@ export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> 
         return kixObjectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
     }
 
-    public async initValues(form: Form): Promise<Map<string, FormFieldValue<any>>> {
+    public async initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>> {
         const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
             EditSysConfigDialogContext.CONTEXT_ID
         );
@@ -50,7 +49,7 @@ export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> 
     }
 
     protected async getValue(
-        property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormField
+        property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
     ): Promise<any> {
         let formValue = value;
         switch (property) {

@@ -7,15 +7,15 @@
  * --
  */
 
-import { ConfiguredWidget, ContextType, IAction } from "../../../core/model";
+import { ContextType, IAction, WidgetConfiguration, ConfiguredDialogWidget } from "../../../core/model";
 import { AbstractComponentState } from "../../../core/browser";
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public tabWidgets: ConfiguredWidget[] = [],
+        public tabWidgets: WidgetConfiguration[] = [],
         public tabId: string = null,
-        public activeTab: ConfiguredWidget = null,
+        public activeTab: WidgetConfiguration = null,
         public activeTabTitle: string = '',
         public minimizable: boolean = true,
         public hasSidebars: boolean = false,

@@ -9,11 +9,12 @@
 
 import { ComponentState } from "./ComponentState";
 import {
-    TreeNode, FormInputComponent, MailAccountProperty, KIXObjectType, FormField, FormFieldValue
+    TreeNode, FormInputComponent, MailAccountProperty, KIXObjectType, FormFieldValue
 } from "../../../../../../core/model";
 import { TranslationService } from "../../../../../../core/browser/i18n/TranslationService";
 import { MailAccountService } from "../../../../../../core/browser/mail-account";
 import { FormService, LabelService } from "../../../../../../core/browser";
+import { FormFieldConfiguration } from "../../../../../../core/model/components/form/configuration";
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -80,7 +81,8 @@ class Component extends FormInputComponent<string, ComponentState> {
             const label = await LabelService.getInstance().getPropertyText(
                 MailAccountProperty.IMAP_FOLDER, KIXObjectType.MAIL_ACCOUNT
             );
-            field = new FormField(
+            field = new FormFieldConfiguration(
+                'imap-field',
                 label, MailAccountProperty.IMAP_FOLDER, null, false,
                 'Translatable#Helptext_Admin_MailAccountCreate_IMAPFolder', undefined,
                 new FormFieldValue('INBOX')

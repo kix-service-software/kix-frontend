@@ -7,14 +7,15 @@
  * --
  */
 
-import { WidgetConfiguration } from './WidgetConfiguration';
 import { UIComponentPermission } from '../../UIComponentPermission';
 import { WidgetSize } from './WidgetSize';
+import { WidgetConfiguration } from './WidgetConfiguration';
 
-export class ConfiguredWidget<T = any> {
+export class ConfiguredWidget {
     public constructor(
         public instanceId: string,
-        public configuration: WidgetConfiguration<T>,
+        public configurationId: string,
+        public configuration?: WidgetConfiguration,
         public permissions: UIComponentPermission[] = [],
         public size: WidgetSize = WidgetSize.LARGE,
     ) { }

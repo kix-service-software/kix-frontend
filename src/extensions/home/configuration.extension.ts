@@ -12,16 +12,18 @@ import {
     WidgetConfiguration, ConfiguredWidget, WidgetSize, DataType,
     FilterCriteria, FilterDataType, FilterType, KIXObjectPropertyFilter,
     TableFilterCriteria, KIXObjectType, SortOrder, ContextConfiguration, CRUD,
-    TableWidgetSettings, KIXObjectLoadingOptions
+    TableWidgetConfiguration, KIXObjectLoadingOptions, ChartComponentConfiguration
 } from '../../core/model';
 import {
     SearchOperator, ToggleOptions, TableConfiguration, DefaultColumnConfiguration
 } from '../../core/browser';
 import { HomeContext } from '../../core/browser/home';
 import { TicketProperty } from '../../core/model/';
-import { TicketChartConfiguration } from '../../core/browser/ticket';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 import { SysConfigService } from '../../core/browser/sysconfig';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { TicketChartWidgetConfiguration } from '../../core/browser/ticket';
+import { ModuleConfigurationService } from '../../services';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -29,7 +31,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         return HomeContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
 
@@ -37,8 +39,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             TicketProperty.STATE_TYPE, SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
         );
 
-        const chartConfig1 = new TicketChartConfiguration(
-            TicketProperty.PRIORITY_ID,
+        const chartConfig1 = new ChartComponentConfiguration(
+            'home-dashboard-ticket-chart-widget-priorities-config', 'Priority Chart', ConfigurationType.Chart,
             {
                 type: 'bar',
                 options: {
@@ -72,21 +74,31 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         }
                     ]
                 }
-            },
-            new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+            }
         );
-        const chart1 = new ConfiguredWidget(
-            '20180813-1-ticket-chart-widget',
-            new WidgetConfiguration(
-                'ticket-chart-widget', 'Overview Ticket Priorities', [], chartConfig1,
-                false, true, null, false
-            ),
-            [new UIComponentPermission('tickets', [CRUD.READ])],
-            WidgetSize.SMALL
-        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig1);
 
-        const chartConfig2 = new TicketChartConfiguration(
-            TicketProperty.STATE_ID,
+        const chartWidgetConfig1 = new TicketChartWidgetConfiguration(
+            'home-dashboard-ticket-chart-widget-priorities', 'Priority Chart', ConfigurationType.ChartWidget,
+            TicketProperty.PRIORITY_ID,
+            new ConfigurationDefinition(
+                'home-dashboard-ticket-chart-widget-priorities-config', ConfigurationType.Chart
+            ),
+            null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig1);
+
+        const chart1 = new WidgetConfiguration(
+            'home-dashboard-ticket-chart-widget-priorities', 'Priority Chart Widget', ConfigurationType.Widget,
+            'ticket-chart-widget', 'Overview Ticket Priorities', [],
+            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-priorities', ConfigurationType.ChartWidget),
+            null, false, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chart1);
+
+
+        const chartConfig2 = new ChartComponentConfiguration(
+            'home-dashboard-ticket-chart-widget-states-config', 'States Chart', ConfigurationType.Chart,
             {
                 type: 'pie',
                 options: {
@@ -114,21 +126,28 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         }
                     ]
                 }
-            },
-            new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+            }
         );
-        const chart2 = new ConfiguredWidget(
-            '20180813-2-ticket-chart-widget',
-            new WidgetConfiguration(
-                'ticket-chart-widget', 'Overview Ticket States', [], chartConfig2,
-                false, true, null, false
-            ),
-            [new UIComponentPermission('tickets', [CRUD.READ])],
-            WidgetSize.SMALL
-        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig2);
 
-        const chartConfig3 = new TicketChartConfiguration(
-            TicketProperty.CREATED,
+        const chartWidgetConfig2 = new TicketChartWidgetConfiguration(
+            'home-dashboard-ticket-chart-widget-states', 'States Chart', ConfigurationType.ChartWidget,
+            TicketProperty.STATE_ID,
+            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-states-config', ConfigurationType.Chart),
+            null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig2);
+
+        const chart2 = new WidgetConfiguration(
+            'home-dashboard-ticket-chart-widget-states', 'Priority Chart Widget', ConfigurationType.Widget,
+            'ticket-chart-widget', 'Overview Ticket States', [],
+            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-states', ConfigurationType.ChartWidget),
+            null, false, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chart2);
+
+        const chartConfig3 = new ChartComponentConfiguration(
+            'home-dashboard-ticket-chart-widget-new-config', 'New Tickets Chart', ConfigurationType.Chart,
             {
                 type: 'line',
                 options: {
@@ -160,18 +179,25 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         ]
                     }]
                 },
-            },
-            new KIXObjectLoadingOptions([stateTypeFilterCriteria])
+            }
         );
-        const chart3 = new ConfiguredWidget(
-            '20180813-3-ticket-chart-widget',
-            new WidgetConfiguration(
-                'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [], chartConfig3,
-                false, true, null, false
-            ),
-            [new UIComponentPermission('tickets', [CRUD.READ])],
-            WidgetSize.SMALL
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig3);
+
+        const chartWidgetConfig3 = new TicketChartWidgetConfiguration(
+            'home-dashboard-ticket-chart-widget-new', 'States Chart', ConfigurationType.ChartWidget,
+            TicketProperty.CREATED,
+            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-new-config', ConfigurationType.Chart),
+            null, new KIXObjectLoadingOptions([stateTypeFilterCriteria])
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig3);
+
+        const chart3 = new WidgetConfiguration(
+            'home-dashboard-ticket-chart-widget-new', 'New Tickets Chart Widget', ConfigurationType.Widget,
+            'ticket-chart-widget', 'Translatable#New Tickets (recent 7 days)', [],
+            new ConfigurationDefinition('home-dashboard-ticket-chart-widget-new', ConfigurationType.ChartWidget),
+            null, false, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chart3);
 
         const predefinedToDoTableFilter = [
             new KIXObjectPropertyFilter('Translatable#Responsible Tickets', [
@@ -189,115 +215,143 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             ]),
         ];
 
-
-        const todoTicketList = new ConfiguredWidget(
-            '20180612-to-do-widget',
-            new WidgetConfiguration(
-                'table-widget', 'Translatable#ToDo / Processing required', ['bulk-action', 'csv-export-action'],
-                new TableWidgetSettings(
-                    KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP], new TableConfiguration(
-                        KIXObjectType.TICKET,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    TicketProperty.OWNER_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                                ),
-                                new FilterCriteria(
-                                    TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
-                                    FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
-                                ),
-                                new FilterCriteria(
-                                    TicketProperty.LOCK_ID, SearchOperator.EQUALS,
-                                    FilterDataType.NUMERIC, FilterType.AND, 2
-                                ),
-                                stateTypeFilterCriteria
-                            ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS]
-                        ), null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
-                    ), null, true, null, predefinedToDoTableFilter
-                ),
-                false, true, 'kix-icon-ticket', false
-            ),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
-        );
-
-        const newTicketsListWidget =
-            new ConfiguredWidget('20180612-new-tickets-widget',
-                new WidgetConfiguration(
-                    'table-widget', 'New Tickets', ['bulk-action', 'csv-export-action'],
-                    new TableWidgetSettings(
-                        KIXObjectType.TICKET,
-                        [TicketProperty.AGE, SortOrder.DOWN],
-                        new TableConfiguration(KIXObjectType.TICKET,
-                            new KIXObjectLoadingOptions(
-                                [
-                                    new FilterCriteria(
-                                        TicketProperty.STATE_ID, SearchOperator.EQUALS,
-                                        FilterDataType.NUMERIC, FilterType.OR, 1
-                                    )
-                                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
-                            ),
-                            null,
-                            [
-                                new DefaultColumnConfiguration(
-                                    TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true
-                                ),
-                                new DefaultColumnConfiguration(
-                                    TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
-                                ),
-                                new DefaultColumnConfiguration(
-                                    TicketProperty.TITLE, true, false, true, true, 463, true, true
-                                ),
-                                new DefaultColumnConfiguration(
-                                    TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
-                                ),
-                                new DefaultColumnConfiguration(
-                                    TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
-                                ),
-                                new DefaultColumnConfiguration(
-                                    TicketProperty.CREATED, true, false, true, true, 155,
-                                    true, true, false, DataType.DATE_TIME
-                                ),
-                                new DefaultColumnConfiguration(
-                                    TicketProperty.AGE, true, false, true, true, 90,
-                                    true, true, false, DataType.DATE_TIME
-                                ),
-                            ],
-                            true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
-                        ), null, true
+        const tableTodoConfiguration = new TableConfiguration(
+            'home-dashboard-ticket-table-todo', 'Todo Table', ConfigurationType.Table,
+            KIXObjectType.TICKET,
+            new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        TicketProperty.OWNER_ID, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
                     ),
-                    false, true, 'kix-icon-ticket', false
-                ),
-                [new UIComponentPermission('tickets', [CRUD.READ])]
-            );
+                    new FilterCriteria(
+                        TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
+                    ),
+                    new FilterCriteria(
+                        TicketProperty.LOCK_ID, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, 2
+                    ),
+                    stateTypeFilterCriteria
+                ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS]
+            ), null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableTodoConfiguration);
 
-        const content: string[] = [
-            '20180813-1-ticket-chart-widget', '20180813-2-ticket-chart-widget', '20180813-3-ticket-chart-widget',
-            '20180612-to-do-widget',
-            '20180612-new-tickets-widget'];
-        const contentWidgets = [chart1, chart2, chart3, todoTicketList, newTicketsListWidget];
+        const tableTodoWidgetConfiguration = new TableWidgetConfiguration(
+            'home-dashboard-ticket-table-todo-widget', 'Todo Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP],
+            new ConfigurationDefinition('home-dashboard-ticket-table-todo', ConfigurationType.Table),
+            null, null, true, null, predefinedToDoTableFilter
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableTodoWidgetConfiguration);
+
+        const todoWidget = new WidgetConfiguration(
+            'home-dashboard-todo-widget', 'Todo Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#ToDo / Processing required', ['bulk-action', 'csv-export-action'],
+            new ConfigurationDefinition('home-dashboard-ticket-table-todo-widget', ConfigurationType.TableWidget),
+            null, false, true, 'kix-icon-ticket', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(todoWidget);
+
+        const newTicketsTableConfig = new TableConfiguration(
+            'home-dashboard-ticket-table-new', 'New Tickets Table', ConfigurationType.Table,
+            KIXObjectType.TICKET,
+            new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        TicketProperty.STATE_ID, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.OR, 1
+                    )
+                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
+            ),
+            null,
+            [
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.TITLE, true, false, true, true, 463, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.CREATED, true, false, true, true, 155,
+                    true, true, false, DataType.DATE_TIME
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    TicketProperty.AGE, true, false, true, true, 90,
+                    true, true, false, DataType.DATE_TIME
+                ),
+            ], null,
+            true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(newTicketsTableConfig);
+
+        const newTicketsTableWidget = new TableWidgetConfiguration(
+            'home-dashboard-ticket-new-table-widget', 'New Tickets Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.DOWN],
+            new ConfigurationDefinition('home-dashboard-ticket-table-new', ConfigurationType.Table),
+            null, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(newTicketsTableWidget);
+
+        const newTicketsWidget = new WidgetConfiguration(
+            'home-dashboard-new-tickets-widget', 'New Tickets Widget', ConfigurationType.Widget,
+            'table-widget', 'New Tickets', ['bulk-action', 'csv-export-action'],
+            new ConfigurationDefinition('home-dashboard-ticket-new-table-widget', ConfigurationType.TableWidget),
+            null, false, true, 'kix-icon-ticket', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(newTicketsWidget);
 
         // sidebars
-        const notesSidebar =
-            new ConfiguredWidget('20180607-home-notes', new WidgetConfiguration(
-                'notes-widget', 'Translatable#Notes', [], {},
-                false, false, 'kix-icon-note', false)
-            );
-
-        const sidebars = ['20180607-home-notes'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+        const notesSidebar = new WidgetConfiguration(
+            'home-dashboard-notes-widget', 'Notes', ConfigurationType.Widget,
+            'notes-widget', 'Translatable#Notes', [], null, null,
+            false, false, 'kix-icon-note', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
 
         return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
             this.getModuleId(),
-            sidebars, sidebarWidgets,
+            [
+                new ConfiguredWidget('home-dashboard-notes-widget', 'home-dashboard-notes-widget')
+            ],
             [], [],
-            [], [],
-            content, contentWidgets,
-            [],
+            [
+                new ConfiguredWidget(
+                    'home-dashboard-ticket-chart-widget-priorities', 'home-dashboard-ticket-chart-widget-priorities',
+                    null, [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'home-dashboard-ticket-chart-widget-states', 'home-dashboard-ticket-chart-widget-states', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'home-dashboard-ticket-chart-widget-new', 'home-dashboard-ticket-chart-widget-new', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'home-dashboard-todo-widget', 'home-dashboard-todo-widget', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'home-dashboard-new-tickets-widget', 'home-dashboard-new-tickets-widget', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])]
+                )
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

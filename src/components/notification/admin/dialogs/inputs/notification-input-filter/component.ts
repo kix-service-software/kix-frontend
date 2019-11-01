@@ -9,11 +9,12 @@
 
 import { ComponentState } from './ComponentState';
 import {
-    FormInputComponent, InputFieldTypes, FormFieldValue, FormField, NotificationProperty,
+    FormInputComponent, InputFieldTypes, FormFieldValue, NotificationProperty,
     ContextType, ArticleProperty, KIXObjectType
 } from '../../../../../../core/model';
 import { ObjectPropertyValue, FormService, ContextService } from '../../../../../../core/browser';
 import { NotificationService } from '../../../../../../core/browser/notification';
+import { FormFieldConfiguration } from '../../../../../../core/model/components/form/configuration';
 
 class Component extends FormInputComponent<Array<[string, string[] | number[]]>, ComponentState> {
 
@@ -38,7 +39,7 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
         form.registerListener({
             formListenerId: 'notification-input-filter',
             updateForm: () => { return; },
-            formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
+            formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>) => {
                 if (formField.property === NotificationProperty.DATA_EVENTS) {
                     const context = ContextService.getInstance().getActiveContext();
                     if (context && context.getDescriptor().contextType === ContextType.DIALOG) {

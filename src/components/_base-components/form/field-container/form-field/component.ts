@@ -9,9 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { FormService, IdService } from '../../../../../core/browser';
-import { FormField } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { KIXModulesService } from '../../../../../core/browser/modules';
+import { FormFieldConfiguration } from '../../../../../core/model/components/form/configuration';
 
 class Component {
 
@@ -61,7 +61,7 @@ class Component {
         FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
     }
 
-    private async hasInvalidChildren(field: FormField = this.state.field): Promise<boolean> {
+    private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         let hasInvalidChildren = false;
         for (const child of field.children) {

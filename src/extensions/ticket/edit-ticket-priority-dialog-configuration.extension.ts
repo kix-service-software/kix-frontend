@@ -10,11 +10,16 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { EditTicketPriorityDialogContext } from '../../core/browser/ticket';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketPriorityProperty, KIXObjectProperty, ObjectReferenceOptions, FormFieldOption
+    ContextConfiguration, KIXObjectType,
+    FormContext, FormFieldValue, TicketPriorityProperty, KIXObjectProperty, ObjectReferenceOptions,
+    FormFieldOption, ContextMode, WidgetConfiguration, ConfiguredDialogWidget
 } from '../../core/model';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -22,51 +27,83 @@ export class Extension implements IConfigurationExtension {
         return EditTicketPriorityDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const widget = new WidgetConfiguration(
+            'ticket-priority-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-ticket-priority-dialog', 'Translatable#Edit Priority', [], null, null,
+            false, false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
-
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(
+            'ticket-priority-edit-dialog', 'Ticket Priority Edit Dialog', ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'ticket-priority-edit-dialog-widget', 'ticket-priority-edit-dialog-widget',
+                    KIXObjectType.TICKET_PRIORITY, ContextMode.EDIT_ADMIN
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+        const formId = 'ticket-priority-edit-form';
 
-        const formId = 'edit-ticket-priority-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing) {
-            const fields: FormField[] = [];
-            fields.push(new FormField(
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-edit-form-field-name',
                 'Translatable#Name', TicketPriorityProperty.NAME, null, true,
-                'Translatable#Helptext_Admin_Tickets_PriorityEdit_Name'
-            ));
-            fields.push(new FormField(
+                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Name'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-edit-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
-                'Translatable#Helptext_Admin_Tickets_PriorityEdit_Icon'
-            ));
-            fields.push(new FormField(
-                'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input',
-                false, 'Translatable#Helptext_Admin_Tickets_PriorityEdit_Comment',
+                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Icon'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-edit-form-field-comment',
+                'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_Admin_Tickets_PriorityCreate_Comment',
                 null, null, null, null, null, null, null, 250
-            ));
-            fields.push(
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_PriorityEdit_Valid', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
-                )
-            );
+            )
+        );
 
-            const group = new FormGroup('Translatable#Priority Data', fields);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-edit-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Valid', [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+            ], new FormFieldValue(1)
+            )
+        );
 
-            const form = new Form(
-                formId, 'Translatable#Edit Priority', [group], KIXObjectType.TICKET_PRIORITY, true, FormContext.EDIT
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.TICKET_PRIORITY, formId);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'ticket-priority-edit-form-group-data', 'Translatable#Priority Data',
+                [
+                    'ticket-priority-edit-form-field-name',
+                    'ticket-priority-edit-form-field-icon',
+                    'ticket-priority-edit-form-field-comment',
+                    'ticket-priority-edit-form-field-valid'
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#Create Priority', ['ticket-priority-edit-form-group-data'],
+                KIXObjectType.TICKET_PRIORITY, true, FormContext.EDIT
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.TICKET_PRIORITY, formId);
     }
 
 }

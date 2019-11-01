@@ -15,9 +15,7 @@ import {
     NewSystemAddressDialogContext, SystemAddressEditAction, EditSystemAddressDialogContext,
     SystemAddressDetailsContext
 } from "../../system-address";
-import {
-    KIXObjectType, CRUD, ContextDescriptor, ContextMode, ContextType, ConfiguredDialogWidget, WidgetConfiguration
-} from "../../../model";
+import { KIXObjectType, CRUD, ContextDescriptor, ContextMode, ContextType } from "../../../model";
 import { LabelService } from "../../LabelService";
 import { TableFactoryService } from "../../table";
 import {
@@ -27,7 +25,6 @@ import {
 } from "../../mail-account";
 import { ActionFactory } from "../../ActionFactory";
 import { ContextService } from "../../context";
-import { DialogService } from "../../components";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import {
@@ -91,17 +88,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 false, 'new-system-address-dialog', ['system-addresses'], NewSystemAddressDialogContext
             );
-            ContextService.getInstance().registerContext(newSystemAddressDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-system-address-dialog',
-                new WidgetConfiguration(
-                    'new-system-address-dialog', 'Translatable#New Address',
-                    [], {}, false, false, 'kix-icon-new-gear'
-                ),
-                KIXObjectType.SYSTEM_ADDRESS,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newSystemAddressDialogContext);
         }
 
         if (await this.checkPermission('system/communication/systemaddresses/*', CRUD.UPDATE)) {
@@ -112,17 +99,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext
             );
-            ContextService.getInstance().registerContext(editSystemAddressDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-system-address-dialog',
-                new WidgetConfiguration(
-                    'edit-system-address-dialog', 'Translatable#Edit Address',
-                    [], {}, false, false, 'kix-icon-edit'
-                ),
-                KIXObjectType.SYSTEM_ADDRESS,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editSystemAddressDialogContext);
         }
 
         const systemAddressDetailsContext = new ContextDescriptor(
@@ -130,7 +107,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['system-addresses'], SystemAddressDetailsContext
         );
-        ContextService.getInstance().registerContext(systemAddressDetailsContext);
+        await ContextService.getInstance().registerContext(systemAddressDetailsContext);
     }
 
     private async registerMailAccounts(): Promise<void> {
@@ -143,17 +120,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext
             );
-            ContextService.getInstance().registerContext(newMailAccountDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-mail-account-dialog',
-                new WidgetConfiguration(
-                    'new-mail-account-dialog', 'Translatable#New Account',
-                    [], {}, false, false, 'kix-icon-new-gear'
-                ),
-                KIXObjectType.MAIL_ACCOUNT,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newMailAccountDialogContext);
         }
 
         if (await this.checkPermission('system/communication/mailaccounts/*', CRUD.UPDATE)) {
@@ -165,17 +132,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-mail-account-dialog', ['mail-accounts'], EditMailAccountDialogContext
             );
-            ContextService.getInstance().registerContext(editMailAccountDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-mail-account-dialog',
-                new WidgetConfiguration(
-                    'edit-mail-account-dialog', 'Translatable#Edit Account',
-                    [], {}, false, false, 'kix-icon-edit'
-                ),
-                KIXObjectType.MAIL_ACCOUNT,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editMailAccountDialogContext);
         }
 
         const mailAccountDetailsContext = new ContextDescriptor(
@@ -183,7 +140,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext
         );
-        ContextService.getInstance().registerContext(mailAccountDetailsContext);
+        await ContextService.getInstance().registerContext(mailAccountDetailsContext);
     }
 
     private async registerMailFilters(): Promise<void> {
@@ -196,17 +153,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext
             );
-            ContextService.getInstance().registerContext(newMailFilterDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-mail-filter-dialog',
-                new WidgetConfiguration(
-                    'new-mail-filter-dialog', 'Translatable#New Email Filter',
-                    [], {}, false, false, 'kix-icon-new-gear'
-                ),
-                KIXObjectType.MAIL_FILTER,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newMailFilterDialogContext);
         }
 
         if (await this.checkPermission('system/communication/mailfilters/*', CRUD.UPDATE)) {
@@ -217,17 +164,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext
             );
-            ContextService.getInstance().registerContext(editMailFilterDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-mail-filter-dialog',
-                new WidgetConfiguration(
-                    'edit-mail-filter-dialog', 'Translatable#Edit Email Filter',
-                    [], {}, false, false, 'kix-icon-edit'
-                ),
-                KIXObjectType.MAIL_FILTER,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editMailFilterDialogContext);
         }
 
         const mailFilterDetailsContext = new ContextDescriptor(
@@ -235,7 +172,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['mail-filters'], MailFilterDetailsContext
         );
-        ContextService.getInstance().registerContext(mailFilterDetailsContext);
+        await ContextService.getInstance().registerContext(mailFilterDetailsContext);
 
     }
 

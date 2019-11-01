@@ -8,18 +8,23 @@
  */
 
 import { IdService, TableConfiguration, TableHeaderHeight, TableRowHeight } from "../../../core/browser";
-import { WidgetConfiguration, TableWidgetSettings, KIXObjectType, JobProperty, SortOrder } from "../../../core/model";
+import {
+    WidgetConfiguration, TableWidgetConfiguration, KIXObjectType, JobProperty, SortOrder
+} from "../../../core/model";
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('admin-jobs-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Automation: Jobs', ['csv-export-action'],
-            new TableWidgetSettings(
-                KIXObjectType.JOB, [JobProperty.NAME, SortOrder.UP],
+            null, null, null,
+            'table-widget', 'Translatable#Automation: Jobs', ['csv-export-action'], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.JOB, [JobProperty.NAME, SortOrder.UP], null,
                 new TableConfiguration(
-                    KIXObjectType.JOB, null, null, null, true, false, null, null,
+                    null, null, null,
+                    KIXObjectType.JOB, null, null, null, null, true, false, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ),

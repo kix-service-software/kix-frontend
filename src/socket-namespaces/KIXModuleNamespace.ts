@@ -16,8 +16,11 @@ import {
     ISocketRequest, LoadReleaseInfoResponse, LoadObjectDefinitionsResponse, SocketEvent
 } from '../core/model';
 import { KIXExtensions, IKIXModuleExtension, KIXModuleFactory } from '../core/extensions';
-import { PluginService } from '../services';
-import { ConfigurationService, ObjectDefinitionService } from '../core/services';
+import { PluginService, ModuleConfigurationService } from '../services';
+import { ConfigurationService, ObjectDefinitionService, LoggingService } from '../core/services';
+import { ConfigurationType } from '../core/model/configuration';
+import { FormConfiguration } from '../core/model/components/form/configuration';
+import { FormConfigurationResolver } from '../services/configuration/FormConfigurationResolver';
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
@@ -75,8 +78,19 @@ export class KIXModuleNamespace extends SocketNameSpace {
         data: LoadFormConfigurationsRequest
     ): Promise<SocketResponse> {
         const response = await AppUtil.updateFormConfigurations()
-            .then(() => {
-                const forms = ConfigurationService.getInstance().getRegisteredForms();
+            .then(async () => {
+                const forms = await ModuleConfigurationService.getInstance().loadConfigurations<FormConfiguration>(
+                    ConfigurationType.Form
+                );
+
+                for (const form of forms) {
+                    await FormConfigurationResolver.resolve(form)
+                        .catch((error) => {
+                            LoggingService.getInstance().error(error);
+                            LoggingService.getInstance().warning('Could not resolve form configuration ' + form.id);
+                        });
+                }
+
                 const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
                 return new SocketResponse(
                     KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,

@@ -107,19 +107,18 @@ export class UIModule implements IUIModule {
 
         FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         await this.registerBookmarks();
     }
 
-    public registerContexts(): void {
+    public async registerContexts(): Promise<void> {
         const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.SEARCH);
         if (dialogs && dialogs.length) {
             const searchContext = new ContextDescriptor(
                 SearchContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
                 false, 'search', ['search'], SearchContext
             );
-            ContextService.getInstance().registerContext(searchContext);
+            await ContextService.getInstance().registerContext(searchContext);
         }
 
         const bulkDialogContext = new ContextDescriptor(
@@ -127,35 +126,14 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.EDIT_BULK,
             false, 'bulk-dialog', ['bulk'], BulkDialogContext
         );
-        ContextService.getInstance().registerContext(bulkDialogContext);
+        await ContextService.getInstance().registerContext(bulkDialogContext);
 
         const settingsDialogContext = new ContextDescriptor(
             PersonalSettingsDialogContext.CONTEXT_ID, [KIXObjectType.PERSONAL_SETTINGS],
             ContextType.DIALOG, ContextMode.PERSONAL_SETTINGS,
             false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
         );
-        ContextService.getInstance().registerContext(settingsDialogContext);
-    }
-
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'personal-settings-dialog',
-            new WidgetConfiguration(
-                'personal-settings-dialog', 'Translatable#Edit Personal Settings',
-                [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.PERSONAL_SETTINGS,
-            ContextMode.PERSONAL_SETTINGS
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'bulk-dialog',
-            new WidgetConfiguration(
-                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.ANY,
-            ContextMode.EDIT_BULK
-        ));
+        await ContextService.getInstance().registerContext(settingsDialogContext);
     }
 
     private async registerBookmarks(): Promise<void> {

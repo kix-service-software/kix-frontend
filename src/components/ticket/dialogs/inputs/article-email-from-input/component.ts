@@ -9,13 +9,14 @@
 
 import { ComponentState } from "./ComponentState";
 import {
-    FormInputComponent, TreeNode, TicketProperty, FormField,
+    FormInputComponent, TreeNode, TicketProperty,
     FormFieldValue, Queue, KIXObjectType, ContextType, ContextMode, Ticket, SystemAddress, TreeHandler
 } from "../../../../../core/model";
 import { FormService, KIXObjectService, ContextService } from "../../../../../core/browser";
 import { TicketDetailsContext } from "../../../../../core/browser/ticket";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
 import { AgentService } from "../../../../../core/browser/application/AgentService";
+import { FormFieldConfiguration } from "../../../../../core/model/components/form/configuration";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -73,7 +74,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         formInstance.registerListener({
             formListenerId: 'article-email-from-input',
-            formValueChanged: async (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
+            formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
                 if (formField && formField.property === TicketProperty.QUEUE_ID) {
                     if (!value) {
                         value = await formInstance.getFormFieldValueByProperty(TicketProperty.QUEUE_ID);

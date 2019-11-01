@@ -69,8 +69,8 @@ export class ContactTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONTACT, null, null, tableColumns, false, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.CONTACT, null, null, tableColumns, [], false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             tableConfiguration.enableSelection = true;
@@ -95,18 +95,21 @@ export class ContactTableFactory extends TableFactory {
         let config;
         switch (property) {
             case ContactProperty.EMAIL:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 175, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 175, true, true);
                 break;
             case ContactProperty.PHONE:
             case ContactProperty.COUNTRY:
             case ContactProperty.CITY:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 130, true, true);
                 break;
             case KIXObjectProperty.VALID_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 130, true, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 130, true, true, true);
                 break;
             case ContactProperty.PRIMARY_ORGANISATION_ID:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, false, DataType.STRING, true, null,
                     'Translatable#Organisation'
                 );

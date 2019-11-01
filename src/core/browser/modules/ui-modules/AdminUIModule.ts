@@ -20,7 +20,6 @@ import { TranslationFormService } from "../../i18n/admin/TranslationFormService"
 import {
     NewTranslationDialogContext, EditTranslationDialogContext, TranslationDetailsContext
 } from "../../i18n/admin/context";
-import { DialogService } from "../../components";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { AdministrationSocketClient, AdminContext } from "../../admin";
@@ -32,7 +31,7 @@ import {
     NotificationFilterValidator
 } from "../../notification";
 import {
-    ContextType, ContextMode, ContextDescriptor, KIXObjectType, ConfiguredDialogWidget, WidgetConfiguration, CRUD
+    ContextType, ContextMode, ContextDescriptor, KIXObjectType, CRUD
 } from "../../../model";
 import { LogFileLabelProvider } from "../../log/LogFileLabelProvider";
 import { LogFileService } from "../../log/LogFileService";
@@ -83,7 +82,7 @@ export class UIModule implements IUIModule {
                 ContextType.MAIN, ContextMode.DASHBOARD,
                 false, 'admin', ['admin'], AdminContext
             );
-            ContextService.getInstance().registerContext(contextDescriptor);
+            await ContextService.getInstance().registerContext(contextDescriptor);
 
             await this.registerI18N();
             await this.registerNotifications();
@@ -130,17 +129,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
             );
-            ContextService.getInstance().registerContext(newTranslationDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-translation-dialog',
-                new WidgetConfiguration(
-                    'new-translation-dialog', 'Translatable#New Translation', [], {},
-                    false, false, 'kix-icon-new-gear'
-                ),
-                KIXObjectType.TRANSLATION_PATTERN,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newTranslationDialogContext);
         }
 
         if (await this.checkPermission('system/i18n/translations/*', CRUD.UPDATE)) {
@@ -150,17 +139,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
             );
-            ContextService.getInstance().registerContext(editTranslationDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-translation-dialog',
-                new WidgetConfiguration(
-                    'edit-translation-dialog', 'Translatable#Edit Translation', [], {},
-                    false, false, 'kix-icon-edit'
-                ),
-                KIXObjectType.TRANSLATION_PATTERN,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editTranslationDialogContext);
         }
 
         const translationDetailsContext = new ContextDescriptor(
@@ -168,7 +147,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['translations'], TranslationDetailsContext
         );
-        ContextService.getInstance().registerContext(translationDetailsContext);
+        await ContextService.getInstance().registerContext(translationDetailsContext);
     }
 
     private async registerNotifications(): Promise<void> {
@@ -190,17 +169,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 false, 'new-notification-dialog', ['notifications'], NewNotificationDialogContext
             );
-            ContextService.getInstance().registerContext(newNotificationDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-notification-dialog',
-                new WidgetConfiguration(
-                    'new-notification-dialog', 'Translatable#New Notification', [], {},
-                    false, false, 'kix-icon-new-gear'
-                ),
-                KIXObjectType.NOTIFICATION,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newNotificationDialogContext);
         }
 
         if (await this.checkPermission('system/communication/notifications/*', CRUD.UPDATE)) {
@@ -210,17 +179,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-notification-dialog', ['notifications'], EditNotificationDialogContext
             );
-            ContextService.getInstance().registerContext(editNotificationDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-notification-dialog',
-                new WidgetConfiguration(
-                    'edit-notification-dialog', 'Translatable#Edit Notification', [], {},
-                    false, false, 'kix-icon-edit'
-                ),
-                KIXObjectType.NOTIFICATION,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editNotificationDialogContext);
         }
 
         const notificationDetailsContext = new ContextDescriptor(
@@ -228,7 +187,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['notifications'], NotificationDetailsContext
         );
-        ContextService.getInstance().registerContext(notificationDetailsContext);
+        await ContextService.getInstance().registerContext(notificationDetailsContext);
     }
 
     private async registerWebforms(): Promise<void> {
@@ -250,41 +209,21 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
             false, 'new-webform-dialog', ['webforms'], NewWebformDialogContext
         );
-        ContextService.getInstance().registerContext(newWebformDialogContext);
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'new-webform-dialog',
-            new WidgetConfiguration(
-                'new-webform-dialog', 'Translatable#New Webform', [], {},
-                false, false, 'kix-icon-new-gear'
-            ),
-            KIXObjectType.WEBFORM,
-            ContextMode.CREATE_ADMIN
-        ));
+        await ContextService.getInstance().registerContext(newWebformDialogContext);
 
         const webformDetailsContext = new ContextDescriptor(
             WebformDetailsContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.MAIN, ContextMode.DETAILS,
             false, 'object-details-page', ['webforms'], WebformDetailsContext
         );
-        ContextService.getInstance().registerContext(webformDetailsContext);
+        await ContextService.getInstance().registerContext(webformDetailsContext);
 
         const editWebformDialogContext = new ContextDescriptor(
             EditWebformDialogContext.CONTEXT_ID, [KIXObjectType.WEBFORM],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-webform-dialog', ['webforms'], EditWebformDialogContext
         );
-        ContextService.getInstance().registerContext(editWebformDialogContext);
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-webform-dialog',
-            new WidgetConfiguration(
-                'edit-webform-dialog', 'Translatable#Edit', [], {},
-                false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.WEBFORM,
-            ContextMode.EDIT_ADMIN
-        ));
+        await ContextService.getInstance().registerContext(editWebformDialogContext);
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

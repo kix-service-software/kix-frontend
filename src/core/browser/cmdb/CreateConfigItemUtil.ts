@@ -7,10 +7,11 @@
  * --
  */
 
-import { ConfigItemProperty, Version, ConfigItemImage, FormField } from "../../model";
+import { ConfigItemProperty, Version, ConfigItemImage } from "../../model";
 import { FormService } from "../form";
 import { BrowserUtil } from "../BrowserUtil";
 import { CreateConfigItemVersionUtil } from "./CreateConfigItemVersionUtil";
+import { FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class CreateConfigItemUtil {
 
@@ -23,7 +24,7 @@ export class CreateConfigItemUtil {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const form = formInstance.getForm();
 
-        let fields: FormField[] = [];
+        let fields: FormFieldConfiguration[] = [];
         form.groups.forEach((g) => fields = [...fields, ...g.formFields]);
 
         for (const formField of fields) {

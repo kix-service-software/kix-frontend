@@ -9,11 +9,14 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectInformationWidgetSettings,
-    KIXObjectType, NotificationProperty, KIXObjectProperty, TableWidgetSettings, SortOrder, TabWidgetSettings, CRUD
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration,
+    KIXObjectType, NotificationProperty, KIXObjectProperty, TableWidgetConfiguration, SortOrder,
+    CRUD, TabWidgetConfiguration, ObjectInformationWidgetConfiguration, ContextType
 } from '../../core/model';
 import { NotificationDetailsContext } from '../../core/browser/notification/context';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,106 +24,149 @@ export class Extension implements IConfigurationExtension {
         return NotificationDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const tabLane = new ConfiguredWidget('notification-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['notification-information-lane']))
+        const objectInfoConfig = new ObjectInformationWidgetConfiguration(
+            'notification-details-object-info-config', 'Object Info Config', ConfigurationType.ObjectInformation,
+            KIXObjectType.NOTIFICATION,
+            [
+                NotificationProperty.NAME,
+                NotificationProperty.DATA_VISIBLE_FOR_AGENT,
+                NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP,
+                KIXObjectProperty.COMMENT,
+                KIXObjectProperty.VALID_ID,
+                KIXObjectProperty.CREATE_TIME,
+                KIXObjectProperty.CREATE_BY,
+                KIXObjectProperty.CHANGE_TIME,
+                KIXObjectProperty.CHANGE_BY
+            ],
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(objectInfoConfig);
 
-        const notificationInfoLane = new ConfiguredWidget('notification-information-lane',
-            new WidgetConfiguration(
-                'notification-info-widget', 'Translatable#Notification Information',
-                [],
-                new ObjectInformationWidgetSettings(
-                    KIXObjectType.NOTIFICATION,
-                    [
-                        NotificationProperty.NAME,
-                        NotificationProperty.DATA_VISIBLE_FOR_AGENT,
-                        NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP,
-                        KIXObjectProperty.COMMENT,
-                        KIXObjectProperty.VALID_ID,
-                        KIXObjectProperty.CREATE_TIME,
-                        KIXObjectProperty.CREATE_BY,
-                        KIXObjectProperty.CHANGE_TIME,
-                        KIXObjectProperty.CHANGE_BY
-                    ],
-                ),
-                false, true
+        const notificationInfoLane = new WidgetConfiguration(
+            'notification-details-object-info-widget', 'Object Info Widget', ConfigurationType.Widget,
+            'notification-info-widget', 'Translatable#Notification Information', [],
+            new ConfigurationDefinition('notification-details-object-info-config', ConfigurationType.ObjectInformation),
+            null, false, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notificationInfoLane);
+
+        const tabConfig = new TabWidgetConfiguration(
+            'notification-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['notification-details-object-info-widget']
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+
+        const tabLane = new WidgetConfiguration(
+            'notification-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('notification-details-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
+
+        const tableWidgetConfig = new TableWidgetConfiguration(
+            'notification-details-filter-table-widget-config', 'Widget Config', ConfigurationType.TableWidget,
+            KIXObjectType.NOTIFICATION_FILTER, ['Field', SortOrder.UP], null, null, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+
+        const notificationFilterWidget = new WidgetConfiguration(
+            'notification-details-filter-table-widget', 'Table Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Filter', [],
+            new ConfigurationDefinition(
+                'notification-details-filter-table-widget-config', ConfigurationType.TableWidget
+            ), null, false, true, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notificationFilterWidget);
+
+        const recipientsInfoConfig = new ObjectInformationWidgetConfiguration(
+            'notification-details-recipients-info-config', 'Info Config', ConfigurationType.ObjectInformation,
+            KIXObjectType.NOTIFICATION,
+            [
+                NotificationProperty.DATA_RECIPIENTS,
+                NotificationProperty.DATA_RECIPIENT_AGENTS,
+                NotificationProperty.DATA_RECIPIENT_ROLES,
+                NotificationProperty.DATA_SEND_DESPITE_OOO,
+                NotificationProperty.DATA_SEND_ONCE_A_DAY,
+                NotificationProperty.DATA_CREATE_ARTICLE
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(recipientsInfoConfig);
+
+        const notificationRecipientsWidget = new WidgetConfiguration(
+            'notification-details-recipient-info-widget', 'Recipient Info Widget', ConfigurationType.Widget,
+            'notification-label-widget', 'Translatable#Recipients', [],
+            new ConfigurationDefinition(
+                'notification-details-recipients-info-config', ConfigurationType.ObjectInformation
             ),
-            [new UIComponentPermission('system/communication/notifications', [CRUD.READ])]
+            null, true, true, null, true
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notificationRecipientsWidget);
 
-        const notificationFilterWidget = new ConfiguredWidget('notification-filter-widget',
-            new WidgetConfiguration(
-                'table-widget', 'Translatable#Filter', [],
-                new TableWidgetSettings(
-                    KIXObjectType.NOTIFICATION_FILTER, ['Field', SortOrder.UP], undefined, undefined, false
-                ),
-                false, true, null, true
-            )
+        const methodsInfoConfig = new ObjectInformationWidgetConfiguration(
+            'notification-details-notification-methods-info-config', 'Info Config', ConfigurationType.ObjectInformation,
+            KIXObjectType.NOTIFICATION,
+            [
+                NotificationProperty.DATA_RECIPIENT_EMAIL,
+                NotificationProperty.DATA_RECIPIENT_SUBJECT
+            ]
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(methodsInfoConfig);
 
-        const notificationRecipientsWidget = new ConfiguredWidget('notification-recipients-widget',
-            new WidgetConfiguration(
-                'notification-label-widget', 'Translatable#Recipients', [],
-                new ObjectInformationWidgetSettings(
-                    KIXObjectType.NOTIFICATION,
-                    [
-                        NotificationProperty.DATA_RECIPIENTS,
-                        NotificationProperty.DATA_RECIPIENT_AGENTS,
-                        NotificationProperty.DATA_RECIPIENT_ROLES,
-                        NotificationProperty.DATA_SEND_DESPITE_OOO,
-                        NotificationProperty.DATA_SEND_ONCE_A_DAY,
-                        NotificationProperty.DATA_CREATE_ARTICLE
-                    ]
-                ),
-                true, true, null, true
-            )
+        const notificationMethodsWidget = new WidgetConfiguration(
+            'notification-details-notification-methods-widget', 'Method Widget', ConfigurationType.Widget,
+            'notification-label-widget', 'Translatable#Notification Options', [],
+            new ConfigurationDefinition(
+                'notification-details-notification-methods-info-config', ConfigurationType.ObjectInformation
+            ), null, true, true, null, true
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notificationMethodsWidget);
 
-        const notificationOptionsWidget = new ConfiguredWidget('notification-options-widget',
-            new WidgetConfiguration(
-                'notification-label-widget', 'Translatable#Notification Options', [],
-                new ObjectInformationWidgetSettings(
-                    KIXObjectType.NOTIFICATION,
-                    [
-                        NotificationProperty.DATA_RECIPIENT_EMAIL,
-                        NotificationProperty.DATA_RECIPIENT_SUBJECT
-                    ]
-                ),
-                true, true, null, true
-            )
+        const notificationTextWidget = new WidgetConfiguration(
+            'notification-details-text-widget', 'Text Widget', ConfigurationType.Widget,
+            'notification-text-widget', 'Translatable#Notification Text', [],
+            null, null, false, true, null, true
         );
-
-        const notificationTextWidget = new ConfiguredWidget('notification-text-widget',
-            new WidgetConfiguration(
-                'notification-text-widget', 'Translatable#Notification Text', [],
-                null, false, true, null, true
-            )
-        );
-
-        const lanes = [
-            'notification-details-tab-widget', 'notification-filter-widget', 'notification-recipients-widget',
-            'notification-options-widget', 'notification-text-widget'
-        ];
-
-        const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabLane, notificationInfoLane, notificationFilterWidget, notificationRecipientsWidget,
-            notificationOptionsWidget, notificationTextWidget
-        ];
+        await ModuleConfigurationService.getInstance().saveConfiguration(notificationTextWidget);
 
         return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
             this.getModuleId(),
             [], [],
-            [], [],
-            lanes, laneWidgets,
-            [], [],
-            ['notification-create'],
-            ['notification-edit', 'print-action']
+            [
+                new ConfiguredWidget(
+                    'notification-details-tab-widget', 'notification-details-tab-widget', null,
+                    [new UIComponentPermission('system/communication/notifications', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'notification-details-filter-table-widget', 'notification-details-filter-table-widget'
+                ),
+                new ConfiguredWidget(
+                    'notification-details-recipient-info-widget', 'notification-details-recipient-info-widget'
+                ),
+                new ConfiguredWidget(
+                    'notification-details-notification-methods-widget',
+                    'notification-details-notification-methods-widget'
+                ),
+                new ConfiguredWidget('notification-details-text-widget', 'notification-details-text-widget')
+            ],
+            [],
+            [
+                'notification-create'
+            ],
+            [
+                'notification-edit', 'print-action'
+            ],
+            [],
+            [
+                new ConfiguredWidget(
+                    'notification-details-object-info-widget', 'notification-details-object-info-widget'
+                )
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 

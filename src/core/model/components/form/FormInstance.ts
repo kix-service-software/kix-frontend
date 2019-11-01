@@ -8,7 +8,7 @@
  */
 
 import {
-    FormFieldValue, AutoCompleteConfiguration, Form, FormField,
+    FormFieldValue, AutoCompleteConfiguration,
     ValidationSeverity, ValidationResult, IFormInstanceListener
 } from ".";
 import { FormContext } from "./FormContext";
@@ -20,6 +20,7 @@ import { KIXObjectType } from "../../kix";
 import { IKIXObjectFormService } from "../../../browser/kix/IKIXObjectFormService";
 import { FormValidationService } from "../../../browser/form/validation";
 import { ContextType } from "../context";
+import { FormConfiguration, FormFieldConfiguration } from "./configuration";
 
 export class FormInstance implements IFormInstance {
 
@@ -29,7 +30,7 @@ export class FormInstance implements IFormInstance {
 
     private listeners: IFormInstanceListener[] = [];
 
-    public constructor(public form: Form) { }
+    public constructor(public form: FormConfiguration) { }
 
     public async initFormInstance(): Promise<void> {
         await this.initFormFieldValues();
@@ -51,7 +52,7 @@ export class FormInstance implements IFormInstance {
         }
     }
 
-    private initValues(formFields: FormField[]): void {
+    private initValues(formFields: FormFieldConfiguration[]): void {
         formFields.forEach((f) => {
             this.formFieldValues.set(f.instanceId, f.defaultValue
                 ? new FormFieldValue(f.defaultValue.value, f.defaultValue.valid)
@@ -82,7 +83,7 @@ export class FormInstance implements IFormInstance {
         }
     }
 
-    private initStructure(formFields: FormField[], parent?: FormField): void {
+    private initStructure(formFields: FormFieldConfiguration[], parent?: FormFieldConfiguration): void {
         formFields.forEach((f) => {
             f.parent = parent;
             if (f.children) {
@@ -91,7 +92,7 @@ export class FormInstance implements IFormInstance {
         });
     }
 
-    public getForm(): Form {
+    public getForm(): FormConfiguration {
         return this.form;
     }
 
@@ -123,14 +124,14 @@ export class FormInstance implements IFormInstance {
         return false;
     }
 
-    public async provideFormField(newFormField: FormField): Promise<void> {
+    public async provideFormField(newFormField: FormFieldConfiguration): Promise<void> {
         const parent = await this.getFormField(newFormField.parent.instanceId);
         parent.children.push(newFormField);
         await this.provideFormFieldValue(newFormField.instanceId, null);
     }
 
-    public async removeFormField(formField: FormField, parent?: FormField): Promise<void> {
-        let fields: FormField[];
+    public async removeFormField(formField: FormFieldConfiguration, parent?: FormFieldConfiguration): Promise<void> {
+        let fields: FormFieldConfiguration[];
         if (parent) {
             fields = parent.children;
         } else if (formField.parent) {
@@ -152,8 +153,8 @@ export class FormInstance implements IFormInstance {
         }
     }
 
-    public async addFormField(formField: FormField): Promise<void> {
-        let fields: FormField[];
+    public async addFormField(formField: FormFieldConfiguration): Promise<void> {
+        let fields: FormFieldConfiguration[];
         if (formField.parent) {
             const parent = await this.getFormField(formField.parent.instanceId);
             fields = parent.children;
@@ -179,7 +180,9 @@ export class FormInstance implements IFormInstance {
         }
     }
 
-    public addNewFormField(parent: FormField, newFields: FormField[], clearChildren: boolean = false): void {
+    public addNewFormField(
+        parent: FormFieldConfiguration, newFields: FormFieldConfiguration[], clearChildren: boolean = false
+    ): void {
         if (parent) {
             if (clearChildren) {
                 parent.children.forEach((c) => this.formFieldValues.delete(c.instanceId));
@@ -244,7 +247,7 @@ export class FormInstance implements IFormInstance {
         return null;
     }
 
-    public async getFormFieldByProperty(property: string): Promise<FormField> {
+    public async getFormFieldByProperty(property: string): Promise<FormFieldConfiguration> {
         for (const g of this.form.groups) {
             const field = this.findFormFieldByProperty(g.formFields, property);
             if (field) {
@@ -267,7 +270,7 @@ export class FormInstance implements IFormInstance {
         return this.formFieldValues;
     }
 
-    public async getFormField(formFieldInstanceId: string): Promise<FormField> {
+    public async getFormField(formFieldInstanceId: string): Promise<FormFieldConfiguration> {
         for (const g of this.form.groups) {
             const field = this.findFormField(g.formFields, formFieldInstanceId);
             if (field) {
@@ -278,7 +281,7 @@ export class FormInstance implements IFormInstance {
         return null;
     }
 
-    public async validateField(field: FormField): Promise<ValidationResult> {
+    public async validateField(field: FormFieldConfiguration): Promise<ValidationResult> {
         let result;
         const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);
         const formFieldValue = this.getFormFieldValue(field.instanceId);
@@ -289,14 +292,17 @@ export class FormInstance implements IFormInstance {
         return result;
     }
 
-    private findFormField(fields: FormField[], formFieldInstanceId: string): FormField {
-        const field = fields.find((f) => f.instanceId === formFieldInstanceId);
+    private findFormField(fields: FormFieldConfiguration[], formFieldInstanceId: string): FormFieldConfiguration {
+        let field: FormFieldConfiguration;
+        if (fields) {
+            field = fields.find((f) => f.instanceId === formFieldInstanceId);
 
-        if (!field) {
-            for (const f of fields) {
-                const foundField = this.findFormField(f.children, formFieldInstanceId);
-                if (foundField) {
-                    return foundField;
+            if (!field) {
+                for (const f of fields) {
+                    const foundField = this.findFormField(f.children, formFieldInstanceId);
+                    if (foundField) {
+                        return foundField;
+                    }
                 }
             }
         }
@@ -304,7 +310,7 @@ export class FormInstance implements IFormInstance {
         return field;
     }
 
-    private findFormFieldByProperty(fields: FormField[], property: string): FormField {
+    private findFormFieldByProperty(fields: FormFieldConfiguration[], property: string): FormFieldConfiguration {
         let field = fields.find((f) => f.property === property);
 
         if (!field) {
@@ -331,7 +337,7 @@ export class FormInstance implements IFormInstance {
         return result;
     }
 
-    private async validateFields(fields: FormField[]): Promise<ValidationResult[]> {
+    private async validateFields(fields: FormFieldConfiguration[]): Promise<ValidationResult[]> {
         let result = [];
         for (const field of fields) {
             const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);

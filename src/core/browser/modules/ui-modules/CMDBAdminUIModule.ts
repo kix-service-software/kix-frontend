@@ -8,11 +8,10 @@
  */
 
 import {
-    ContextService, DialogService, ActionFactory,
-    TableFactoryService, LabelService, ServiceRegistry, FactoryService
+    ContextService, ActionFactory, TableFactoryService, LabelService, ServiceRegistry, FactoryService
 } from "../../../../core/browser";
 import {
-    KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, CRUD
+    KIXObjectType, ContextDescriptor, ContextType, ContextMode, CRUD
 } from "../../../../core/model";
 import {
     ConfigItemClassCreateAction, ConfigItemClassEditAction, ConfigItemClassDetailsContext,
@@ -54,17 +53,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext
             );
-            ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-config-item-class-dialog',
-                new WidgetConfiguration(
-                    'new-config-item-class-dialog', 'Translatable#New Class', [], {}, false, false,
-                    'kix-icon-new-gear'
-                ),
-                KIXObjectType.CONFIG_ITEM_CLASS,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
         }
 
         if (await this.checkPermission('system/cmdb/classes/*', CRUD.UPDATE)) {
@@ -75,17 +64,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext
             );
-            ContextService.getInstance().registerContext(editConfigItemClassContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-config-item-class-dialog',
-                new WidgetConfiguration(
-                    'edit-config-item-class-dialog', 'Translatable#Edit Class', [], {},
-                    false, false, 'kix-icon-edit'
-                ),
-                KIXObjectType.CONFIG_ITEM_CLASS,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editConfigItemClassContext);
         }
 
         const configItemClassDetailsContext = new ContextDescriptor(
@@ -93,7 +72,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['configitemclasses'], ConfigItemClassDetailsContext
         );
-        ContextService.getInstance().registerContext(configItemClassDetailsContext);
+        await ContextService.getInstance().registerContext(configItemClassDetailsContext);
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

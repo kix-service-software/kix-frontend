@@ -7,14 +7,16 @@
  * --
  */
 
-import { FormField } from ".";
+import { IConfiguration, ConfigurationType } from "../../configuration";
+import { ChartConfiguration } from "chart.js";
 
-export class FormGroup {
+export class ChartComponentConfiguration implements IConfiguration {
 
     public constructor(
+        public id: string,
         public name: string,
-        public formFields: FormField[],
-        public separatorString: string = null
+        public type: ConfigurationType | string,
+        public chartConfiguration: ChartConfiguration
     ) { }
 
 }

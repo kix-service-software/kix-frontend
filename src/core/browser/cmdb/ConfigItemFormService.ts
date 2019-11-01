@@ -9,14 +9,17 @@
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, FormFieldValue, FormField, ConfigItem, VersionProperty, ConfigItemProperty,
+    KIXObjectType, FormFieldValue, ConfigItem, VersionProperty, ConfigItemProperty,
     GeneralCatalogItem, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes, FormContext
+    FilterType, ConfigItemClass, Contact, Organisation, FormFieldOptions, InputFieldTypes, FormContext, ContextType
 } from "../../model";
 import { KIXObjectService } from '../kix/';
 import { LabelService } from "../LabelService";
 import { SearchOperator } from "../SearchOperator";
 import { PreparedData } from "../../model/kix/cmdb/PreparedData";
+import { FormFieldConfiguration, FormConfiguration } from "../../model/components/form/configuration";
+import { ConfigItemFormFactory } from "./ConfigItemFormFactory";
+import { ContextService } from "../context";
 
 export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
 
@@ -37,8 +40,18 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         return kixObjectType === KIXObjectType.CONFIG_ITEM || kixObjectType === KIXObjectType.CONFIG_ITEM_VERSION;
     }
 
+    protected async prePrepareForm(form: FormConfiguration): Promise<void> {
+        if (form) {
+            const context = ContextService.getInstance().getActiveContext();
+            if (context.getDescriptor().contextType === ContextType.DIALOG) {
+                const ciClassId = context.getAdditionalInformation('CI_CLASS_ID');
+                await ConfigItemFormFactory.getInstance().addCIClassAttributesToForm(form, ciClassId);
+            }
+        }
+    }
+
     public async prepareFormFieldValues(
-        formFields: FormField[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
+        formFields: FormFieldConfiguration[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
         formContext: FormContext
     ): Promise<void> {
         if (configItem && formContext === FormContext.EDIT) {
@@ -67,9 +80,9 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     private async prepareConfigItemValues(
-        configItem: ConfigItem, formFields: FormField[], formFieldValues: Map<string, FormFieldValue<any>>
-    ): Promise<FormField[]> {
-        let newFormFields: FormField[] = [];
+        configItem: ConfigItem, formFields: FormFieldConfiguration[], formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<FormFieldConfiguration[]> {
+        let newFormFields: FormFieldConfiguration[] = [];
         for (const formField of formFields) {
             if (configItem[formField.property]) {
                 newFormFields.push(formField);
@@ -97,7 +110,8 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     private async getConfigItemValue(
-        formField: FormField, value: any, configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>
+        formField: FormFieldConfiguration, value: any,
+        configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         const newValue = await this.getValue(
             formField.property,
@@ -153,9 +167,10 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     private async prepareDataValues(
-        preparedData: PreparedData[], formField: FormField, formFieldValues: Map<string, FormFieldValue<any>>
-    ): Promise<FormField[]> {
-        const formFields: FormField[] = [];
+        preparedData: PreparedData[], formField: FormFieldConfiguration,
+        formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<FormFieldConfiguration[]> {
+        const formFields: FormFieldConfiguration[] = [];
         const relevantPreparedData = preparedData.filter(
             (pd) => pd.Key === formField.property
         );
@@ -181,7 +196,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     private async setDataValue(
-        ff: FormField, pd: PreparedData, index: number, formFieldValues: Map<string, FormFieldValue<any>>
+        ff: FormFieldConfiguration, pd: PreparedData, index: number, formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         let value = await this.getDataValue(ff, pd);
         if (value && value !== '') {
@@ -198,10 +213,10 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
     }
 
     private async setDataChildren(
-        ff: FormField, pd: PreparedData, formFieldValues: Map<string, FormFieldValue<any>>
+        ff: FormFieldConfiguration, pd: PreparedData, formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         if (ff.children && ff.children.length) {
-            let newChildren: FormField[] = [];
+            let newChildren: FormFieldConfiguration[] = [];
             for (const child of ff.children) {
                 const children = await this.prepareDataValues(
                     pd.Sub ? pd.Sub : [], child, formFieldValues
@@ -212,10 +227,12 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         }
     }
 
-    private async setEmptyField(ff: FormField, formFieldValues: Map<string, FormFieldValue<any>>): Promise<void> {
+    private async setEmptyField(
+        ff: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>
+    ): Promise<void> {
         formFieldValues.set(ff.instanceId, new FormFieldValue(null));
         if (ff.children && ff.children.length) {
-            let newChildren: FormField[] = [];
+            let newChildren: FormFieldConfiguration[] = [];
             for (const child of ff.children) {
                 const children = await this.prepareDataValues([], child, formFieldValues);
                 newChildren = [...newChildren, ...children];
@@ -224,7 +241,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         }
     }
 
-    private async getDataValue(formField: FormField, preparedData: PreparedData): Promise<any> {
+    private async getDataValue(formField: FormFieldConfiguration, preparedData: PreparedData): Promise<any> {
         let value;
         switch (preparedData.Type) {
             case 'GeneralCatalog':
@@ -281,7 +298,7 @@ export class ConfigItemFormService extends KIXObjectFormService<ConfigItem> {
         return value;
     }
 
-    public async hasPermissions(field: FormField): Promise<boolean> {
+    public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         let hasPermissions = true;
         switch (field.property) {
             case ConfigItemProperty.CLASS_ID:

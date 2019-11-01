@@ -7,23 +7,26 @@
  * --
  */
 
-import { AutoCompleteConfiguration } from './AutoCompleteConfiguration';
-import { FormGroup } from './FormGroup';
-import { KIXObjectType } from '../..';
-import { FormContext } from './FormContext';
+import { AutoCompleteConfiguration } from '../AutoCompleteConfiguration';
+import { FormGroupConfiguration } from './FormGroupConfiguration';
+import { KIXObjectType } from '../../../';
+import { FormContext } from '../FormContext';
+import { ConfigurationType, IConfiguration } from '../../../configuration';
 
-export class Form {
+export class FormConfiguration implements IConfiguration {
 
     public constructor(
         public id: string,
         public name: string,
-        public groups: FormGroup[],
+        public groupConfigurations: string[],
         public objectType: KIXObjectType,
         public validation: boolean = true,
         public formContext: FormContext = FormContext.NEW,
         public autoCompleteConfiguration: AutoCompleteConfiguration = new AutoCompleteConfiguration(),
         public singleFormGroupOpen: boolean = false,
-        public showSingleGroup: boolean = false
+        public showSingleGroup: boolean = false,
+        public type: ConfigurationType = ConfigurationType.Form,
+        public groups: FormGroupConfiguration[] = []
     ) { }
 
 }

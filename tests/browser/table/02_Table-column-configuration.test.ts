@@ -28,15 +28,15 @@ describe('Table Column Configuration Tests', () => {
         });
 
         it('DefaultColumnConfguration should have right defaults.', async () => {
-            const config = new DefaultColumnConfiguration('1');
+            const config = new DefaultColumnConfiguration(null, null, null,'1');
             expect(config.showIcon).is.true;
             expect(config.showText).is.true;
         });
 
         it('Should initialize a table with the correct amount of columns.', async () => {
             const columnConfiguration: IColumnConfiguration[] = [
-                new DefaultColumnConfiguration('A'), new DefaultColumnConfiguration('B'), new DefaultColumnConfiguration('C'),
-                new DefaultColumnConfiguration('D'), new DefaultColumnConfiguration('E'), new DefaultColumnConfiguration('F')
+                new DefaultColumnConfiguration(null, null, null,'A'), new DefaultColumnConfiguration(null, null, null,'B'), new DefaultColumnConfiguration(null, null, null,'C'),
+                new DefaultColumnConfiguration(null, null, null,'D'), new DefaultColumnConfiguration(null, null, null,'E'), new DefaultColumnConfiguration(null, null, null,'F')
             ];
 
             table.setColumnConfiguration(columnConfiguration);

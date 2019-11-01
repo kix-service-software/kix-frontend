@@ -7,8 +7,6 @@
  * --
  */
 
-export class TabWidgetSettings {
-
-    public constructor(public widgets: string[] = []) { }
-
-}
+export { FormFieldConfiguration } from './FormFieldConfiguration';
+export { FormGroupConfiguration } from './FormGroupConfiguration';
+export { FormConfiguration } from './FormConfiguration';

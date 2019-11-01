@@ -8,23 +8,25 @@
  */
 
 import {
-    PersonalSettingsProperty, FormField, IFormFieldValidator, ValidationResult, FormFieldValue, ValidationSeverity
+    PersonalSettingsProperty, IFormFieldValidator,
+    ValidationResult, FormFieldValue, ValidationSeverity
 } from "../../model";
 import { FormService } from "../form";
 import { TranslationService } from "../i18n/TranslationService";
 import { AgentService } from "../application/AgentService";
+import { FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class UserPasswordValidator implements IFormFieldValidator {
 
     public validatorId: string = 'UserPasswordValidator';
 
-    public isValidatorFor(formField: FormField, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
         return formField.property === PersonalSettingsProperty.CURRENT_PASSWORD
             || formField.property === PersonalSettingsProperty.USER_PASSWORD
             || formField.property === PersonalSettingsProperty.USER_PASSWORD_CONFIRM;
     }
 
-    public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
 
         const currentPassword = await formInstance.getFormFieldValueByProperty<string>(

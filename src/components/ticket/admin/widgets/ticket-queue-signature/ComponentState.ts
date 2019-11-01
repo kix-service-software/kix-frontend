@@ -9,7 +9,7 @@
 
 import { WidgetComponentState, AbstractAction, Queue } from "../../../../../core/model";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public title: string = '',

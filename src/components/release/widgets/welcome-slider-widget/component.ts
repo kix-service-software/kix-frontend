@@ -10,7 +10,7 @@
 import { AbstractMarkoComponent, ContextService } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
-import { SliderContent } from "../../../../core/browser/release";
+import { SliderContent, SliderWidgetConfiguration } from "../../../../core/browser/release";
 import { AgentService } from "../../../../core/browser/application/AgentService";
 import { ContextType, KIXObjectType, ContextMode } from "../../../../core/model";
 import { HomeContext } from "../../../../core/browser/home";
@@ -100,32 +100,32 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ? currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
-        this.state.sliderList = [
-            new SliderContent(
-                userId === 1 ? 'Translatable#Welcome to KIX 18' : 'Translatable#Hello',
-                'Translatable#QuickstartGuide_Text_Start',
-                'Slider_Start.png'
-            )
-        ];
+        if (this.state.widgetConfiguration) {
+            this.state.sliderList = [
+                new SliderContent(
+                    userId === 1 ? 'Translatable#Welcome to KIX 18' : 'Translatable#Hello',
+                    'Translatable#QuickstartGuide_Text_Start',
+                    'Slider_Start.png'
+                )
+            ];
 
-        if (
-            this.state.widgetConfiguration && this.state.widgetConfiguration.settings
-            && Array.isArray(this.state.widgetConfiguration.settings.sliderList)
-        ) {
-            this.state.widgetConfiguration.settings.sliderList.forEach((s) => {
-                if (s && s.title) {
-                    this.state.sliderList.push(s);
-                }
-            });
+            const sliderConfig: SliderWidgetConfiguration = this.state.widgetConfiguration.configuration;
+            if (sliderConfig && Array.isArray(this.state.widgetConfiguration.configuration.sliderList)) {
+                this.state.widgetConfiguration.configuration.sliderList.forEach((s) => {
+                    if (s && s.title) {
+                        this.state.sliderList.push(s);
+                    }
+                });
+            }
+
+            this.state.sliderList.push(
+                new SliderContent(
+                    'Translatable#You did it!',
+                    'Translatable#QuickstartGuide_Text_End',
+                    'Slider_End.png'
+                )
+            );
         }
-
-        this.state.sliderList.push(
-            new SliderContent(
-                'Translatable#You did it!',
-                'Translatable#QuickstartGuide_Text_End',
-                'Slider_End.png'
-            )
-        );
     }
 }
 

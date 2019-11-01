@@ -21,6 +21,8 @@ export * from './table-tree';
 export * from './label-value-group';
 
 export { Bookmark } from './Bookmark';
-export { TableWidgetSettings } from './TableWidgetSettings';
-export { ObjectInformationWidgetSettings } from './ObjectInformationWidgetSettings';
-export { TabWidgetSettings } from './TabWidgetSettings';
+export { TableWidgetConfiguration } from './TableWidgetConfiguration';
+export { ObjectInformationWidgetConfiguration } from './ObjectInformationWidgetConfiguration';
+export { TabWidgetConfiguration } from './TabWidgetConfiguration';
+export { LinkedObjectsWidgetConfiguration } from './LinkedObjectsWidgetConfiguration';
+export { HelpWidgetConfiguration } from './HelpWidgetConfiguration';

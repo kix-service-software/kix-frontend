@@ -7,15 +7,13 @@
  * --
  */
 
-import { WidgetConfiguration } from "./WidgetConfiguration";
-import { WidgetType } from './WidgetType';
+import { ConfigurationType } from "./ConfigurationType";
 
-export class WidgetDescriptor<T = any> {
+export class ConfigurationDefinition {
 
     public constructor(
-        public widgetId: string,
-        public configuration: WidgetConfiguration<T>,
-        public type: WidgetType,
-        public required: boolean = false
+        public configurationId: string,
+        public configurationType: ConfigurationType
     ) { }
+
 }

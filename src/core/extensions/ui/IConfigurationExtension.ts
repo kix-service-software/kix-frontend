@@ -13,8 +13,8 @@ export interface IConfigurationExtension {
 
     getModuleId(): string;
 
-    getDefaultConfiguration(token: string): Promise<ContextConfiguration>;
+    createDefaultConfiguration(token: string): Promise<ContextConfiguration>;
 
-    createFormDefinitions(overwrite: boolean): Promise<void>;
+    createFormConfigurations(overwrite: boolean): Promise<void>;
 
 }

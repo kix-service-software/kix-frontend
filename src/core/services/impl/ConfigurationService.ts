@@ -8,13 +8,14 @@
  */
 
 import { IServerConfiguration, AppUtil } from '../../common';
-import { Form, FormContext, KIXObjectType } from '../../model';
+import { FormContext, KIXObjectType } from '../../model';
 
 import jsonfile = require('jsonfile');
 import fs = require('fs');
 import path = require('path');
 
 import { LoggingService } from './LoggingService';
+import { FormConfiguration } from '../../model/components/form/configuration';
 
 export class ConfigurationService {
 
@@ -212,7 +213,7 @@ export class ConfigurationService {
         });
     }
 
-    public getRegisteredForms(): Form[] {
+    public getRegisteredForms(): FormConfiguration[] {
         const result = [];
         for (const formId of this.forms) {
             const form = this.getConfiguration(formId);

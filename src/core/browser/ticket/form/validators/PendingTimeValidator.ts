@@ -8,19 +8,20 @@
  */
 
 import {
-    IFormFieldValidator, FormField, ValidationResult, TicketProperty, ValidationSeverity
+    IFormFieldValidator, ValidationResult, TicketProperty, ValidationSeverity
 } from "../../../../model";
 import { FormService } from "../../..";
+import { FormFieldConfiguration } from "../../../../model/components/form/configuration";
 
 export class PendingTimeValidator implements IFormFieldValidator {
 
     public validatorId: string = 'PendingTimeValidator';
 
-    public isValidatorFor(formField: FormField, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
         return formField.property === TicketProperty.PENDING_TIME;
     }
 
-    public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const formFieldValue = formInstance.getFormFieldValue<Date>(formField.instanceId);
 

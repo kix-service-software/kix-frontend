@@ -39,7 +39,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         loadingHint: string, successHint: string, objectType: KIXObjectType,
         routingConfiguration: RoutingConfiguration
     ) {
-        this.loadingHint = loadingHint;
+        this.loadingHint = await TranslationService.translate(loadingHint);
         this.successHint = await TranslationService.translate(successHint);
         this.objectType = objectType;
         this.routingConfiguration = routingConfiguration;

@@ -11,13 +11,15 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { ContactDetailsContext } from '../../core/browser/contact';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, OrganisationProperty,
-    DataType, KIXObjectType, ObjectInformationWidgetSettings, ContactProperty,
-    KIXObjectProperty, CRUD, TabWidgetSettings, KIXObjectLoadingOptions
+    DataType, KIXObjectType, ContactProperty,
+    KIXObjectProperty, CRUD, KIXObjectLoadingOptions, ObjectInformationWidgetConfiguration, TabWidgetConfiguration
 } from '../../core/model';
 import {
     TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
 } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -25,111 +27,167 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         return ContactDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const generalActions = ['contact-create-action'];
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const tabLane = new ConfiguredWidget('contact-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['contact-information-lane']))
+        const infoConfig = new ObjectInformationWidgetConfiguration(
+            'contact-details-object-information-config', 'Contact Info', ConfigurationType.ObjectInformation,
+            KIXObjectType.CONTACT,
+            [
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.LOGIN,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.FAX,
+                ContactProperty.EMAIL,
+                ContactProperty.STREET,
+                ContactProperty.ZIP,
+                ContactProperty.CITY,
+                ContactProperty.COUNTRY,
+                ContactProperty.COMMENT,
+                KIXObjectProperty.VALID_ID,
+                KIXObjectProperty.CREATE_BY,
+                KIXObjectProperty.CREATE_TIME,
+                KIXObjectProperty.CHANGE_BY,
+                KIXObjectProperty.CHANGE_TIME
+            ]
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(infoConfig);
 
-        const contactInfoLane =
-            new ConfiguredWidget('contact-information-lane', new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Contact Information', [],
-                new ObjectInformationWidgetSettings(KIXObjectType.CONTACT, [
-                    ContactProperty.TITLE,
-                    ContactProperty.FIRSTNAME,
-                    ContactProperty.LASTNAME,
-                    ContactProperty.LOGIN,
-                    ContactProperty.PRIMARY_ORGANISATION_ID,
-                    ContactProperty.PHONE,
-                    ContactProperty.MOBILE,
-                    ContactProperty.FAX,
-                    ContactProperty.EMAIL,
-                    ContactProperty.STREET,
-                    ContactProperty.ZIP,
-                    ContactProperty.CITY,
-                    ContactProperty.COUNTRY,
-                    ContactProperty.COMMENT,
-                    KIXObjectProperty.VALID_ID,
-                    KIXObjectProperty.CREATE_BY,
-                    KIXObjectProperty.CREATE_TIME,
-                    KIXObjectProperty.CHANGE_BY,
-                    KIXObjectProperty.CHANGE_TIME
-                ]),
-                false, true, null, false)
-            );
-
-        const assignedOrganisationsLane = new ConfiguredWidget('contact-assigned-organisations-widget',
-            new WidgetConfiguration(
-                'contact-assigned-organisations-widget', 'Translatable#Assigned Organisations', [],
-                new TableConfiguration(KIXObjectType.ORGANISATION,
-                    new KIXObjectLoadingOptions(null, null, null, [OrganisationProperty.TICKET_STATS], null),
-                    null,
-                    [
-                        new DefaultColumnConfiguration(
-                            OrganisationProperty.NUMBER, true, false, true, true, 230, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            OrganisationProperty.NAME, true, false, true, true, 300, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            OrganisationProperty.COUNTRY, true, false, true, true, 175, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            OrganisationProperty.CITY, true, false, true, true, 175, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            OrganisationProperty.STREET, true, false, true, true, 250, true, true
-                        ),
-                        new DefaultColumnConfiguration(
-                            OrganisationProperty.OPEN_TICKETS_COUNT, true, false, true, true, 150,
-                            true, false, false, DataType.NUMBER
-                        ),
-                        new DefaultColumnConfiguration(
-                            OrganisationProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 150,
-                            true, false, false, DataType.NUMBER
-                        ),
-                    ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ),
-                false, true, null, false
+        const contactInfoWidget = new WidgetConfiguration(
+            'contact-details-info-widget', 'Contact Info Widget', ConfigurationType.Widget,
+            'object-information-widget', 'Translatable#Contact Information', [],
+            new ConfigurationDefinition(
+                'contact-details-object-information-config', ConfigurationType.ObjectInformation
             ),
-            [new UIComponentPermission('organisations', [CRUD.READ])]
+            null, false, true, null, false
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactInfoWidget);
 
-        const assignedTicketsLane = new ConfiguredWidget('contact-assigned-tickets-widget',
-            new WidgetConfiguration(
-                'contact-assigned-tickets-widget', 'Translatable#Overview Tickets', [
-                    'contact-create-ticket-action'
-                ], {},
-                false, true, null, false
-            ),
-            [new UIComponentPermission('tickets', [CRUD.READ])]
+        const tabConfig = new TabWidgetConfiguration(
+            'contact-details-tab-widget-config', 'Tab Config', ConfigurationType.TabWidget,
+            ['contact-details-info-widget']
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
 
-        const lanes = [
-            'contact-details-tab-widget', 'contact-assigned-organisations-widget', 'contact-assigned-tickets-widget'
-        ];
+        const tabWidget = new WidgetConfiguration(
+            'contact-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('contact-details-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabWidget);
 
-        const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabLane, contactInfoLane, assignedOrganisationsLane, assignedTicketsLane
-        ];
+        const organisationNumber = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-number', 'Organisation Number', ConfigurationType.TableColumn,
+            OrganisationProperty.NUMBER, true, false, true, true, 230, true, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationNumber);
 
-        const contactActions = [
-            'contact-edit-action', 'organisation-create-action', 'ticket-create-action',
-            'config-item-create-action', 'print-action'
-        ];
+        const organisationName = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-name', 'Organisation Name', ConfigurationType.TableColumn,
+            OrganisationProperty.NAME, true, false, true, true, 300, true, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationName);
+
+        const organisationCountry = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-country', 'Organisation Country', ConfigurationType.TableColumn,
+            OrganisationProperty.COUNTRY, true, false, true, true, 175, true, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationCountry);
+
+        const organisationCity = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-city', 'Organisation City', ConfigurationType.TableColumn,
+            OrganisationProperty.CITY, true, false, true, true, 175, true, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationCity);
+
+        const organisationStreet = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-street', 'Organisation Street', ConfigurationType.TableColumn,
+            OrganisationProperty.STREET, true, false, true, true, 250, true, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationStreet);
+
+        const organisationOpenTicketCount = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-open-tickets',
+            'Organisation Open Tickets', ConfigurationType.TableColumn,
+            OrganisationProperty.OPEN_TICKETS_COUNT, true, false, true, true, 150,
+            true, false, false, DataType.NUMBER
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationOpenTicketCount);
+
+        const organisationReminderTicketCount = new DefaultColumnConfiguration(
+            'contact-details-assigned-organisation-reminder-tickets',
+            'Organisation Reminder', ConfigurationType.TableColumn,
+            OrganisationProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 150,
+            true, false, false, DataType.NUMBER
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationReminderTicketCount);
+
+        const tableConfig = new TableConfiguration(
+            'contact-details-assigned-organisations-table', 'Assigned Organisations', ConfigurationType.Table,
+            KIXObjectType.ORGANISATION,
+            new KIXObjectLoadingOptions(null, null, null, [OrganisationProperty.TICKET_STATS], null),
+            null, [],
+            [
+                'contact-details-assigned-organisation-number',
+                'contact-details-assigned-organisation-name',
+                'contact-details-assigned-organisation-country',
+                'contact-details-assigned-organisation-city',
+                'contact-details-assigned-organisation-street',
+                'contact-details-assigned-organisation-open-tickets',
+                'contact-details-assigned-organisation-reminder-tickets'
+            ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableConfig);
+
+        const assignedOrganisationsLane = new WidgetConfiguration(
+            'contact-details-assigned-organisations-widget', 'Assigned Organisations', ConfigurationType.Widget,
+            'contact-assigned-organisations-widget', 'Translatable#Assigned Organisations', [],
+            new ConfigurationDefinition('contact-details-assigned-organisations-table', ConfigurationType.Table),
+            null, false, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(assignedOrganisationsLane);
+
+        const assignedTicketsLane = new WidgetConfiguration(
+            'contact-details-assigned-tickets-widget', 'Assigned Tickets', ConfigurationType.Widget,
+            'contact-assigned-tickets-widget', 'Translatable#Overview Tickets',
+            ['contact-create-ticket-action'], null, null, false, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(assignedTicketsLane);
 
         return new ContextConfiguration(
+            this.getModuleId(), 'Contact Details', ConfigurationType.Context,
             this.getModuleId(),
             [], [],
-            [], [],
-            lanes, laneWidgets,
-            [], [],
-            generalActions, contactActions
+            [
+                new ConfiguredWidget('contact-details-tab-widget', 'contact-details-tab-widget'),
+                new ConfiguredWidget(
+                    'contact-details-assigned-organisations-widget', 'contact-details-assigned-organisations-widget',
+                    null, [new UIComponentPermission('organisations', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'contact-details-assigned-tickets-widget', 'contact-details-assigned-tickets-widget', null,
+                    [new UIComponentPermission('tickets', [CRUD.READ])]
+                )
+            ],
+            [],
+            [
+                'contact-create-action'
+            ],
+            [
+                'contact-edit-action', 'organisation-create-action', 'ticket-create-action',
+                'config-item-create-action', 'print-action'
+            ],
+            [],
+            [
+                new ConfiguredWidget('contact-details-info-widget', 'contact-details-info-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

@@ -7,18 +7,13 @@
  * --
  */
 
-import {
-    ServiceRegistry, ContextService, ActionFactory, DialogService
-} from '../../../../core/browser';
+import { ServiceRegistry, ContextService, ActionFactory } from '../../../../core/browser';
 import {
     TicketFormService, PendingTimeValidator, EmailRecipientValidator, TicketBulkManager,
     EditTicketDialogContext, TicketEditAction
 } from '../../../../core/browser/ticket';
 import { BulkService } from '../../../../core/browser/bulk';
-import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode,
-    ConfiguredDialogWidget, WidgetConfiguration, CRUD
-} from '../../../../core/model';
+import { ContextDescriptor, KIXObjectType, ContextType, ContextMode, CRUD } from '../../../../core/model';
 import { FormValidationService } from '../../../../core/browser/form/validation';
 import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
@@ -46,8 +41,7 @@ export class UIModule implements IUIModule {
         }
 
         await this.registerContexts();
-        await this.registerTicketActions();
-        await this.registerTicketDialogs();
+        this.registerTicketActions();
     }
 
     private async checkPermissions(resource: string, crud: CRUD[]): Promise<boolean> {
@@ -56,26 +50,15 @@ export class UIModule implements IUIModule {
         );
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const editTicketContext = new ContextDescriptor(
             EditTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.EDIT,
             false, 'edit-ticket-dialog', ['tickets'], EditTicketDialogContext
         );
-        ContextService.getInstance().registerContext(editTicketContext);
+        await ContextService.getInstance().registerContext(editTicketContext);
     }
 
     private registerTicketActions(): void {
         ActionFactory.getInstance().registerAction('ticket-edit-action', TicketEditAction);
-    }
-
-    private registerTicketDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-ticket-dialog',
-            new WidgetConfiguration(
-                'edit-ticket-dialog', 'Translatable#Edit Ticket', [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.TICKET,
-            ContextMode.EDIT
-        ));
     }
 }

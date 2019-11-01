@@ -1,5 +1,5 @@
-config/defaults/*.config.json
-config/user/**/*.config.json
+config/defaults/**/*.json
+config/user/**/*.json
 features/report
 .cache
 package-lock.json

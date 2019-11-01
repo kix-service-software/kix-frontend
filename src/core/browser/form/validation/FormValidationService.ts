@@ -7,11 +7,12 @@
  * --
  */
 
-import { IFormFieldValidator, ValidationResult, FormField } from "../../../model";
+import { IFormFieldValidator, ValidationResult } from "../../../model";
 import {
     RequiredFormFieldValidator, MaxLengthFormFieldValidator, RegExFormFieldValidator, JSONFormFieldValidator
 } from ".";
 import addrparser = require('address-rfc2822');
+import { FormFieldConfiguration } from "../../../model/components/form/configuration";
 
 export class FormValidationService {
 
@@ -47,7 +48,7 @@ export class FormValidationService {
         }
     }
 
-    public async validate(formField: FormField, formId: string): Promise<ValidationResult[]> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult[]> {
         const result = [];
         if (formField && !formField.empty) {
             const validators = this.formFieldValidators.filter((ffv) => ffv.isValidatorFor(formField, formId));

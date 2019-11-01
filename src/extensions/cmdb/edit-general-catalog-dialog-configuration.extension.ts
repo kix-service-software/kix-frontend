@@ -9,14 +9,19 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ConfiguredWidget, FormField, Form, KIXObjectType, FormContext, ContextConfiguration,
+    KIXObjectType, FormContext, ContextConfiguration,
     KIXObjectProperty, GeneralCatalogItemProperty, ObjectReferenceOptions, FormFieldOption,
-    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, WidgetConfiguration,
+    ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+} from '../../core/model/components/form/configuration';
 import { EditGeneralCatalogDialogContext } from '../../core/browser/general-catalog';
 import { SearchOperator } from '../../core/browser';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -24,68 +29,107 @@ export class Extension implements IConfigurationExtension {
         return EditGeneralCatalogDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
+        const widget = new WidgetConfiguration(
+            'general-catalog-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-general-catalog-dialog', 'Translatable#Edit Value', [],
+            null, null, false, false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'general-catalog-edit-dialog-widget', 'general-catalog-edit-dialog-widget',
+                    KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.EDIT_ADMIN
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+        const formId = 'general-catalog-edit-form';
 
-        const formId = 'edit-general-catalog-form';
-        const existing = configurationService.getConfiguration(formId);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'general-catalog-edit-form-field-class',
+                'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'object-reference-input', true,
+                'Translatable#Helptext_Admin_GeneralCatalogCreate_Class', [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_CLASS),
 
-        if (!existing) {
-            const group = new FormGroup('Translatable#General Catalog', [
-                new FormField(
-                    'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'object-reference-input', true,
-                    'Translatable#Helptext_Admin_GeneralCatalogCreate_Class', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_CLASS),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                            FilterType.AND, 1
+                        )
+                    ])
+                ),
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+            ], null, null,
+                null, null, null, null, 100
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'general-catalog-edit-form-field-name',
+                'Translatable#Name', GeneralCatalogItemProperty.NAME, null, true,
+                'Translatable#Helptext_Admin_GeneralCatalogCreate_Name', null, null, null,
+                null, null, null, null, 100
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'general-catalog-edit-form-field-icon',
+                'Translatable#Icon', 'ICON', 'icon-input', false,
+                'Translatable#Helptext_Admin_Tickets_GeneralCatalogCreate_Icon.'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'general-catalog-edit-form-field-comment',
+                'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_Admin_GeneralCatalogCreate_Comment', null, null, null,
+                null, null, null, null, 250
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'general-catalog-edit-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Admin_GeneralCatalogCreate_Validity',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ]
+            )
+        );
 
-                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                            new KIXObjectLoadingOptions([
-                                new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                )
-                            ])
-                        ),
-                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
-                    ], null, null,
-                    null, null, null, null, 100, null, null, null, null, true
-                ),
-                new FormField(
-                    'Translatable#Name', GeneralCatalogItemProperty.NAME, null, true,
-                    'Translatable#Helptext_Admin_GeneralCatalogCreate_Name', null, null, null,
-                    null, null, null, null, 100
-                ),
-                new FormField(
-                    'Translatable#Icon', 'ICON', 'icon-input', false,
-                    'Translatable#Helptext_Admin_Tickets_GeneralCatalogCreate_Icon.'
-                ),
-                new FormField(
-                    'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Admin_GeneralCatalogCreate_Comment', null, null, null,
-                    null, null, null, null, 250
-                ),
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Admin_GeneralCatalogCreate_Validity', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ]
-                )
-            ]);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'general-catalog-edit-form-group-information', 'Translatable#General Catalog',
+                [
+                    'general-catalog-edit-form-field-class',
+                    'general-catalog-edit-form-field-name',
+                    'general-catalog-edit-form-field-icon',
+                    'general-catalog-edit-form-field-comment',
+                    'general-catalog-edit-form-field-valid'
+                ]
+            )
+        );
 
-            const form = new Form(
-                formId, 'Translatable#Edit Value', [group],
-                KIXObjectType.GENERAL_CATALOG_ITEM, false, FormContext.EDIT
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.GENERAL_CATALOG_ITEM, formId);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New Value',
+                [
+                    'general-catalog-edit-form-group-information'
+                ],
+                KIXObjectType.GENERAL_CATALOG_ITEM, true, FormContext.EDIT
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.GENERAL_CATALOG_ITEM, formId);
     }
 }
 

@@ -7,8 +7,6 @@
  * --
  */
 
-export class DynamicFieldsSettings {
-
-    public dynamicFields: number[] = [];
-
-}
+export { IConfiguration } from './IConfiguration';
+export { ConfigurationType } from './ConfigurationType';
+export { ConfigurationDefinition } from './ConfigurationDefinition';

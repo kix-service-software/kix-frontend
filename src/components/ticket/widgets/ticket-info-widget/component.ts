@@ -12,7 +12,7 @@ import { TicketLabelProvider, TicketService, TicketDetailsContext } from "../../
 import { ContextService } from '../../../../core/browser/context';
 import {
     ObjectIcon, KIXObjectType, Ticket, SysConfigUtil, ContextMode, OrganisationProperty,
-    ContactProperty, Service, ObjectInformationWidgetSettings, Contact, Organisation, Context
+    ContactProperty, Service, Contact, Organisation, Context, ObjectInformationWidgetConfiguration
 } from '../../../../core/model';
 import { ActionFactory, IdService, KIXObjectService } from '../../../../core/browser';
 import { RoutingConfiguration } from '../../../../core/browser/router';
@@ -59,6 +59,7 @@ class Component {
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         await this.initWidget(await context.getObject<Ticket>());
+        this.state.prepared = true;
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {
@@ -104,15 +105,17 @@ class Component {
 
     private async initContact(context: Context): Promise<void> {
         const config = context ? context.getWidgetConfiguration('contact-info-overlay') : undefined;
-        if (config && config.settings && !isNaN(Number(this.state.ticket.ContactID))) {
+        if (!isNaN(Number(this.state.ticket.ContactID))) {
 
-            const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, [this.state.ticket.ContactID]
-            );
-            this.state.contact = contacts && contacts.length ? contacts[0] : null;
+            if (config && config.configuration) {
+                const contacts = await KIXObjectService.loadObjects<Contact>(
+                    KIXObjectType.CONTACT, [this.state.ticket.ContactID]
+                );
+                this.state.contact = contacts && contacts.length ? contacts[0] : null;
 
-            const settings = config.settings as ObjectInformationWidgetSettings;
-            this.state.contactProperties = settings.properties;
+                const settings = config.configuration as ObjectInformationWidgetConfiguration;
+                this.state.contactProperties = settings.properties;
+            }
 
             this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
         }
@@ -120,15 +123,17 @@ class Component {
 
     private async initOrganisation(context: Context): Promise<void> {
         const config = context ? context.getWidgetConfiguration('organisation-info-overlay') : undefined;
-        if (config && config.settings && !isNaN(Number(this.state.ticket.OrganisationID))) {
+        if (!isNaN(Number(this.state.ticket.OrganisationID))) {
 
-            const organisation = await KIXObjectService.loadObjects<Organisation>(
-                KIXObjectType.ORGANISATION, [this.state.ticket.OrganisationID]
-            );
-            this.state.organisation = organisation && organisation.length ? organisation[0] : null;
+            if (config && config.configuration) {
+                const organisation = await KIXObjectService.loadObjects<Organisation>(
+                    KIXObjectType.ORGANISATION, [this.state.ticket.OrganisationID]
+                );
+                this.state.organisation = organisation && organisation.length ? organisation[0] : null;
 
-            const settings = config.settings as ObjectInformationWidgetSettings;
-            this.state.organisationProperties = settings.properties;
+                const settings = config.configuration as ObjectInformationWidgetConfiguration;
+                this.state.organisationProperties = settings.properties;
+            }
 
             this.organisationRoutingConfiguration = await this.getOrganisationRoutingConfiguration();
         }

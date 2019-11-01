@@ -49,8 +49,8 @@ export class TranslationPatternTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.TRANSLATION_PATTERN, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.TRANSLATION_PATTERN, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -73,13 +73,13 @@ export class TranslationPatternTableFactory extends TableFactory {
         let config;
         switch (property) {
             case TranslationPatternProperty.VALUE:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 400, true, true, false,
                     DataType.STRING, true, null, null, false
                 );
                 break;
             case TranslationPatternProperty.AVAILABLE_LANGUAGES:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 250, true, true, true,
                     DataType.STRING, true, 'label-list-cell-content'
                 );

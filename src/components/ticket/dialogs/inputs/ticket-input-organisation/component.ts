@@ -9,12 +9,13 @@
 
 import { ComponentState } from "./ComponentState";
 import {
-    TicketProperty, FormFieldValue, FormInputComponent, FormField,
-    KIXObjectType, Organisation, TreeNode, Contact, MailFilterMatch, TreeHandler
+    TicketProperty, FormFieldValue, FormInputComponent,
+    KIXObjectType, Organisation, TreeNode, Contact, TreeHandler
 } from "../../../../../core/model";
 import { FormService } from "../../../../../core/browser/form";
 import { IdService, KIXObjectService, LabelService } from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../../../core/model/components/form/configuration";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -47,7 +48,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.setCurrentNode();
     }
 
-    private async formValueChanged(formField: FormField, value: FormFieldValue<any>): Promise<void> {
+    private async formValueChanged(formField: FormFieldConfiguration, value: FormFieldValue<any>): Promise<void> {
         if (formField && formField.property === TicketProperty.CONTACT_ID) {
             if (value.value) {
                 this.setOrganisationsByContact(value);

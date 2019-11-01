@@ -7,9 +7,14 @@
  * --
  */
 
-import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration } from "../../core/model";
+import {
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, HelpWidgetConfiguration,
+    ConfiguredDialogWidget, KIXObjectType, ContextMode
+} from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { OrganisationImportDialogContext } from "../../core/browser/organisation";
+import { ConfigurationType, ConfigurationDefinition } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,22 +22,46 @@ export class Extension implements IConfigurationExtension {
         return OrganisationImportDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const helpSettings = new HelpWidgetConfiguration(
+            'organisation-import-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
+            'Translatable#Helptext_Customers_OrganisationImport', null
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
 
-        const helpWidget = new ConfiguredWidget('20190301-organisation-import-help-widget', new WidgetConfiguration(
-            'help-widget', null, [], {
-                helpText: 'Translatable#Helptext_Customers_OrganisationImport'
-            },
-            false, false, 'kix-icon-query'
-        ));
+        const helpWidget = new WidgetConfiguration(
+            'organisation-import-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
+            'help-widget', 'Translatable#Help', [],
+            new ConfigurationDefinition('organisation-import-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            null, false, false, 'kix-icon-textblocks'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+
+
+        const widget = new WidgetConfiguration(
+            'organisation-import-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'import-dialog', 'Translatable#Import Organisations', [], null, null,
+            false, false, 'kix-icon-man-house-new'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
         return new ContextConfiguration(
-            OrganisationImportDialogContext.CONTEXT_ID,
-            ['20190301-organisation-import-help-widget'], [helpWidget]
+            this.getModuleId(), 'Organisation Import Dialog', ConfigurationType.Context,
+            this.getModuleId(),
+            [
+                new ConfiguredWidget('organisation-import-dialog-help-widget', 'organisation-import-dialog-help-widget')
+            ],
+            [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'organisation-import-dialog-widget', 'organisation-import-dialog-widget',
+                    KIXObjectType.ORGANISATION, ContextMode.IMPORT
+                )
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 }

@@ -56,22 +56,22 @@ class Component {
         this.state.widgetTitle = await TranslationService.translate('Translatable#Overview Tickets');
 
         this.state.openTicketsTitle = await TranslationService.translate('Translatable#Open Tickets');
-        this.openTicketsConfig = new WidgetConfiguration(
+        this.openTicketsConfig = new WidgetConfiguration(null, null, null,
             'organisation-open-tickets-group', this.state.openTicketsTitle, [], null
         );
 
         this.state.reminderTicketsTitle = await TranslationService.translate('Translatable#Reminder Tickets');
-        this.reminderTicketsConfig = new WidgetConfiguration(
+        this.reminderTicketsConfig = new WidgetConfiguration(null, null, null,
             'organisation-reminder-tickets-group', this.state.reminderTicketsTitle, [], null
         );
 
         this.state.newTicketsTitle = await TranslationService.translate('Translatable#New Tickets');
-        this.newTicketsConfig = new WidgetConfiguration(
+        this.newTicketsConfig = new WidgetConfiguration(null, null, null,
             'organisation-new-tickets-group', this.state.newTicketsTitle, [], null
         );
 
         this.state.pendingTicketsTitle = await TranslationService.translate('Translatable#Pending Tickets');
-        this.pendingTicketsConfig = new WidgetConfiguration(
+        this.pendingTicketsConfig = new WidgetConfiguration(null, null, null,
             'organisation-pending-tickets-group', this.state.pendingTicketsTitle, [], null
         );
 
@@ -156,36 +156,38 @@ class Component {
                 )
             ];
 
-            const tableConfiguration = new TableConfiguration(
+            const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
                 new KIXObjectLoadingOptions(filter), null,
                 [
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
                     ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, true, 260, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CONTACT_ID, true, false, true, true, 150, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
 
             const table = await TableFactoryService.getInstance().createTable(
@@ -240,33 +242,35 @@ class Component {
                 TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
             ));
 
-            const tableConfiguration = new TableConfiguration(
+            const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
                 new KIXObjectLoadingOptions(filter), null,
                 [
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
                     ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, true, 260, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CONTACT_ID, true, false, true, true, 150, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
                 'organisation-assigned-tickets-new', KIXObjectType.TICKET, tableConfiguration, null, null, true
@@ -318,33 +322,35 @@ class Component {
                 TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
             ));
 
-            const tableConfiguration = new TableConfiguration(
+            const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
                 new KIXObjectLoadingOptions(filter), null,
                 [
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
                     ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, true, 260, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CONTACT_ID, true, false, true, true, 150, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
 
             const table = await TableFactoryService.getInstance().createTable(
@@ -403,36 +409,38 @@ class Component {
                 TicketProperty.STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC, FilterType.AND, stateIds
             ));
 
-            const tableConfiguration = new TableConfiguration(
+            const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
                 new KIXObjectLoadingOptions(filter), null,
                 [
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.TICKET_NUMBER, true, false, true, true, 135, true, true
                     ),
-                    new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, true, 260, true, true),
                     new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, true, 260, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.STATE_ID, true, true, true, true, 150, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CONTACT_ID, true, false, true, true, 150, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PENDING_TIME, true, false, true, true, 150, true, true
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
-                    new DefaultColumnConfiguration(
+                    new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.DATE_TIME
                     )
-                ], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
 
             const table = await TableFactoryService.getInstance().createTable(

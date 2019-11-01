@@ -7,17 +7,22 @@
  * --
  */
 
-import { WidgetSize } from './WidgetSize';
-import { KIXObjectPropertyFilter } from '../filter';
 import { ObjectIcon } from '../../kix';
+import { IConfiguration, ConfigurationType, ConfigurationDefinition } from '../../configuration';
 
-export class WidgetConfiguration<T = any> {
+export class WidgetConfiguration implements IConfiguration {
+
+    public instanceId: string;
 
     public constructor(
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
         public widgetId: string,
         public title: string,
         public actions: string[],
-        public settings: T,
+        public subConfigurationDefinition?: ConfigurationDefinition,
+        public configuration?: any,
         public minimized: boolean = false,
         public minimizable: boolean = true,
         public icon: string | ObjectIcon = '',

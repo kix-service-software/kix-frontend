@@ -9,10 +9,13 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ConfiguredWidget, WidgetConfiguration, WidgetSize, ContextConfiguration, TabWidgetSettings
+    ConfiguredWidget, WidgetConfiguration, WidgetSize, ContextConfiguration, TabWidgetConfiguration
 } from '../../core/model';
 import { TicketPriorityDetailsContext } from '../../core/browser/ticket';
 import { UserDetailsContext } from '../../core/browser/user';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
+import { ConfigurationService } from '../../core/services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -20,38 +23,65 @@ export class Extension implements IConfigurationExtension {
         return UserDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const tabLane = new ConfiguredWidget('user-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['user-info-widget']))
-        );
-
-        const userInfoWidget = new ConfiguredWidget('user-info-widget', new WidgetConfiguration(
-            'user-info-widget', 'Translatable#Agent Information', [], null,
+        const userInfoWidgetConfig = new WidgetConfiguration(
+            'user-details-info-widget', 'User info widget', ConfigurationType.Widget,
+            'user-info-widget', 'Translatable#Agent Information', [], null, null,
             false, true, null, false
-        ));
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(userInfoWidgetConfig);
 
-        const personalSettingsWidget = new ConfiguredWidget('user-personal-settings-widget', new WidgetConfiguration(
-            'user-personal-settings-widget', 'Translatable#Preferences', [], null, true, true, WidgetSize.BOTH
-        ));
+        const tabWidgetSettings = new TabWidgetConfiguration(
+            'user-details-tab-widget-settings', 'User details tab widget settings', ConfigurationType.TabWidget,
+            ['user-details-info-widget']
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabWidgetSettings);
 
-        const assignedRolesWidget = new ConfiguredWidget('user-assigned-roles-widget', new WidgetConfiguration(
-            'user-assigned-roles-widget', 'Translatable#Assigned Roles', [], null, false, true, WidgetSize.BOTH
-        ));
+        const tabWidgetConfiguration = new WidgetConfiguration(
+            'user-details-tab-widget', 'User details tab widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('user-details-tab-widget-settings', ConfigurationType.TabWidget)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabWidgetConfiguration);
+
+
+        const personalSettingsConfig = new WidgetConfiguration(
+            'user-personal-settings-widget', 'User details personal settings widget', ConfigurationType.Widget,
+            'user-personal-settings-widget', 'Translatable#Preferences', [], null, null, true, true, WidgetSize.BOTH
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(personalSettingsConfig);
+
+        const assignedRolesConfig = new WidgetConfiguration(
+            'user-assigned-roles-widget', 'User assigned roles', ConfigurationType.Widget,
+            'user-assigned-roles-widget', 'Translatable#Assigned Roles', [], null, null, false, true, WidgetSize.BOTH
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(assignedRolesConfig);
 
         return new ContextConfiguration(
-            TicketPriorityDetailsContext.CONTEXT_ID,
+            this.getModuleId(), 'User Details', ConfigurationType.Context,
+            this.getModuleId(),
             [], [],
-            [], [],
-            ['user-details-tab-widget', 'user-personal-settings-widget', 'user-assigned-roles-widget'],
-            [tabLane, personalSettingsWidget, assignedRolesWidget, userInfoWidget],
-            [], [],
-            ['user-admin-user-create-action'],
-            ['user-admin-user-edit-action', 'print-action']
+            [
+                new ConfiguredWidget('user-details-tab-widget', 'user-details-tab-widget'),
+                new ConfiguredWidget('user-personal-settings-widget', 'user-personal-settings-widget'),
+                new ConfiguredWidget('user-assigned-roles-widget', 'user-assigned-roles-widget')
+            ],
+            [],
+            [
+                'user-admin-user-create-action'
+            ],
+            [
+                'user-admin-user-edit-action', 'print-action'
+            ],
+            [],
+            [
+                new ConfiguredWidget('user-details-info-widget', 'user-details-info-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 

@@ -52,9 +52,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        if (this.state.widgetConfiguration.settings) {
+        if (this.state.widgetConfiguration.configuration) {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
-                this.state.widgetConfiguration.settings.linkedObjectTypes;
+                this.state.widgetConfiguration.configuration.linkedObjectTypes;
             for (const lot of linkedObjectTypes) {
                 TableFactoryService.getInstance().destroyTable(`link-objects-${lot[1]}`);
             }
@@ -78,9 +78,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareLinkedObjectsGroups(): Promise<void> {
         const linkedObjectGroups = [];
-        if (this.state.widgetConfiguration.settings) {
+        if (this.state.widgetConfiguration.configuration) {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
-                this.state.widgetConfiguration.settings.linkedObjectTypes;
+                this.state.widgetConfiguration.configuration.linkedObjectTypes;
 
             let objectsCount = 0;
             for (const lot of linkedObjectTypes) {
@@ -88,8 +88,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                 const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.kixObject, objectLinks);
 
-                const tableConfiguration = new TableConfiguration(
-                    null, null, null, null, false, false, null, null,
+                const tableConfiguration = new TableConfiguration(null, null, null,
+                    null, null, null, null, [], false, false, null, null,
                     TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 

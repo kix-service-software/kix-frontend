@@ -35,31 +35,38 @@ export abstract class TableFactory implements ITableFactory {
         switch (property) {
             case KIXObjectProperty.COMMENT:
                 config = new DefaultColumnConfiguration(
+                    null, null, null,
                     property, true, false, true, false, 350, true, true, false,
                     DataType.STRING, true, undefined, null, false
                 );
                 break;
             case 'ICON':
                 config = new DefaultColumnConfiguration(
+                    null, null, null,
                     property, false, true, false, false, 41, false, false, false, undefined, false
                 );
                 break;
             case KIXObjectProperty.VALID_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null,
+                    property, true, false, true, false, 150, true, true, true);
                 break;
             case KIXObjectProperty.CHANGE_TIME:
             case KIXObjectProperty.CREATE_TIME:
                 config = new DefaultColumnConfiguration(
+                    null, null, null,
                     property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
                 );
                 break;
             case 'LinkedAs':
                 config = new DefaultColumnConfiguration(
+                    null, null, null,
                     property, true, false, true, false, 120, true, true, true, DataType.STRING
                 );
                 break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 150, true, true);
         }
         return config;
     }

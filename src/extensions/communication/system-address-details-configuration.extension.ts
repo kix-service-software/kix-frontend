@@ -9,9 +9,11 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, TabWidgetSettings
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, TabWidgetConfiguration
 } from '../../core/model';
 import { SystemAddressDetailsContext } from '../../core/browser/system-address/context';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -19,39 +21,50 @@ export class Extension implements IConfigurationExtension {
         return SystemAddressDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const tabLane = new ConfiguredWidget('system-address-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['system-address-info-widget']))
+        const systemAddressInfoWidget = new WidgetConfiguration(
+            'system-address-details-info-widget', 'Info Widget', ConfigurationType.Widget,
+            'system-address-info-widget', 'Translatable#Email Information', [],
+            null, null, false, true, null, false
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(systemAddressInfoWidget);
 
-        const systemAddressInfoWidget = new ConfiguredWidget('system-address-info-widget',
-            new WidgetConfiguration(
-                'system-address-info-widget', 'Translatable#Email Information', [], null,
-                false, true, null, false
-            )
+        const tabConfig = new TabWidgetConfiguration(
+            'system-address-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['system-address-details-info-widget']
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
 
-        const systemAddressAssignedQueuesWidget = new ConfiguredWidget('system-address-assigned-queues-widget',
-            new WidgetConfiguration(
-                'system-address-assigned-queues-widget', 'Translatable#Assigned Queues', [], null,
-                false, true, null, false
-            )
+        const tabLane = new WidgetConfiguration(
+            'system-address-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('system-address-details-tab-widget-config', ConfigurationType.TabWidget)
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
 
         return new ContextConfiguration(
-            SystemAddressDetailsContext.CONTEXT_ID,
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(),
             [], [],
-            [], [],
-            ['system-address-details-tab-widget'],
-            [tabLane, systemAddressAssignedQueuesWidget, systemAddressInfoWidget],
-            [], [],
-            ['system-address-create'],
-            ['system-address-edit', 'print-action']
+            [
+                new ConfiguredWidget('system-address-details-tab-widget', 'system-address-details-tab-widget')
+            ],
+            [],
+            [
+                'system-address-create'
+            ],
+            [
+                'system-address-edit', 'print-action'
+            ],
+            [],
+            [
+                new ConfiguredWidget('system-address-details-info-widget', 'system-address-details-info-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 

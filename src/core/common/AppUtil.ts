@@ -23,7 +23,7 @@ export class AppUtil {
         );
 
         for (const mf of moduleFactories) {
-            await mf.createFormDefinitions(overwrite);
+            await mf.createFormConfigurations(overwrite);
         }
 
         if (notify) {

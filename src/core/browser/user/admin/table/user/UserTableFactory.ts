@@ -47,43 +47,46 @@ export class UserTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 UserProperty.USER_LOGIN, true, false, true, false, 250, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 UserProperty.USER_EMAIL, true, false, true, false, 200, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 UserProperty.USER_PHONE, true, false, true, false, 200, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 UserProperty.USER_MOBILE, true, false, true, false, 200, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 UserProperty.LAST_LOGIN, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true),
             new DefaultColumnConfiguration(
+                null, null, null, KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true),
+            new DefaultColumnConfiguration(null, null, null,
                 KIXObjectProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(KIXObjectProperty.CREATE_BY, true, false, true, true, 150, true, true),
             new DefaultColumnConfiguration(
+                null, null, null, KIXObjectProperty.CREATE_BY, true, false, true, true, 150, true, true),
+            new DefaultColumnConfiguration(null, null, null,
                 KIXObjectProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(
+                null, null, null, KIXObjectProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.USER, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

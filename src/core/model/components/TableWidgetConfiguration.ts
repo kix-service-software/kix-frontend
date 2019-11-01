@@ -9,14 +9,19 @@
 
 import { KIXObjectType } from "../kix";
 import { SortOrder } from "../sort";
-import { TableConfiguration } from "../../browser";
 import { KIXObjectPropertyFilter } from "./filter";
+import { IConfiguration, ConfigurationType, ConfigurationDefinition } from "../configuration";
+import { TableConfiguration } from "../../browser";
 
-export class TableWidgetSettings {
+export class TableWidgetConfiguration implements IConfiguration {
 
     public constructor(
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
         public objectType: KIXObjectType,
         public sort?: [string, SortOrder],
+        public subConfigurationDefinition?: ConfigurationDefinition,
         public tableConfiguration?: TableConfiguration,
         public headerComponents?: string[],
         public showFilter: boolean = true,
