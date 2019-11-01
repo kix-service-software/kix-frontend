@@ -10,7 +10,7 @@
 import { QueueLabelProvider } from "../../../../../core/browser/ticket";
 import { WidgetComponentState, AbstractAction, Queue } from "../../../../../core/model";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public labelProvider: QueueLabelProvider = null,

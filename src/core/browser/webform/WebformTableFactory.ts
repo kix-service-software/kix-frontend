@@ -53,8 +53,8 @@ export class WebformTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.WEBFORM, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.WEBFORM, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -76,23 +76,27 @@ export class WebformTableFactory extends TableFactory {
     }
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        switch (property) {
-            case WebformProperty.PRIORITY_ID:
-                return new DefaultColumnConfiguration(
-                    property, false, true, true, false, 80, true, true, true, DataType.STRING, false
-                );
-            case WebformProperty.STATE_ID:
-                return new DefaultColumnConfiguration(
-                    property, true, true, true, false, 120, true, true, true, DataType.STRING, true
-                );
-            case WebformProperty.TYPE_ID:
-            case WebformProperty.QUEUE_ID:
-            case KIXObjectProperty.VALID_ID:
-                return new DefaultColumnConfiguration(
-                    property, true, false, true, false, 150, true, true, true, DataType.STRING, true
-                );
-            default:
-                return super.getDefaultColumnConfiguration(property);
+        let config = super.getDefaultColumnConfiguration(property);
+
+        if (property === WebformProperty.PRIORITY_ID) {
+            config = new DefaultColumnConfiguration(null, null, null,
+                property, false, true, true, false, 80, true, true, true, DataType.STRING, false
+            );
+        } else if (property === WebformProperty.STATE_ID) {
+            config = new DefaultColumnConfiguration(
+                null, null, null,
+                property, true, true, true, false, 120, true, true, true, DataType.STRING, true
+            );
+        } else if (property === WebformProperty.TYPE_ID
+            || property === WebformProperty.QUEUE_ID
+            || property === KIXObjectProperty.VALID_ID
+        ) {
+            config = new DefaultColumnConfiguration(
+                null, null, null,
+                property, true, false, true, false, 150, true, true, true, DataType.STRING, true
+            );
         }
+
+        return config;
     }
 }

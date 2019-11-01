@@ -10,12 +10,13 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import { Webform, WebformProperty } from "../../model/webform";
 import {
-    KIXObjectType, FormFieldValue, Form, SysConfigOption, SysConfigKey, FormContext, Queue,
+    KIXObjectType, FormFieldValue, SysConfigOption, SysConfigKey, FormContext, Queue,
     KIXObjectLoadingOptions, FilterCriteria, QueueProperty, FilterDataType, FilterType, TicketPriority,
     TicketPriorityProperty, TicketType, TicketTypeProperty, TicketState, TicketStateProperty, User, UserProperty
 } from "../../model";
 import { KIXObjectService } from "../kix";
 import { SearchOperator } from "../SearchOperator";
+import { FormConfiguration } from "../../model/components/form/configuration";
 
 export class WebformFormService extends KIXObjectFormService<Webform> {
 
@@ -37,8 +38,8 @@ export class WebformFormService extends KIXObjectFormService<Webform> {
         return kixObjectType === KIXObjectType.WEBFORM;
     }
 
-    protected async doAdditionalPreparations(
-        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
     ): Promise<void> {
         const hasConfigPermissions = await this.checkPermissions('system/config');
         if (form && hasConfigPermissions && form.formContext === FormContext.NEW) {

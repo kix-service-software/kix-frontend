@@ -13,7 +13,7 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public loading: boolean = false,
-        public formId: string = 'edit-contact-form'
+        public formId: string = 'contact-edit-form'
     ) {
         super();
     }

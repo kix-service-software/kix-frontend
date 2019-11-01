@@ -51,8 +51,8 @@ export class TicketTemplateTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.TICKET_TEMPLATE, null, null, tableColumns,  true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.TICKET_TEMPLATE, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -74,11 +74,13 @@ export class TicketTemplateTableFactory extends TableFactory {
         let config;
         switch (property) {
             case TicketTemplateProperty.NAME:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 200, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 200, true, true);
                 break;
             case TicketTemplateProperty.TYPE_ID:
             case TicketTemplateProperty.CHANNEL_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
+                config = new DefaultColumnConfiguration
+                    (null, null, null, property, true, false, true, false, 150, true, true, true);
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

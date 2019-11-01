@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import {
-    TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter, TableWidgetSettings
+    TableFilterCriteria, KIXObjectType, ContextType, KIXObjectPropertyFilter, TableWidgetConfiguration
 } from '../../../core/model';
 import { IEventSubscriber, EventService } from '../../../core/browser/event';
 import {
@@ -65,7 +65,7 @@ class Component {
         }
 
         if (this.state.widgetConfiguration) {
-            const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
+            const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
 
             context.addObjectDependency(settings.objectType);
 
@@ -146,7 +146,7 @@ class Component {
     }
 
     private async prepareHeader(): Promise<void> {
-        const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
         if (settings && settings.headerComponents) {
             this.state.headerTitleComponents = settings.headerComponents;
         }
@@ -172,7 +172,7 @@ class Component {
 
 
     private async prepareTable(): Promise<void> {
-        const settings: TableWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
         if (
             settings && settings.objectType || (settings.tableConfiguration && settings.tableConfiguration.objectType)
         ) {

@@ -8,15 +8,16 @@
  */
 
 import {
-    AttributeDefinition, FormField, FormFieldOption, KIXObjectType, FormFieldOptions,
-    InputFieldTypes, Form, VersionProperty, ConfigItemProperty, ConfigItemClass, FormContext,
+    AttributeDefinition, FormFieldOption, KIXObjectType, FormFieldOptions,
+    InputFieldTypes, VersionProperty, ConfigItemProperty, ConfigItemClass,
     ObjectReferenceOptions, KIXObjectLoadingOptions, FilterCriteria, KIXObjectProperty, FilterDataType,
-    FilterType, GeneralCatalogItemProperty
+    FilterType, GeneralCatalogItemProperty, ConfigItemClassProperty
 } from "../../model";
 import { isArray } from "util";
-import { FormGroup } from "../../model/components/form/FormGroup";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
+import { FormFieldConfiguration, FormConfiguration } from "../../model/components/form/configuration";
+import { KIXObjectService } from "../kix";
 
 export class ConfigItemFormFactory {
 
@@ -31,100 +32,31 @@ export class ConfigItemFormFactory {
 
     private constructor() { }
 
-    public getFormId(ciClass: ConfigItemClass, edit: boolean = false): string {
-        const editString = edit ? '_EDIT' : '';
-        return ciClass.CurrentDefinition
-            ? `CMDB_CI_${ciClass.Name}_${ciClass.ID}_${ciClass.CurrentDefinition.Version}${editString}`
-            : null;
-    }
+    public async addCIClassAttributesToForm(form: FormConfiguration, classId: number): Promise<void> {
+        if (form.groups[0] && classId) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
+            );
+            const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+                KIXObjectType.CONFIG_ITEM_CLASS, [classId], loadingOptions
+            );
 
-    // tslint:disable:max-line-length
-    public async createCIForm(ciClass: ConfigItemClass, formId: string, forEdit: boolean = false): Promise<Form> {
-        const fields: FormField[] = [];
-
-        if (forEdit) {
-            fields.push(new FormField(
-                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Class',
-                null, null, null, null, 1, 1, 1,
-                null, null, null, false, false, true
-            ));
-        }
-        fields.push(new FormField(
-            'Translatable#Name', VersionProperty.NAME, null, true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Name',
-            null, null, null, null, 1, 1, 1,
-            null, null, null, false, false
-        ));
-        fields.push(new FormField(
-            'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'object-reference-input',
-            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
-            [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                            FilterType.AND, 1
-                        ),
-                        new FilterCriteria(
-                            GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, 'ITSM::ConfigItem::DeploymentState'
-                        )
-                    ])
-                ),
-                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
-            ],
-            null, null, null, 1, 1, 1, null, null, null, false, false
-        ));
-        fields.push(new FormField(
-            'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'object-reference-input',
-            true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
-            [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                            FilterType.AND, 1
-                        ),
-                        new FilterCriteria(
-                            GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, 'ITSM::Core::IncidentState'
-                        )
-                    ])
-                ),
-                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
-            ],
-            null, null, null, 1, 1, 1, null, null, null, false, false
-        ));
-
-        if (!forEdit) {
-            fields.push(new FormField(
-                'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Links',
-                null, null, null, null, 1, 1, 1, null, null, null, false, false
-            ));
-        }
-
-        if (ciClass.CurrentDefinition && ciClass.CurrentDefinition.Definition) {
-            for (const ad of ciClass.CurrentDefinition.Definition) {
-                const field = this.getFormField(ad);
-                fields.push(field);
+            if (ciClasses && ciClasses.length) {
+                const ciClass = ciClasses[0];
+                if (ciClass.CurrentDefinition && ciClass.CurrentDefinition.Definition) {
+                    for (const ad of ciClass.CurrentDefinition.Definition) {
+                        const field = this.getFormField(ad);
+                        form.groups[0].formFields.push(field);
+                    }
+                }
             }
         }
-
-        const mainGroup = new FormGroup('Translatable#Config Item Data', fields);
-
-        const form = new Form(
-            formId,
-            forEdit ? 'Translatable#Edit Config Item' : 'Translatable#New Config Item',
-            [mainGroup], KIXObjectType.CONFIG_ITEM, true,
-            forEdit ? FormContext.EDIT : null
-        );
-
-        return form;
     }
 
-    private getFormField(ad: AttributeDefinition, parentInstanceId?: string, parent?: FormField): FormField {
-        let formField: FormField;
+    private getFormField(
+        ad: AttributeDefinition, parentInstanceId?: string, parent?: FormFieldConfiguration
+    ): FormFieldConfiguration {
+        let formField: FormFieldConfiguration;
         if (typeof ad.CountDefault === 'undefined' || ad.CountDefault === null) {
             ad.CountDefault = 1;
         }
@@ -165,8 +97,8 @@ export class ConfigItemFormFactory {
         return formField;
     }
 
-    private getGeneralCatalogField(ad: AttributeDefinition, parentInstanceId?: string): FormField {
-        return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
+    private getGeneralCatalogField(ad: AttributeDefinition, parentInstanceId?: string): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
                 new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -184,52 +116,52 @@ export class ConfigItemFormFactory {
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
             ],
-            null, null, parentInstanceId, ad.CountDefault, ad.CountMax,
+            null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax,
             ad.CountMin, ad.Input.MaxLength,
             ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
-    private getTextField(ad: AttributeDefinition, parentInstanceId: string): FormField {
-        return new FormField(ad.Name, ad.Key, null, ad.Input.Required, null,
+    private getTextField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, null, ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.TEXT)
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
-    private getTextAreaField(ad: AttributeDefinition, parentInstanceId: string): FormField {
-        return new FormField(ad.Name, ad.Key, 'text-area-input', ad.Input.Required, null,
+    private getTextAreaField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'text-area-input', ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.TEXT_AREA)
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
     private getObjectReferenceField(
         ad: AttributeDefinition, parentInstanceId: string, objectType: KIXObjectType
-    ): FormField {
-        return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
+    ): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
                 new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
-    private getCIClassReferenceField(ad: AttributeDefinition, parentInstanceId: string): FormField {
+    private getCIClassReferenceField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
         let classes = [];
         if (isArray(ad.Input['ReferencedCIClassName'])) {
             classes = ad.Input['ReferencedCIClassName'];
         } else {
             classes = [ad.Input['ReferencedCIClassName']];
         }
-        return new FormField(ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'object-reference-input', ad.Input.Required, null,
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
@@ -252,48 +184,50 @@ export class ConfigItemFormFactory {
                     ])
                 )
             ],
-            null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
-    private getDateField(ad: AttributeDefinition, parentInstanceId: string): FormField {
-        return new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
+    private getDateField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE),
             ],
-            null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength,
             ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
-    private getDateTimeField(ad: AttributeDefinition, parentInstanceId: string): FormField {
-        return new FormField(ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
+    private getDateTimeField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'date-time-input', ad.Input.Required, null,
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.DATE_TIME)
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
-    private getDefaultFormField(ad: AttributeDefinition, parentInstanceId: string, dummy: boolean = false): FormField {
-        return new FormField(ad.Name, ad.Key, null, ad.Input.Required, null,
+    private getDefaultFormField(
+        ad: AttributeDefinition, parentInstanceId: string, dummy: boolean = false
+    ): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, null, ad.Input.Required, null,
             [
                 new FormFieldOption(
                     FormFieldOptions.INPUT_FIELD_TYPE, dummy ? InputFieldTypes.DUMMY : InputFieldTypes.TEXT
                 )
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }
 
-    private getAttachmentFormField(ad: AttributeDefinition, parentInstanceId: string): FormField {
-        return new FormField(ad.Name, ad.Key, 'attachment-input', ad.Input.Required, null,
+    private getAttachmentFormField(ad: AttributeDefinition, parentInstanceId: string): FormFieldConfiguration {
+        return new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, 'attachment-input', ad.Input.Required, null,
             [
                 new FormFieldOption('MULTI_FILES', false),
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.ATTACHMENT)
-            ], null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+            ], null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
             ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
         );
     }

@@ -8,13 +8,18 @@
  */
 
 import {
-    ContextConfiguration, FormField, Form, FormContext,
-    KIXObjectType, OrganisationProperty, KIXObjectProperty, FormFieldValue, FormFieldOption, ObjectReferenceOptions
+    ContextConfiguration, FormContext,
+    KIXObjectType, OrganisationProperty, KIXObjectProperty, FormFieldValue, FormFieldOption,
+    ObjectReferenceOptions, ConfiguredDialogWidget, ContextMode, WidgetConfiguration
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+} from '../../core/model/components/form/configuration';
 import { NewOrganisationDialogContext } from '../../core/browser/organisation';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -22,70 +27,147 @@ export class Extension implements IConfigurationExtension {
         return NewOrganisationDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new ContextConfiguration(NewOrganisationDialogContext.CONTEXT_ID);
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const widget = new WidgetConfiguration(
+            'organisation-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'new-organisation-dialog', 'Translatable#New Organisation', [], null, null,
+            false, false, 'kix-icon-man-house-new'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+
+        return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'organisation-new-dialog-widget', 'organisation-new-dialog-widget',
+                    KIXObjectType.ORGANISATION, ContextMode.CREATE
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
 
-        const formId = 'new-organisation-form';
-        const existingForm = configurationService.getConfiguration(formId);
-        if (!existingForm || overwrite) {
-            const groups: FormGroup[] = [];
+        const formId = 'organisation-new-form';
 
-            groups.push(new FormGroup('Translatable#Organisation Information', [
-                new FormField(
-                    'Translatable#CNO', OrganisationProperty.NUMBER, null, true,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Number'
-                ),
-                new FormField(
-                    'Translatable#Name', OrganisationProperty.NAME, null, true,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Name'
-                ),
-                new FormField(
-                    'Translatable#URL', OrganisationProperty.URL, null, false,
-                    'Translatable#Helptext_Customers_OrganisationCreate_URL'
-                )
-            ]));
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-cno',
+                'Translatable#CNO', OrganisationProperty.NUMBER, null, true,
+                'Translatable#Helptext_Customers_OrganisationCreate_Number'
+            )
+        );
 
-            groups.push(new FormGroup('Translatable#Postal Address', [
-                new FormField(
-                    'Translatable#Street', OrganisationProperty.STREET, null, false,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Street'
-                ),
-                new FormField(
-                    'Translatable#Zip', OrganisationProperty.ZIP, null, false,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Zip'
-                ),
-                new FormField(
-                    'Translatable#City', OrganisationProperty.CITY, null, false,
-                    'Translatable#Helptext_Customers_OrganisationCreate_City'
-                ),
-                new FormField(
-                    'Translatable#Country', OrganisationProperty.COUNTRY, null, false,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Country'
-                )
-            ]));
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-name',
+                'Translatable#Name', OrganisationProperty.NAME, null, true,
+                'Translatable#Helptext_Customers_OrganisationCreate_Name'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-url',
+                'Translatable#URL', OrganisationProperty.URL, null, false,
+                'Translatable#Helptext_Customers_OrganisationCreate_URL'
+            )
+        );
 
-            groups.push(new FormGroup('Translatable#Other', [
-                new FormField(
-                    'Translatable#Comment', OrganisationProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Customers_OrganisationCreate_Comment', null, null, null, null,
-                    null, null, null, 250
-                ),
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Customers_OrganisationCreate_Validity', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
-                )
-            ]));
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'organisation-new-form-group-information', 'Translatable#Organisation Information',
+                [
+                    'organisation-new-form-field-cno',
+                    'organisation-new-form-field-name',
+                    'organisation-new-form-field-url'
+                ]
+            )
+        );
 
-            const form = new Form(formId, 'New Organisation', groups, KIXObjectType.ORGANISATION);
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.ORGANISATION, formId);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-street',
+                'Translatable#Street', OrganisationProperty.STREET, null, false,
+                'Translatable#Helptext_Customers_OrganisationCreate_Street'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-zip',
+                'Translatable#Zip', OrganisationProperty.ZIP, null, false,
+                'Translatable#Helptext_Customers_OrganisationCreate_Zip'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-city',
+                'Translatable#City', OrganisationProperty.CITY, null, false,
+                'Translatable#Helptext_Customers_OrganisationCreate_City'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-country',
+                'Translatable#Country', OrganisationProperty.COUNTRY, null, false,
+                'Translatable#Helptext_Customers_OrganisationCreate_Country'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'organisation-new-form-group-address', 'Translatable#Postal Address',
+                [
+                    'organisation-new-form-field-street',
+                    'organisation-new-form-field-zip',
+                    'organisation-new-form-field-city',
+                    'organisation-new-form-field-country'
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-comment',
+                'Translatable#Comment', OrganisationProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_Customers_OrganisationCreate_Comment', null, null, null, null,
+                null, null, null, 250
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'organisation-new-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Customers_OrganisationCreate_Validity',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ],
+                new FormFieldValue(1)
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'organisation-new-form-group-other', 'Translatable#Other',
+                [
+                    'organisation-new-form-field-comment',
+                    'organisation-new-form-field-valid'
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'New Organisation',
+                [
+                    'organisation-new-form-group-information',
+                    'organisation-new-form-group-address',
+                    'organisation-new-form-group-other'
+                ],
+                KIXObjectType.ORGANISATION
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.ORGANISATION, formId);
     }
 
 }

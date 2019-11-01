@@ -10,10 +10,7 @@
 import {
     ContextService, ActionFactory, ServiceRegistry, FactoryService, TableFactoryService, LabelService
 } from '../../../../core/browser';
-import {
-    KIXObjectType, ContextType, ContextMode, ContextDescriptor, ConfiguredDialogWidget,
-    WidgetConfiguration, CRUD
-} from '../../../../core/model';
+import { KIXObjectType, ContextType, ContextMode, ContextDescriptor, CRUD } from '../../../../core/model';
 import {
     FAQCategoryCSVExportAction, FAQService, FAQCategoryLabelProvider, FAQCategoryFormService
 } from '../../../../core/browser/faq';
@@ -55,17 +52,7 @@ export class UIModule implements IUIModule {
                 ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'],
                 NewFAQCategoryDialogContext
             );
-            ContextService.getInstance().registerContext(newFAQCategoryContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-faq-category-dialog',
-                new WidgetConfiguration(
-                    'new-faq-category-dialog', 'Translatable#New Category', [], {},
-                    false, false, 'kix-icon-new-gear'
-                ),
-                KIXObjectType.FAQ_CATEGORY,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newFAQCategoryContext);
         }
 
         if (await this.checkPermission('system/faq/categories/*', CRUD.UPDATE)) {
@@ -76,17 +63,7 @@ export class UIModule implements IUIModule {
                 ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'],
                 EditFAQCategoryDialogContext
             );
-            ContextService.getInstance().registerContext(editFAQCategoryContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-faq-category-dialog',
-                new WidgetConfiguration(
-                    'edit-faq-category-dialog', 'Translatable#Edit FAQ Category', [], {}, false,
-                    false, 'kix-icon-edit'
-                ),
-                KIXObjectType.FAQ_CATEGORY,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editFAQCategoryContext);
         }
 
         const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
@@ -94,7 +71,7 @@ export class UIModule implements IUIModule {
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext
         );
-        ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
+        await ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
 
     }
 

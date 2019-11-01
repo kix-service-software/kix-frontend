@@ -9,16 +9,20 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, FormFieldOption, UserProperty,
+    KIXObjectType, FormContext, FormFieldValue,
+    FormFieldOption, UserProperty,
     FormFieldOptions, InputFieldTypes, ObjectReferenceOptions, ContextConfiguration, KIXObjectLoadingOptions,
     FilterCriteria, RoleProperty, FilterDataType, FilterType, KIXObjectProperty, PersonalSettingsProperty,
-    QueueProperty, NotificationProperty
+    QueueProperty, NotificationProperty, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { EditUserDialogContext } from '../../core/browser/user';
 import { SearchOperator } from '../../core/browser';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -26,76 +30,140 @@ export class Extension implements IConfigurationExtension {
         return EditUserDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const widget = new WidgetConfiguration(
+            'user-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-user-dialog', 'Translatable#Edit Agent', [], null, null,
+            false, false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
-
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(
+            this.getModuleId(), 'Edit User Dialog', ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'user-edit-dialog-widget', 'user-edit-dialog-widget',
+                    KIXObjectType.USER, ContextMode.EDIT_ADMIN
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
-        const formId = 'edit-user-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing) {
-            const infoFields: FormField[] = [
-                new FormField(
-                    'Translatable#Title', UserProperty.USER_TITLE, null, false,
-                    'Translatable#Helptext_Admin_Users_UserEdit_Title'
-                ),
-                new FormField(
-                    'Translatable#First Name', UserProperty.USER_FIRSTNAME, null, true,
-                    'Translatable#Helptext_Admin_Users_UserEdit_FirstName'
-                ),
-                new FormField(
-                    'Translatable#Last Name', UserProperty.USER_LASTNAME, null, true,
-                    'Translatable#Helptext_Admin_Users_UserEdit_LastName'
-                ),
-                new FormField(
-                    'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
-                    'Translatable#Helptext_Admin_Users_UserEdit_Login'
-                ),
-                new FormField(
-                    'Translatable#Password', UserProperty.USER_PASSWORD, null, false,
-                    'Translatable#Helptext_Admin_Users_UserEdit_Password',
-                    [
-                        new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                    ], null, null, null, null, null, null, null, null, null, null, null, null,
-                    'Translatable#not modified'
-                ),
-                new FormField(
-                    'Translatable#Phone', UserProperty.USER_PHONE, null, false,
-                    'Translatable#Helptext_Admin_Users_UserEdit_Phone'
-                ),
-                new FormField(
-                    'Translatable#Mobile', UserProperty.USER_MOBILE, null, false,
-                    'Translatable#Helptext_Admin_Users_UserEdit_Mobile'
-                ),
-                new FormField(
-                    'Translatable#Email', UserProperty.USER_EMAIL, null, true,
-                    'Translatable#Helptext_Admin_Users_UserEdit_Email'
-                ),
-                new FormField(
-                    'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Admin_Users_UserEdit_Comment',
-                    null, null, null, null, null, null, null, 250
-                ),
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Admin_Users_UserEdit_Valid', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
-                )
-            ];
-            const infoGroup = new FormGroup('Translatable#Agent Information', infoFields);
+        const formId = 'user-edit-form';
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-title',
+                'Translatable#Title', UserProperty.USER_TITLE, null, false,
+                'Translatable#Helptext_Admin_Users_UserEdit_Title'
+            )
+        );
 
-            const roleField = new FormField(
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-firstname',
+                'Translatable#First Name', UserProperty.USER_FIRSTNAME, null, true,
+                'Translatable#Helptext_Admin_Users_UserEdit_FirstName'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-lastname',
+                'Translatable#Last Name', UserProperty.USER_LASTNAME, null, true,
+                'Translatable#Helptext_Admin_Users_UserEdit_LastName'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-login',
+                'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
+                'Translatable#Helptext_Admin_Users_UserEdit_Login'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-password',
+                'Translatable#Password', UserProperty.USER_PASSWORD, null, false,
+                'Translatable#Helptext_Admin_Users_UserEdit_Password',
+                [
+                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
+                ], null, null, null, null, null, null, null, null, null, null, null, null, null,
+                'Translatable#not modified'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-phone',
+                'Translatable#Phone', UserProperty.USER_PHONE, null, false,
+                'Translatable#Helptext_Admin_Users_UserEdit_Phone'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-mobile',
+                'Translatable#Mobile', UserProperty.USER_MOBILE, null, false,
+                'Translatable#Helptext_Admin_Users_UserEdit_Mobile'
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-email',
+                'Translatable#Email', UserProperty.USER_EMAIL, null, true,
+                'Translatable#Helptext_Admin_Users_UserEdit_Email'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-comment',
+                'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_Admin_Users_UserEdit_Comment',
+                null, null, null, null, null, null, null, 250
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Admin_Users_UserEdit_Valid', [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+            ], new FormFieldValue(1)
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'user-edit-form-group-informations', 'Translatable#Agent Information',
+                [
+                    'user-edit-form-field-title',
+                    'user-edit-form-field-firstname',
+                    'user-edit-form-field-lastname',
+                    'user-edit-form-field-login',
+                    'user-edit-form-field-password',
+                    'user-edit-form-field-phone',
+                    'user-edit-form-field-mobile',
+                    'user-edit-form-field-email',
+                    'user-edit-form-field-comment',
+                    'user-edit-form-field-valid',
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-roles',
                 'Translatable#Roles', UserProperty.ROLEIDS, 'object-reference-input', false,
-                'Translatable#Helptext_Admin_Users_UserEdit_Roles', [
+                'Translatable#Helptext_Admin_Users_UserCreate_Roles',
+                [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
-
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
@@ -108,18 +176,30 @@ export class Extension implements IConfigurationExtension {
                         )
                     )
                 ]
-            );
-            const roleGroup = new FormGroup('Translatable#Role Assignment', [roleField]);
+            )
+        );
 
-            const languageField = new FormField(
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'user-edit-form-group-roles', 'Translatable#Role Assignment', ['user-edit-form-field-roles']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-language',
                 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE, 'language-input',
-                true, 'Translatable#Helptext_Admin_UserEdit_Preferences_Language', null
-            );
-            const myQueuesField = new FormField(
-                'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',
-                false, 'Translatable#Helptext_Admin_UserEdit_Preferences_MyQueues', [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+                true, 'Translatable#Helptext_Admin_UserCreate_Preferences_UserLanguage', null
+            )
+        );
 
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-queues',
+                'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',
+                false, 'Translatable#Helptext_Admin_UserCreate_Preferences_MyQueues',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
@@ -133,12 +213,15 @@ export class Extension implements IConfigurationExtension {
                         )
                     )
                 ]
-            );
+            )
+        );
 
-            const notificationsField = new FormField(
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'user-edit-form-field-notifications',
                 'Translatable#Notifications for Tickets', PersonalSettingsProperty.NOTIFICATIONS,
                 'object-reference-input', false,
-                'Translatable#Helptext_Admin_UserEdit_Preferences_Notifications_Hint',
+                'Translatable#Helptext_Admin_UserCreate_Preferences_Notifications_Hint',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.NOTIFICATION),
 
@@ -159,18 +242,31 @@ export class Extension implements IConfigurationExtension {
                         )
                     )
                 ]
-            );
+            )
+        );
 
-            const settingsGroup = new FormGroup(
-                'Translatable#Preferences', [languageField, notificationsField, myQueuesField]
-            );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'user-edit-form-group-preferences', 'Translatable#Preferences',
+                [
+                    'user-edit-form-field-language',
+                    'user-edit-form-field-queues',
+                    'user-edit-form-field-notifications'
+                ]
+            )
+        );
 
-            const form = new Form(
-                formId, 'Translatable#New Agent', [infoGroup, roleGroup, settingsGroup], KIXObjectType.USER,
-                true, FormContext.EDIT
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New Agent',
+                [
+                    'user-edit-form-group-informations',
+                    'user-edit-form-group-roles',
+                    'user-edit-form-group-preferences'
+                ],
+                KIXObjectType.USER, true, FormContext.EDIT
+            )
+        );
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.USER, formId);
     }
 

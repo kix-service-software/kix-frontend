@@ -38,16 +38,18 @@ export class FAQArticleHistoryTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(FAQArticleHistoryProperty.NAME, true, false, true, true, 200),
-            new DefaultColumnConfiguration(FAQArticleHistoryProperty.CREATED_BY, true, false, true, true, 300),
             new DefaultColumnConfiguration(
+                null, null, null, FAQArticleHistoryProperty.NAME, true, false, true, true, 200),
+            new DefaultColumnConfiguration(
+                null, null, null, FAQArticleHistoryProperty.CREATED_BY, true, false, true, true, 300),
+            new DefaultColumnConfiguration(null, null, null,
                 FAQArticleHistoryProperty.CREATED, true, false, true, true, 150, true, false, false, DataType.DATE_TIME
             )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns, null, null, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.FAQ_ARTICLE_HISTORY, null, null, tableColumns, [], null, null, null, null,
                 TableHeaderHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {

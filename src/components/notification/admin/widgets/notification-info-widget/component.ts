@@ -9,8 +9,9 @@
 
 import { AbstractMarkoComponent, ActionFactory, ContextService, IdService, Label } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { KIXObjectType, Notification, ContextType, ObjectInformationWidgetSettings } from '../../../../../core/model';
-
+import {
+    KIXObjectType, Notification, ContextType, ObjectInformationWidgetConfiguration
+} from '../../../../../core/model';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
@@ -50,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private initWidget(notification: Notification): void {
         this.state.notification = null;
-        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration.configuration;
         if (settings && Array.isArray(settings.properties)) {
             this.state.properties = [...settings.properties];
         }

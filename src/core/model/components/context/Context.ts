@@ -78,7 +78,7 @@ export abstract class Context {
 
     public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
-        this.shownSidebars = [...this.configuration.sidebars];
+        this.shownSidebars = [...this.configuration.sidebars.map((s) => s.instanceId)];
     }
 
     public setAdditionalInformation(key: string, value: any): void {
@@ -150,11 +150,11 @@ export abstract class Context {
     }
 
     public getLanes(show: boolean = false): ConfiguredWidget[] {
-        let lanes = this.configuration.laneWidgets;
+        let lanes = this.configuration.lanes;
 
         if (show) {
             lanes = lanes.filter(
-                (l) => this.configuration.lanes.findIndex((lid) => l.instanceId === lid) !== -1
+                (l) => this.configuration.lanes.findIndex((lid) => l.instanceId === lid.instanceId) !== -1
             );
         }
 
@@ -162,11 +162,11 @@ export abstract class Context {
     }
 
     public getContent(show: boolean = false): ConfiguredWidget[] {
-        let content = this.configuration.contentWidgets;
+        let content = this.configuration.content;
 
         if (show && content) {
             content = content.filter(
-                (l) => this.configuration.content.findIndex((cid) => l.instanceId === cid) !== -1
+                (l) => this.configuration.content.findIndex((cid) => l.instanceId === cid.instanceId) !== -1
             );
         }
 
@@ -174,11 +174,11 @@ export abstract class Context {
     }
 
     public getExplorer(show: boolean = false): ConfiguredWidget[] {
-        let explorer = this.configuration.explorerWidgets;
+        let explorer = this.configuration.explorer;
 
         if (show && explorer) {
             explorer = explorer.filter(
-                (ex) => this.configuration.explorer.some((e) => ex.instanceId === e)
+                (ex) => this.configuration.explorer.some((e) => ex.instanceId === e.instanceId)
             );
         }
 
@@ -186,11 +186,11 @@ export abstract class Context {
     }
 
     public getSidebars(show: boolean = false): ConfiguredWidget[] {
-        let sidebars = this.configuration.sidebarWidgets;
+        let sidebars = this.configuration.sidebars;
 
         if (show && sidebars) {
             sidebars = sidebars
-                .filter((sb) => this.configuration.sidebars.some((s) => sb.instanceId === s))
+                .filter((sb) => this.configuration.sidebars.some((s) => sb.instanceId === s.instanceId))
                 .filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
         }
 
@@ -198,7 +198,7 @@ export abstract class Context {
     }
 
     public toggleSidebarWidget(instanceId: string): void {
-        const sidebar = this.configuration.sidebars.find((s) => s === instanceId);
+        const sidebar = this.configuration.sidebars.find((s) => s.instanceId === instanceId);
         if (sidebar) {
 
             const index = this.shownSidebars.findIndex((s) => s === instanceId);
@@ -241,82 +241,61 @@ export abstract class Context {
         return sidebars ? sidebars.length > 0 : false;
     }
 
-    public getWidgetConfiguration<WS = any>(instanceId: string): WidgetConfiguration<WS> {
-        let configuration: WidgetConfiguration<WS>;
+    public getWidgetConfiguration(instanceId: string): WidgetConfiguration {
+        let configuration: WidgetConfiguration;
 
         if (this.configuration) {
-            const explorer = this.configuration.explorerWidgets.find((e) => e.instanceId === instanceId);
+            const explorer = this.configuration.explorer.find((e) => e.instanceId === instanceId);
             configuration = explorer ? explorer.configuration : undefined;
 
             if (!configuration) {
-                const sidebar = this.configuration.sidebarWidgets.find((e) => e.instanceId === instanceId);
+                const sidebar = this.configuration.sidebars.find((e) => e.instanceId === instanceId);
                 configuration = sidebar ? sidebar.configuration : undefined;
             }
 
             if (!configuration) {
-                const overlay = this.configuration.overlayWidgets.find((o) => o.instanceId === instanceId);
+                const overlay = this.configuration.overlays.find((o) => o.instanceId === instanceId);
                 configuration = overlay ? overlay.configuration : undefined;
             }
 
             if (!configuration) {
-                const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
+                const laneWidget = this.configuration.lanes.find((lw) => lw.instanceId === instanceId);
                 configuration = laneWidget ? laneWidget.configuration : undefined;
             }
 
             if (!configuration) {
-                const contentWidget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
+                const contentWidget = this.configuration.content.find((cw) => cw.instanceId === instanceId);
                 configuration = contentWidget ? contentWidget.configuration : undefined;
+            }
+
+            if (!configuration) {
+                const otherWidget = this.configuration.others.find((cw) => cw.instanceId === instanceId);
+                configuration = otherWidget ? otherWidget.configuration : undefined;
             }
         }
 
         return configuration;
     }
 
-    public getWidget<WS = any>(instanceId: string): ConfiguredWidget {
-        let widget: ConfiguredWidget;
-
-        if (this.configuration) {
-            widget = this.configuration.explorerWidgets.find((e) => e.instanceId === instanceId);
-
-            if (!widget) {
-                widget = this.configuration.sidebarWidgets.find((e) => e.instanceId === instanceId);
-            }
-
-            if (!widget) {
-                widget = this.configuration.overlayWidgets.find((o) => o.instanceId === instanceId);
-            }
-
-            if (!widget) {
-                widget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
-            }
-
-            if (!widget) {
-                widget = this.configuration.contentWidgets.find((cw) => cw.instanceId === instanceId);
-            }
-        }
-
-        return widget;
-    }
-
     public getContextSpecificWidgetType(instanceId: string): WidgetType {
         let widgetType: WidgetType;
 
         if (this.configuration) {
-            const sidebar = this.configuration.sidebarWidgets.find((sw) => sw.instanceId === instanceId);
+            const sidebar = this.configuration.sidebars.find((sw) => sw.instanceId === instanceId);
             widgetType = sidebar ? WidgetType.SIDEBAR : undefined;
 
             if (!widgetType) {
-                const explorer = this.configuration.explorerWidgets.find((ex) => ex.instanceId === instanceId);
+                const explorer = this.configuration.explorer.find((ex) => ex.instanceId === instanceId);
                 widgetType = explorer ? WidgetType.EXPLORER : undefined;
             }
 
             if (!widgetType) {
-                const overlay = this.configuration.overlayWidgets.find((ow) => ow.instanceId === instanceId);
+                const overlay = this.configuration.overlays.find((ow) => ow.instanceId === instanceId);
                 widgetType = overlay ? WidgetType.OVERLAY : undefined;
             }
 
             if (!widgetType) {
-                const laneWidget = this.configuration.laneWidgets.find((lw) => lw.instanceId === instanceId);
+                const laneWidget = this.configuration.lanes.find((lw) => lw.instanceId === instanceId);
                 widgetType = laneWidget ? WidgetType.LANE : undefined;
             }
         }

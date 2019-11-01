@@ -12,7 +12,7 @@ import {
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, Notification, ContextType, ObjectInformationWidgetSettings, NotificationProperty, WidgetType
+    KIXObjectType, Notification, ContextType, WidgetType
 } from '../../../../../core/model';
 import { NotificationLabelProvider } from '../../../../../core/browser/notification';
 

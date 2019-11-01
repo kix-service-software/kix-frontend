@@ -7,11 +7,15 @@
  * --
  */
 
-import { SliderContent } from "./SliderContent";
+import { IConfiguration, ConfigurationType } from "../configuration";
 
-export class SliderWidgetSettings {
+export class HelpWidgetConfiguration implements IConfiguration {
 
     public constructor(
-        public sliderList: SliderContent[] = []
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
+        public helpText: string,
+        public links: Array<[string, string]>
     ) { }
 }

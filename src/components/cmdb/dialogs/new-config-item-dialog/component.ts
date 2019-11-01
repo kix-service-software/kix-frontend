@@ -7,14 +7,16 @@
  * --
  */
 
-import { OverlayService, FormService, ServiceRegistry, BrowserUtil, KIXObjectService } from '../../../../core/browser';
+import {
+    OverlayService, FormService, ServiceRegistry, BrowserUtil, KIXObjectService, ContextService
+} from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, TreeNode, ValidationResult,
     ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ConfigItemProperty, Error,
     KIXObjectLoadingOptions, ConfigItemClassProperty
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
+import { CMDBService, ConfigItemDetailsContext, NewConfigItemDialogContext } from '../../../../core/browser/cmdb';
 import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
@@ -55,25 +57,22 @@ class Component {
     }
 
     public async classChanged(nodes: TreeNode[]): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true);
-        const currentClassNode = nodes && nodes.length ? nodes[0] : null;
+        this.state.prepared = false;
         FormService.getInstance().deleteFormInstance(this.state.formId);
-        this.state.formId = null;
-        let formId: string;
-        if (currentClassNode) {
-            this.classId = currentClassNode.id;
-            const ciClass = await this.getCIClass(this.classId);
-            if (ciClass) {
-                formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
+
+        if (nodes && nodes.length) {
+            const context = await ContextService.getInstance().getContext<NewConfigItemDialogContext>(
+                NewConfigItemDialogContext.CONTEXT_ID
+            );
+            if (context) {
+                context.setAdditionalInformation('CI_CLASS_ID', nodes[0].id);
+                this.classId = nodes[0].id;
+                setTimeout(() => {
+                    this.state.prepared = true;
+                }, 50);
             }
-        } else {
-            formId = null;
         }
 
-        setTimeout(() => {
-            this.state.formId = formId;
-            DialogService.getInstance().setMainDialogLoading(false);
-        }, 100);
     }
 
     public async submit(): Promise<void> {

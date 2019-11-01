@@ -123,8 +123,8 @@ describe('Table Content Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(1, 2, true));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null,'1'),
+                new DefaultColumnConfiguration(null, null, null,'2')
             ])
             await table.initialize();
         });

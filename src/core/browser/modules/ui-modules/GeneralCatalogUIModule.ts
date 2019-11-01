@@ -11,9 +11,7 @@ import {
     ContextService, DialogService, ActionFactory,
     TableFactoryService, LabelService, ServiceRegistry, FactoryService
 } from "../../../../core/browser";
-import {
-    KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, CRUD
-} from "../../../../core/model";
+import { KIXObjectType, ContextDescriptor, ContextType, ContextMode, CRUD } from "../../../../core/model";
 import { AuthenticationSocketClient } from "../../../../core/browser/application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../core/model/UIComponentPermission";
 import { IUIModule } from "../../application/IUIModule";
@@ -22,7 +20,6 @@ import {
     GeneralCatalogLabelProvider, GeneralCatalogService, GeneralCatalogCreateAction, GeneralCatalogFormService
 } from "../../general-catalog";
 import { NewGeneralCatalogDialogContext, EditGeneralCatalogDialogContext } from "../../general-catalog/context";
-import { SearchService } from "../../kix/search/SearchService";
 
 export class UIModule implements IUIModule {
 
@@ -49,35 +46,13 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 true, 'new-general-catalog-dialog', ['generalcatalog'], NewGeneralCatalogDialogContext
             );
-            ContextService.getInstance().registerContext(newGeneralCatalogDialogContext);
+            await ContextService.getInstance().registerContext(newGeneralCatalogDialogContext);
             const editGeneralCatalogDialogContext = new ContextDescriptor(
                 EditGeneralCatalogDialogContext.CONTEXT_ID, [KIXObjectType.GENERAL_CATALOG_ITEM],
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 true, 'edit-general-catalog-dialog', ['generalcatalog'], EditGeneralCatalogDialogContext
             );
-            ContextService.getInstance().registerContext(editGeneralCatalogDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-general-catalog-dialog',
-                new WidgetConfiguration(
-                    'new-general-catalog-dialog', 'Translatable#New Value', [], {}, false, false,
-                    'kix-icon-new-gear'
-                ),
-                KIXObjectType.GENERAL_CATALOG_ITEM,
-                ContextMode.CREATE_ADMIN
-            ));
-
-            if (await this.checkPermission('system/generalcatalog/*', CRUD.UPDATE)) {
-                DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                    'edit-general-catalog-dialog',
-                    new WidgetConfiguration(
-                        'edit-general-catalog-dialog', 'Translatable#Edit Value', [], {}, false, false,
-                        'kix-icon-edit'
-                    ),
-                    KIXObjectType.GENERAL_CATALOG_ITEM,
-                    ContextMode.EDIT_ADMIN
-                ));
-            }
+            await ContextService.getInstance().registerContext(editGeneralCatalogDialogContext);
         }
     }
 

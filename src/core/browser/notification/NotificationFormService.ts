@@ -9,12 +9,14 @@
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
-    KIXObjectType, Notification, NotificationProperty, FormField, Form, FormFieldValue,
+    KIXObjectType, Notification, NotificationProperty, FormFieldValue,
     FormFieldOption, FormContext, NotificationMessage
 } from "../../model";
-import { FormGroup } from "../../model/components/form/FormGroup";
 import { ServiceRegistry } from "../kix";
 import { TranslationService } from "../i18n/TranslationService";
+import {
+    FormConfiguration, FormFieldConfiguration, FormGroupConfiguration
+} from "../../model/components/form/configuration";
 
 export class NotificationFormService extends KIXObjectFormService<Notification> {
 
@@ -36,15 +38,15 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
         return kixObjectType === KIXObjectType.NOTIFICATION;
     }
 
-    protected async doAdditionalPreparations(
-        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, notification: Notification
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, notification: Notification
     ): Promise<void> {
         if (form) {
             const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
                 KIXObjectType.TRANSLATION_PATTERN
             );
             const languages = await translationService.getLanguages();
-            const languageFields: FormField[] = [];
+            const languageFields: FormFieldConfiguration[] = [];
             if (languages) {
                 languages.forEach((l) => {
                     const languagField = this.getLanguageField(form, l);
@@ -60,14 +62,16 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
             }
             if (!!languageFields.length) {
                 form.groups.push(
-                    new FormGroup('Translatable#Notification Text', languageFields)
+                    new FormGroupConfiguration(
+                        'notification-form-text', 'Translatable#Notification Text', [], null, languageFields
+                    )
                 );
             }
         }
     }
 
     protected async getValue(
-        property: string, value: any, notification: Notification, formField: FormField
+        property: string, value: any, notification: Notification, formField: FormFieldConfiguration
     ): Promise<any> {
         switch (property) {
             case NotificationProperty.DATA_FILTER:
@@ -83,7 +87,7 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
         return value;
     }
 
-    public async hasPermissions(field: FormField): Promise<boolean> {
+    public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         let hasPermissions = true;
         switch (field.property) {
             case NotificationProperty.DATA_RECIPIENT_AGENTS:
@@ -97,22 +101,25 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
         return hasPermissions;
     }
 
-    private getLanguageField(form: Form, language: [string, string]): FormField {
-        const subjectField = new FormField(
+    private getLanguageField(form: FormConfiguration, language: [string, string]): FormFieldConfiguration {
+        const subjectField = new FormFieldConfiguration(
+            'subject-field',
             'Translatable#Subject', `${NotificationProperty.MESSAGE_SUBJECT}###${language[0]}`, null, true,
             form && form.formContext === FormContext.EDIT ?
                 'Translatable#Helptext_Admin_NotificationEdit_MessageSubject' :
                 'Translatable#Helptext_Admin_NotificationCreate_MessageSubject'
         );
-        const bodyField = new FormField(
+        const bodyField = new FormFieldConfiguration(
+            'body-field',
             'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${language[0]}`, 'rich-text-input', true,
             form && form.formContext === FormContext.EDIT ?
                 'Translatable#Helptext_Admin_NotificationEdit_MessageText' :
                 'Translatable#Helptext_Admin_NotificationCreate_MessageText',
             [new FormFieldOption('NO_IMAGES', true)]
         );
-        const languagField = new FormField(
-            language[1], null, null, null, null, null, null, [subjectField, bodyField],
+        const languagField = new FormFieldConfiguration(
+            'language-field',
+            language[1], null, null, null, null, null, null, null, [subjectField, bodyField],
             undefined, undefined, undefined, undefined, undefined, undefined, undefined,
             true, true
         );
@@ -120,7 +127,8 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
     }
 
     private setTextValue(
-        fields: FormField[], formFieldValues: Map<string, FormFieldValue<any>>, message: NotificationMessage
+        fields: FormFieldConfiguration[], formFieldValues: Map<string, FormFieldValue<any>>,
+        message: NotificationMessage
     ): void {
         let subjectValue;
         let bodyValue;

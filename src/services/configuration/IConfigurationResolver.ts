@@ -7,10 +7,10 @@
  * --
  */
 
-.widget-content {
-    .dynamic-fields-container {
-        position: relative;
-        overflow: auto;
-        box-sizing: border-box;
-    }
+import { IConfiguration } from "../../core/model/configuration";
+
+export interface IConfigurationResolver<T extends IConfiguration = IConfiguration> {
+
+    resolve(configuration: T): Promise<void>;
+
 }

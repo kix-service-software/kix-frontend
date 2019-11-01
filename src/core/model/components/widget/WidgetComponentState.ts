@@ -12,10 +12,10 @@ import { ContextType } from '../context';
 import { AbstractComponentState } from '../../../browser/components/AbstractComponentState';
 import { ObjectIcon } from '../../kix';
 
-export abstract class WidgetComponentState<T = any> extends AbstractComponentState {
+export abstract class WidgetComponentState extends AbstractComponentState {
 
     public constructor(
-        public widgetConfiguration: WidgetConfiguration<T> = null,
+        public widgetConfiguration: WidgetConfiguration = null,
         public contextType: ContextType = null,
         public showConfiguration: boolean = false,
         public error: string = null,

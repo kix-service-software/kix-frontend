@@ -9,9 +9,11 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, TabWidgetSettings,
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, TabWidgetConfiguration,
 } from '../../core/model/';
 import { TranslationDetailsContext } from '../../core/browser/i18n/admin/context';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -19,44 +21,61 @@ export class Extension implements IConfigurationExtension {
         return TranslationDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const tabLane = new ConfiguredWidget('translation-pattern-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['i18n-translation-information-lane']))
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const translationInfoWidget = new WidgetConfiguration(
+            'i18n-translation-details-info-widget', 'Info Widget', ConfigurationType.Widget,
+            'i18n-translation-info-widget', 'Translatable#Pattern Information', [], null, null,
+            false, true, null, false
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(translationInfoWidget);
 
-        const translationInfoLane =
-            new ConfiguredWidget("i18n-translation-information-lane", new WidgetConfiguration(
-                "i18n-translation-info-widget", "Translatable#Pattern Information", [], {},
-                false, true, null, false)
-            );
+        const tabConfig = new TabWidgetConfiguration(
+            'i18n-translation-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['i18n-translation-details-info-widget'],
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
 
-        const lanes = ['translation-pattern-details-tab-widget'];
-        const laneWidgets = [tabLane, translationInfoLane];
+        const tabLane = new WidgetConfiguration(
+            'i18n-translation-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('i18n-translation-details-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
 
-        // actions
-        const generalActions = ['i18n-admin-translation-create'];
-        const translationActions = ['i18n-admin-translation-edit', 'print-action'];
 
-        const languagesListWidget =
-            new ConfiguredWidget("20190125104012-languages-list", new WidgetConfiguration(
-                "i18n-translation-language-list-widget", "Translatable#Translations", [], null,
-                false, true, null, false)
-            );
-
-        const content = ['20190125104012-languages-list'];
-        const contentWidgets = [languagesListWidget];
+        const languagesListWidget = new WidgetConfiguration(
+            'i18n-translation-details-language-widget', 'Language Widget', ConfigurationType.Widget,
+            'i18n-translation-language-list-widget', 'Translatable#Translations', [],
+            null, null, false, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(languagesListWidget);
 
         return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
             this.getModuleId(),
             [], [],
-            [], [],
-            lanes, laneWidgets,
-            content, contentWidgets,
-            generalActions, translationActions
+            [
+                new ConfiguredWidget('i18n-translation-details-tab-widget', 'i18n-translation-details-tab-widget')
+            ],
+            [
+                new ConfiguredWidget(
+                    'i18n-translation-details-language-widget', 'i18n-translation-details-language-widget'
+                )
+            ],
+            [
+                'i18n-admin-translation-create'
+            ],
+            [
+                'i18n-admin-translation-edit', 'print-action'
+            ],
+            [],
+            [
+                new ConfiguredWidget('i18n-translation-details-info-widget', 'i18n-translation-details-info-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

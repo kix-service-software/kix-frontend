@@ -8,12 +8,15 @@
  */
 
 import {
-    ContextConfiguration, WidgetSize, ConfiguredWidget, WidgetConfiguration, KIXObjectType, TableWidgetSettings
+    ContextConfiguration, WidgetSize, ConfiguredWidget, WidgetConfiguration,
+    KIXObjectType, TableWidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import {
     CompareConfigItemVersionDialogContext
 } from "../../core/browser/cmdb";
+import { ConfigurationType, ConfigurationDefinition } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,31 +24,56 @@ export class Extension implements IConfigurationExtension {
         return CompareConfigItemVersionDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const versionWidget =
-            new ConfiguredWidget('compare-ci-version-widget', new WidgetConfiguration(
-                'table-widget', 'Translatable#Selected Versions', ['switch-column-order-action'],
-                new TableWidgetSettings(
-                    KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, null, null, null, null, false
-                ),
-                false, false, null, true
-            ));
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const tableWidgetConfig = new TableWidgetConfiguration(
+            'cmdb-ci-compare-dialog-table-widget-config', 'Table Widget Config', ConfigurationType.TableWidget,
+            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, null, null, null, null, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
 
-        const legendSidebar =
-            new ConfiguredWidget('20190214082400-compare-ci-version-legend', new WidgetConfiguration(
-                'config-item-version-compare-legend', 'Translatable#Legend', [], null,
-                false, false, 'kix-icon-legend', false
-            ));
+        const versionWidget = new WidgetConfiguration(
+            'cmdb-ci-compare-dialog-table-widget', 'Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Selected Versions', ['switch-column-order-action'],
+            new ConfigurationDefinition('cmdb-ci-compare-dialog-table-widget-config', ConfigurationType.TableWidget),
+            null, false, false, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(versionWidget);
+
+        const legendSidebar = new WidgetConfiguration(
+            'cmdb-ci-compare-dialog-legend-widget', 'Widget', ConfigurationType.Widget,
+            'config-item-version-compare-legend', 'Translatable#Legend', [], null, null,
+            false, false, 'kix-icon-legend', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(legendSidebar);
+
+        const dialogWidget = new WidgetConfiguration(
+            'cmdb-ci-compare-dialog-widget', 'Widget', ConfigurationType.Widget,
+            'compare-config-item-version-dialog', 'Translatable#Compare Versions', [], null, null,
+            false, false, 'kix-icon-comparison-version'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(dialogWidget);
+
         return new ContextConfiguration(
-            CompareConfigItemVersionDialogContext.CONTEXT_ID,
-            ['20190214082400-compare-ci-version-legend'], [legendSidebar],
-            [], [],
-            [], [],
-            ['compare-ci-version-widget'], [versionWidget]
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(),
+            [
+                new ConfiguredWidget('cmdb-ci-compare-dialog-legend-widget', 'cmdb-ci-compare-dialog-legend-widget')
+            ],
+            [], [], [], [], [],
+            [],
+            [
+                new ConfiguredWidget('compare-ci-version-widget', 'cmdb-ci-compare-dialog-table-widget')
+            ],
+            [
+                new ConfiguredDialogWidget(
+                    'cmdb-ci-compare-dialog-widget', 'cmdb-ci-compare-dialog-widget',
+                    KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, ContextMode.EDIT
+                )
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 

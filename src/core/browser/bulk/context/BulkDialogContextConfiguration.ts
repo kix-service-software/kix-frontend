@@ -9,11 +9,16 @@
 
 import { ContextConfiguration } from '../../../model/components/context/ContextConfiguration';
 import { BulkDialogContext } from './BulkDialogContext';
+import { ConfigurationType } from '../../../model/configuration';
 
 export class BulkDialogContextConfiguration extends ContextConfiguration {
 
     public constructor() {
-        super(BulkDialogContext.CONTEXT_ID, [], [], [], [], []);
+        super(
+            BulkDialogContext.CONTEXT_ID, BulkDialogContext.CONTEXT_ID, ConfigurationType.Context,
+            BulkDialogContext.CONTEXT_ID,
+            [], [], [], [], []
+        );
     }
 
 }

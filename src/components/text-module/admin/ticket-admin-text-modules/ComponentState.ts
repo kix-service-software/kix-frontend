@@ -9,19 +9,22 @@
 
 import { IdService } from "../../../../core/browser";
 import {
-    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings, TextModuleProperty
+    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetConfiguration, TextModuleProperty
 } from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('ticket-text-modules-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Text Modules',
             [
                 'text-module-create', 'text-module-csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.TEXT_MODULE, [TextModuleProperty.NAME, SortOrder.UP]),
+            ], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.TEXT_MODULE, [TextModuleProperty.NAME, SortOrder.UP]
+            ),
             false, false, 'kix-icon-gears')
     ) { }
 

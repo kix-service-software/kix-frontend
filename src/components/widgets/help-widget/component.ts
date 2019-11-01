@@ -27,8 +27,10 @@ export class Component {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
-        this.state.helpText = await TranslationService.translate(this.state.widgetConfiguration.settings.helpText);
-        this.state.links = this.state.widgetConfiguration.settings.links;
+        this.state.helpText = await TranslationService.translate(
+            this.state.widgetConfiguration.configuration.helpText
+        );
+        this.state.links = this.state.widgetConfiguration.configuration.links;
     }
 
 }

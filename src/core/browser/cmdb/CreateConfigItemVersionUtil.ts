@@ -8,11 +8,12 @@
  */
 
 import {
-    VersionProperty, FormField, FormFieldOptions, InputFieldTypes, IFormInstance, DateTimeUtil,
+    VersionProperty, FormFieldOptions, InputFieldTypes, IFormInstance, DateTimeUtil,
     Attachment, ConfigItemProperty
 } from "../../model";
 import { FormService } from "../form";
 import { BrowserUtil } from "../BrowserUtil";
+import { FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class CreateConfigItemVersionUtil {
 
@@ -23,7 +24,7 @@ export class CreateConfigItemVersionUtil {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const form = formInstance.getForm();
 
-        let fields: FormField[] = [];
+        let fields: FormFieldConfiguration[] = [];
         form.groups.forEach((g) => fields = [...fields, ...g.formFields]);
 
         let data = null;
@@ -56,7 +57,7 @@ export class CreateConfigItemVersionUtil {
     }
 
     private static async prepareData(
-        versionData: any, formField: FormField, formInstance: IFormInstance
+        versionData: any, formField: FormFieldConfiguration, formInstance: IFormInstance
     ): Promise<any> {
         const data = await CreateConfigItemVersionUtil.perpareFormFieldData(formField, formInstance);
         if (data) {
@@ -77,7 +78,7 @@ export class CreateConfigItemVersionUtil {
     }
 
     private static async perpareFormFieldData(
-        formField: FormField, formInstance: IFormInstance
+        formField: FormFieldConfiguration, formInstance: IFormInstance
     ): Promise<any> {
         let data;
         let fieldType: string;

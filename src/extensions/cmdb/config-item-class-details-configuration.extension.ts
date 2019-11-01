@@ -9,11 +9,13 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TableWidgetSettings,
-    KIXObjectType, PermissionProperty, SortOrder, ConfigItemClassDefinitionProperty, TabWidgetSettings
+    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TableWidgetConfiguration,
+    KIXObjectType, PermissionProperty, SortOrder, ConfigItemClassDefinitionProperty, TabWidgetConfiguration
 } from '../../core/model';
 import { TicketTypeDetailsContext } from '../../core/browser/ticket';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, ToggleOptions } from '../../core/browser';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,77 +23,78 @@ export class Extension implements IConfigurationExtension {
         return 'config-item-class-details';
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const tabLane = new ConfiguredWidget('config-item-class-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['config-item-class-details-widget']))
+        const ciClassInfoWidget = new WidgetConfiguration(
+            'ci-class-details-object-info', 'Object Info', ConfigurationType.Widget,
+            'config-item-class-info-widget', 'Translatable#CI Class Information',
+            [], null, null, false, true, null, false
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(ciClassInfoWidget);
 
-        const ciClassInfoWidget = new ConfiguredWidget(
-            'config-item-class-details-widget', new WidgetConfiguration(
-                'config-item-class-info-widget', 'Translatable#CI Class Information',
-                [], null,
-                false, true, null, false
-            )
+        const tabConfig = new TabWidgetConfiguration(
+            'ci-class-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['ci-class-details-object-info']
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
 
-        const ciClassObjectPermissionsWidget = new ConfiguredWidget(
-            'ci-class-permissions-widget', new WidgetConfiguration(
-                'table-widget', 'Translatable#Permissions',
-                [],
-                new TableWidgetSettings(
-                    KIXObjectType.PERMISSION, [PermissionProperty.RoleID, SortOrder.UP],
-                    new TableConfiguration(
-                        KIXObjectType.PERMISSION, null, null, null, null, null, null, null,
-                        TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                    ), null, false
-                ),
-                true, true, null, true
-            )
+        const tabLane = new WidgetConfiguration(
+            'ci-class-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('ci-class-details-tab-widget-config', ConfigurationType.TabWidget)
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
 
-        const ciClassDependentObjectPermissionsWidget = new ConfiguredWidget(
-            'ci-class-permissions-dependent-objects-widget', new WidgetConfiguration(
-                'table-widget',
-                'Translatable#Permissions on dependent objects',
-                [],
-                new TableWidgetSettings(
-                    KIXObjectType.PERMISSION_DEPENDING_OBJECTS, [PermissionProperty.RoleID, SortOrder.UP],
-                    new TableConfiguration(
-                        KIXObjectType.PERMISSION_DEPENDING_OBJECTS, null, null, null, null, null, null, null,
-                        TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                    ), null, false
-                ),
-                true, true, null, true
-            )
-        );
 
-        const ciClassVersionsWidget = new ConfiguredWidget(
-            'ci-class-versions-widget', new WidgetConfiguration(
-                'table-widget', 'Translatable#Overview Versions',
-                [], new TableWidgetSettings(
-                    KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
-                    [ConfigItemClassDefinitionProperty.VERSION, SortOrder.DOWN],
-                    new TableConfiguration(
-                        KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, null, null, true,
-                        new ToggleOptions('config-item-class-definition', 'definition', [], true), null,
-                        TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                    ), null, false
-                ),
-                false, true, null, true
-            )
+        const tableConfig = new TableConfiguration(
+            'ci-class-details-version-table-config', 'Table Config', ConfigurationType.Table,
+            KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, null, null, null, true,
+            new ToggleOptions('config-item-class-definition', 'definition', [], true), null,
+            TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableConfig);
+
+        const tableWidgetConfig = new TableWidgetConfiguration(
+            'ci-class-details-version-table-widget-config', 'Table Widget Config', ConfigurationType.TableWidget,
+            KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION,
+            [ConfigItemClassDefinitionProperty.VERSION, SortOrder.DOWN],
+            new ConfigurationDefinition('ci-class-details-version-table-config', ConfigurationType.TableWidget),
+            null, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+
+        const ciClassVersionsWidget = new WidgetConfiguration(
+            'ci-class-details-table-widget', 'Table Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Overview Versions', [],
+            new ConfigurationDefinition('ci-class-details-version-table-widget-config', ConfigurationType.TableWidget),
+            null, false, true, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(ciClassVersionsWidget);
 
         return new ContextConfiguration(
-            TicketTypeDetailsContext.CONTEXT_ID, [], [], [], [],
-            ['config-item-class-details-tab-widget'], [tabLane, ciClassInfoWidget],
-            ['ci-class-versions-widget'], [ciClassVersionsWidget],
-            ['cmdb-admin-ci-class-create'],
-            ['cmdb-admin-ci-class-edit', 'print-action']
+            this.getModuleId(), 'CI Class Details', ConfigurationType.Context,
+            this.getModuleId(),
+            [], [],
+            [
+                new ConfiguredWidget('ci-class-details-tab-widget', 'ci-class-details-tab-widget'),
+                new ConfiguredWidget('ci-class-details-table-widget', 'ci-class-details-table-widget')
+            ],
+            [],
+            [
+                'cmdb-admin-ci-class-create'
+            ],
+            [
+                'cmdb-admin-ci-class-edit', 'print-action'
+            ],
+            [],
+            [
+                new ConfiguredWidget('ci-class-details-object-info', 'ci-class-details-object-info')
+            ]
+
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 

@@ -24,7 +24,7 @@ const newFAQArticleContext = new ContextDescriptor(
     NewFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.CREATE,
     false, 'new-faq-article-dialog', 'faqarticle/new', NewFAQArticleDialogContext
 );
-ContextService.getInstance().registerContext(newFAQArticleContext);
+await ContextService.getInstance().registerContext(newFAQArticleContext);
 ```
 
 ### Erstelldialog implementieren & registrieren
@@ -34,8 +34,8 @@ ContextService.getInstance().registerContext(newFAQArticleContext);
 ```javascript
 DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
     'new-faq-article-dialog',
-    new WidgetConfiguration(
-        'new-faq-article-dialog', 'Neue FAQ', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-query'
+    new WidgetConfiguration(null,null,null,
+        'new-faq-article-dialog', 'Neue FAQ',[], null, null, false, false, WidgetSize.BOTH, 'kix-icon-query'
     ),
     KIXObjectType.FAQ_ARTICLE,
     ContextMode.CREATE

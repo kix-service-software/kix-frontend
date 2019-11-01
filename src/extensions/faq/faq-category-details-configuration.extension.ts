@@ -9,7 +9,9 @@
 
 import { IConfigurationExtension } from "../../core/extensions";
 import { FAQCategoryDetailsContext } from "../../core/browser/faq/admin";
-import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, TabWidgetSettings } from "../../core/model";
+import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration, TabWidgetConfiguration } from "../../core/model";
+import { ConfigurationType, ConfigurationDefinition } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,34 +19,49 @@ export class Extension implements IConfigurationExtension {
         return FAQCategoryDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-
-        const tabLane = new ConfiguredWidget('faq-category-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['faq-category-info-widget']))
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const faqInfoLane = new WidgetConfiguration(
+            'faq-category-details-info-widget', 'Info Widget', ConfigurationType.Widget,
+            'faq-category-info-widget', 'Translatable#FAQ Category Information',
+            [], null, null, false, true, null, false
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(faqInfoLane);
 
-        const faqInfoLaneTab =
-            new ConfiguredWidget('faq-category-info-widget',
-                new WidgetConfiguration(
-                    'faq-category-info-widget', 'Translatable#FAQ Category Information',
-                    [], {}, false, true, null, false
-                )
-            );
+        const tabConfig = new TabWidgetConfiguration(
+            'faq-category-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['faq-category-details-info-widget']
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
 
-        const actions = ['faq-admin-category-create-action'];
-        const faqActions = ['faq-admin-category-edit-action', 'print-action'];
+        const tabLane = new WidgetConfiguration(
+            'faq-category-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('faq-category-details-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
 
         return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
             this.getModuleId(),
             [], [],
-            [], [],
-            ['faq-category-details-tab-widget'], [tabLane, faqInfoLaneTab],
-            [], [],
-            actions, faqActions
+            [
+                new ConfiguredWidget('faq-category-details-tab-widget', 'faq-category-details-tab-widget')
+            ],
+            [],
+            [
+                'faq-admin-category-create-action'
+            ],
+            [
+                'faq-admin-category-edit-action', 'print-action'
+            ],
+            [],
+            [
+                new ConfiguredWidget('faq-category-details-info-widget', 'faq-category-details-info-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

@@ -10,19 +10,19 @@
 import { AutoCompleteConfiguration } from './AutoCompleteConfiguration';
 import { KIXObjectType } from '../..';
 import { FormContext } from './FormContext';
-import { Form } from './Form';
+import { FormConfiguration } from './configuration';
 
-export class SearchForm extends Form {
+export class SearchForm extends FormConfiguration {
 
     public constructor(
-        id: string,
-        name: string,
+        formId: string,
+        formName: string,
         objectType: KIXObjectType,
         formContext: FormContext = FormContext.SEARCH,
         autoCompleteConfiguration: AutoCompleteConfiguration = new AutoCompleteConfiguration(),
         public defaultSearchProperties: string[] = []
     ) {
-        super(id, name, [], objectType, false, formContext, autoCompleteConfiguration);
+        super(formId, formName, [], objectType, false, formContext, autoCompleteConfiguration);
     }
 
 }

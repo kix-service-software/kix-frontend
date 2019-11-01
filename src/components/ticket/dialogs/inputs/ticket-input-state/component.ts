@@ -9,12 +9,13 @@
 
 import { ComponentState } from "./ComponentState";
 import {
-    TicketProperty, TreeNode, TicketState, KIXObjectType, StateType, FormField
+    TicketProperty, TreeNode, TicketState, KIXObjectType, StateType
 } from "../../../../../core/model";
 import { TicketStateOptions, TicketService } from "../../../../../core/browser/ticket";
 import { FormInputComponent } from '../../../../../core/model/components/form/FormInputComponent';
 import { KIXObjectService, FormService, LabelService } from "../../../../../core/browser";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../../../core/model/components/form/configuration";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -81,11 +82,12 @@ class Component extends FormInputComponent<number, ComponentState> {
             const label = await LabelService.getInstance().getPropertyText(
                 TicketProperty.PENDING_TIME, KIXObjectType.TICKET
             );
-            field = new FormField(
+            field = new FormFieldConfiguration(
+                'pending-time-field',
                 label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
                 null, null, undefined, undefined, undefined, undefined, undefined, undefined,
                 undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                undefined, false
+                undefined, null, false
             );
             formInstance.addNewFormField(this.state.field, [field]);
         }

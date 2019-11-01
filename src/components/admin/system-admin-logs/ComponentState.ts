@@ -8,15 +8,15 @@
  */
 
 import { IdService } from "../../../core/browser";
-import { WidgetConfiguration, TableWidgetSettings, KIXObjectType, SortOrder } from "../../../core/model";
+import { WidgetConfiguration, TableWidgetConfiguration, KIXObjectType, SortOrder } from "../../../core/model";
 import { LogFileProperty } from "../../../core/model/kix/log";
 
 export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('system-admin-logs-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#System: Logs', [],
-            new TableWidgetSettings(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
+            'table-widget', 'Translatable#System: Logs', [], null,
+            new TableWidgetConfiguration(null, null, null,
                 KIXObjectType.LOG_FILE,
                 [LogFileProperty.MODIFIY_TIME, SortOrder.DOWN]
             ), false, false, 'kix-icon-gears'

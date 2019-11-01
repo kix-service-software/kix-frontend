@@ -11,7 +11,7 @@ import { WidgetComponentState, AbstractAction, Notification, NotificationMessage
 import { NotificationLabelProvider } from "../../../../../core/browser/notification";
 import { Label } from "../../../../../core/browser";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public actions: AbstractAction[] = [],

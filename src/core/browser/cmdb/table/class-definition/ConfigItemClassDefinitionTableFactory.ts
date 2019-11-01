@@ -37,25 +37,25 @@ export class ConfigItemClassDefinitionTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ConfigItemClassDefinitionProperty.VERSION, true, false, true, true, 100, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ConfigItemClassDefinitionProperty.CREATE_BY, true, false, true, true, 150, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ConfigItemClassDefinitionProperty.CREATE_TIME, true, false, true, true, 150,
                 true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ConfigItemClassDefinitionProperty.CURRENT, true, false, true, true, 150,
                 true, true, false, DataType.DATE_TIME
             )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, tableColumns, false, true,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, tableColumns, [], false, true,
                 new ToggleOptions(
                     'config-item-class-definition', 'definition', [], true
                 ), null,

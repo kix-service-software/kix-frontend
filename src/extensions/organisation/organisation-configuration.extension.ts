@@ -9,12 +9,15 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, KIXObjectType, CRUD,
-    TableWidgetSettings, KIXObjectLoadingOptions, FilterCriteria, KIXObjectProperty, FilterDataType, FilterType
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, KIXObjectType, CRUD, TableWidgetConfiguration
 } from '../../core/model';
-import { TableConfiguration, SearchOperator } from '../../core/browser';
+import { TableConfiguration } from '../../core/browser';
 import { OrganisationContext } from '../../core/browser/organisation';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import {
+    ConfigurationType, ConfigurationDefinition as SubConfigurationDefinition
+} from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 
@@ -22,69 +25,83 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         return OrganisationContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const organisationListWidget = new ConfiguredWidget('20180529102830',
-            new WidgetConfiguration(
-                'table-widget', 'Translatable#Overview Organisations', [
-                    'organisation-search-action',
-                    'organisation-create-action',
-                    'import-action',
-                    'csv-export-action'
-                ],
-                new TableWidgetSettings(
-                    KIXObjectType.ORGANISATION, null,
-                    new TableConfiguration(
-                        KIXObjectType.ORGANISATION, null,
-                        null, null, true
-                    )
-                ),
-                false, true, 'kix-icon-man-house', true
-            ),
-            [new UIComponentPermission('organisations', [CRUD.READ])]
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const organisationsTable = new TableConfiguration(
+            'customer-dashboard-table', 'Organisations Table', ConfigurationType.Table,
+            KIXObjectType.ORGANISATION, null, null,
+            null, null, true
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationsTable);
 
-        const contactListWidget =
-            new ConfiguredWidget('20180529144530',
-                new WidgetConfiguration(
-                    'contact-list-widget', 'Translatable#Overview Contacts', [
-                        'contact-search-action',
-                        'contact-create-action',
-                        'import-action',
-                        'contact-csv-export-action'
-                    ], new TableWidgetSettings(
-                        KIXObjectType.CONTACT, null,
-                        new TableConfiguration(
-                            KIXObjectType.CONTACT, null,
-                            null, null, true
-                        ), null, true, null, null, null, false
-                    ),
-                    false, true, 'kix-icon-man-bubble', true
-                ),
-                [new UIComponentPermission('contacts', [CRUD.READ])]
-            );
+        const organsiationTableWidget = new TableWidgetConfiguration(
+            'customer-dashboard-table-widget', 'Organisation Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.ORGANISATION, null,
+            new SubConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table), null
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organsiationTableWidget);
 
-        const content: string[] = ['20180529102830', '20180529144530'];
-        const contentWidgets = [organisationListWidget, contactListWidget];
+        const organisationTableWidget = new WidgetConfiguration(
+            'customer-dashboard-organisations-widget', 'Organisations Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Overview Organisations',
+            ['organisation-search-action', 'organisation-create-action', 'import-action', 'csv-export-action'],
+            new SubConfigurationDefinition('customer-dashboard-table-widget', ConfigurationType.TableWidget), null,
+            false, true, 'kix-icon-man-house', true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationTableWidget);
 
-        const notesSidebar =
-            new ConfiguredWidget('20181010-organisation-notes', new WidgetConfiguration(
-                'notes-widget', 'Translatable#Notes', [], {},
-                false, false, 'kix-icon-note', false)
-            );
+        const contactsTable = new TableConfiguration(
+            'customer-dashboard-contacts-table', 'Contact Table', ConfigurationType.Table,
+            KIXObjectType.CONTACT, null, null, null, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactsTable);
 
-        const sidebars = ['20181010-organisation-notes'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+        const contactTableWidget = new TableWidgetConfiguration(
+            'customer-dashboard-contacts-table-widget', 'Contacts Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.CONTACT, null,
+            new SubConfigurationDefinition('customer-dashboard-contacts-table', ConfigurationType.Table), null,
+            null, true, null, null, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactTableWidget);
+
+        const contactListWidget = new WidgetConfiguration(
+            'customer-dashboard-contacts-widget', 'Contacts Widget', ConfigurationType.Widget,
+            'contact-list-widget', 'Translatable#Overview Contacts',
+            ['contact-search-action', 'contact-create-action', 'import-action', 'contact-csv-export-action'],
+            new SubConfigurationDefinition(
+                'customer-dashboard-contacts-table-widget', ConfigurationType.TableWidget
+            ),
+            null, false, true, 'kix-icon-man-bubble', true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactListWidget);
+
+        const notesSidebar = new WidgetConfiguration(
+            'customer-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
+            'notes-widget', 'Translatable#Notes', [], null, null,
+            false, false, 'kix-icon-note', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
 
         return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
             this.getModuleId(),
-            sidebars, sidebarWidgets,
+            [
+                new ConfiguredWidget('customer-dashboard-notes-widget', 'customer-dashboard-notes-widget')
+            ],
             [], [],
-            [], [],
-            content, contentWidgets
+            [
+                new ConfiguredWidget(
+                    'customer-dashboard-organisations-widget', 'customer-dashboard-organisations-widget', null,
+                    [new UIComponentPermission('organisations', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'customer-dashboard-contacts-widget', 'customer-dashboard-contacts-widget', null,
+                    [new UIComponentPermission('contacts', [CRUD.READ])]
+                )
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

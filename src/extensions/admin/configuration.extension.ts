@@ -9,10 +9,11 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetConfiguration, WidgetSize
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration
 } from '../../core/model';
 import { AdminContext } from '../../core/browser/admin';
-import { AdminModuleService } from '../../services';
+import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -20,33 +21,33 @@ export class Extension implements IConfigurationExtension {
         return AdminContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(token: string): Promise<ContextConfiguration> {
-        const notesSidebar =
-            new ConfiguredWidget('20181126-admin-notes', new WidgetConfiguration(
-                'notes-widget', 'Translatable#Notes', [], {},
-                false, false, 'kix-icon-note', false)
-            );
+    public async createDefaultConfiguration(token: string): Promise<ContextConfiguration> {
+        const notesSidebar = new WidgetConfiguration(
+            'admin-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
+            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
 
-        const sidebars = ['20181126-admin-notes'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
 
-        const adminModuleCategoriesExplorer =
-            new ConfiguredWidget('20181127-admin-module-categories-explorer', new WidgetConfiguration(
-                'admin-modules-explorer', 'Translatable#Administration', [], null,
-                false, false, null, false)
-            );
-
-        const explorer = ['20181127-admin-module-categories-explorer'];
-        const explorerWidgets: Array<ConfiguredWidget<any>> = [adminModuleCategoriesExplorer];
+        const adminModuleCategoriesExplorer = new WidgetConfiguration(
+            'admin-dashboard-category-explorer', 'Category Explorer', ConfigurationType.Widget,
+            'admin-modules-explorer', 'Translatable#Administration', [], null, null, false, false, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(adminModuleCategoriesExplorer);
 
         return new ContextConfiguration(
+            this.getModuleId(), 'Admin Dashboard', ConfigurationType.Context,
             this.getModuleId(),
-            sidebars, sidebarWidgets,
-            explorer, explorerWidgets
+            [
+                new ConfiguredWidget('admin-dashboard-notes-widget', 'admin-dashboard-notes-widget')
+            ],
+            [
+                new ConfiguredWidget('admin-dashboard-category-explorer', 'admin-dashboard-category-explorer')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 

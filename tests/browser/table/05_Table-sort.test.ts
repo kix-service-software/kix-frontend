@@ -27,9 +27,9 @@ describe('Table Sort Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 10, false));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+                new DefaultColumnConfiguration(null, null, null,'0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null,'1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null,'2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
             ]);
             await table.initialize();
         });
@@ -105,9 +105,9 @@ describe('Table Sort Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 10, false, true));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+                new DefaultColumnConfiguration(null, null, null,'0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null,'1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null,'2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
             ]);
 
             subscriber = {
@@ -167,9 +167,9 @@ describe('Table Sort Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(1500, 10, false));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+                new DefaultColumnConfiguration(null, null, null,'0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null,'1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null,'2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
             ]);
             await table.initialize();
         });

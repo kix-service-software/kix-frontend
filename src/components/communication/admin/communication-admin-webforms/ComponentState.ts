@@ -8,7 +8,7 @@
  */
 
 import {
-    WidgetConfiguration, KIXObjectType, TableWidgetSettings, SortOrder
+    WidgetConfiguration, KIXObjectType, TableWidgetConfiguration, SortOrder
 } from "../../../../core/model";
 import { IdService } from "../../../../core/browser";
 import { WebformProperty } from "../../../../core/model/webform";
@@ -16,9 +16,9 @@ import { WebformProperty } from "../../../../core/model/webform";
 export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('communication-webforms-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            'table-widget', 'Translatable#Communication: Webform', ['webform-create-action'],
-            new TableWidgetSettings(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
+            'table-widget', 'Translatable#Communication: Webform', ['webform-create-action'], null,
+            new TableWidgetConfiguration(null, null, null,
                 KIXObjectType.WEBFORM,
                 [WebformProperty.TITLE, SortOrder.UP]
             ), false, false, 'kix-icon-gears'

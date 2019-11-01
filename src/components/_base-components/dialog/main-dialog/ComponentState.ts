@@ -7,7 +7,7 @@
  * --
  */
 
-import { ConfiguredDialogWidget, ObjectIcon } from '../../../../core/model';
+import { ConfiguredDialogWidget, ObjectIcon, WidgetConfiguration } from '../../../../core/model';
 
 export class ComponentState {
 
@@ -19,7 +19,8 @@ export class ComponentState {
         public contextId: string = null,
         public showClose: boolean = false,
         public time: number = null,
-        public cancelCallback: () => void = null
+        public cancelCallback: () => void = null,
+        public dialogWidgets: WidgetConfiguration[] = []
     ) { }
 
 }

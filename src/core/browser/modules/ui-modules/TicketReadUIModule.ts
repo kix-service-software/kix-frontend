@@ -114,9 +114,8 @@ export class UIModule implements IUIModule {
             KIXObjectType.TICKET_TEMPLATE, TicketTemplateBrowserFactory.getInstance()
         );
 
-        this.registerContexts();
+        await this.registerContexts();
         this.registerTicketActions();
-        this.registerTicketDialogs();
     }
 
     private registerTicketActions(): void {
@@ -128,44 +127,32 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const ticketContext = new ContextDescriptor(
             TicketContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'tickets', ['tickets'], TicketContext
         );
-        ContextService.getInstance().registerContext(ticketContext);
+        await ContextService.getInstance().registerContext(ticketContext);
 
         const ticketDetailsContextDescriptor = new ContextDescriptor(
             TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['tickets'], TicketDetailsContext
         );
-        ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+        await ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
         const searchContext = new ContextDescriptor(
             TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-ticket-dialog', ['tickets'], TicketSearchContext
         );
-        ContextService.getInstance().registerContext(searchContext);
+        await ContextService.getInstance().registerContext(searchContext);
 
         const ticketListContext = new ContextDescriptor(
             TicketListContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'ticket-list-module', ['ticket-list'], TicketListContext
         );
-        ContextService.getInstance().registerContext(ticketListContext);
+        await ContextService.getInstance().registerContext(ticketListContext);
     }
 
-
-    private registerTicketDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'search-ticket-dialog',
-            new WidgetConfiguration(
-                'search-ticket-dialog', 'Translatable#Ticket Search', [], {},
-                false, false, 'kix-icon-search-ticket'
-            ),
-            KIXObjectType.TICKET,
-            ContextMode.SEARCH
-        ));
-    }
 }

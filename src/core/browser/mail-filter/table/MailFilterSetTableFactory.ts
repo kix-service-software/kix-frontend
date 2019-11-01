@@ -39,19 +39,19 @@ export class MailFilterSetTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 'Key', true, false, true, false, 200, true, true,
                 false, DataType.STRING, true, null, 'Translatable#Email Header', false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 'Value', true, false, true, false, 300, true, true,
                 false, DataType.STRING, true, null, 'Translatable#Value', false
             )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.MAIL_FILTER_SET, null, null, tableColumns, false, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.MAIL_FILTER_SET, null, null, tableColumns, [], false, false, null, null,
                 TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {

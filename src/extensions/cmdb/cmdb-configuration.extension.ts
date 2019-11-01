@@ -10,15 +10,21 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, WidgetConfiguration, WidgetSize, ConfiguredWidget, ConfigItemProperty,
-    FormField, VersionProperty, FormFieldOption, FormContext, KIXObjectType, Form,
-    KIXObjectPropertyFilter, TableFilterCriteria, CRUD, TableWidgetSettings, ObjectReferenceOptions,
-    FilterType, GeneralCatalogItemProperty, FilterCriteria, FilterDataType, KIXObjectProperty, KIXObjectLoadingOptions
+    VersionProperty, FormFieldOption, FormContext, KIXObjectType,
+    CRUD, ObjectReferenceOptions,
+    FilterType, GeneralCatalogItemProperty, FilterCriteria, FilterDataType, KIXObjectProperty,
+    KIXObjectLoadingOptions, ChartComponentConfiguration, KIXObjectPropertyFilter, TableFilterCriteria,
+    TableWidgetConfiguration
 } from '../../core/model';
-import { CMDBContext, ConfigItemChartConfiguration } from '../../core/browser/cmdb';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { CMDBContext, ConfigItemChartWidgetConfiguration } from '../../core/browser/cmdb';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService, CMDBService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -26,159 +32,184 @@ export class Extension implements IConfigurationExtension {
         return CMDBContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const sidebars = ['20180830-cmdb-notes-sidebar'];
-
-        const notesSidebar = new ConfiguredWidget('20180830-cmdb-notes-sidebar',
-            new WidgetConfiguration(
-                'notes-widget', 'Translatable#Notes', [], {}, false, false, 'kix-icon-note', false
-            ));
-
-        const sidebarWidgets = [notesSidebar];
-
-        const explorer = ['20180830-ci-class-explorer'];
-
-        const ciClassExplorer = new ConfiguredWidget('20180830-ci-class-explorer',
-            new WidgetConfiguration(
-                'config-item-class-explorer', 'Translatable#CMDB Explorer', [], {}, false, false
-            ),
-            [new UIComponentPermission('system/cmdb/classes', [CRUD.READ])]
+        const notesSidebar = new WidgetConfiguration(
+            'cmdb-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
+            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
         );
-        const explorerWidgets = [ciClassExplorer];
+        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
 
+        const classExplorer = new WidgetConfiguration(
+            'cmdb-dashboard-class-explorer', 'Class Explorer', ConfigurationType.Widget,
+            'config-item-class-explorer', 'Translatable#CMDB Explorer', [], null, null, false, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(classExplorer);
 
-        // CONTENT WIDGETS
-
-        const chartConfig1 = new ConfigItemChartConfiguration(ConfigItemProperty.CLASS_ID, {
-            type: 'bar',
-            data: {
-                labels: [],
-                datasets: [{
-                    backgroundColor: [
-                        "rgb(91, 91, 91)",
-                        "rgb(4, 83, 125)",
-                        "rgb(0, 141, 210)",
-                        "rgb(129, 189, 223)",
-                        "rgb(160, 230, 200)",
-                        "rgb(130, 200, 38)",
-                        "rgb(0, 152, 70)",
-                        "rgb(227, 30, 36)",
-                        "rgb(239, 127, 26)",
-                        "rgb(254, 204, 0)"
-                    ]
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                scales: {
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            maxTicksLimit: 6
-                        }
+        const chartConfig1 = new ChartComponentConfiguration(
+            'cmdb-dashboard-ci-chart-class-items-count', 'Class Items Count Chart', ConfigurationType.Chart,
+            {
+                type: 'bar',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        backgroundColor: [
+                            "rgb(91, 91, 91)",
+                            "rgb(4, 83, 125)",
+                            "rgb(0, 141, 210)",
+                            "rgb(129, 189, 223)",
+                            "rgb(160, 230, 200)",
+                            "rgb(130, 200, 38)",
+                            "rgb(0, 152, 70)",
+                            "rgb(227, 30, 36)",
+                            "rgb(239, 127, 26)",
+                            "rgb(254, 204, 0)"
+                        ]
                     }]
-                }
-            }
-        });
-        const chart1 = new ConfiguredWidget('20180903-cmdb-chart-1',
-            new WidgetConfiguration(
-                'config-item-chart-widget', 'Translatable#Number of Config Items', [], chartConfig1,
-                false, true, null, true
-            ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
-            WidgetSize.SMALL
-        );
-
-        const chartConfig2 = new ConfigItemChartConfiguration(ConfigItemProperty.CUR_DEPL_STATE_ID, {
-            type: 'pie',
-            data: {
-                labels: [],
-                datasets: [{
-                    label: '',
-                    data: [],
-                    fill: true,
-                    backgroundColor: [
-                        "rgb(91, 91, 91)",
-                        "rgb(4, 83, 125)",
-                        "rgb(0, 141, 210)",
-                        "rgb(129, 189, 223)",
-                        "rgb(160, 230, 200)",
-                        "rgb(130, 200, 38)",
-                        "rgb(0, 152, 70)",
-                        "rgb(227, 30, 36)",
-                        "rgb(239, 127, 26)",
-                        "rgb(254, 204, 0)"
-                    ]
-                }]
-            },
-            options: {
-                legend: {
-                    display: true,
-                    position: 'right'
-                }
-            }
-        });
-        const chart2 = new ConfiguredWidget('20180903-cmdb-chart-2',
-            new WidgetConfiguration(
-                'config-item-chart-widget', 'Translatable#Overview Config Items Deployment State', [], chartConfig2,
-                false, true, null, true
-            ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
-            WidgetSize.SMALL
-        );
-
-        const chartConfig3 = new ConfigItemChartConfiguration(ConfigItemProperty.CUR_INCI_STATE_ID, {
-            type: 'bar',
-            data: {
-                datasets: [{
-                    backgroundColor: [
-                        "rgb(91, 91, 91)",
-                        "rgb(4, 83, 125)",
-                        "rgb(0, 141, 210)",
-                        "rgb(129, 189, 223)",
-                        "rgb(160, 230, 200)",
-                        "rgb(130, 200, 38)",
-                        "rgb(0, 152, 70)",
-                        "rgb(227, 30, 36)",
-                        "rgb(239, 127, 26)",
-                        "rgb(254, 204, 0)"
-                    ]
-                }]
-            },
-            options: {
-                legend: {
-                    display: true,
-                    position: 'top'
                 },
-                scales: {
-                    xAxes: [{
-                        stacked: true
-                    }],
-                    yAxes: [{
-                        stacked: true,
-                        ticks: {
-                            beginAtZero: true,
-                            maxTicksLimit: 6
-                        }
-                    }]
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero: true,
+                                maxTicksLimit: 6
+                            }
+                        }]
+                    }
                 }
             }
-        });
-        const chart3 = new ConfiguredWidget('20180903-cmdb-chart-3',
-            new WidgetConfiguration(
-                'config-item-chart-widget', 'Translatable#Number of Config Items in critical incident state',
-                [], chartConfig3, false, true, null, true
-            ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
-            WidgetSize.SMALL
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig1);
 
-        const content = [
-            '20180903-cmdb-chart-1', '20180903-cmdb-chart-2', '20180903-cmdb-chart-3', '20180905-ci-list-widget'
-        ];
+        const chartWidgetConfig1 = new ConfigItemChartWidgetConfiguration(
+            'cmdb-dashboard-ci-chart-class-items-count-widget', null, ConfigurationType.ChartWidget,
+            ConfigItemProperty.CLASS_ID,
+            new ConfigurationDefinition('cmdb-dashboard-ci-chart-class-items-count', ConfigurationType.Chart)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig1);
+
+        const chart1 = new WidgetConfiguration(
+            'cmdb-dashboard-ci-chart-items-count', 'Items Count', ConfigurationType.Widget,
+            'config-item-chart-widget', 'Translatable#Number of Config Items', [],
+            new ConfigurationDefinition(
+                'cmdb-dashboard-ci-chart-class-items-count-widget', ConfigurationType.ChartWidget
+            ),
+            null, false, true, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chart1);
+
+        const chartConfig2 = new ChartComponentConfiguration(
+            'cmdb-dashboard-ci-deployment-state-chart', 'CI Deployment States', ConfigurationType.Chart,
+            {
+                type: 'pie',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: '',
+                        data: [],
+                        fill: true,
+                        backgroundColor: [
+                            "rgb(91, 91, 91)",
+                            "rgb(4, 83, 125)",
+                            "rgb(0, 141, 210)",
+                            "rgb(129, 189, 223)",
+                            "rgb(160, 230, 200)",
+                            "rgb(130, 200, 38)",
+                            "rgb(0, 152, 70)",
+                            "rgb(227, 30, 36)",
+                            "rgb(239, 127, 26)",
+                            "rgb(254, 204, 0)"
+                        ]
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: true,
+                        position: 'right'
+                    }
+                }
+            }
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig2);
+
+        const chartWidgetConfig2 = new ConfigItemChartWidgetConfiguration(
+            'cmdb-dashboard-ci-deployment-state-chart-widget', 'CI Deployment States Chart Widget',
+            ConfigurationType.ChartWidget,
+            ConfigItemProperty.CUR_DEPL_STATE_ID,
+            new ConfigurationDefinition('cmdb-dashboard-ci-deployment-state-chart', ConfigurationType.Chart)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig2);
+
+        const chart2 = new WidgetConfiguration(
+            'cmdb-dashboard-ci-chart-deployment-states', 'CI Chart Deployment States', ConfigurationType.Widget,
+            'config-item-chart-widget', 'Translatable#Overview Config Items Deployment State', [],
+            new ConfigurationDefinition(
+                'cmdb-dashboard-ci-deployment-state-chart-widget', ConfigurationType.ChartWidget
+            ),
+            null, false, true, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chart2);
+
+        const chartConfig3 = new ChartComponentConfiguration(
+            'cmdb-dashboard-ci-incident-state-chart', 'CI Incident States', ConfigurationType.Chart,
+            {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        backgroundColor: [
+                            "rgb(91, 91, 91)",
+                            "rgb(4, 83, 125)",
+                            "rgb(0, 141, 210)",
+                            "rgb(129, 189, 223)",
+                            "rgb(160, 230, 200)",
+                            "rgb(130, 200, 38)",
+                            "rgb(0, 152, 70)",
+                            "rgb(227, 30, 36)",
+                            "rgb(239, 127, 26)",
+                            "rgb(254, 204, 0)"
+                        ]
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    scales: {
+                        xAxes: [{
+                            stacked: true
+                        }],
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                beginAtZero: true,
+                                maxTicksLimit: 6
+                            }
+                        }]
+                    }
+                }
+            }
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig3);
+
+        const chartWidgetConfig3 = new ConfigItemChartWidgetConfiguration(
+            'cmdb-dashboard-ci-incident-state-chart-widget', 'CI Incident States Chart Widget',
+            ConfigurationType.ChartWidget,
+            ConfigItemProperty.CUR_INCI_STATE_ID,
+            new ConfigurationDefinition('cmdb-dashboard-ci-incident-state-chart', ConfigurationType.Chart)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig3);
+
+        const chart3 = new WidgetConfiguration(
+            'cmdb-dashboard-ci-chart-incident-states', 'CI Chart Incident States', ConfigurationType.Widget,
+            'config-item-chart-widget', 'Translatable#Number of Config Items in critical incident state', [],
+            new ConfigurationDefinition('cmdb-dashboard-ci-incident-state-chart-widget', ConfigurationType.ChartWidget),
+            null, false, true, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(chart3);
 
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         const deploymentStates = await CMDBService.getInstance().getDeploymentStates(serverConfig.BACKEND_API_TOKEN);
@@ -190,50 +221,86 @@ export class Extension implements IConfigurationExtension {
                 )
             ])));
 
-        const ciListWidget = new ConfiguredWidget('20180905-ci-list-widget',
-            new WidgetConfiguration(
-                'table-widget', 'Translatable#Overview Config Items', [
-                    'ticket-create-action', 'config-item-create-action', 'csv-export-action'
-                ],
-                new TableWidgetSettings(KIXObjectType.CONFIG_ITEM, null, null, null, true, null, filter),
-                false, false, 'kix-icon-ci', true
-            ),
-            [new UIComponentPermission('cmdb/configitems', [CRUD.READ])],
-            WidgetSize.LARGE
-        );
 
-        const contentWidgets = [chart1, chart2, chart3, ciListWidget];
+        const tableWidgetConfig = new TableWidgetConfiguration(
+            'cmdb-dashboard-ci-table-widget', 'CI Table Widget', ConfigurationType.TableWidget,
+            KIXObjectType.CONFIG_ITEM, null, null, null, null, true, null, filter
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+
+        const ciListWidget = new WidgetConfiguration(
+            'cmdb-dashboard-ci-list-widget', 'CI List', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Overview Config Items',
+            ['ticket-create-action', 'config-item-create-action', 'csv-export-action'],
+            new ConfigurationDefinition('cmdb-dashboard-ci-table-widget', ConfigurationType.TableWidget),
+            null, false, false, 'kix-icon-ci', true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(ciListWidget);
 
         return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
             this.getModuleId(),
-            sidebars, sidebarWidgets,
-            explorer, explorerWidgets,
-            [], [],
-            content, contentWidgets
+            [
+                new ConfiguredWidget('cmdb-dashboard-notes-widget', 'cmdb-dashboard-notes-widget')
+            ],
+            [
+                new ConfiguredWidget(
+                    'cmdb-dashboard-class-explorer', 'cmdb-dashboard-class-explorer', null,
+                    [new UIComponentPermission('system/cmdb/classes', [CRUD.READ])]
+                )
+            ],
+            [],
+            [
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-chart-items-count', 'cmdb-dashboard-ci-chart-items-count', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-chart-deployment-states', 'cmdb-dashboard-ci-chart-deployment-states', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-chart-incident-states', 'cmdb-dashboard-ci-chart-incident-states', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                ),
+                new ConfiguredWidget(
+                    'cmdb-dashboard-ci-list-widget', 'cmdb-dashboard-ci-list-widget', null,
+                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.LARGE
+                )
+            ]
         );
     }
 
-    // tslint:disable:max-line-length
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
-
-        const linkFormId = 'link-config-item-search-form';
-        const existingForm = configurationService.getConfiguration(linkFormId);
-        if (!existingForm || overwrite) {
-            const fields: FormField[] = [];
-            fields.push(
-                new FormField(
-                    'Translatable#Config Item Class', ConfigItemProperty.CLASS_ID,
-                    'object-reference-input', false,
-                    'Translatable#Helptext_CMDB_ConfigItem_Link_Class', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM_CLASS),
-                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
-                    ]
-                )
-            );
-            fields.push(new FormField('Translatable#Name', ConfigItemProperty.NAME, null, false, 'Translatable#Helptext_CMDB_ConfigItem_Link_Name'));
-            fields.push(new FormField('Translatable#Number', ConfigItemProperty.NUMBER, null, false, 'Translatable#Helptext_CMDB_ConfigItem_Link_Number'));
-            fields.push(new FormField(
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+        const linkFormId = 'cmdb-config-item-link-form';
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'cmdb-config-item-link-form-field-class',
+                'Translatable#Config Item Class', ConfigItemProperty.CLASS_ID,
+                'object-reference-input', false, 'Translatable#Helptext_CMDB_ConfigItem_Link_Class',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM_CLASS),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
+                ]
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'cmdb-config-item-link-form-field-name',
+                'Translatable#Name', ConfigItemProperty.NAME, null, false,
+                'Translatable#Helptext_CMDB_ConfigItem_Link_Name'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'cmdb-config-item-link-form-field-number',
+                'Translatable#Number', ConfigItemProperty.NUMBER, null, false,
+                'Translatable#Helptext_CMDB_ConfigItem_Link_Number'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'cmdb-config-item-link-form-field-deployment-state',
                 'Translatable#Deployment State', VersionProperty.CUR_DEPL_STATE_ID, 'object-reference-input',
                 false, 'Translatable#Helptext_CMDB_ConfigItem_Link_DeploymentState',
                 [
@@ -252,9 +319,12 @@ export class Extension implements IConfigurationExtension {
                         ])
                     )
                 ],
-                null, null, null, 1, 1, 1, null, null, null, false, false
-            ));
-            fields.push(new FormField(
+                null, null, null, null, 1, 1, 1, null, null, null, false, false
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'cmdb-config-item-link-form-field-incident-state',
                 'Translatable#Incident State', VersionProperty.CUR_INCI_STATE_ID, 'object-reference-input',
                 false, 'Translatable#Helptext_CMDB_ConfigItem_Link_IncidentState',
                 [
@@ -273,17 +343,35 @@ export class Extension implements IConfigurationExtension {
                         ])
                     )
                 ],
-                null, null, null, 1, 1, 1, null, null, null, false, false
-            ));
+                null, null, null, null, 1, 1, 1, null, null, null, false, false
+            )
+        );
 
-            const group = new FormGroup('Translatable#Config Item Data', fields);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'cmdb-config-item-link-form-group-data',
+                'Translatable#Config Item Data',
+                [
+                    'cmdb-config-item-link-form-field-class',
+                    'cmdb-config-item-link-form-field-name',
+                    'cmdb-config-item-link-form-field-number',
+                    'cmdb-config-item-link-form-field-deployment-state',
+                    'cmdb-config-item-link-form-field-incident-state',
+                ]
+            )
+        );
 
-            const form = new Form(
-                linkFormId, 'Translatable#Link Config Item with', [group], KIXObjectType.CONFIG_ITEM, false, FormContext.LINK
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm(
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                linkFormId, 'Translatable#Link Config Item with',
+                [
+                    'cmdb-config-item-link-form-group-data'
+                ],
+                KIXObjectType.CONFIG_ITEM, false, FormContext.LINK
+            )
+        );
+
+        ConfigurationService.getInstance().registerForm(
             [FormContext.LINK], KIXObjectType.CONFIG_ITEM, linkFormId
         );
     }

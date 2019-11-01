@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../core/browser';
-import { ConfiguredDialogWidget, ObjectIcon, ContextType } from '../../../../core/model';
+import { ConfiguredDialogWidget, ObjectIcon, ContextType, WidgetConfiguration } from '../../../../core/model';
 import { EventService } from '../../../../core/browser/event';
 import {
     IMainDialogListener, DialogService, DialogEvents, DialogEventData
@@ -39,6 +39,7 @@ export class MainDialogComponent implements IMainDialogListener {
             this.dialogTitle = dialogTitle;
             this.dialogIcon = dialogIcon;
             this.dialogWidgets = dialogs || [];
+            this.state.dialogWidgets = dialogs ? dialogs.map((d) => d.configuration) : [];
             this.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
             this.state.show = true;
@@ -74,10 +75,11 @@ export class MainDialogComponent implements IMainDialogListener {
         }
     }
 
-    public async tabChanged(tab: ConfiguredDialogWidget): Promise<void> {
+    public async tabChanged(tab: WidgetConfiguration): Promise<void> {
         if (tab) {
+            const dialog = this.dialogWidgets.find((d) => d.instanceId === tab.instanceId);
             await ContextService.getInstance().setDialogContext(
-                null, tab.kixObjectType, tab.contextMode, undefined, false, undefined,
+                null, dialog.kixObjectType, dialog.contextMode, undefined, false, undefined,
                 false, undefined, undefined, false
             );
             this.dialogId = tab.instanceId;

@@ -8,8 +8,9 @@
  */
 
 import { DataType } from "../../model";
+import { IConfiguration } from "../../model/configuration";
 
-export interface IColumnConfiguration {
+export interface IColumnConfiguration extends IConfiguration {
 
     property: string;
     showText: boolean;

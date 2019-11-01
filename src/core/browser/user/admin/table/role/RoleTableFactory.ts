@@ -39,28 +39,31 @@ export class RoleTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.NAME, true, false, true, false, 300, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.COMMENT, true, false, true, false, 400, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(RoleProperty.VALID_ID, true, false, true, false, 150, true, true, true),
             new DefaultColumnConfiguration(
+                null, null, null, RoleProperty.VALID_ID, true, false, true, false, 150, true, true, true),
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(RoleProperty.CREATE_BY, true, false, true, false, 150, true, true),
             new DefaultColumnConfiguration(
+                null, null, null, RoleProperty.CREATE_BY, true, false, true, false, 150, true, true),
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(RoleProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(
+                null, null, null, RoleProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.ROLE, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.ROLE, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;

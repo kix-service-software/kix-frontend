@@ -163,7 +163,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case ConfigItemProperty.NAME:
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
-                    columns.push(new DefaultColumnConfiguration(
+                    columns.push(new DefaultColumnConfiguration(null, null, null,
                         p[0], false, true, false, true, 55, true, true, false, DataType.STRING, false
                     ));
                     break;
@@ -196,7 +196,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 type = DataType.STRING;
         }
 
-        const column = new DefaultColumnConfiguration(
+        const column = new DefaultColumnConfiguration(null, null, null,
             attribute.Key, true, false, true, false, 150, true, true, false, type, undefined, undefined, attribute.Name
         );
 

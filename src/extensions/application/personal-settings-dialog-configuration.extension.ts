@@ -7,9 +7,13 @@
  * --
  */
 
-import { ContextConfiguration } from "../../core/model";
+import {
+    ContextConfiguration, WidgetConfiguration, ConfiguredDialogWidget, KIXObjectType, ContextMode
+} from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
-import { PersonalSettingsDialogContext, PersonalSettingsDialogContextConfiguration } from "../../core/browser";
+import { PersonalSettingsDialogContext } from "../../core/browser";
+import { ConfigurationType } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,11 +21,28 @@ export class Extension implements IConfigurationExtension {
         return PersonalSettingsDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new PersonalSettingsDialogContextConfiguration();
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+
+        const widget = new WidgetConfiguration(
+            'personal-settings-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'personal-settings-dialog', 'Translatable#Edit Personal Settings',
+            [], null, null, false, false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+
+        return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'personal-settings-dialog-widget', 'personal-settings-dialog-widget',
+                    KIXObjectType.PERSONAL_SETTINGS, ContextMode.PERSONAL_SETTINGS
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 }

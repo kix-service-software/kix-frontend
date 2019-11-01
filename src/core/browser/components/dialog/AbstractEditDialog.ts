@@ -33,7 +33,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         loadingHint: string, successHint: string = 'Translatable#Changes saved.', objectType: KIXObjectType,
         detailsContextId: string
     ) {
-        this.loadingHint = loadingHint;
+        this.loadingHint = await TranslationService.translate(loadingHint);
         this.successHint = await TranslationService.translate(successHint);
         this.objectType = objectType;
         this.contextId = detailsContextId;

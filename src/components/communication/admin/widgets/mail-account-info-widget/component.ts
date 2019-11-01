@@ -10,8 +10,8 @@
 import { AbstractMarkoComponent, ActionFactory, ContextService, IdService } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, MailAccount, ContextType, ObjectInformationWidgetSettings, MailAccountProperty,
-    DispatchingType, ContextMode, QueueProperty
+    KIXObjectType, MailAccount, ContextType, MailAccountProperty,
+    DispatchingType, ContextMode, QueueProperty, ObjectInformationWidgetConfiguration
 } from '../../../../../core/model';
 import { RoutingConfiguration } from '../../../../../core/browser/router';
 import { QueueDetailsContext } from '../../../../../core/browser/ticket';
@@ -55,7 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private initWidget(mailAccount: MailAccount): void {
         this.state.account = null;
-        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration.configuration;
         if (settings && Array.isArray(settings.properties)) {
             this.state.properties = [...settings.properties];
         }

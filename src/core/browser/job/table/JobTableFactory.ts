@@ -54,11 +54,12 @@ export class JobTableFactory extends TableFactory {
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
+                null, null, null,
                 KIXObjectType.JOB,
                 new KIXObjectLoadingOptions(
                     undefined, undefined, undefined, [JobProperty.MACROS, JobProperty.EXEC_PLANS]
                 ),
-                null, tableColumns, true, false, null, null,
+                null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -89,6 +90,7 @@ export class JobTableFactory extends TableFactory {
             case JobProperty.TRIGGER_EVENTS:
             case JobProperty.TRIGGER_TIME:
                 config = new DefaultColumnConfiguration(
+                    null, null, null,
                     property, false, true, true, false, 110, true, true, true,
                     DataType.STRING, true, null, null, false
                 );
@@ -96,6 +98,7 @@ export class JobTableFactory extends TableFactory {
             case JobProperty.ACTION_COUNT:
             case JobProperty.LAST_EXEC_TIME:
                 config = new DefaultColumnConfiguration(
+                    null, null, null,
                     property, true, false, true, false, 150, true, true, false,
                     DataType.STRING, true, null, null, false
                 );

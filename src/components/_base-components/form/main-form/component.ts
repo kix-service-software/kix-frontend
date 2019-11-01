@@ -8,9 +8,10 @@
  */
 
 import { FormComponentState } from './FormComponentState';
-import { WidgetType, FormContext, FormField } from '../../../../core/model';
+import { WidgetType, FormContext } from '../../../../core/model';
 import { FormService } from '../../../../core/browser/form';
 import { WidgetService } from '../../../../core/browser';
+import { FormFieldConfiguration } from '../../../../core/model/components/form/configuration';
 
 class FormComponent {
 
@@ -57,7 +58,7 @@ class FormComponent {
         }
     }
 
-    private additionalFieldControlsNeeded(field: FormField): boolean {
+    private additionalFieldControlsNeeded(field: FormFieldConfiguration): boolean {
         let needed = field.countMax > 1 || field.countDefault < field.countMax;
         if (!needed && field.children) {
             for (const child of field.children) {
@@ -73,7 +74,7 @@ class FormComponent {
     private prepareMultiGroupHandling(): void {
         if (this.state.formInstance) {
             const form = this.state.formInstance.getForm();
-            if (form && form.singleFormGroupOpen && form.groups.length > 1) {
+            if (form && form.singleFormGroupOpen && form.groupConfigurations.length > 1) {
                 const formElement = (this as any).getEl();
                 if (formElement) {
                     formElement.style.opacity = 0;
@@ -89,7 +90,7 @@ class FormComponent {
     public handleFormGroupMinimizeState(groupName: string, minimized: boolean): void {
         if (this.state.formInstance) {
             const form = this.state.formInstance.getForm();
-            if (form && form.singleFormGroupOpen && form.groups.length > 1) {
+            if (form && form.singleFormGroupOpen && form.groupConfigurations.length > 1) {
                 const otherGroups = form.groups.filter((g) => g.name !== groupName);
                 if (minimized === false) {
                     otherGroups.forEach((g) => {
@@ -98,7 +99,7 @@ class FormComponent {
                             groupComponent.setMinizedState(true);
                         }
                     });
-                } else if (minimized === true && form.groups.length === 2) {
+                } else if (minimized === true && form.groupConfigurations.length === 2) {
                     otherGroups.forEach((g) => {
                         const groupComponent = (this as any).getComponent(g.name);
                         if (groupComponent) {

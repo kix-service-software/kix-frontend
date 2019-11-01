@@ -8,7 +8,7 @@
  */
 
 import {
-    LoadKIXModulesRequest, KIXModulesEvent, LoadKIXModulesResponse, Form, FormContext,
+    LoadKIXModulesRequest, KIXModulesEvent, LoadKIXModulesResponse, FormContext,
     KIXObjectType, LoadFormConfigurationsResponse, LoadFormConfigurationsRequest,
     ISocketRequest, LoadReleaseInfoResponse, ReleaseInfo, LoadObjectDefinitionsResponse,
     SocketEvent
@@ -20,6 +20,7 @@ import { IKIXModuleExtension } from '../../extensions';
 import { IdService } from '../IdService';
 import { SocketErrorResponse } from '../../common';
 import { ObjectDefinition } from '../../model/kix/object-definition';
+import { FormConfiguration } from '../../model/components/form/configuration';
 
 export class KIXModulesSocketClient extends SocketClient {
 
@@ -67,7 +68,7 @@ export class KIXModulesSocketClient extends SocketClient {
         });
     }
 
-    public loadFormConfigurations(): Promise<[Form[], Array<[FormContext, KIXObjectType, string]>]> {
+    public loadFormConfigurations(): Promise<[FormConfiguration[], Array<[FormContext, KIXObjectType, string]>]> {
         return new Promise((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();

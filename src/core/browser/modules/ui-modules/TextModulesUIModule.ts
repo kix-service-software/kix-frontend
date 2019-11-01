@@ -9,14 +9,11 @@
 
 import { IUIModule } from "../../application/IUIModule";
 import { ServiceRegistry, FactoryService } from "../../kix";
-import {
-    KIXObjectType, CRUD, ContextDescriptor, ContextMode, ContextType, ConfiguredDialogWidget, WidgetConfiguration
-} from "../../../model";
+import { KIXObjectType, CRUD, ContextDescriptor, ContextMode, ContextType } from "../../../model";
 import { ActionFactory } from "../../ActionFactory";
 import { LabelService } from "../../LabelService";
 import { TableFactoryService } from "../../table";
 import { ContextService } from "../../context";
-import { DialogService } from "../../components";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import {
@@ -52,17 +49,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.CREATE_ADMIN,
                 false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext
             );
-            ContextService.getInstance().registerContext(newTextModuleDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'new-text-module-dialog',
-                new WidgetConfiguration(
-                    'new-text-module-dialog', 'Translatable#New Text Module',
-                    [], {}, false, false, 'kix-icon-new-gear'
-                ),
-                KIXObjectType.TEXT_MODULE,
-                ContextMode.CREATE_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(newTextModuleDialogContext);
         }
 
         if (await this.checkPermission('system/textmodules/*', CRUD.UPDATE)) {
@@ -71,17 +58,7 @@ export class UIModule implements IUIModule {
                 ContextType.DIALOG, ContextMode.EDIT_ADMIN,
                 false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext
             );
-            ContextService.getInstance().registerContext(editTextModuleDialogContext);
-
-            DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-                'edit-text-module-dialog',
-                new WidgetConfiguration(
-                    'edit-text-module-dialog', 'Translatable#Edit Text Module',
-                    [], {}, false, false, 'kix-icon-edit'
-                ),
-                KIXObjectType.TEXT_MODULE,
-                ContextMode.EDIT_ADMIN
-            ));
+            await ContextService.getInstance().registerContext(editTextModuleDialogContext);
         }
     }
 

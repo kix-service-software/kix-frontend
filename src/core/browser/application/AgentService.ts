@@ -8,8 +8,7 @@
  */
 
 import { AgentSocketClient } from './AgentSocketClient';
-import { UserType } from '../../model/kix/user/UserType';
-import { PersonalSetting, KIXObjectType, User, PersonalSettingsProperty, NotificationProperty } from '../../model';
+import { PersonalSetting, KIXObjectType, User, PersonalSettingsProperty } from '../../model';
 import { KIXObjectService } from '../kix';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 

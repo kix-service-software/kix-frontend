@@ -179,8 +179,8 @@ class LinkDialogComponent {
 
             const objectType = formInstance.getObjectType();
 
-            const tableConfiguration = new TableConfiguration(
-                objectType, null, 5, null, true, false,
+            const tableConfiguration = new TableConfiguration(null, null, null,
+                objectType, null, 5, null, [], true, false,
                 null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(

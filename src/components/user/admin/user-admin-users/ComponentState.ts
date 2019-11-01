@@ -8,7 +8,7 @@
  */
 
 import {
-    WidgetConfiguration, KIXObjectType, TableWidgetSettings, UserProperty, SortOrder
+    WidgetConfiguration, KIXObjectType, TableWidgetConfiguration, UserProperty, SortOrder
 } from "../../../../core/model";
 import { IdService } from "../../../../core/browser";
 
@@ -16,10 +16,12 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('user-admin-users'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#User Management: Agents',
-            ['user-admin-user-create-action', 'csv-export-action'],
-            new TableWidgetSettings(KIXObjectType.USER, [UserProperty.USER_LASTNAME, SortOrder.UP]), false, false,
+            ['user-admin-user-create-action', 'csv-export-action'], null,
+            new TableWidgetConfiguration(
+                null, null, null, KIXObjectType.USER, [UserProperty.USER_LASTNAME, SortOrder.UP]
+            ), false, false,
             'kix-icon-gears'
         )
     ) { }

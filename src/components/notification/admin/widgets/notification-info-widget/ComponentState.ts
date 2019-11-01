@@ -10,7 +10,7 @@
 import { WidgetComponentState, AbstractAction, Notification } from "../../../../../core/model";
 import { Label } from "../../../../../core/browser";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public notification: Notification = null,

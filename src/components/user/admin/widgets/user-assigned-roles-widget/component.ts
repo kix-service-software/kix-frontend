@@ -55,16 +55,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async initWidget(user: User): Promise<void> {
         const columns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.NAME, true, false, true, false, 250, true, true, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.COMMENT, true, false, true, false, 250, true, true, false
             ),
-            new DefaultColumnConfiguration(RoleProperty.VALID_ID, true, false, true, false, 100, true, true)
+            new DefaultColumnConfiguration(
+                null, null, null, RoleProperty.VALID_ID, true, false, true, false, 100, true, true
+            )
         ];
-        const tableConfiguration = new TableConfiguration(
-            KIXObjectType.ROLE, null, null, columns, false, false, null, null,
+        const tableConfiguration = new TableConfiguration(null, null, null,
+            KIXObjectType.ROLE, null, null, columns, [], false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(

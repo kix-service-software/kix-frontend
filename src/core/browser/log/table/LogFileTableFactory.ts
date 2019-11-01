@@ -61,11 +61,10 @@ export class LogFileTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.LOG_FILE, null, null, tableColumns, false, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.LOG_FILE, null, null, tableColumns, [], false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
-            defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
         }
@@ -77,19 +76,19 @@ export class LogFileTableFactory extends TableFactory {
         let config;
         switch (property) {
             case LogFileProperty.DISPLAY_NAME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 350, true, false,
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
             case LogFileProperty.FILE_SIZE:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 100, true, false,
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
             case LogFileProperty.MODIFIY_TIME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 200, true, false,
                     false, DataType.DATE_TIME, true, null, null, false
                 );

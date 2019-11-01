@@ -7,9 +7,13 @@
  * --
  */
 
-import { ContextConfiguration } from "../../core/model";
+import {
+    ContextConfiguration, WidgetConfiguration, ConfiguredDialogWidget, ContextMode, KIXObjectType
+} from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
-import { BulkDialogContext, BulkDialogContextConfiguration } from "../../core/browser/bulk";
+import { BulkDialogContext } from "../../core/browser/bulk";
+import { ConfigurationType } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -17,11 +21,26 @@ export class Extension implements IConfigurationExtension {
         return BulkDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new BulkDialogContextConfiguration();
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const widget = new WidgetConfiguration(
+            'bulk-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'bulk-dialog', 'Translatable#Edit Objects', [], null, null, false, false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+
+        return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'bulk-dialog-widget', 'bulk-dialog-widget',
+                    KIXObjectType.ANY, ContextMode.EDIT_BULK
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 }

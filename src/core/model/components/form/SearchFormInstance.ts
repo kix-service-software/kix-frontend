@@ -11,15 +11,13 @@ import { FilterCriteria } from "../../FilterCriteria";
 import { FormFieldValue } from "./events";
 import { IFormInstance } from "./IFormInstance";
 import { KIXObjectType } from "../../kix";
-import { FormField } from "./FormField";
 import { IFormInstanceListener } from "./IFormInstanceListener";
 import { ValidationResult } from "./ValidationResult";
 import { AutoCompleteConfiguration } from "./AutoCompleteConfiguration";
 import { FormContext } from "./FormContext";
 import { SearchForm } from "./SearchForm";
 import { ISearchFormListener } from "./ISearchFormListener";
-import { Form } from "./Form";
-import { SearchService } from "../../../browser/kix/search/SearchService";
+import { FormFieldConfiguration, FormConfiguration } from "./configuration";
 
 export class SearchFormInstance implements IFormInstance {
 
@@ -29,7 +27,7 @@ export class SearchFormInstance implements IFormInstance {
 
     public constructor(public form: SearchForm) { }
 
-    public getForm(): Form {
+    public getForm(): FormConfiguration {
         return this.form;
     }
 
@@ -54,19 +52,21 @@ export class SearchFormInstance implements IFormInstance {
         this.filterCriteria = [];
     }
 
-    public async provideFormField(formField: FormField): Promise<void> {
+    public async provideFormField(formField: FormFieldConfiguration): Promise<void> {
         return;
     }
 
-    public removeFormField(formField: FormField<any>): void {
+    public removeFormField(formField: FormFieldConfiguration): void {
         return;
     }
 
-    public addFormField(formField: FormField<any>): void {
+    public addFormField(formField: FormFieldConfiguration): void {
         return;
     }
 
-    public addNewFormField(parent: FormField<any>, newFields: Array<FormField<any>>, clearChildren?: boolean): void {
+    public addNewFormField(
+        parent: FormFieldConfiguration, newFields: FormFieldConfiguration[], clearChildren?: boolean
+    ): void {
         return;
     }
 
@@ -87,7 +87,7 @@ export class SearchFormInstance implements IFormInstance {
         return null;
     }
 
-    public async getFormFieldByProperty(property: string): Promise<FormField> {
+    public async getFormFieldByProperty(property: string): Promise<FormFieldConfiguration> {
         return null;
     }
 
@@ -99,7 +99,7 @@ export class SearchFormInstance implements IFormInstance {
         return new Map();
     }
 
-    public async getFormField(fieldId: string): Promise<FormField> {
+    public async getFormField(fieldId: string): Promise<FormFieldConfiguration> {
         return null;
     }
 
@@ -144,7 +144,7 @@ export class SearchFormInstance implements IFormInstance {
         return [];
     }
 
-    public async validateField(field: FormField): Promise<ValidationResult> {
+    public async validateField(field: FormFieldConfiguration): Promise<ValidationResult> {
         return;
     }
 

@@ -68,8 +68,8 @@ export class PermissionsTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.USER, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -84,25 +84,30 @@ export class PermissionsTableFactory extends TableFactory {
         let config;
         switch (property) {
             case PermissionProperty.RoleID:
-            case PermissionProperty.TYPE_ID:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, true,
                     DataType.STRING, true, null, null, false
                 );
                 break;
             case 'ICON':
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, false, true, false, false, null, false, false, false, undefined, false
                 );
                 break;
+            case PermissionProperty.TYPE_ID:
+                config = new DefaultColumnConfiguration(null, null, null,
+                    property, true, false, true, false, 150, true, true, true,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
             case PermissionProperty.TARGET:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 250, true, true, false,
                     DataType.STRING, true, null, null, false
                 );
                 break;
             case PermissionProperty.IS_REQUIRED:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, false, true, true, false, 85,
                     true, true, true, null, true, null, null, false, false
                 );
@@ -112,20 +117,20 @@ export class PermissionsTableFactory extends TableFactory {
             case PermissionProperty.UPDATE:
             case PermissionProperty.DELETE:
             case PermissionProperty.DENY:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, false, false, true, false, 85,
                     false, true, true, null, null, 'crud-cell', null, false, false
                 );
                 break;
             case PermissionProperty.COMMENT:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 350, true, true, false,
                     DataType.STRING, true, undefined, null, false
                 );
                 break;
             case PermissionProperty.CHANGE_TIME:
             case PermissionProperty.CREATE_TIME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
                 );
                 break;

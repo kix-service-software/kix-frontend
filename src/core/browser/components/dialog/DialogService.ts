@@ -14,8 +14,6 @@ import { DisplayImageDescription } from "../../components/DisplayImageDescriptio
 import { IImageDialogListener } from "./IImageDialogListener";
 import { ContextService } from '../../context/ContextService';
 import { TranslationService } from "../../i18n/TranslationService";
-import { ApplicationEvent } from "../../application/ApplicationEvent";
-import { EventService } from "../../event";
 import { CacheService } from "../../cache";
 
 export class DialogService {
@@ -43,8 +41,14 @@ export class DialogService {
         return DialogService.INSTANCE;
     }
 
-    public registerDialog(dialogWidget: ConfiguredDialogWidget): void {
-        this.dialogs.push(dialogWidget);
+    public async registerDialogs(contextId: string): Promise<void> {
+        const configuration = await ContextService.getInstance().getContextConfiguration(contextId);
+        if (configuration) {
+            const dialogs = configuration.dialogs;
+            if (dialogs) {
+                dialogs.forEach((d) => this.dialogs.push(d));
+            }
+        }
     }
 
     public unregisterDialog(instanceId: string): void {

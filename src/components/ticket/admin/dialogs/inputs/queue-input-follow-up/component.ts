@@ -9,12 +9,13 @@
 
 import { ComponentState } from "./ComponentState";
 import {
-    TreeNode, KIXObjectType, QueueProperty, FormField, FormFieldValue
+    TreeNode, KIXObjectType, QueueProperty, FormFieldValue
 } from "../../../../../../core/model";
 import { QueueService } from "../../../../../../core/browser/ticket";
 import { FormInputComponent } from '../../../../../../core/model/components/form/FormInputComponent';
 import { FormService, LabelService } from "../../../../../../core/browser";
 import { TranslationService } from "../../../../../../core/browser/i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../../../../core/model/components/form/configuration";
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -79,7 +80,8 @@ class Component extends FormInputComponent<number, ComponentState> {
             const label = await LabelService.getInstance().getPropertyText(
                 QueueProperty.FOLLOW_UP_LOCK, KIXObjectType.QUEUE
             );
-            field = new FormField(
+            field = new FormFieldConfiguration(
+                'followup-field',
                 label, QueueProperty.FOLLOW_UP_LOCK, 'checkbox-input', false,
                 'Translatable#Helptext_Admin_QueueCreate_FollowUpTicketLock', null,
                 new FormFieldValue(true)

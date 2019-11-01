@@ -8,7 +8,7 @@
  */
 
 import {
-    Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectIcon
+    Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectIcon, ContextConfiguration
 } from '../../model';
 import { IContextServiceListener } from './IContextServiceListener';
 import { ContextHistoryEntry } from './ContextHistoryEntry';
@@ -20,6 +20,8 @@ import { FormService } from '../form';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { BrowserHistoryState } from './BrowserHistoryState';
 import { TableFactoryService } from '../table';
+import { ContextSocketClient } from './ContextSocketClient';
+import { config } from 'memcached';
 
 export class ContextService {
 
@@ -46,8 +48,9 @@ export class ContextService {
         this.serviceListener.delete(listenerId);
     }
 
-    public registerContext(contextDescriptor: ContextDescriptor): void {
+    public async registerContext(contextDescriptor: ContextDescriptor): Promise<void> {
         ContextFactory.getInstance().registerContext(contextDescriptor);
+        await DialogService.getInstance().registerDialogs(contextDescriptor.contextId);
         this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
     }
 
@@ -200,6 +203,11 @@ export class ContextService {
             )
             .sort((a, b) => b.lastVisitDate - a.lastVisitDate)
             .slice(0, limit);
+    }
+
+    public async getContextConfiguration(contextId: string): Promise<ContextConfiguration> {
+        const configuration = await ContextSocketClient.loadContextConfiguration(contextId);
+        return configuration;
     }
 
 }

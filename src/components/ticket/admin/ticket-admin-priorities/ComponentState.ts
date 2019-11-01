@@ -9,20 +9,23 @@
 
 import { IdService } from "../../../../core/browser";
 import {
-    WidgetConfiguration, KIXObjectType, SortOrder, TicketPriorityProperty, TableWidgetSettings
+    WidgetConfiguration, KIXObjectType, SortOrder, TicketPriorityProperty, TableWidgetConfiguration
 } from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('ticket-priorities-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Priorities',
             [
                 'ticket-admin-priority-create', 'csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.TICKET_PRIORITY,
-                [TicketPriorityProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
+            ], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.TICKET_PRIORITY,
+                [TicketPriorityProperty.NAME, SortOrder.UP]
+            ), false, false, 'kix-icon-gears')
     ) { }
 
 }

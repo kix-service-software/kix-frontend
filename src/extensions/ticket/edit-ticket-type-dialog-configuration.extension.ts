@@ -10,11 +10,15 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { EditTicketTypeDialogContext } from '../../core/browser/ticket';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketTypeProperty, KIXObjectProperty, FormFieldOption, ObjectReferenceOptions
+    ContextConfiguration, KIXObjectType, FormContext, FormFieldValue, TicketTypeProperty,
+    KIXObjectProperty, FormFieldOption, ObjectReferenceOptions, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -22,50 +26,83 @@ export class Extension implements IConfigurationExtension {
         return EditTicketTypeDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const widget = new WidgetConfiguration(
+            'ticket-type-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-ticket-type-dialog', 'Translatable#Edit Type', [], null, null,
+            false, false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
-
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(
+            'ticket-type-edit-dialog', 'Ticket Type Edit Dialog', ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'ticket-type-edit-dialog-widget', 'ticket-type-edit-dialog-widget',
+                    KIXObjectType.TICKET_TYPE, ContextMode.EDIT_ADMIN
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+        const formId = 'ticket-type-edit-form';
 
-        const formId = 'edit-ticket-type-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing) {
-            const fields: FormField[] = [];
-            fields.push(new FormField(
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-type-edit-form-field-name',
                 'Translatable#Name', TicketTypeProperty.NAME, null, true,
-                'Translatable#Helptext_Admin_Tickets_TypeEdit_Name'
-            ));
-            fields.push(new FormField(
+                'Translatable#Helptext_Admin_Tickets_TypeCreate_Name'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-type-edit-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
-                'Translatable#Helptext_Admin_Tickets_TypeEdit_Icon'
-            ));
-            fields.push(new FormField(
-                'Translatable#Comment', TicketTypeProperty.COMMENT, 'text-area-input',
-                false, 'Translatable#Helptext_Admin_Tickets_TypeEdit_Comment'
-            ));
-            fields.push(
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_TypeEdit_Valid', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
-                )
-            );
+                'Translatable#Helptext_Admin_Tickets_TypeCreate_Icon'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-type-edit-form-field-comment',
+                'Translatable#Comment', TicketTypeProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_Admin_Tickets_TypeCreate_Comment', null, null, null, null, null, null, null, 250
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-type-edit-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_TypeCreate_Valid', [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+            ], new FormFieldValue(1)
+            )
+        );
 
-            const group = new FormGroup('Translatable#Type Data', fields);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'ticket-type-edit-form-group-data',
+                'Translatable#Type Data',
+                [
+                    'ticket-type-edit-form-field-name',
+                    'ticket-type-edit-form-field-icon',
+                    'ticket-type-edit-form-field-comment',
+                    'ticket-type-edit-form-field-valid'
+                ]
+            )
+        );
 
-            const form = new Form(
-                formId, 'Translatable#Edit Type', [group], KIXObjectType.TICKET_TYPE, true, FormContext.EDIT
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.TICKET_TYPE, formId);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#Create Type',
+                [
+                    'ticket-type-edit-form-group-data'
+                ],
+                KIXObjectType.TICKET_TYPE, true, FormContext.EDIT
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.TICKET_TYPE, formId);
     }
 
 }

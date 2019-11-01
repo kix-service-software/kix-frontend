@@ -8,11 +8,13 @@
  */
 
 import {
-    FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm, Form, IFormInstanceListener
+    FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm,
+    IFormInstanceListener
 } from "../../model";
 import { FormFactory } from "./FormFactory";
 import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 import { BrowserUtil } from "../BrowserUtil";
+import { FormConfiguration } from "../../model/components/form/configuration";
 
 export class FormService {
 
@@ -27,7 +29,7 @@ export class FormService {
 
     private formInstances: Map<string, Promise<IFormInstance>> = new Map();
 
-    private forms: Form[] = null;
+    private forms: FormConfiguration[] = null;
     private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = null;
 
     private constructor() { }
@@ -38,7 +40,7 @@ export class FormService {
         this.formIDsWithContext = formConfigurations[1];
     }
 
-    public async addForm(form: Form): Promise<void> {
+    public async addForm(form: FormConfiguration): Promise<void> {
         if (!this.forms) {
             await this.loadFormConfigurations();
         }
@@ -51,7 +53,7 @@ export class FormService {
     }
 
     public async getFormInstance<T extends IFormInstance>(
-        formId: string, cache: boolean = true, form?: Form
+        formId: string, cache: boolean = true, form?: FormConfiguration
     ): Promise<T> {
         if (formId) {
             if (!this.formInstances.has(formId) || !cache) {
@@ -63,7 +65,7 @@ export class FormService {
         return;
     }
 
-    private getNewFormInstance(formId: string, form?: Form): Promise<IFormInstance> {
+    private getNewFormInstance(formId: string, form?: FormConfiguration): Promise<IFormInstance> {
         return new Promise<IFormInstance>(async (resolve, reject) => {
             this.deleteFormInstance(formId);
             if (!form) {
@@ -87,7 +89,7 @@ export class FormService {
         });
     }
 
-    public async getForm(formId: string): Promise<Form> {
+    public async getForm(formId: string): Promise<FormConfiguration> {
         if (!this.forms) {
             await this.loadFormConfigurations();
         }
@@ -117,13 +119,17 @@ export class FormService {
 
     public async registerFormInstanceListener(formId: string, listener: IFormInstanceListener): Promise<void> {
         const formInstance = await this.getFormInstance(formId);
-        formInstance.registerListener(listener);
+        if (formInstance) {
+            formInstance.registerListener(listener);
+        }
     }
 
     public async removeFormInstanceListener(formId: string, listenerId: string): Promise<void> {
         if (this.formInstances.has(formId)) {
             const formInstance = await this.getFormInstance(formId);
-            formInstance.removeListener(listenerId);
+            if (formInstance) {
+                formInstance.removeListener(listenerId);
+            }
         }
     }
 

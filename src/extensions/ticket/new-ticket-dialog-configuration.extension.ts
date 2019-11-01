@@ -11,15 +11,18 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { NewTicketDialogContext } from '../../core/browser/ticket';
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration, TicketProperty,
-    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldValue, FormFieldOption,
-    ObjectReferenceOptions, KIXObjectLoadingOptions, FilterCriteria,
-    FilterDataType, FilterType, ObjectInformationWidgetSettings, ContactProperty, OrganisationProperty,
-    KIXObjectProperty,
-    QueueProperty
+    ArticleProperty, KIXObjectType, FormContext, FormFieldValue, FormFieldOption, ObjectReferenceOptions,
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, ContactProperty, OrganisationProperty,
+    KIXObjectProperty, QueueProperty, ObjectInformationWidgetConfiguration, HelpWidgetConfiguration,
+    ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class NewTicketDialogModuleExtension implements IConfigurationExtension {
 
@@ -27,177 +30,280 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         return NewTicketDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const organisationInfoSidebar =
-            new ConfiguredWidget('20180524110915', new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Organisation', [],
-                new ObjectInformationWidgetSettings(KIXObjectType.ORGANISATION, [
-                    OrganisationProperty.NUMBER,
-                    OrganisationProperty.NAME,
-                    OrganisationProperty.URL,
-                    OrganisationProperty.STREET,
-                    OrganisationProperty.ZIP,
-                    OrganisationProperty.CITY,
-                    OrganisationProperty.COUNTRY
-                ], true),
-                false, false, 'kix-icon-man-house', false)
-            );
-        const contactInfoSidebar =
-            new ConfiguredWidget('20180524110920', new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Contact', [],
-                new ObjectInformationWidgetSettings(KIXObjectType.CONTACT, [
-                    ContactProperty.LOGIN,
-                    ContactProperty.TITLE,
-                    ContactProperty.LASTNAME,
-                    ContactProperty.FIRSTNAME,
-                    ContactProperty.PRIMARY_ORGANISATION_ID,
-                    ContactProperty.PHONE,
-                    ContactProperty.MOBILE,
-                    ContactProperty.EMAIL
-                ], true),
-                false, false, 'kix-icon-man-bubble', false)
-            );
+        const organisationInformation = new ObjectInformationWidgetConfiguration(
+            'ticket-new-dialog-organisation-information', 'Organisation Information',
+            ConfigurationType.ObjectInformation,
+            KIXObjectType.ORGANISATION,
+            [
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
+            ], true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationInformation);
 
-        const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Translatable#Text Modules', [], {
-            // tslint:disable-next-line:max-line-length
-            helpText: 'Translatable#Helptext_Textmodules_TicketCreate'
-        },
-            false, false, 'kix-icon-textblocks'
-        ));
+        const organisationInfoSidebar = new WidgetConfiguration(
+            'ticket-new-dialog-organisation-widget', 'Organisation Widget', ConfigurationType.Widget,
+            'object-information-widget', 'Translatable#Organisation', [],
+            new ConfigurationDefinition(
+                'ticket-new-dialog-organisation-information', ConfigurationType.ObjectInformation
+            ),
+            null, false, false, 'kix-icon-man-house', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationInfoSidebar);
 
-        const sidebars = ['20180524110915', '20180524110920', '20180919-help-widget'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [organisationInfoSidebar, contactInfoSidebar, helpWidget];
+        const contactInformation = new ObjectInformationWidgetConfiguration(
+            'ticket-new-dialog-contact-information', 'Contact Information',
+            ConfigurationType.ObjectInformation,
+            KIXObjectType.CONTACT,
+            [
+                ContactProperty.LOGIN,
+                ContactProperty.TITLE,
+                ContactProperty.LASTNAME,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.EMAIL
+            ], true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactInformation);
 
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        const contactInfoSidebar = new WidgetConfiguration(
+            'ticket-new-dialog-contact-widget', 'Contact Widget', ConfigurationType.Widget,
+            'object-information-widget', 'Translatable#Contact', [],
+            new ConfigurationDefinition('ticket-new-dialog-contact-information', ConfigurationType.ObjectInformation),
+            null, false, false, 'kix-icon-man-bubble', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactInfoSidebar);
+
+        const helpSettings = new HelpWidgetConfiguration(
+            'ticket-new-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
+            'Translatable#Helptext_Textmodules_TicketCreate', null
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
+
+        const helpWidget = new WidgetConfiguration(
+            'ticket-new-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
+            'help-widget', 'Translatable#Text Modules', [],
+            new ConfigurationDefinition('ticket-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            null, false, false, 'kix-icon-textblocks'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+
+        const dialogWidget = new WidgetConfiguration(
+            'ticket-new-dialog-widget', 'New Ticket Dialog', ConfigurationType.Widget,
+            'new-ticket-dialog', 'Translatable#New Ticket', [], null, null,
+            false, false, 'kix-icon-new-ticket'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(dialogWidget);
+
+        return new ContextConfiguration(
+            this.getModuleId(), 'Ticket New Dialog', ConfigurationType.Context,
+            this.getModuleId(),
+            [
+                new ConfiguredWidget('ticket-new-dialog-organisation-widget', 'ticket-new-dialog-organisation-widget'),
+                new ConfiguredWidget('ticket-new-dialog-contact-widget', 'ticket-new-dialog-contact-widget'),
+                new ConfiguredWidget('ticket-new-dialog-help-widget', 'ticket-new-dialog-help-widget')
+            ],
+            [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'ticket-new-dialog-widget', 'ticket-new-dialog-widget', KIXObjectType.TICKET, ContextMode.CREATE
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        // tslint:disable:max-line-length
-        const formId = 'new-ticket-form';
-        const existingFormNewTicket = ConfigurationService.getInstance().getConfiguration(formId);
-        if (!existingFormNewTicket) {
-            const fields: FormField[] = [];
-            fields.push(new FormField(
-                'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true, 'Translatable#Helptext_Tickets_TicketCreate_Contact',
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+        const formId = 'ticket-new-form';
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-contact',
+                'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Contact',
                 [
                     new FormFieldOption('SHOW_NEW_CONTACT', true)
                 ]
             )
-            );
-            fields.push(new FormField('Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true, 'Translatable#Helptext_Tickets_TicketCreate_Organisation'));
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-organisation',
+                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Organisation'
+            )
+        );
 
-            fields.push(new FormField(
-                'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Type', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-type',
+                'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Type',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
 
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ]
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
                     )
-                )
-            ]
-            ));
+                ]
+            )
+        );
 
-            fields.push(new FormField(
-                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Queue', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-queue',
+                'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Queue',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
-                new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            ),
-                            new FilterCriteria(
-                                QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
-                            )
-                        ],
-                        null, null,
-                        [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
-                        [QueueProperty.SUB_QUEUES]
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                ),
+                                new FilterCriteria(
+                                    QueueProperty.PARENT_ID, SearchOperator.EQUALS,
+                                    FilterDataType.STRING, FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES]
+                        )
                     )
-                )
-            ]
-            ));
-            fields.push(new FormField('Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Channel'));
-            fields.push(new FormField(
-                'Translatable#Link Ticket with', TicketProperty.LINK, 'link-input', false, 'Translatable#Helptext_Tickets_TicketCreate_Links')
-            );
-            fields.push(new FormField(
-                'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_TicketCreate_Owner', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+                ]
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-channel',
+                'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Channel'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-links',
+                'Translatable#Link Ticket with', TicketProperty.LINK, 'link-input', false,
+                'Translatable#Helptext_Tickets_TicketCreate_Links'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-owner',
+                'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
+                'Translatable#Helptext_Tickets_TicketCreate_Owner',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
 
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ], undefined, undefined, undefined, undefined,
-                        [
-                            ['requiredPermission', 'TicketRead,TicketUpdate']
-                        ]
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
                     )
-                )
-            ]
-            ));
-            fields.push(new FormField(
-                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false, 'Translatable#Helptext_Tickets_TicketCreate_Responsible', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+                ]
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-responsible',
+                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
+                'Translatable#Helptext_Tickets_TicketCreate_Responsible',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
 
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ], undefined, undefined, undefined, undefined,
-                        [
-                            ['requiredPermission', 'TicketRead,TicketUpdate']
-                        ]
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
                     )
-                )
-            ]
-            ));
+                ]
+            )
+        );
 
-            fields.push(new FormField(
-                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true, 'Translatable#Helptext_Tickets_TicketCreate_Priority', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-priority',
+                'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_Priority',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
 
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ]
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
                     )
-                )
-            ], new FormFieldValue(3)
-            ));
+                ], new FormFieldValue(3)
+            )
+        );
 
-            fields.push(new FormField<number>(
-                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true, 'Translatable#Helptext_Tickets_TicketCreate_State', null,
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-new-form-field-state',
+                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,
+                'Translatable#Helptext_Tickets_TicketCreate_State', null,
                 new FormFieldValue(2)
-            ));
+            )
+        );
 
-            const group = new FormGroup('Translatable#Ticket Data', fields);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'ticket-new-form-group-data', 'Translatable#Ticket Data',
+                [
+                    'ticket-new-form-field-contact',
+                    'ticket-new-form-field-organisation',
+                    'ticket-new-form-field-type',
+                    'ticket-new-form-field-queue',
+                    'ticket-new-form-field-channel',
+                    'ticket-new-form-field-links',
+                    'ticket-new-form-field-owner',
+                    'ticket-new-form-field-responsible',
+                    'ticket-new-form-field-priority',
+                    'ticket-new-form-field-state',
+                ]
+            )
+        );
 
-            const form = new Form(formId, 'Translatable#New Ticket', [group], KIXObjectType.TICKET);
-            await ConfigurationService.getInstance().saveConfiguration(form.id, form);
-        }
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New Ticket', ['ticket-new-form-group-data'], KIXObjectType.TICKET
+            )
+        );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET, formId);
     }
 

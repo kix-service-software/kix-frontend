@@ -9,14 +9,19 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField, KIXObjectType, Form,
+    ContextConfiguration, ConfiguredWidget, KIXObjectType,
     FormContext, FormFieldValue, RoleProperty, FormFieldOption, ObjectReferenceOptions,
-    KIXObjectLoadingOptions, FilterCriteria, UserProperty, FilterDataType, FilterType, KIXObjectProperty
+    KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, KIXObjectProperty,
+    WidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { EditUserRoleDialogContext } from '../../core/browser/user';
 import { SearchOperator } from '../../core/browser';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -24,73 +29,120 @@ export class Extension implements IConfigurationExtension {
         return EditUserRoleDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
+        const widget = new WidgetConfiguration(
+            'user-role-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-user-role-dialog', 'Translatable#Edit Role', [], null, null,
+            false, false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(
+            this.getModuleId(), 'Edit User Role Dialog', ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'user-role-edit-dialog-widget', 'user-role-edit-dialog-widget',
+                    KIXObjectType.ROLE, ContextMode.EDIT_ADMIN
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         const configurationService = ConfigurationService.getInstance();
 
-        const formId = 'edit-user-role-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing || overwrite) {
-            const infoGroup = new FormGroup('Translatable#Role Information', [
-                new FormField(
-                    'Translatable#Name', RoleProperty.NAME, null, true,
-                    'Translatable#Helptext_Admin_Users_RoleEdit_Name'
-                ),
-                new FormField(
-                    'Translatable#Comment', RoleProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Admin_Users_RoleEdit_Comment', null, null, null, null, null, null, null, 250
-                ),
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Admin_Users_RoleEdit_Valid', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
-                )
-            ]);
+        const formId = 'user-role-edit-form';
+        const nameField = new FormFieldConfiguration(
+            'user-role-edit-form-field-name',
+            'Translatable#Name', RoleProperty.NAME, null, true,
+            'Translatable#Helptext_Admin_Users_RoleCreate_Name'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(nameField);
 
-            const permissionGroup = new FormGroup('Translatable#Permissions', [
-                new FormField(
-                    null, RoleProperty.PERMISSIONS, 'permissions-form-input', false, null
-                )
-            ]);
+        const commentField = new FormFieldConfiguration(
+            'user-role-edit-form-field-comment',
+            'Translatable#Comment', RoleProperty.COMMENT, 'text-area-input', false,
+            'Translatable#Helptext_Admin_Users_RoleCreate_Comment',
+            null, null, null, null, null, null, null, 250
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(commentField);
 
-            const agentGroup = new FormGroup('Translatable#Agent Assignment', [
-                new FormField(
-                    'Translatable#Agents', RoleProperty.USER_IDS, 'object-reference-input', false,
-                    'Translatable#Helptext_Admin_Users_RoleEdit_User', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+        const validField = new FormFieldConfiguration(
+            'user-role-edit-form-field-validity',
+            'Translatable#Validity', KIXObjectProperty.VALID_ID,
+            'object-reference-input', true, 'Translatable#Helptext_Admin_Users_RoleCreate_Valid',
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+            ], new FormFieldValue(1)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(validField);
 
-                        new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                            new KIXObjectLoadingOptions(
-                                [
-                                    new FilterCriteria(
-                                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                        FilterType.AND, 1
-                                    )
-                                ]
+        const infoGroup = new FormGroupConfiguration(
+            'user-role-edit-form-group-role-information', 'Translatable#Role Information',
+            [
+                'user-role-edit-form-field-name',
+                'user-role-edit-form-field-comment',
+                'user-role-edit-form-field-validity'
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(infoGroup);
+
+        const permissionField = new FormFieldConfiguration(
+            'user-role-edit-form-field-permissions',
+            null, RoleProperty.PERMISSIONS, 'permissions-form-input', false, null
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(permissionField);
+
+        const permissionGroup = new FormGroupConfiguration(
+            'user-role-edit-form-group-permissions', 'Translatable#Permissions',
+            [
+                'user-role-edit-form-field-permissions'
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(permissionGroup);
+
+        const agentsField = new FormFieldConfiguration(
+            'user-role-edit-form-field-agents',
+            'Translatable#Agents', RoleProperty.USER_IDS, 'object-reference-input', false,
+            'Translatable#Helptext_Admin_Users_RoleCreate_User',
+            [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
+
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
                             )
-                        )
-                    ]
+                        ]
+                    )
                 )
-            ]);
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(agentsField);
 
-            const form = new Form(
-                formId, 'Translatable#Edit Role', [
-                    infoGroup,
-                    permissionGroup,
-                    agentGroup
-                ], KIXObjectType.ROLE, true, FormContext.EDIT
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
+        const agentsGroup = new FormGroupConfiguration(
+            'user-role-edit-form-group-agents', 'Translatable#Agent Assignment',
+            [
+                'user-role-edit-form-field-agents'
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(agentsGroup);
+
+        const form = new FormConfiguration(
+            formId, 'Translatable#New Role',
+            [
+                'user-role-edit-form-group-role-information',
+                'user-role-edit-form-group-permissions',
+                'user-role-edit-form-group-agents'
+            ],
+            KIXObjectType.ROLE, true, FormContext.EDIT
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(form);
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.ROLE, formId);
     }
 

@@ -76,7 +76,7 @@ class Component {
             const contactIds = this.state.organisation.Contacts.map((c) => typeof c === 'string' ? c : c.ID);
             this.state.table = await TableFactoryService.getInstance().createTable(
                 'organisation-assigned-contacts', KIXObjectType.CONTACT,
-                this.state.widgetConfiguration.settings, contactIds, null, true
+                this.state.widgetConfiguration.configuration, contactIds, null, true
             );
         }
     }

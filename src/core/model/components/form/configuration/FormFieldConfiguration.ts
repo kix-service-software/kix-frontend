@@ -7,25 +7,28 @@
  * --
  */
 
-import { FormFieldOption } from ".";
-import { FormFieldValue } from "./events";
-import { IdService } from "../../../browser";
+import { FormFieldOption } from "../";
+import { FormFieldValue } from "../events";
+import { IdService } from "../../../../browser";
+import { IConfiguration, ConfigurationType } from "../../../configuration";
 
-export class FormField<T = any> {
+export class FormFieldConfiguration implements IConfiguration {
 
     public instanceId: string;
 
-    public parent: FormField;
+    public parent: FormFieldConfiguration;
 
     public constructor(
+        public id: string,
         public label: string,
         public property: string,
         public inputComponent: string,
         public required: boolean = false,
         public hint?: string,
         public options: FormFieldOption[] = [],
-        public defaultValue: FormFieldValue<T> = new FormFieldValue(null),
-        public children: FormField[] = [],
+        public defaultValue: FormFieldValue = new FormFieldValue(null),
+        public fieldConfigurations: string[] = [],
+        public children: FormFieldConfiguration[] = [],
         public parentInstanceId: string = null,
         public countDefault: number = null,
         public countMax: number = null,
@@ -38,7 +41,9 @@ export class FormField<T = any> {
         public readonly: boolean = false,
         public placeholder: string = null,
         public existingFieldId: string = null,
-        public showLabel: boolean = true
+        public showLabel: boolean = true,
+        public type: ConfigurationType = ConfigurationType.FormField,
+        public name: string = label,
     ) {
         this.instanceId = existingFieldId ? existingFieldId : IdService.generateDateBasedId(this.property);
     }

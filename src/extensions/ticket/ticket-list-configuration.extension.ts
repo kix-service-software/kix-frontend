@@ -9,13 +9,15 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ConfiguredWidget, WidgetConfiguration, WidgetSize, FilterCriteria, FilterDataType,
-    FilterType, KIXObjectType, ContextConfiguration, KIXObjectLoadingOptions
+    ConfiguredWidget, WidgetConfiguration, FilterCriteria, FilterDataType,
+    FilterType, KIXObjectType, ContextConfiguration, KIXObjectLoadingOptions, TableWidgetConfiguration
 } from '../../core/model';
 import { TicketListContext } from '../../core/browser/ticket';
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator
 } from '../../core/browser';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class TicketModuleFactoryExtension implements IConfigurationExtension {
 
@@ -23,53 +25,58 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         return TicketListContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const ticketListWidget =
-            new ConfiguredWidget('20180927-ticket-list-widget', new WidgetConfiguration(
-                'table-widget', 'Translatable#Tickets', [
-                    'bulk-action', 'ticket-create-action', 'ticket-search-action', 'csv-export-action'
-                ],
-                {
-                    objectType: KIXObjectType.TICKET,
-                    tableConfiguration: new TableConfiguration(
-                        KIXObjectType.TICKET,
-                        new KIXObjectLoadingOptions([
-                            new FilterCriteria(
-                                'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-                            )
-                        ]),
-                        null, null,
-                        true, true,
-                        new ToggleOptions('ticket-article-details', 'article', [], true),
-                        null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                    )
-                },
-                false, false, null, true)
-            );
+        const notesSidebar = new WidgetConfiguration(
+            'user-ticket-list-notes-widget', 'User Ticket List Notes Widget', ConfigurationType.Widget,
+            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
 
-        const content = ['20180927-ticket-list-widget'];
-        const contentWidgets = [ticketListWidget];
+        const tableConfig = new TableConfiguration(
+            'user-ticket-list-table', 'User Ticket List Table', ConfigurationType.Table,
+            KIXObjectType.TICKET, new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    'StateType', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+                )
+            ]),
+            null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
+            null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableConfig);
 
-        const notesSidebar =
-            new ConfiguredWidget('20181010-ticket-notes', new WidgetConfiguration(
-                'notes-widget', 'Translatable#Notes', [], {},
-                false, false, 'kix-icon-note', false)
-            );
+        const tableWidgetConfig = new TableWidgetConfiguration(
+            'user-ticket-list-table-widget-config', 'User Ticket List Widget Config', ConfigurationType.TableWidget,
+            KIXObjectType.TICKET, null,
+            new ConfigurationDefinition('user-ticket-list-table', ConfigurationType.Table)
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
 
-        const sidebars = ['20181010-ticket-notes'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [notesSidebar];
+        const tableWidget = new WidgetConfiguration(
+            'user-ticket-list-table-widget', 'User Ticket List Table Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Tickets',
+            [
+                'bulk-action', 'ticket-create-action', 'ticket-search-action', 'csv-export-action'
+            ],
+            new ConfigurationDefinition('user-ticket-list-table-widget-config', ConfigurationType.TableWidget),
+            null, false, false, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidget);
 
         return new ContextConfiguration(
+            'user-ticket-list', 'User Ticket List', ConfigurationType.Context,
             this.getModuleId(),
-            sidebars, sidebarWidgets,
+            [
+                new ConfiguredWidget('user-ticket-list-notes-widget', 'user-ticket-list-notes-widget')
+            ],
             [], [],
-            [], [],
-            content, contentWidgets
+            [
+                new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         return;
     }
 

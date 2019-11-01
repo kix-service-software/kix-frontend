@@ -9,10 +9,14 @@
 
 import { KIXObjectType } from "../kix";
 import { RoutingConfiguration } from "../../browser/router";
+import { IConfiguration, ConfigurationType } from "../configuration";
 
-export class ObjectInformationWidgetSettings {
+export class ObjectInformationWidgetConfiguration implements IConfiguration {
 
     public constructor(
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
         public objectType: KIXObjectType,
         public properties: string[] = [],
         public displayFlatList: boolean = false,

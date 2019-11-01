@@ -82,8 +82,8 @@ class Component {
 
             if (this.state.bulkManager.objects) {
 
-                const configuration = new TableConfiguration(
-                    null, null, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                const configuration = new TableConfiguration(null, null, null,
+                    null, null, null, null, [], true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
                 const table = await TableFactoryService.getInstance().createTable(

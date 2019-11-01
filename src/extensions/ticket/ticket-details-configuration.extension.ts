@@ -10,13 +10,15 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     WidgetConfiguration, ConfiguredWidget, KIXObjectType, ContextConfiguration,
-    ObjectInformationWidgetSettings, OrganisationProperty, ContactProperty, ContextMode, CRUD, TableWidgetSettings
+    OrganisationProperty, ContactProperty, ContextMode, CRUD, TableWidgetConfiguration,
+    LinkedObjectsWidgetConfiguration, ObjectInformationWidgetConfiguration, TabWidgetConfiguration
 } from '../../core/model/';
 import { RoutingConfiguration } from '../../core/browser/router';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
 import { ContactDetailsContext } from '../../core/browser/contact';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { TabWidgetSettings } from '../../core/model/components/TabWidgetSettings';
+import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -24,59 +26,52 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         return 'ticket-details';
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const tabwidget = new ConfiguredWidget('ticket-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings([
-                'ticket-information-lane'
-            ]), false, true)
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const ticketInfoLane = new WidgetConfiguration(
+            'ticket-details-info-widget', 'Info Widget', ConfigurationType.Widget,
+            'ticket-info-widget', 'Translatable#Ticket Information',
+            [], null, null, false, true, null, false
         );
+        await ModuleConfigurationService.getInstance().saveConfiguration(ticketInfoLane);
 
-        const ticketInfoLane =
-            new ConfiguredWidget('ticket-information-lane', new WidgetConfiguration(
-                'ticket-info-widget', 'Translatable#Ticket Information',
-                [], {},
-                false, true, null, false)
-            );
+        const tabSettings = new TabWidgetConfiguration(
+            'ticket-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['ticket-details-info-widget']
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabSettings);
 
-        const ticketHistoryLane =
-            new ConfiguredWidget('ticket-history-lane', new WidgetConfiguration(
-                'ticket-history-widget', 'Translatable#History', [],
-                null, true, true, null, false),
-                [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
-            );
-        const descriptionLane =
-            new ConfiguredWidget('ticket-description-lane', new WidgetConfiguration(
-                'ticket-description-widget', 'Translatable#Description & Comments',
-                [], {},
-                false, true, null, false),
-                [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
-            );
+        const tabWidget = new WidgetConfiguration(
+            'ticket-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('ticket-details-tab-widget-config', ConfigurationType.TabWidget),
+            false, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tabWidget);
 
-        const linkedObjectsLane =
-            new ConfiguredWidget('ticket-linked-objects-lane', new WidgetConfiguration(
-                'linked-objects-widget', 'Translatable#Linked Objects',
-                ['linked-objects-edit-action'],
-                {
-                    linkedObjectTypes: [
-                        ['Tickets', KIXObjectType.TICKET],
-                        ['Config Items', KIXObjectType.CONFIG_ITEM],
-                        ['FAQs', KIXObjectType.FAQ_ARTICLE],
-                    ]
-                },
-                true, true, null, false),
-                [new UIComponentPermission('links', [CRUD.READ])]
-            );
+        const ticketHistoryLane = new WidgetConfiguration(
+            'ticket-details-history-widget', 'History Widget', ConfigurationType.Widget,
+            'ticket-history-widget', 'Translatable#History', [], null, null, true, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(ticketHistoryLane);
 
-        const lanes =
+        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
+            'ticket-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects,
             [
-                'ticket-details-tab-widget',
-                'ticket-history-lane',
-                'ticket-linked-objects-lane'
-            ];
+                ['Tickets', KIXObjectType.TICKET],
+                ['Config Items', KIXObjectType.CONFIG_ITEM],
+                ['FAQs', KIXObjectType.FAQ_ARTICLE]
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(linkedObjectsConfig);
 
-        const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabwidget, ticketInfoLane, linkedObjectsLane, ticketHistoryLane
-        ];
+        const linkedObjectsWidget = new WidgetConfiguration(
+            'ticket-details-linked-objects-widget', 'linked objects', ConfigurationType.Widget,
+            'linked-objects-widget', 'Translatable#Linked Objects', ['linked-objects-edit-action'],
+            new ConfigurationDefinition('ticket-details-linked-objects-config', ConfigurationType.LinkedObjects),
+            null, true, true, null, false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(linkedObjectsWidget);
+
 
         const organisationRouting = new RoutingConfiguration(
             OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
@@ -89,154 +84,194 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
 
         // Sidebars
-        const organisationInfoSidebar =
-            new ConfiguredWidget('20180116143215', new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Organisation', [],
-                new ObjectInformationWidgetSettings(
-                    KIXObjectType.ORGANISATION, [
-                        OrganisationProperty.NUMBER,
-                        OrganisationProperty.NAME,
-                        OrganisationProperty.URL,
-                        OrganisationProperty.STREET,
-                        OrganisationProperty.ZIP,
-                        OrganisationProperty.CITY,
-                        OrganisationProperty.COUNTRY
-                    ], true, [
-                        [OrganisationProperty.NUMBER, organisationRouting],
-                        [OrganisationProperty.NAME, organisationRouting]
-                    ]
-                ),
-                false, false, 'kix-icon-man-house', false),
-                [new UIComponentPermission('organisations', [CRUD.READ])]
-            );
-        const contactInfoSidebar =
-            new ConfiguredWidget('20180116143216', new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Contact', [],
-                new ObjectInformationWidgetSettings(
-                    KIXObjectType.CONTACT, [
-                        ContactProperty.TITLE,
-                        ContactProperty.FIRSTNAME,
-                        ContactProperty.LASTNAME,
-                        ContactProperty.LOGIN,
-                        ContactProperty.PRIMARY_ORGANISATION_ID,
-                        ContactProperty.PHONE,
-                        ContactProperty.MOBILE,
-                        ContactProperty.FAX,
-                        ContactProperty.EMAIL
-                    ], true, [
-                        [ContactProperty.LASTNAME, contactRouting],
-                        [ContactProperty.FIRSTNAME, contactRouting],
-                        [ContactProperty.LOGIN, contactRouting]
-                    ]
-                ),
-                false, false, 'kix-icon-man-bubble', false),
-                [new UIComponentPermission('contacts', [CRUD.READ])]
-            );
-        const sidebars = ['20180116143215', '20180116143216'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [organisationInfoSidebar, contactInfoSidebar];
+        const organisationObjectInformation = new ObjectInformationWidgetConfiguration(
+            'ticket-details-organisation-information-settings', 'Organisation Information Settings',
+            ConfigurationType.ObjectInformation,
+            KIXObjectType.ORGANISATION,
+            [
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
+            ], true,
+            [
+                [OrganisationProperty.NUMBER, organisationRouting],
+                [OrganisationProperty.NAME, organisationRouting]
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationObjectInformation);
 
-        // actions
-        const generalActions = ['ticket-create-action'];
-        const ticketActions = [
-            'ticket-edit-action', 'article-new-action', 'linked-objects-edit-action',
-            'ticket-lock-action', 'ticket-watch-action', 'print-action',
-        ];
+        const organisationInfoSidebar = new WidgetConfiguration(
+            'ticket-details-organisation-info-widget', 'Organisation Info Widget', ConfigurationType.Widget,
+            'object-information-widget', 'Translatable#Organisation', [],
+            new ConfigurationDefinition(
+                'ticket-details-organisation-information-settings', ConfigurationType.ObjectInformation
+            ),
+            null, false, false, 'kix-icon-man-house', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationInfoSidebar);
+
+
+        const contactObjectInformation = new ObjectInformationWidgetConfiguration(
+            'ticket-details-contact-information-settings', 'Contact Information Settings',
+            ConfigurationType.ObjectInformation,
+            KIXObjectType.CONTACT,
+            [
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.LOGIN,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.FAX,
+                ContactProperty.EMAIL
+            ], true,
+            [
+                [ContactProperty.LASTNAME, contactRouting],
+                [ContactProperty.FIRSTNAME, contactRouting],
+                [ContactProperty.LOGIN, contactRouting]
+            ]
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactObjectInformation);
+
+        const contactInfoSidebar = new WidgetConfiguration(
+            'ticket-details-contact-info-widget', 'Contact Info Widget', ConfigurationType.Widget,
+            'object-information-widget', 'Translatable#Contact', [],
+            new ConfigurationDefinition(
+                'ticket-details-contact-information-settings', ConfigurationType.ObjectInformation
+            ),
+            null, false, false, 'kix-icon-man-bubble', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactInfoSidebar);
+
 
         // Overlays
-        const organisationInfoOverlay =
-            new ConfiguredWidget('organisation-info-overlay', new WidgetConfiguration(
-                'object-information', 'Translatable#Organisation', [],
-                new ObjectInformationWidgetSettings(
-                    KIXObjectType.ORGANISATION, [
-                        OrganisationProperty.NUMBER,
-                        OrganisationProperty.NAME,
-                        OrganisationProperty.URL,
-                        OrganisationProperty.STREET,
-                        OrganisationProperty.ZIP,
-                        OrganisationProperty.CITY,
-                        OrganisationProperty.COUNTRY
-                    ], true, [
-                        [ContactProperty.LASTNAME, contactRouting],
-                        [ContactProperty.FIRSTNAME, contactRouting],
-                        [ContactProperty.LOGIN, contactRouting]
-                    ]
-                ),
-                false, false, 'kix-icon-man-house', false),
-                [new UIComponentPermission('organisations', [CRUD.READ])]
-            );
-        const contactInfoOverlay =
-            new ConfiguredWidget('contact-info-overlay', new WidgetConfiguration(
-                'object-information', 'Translatable#Contact', [],
-                new ObjectInformationWidgetSettings(KIXObjectType.CONTACT, [
-                    ContactProperty.LOGIN,
-                    ContactProperty.TITLE,
-                    ContactProperty.FIRSTNAME,
-                    ContactProperty.LASTNAME,
-                    ContactProperty.PRIMARY_ORGANISATION_ID,
-                    ContactProperty.PHONE,
-                    ContactProperty.MOBILE,
-                    ContactProperty.EMAIL
-                ],
-                    true, [
-                        [OrganisationProperty.NUMBER, organisationRouting],
-                        [OrganisationProperty.NAME, organisationRouting]
-                    ]
-                ),
-                false, false, 'kix-icon-man-bubble', false),
-                [new UIComponentPermission('contacts', [CRUD.READ])]
-            );
-        const toReceiverOverlay =
-            new ConfiguredWidget('to-receiver-overlay', new WidgetConfiguration(
-                'article-receiver-list', 'Translatable#Recipient: To', [], {},
-                false, false, 'kix-icon-man-mail-To', false)
-            );
-        const ccReceiverOverlay =
-            new ConfiguredWidget('cc-receiver-overlay', new WidgetConfiguration(
-                'article-receiver-list', 'Translatable#Recipient: Cc', [], {},
-                false, false, 'kix-icon-man-mail-Cc', false)
-            );
-        const bccReceiverOverlay =
-            new ConfiguredWidget('bcc-receiver-overlay', new WidgetConfiguration(
-                'article-receiver-list', 'Translatable#Recipient: Bcc', [], {},
-                false, false, 'kix-icon-man-mail-Bcc', false)
-            );
-        const articleAttachmentOverlay =
-            new ConfiguredWidget('article-attachment-widget', new WidgetConfiguration(
-                'article-attachment-widget', 'Translatable#Attachments', ['article-attachment-zip-download'], {},
-                false, false, 'kix-icon-attachement', false)
-            );
-        const infoOverlayWidgets = [
-            organisationInfoOverlay, contactInfoOverlay,
-            toReceiverOverlay, ccReceiverOverlay, bccReceiverOverlay,
-            articleAttachmentOverlay
-        ];
+        const organisationInfoOverlay = new WidgetConfiguration(
+            'ticket-details-organisation-overlay', 'Organisation Info Overlay', ConfigurationType.Widget,
+            'object-information', 'Translatable#Organisation', [],
+            new ConfigurationDefinition(
+                'ticket-details-organisation-information-settings', ConfigurationType.ObjectInformation
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(organisationInfoOverlay);
 
-        const articleListWidget =
-            new ConfiguredWidget('20180921-article-list', new WidgetConfiguration(
-                'table-widget', 'Translatable#Article Overview', ['article-new-action'],
-                new TableWidgetSettings(
-                    KIXObjectType.ARTICLE, undefined, undefined,
-                    ['article-attachment-count']
-                ),
-                false, true, null, true),
-                [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
-            );
+        const contactInfoOverlay = new WidgetConfiguration(
+            'ticket-details-contact-overlay', 'Contact Info Overlay', ConfigurationType.Widget,
+            'object-information', 'Translatable#Contact', [],
+            new ConfigurationDefinition(
+                'ticket-details-contact-information-settings', ConfigurationType.ObjectInformation
+            ),
+            null, false, false, 'kix-icon-man-bubble', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(contactInfoOverlay);
 
-        const content = ['20180921-article-list'];
-        const contentWidgets = [articleListWidget];
+
+        const toReceiverOverlay = new WidgetConfiguration(
+            'ticket-details-to-receiver-overlay', 'To Receiver Overlay', ConfigurationType.Widget,
+            'article-receiver-list', 'Translatable#Recipient: To', [], null, null,
+            false, false, 'kix-icon-man-mail-To', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(toReceiverOverlay);
+
+        const ccReceiverOverlay = new WidgetConfiguration(
+            'ticket-details-cc-receiver-overlay', 'Cc Receiver Overlay', ConfigurationType.Widget,
+            'article-receiver-list', 'Translatable#Recipient: Cc', [], null, null,
+            false, false, 'kix-icon-man-mail-Cc', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(ccReceiverOverlay);
+
+        const bccReceiverOverlay = new WidgetConfiguration(
+            'ticket-details-bcc-receiver-overlay', 'Bcc Receiver Overlay', ConfigurationType.Widget,
+            'article-receiver-list', 'Translatable#Recipient: Bcc', [], null, null,
+            false, false, 'kix-icon-man-mail-Bcc', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(bccReceiverOverlay);
+
+        const articleAttachmentOverlay = new WidgetConfiguration(
+            'ticket-details-article-attachments-overlay', 'Article Attachments Overlay', ConfigurationType.Widget,
+            'article-attachment-widget', 'Translatable#Attachments', ['article-attachment-zip-download'], null, null,
+            false, false, 'kix-icon-attachement', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(articleAttachmentOverlay);
+
+
+        const tableSettings = new TableWidgetConfiguration(
+            'ticket-details-article-list-table-config', 'Article Table', ConfigurationType.TableWidget,
+            KIXObjectType.ARTICLE, undefined, undefined, null, ['article-attachment-count']
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(tableSettings);
+
+        const articleListWidget = new WidgetConfiguration(
+            'ticket-details-article-list-widget', 'Article List Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Article Overview', ['article-new-action'],
+            new ConfigurationDefinition('ticket-details-article-list-table-config', ConfigurationType.TableWidget),
+            null, false, true, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(articleListWidget);
 
         return new ContextConfiguration(
+            this.getModuleId(), 'Ticket Details', ConfigurationType.Context,
             this.getModuleId(),
-            sidebars, sidebarWidgets,
-            [], [],
-            lanes, laneWidgets,
-            content, contentWidgets,
-            generalActions, ticketActions,
-            infoOverlayWidgets
+            [
+                new ConfiguredWidget(
+                    'ticket-details-organisation-info-widget', 'ticket-details-organisation-info-widget', null,
+                    [new UIComponentPermission('organisations', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'ticket-details-contact-info-widget', 'ticket-details-contact-info-widget', null,
+                    [new UIComponentPermission('contacts', [CRUD.READ])]
+                )
+            ],
+            [],
+            [
+                new ConfiguredWidget('ticket-details-tab-widget', 'ticket-details-tab-widget'),
+                new ConfiguredWidget(
+                    'ticket-details-linked-objects-widget', 'ticket-details-linked-objects-widget', null,
+                    [new UIComponentPermission('links', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'ticket-details-history-widget', 'ticket-details-history-widget', null,
+                    [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
+                )
+            ],
+            [
+                new ConfiguredWidget(
+                    'ticket-details-article-list-widget', 'ticket-details-article-list-widget', null,
+                    [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
+                )
+            ],
+            [
+                'ticket-create-action'
+            ],
+            [
+                'ticket-edit-action', 'article-new-action', 'linked-objects-edit-action',
+                'ticket-lock-action', 'ticket-watch-action', 'print-action',
+            ],
+            [
+                new ConfiguredWidget(
+                    'organisation-info-overlay', 'ticket-details-organisation-overlay', null,
+                    [new UIComponentPermission('organisations', [CRUD.READ])]
+                ),
+                new ConfiguredWidget(
+                    'contact-info-overlay', 'ticket-details-contact-overlay', null,
+                    [new UIComponentPermission('contacts', [CRUD.READ])]
+                ),
+                new ConfiguredWidget('to-receiver-overlay', 'ticket-details-to-receiver-overlay'),
+                new ConfiguredWidget('cc-receiver-overlay', 'ticket-details-cc-receiver-overlay'),
+                new ConfiguredWidget('bcc-receiver-overlay', 'ticket-details-bcc-receiver-overlay'),
+                new ConfiguredWidget('article-attachment-widget', 'ticket-details-article-attachments-overlay')
+            ],
+            [
+                new ConfiguredWidget('ticket-details-info-widget', 'ticket-details-info-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

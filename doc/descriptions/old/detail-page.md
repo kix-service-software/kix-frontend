@@ -49,7 +49,7 @@ const faqDetailsContextDescriptor = new ContextDescriptor(
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'faq-details', 'faqarticle', FAQDetailsContext
         );
-        ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
+        await ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 ```
 
 # Detail Modul registrieren & implementieren
@@ -71,7 +71,7 @@ export class Extension implements IModuleFactoryExtension {
 
     public getDefaultConfiguration(): ContextConfiguration {
         // Content Widgets
-        const ticketDetailsWidget = new ConfiguredWidget("faq-details-widget", new WidgetConfiguration(
+        const ticketDetailsWidget = new ConfiguredWidget("faq-details-widget", new WidgetConfiguration(null,null,null,
             "faq-details-widget", "Translatable#FAQ Details", [], null,
             false, true, WidgetSize.BOTH, null, false
         ));

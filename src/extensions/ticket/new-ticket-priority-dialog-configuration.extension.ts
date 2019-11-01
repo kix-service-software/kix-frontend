@@ -10,12 +10,15 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { NewTicketPriorityDialogContext } from '../../core/browser/ticket';
 import {
-    ConfiguredWidget, FormField, KIXObjectType, Form,
-    FormContext, FormFieldValue, TicketPriorityProperty, ContextConfiguration,
-    KIXObjectProperty, FormFieldOption, ObjectReferenceOptions
+    KIXObjectType, FormContext, FormFieldValue, TicketPriorityProperty, ContextConfiguration,
+    KIXObjectProperty, FormFieldOption, ObjectReferenceOptions, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -23,49 +26,84 @@ export class Extension implements IConfigurationExtension {
         return NewTicketPriorityDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
+        const widget = new WidgetConfiguration(
+            'ticket-priority-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'new-ticket-priority-dialog', 'Translatable#New Priority', [], null, null,
+            false, false, 'kix-icon-new-gear'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        return new ContextConfiguration(
+            'ticket-priority-new-dialog', 'Ticket Priority New Dialog', ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'ticket-priority-new-dialog-widget', 'ticket-priority-new-dialog-widget',
+                    KIXObjectType.TICKET_PRIORITY, ContextMode.CREATE_ADMIN
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+        const formId = 'ticket-priority-new-form';
 
-        const formId = 'new-ticket-priority-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing) {
-            const fields: FormField[] = [];
-            fields.push(new FormField(
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-new-form-field-name',
                 'Translatable#Name', TicketPriorityProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Name'
-            ));
-            fields.push(new FormField(
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-new-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Icon'
-            ));
-            fields.push(new FormField(
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-new-form-field-comment',
                 'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Comment',
                 null, null, null, null, null, null, null, 250
-            ));
-            fields.push(
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Valid', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
-                )
-            );
+            )
+        );
 
-            const group = new FormGroup('Translatable#Priority Data', fields);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'ticket-priority-new-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Valid', [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+            ], new FormFieldValue(1)
+            )
+        );
 
-            const form = new Form(formId, 'Translatable#Create Priority', [group], KIXObjectType.TICKET_PRIORITY);
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.TICKET_PRIORITY, formId);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'ticket-priority-new-form-group-data', 'Translatable#Priority Data',
+                [
+                    'ticket-priority-new-form-field-name',
+                    'ticket-priority-new-form-field-icon',
+                    'ticket-priority-new-form-field-comment',
+                    'ticket-priority-new-form-field-valid'
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#Create Priority', ['ticket-priority-new-form-group-data'],
+                KIXObjectType.TICKET_PRIORITY
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET_PRIORITY, formId);
     }
 
 }

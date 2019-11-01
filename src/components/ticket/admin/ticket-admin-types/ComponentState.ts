@@ -8,7 +8,7 @@
  */
 
 import {
-    WidgetConfiguration, KIXObjectType, TicketTypeProperty, SortOrder, TableWidgetSettings
+    WidgetConfiguration, KIXObjectType, TicketTypeProperty, SortOrder, TableWidgetConfiguration
 } from "../../../../core/model";
 import { IdService } from "../../../../core/browser";
 
@@ -16,13 +16,16 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('ticket-types-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Types',
             [
                 'ticket-admin-type-create', 'csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.TICKET_TYPE,
-                [TicketTypeProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
+            ], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.TICKET_TYPE,
+                [TicketTypeProperty.NAME, SortOrder.UP]
+            ), false, false, 'kix-icon-gears')
     ) { }
 
 }

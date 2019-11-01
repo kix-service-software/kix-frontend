@@ -12,6 +12,8 @@ import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration
 } from '../../core/model';
 import { SearchContext } from '../../core/browser/search/context/SearchContext';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -19,39 +21,40 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         return SearchContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
         // explorer
-        const searchResultExplorer =
-            new ConfiguredWidget("20180625-search-result-explorer", new WidgetConfiguration(
-                "search-result-explorer", "Translatable#Search Results", [], {},
-                false, false, 'kix-icon-search', false)
-            );
+        const searchResultExplorer = new WidgetConfiguration(
+            'search-dashboard-result-explorer', 'Search Explorer', ConfigurationType.Widget,
+            'search-result-explorer', 'Translatable#Search Results', [], null, null,
+            false, false, 'kix-icon-search', false
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(searchResultExplorer);
 
-        const explorer = ['20180625-search-result-explorer'];
-        const explorerWidgets: Array<ConfiguredWidget<any>> = [searchResultExplorer];
 
-        const searchResultListWidget =
-            new ConfiguredWidget("search-result-list-widget", new WidgetConfiguration(
-                "search-result-list-widget", "Hit List", [
-                    'csv-export-action', 'bulk-action', 'print-action'
-                ], {},
-                false, true, null, true)
-            );
-
-        const content: string[] = ['search-result-list-widget'];
-        const contentWidgets = [searchResultListWidget];
+        const searchResultListWidget = new WidgetConfiguration(
+            'search-dashboard-result-list-widget', 'Search Result List', ConfigurationType.Widget,
+            'search-result-list-widget', 'Hit List',
+            ['csv-export-action', 'bulk-action', 'print-action'],
+            null, null, false, true, null, true
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(searchResultListWidget);
 
         return new ContextConfiguration(
+            this.getModuleId(), 'Search Dashboard', ConfigurationType.Context,
             this.getModuleId(),
-            [], [],
-            explorer, explorerWidgets,
-            [], [],
-            content, contentWidgets
+            [],
+            [
+                new ConfiguredWidget('search-dashboard-result-explorer', 'search-dashboard-result-explorer')
+            ],
+            [],
+            [
+                new ConfiguredWidget('search-dashboard-result-list-widget', 'search-dashboard-result-list-widget')
+            ]
         );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
         // do nothing
     }
 

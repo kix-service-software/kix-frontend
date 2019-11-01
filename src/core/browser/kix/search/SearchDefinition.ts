@@ -83,7 +83,7 @@ export abstract class SearchDefinition {
                 }
             }
 
-            columns.push(new DefaultColumnConfiguration(
+            columns.push(new DefaultColumnConfiguration(null, null, null,
                 p[0], true, false, true, false, 150, true, true, false, DataType.STRING, true)
             );
         }

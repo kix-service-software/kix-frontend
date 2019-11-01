@@ -10,7 +10,7 @@
 import { ComponentState } from "./ComponentState";
 import {
     Contact, FormInputComponent, KIXObjectType, TreeNode, KIXObjectLoadingOptions,
-    AutoCompleteConfiguration, FormField, FilterCriteria, ContactProperty, FilterDataType, FilterType,
+    AutoCompleteConfiguration, FilterCriteria, ContactProperty, FilterDataType, FilterType,
     ArticleProperty, ContextType, SystemAddress, ArticleReceiver, Ticket, Article, TreeHandler, TreeService
 } from "../../../../../core/model";
 import { FormService, FormInputAction } from "../../../../../core/browser/form";
@@ -18,6 +18,7 @@ import { KIXObjectService, Label, LabelService, SearchOperator, ContextService }
 import { ContactService } from "../../../../../core/browser/contact";
 import { EventService, IEventSubscriber } from "../../../../../core/browser/event";
 import { TranslationService } from "../../../../../core/browser/i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../../../core/model/components/form/configuration";
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -166,7 +167,8 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 const helpText = action.id === ArticleProperty.CC
                     ? 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverCc'
                     : 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverBcc';
-                field = new FormField(
+                field = new FormFieldConfiguration(
+                    'recipinet-field',
                     label, action.id, 'article-email-recipient-input', false, helpText
                 );
                 formInstance.addNewFormField(this.state.field, [field]);

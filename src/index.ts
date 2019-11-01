@@ -9,7 +9,7 @@
 
 import { Server } from './Server';
 import { CoreServiceRegistry, ConfigurationService } from './core/services';
-import { PluginService } from './services';
+import { PluginService, ModuleConfigurationService } from './services';
 
 import path = require('path');
 
@@ -27,6 +27,7 @@ class Startup {
         const configDir = path.join(__dirname, '..', 'config');
         const certDir = path.join(__dirname, '..', 'cert');
         ConfigurationService.getInstance().init(configDir, certDir);
+        ModuleConfigurationService.getInstance().setConfigurationPath(configDir);
 
         PluginService.getInstance().init(['extensions']);
 

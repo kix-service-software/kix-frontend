@@ -8,16 +8,21 @@
  */
 
 import {
-    FormFieldOption, ContextConfiguration, FormField, Form, KIXObjectType,
-    FormContext, FormFieldOptions, KIXObjectProperty, ObjectReferenceOptions,
-    FormFieldValue, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType
+    FormFieldOption, ContextConfiguration, KIXObjectType,
+    FormContext, KIXObjectProperty, ObjectReferenceOptions,
+    FormFieldValue, KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType,
+    WidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import { FAQCategoryProperty } from '../../core/model/kix/faq';
 import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+} from '../../core/model/components/form/configuration';
 import { EditFAQCategoryDialogContext } from '../../core/browser/faq/admin';
 import { SearchOperator } from '../../core/browser';
+import { ConfigurationType } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -25,75 +30,110 @@ export class Extension implements IConfigurationExtension {
         return EditFAQCategoryDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new ContextConfiguration(this.getModuleId());
+    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+        const widget = new WidgetConfiguration(
+            'faq-category-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-faq-category-dialog', 'Translatable#Edit FAQ Category', [], null, null, false,
+            false, 'kix-icon-edit'
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+
+        return new ContextConfiguration(
+            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+            this.getModuleId(), [], [], [], [], [], [], [], [],
+            [
+                new ConfiguredDialogWidget(
+                    'faq-category-edit-dialog-widget', 'faq-category-edit-dialog-widget',
+                    KIXObjectType.FAQ_CATEGORY, ContextMode.EDIT_ADMIN
+                )
+            ]
+        );
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+        const formId = 'faq-category-edit-form';
 
-        const formId = 'edit-faq-category-form';
-        const existingForm = configurationService.getConfiguration(formId);
-        if (!existingForm || overwrite) {
-            const fields: FormField[] = [];
-            fields.push(
-                new FormField(
-                    'Translatable#Name', FAQCategoryProperty.NAME, null, true,
-                    'Translatable#Helptext_Admin_FAQCategoryEdit_Name'
-                )
-            );
-            fields.push(
-                new FormField(
-                    'Translatable#Icon', 'ICON', 'icon-input', false,
-                    'Translatable#Helptext_Admin_FAQCategoryEdit_Icon'
-                )
-            );
-            fields.push(
-                new FormField(
-                    'Translatable#Parent Category', FAQCategoryProperty.PARENT_ID, 'object-reference-input', false,
-                    'Translatable#Helptext_Admin_FAQCategoryEdit_ParentCategory', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
-                        new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
-                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                            new KIXObjectLoadingOptions(
-                                [
-                                    new FilterCriteria(
-                                        FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
-                                        FilterType.AND, null
-                                    )
-                                ],
-                                null, null,
-                                [FAQCategoryProperty.SUB_CATEGORIES],
-                                [FAQCategoryProperty.SUB_CATEGORIES]
-                            )
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'faq-category-edit-form-field-name',
+                'Translatable#Name', FAQCategoryProperty.NAME, null, true,
+                'Translatable#Helptext_Admin_FAQCategoryCreate_Name'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'faq-category-edit-form-field-icon',
+                'Translatable#Icon', 'ICON', 'icon-input', false,
+                'Translatable#Helptext_Admin_FAQCategoryCreate_Icon'
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'faq-category-edit-form-field-parent',
+                'Translatable#Parent Category', FAQCategoryProperty.PARENT_ID, 'object-reference-input', false,
+                'Translatable#Helptext_Admin_FAQCategoryCreate_ParentCategory',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [FAQCategoryProperty.SUB_CATEGORIES],
+                            [FAQCategoryProperty.SUB_CATEGORIES]
                         )
-                    ]
-                )
-            );
-            fields.push(
-                new FormField(
-                    'Translatable#Comment', FAQCategoryProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Admin_FAQCategoryEdit_Comment',
-                    null, null, null, null, null, null, null, 250
-                )
-            );
-            fields.push(
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                    'object-reference-input', true, 'Translatable#Helptext_Admin_FAQCategoryEdit_Validity', [
-                        new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-                    ], new FormFieldValue(1)
-                )
-            );
+                    )
+                ]
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'faq-category-edit-form-field-comment',
+                'Translatable#Comment', FAQCategoryProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_Admin_FAQCategoryCreate_Comment',
+                null, null, null, null, null, null, null, 250
+            )
+        );
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormFieldConfiguration(
+                'faq-category-edit-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Admin_FAQCategoryCreate_Validity',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ],
+                new FormFieldValue(1)
+            )
+        );
 
-            const group = new FormGroup('Translatable#FAQ Category Information', fields);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormGroupConfiguration(
+                'faq-category-edit-form-group-information', 'Translatable#FAQ Category Information',
+                [
+                    'faq-category-edit-form-field-name',
+                    'faq-category-edit-form-field-icon',
+                    'faq-category-edit-form-field-parent',
+                    'faq-category-edit-form-field-comment',
+                    'faq-category-edit-form-field-valid'
+                ]
+            )
+        );
 
-            const form = new Form(
-                formId, 'Translatable#Edit FAQ Category', [group], KIXObjectType.FAQ_CATEGORY, true, FormContext.EDIT
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.FAQ_CATEGORY, formId);
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New FAQ Category',
+                [
+                    'faq-category-edit-form-group-information'
+                ],
+                KIXObjectType.FAQ_CATEGORY, true, FormContext.EDIT
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.FAQ_CATEGORY, formId);
     }
 
 }
