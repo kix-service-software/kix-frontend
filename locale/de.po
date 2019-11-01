@@ -631,9 +631,6 @@ msgstr "Verwendungsstatus"
 msgid "Description"
 msgstr "Beschreibung"
 
-msgid "Description & Comments"
-msgstr "Beschreibung & Anmerkungen"
-
 msgid "Detailed search results"
 msgstr "Detailierte Suchergebnisse"
 
@@ -685,11 +682,13 @@ msgstr "Stammdaten bearbeiten"
 msgid "edited"
 msgstr "bearbeitet"
 
-msgid "Edit Email Account"
-msgstr "E-Mail-Konto bearbeiten"
-
 msgid "Edit Email Filter"
 msgstr "E-Mail Filter bearbeiten"
+
+#, fuzzy
+#| msgid "Edit FAQ Article"
+msgid "Edit FAQ"
+msgstr "FAQ Artikel bearbeiten"
 
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
@@ -1009,28 +1008,6 @@ msgid "Helptext_Admin_FAQCategoryCreate_Validity"
 msgstr ""
 "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_FAQCategoryEdit_Icon"
-msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Kategorie angezeigt wird."
-
-msgid "Helptext_Admin_FAQCategoryEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
-msgstr ""
-"Wenn Sie diese Kategorie einer bereits existierenden Kategorie unterordnen "
-"wollen, wählen Sie das hier aus."
-
-msgid "Helptext_Admin_FAQCategoryEdit_Validity"
-msgstr ""
-"Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
-
 msgid "Helptext_Admin_GeneralCatalogCreate_Class"
 msgstr ""
 "Geben Sie Freitext ein oder wählen Sie einen Wert aus der Liste. Die General "
@@ -1099,51 +1076,10 @@ msgid "Helptext_Admin_MailAccountCreate_Validity"
 msgstr ""
 "Das E-Mail-Konto kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
-msgstr ""
-"Ggf. können in eingehenden E-Mails bereits KIX-Header gesetzt sein. Wenn "
-"dieser Haken gesetzt wird, werden diese ausgewertet, unabhängig davon, was "
-"im E-Mail-Konto konfiguriert ist."
-
-msgid "Helptext_Admin_MailAccountEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_MailAccountEdit_Dispachting"
-msgstr ""
-"Wählen Sie das Team, in welche über dieses Konto eingehende E-Mails "
-"verschoben werden. Welches Team als „Standard“ hinterlegt ist, wird in der "
-"SysConfig definiert."
-
-msgid "Helptext_Admin_MailAccountEdit_Host"
-msgstr ""
-"Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: mail."
-"example.com"
-
 msgid "Helptext_Admin_MailAccountEdit_IMAPFolder"
 msgstr ""
 "Ändern Sie diese Einstellung nur, wenn die Mails aus einem anderen Ordner "
 "als \"INBOX\" geholt werden sollen."
-
-msgid "Helptext_Admin_MailAccountEdit_Password"
-msgstr "Geben Sie das Passwort für Ihr Konto an, um sich beim Host anzumelden."
-
-msgid "Helptext_Admin_MailAccountEdit_Type."
-msgstr ""
-"IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die Nachrichten "
-"liegen weiterhin auf dem Server; POP/=Die Nachrichten werden vom Server "
-"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /"
-"TLS=Verbindung wird direkt über TLS verschlüsselt"
-
-msgid "Helptext_Admin_MailAccountEdit_UserName"
-msgstr ""
-"Geben Sie den Benutzername für das Konto an, welches Sie im KIX "
-"konfigurieren möchten, um sich beim Host anzumelden."
-
-msgid "Helptext_Admin_MailAccountEdit_Validity"
-msgstr ""
-"Das E-Mail-Konto kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_MailFilterCreate_Comment"
 msgstr ""
@@ -1169,33 +1105,6 @@ msgstr ""
 "einkommende Nachricht zu, werden auf diese keine weiteren Filter angewendet."
 
 msgid "Helptext_Admin_MailFilterCreate_Validity"
-msgstr ""
-"Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_MailFilterEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
-msgstr ""
-"Mindestens eine Filterbedingung muss gesetzt sein, damit der Filter "
-"funktioniert."
-
-msgid "Helptext_Admin_MailFilterEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
-msgstr ""
-"Mindestens ein E-Mail Header muss gesetzt sein, damit der Filter "
-"funktioniert."
-
-msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
-msgstr ""
-"Ist der Haken gesetzt, und die hier definierten Bedingungen treffen auf eine "
-"einkommende Nachricht zu, werden auf diese keine weiteren Filter angewendet."
-
-msgid "Helptext_Admin_MailFilterEdit_Validity"
 msgstr ""
 "Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
@@ -1372,6 +1281,14 @@ msgstr ""
 msgid "Helptext_Admin_NotificationEdit_Name"
 msgstr ""
 
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
+msgid "Helptext_Admin_NotificationEdit_PreferencesTooltip"
+msgstr ""
+"Hier können Sie zusätzliche Informationen oder Erläuterungen zu dieser "
+"Benachrichtigung eingeben, die den Agenten in ihren persönlichen "
+"Einstellungen angezeigt werden."
+
 msgid "Helptext_Admin_NotificationEdit_SendDespiteOutOfOffice"
 msgstr ""
 "Ist diese Option aktiviert, wird die Benachrichtigung auch an abwesende "
@@ -1397,6 +1314,14 @@ msgstr ""
 "Wählen Sie aus der Dropdown-Liste Rollen aus. Die Benachrichtigung wird an "
 "alle die Agenten verschickt, denen diese Rollen zugeordnet sind. Zur Auswahl "
 "stehen alle im System verfügbaren, gültigen Rollen."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
+msgid "Helptext_Admin_NotificationEdit_ShowPreferences"
+msgstr ""
+"Die Benachrichtigung wird an alle Agenten versendet, die als Empfänger "
+"ausgewählt sind. Ist diese Option aktiviert, können diese Agenten diese "
+"Benachrichtigung in ihren persönlichen Einstellungen aktivieren."
 
 msgid "Helptext_Admin_NotificationEdit_SubjectWithTicketNumber"
 msgstr ""
@@ -1487,30 +1412,6 @@ msgid "Helptext_Admin_TextModuleCreate_Validity"
 msgstr ""
 "Der Textbaustein kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_TextModuleEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_TextModuleEdit_Keywords"
-msgstr ""
-"Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
-
-msgid "Helptext_Admin_TextModuleEdit_Language"
-msgstr "Geben Sie die Sprache an, in der der Textbaustein angelegt ist."
-
-msgid "Helptext_Admin_TextModuleEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_TextModuleEdit_Text"
-msgstr ""
-"Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es können "
-"Platzhalter verwendet werden."
-
-msgid "Helptext_Admin_TextModuleEdit_Validity"
-msgstr ""
-"Der Textbaustein kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
-
 msgid "Helptext_Admin_Tickets_GeneralCatalogCreate_Icon."
 msgstr ""
 "Legen Sie ein Icon fest, welches gemeinsam mit dem Name der General Catalog "
@@ -1530,23 +1431,6 @@ msgid "Helptext_Admin_Tickets_PriorityCreate_Name"
 msgstr ""
 
 msgid "Helptext_Admin_Tickets_PriorityCreate_Valid"
-msgstr ""
-"Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
-msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der Priorität angezeigt wird."
-
-msgid "Helptext_Admin_Tickets_PriorityEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
 msgstr ""
 "Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
@@ -1589,42 +1473,6 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_QueueCreate_Validity"
 msgstr "Das Team kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
-msgstr ""
-"Gibt an, ob bei einer Rückmeldung zu einem bereits geschlossenen Ticket in "
-"diesem Team dieses Ticket erneut geöffnet wird."
-
-msgid "Helptext_Admin_Tickets_QueueEdit_Icon."
-msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"des Teams angezeigt wird."
-
-msgid "Helptext_Admin_Tickets_QueueEdit_ParentQueue"
-msgstr ""
-"Wenn Sie dieses Team einem bereits existierenden Team unterordnen wollen, "
-"wählen Sie das hier aus."
-
-msgid "Helptext_Admin_Tickets_QueueEdit_SenderAddress."
-msgstr "Absenderadresse für E-Mails aus diesem Team."
-
-msgid "Helptext_Admin_Tickets_QueueEdit_Signature"
-msgstr ""
-"Signatur für E-Mails aus diesem Team. Es ist nicht möglich, Bilder "
-"einzufügen. Platzhalter können verwendet werden."
-
-msgid "Helptext_Admin_Tickets_QueueEdit_UnlockTimeout"
-msgstr ""
-"Wenn ein Agent ein Ticket sperrt und es vor Ablauf der Entsperrzeit nicht "
-"schließt, wird es entsperrt und wieder für andere Agenten verfügbar gemacht."
-
-msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
-msgstr "Das Team kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
-
 msgid "Helptext_Admin_Tickets_StateCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -1644,28 +1492,6 @@ msgstr "Über den Statustyp werden Status gruppiert."
 msgid "Helptext_Admin_Tickets_StateCreate_Valid"
 msgstr "Der Status kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_Tickets_StateEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_Tickets_StateEdit_Icon"
-msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"des Status angezeigt wird."
-
-msgid "Helptext_Admin_Tickets_StateEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_Tickets_StateEdit_Type"
-msgstr "Über den Statustyp werden Status guppiert."
-
-msgid "Helptext_Admin_Tickets_StateEdit_Valid"
-msgstr "Der Status kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_Tickets_Tickets_QueueEdit_Name"
-msgstr ""
-
 msgid "Helptext_Admin_Tickets_TypeCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -1680,22 +1506,6 @@ msgid "Helptext_Admin_Tickets_TypeCreate_Name"
 msgstr ""
 
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
-msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
-msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"des Typs angezeigt wird."
-
-msgid "Helptext_Admin_Tickets_TypeEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_Tickets_TypeEdit_Valid"
 msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
@@ -1716,24 +1526,6 @@ msgstr ""
 "erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
 "persönlichen Einstellungen ändern."
 
-msgid "Helptext_Admin_UserEdit_Preferences_Language"
-msgstr ""
-"Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
-"erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
-"persönlichen Einstellungen ändern."
-
-msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
-msgstr ""
-"Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
-"erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
-"Einstellungen ändern."
-
-msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
-msgstr ""
-"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
-"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
-"Einstellungen ändern."
-
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -1746,20 +1538,6 @@ msgid "Helptext_Admin_Users_RoleCreate_User"
 msgstr "Es werden nur gültige Agenten angezeigt."
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
-msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_Users_RoleEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_Users_RoleEdit_Name"
-msgstr ""
-
-msgid "Helptext_Admin_Users_RoleEdit_User"
-msgstr "Es werden nur gültige Agenten angezeigt."
-
-msgid "Helptext_Admin_Users_RoleEdit_Valid"
 msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_Users_UserCreate_Comment"
@@ -1828,11 +1606,6 @@ msgstr ""
 
 msgid "Helptext_Admin_Users_UserEdit_Phone"
 msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Roles"
-msgstr ""
-"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
-"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
 
 msgid "Helptext_Admin_Users_UserEdit_Title"
 msgstr ""
@@ -1943,30 +1716,6 @@ msgid "Helptext_CMDB_ConfigItemClassCreate_Valid"
 msgstr ""
 "Die Asset-Klasse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-msgid "Helptext_CMDB_ConfigItemClassEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_CMDB_ConfigItemClassEdit_Definition"
-msgstr ""
-"Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-Notation "
-"(\"Array of Hashes\") enthalten. Wenn die Klassendefinition General Catalog "
-"Referenzen enthält, können für diese im Modul \"General Catalog\" "
-"Auswahlwerte definiert werden."
-
-msgid "Helptext_CMDB_ConfigItemClassEdit_Icon"
-msgstr ""
-"Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem Name "
-"der  Asset-Klasse angezeigt wird."
-
-msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
-msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
-
-msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
-msgstr ""
-"Die Asset-Klasse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
-
 msgid "Helptext_CMDB_ConfigItemCreate_Class"
 msgstr ""
 "Bitte wählen Sie zunächst eine Asset-Klasse aus der Liste. Anschließend wird "
@@ -2059,54 +1808,6 @@ msgstr ""
 "ist."
 
 msgid "Helptext_Customers_ContactCreate_Zip"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_City"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Comment"
-msgstr "Hier können Sie zusätzliche Informationen zu dem Kontakt hinterlegen."
-
-msgid "Helptext_Customers_ContactEdit_Country"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Email"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Fax"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Firstname"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Lastname"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Mobile"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Organisation"
-msgstr ""
-"Wählen Sie den Kunden, welchem der Kontakt zugeordnet sein soll. Bei der "
-"Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im System "
-"registrierten Kontakten vorgeschlagen. Sie können „*“ als Platzhalter "
-"verwenden. („KNR“ und „Kundenname“ möglich)"
-
-msgid "Helptext_Customers_ContactEdit_Phone"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Street"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Title"
-msgstr ""
-
-msgid "Helptext_Customers_ContactEdit_Validity"
-msgstr ""
-"Der Kontakt kann im System nur verwendet werden, wenn er „gültig“ gesetzt "
-"ist."
-
-msgid "Helptext_Customers_ContactEdit_Zip"
 msgstr ""
 
 msgid "Helptext_Customers_ContactImport"
@@ -2212,41 +1913,6 @@ msgstr ""
 "gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
 "werden."
 
-msgid "Helptext_FAQ_ArticleEdit_Attachments"
-msgstr ""
-
-msgid "Helptext_FAQ_ArticleEdit_Category"
-msgstr ""
-"Ordnen Sie FAQ-Artikel in Kategorien ein, um sie thematisch zu sortieren."
-
-msgid "Helptext_FAQ_ArticleEdit_Cause"
-msgstr "Beschreiben Sie die Ursache hinter dem Phänomen so genau wie möglich."
-
-msgid "Helptext_FAQ_ArticleEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen zu dem FAQ-Artikel hinterlegen."
-
-msgid "Helptext_FAQ_ArticleEdit_Language"
-msgstr "Geben sie die Sprache an, in der der FAQ-Artikel verfasst ist."
-
-msgid "Helptext_FAQ_ArticleEdit_Solution"
-msgstr "Beschreiben Sie die Lösung des Problems so genau wie möglich."
-
-msgid "Helptext_FAQ_ArticleEdit_Symptom"
-msgstr "Beschreiben Sie das auftretende Phänomen so genau wie möglich."
-
-msgid "Helptext_FAQ_ArticleEdit_Tags"
-msgstr "Schlagworte helfen, einen FAQ-Eintrag schnell zu finden."
-
-msgid "Helptext_FAQ_ArticleEdit_Title"
-msgstr "Fassen Sie das Thema des FAQ-Artikels kurz zusammen."
-
-msgid "Helptext_FAQ_ArticleEdit_Valid"
-msgstr ""
-"Der FAQ Eintrag kann im System nur verwendet werden, wenn er „gültig“ "
-"gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
-"werden."
-
 msgid "Helptext_FAQ_Link_Category"
 msgstr "Suchen Sie nach FAQ-Artikeln innerhalb der gewählten Kategorie."
 
@@ -2272,12 +1938,6 @@ msgstr ""
 "Sprache gewählt hat."
 
 msgid "Helptext_i18n_TranslationPatternCreate_Pattern"
-msgstr ""
-"Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
-"Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
-"angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
-
-msgid "Helptext_i18n_TranslationPatternEdit_Pattern"
 msgstr ""
 "Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
 "Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
@@ -2566,9 +2226,6 @@ msgstr "ID"
 msgid "Ignore"
 msgstr "Ignorieren"
 
-msgid "Images"
-msgstr "Bilder"
-
 msgid "IMAP Folder"
 msgstr "IMAP-Ordner"
 
@@ -2688,9 +2345,6 @@ msgstr "Verknüpfte Objekte"
 
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
-
-msgid "Link Graph"
-msgstr "Verknüpfungsgraph"
 
 msgid "Link Objects"
 msgstr "Objekte verknüpfen"
@@ -3195,9 +2849,6 @@ msgstr "Berechtigung"
 
 msgid "Permissions"
 msgstr "Berechtigungen"
-
-msgid "Permissions on dependent objects"
-msgstr "Berechtigungen auf abhängige Objekte"
 
 msgid "Personal Home Dashboard"
 msgstr "Persönliches Home Dashboard"
@@ -4075,6 +3726,322 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Description & Comments"
+#~ msgstr "Beschreibung & Anmerkungen"
+
+#~ msgid "Edit Email Account"
+#~ msgstr "E-Mail-Konto bearbeiten"
+
+#~ msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_FAQCategoryEdit_Icon"
+#~ msgstr ""
+#~ "Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem "
+#~ "Name der Kategorie angezeigt wird."
+
+#~ msgid "Helptext_Admin_FAQCategoryEdit_ParentCategory"
+#~ msgstr ""
+#~ "Wenn Sie diese Kategorie einer bereits existierenden Kategorie "
+#~ "unterordnen wollen, wählen Sie das hier aus."
+
+#~ msgid "Helptext_Admin_FAQCategoryEdit_Validity"
+#~ msgstr ""
+#~ "Die Kategorie kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_MailAccountEdit_AcceptKIXHeader"
+#~ msgstr ""
+#~ "Ggf. können in eingehenden E-Mails bereits KIX-Header gesetzt sein. Wenn "
+#~ "dieser Haken gesetzt wird, werden diese ausgewertet, unabhängig davon, "
+#~ "was im E-Mail-Konto konfiguriert ist."
+
+#~ msgid "Helptext_Admin_MailAccountEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_MailAccountEdit_Dispachting"
+#~ msgstr ""
+#~ "Wählen Sie das Team, in welche über dieses Konto eingehende E-Mails "
+#~ "verschoben werden. Welches Team als „Standard“ hinterlegt ist, wird in "
+#~ "der SysConfig definiert."
+
+#~ msgid "Helptext_Admin_MailAccountEdit_Host"
+#~ msgstr ""
+#~ "Geben Sie den Name des Hosts an, bei dem das Konto liegt. Beispiel: mail."
+#~ "example.com"
+
+#~ msgid "Helptext_Admin_MailAccountEdit_Password"
+#~ msgstr ""
+#~ "Geben Sie das Passwort für Ihr Konto an, um sich beim Host anzumelden."
+
+#~ msgid "Helptext_Admin_MailAccountEdit_Type."
+#~ msgstr ""
+#~ "IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die "
+#~ "Nachrichten liegen weiterhin auf dem Server; POP/=Die Nachrichten werden "
+#~ "vom Server herunter geladen; /S=Verbindung wird direkt über SSL "
+#~ "verschlüsselt; /TLS=Verbindung wird direkt über TLS verschlüsselt"
+
+#~ msgid "Helptext_Admin_MailAccountEdit_UserName"
+#~ msgstr ""
+#~ "Geben Sie den Benutzername für das Konto an, welches Sie im KIX "
+#~ "konfigurieren möchten, um sich beim Host anzumelden."
+
+#~ msgid "Helptext_Admin_MailAccountEdit_Validity"
+#~ msgstr ""
+#~ "Das E-Mail-Konto kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_MailFilterEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_MailFilterEdit_FilterConditions"
+#~ msgstr ""
+#~ "Mindestens eine Filterbedingung muss gesetzt sein, damit der Filter "
+#~ "funktioniert."
+
+#~ msgid "Helptext_Admin_MailFilterEdit_SetEmailHeaders"
+#~ msgstr ""
+#~ "Mindestens ein E-Mail Header muss gesetzt sein, damit der Filter "
+#~ "funktioniert."
+
+#~ msgid "Helptext_Admin_MailFilterEdit_StopAfterMatch"
+#~ msgstr ""
+#~ "Ist der Haken gesetzt, und die hier definierten Bedingungen treffen auf "
+#~ "eine einkommende Nachricht zu, werden auf diese keine weiteren Filter "
+#~ "angewendet."
+
+#~ msgid "Helptext_Admin_MailFilterEdit_Validity"
+#~ msgstr ""
+#~ "Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_TextModuleEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_TextModuleEdit_Keywords"
+#~ msgstr ""
+#~ "Schlagworte helfen, einen Textbaustein schnell zu finden & auszuwählen."
+
+#~ msgid "Helptext_Admin_TextModuleEdit_Language"
+#~ msgstr "Geben Sie die Sprache an, in der der Textbaustein angelegt ist."
+
+#~ msgid "Helptext_Admin_TextModuleEdit_Text"
+#~ msgstr ""
+#~ "Geben Sie den Text ein, den Sie per Textbaustein einfügen wollen. Es "
+#~ "können Platzhalter verwendet werden."
+
+#~ msgid "Helptext_Admin_TextModuleEdit_Validity"
+#~ msgstr ""
+#~ "Der Textbaustein kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_Tickets_PriorityEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_Tickets_PriorityEdit_Icon"
+#~ msgstr ""
+#~ "Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem "
+#~ "Name der Priorität angezeigt wird."
+
+#~ msgid "Helptext_Admin_Tickets_PriorityEdit_Valid"
+#~ msgstr ""
+#~ "Die Priorität kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_FollowUp"
+#~ msgstr ""
+#~ "Gibt an, ob bei einer Rückmeldung zu einem bereits geschlossenen Ticket "
+#~ "in diesem Team dieses Ticket erneut geöffnet wird."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_Icon."
+#~ msgstr ""
+#~ "Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem "
+#~ "Name des Teams angezeigt wird."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_ParentQueue"
+#~ msgstr ""
+#~ "Wenn Sie dieses Team einem bereits existierenden Team unterordnen wollen, "
+#~ "wählen Sie das hier aus."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_SenderAddress."
+#~ msgstr "Absenderadresse für E-Mails aus diesem Team."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_Signature"
+#~ msgstr ""
+#~ "Signatur für E-Mails aus diesem Team. Es ist nicht möglich, Bilder "
+#~ "einzufügen. Platzhalter können verwendet werden."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_UnlockTimeout"
+#~ msgstr ""
+#~ "Wenn ein Agent ein Ticket sperrt und es vor Ablauf der Entsperrzeit nicht "
+#~ "schließt, wird es entsperrt und wieder für andere Agenten verfügbar "
+#~ "gemacht."
+
+#~ msgid "Helptext_Admin_Tickets_QueueEdit_Validity"
+#~ msgstr "Das Team kann nur verwendet werden, wenn es „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_Tickets_StateEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_Tickets_StateEdit_Icon"
+#~ msgstr ""
+#~ "Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem "
+#~ "Name des Status angezeigt wird."
+
+#~ msgid "Helptext_Admin_Tickets_StateEdit_Type"
+#~ msgstr "Über den Statustyp werden Status guppiert."
+
+#~ msgid "Helptext_Admin_Tickets_StateEdit_Valid"
+#~ msgstr ""
+#~ "Der Status kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_Tickets_TypeEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_Tickets_TypeEdit_Icon"
+#~ msgstr ""
+#~ "Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem "
+#~ "Name des Typs angezeigt wird."
+
+#~ msgid "Helptext_Admin_Tickets_TypeEdit_Valid"
+#~ msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_UserEdit_Preferences_Language"
+#~ msgstr ""
+#~ "Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
+#~ "erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
+#~ "persönlichen Einstellungen ändern."
+
+#~ msgid "Helptext_Admin_UserEdit_Preferences_MyQueues"
+#~ msgstr ""
+#~ "Legen Sie fest, für welche Teams der Agent standardmäßig "
+#~ "Benachrichtigungen erhält. Der Agent kann diese Einstellung auch selbst "
+#~ "in seinen persönlichen Einstellungen ändern."
+
+#~ msgid "Helptext_Admin_UserEdit_Preferences_Notifications_Hint"
+#~ msgstr ""
+#~ "Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
+#~ "Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+#~ "Einstellungen ändern."
+
+#~ msgid "Helptext_Admin_Users_RoleEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_Users_RoleEdit_User"
+#~ msgstr "Es werden nur gültige Agenten angezeigt."
+
+#~ msgid "Helptext_Admin_Users_RoleEdit_Valid"
+#~ msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Roles"
+#~ msgstr ""
+#~ "Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, "
+#~ "damit er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
+
+#~ msgid "Helptext_CMDB_ConfigItemClassEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_CMDB_ConfigItemClassEdit_Definition"
+#~ msgstr ""
+#~ "Die Klassendefinition muss ein Liste von Attribut-Objekten in Perl-"
+#~ "Notation (\"Array of Hashes\") enthalten. Wenn die Klassendefinition "
+#~ "General Catalog Referenzen enthält, können für diese im Modul \"General "
+#~ "Catalog\" Auswahlwerte definiert werden."
+
+#~ msgid "Helptext_CMDB_ConfigItemClassEdit_Icon"
+#~ msgstr ""
+#~ "Legen Sie ein Icon fest, welches im Agenten-Bereich gemeinsam mit dem "
+#~ "Name der  Asset-Klasse angezeigt wird."
+
+#~ msgid "Helptext_CMDB_ConfigItemClassEdit_Name"
+#~ msgstr "Der Name einer Asset-Klasse kann nicht mehrmals verwendet werden."
+
+#~ msgid "Helptext_CMDB_ConfigItemClassEdit_Valid"
+#~ msgstr ""
+#~ "Die Asset-Klasse kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Customers_ContactEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen zu dem Kontakt hinterlegen."
+
+#~ msgid "Helptext_Customers_ContactEdit_Organisation"
+#~ msgstr ""
+#~ "Wählen Sie den Kunden, welchem der Kontakt zugeordnet sein soll. Bei der "
+#~ "Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im "
+#~ "System registrierten Kontakten vorgeschlagen. Sie können „*“ als "
+#~ "Platzhalter verwenden. („KNR“ und „Kundenname“ möglich)"
+
+#~ msgid "Helptext_Customers_ContactEdit_Validity"
+#~ msgstr ""
+#~ "Der Kontakt kann im System nur verwendet werden, wenn er „gültig“ gesetzt "
+#~ "ist."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Category"
+#~ msgstr ""
+#~ "Ordnen Sie FAQ-Artikel in Kategorien ein, um sie thematisch zu sortieren."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Cause"
+#~ msgstr ""
+#~ "Beschreiben Sie die Ursache hinter dem Phänomen so genau wie möglich."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen zu dem FAQ-Artikel hinterlegen."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Language"
+#~ msgstr "Geben sie die Sprache an, in der der FAQ-Artikel verfasst ist."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Solution"
+#~ msgstr "Beschreiben Sie die Lösung des Problems so genau wie möglich."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Symptom"
+#~ msgstr "Beschreiben Sie das auftretende Phänomen so genau wie möglich."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Tags"
+#~ msgstr "Schlagworte helfen, einen FAQ-Eintrag schnell zu finden."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Title"
+#~ msgstr "Fassen Sie das Thema des FAQ-Artikels kurz zusammen."
+
+#~ msgid "Helptext_FAQ_ArticleEdit_Valid"
+#~ msgstr ""
+#~ "Der FAQ Eintrag kann im System nur verwendet werden, wenn er „gültig“ "
+#~ "gesetzt ist. Ungültige FAQ Einträge können nur über die Suche gefunden "
+#~ "werden."
+
+#~ msgid "Helptext_i18n_TranslationPatternEdit_Pattern"
+#~ msgstr ""
+#~ "Das Pattern bezeichnet die Ausgangszeichenkette. Je nach dem, welche "
+#~ "Sprachen in der SysConfig konfiguriert sind, können dafür Übersetzungen "
+#~ "angelegt werden, welche dann in der Nutzeroberfläche angezeigt werden."
+
+#~ msgid "Images"
+#~ msgstr "Bilder"
+
+#~ msgid "Link Graph"
+#~ msgstr "Verknüpfungsgraph"
+
+#~ msgid "Permissions on dependent objects"
+#~ msgstr "Berechtigungen auf abhängige Objekte"
 
 #~ msgid "Sender"
 #~ msgstr "Absender"
