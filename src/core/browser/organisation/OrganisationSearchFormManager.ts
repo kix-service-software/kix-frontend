@@ -64,7 +64,9 @@ export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
     public async getOperations(property: string): Promise<any[]> {
         let operations: SearchOperator[] = [];
 
-        if (this.isDropDown(property)) {
+        if (property === SearchProperty.FULLTEXT) {
+            operations = [SearchOperator.CONTAINS];
+        } else if (this.isDropDown(property)) {
             operations = [SearchOperator.IN];
         } else {
             operations = SearchDefinition.getStringOperators();
