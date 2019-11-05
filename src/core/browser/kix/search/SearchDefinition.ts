@@ -126,6 +126,7 @@ export abstract class SearchDefinition {
         const operator = searchValue.operator;
         const value = searchValue.value;
         const filterDataType = operator === SearchOperator.BETWEEN ? FilterDataType.DATETIME : FilterDataType.STRING;
+
         return new FilterCriteria(property, operator as SearchOperator, filterDataType, FilterType.AND, value);
     }
 }

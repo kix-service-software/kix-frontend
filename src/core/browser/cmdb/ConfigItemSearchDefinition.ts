@@ -20,6 +20,7 @@ import { ConfigItemClassAttributeUtil } from "./ConfigItemClassAttributeUtil";
 import { IColumnConfiguration, DefaultColumnConfiguration } from "../table";
 import { LabelService } from "../LabelService";
 import { ConfigItemSearchFormManager } from "./ConfigItemSearchFormManager";
+import { ObjectPropertyValue } from "../ObjectPropertyValue";
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 
@@ -93,22 +94,37 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 case ConfigItemProperty.CLASS_ID:
                 case ConfigItemProperty.CUR_DEPL_STATE_ID:
                 case ConfigItemProperty.CUR_INCI_STATE_ID:
-                case KIXObjectProperty.CREATE_BY:
-                case KIXObjectProperty.CREATE_TIME:
                 case KIXObjectProperty.CHANGE_BY:
+                case KIXObjectProperty.CREATE_BY:
+                    newCriteria.push(searchCriteria);
+                    break;
+                case KIXObjectProperty.CREATE_TIME:
                 case KIXObjectProperty.CHANGE_TIME:
+                    searchCriteria.type = FilterDataType.DATETIME;
                     newCriteria.push(searchCriteria);
                     break;
                 default:
                     if (classIds) {
-                        const path = await ConfigItemClassAttributeUtil.getAttributePath(
+                        const path = await ConfigItemClassAttributeUtil.getAttributeType(
                             searchCriteria.property, classIds
                         );
                         if (path) {
-                            newCriteria.push(new FilterCriteria(
+
+                            const attributeCriteria = new FilterCriteria(
                                 `CurrentVersion.Data.${path}`, searchCriteria.operator,
                                 searchCriteria.type, searchCriteria.filterType, searchCriteria.value
-                            ));
+                            );
+
+                            const type = await ConfigItemClassAttributeUtil.getAttributePath(
+                                searchCriteria.property, classIds
+                            );
+
+                            if (type === "Date") {
+                                attributeCriteria.type = FilterDataType.DATE;
+                            } else if (type === "DateTime") {
+                                attributeCriteria.type = FilterDataType.DATETIME;
+                            }
+                            newCriteria.push(attributeCriteria);
                         }
                     }
             }

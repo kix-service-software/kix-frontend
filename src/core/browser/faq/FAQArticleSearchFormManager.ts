@@ -7,8 +7,7 @@
  * --
  */
 
-import { AbstractDynamicFormManager } from "../form";
-import { KIXObjectType, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode } from "../../model";
+import { KIXObjectType, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode, FilterDataType } from "../../model";
 import { LabelService } from "../LabelService";
 import { FAQArticleProperty } from "../../model/kix/faq";
 import { SearchProperty } from "../SearchProperty";
@@ -18,6 +17,7 @@ import { SearchOperatorUtil } from "../SearchOperatorUtil";
 import { SearchOperator } from "../SearchOperator";
 import { FAQService } from "./FAQService";
 import { SearchDefinition } from "../kix";
+import { AbstractDynamicFormManager } from "../form";
 
 
 export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {

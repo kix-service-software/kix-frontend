@@ -15,6 +15,7 @@ import {
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
 import { TicketSearchFormManager } from "./TicketSearchFormManager";
+import { ObjectPropertyValue } from "../ObjectPropertyValue";
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -94,5 +95,20 @@ export class TicketSearchDefinition extends SearchDefinition {
         }
         return criteria;
 
+    }
+
+    public getFilterCriteria(searchValue: ObjectPropertyValue): FilterCriteria {
+        const criteria = super.getFilterCriteria(searchValue);
+
+        if (criteria.property === TicketProperty.CREATED
+            || criteria.property === TicketProperty.CHANGED
+            || criteria.property === TicketProperty.CLOSE_TIME
+            || criteria.property === TicketProperty.PENDING_TIME
+            || criteria.property === TicketProperty.LAST_CHANGE_TIME
+        ) {
+            criteria.type = FilterDataType.DATETIME;
+        }
+
+        return criteria;
     }
 }
