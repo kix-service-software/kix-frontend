@@ -7,7 +7,7 @@
  * --
  */
 
-import { ConfigurationType, IConfiguration } from "../../core/model/configuration";
+import { ConfigurationType } from "../../core/model/configuration";
 import { ModuleConfigurationService } from "./ModuleConfigurationService";
 import { TableConfiguration } from "../../core/browser";
 import { TableConfigurationResolver } from "./TableConfigurationResolver";
