@@ -9,7 +9,8 @@
 
 import { AbstractDynamicFormManager } from "../form";
 import {
-    KIXObjectType, TicketProperty, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode, Contact, Organisation
+    KIXObjectType, TicketProperty, KIXObjectProperty, CRUD, InputFieldTypes, TreeNode, Contact,
+    Organisation, FilterDataType
 } from "../../model";
 import { SearchProperty } from "../SearchProperty";
 import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
@@ -223,6 +224,14 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
         }
 
         return tree;
+    }
+
+    public getFilterDataType(property: string): FilterDataType {
+        if (this.isDateTime(property)) {
+            return FilterDataType.DATETIME;
+        }
+
+        return FilterDataType.STRING;
     }
 
 }

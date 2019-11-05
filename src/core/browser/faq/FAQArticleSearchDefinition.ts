@@ -16,6 +16,7 @@ import { FAQArticleProperty } from "../../model/kix/faq";
 import { SearchProperty } from "../SearchProperty";
 import { FAQArticleSearchFormManager } from "./FAQArticleSearchFormManager";
 import { BrowserUtil } from "../BrowserUtil";
+import { ObjectPropertyValue } from "../ObjectPropertyValue";
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 
@@ -135,6 +136,16 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
                 FAQArticleProperty.FIELD_6, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, encodedValue
             ));
         }
+        return criteria;
+    }
+
+    public getFilterCriteria(searchValue: ObjectPropertyValue): FilterCriteria {
+        const criteria = super.getFilterCriteria(searchValue);
+
+        if (criteria.property === FAQArticleProperty.CREATED || criteria.property === FAQArticleProperty.CHANGED) {
+            criteria.type = FilterDataType.DATETIME;
+        }
+
         return criteria;
     }
 }
