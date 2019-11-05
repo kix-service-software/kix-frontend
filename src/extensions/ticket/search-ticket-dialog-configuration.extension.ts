@@ -30,7 +30,7 @@ export class ModuleExtension implements IConfigurationExtension {
         const helpConfig = new HelpWidgetConfiguration(
             'ticket-search-help-widget-config', 'Help WIdget Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_Ticket',
-            [['Translatable#How to search in KIX 18?', 'faqarticles/2']]
+            []
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(helpConfig);
 
