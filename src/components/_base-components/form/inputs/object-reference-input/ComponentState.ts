@@ -20,7 +20,8 @@ export class ComponentState extends FormInputComponentState<string | number> {
         public loadNodes: () => Promise<TreeNode[]> = null,
         public multiselect: boolean = false,
         public treeId: string = IdService.generateDateBasedId('object-reference-input-'),
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public freeText: boolean = false
     ) {
         super();
     }

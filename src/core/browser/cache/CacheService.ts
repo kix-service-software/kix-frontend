@@ -179,6 +179,7 @@ export class CacheService {
                 break;
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.GENERAL_CATALOG_CLASS);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
             case KIXObjectType.SYS_CONFIG_OPTION:
