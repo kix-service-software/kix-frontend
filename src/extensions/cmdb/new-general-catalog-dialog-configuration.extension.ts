@@ -68,7 +68,8 @@ export class Extension implements IConfigurationExtension {
                         )
                     ])
                 ),
-                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                new FormFieldOption(ObjectReferenceOptions.FREETEXT, true)
             ], null, null,
                 null, null, null, null, 100
             )

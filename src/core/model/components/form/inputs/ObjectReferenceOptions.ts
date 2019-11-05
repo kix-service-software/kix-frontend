@@ -19,6 +19,8 @@ export enum ObjectReferenceOptions {
 
     AS_STRUCTURE = 'AS_STRUCTURE',
 
-    ADDITIONAL_NODES = 'ADDITIONAL_NODES'
+    ADDITIONAL_NODES = 'ADDITIONAL_NODES',
+
+    FREETEXT = 'FREETEXT'
 
 }

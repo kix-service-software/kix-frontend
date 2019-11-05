@@ -179,6 +179,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         );
         this.state.multiselect = typeof isMultiselectOption === 'undefined'
             || isMultiselectOption === null ? false : isMultiselectOption.value;
+
+        const freeTextOption = this.state.field.options.find(
+            (o) => o.option === ObjectReferenceOptions.FREETEXT
+        );
+        if (typeof freeTextOption !== 'undefined' && freeTextOption !== null) {
+            this.state.freeText = freeTextOption.value;
+        }
     }
 
     private async search(limit: number, searchValue: string): Promise<TreeNode[]> {

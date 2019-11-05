@@ -172,6 +172,9 @@ export class CacheService {
             case KIXObjectType.TICKET_PRIORITY:
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 break;
+            case KIXObjectType.GENERAL_CATALOG_ITEM:
+                cacheKeyPrefixes.push(KIXObjectType.GENERAL_CATALOG_CLASS);
+                break;
             default:
         }
 

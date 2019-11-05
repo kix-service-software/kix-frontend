@@ -88,17 +88,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.filterValue = value;
                 this.handler.filter(this.state.filterValue);
             }
-        } else if (isFilterInput
-            && event.key === 'Enter'
-            && this.state.freeText
-            && this.state.filterValue
-            && this.state.filterValue !== ''
-        ) {
-            event.stopPropagation();
-            event.preventDefault();
-            const node = new TreeNode(this.state.filterValue, this.state.filterValue);
-            this.handler.setSelection([node], true);
-            this.state.filterValue = null;
         } else if (isFilterInput && event.key === 'ArrowUp' || event.key === 'ArrowDown') {
             if (hiddenInput) {
                 hiddenInput.focus();
@@ -124,6 +113,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 event.preventDefault();
                 filterInput.focus();
             }
+        } else if (isFilterInput
+            && event.key === 'Enter'
+            && this.state.freeText
+            && this.state.filterValue
+            && this.state.filterValue !== ''
+        ) {
+            event.stopPropagation();
+            event.preventDefault();
+            const node = new TreeNode(this.state.filterValue, this.state.filterValue);
+            this.handler.setSelection([node], true);
+            this.state.filterValue = null;
         }
     }
 
