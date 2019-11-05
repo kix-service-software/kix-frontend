@@ -30,9 +30,7 @@ export class ModuleExtension implements IConfigurationExtension {
         const helpConfig = new HelpWidgetConfiguration(
             'cmdb-ci-search-dialog-help-widget-config', 'Help COnfig', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_ConfigItem',
-            [
-                ['Translatable#How to search in KIX 18?', 'faqarticles/2']
-            ]
+            []
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(helpConfig);
 

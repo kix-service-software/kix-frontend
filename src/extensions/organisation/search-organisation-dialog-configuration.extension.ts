@@ -30,9 +30,7 @@ export class ModuleExtension implements IConfigurationExtension {
         const helpSettings = new HelpWidgetConfiguration(
             'organisation-search-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_Organisation',
-            [
-                ['Translatable#How to search in KIX 18?', 'faqarticles/2']
-            ]
+            []
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
 

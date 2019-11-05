@@ -31,9 +31,7 @@ export class ModuleExtension implements IConfigurationExtension {
         const helpConfig = new HelpWidgetConfiguration(
             'faq-article-search-dialog-help-widget-config', 'Help COnfig', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_FAQArticle',
-            [
-                ['Translatable#How to search in KIX 18?', 'faqarticles/2']
-            ]
+            []
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(helpConfig);
 
