@@ -160,7 +160,7 @@ class Component implements IKIXObjectSearchListener {
     }
 
     private async prepareActions(table: ITable): Promise<void> {
-        // WidgetService.getInstance().setActionData(this.state.instanceId, table);
+        WidgetService.getInstance().setActionData(this.state.instanceId, table);
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance()
                 .generateActions(this.state.widgetConfiguration.actions, table);
