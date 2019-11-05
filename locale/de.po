@@ -2211,9 +2211,6 @@ msgstr "Wie lege ich ein neues Ticket an?"
 msgid "How do I search in KIX 18?"
 msgstr "Wie suche ich in KIX 18?"
 
-msgid "How to search in KIX 18?"
-msgstr "Wie suche ich in KIX 18?"
-
 msgid "Icon"
 msgstr "Icon"
 
@@ -3726,6 +3723,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "How to search in KIX 18?"
+#~ msgstr "Wie suche ich in KIX 18?"
 
 #~ msgid "Description & Comments"
 #~ msgstr "Beschreibung & Anmerkungen"

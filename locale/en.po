@@ -2087,9 +2087,6 @@ msgstr ""
 msgid "How do I search in KIX 18?"
 msgstr ""
 
-msgid "How to search in KIX 18?"
-msgstr ""
-
 msgid "Icon"
 msgstr ""
 
