@@ -51,6 +51,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 eventSubscriberId: 'article-email-cc-recipient-input',
                 eventPublished: (data: any, eventId: string) => {
                     const newCcNodes = this.prepareMailNodes(data ? data.ccList : null, data ? data.filterList : null);
+                    this.treeHandler.setSelection(newCcNodes, true, true, true);
                     this.contactChanged(newCcNodes);
                 }
             };
@@ -191,6 +192,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                         KIXObjectType.SYSTEM_ADDRESS
                     );
                     const newToNodes = this.prepareMailNodes(replyArticle.toList, systemAddresses.map((sa) => sa.Name));
+                    this.treeHandler.setSelection(newToNodes, true, true, true);
                     this.contactChanged(newToNodes);
 
                     this.handleCcField(
