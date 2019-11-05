@@ -42,6 +42,8 @@ import { ValidObjectLabelProvider } from '../../valid/ValidObjectLabelProvider';
 import {
     NotificationService, NotificationTableFactory, NotificationLabelProvider, NotificationBrowserFactory
 } from '../../notification';
+import { TicketLabelProvider, ArticleLabelProvider } from '../../ticket';
+import { ChannelService } from '../../channel';
 
 export class UIModule implements IUIModule {
 
@@ -58,6 +60,7 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
         ServiceRegistry.registerServiceInstance(ServiceService.getInstance());
         ServiceRegistry.registerServiceInstance(ValidService.getInstance());
+        ServiceRegistry.registerServiceInstance(ChannelService.getInstance());
 
         ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
@@ -80,6 +83,9 @@ export class UIModule implements IUIModule {
 
         LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ValidObjectLabelProvider());
+
+        LabelService.getInstance().registerLabelProvider(new TicketLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ArticleLabelProvider());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()

@@ -163,7 +163,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.CHANNEL_ID:
                 if (displayValue) {
-                    const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL, null);
+                    const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
                     if (channels) {
                         const channel = channels.find((c) => c.ID.toString() === displayValue.toString());
                         displayValue = channel ? channel.Name : displayValue;

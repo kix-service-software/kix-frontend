@@ -75,30 +75,32 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
     ): Promise<[string[], Array<string | ObjectIcon>]> {
         const displayValues: string[] = [];
         const displayIcons: Array<string | ObjectIcon> = [];
-        if (Array.isArray(value)) {
-            for (const v of value) {
-                const string = await labelProvider.getPropertyValueDisplayText(property, v);
-                if (string) {
-                    displayValues.push(string);
-                    const icons = await labelProvider.getIcons(null, property, v);
-                    if (icons && !!icons.length) {
-                        displayIcons.push(icons[0]);
-                    } else {
-                        displayIcons.push(null);
+        if (labelProvider) {
+            if (Array.isArray(value)) {
+                for (const v of value) {
+                    const string = await labelProvider.getPropertyValueDisplayText(property, v);
+                    if (string) {
+                        displayValues.push(string);
+                        const icons = await labelProvider.getIcons(null, property, v);
+                        if (icons && !!icons.length) {
+                            displayIcons.push(icons[0]);
+                        } else {
+                            displayIcons.push(null);
+                        }
                     }
                 }
-            }
-        } else {
-            displayValues.push(
-                await labelProvider.getPropertyValueDisplayText(
-                    property, isNaN(Number(value)) ? value : Number(value)
-                )
-            );
-            const icons = await labelProvider.getIcons(null, property, value);
-            if (icons && !!icons.length) {
-                displayIcons.push(icons[0]);
             } else {
-                displayIcons.push(null);
+                displayValues.push(
+                    await labelProvider.getPropertyValueDisplayText(
+                        property, isNaN(Number(value)) ? value : Number(value)
+                    )
+                );
+                const icons = await labelProvider.getIcons(null, property, value);
+                if (icons && !!icons.length) {
+                    displayIcons.push(icons[0]);
+                } else {
+                    displayIcons.push(null);
+                }
             }
         }
         return [displayValues, displayIcons];
