@@ -27,7 +27,7 @@ export class Extension implements IConfigurationExtension {
     public async createDefaultConfiguration(): Promise<ContextConfiguration> {
         const tableWidgetConfig = new TableWidgetConfiguration(
             'cmdb-ci-compare-dialog-table-widget-config', 'Table Widget Config', ConfigurationType.TableWidget,
-            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, null, null, null, null, null, false
+            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, null, null, true, null, null, false
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
 

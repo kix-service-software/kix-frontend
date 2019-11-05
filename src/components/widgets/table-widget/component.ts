@@ -42,8 +42,8 @@ class Component {
     public onInput(input: ComponentInput): void {
         this.state.instanceId = input.instanceId;
         this.contextType = input.contextType;
-        this.configuredTitle = typeof input.title === 'undefined';
-        if (!this.configuredTitle) {
+        this.configuredTitle = typeof input.title !== 'undefined';
+        if (this.configuredTitle) {
             this.state.title = input.title;
         }
 
@@ -158,16 +158,12 @@ class Component {
             count = this.state.table.getRowCount(true);
         }
 
-        let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
-
-        if (!title && this.configuredTitle) {
-            title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        if (!this.configuredTitle) {
+            let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
             title = await TranslationService.translate(title);
-            this.state.title = title;
+            const countString = count > 0 ? " (" + count + ")" : "";
+            this.state.title = title + countString;
         }
-
-        const countString = count > 0 ? " (" + count + ")" : "";
-        this.state.title = title + countString;
     }
 
 
