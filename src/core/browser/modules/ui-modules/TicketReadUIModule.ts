@@ -19,7 +19,7 @@ import { DialogService } from "../../components";
 import {
     TicketPlaceholderHandler, TicketService, TicketFormService, ArticleFormService, TicketTypeService,
     TicketStateService, TicketPriorityService, QueueService, TicketTemplateService, PendingTimeValidator,
-    EmailRecipientValidator, TicketSearchDefinition, TicketLabelProvider, ArticleLabelProvider,
+    EmailRecipientValidator, TicketSearchDefinition,
     TicketHistoryLabelProvider, TicketTypeLabelProvider, TicketPriorityLabelProvider, TicketStateLabelProvider,
     TicketStateTypeLabelProvider, QueueLabelProvider, TicketTemplateLabelProvider, TicketTableFactory,
     TicketHistoryTableFactory, TicketTableCSSHandler, TicketBrowserFactory, TicketHistoryBrowserFactory,
@@ -29,7 +29,6 @@ import {
     TicketWatchAction, ShowUserTicketsAction, TicketLockAction, TicketContext, TicketDetailsContext,
     TicketSearchContext, TicketListContext
 } from "../../ticket";
-import { ChannelService } from "../../channel";
 import { ServiceRegistry, FactoryService } from "../../kix";
 import { FormValidationService } from "../../form/validation";
 import { SearchService } from "../../kix/search/SearchService";
@@ -50,7 +49,6 @@ export class UIModule implements IUIModule {
         PlaceholderService.getInstance().registerPlaceholderHandler(new TicketPlaceholderHandler());
 
         ServiceRegistry.registerServiceInstance(TicketService.getInstance());
-        ServiceRegistry.registerServiceInstance(ChannelService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
@@ -66,8 +64,6 @@ export class UIModule implements IUIModule {
 
         SearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 
-        LabelService.getInstance().registerLabelProvider(new TicketLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new ArticleLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketHistoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketTypeLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketPriorityLabelProvider());
