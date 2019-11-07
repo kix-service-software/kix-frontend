@@ -63,7 +63,7 @@ export class ContextService {
         const oldContext = this.getActiveContext();
 
         const context = await ContextFactory.getInstance().getContext(
-            contextId, kixObjectType, contextMode, objectId, (!history && reset)
+            contextId, kixObjectType, contextMode, objectId, (!history && reset), oldContext
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
