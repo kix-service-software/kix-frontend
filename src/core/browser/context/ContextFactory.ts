@@ -35,11 +35,15 @@ export class ContextFactory {
 
     public async getContext(
         contextId: string, objectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number, reset?: boolean
+        objectId?: string | number, reset?: boolean, compareContext?: Context
     ): Promise<Context> {
         let context = this.contextInstances.find(
             (c) => this.isContext(contextId, c.getDescriptor(), objectType, contextMode)
         );
+
+        if (compareContext && (compareContext === context)) {
+            reset = false;
+        }
 
         if (!context) {
             context = await this.createContextInstance(contextId, objectType, contextMode, objectId);
