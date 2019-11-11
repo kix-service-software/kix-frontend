@@ -33,8 +33,15 @@ export class TicketContext extends Context {
     }
 
     public async setQueue(queueId: number): Promise<void> {
-        this.queueId = queueId;
-        await this.loadTickets();
+        if (queueId) {
+            if (queueId !== this.queueId) {
+                this.queueId = queueId;
+                await this.loadTickets();
+            }
+        } else if (this.queueId) {
+            this.queueId = null;
+            await this.loadTickets();
+        }
     }
 
     private async loadTickets(): Promise<void> {
@@ -76,6 +83,7 @@ export class TicketContext extends Context {
     public reset(): void {
         super.reset();
         this.queueId = null;
+        this.loadTickets();
     }
 
     public async reloadObjectList(objectType: KIXObjectType): Promise<void> {

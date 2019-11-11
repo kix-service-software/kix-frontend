@@ -34,8 +34,15 @@ export class CMDBContext extends Context {
     }
 
     public async setCIClass(ciClass: ConfigItemClass): Promise<void> {
-        this.currentCIClass = ciClass;
-        await this.loadConfigItems();
+        if (ciClass) {
+            if (!this.currentCIClass || ciClass.ID !== this.currentCIClass.ID) {
+                this.currentCIClass = ciClass;
+                await this.loadConfigItems();
+            }
+        } else if (this.currentCIClass) {
+            this.currentCIClass = null;
+            await this.loadConfigItems();
+        }
     }
 
     public async loadConfigItems(): Promise<void> {
@@ -88,6 +95,7 @@ export class CMDBContext extends Context {
     public reset(): void {
         super.reset();
         this.currentCIClass = null;
+        this.loadConfigItems();
     }
 
 }
