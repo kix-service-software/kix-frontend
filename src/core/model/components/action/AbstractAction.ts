@@ -34,7 +34,7 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
         return true;
     }
 
-    public canShow(): boolean {
+    public async canShow(): Promise<boolean> {
         return true;
     }
 

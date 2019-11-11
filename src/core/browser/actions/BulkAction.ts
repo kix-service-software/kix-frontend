@@ -40,7 +40,7 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         return canRun;
     }
 
-    public canShow(): boolean {
+    public async canShow(): Promise<boolean> {
         return BulkService.getInstance().hasBulkManager(this.data.getObjectType());
     }
 
