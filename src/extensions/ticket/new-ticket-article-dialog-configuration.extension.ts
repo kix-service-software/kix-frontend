@@ -15,7 +15,7 @@ import {
     HelpWidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
@@ -64,7 +64,7 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        const formId = 'new-ticket-article-form';
+        const formId = 'ticket-article-new-form';
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormFieldConfiguration(
@@ -84,10 +84,15 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'ticket-article-new-form-page', 'Translatable#New Article',
+                ['ticket-article-new-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(formId, 'Translatable#New Article',
-                [
-                    'ticket-article-new-form-group-data'
-                ],
+                ['ticket-article-new-form-page'],
                 KIXObjectType.ARTICLE
             )
         );

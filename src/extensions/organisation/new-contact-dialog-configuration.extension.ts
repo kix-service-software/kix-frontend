@@ -15,7 +15,7 @@ import {
 import { IConfigurationExtension } from '../../core/extensions';
 import { NewContactDialogContext } from '../../core/browser/contact';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { FormValidationService } from '../../core/browser/form/validation';
@@ -202,7 +202,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                 'contact-new-form-field-comment',
                 'Translatable#Comment', ContactProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Customers_ContactCreate_Comment', null, null, null, null,
-                null, null, null, 250
+                null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -225,16 +225,22 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'New Contact',
+            new FormPageConfiguration(
+                'contact-new-form-page', 'Translatable#New Contact',
                 [
                     'contact-new-form-group-information',
                     'contact-new-form-group-communication',
                     'contact-new-form-group-address',
                     'contact-new-form-group-other'
-                ],
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New Contact',
+                ['contact-new-form-page'],
                 KIXObjectType.CONTACT
             )
         );

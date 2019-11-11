@@ -8,25 +8,23 @@
  */
 
 import { AutoCompleteConfiguration } from '../AutoCompleteConfiguration';
-import { FormGroupConfiguration } from './FormGroupConfiguration';
 import { KIXObjectType } from '../../../';
 import { FormContext } from '../FormContext';
 import { ConfigurationType, IConfiguration } from '../../../configuration';
+import { FormPageConfiguration } from './FormPageConfiguration';
 
 export class FormConfiguration implements IConfiguration {
 
     public constructor(
         public id: string,
         public name: string,
-        public groupConfigurations: string[],
+        public pageConfigurationIds: string[],
         public objectType: KIXObjectType,
         public validation: boolean = true,
         public formContext: FormContext = FormContext.NEW,
         public autoCompleteConfiguration: AutoCompleteConfiguration = new AutoCompleteConfiguration(),
-        public singleFormGroupOpen: boolean = false,
-        public showSingleGroup: boolean = false,
+        public pages: FormPageConfiguration[] = [],
         public type: ConfigurationType = ConfigurationType.Form,
-        public groups: FormGroupConfiguration[] = []
     ) { }
 
 }

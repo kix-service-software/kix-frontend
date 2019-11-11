@@ -18,7 +18,7 @@ import {
 } from '../../core/model';
 import { CMDBContext, ConfigItemChartWidgetConfiguration } from '../../core/browser/cmdb';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService, CMDBService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
@@ -362,11 +362,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'cmdb-config-item-link-form-page', 'Translatable#Link Config Item with',
+                ['cmdb-config-item-link-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 linkFormId, 'Translatable#Link Config Item with',
-                [
-                    'cmdb-config-item-link-form-group-data'
-                ],
+                ['cmdb-config-item-link-form-page'],
                 KIXObjectType.CONFIG_ITEM, false, FormContext.LINK
             )
         );

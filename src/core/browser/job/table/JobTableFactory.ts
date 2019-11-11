@@ -40,8 +40,8 @@ export class JobTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(JobProperty.NAME),
-            this.getDefaultColumnConfiguration(JobProperty.TRIGGER_EVENTS),
-            this.getDefaultColumnConfiguration(JobProperty.TRIGGER_TIME),
+            this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_EVENTS),
+            this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_TIMES),
             this.getDefaultColumnConfiguration(JobProperty.ACTION_COUNT),
             this.getDefaultColumnConfiguration(JobProperty.LAST_EXEC_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.COMMENT),
@@ -87,8 +87,8 @@ export class JobTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
-            case JobProperty.TRIGGER_EVENTS:
-            case JobProperty.TRIGGER_TIME:
+            case JobProperty.HAS_TRIGGER_EVENTS:
+            case JobProperty.HAS_TRIGGER_TIMES:
                 config = new DefaultColumnConfiguration(
                     null, null, null,
                     property, false, true, true, false, 110, true, true, true,

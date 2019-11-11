@@ -7,7 +7,9 @@
  * --
  */
 
-import { FormInputComponent, TreeNode, DefaultSelectInputFormOption } from '../../../../../core/model';
+import {
+    FormInputComponent, TreeNode, DefaultSelectInputFormOption, FormInstance, TreeService
+} from '../../../../../core/model';
 import { CompontentState } from './CompontentState';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { FormService } from '../../../../../core/browser';
@@ -33,6 +35,15 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public async onMount(): Promise<void> {
         await super.onMount();
+
+        if (this.state.field && this.state.field.options && !!this.state.field.options) {
+            const asMultiselectOption = this.state.field.options.find(
+                (o) => o.option === DefaultSelectInputFormOption.MULTI
+            );
+            this.state.asMultiselect = asMultiselectOption && typeof asMultiselectOption.value === 'boolean'
+                ? asMultiselectOption.value : false;
+        }
+        this.state.prepared = true;
     }
 
     public async load(): Promise<TreeNode[]> {
@@ -41,13 +52,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const nodesOption = this.state.field.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.NODES
             );
-            nodes = nodesOption ? nodesOption.value : [];
+            nodes = nodesOption ? (nodesOption.value as TreeNode[]).map(
+                (n) => new TreeNode(
+                    n.id, n.label, n.icon, n.secondaryIcon, n.children, n.parent, n.nextNode, n.previousNode,
+                    n.properties, n.expanded, n.visible, n.expandOnClick, n.clickable, n.tooltip, n.flags,
+                    n.navigationNode, n.selected
+                )
+            ) : [];
 
-            const asMultiselectOption = this.state.field.options.find(
-                (o) => o.option === DefaultSelectInputFormOption.MULTI
-            );
-            this.state.asMultiselect = asMultiselectOption && typeof asMultiselectOption.value === 'boolean'
-                ? asMultiselectOption.value : false;
+            if (this.state.field.countMax && this.state.field.countMax > 1) {
+                const uniqueOption = this.state.field.options.find(
+                    (o) => o.option === DefaultSelectInputFormOption.UNIQUE
+                );
+                const unique = uniqueOption && typeof uniqueOption.value === 'boolean' ? uniqueOption.value : true;
+                if (unique) {
+                    nodes = await this.handleUnique(nodes);
+                }
+            }
         }
 
         await this.setCurrentNode(nodes);
@@ -59,21 +80,25 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         const defaultValue = formInstance.getFormFieldValue<string | number | string[] | number[]>(
             this.state.field.instanceId
         );
-        if (defaultValue && defaultValue.value) {
+        if (defaultValue && defaultValue.value !== null) {
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
             let selectedNodes = [];
-            if (Array.isArray(defaultValue.value)) {
-                selectedNodes = nodes.filter(
-                    (n) => (defaultValue.value as Array<string | number>).some((dv) => dv === n.id)
-                );
-                selectedNodes.forEach((n) => n.selected = true);
-            } else {
-                const node = nodes.find((n) => n.id === defaultValue.value);
-                if (node) {
-                    node.selected = true;
-                    selectedNodes = [node];
+            if (treeHandler) {
+                if (Array.isArray(defaultValue.value)) {
+                    selectedNodes = nodes.filter(
+                        (n) => (defaultValue.value as Array<string | number>).some((dv) => dv === n.id)
+                    );
+                    selectedNodes.forEach((n) => n.selected = true);
+                } else {
+                    const node = nodes.find((n) => n.id === defaultValue.value);
+                    if (node) {
+                        node.selected = true;
+                        selectedNodes = [node];
+                    }
                 }
+                super.provideValue(selectedNodes && !!selectedNodes.length ? selectedNodes.map((sn) => sn.id) : null);
+                treeHandler.setSelection(selectedNodes, true, false, true);
             }
-            super.provideValue(selectedNodes && !!selectedNodes.length ? selectedNodes.map((sn) => sn.id) : null);
         }
     }
 
@@ -84,6 +109,28 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
+        const formInstance = await FormService.getInstance().getFormInstance<FormInstance>(this.state.formId);
+        if (formInstance) {
+            const fieldList = await formInstance.getFields(this.state.field);
+            let usedValues = [];
+            fieldList.forEach((f) => {
+                if (f.property === this.state.field.property && f.instanceId !== this.state.field.instanceId) {
+                    const fieldValue = formInstance.getFormFieldValue(f.instanceId);
+                    if (fieldValue && fieldValue.value !== null) {
+                        if (Array.isArray(fieldValue.value)) {
+                            usedValues = [...usedValues, ...fieldValue.value];
+                        } else {
+                            usedValues.push(fieldValue.value);
+                        }
+                    }
+                }
+            });
+            nodes = nodes.filter((n) => !usedValues.some((v) => v === n.id));
+        }
+        return nodes;
     }
 }
 

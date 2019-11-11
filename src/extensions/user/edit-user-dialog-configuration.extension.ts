@@ -16,7 +16,7 @@ import {
     QueueProperty, NotificationProperty, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { EditUserDialogContext } from '../../core/browser/user';
@@ -126,7 +126,7 @@ export class Extension implements IConfigurationExtension {
                 'user-edit-form-field-comment',
                 'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_Users_UserEdit_Comment',
-                null, null, null, null, null, null, null, 250
+                null, null, null, null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -257,13 +257,20 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'Translatable#New Agent',
+            new FormPageConfiguration(
+                'user-edit-form-group-page', 'Translatable#Edit Agent',
                 [
                     'user-edit-form-group-informations',
                     'user-edit-form-group-roles',
                     'user-edit-form-group-preferences'
-                ],
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#Edit Agent',
+                ['user-edit-form-group-page'],
                 KIXObjectType.USER, true, FormContext.EDIT
             )
         );

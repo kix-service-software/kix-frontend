@@ -10,8 +10,8 @@
 export class ExecPlanParameter {
 
     public constructor(
-        public Weekdays: number[],
-        public Time: string,
-        public Events: string[]
+        public Weekday: string[],
+        public Time: string[],
+        public Event: string[]
     ) { }
 }

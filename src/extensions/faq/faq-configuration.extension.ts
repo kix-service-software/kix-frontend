@@ -19,7 +19,7 @@ import {
 } from '../../core/browser';
 import { FAQArticleProperty, FAQCategoryProperty } from '../../core/model/kix/faq';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
@@ -166,12 +166,17 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'faq-article-link-form-page', 'Translatable#Link FAQ with',
+                ['faq-article-link-form-group-attributes']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 linkFormId, 'Translatable#Link FAQ with',
-                [
-                    'faq-article-link-form-group-attributes'
-                ],
-                KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK, null, true
+                ['faq-article-link-form-page'],
+                KIXObjectType.FAQ_ARTICLE, false, FormContext.LINK
             )
         );
 

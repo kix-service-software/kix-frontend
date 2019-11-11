@@ -9,7 +9,7 @@
 
 import { ObjectFactory } from "./ObjectFactory";
 import { KIXObjectType } from "../../model";
-import { Job } from "../../model/kix/job/Job";
+import { Job } from "../../model/kix/job";
 import { Macro } from "../../model/kix/macro";
 import { ExecPlan } from "../../model/kix/exec-plan";
 

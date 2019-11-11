@@ -8,7 +8,7 @@
  */
 
 import { KIXObjectFactory } from "../kix/KIXObjectFactory";
-import { Job } from "../../model/kix/job/Job";
+import { Job } from "../../model/kix/job";
 
 export class JobBrowserFactory extends KIXObjectFactory<Job> {
 

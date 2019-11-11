@@ -1,0 +1,36 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.pages && state.pages.length > 1)>
+    <div class=(input.before ? "form-page-menu-before" : "form-page-menu-after")>
+        <div.kix-icon-nook-left
+            class={
+                        "dead-end": !state.activePageIndex
+                    }
+            title=(state.activePageIndex ? state.translations["Translatable#Previous"] : "")
+            on-click("showPage", state.activePageIndex - 1)/>
+        <for|page, index| of=state.pages>
+            <span
+                class={
+                                active: index === state.activePageIndex
+                            }
+                title=state.translations[page.name]
+                on-click("showPage", index)/>
+        </for>
+        <div.kix-icon-nook-right
+            class={
+                        "dead-end": state.activePageIndex && state.pages.length - 1 === state.activePageIndex
+                    }
+            title=(
+                        !isNaN(state.activePageIndex) && state.pages.length - 1 !== state.activePageIndex
+                                    ? state.translations["Translatable#Next"]
+                                    : ""
+                    )
+            on-click("showPage", state.activePageIndex + 1)/>
+    </div>
+</if>

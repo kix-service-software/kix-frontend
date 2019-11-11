@@ -17,6 +17,10 @@ export interface IKIXObjectFormService<T extends KIXObject = KIXObject> extends 
 
     initOptions(form: FormConfiguration): Promise<void>;
 
-    getNewFormField(formField: FormFieldConfiguration): FormFieldConfiguration;
+    getNewFormField(
+        formField: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren?: boolean
+    ): FormFieldConfiguration;
+
+    updateFields(fields: FormFieldConfiguration[]): Promise<void>;
 
 }

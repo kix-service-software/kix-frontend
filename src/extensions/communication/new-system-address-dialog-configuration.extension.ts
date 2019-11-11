@@ -16,7 +16,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { FormValidationService } from '../../core/browser/form/validation';
 import { ConfigurationType } from '../../core/model/configuration';
@@ -72,7 +72,7 @@ export class Extension implements IConfigurationExtension {
                 'system-address-new-form-field-comment',
                 'Translatable#Comment', SystemAddressProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_SystemAddressCreate_Comment', null, null, null,
-                null, null, null, null, 250
+                null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -98,11 +98,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'system-address-new-form-page', 'Translatable#New Address',
+                ['system-address-new-form-group-information']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#New Address',
-                [
-                    'system-address-new-form-group-information'
-                ],
+                ['system-address-new-form-page'],
                 KIXObjectType.SYSTEM_ADDRESS
             )
         );

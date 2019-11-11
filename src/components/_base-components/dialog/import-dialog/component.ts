@@ -26,7 +26,7 @@ import { DialogService } from '../../../../core/browser/components/dialog';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../../../core/browser/application';
 import {
-    FormConfiguration, FormFieldConfiguration, FormGroupConfiguration
+    FormConfiguration, FormFieldConfiguration, FormGroupConfiguration, FormPageConfiguration
 } from '../../../../core/model/components/form/configuration';
 
 class Component {
@@ -134,7 +134,7 @@ class Component {
 
     private async prepareImportConfigForm(): Promise<void> {
         const formGroup = new FormGroupConfiguration(
-            'import-form-group-configuration', 'Import configurations', [], null, [
+            'import-form-group-configuration', 'Translatable#Import configurations', [], null, [
             new FormFieldConfiguration(
                 'import-form-field-source',
                 'Translatable#Source', 'source', 'attachment-input', true,
@@ -186,9 +186,11 @@ class Component {
 
         const form = new FormConfiguration(
             'import-file-config', 'Import configuration',
-            [], KIXObjectType.ANY, true, FormContext.NEW, null, null, null, null,
+            [], KIXObjectType.ANY, true, FormContext.NEW, null,
             [
-                formGroup
+                new FormPageConfiguration(
+                    'import-form-page-configuration', 'Import configurations', [], null, null, [formGroup]
+                )
             ]
         );
 

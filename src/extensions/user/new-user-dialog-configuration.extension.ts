@@ -16,7 +16,7 @@ import {
     QueueProperty, NotificationProperty, ContextMode, WidgetConfiguration, ConfiguredDialogWidget
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { NewUserDialogContext } from '../../core/browser/user';
@@ -129,7 +129,7 @@ export class Extension implements IConfigurationExtension {
                 'user-new-form-field-comment',
                 'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_Users_UserCreate_Comment',
-                null, null, null, null, null, null, null, 250
+                null, null, null, null, null, null, null, null, 250
             )
         );
 
@@ -261,13 +261,20 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'Translatable#New Agent',
+            new FormPageConfiguration(
+                'user-new-form-group-page', 'Translatable#New Agent',
                 [
                     'user-new-form-group-informations',
                     'user-new-form-group-roles',
                     'user-new-form-group-preferences'
-                ], KIXObjectType.USER
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New Agent',
+                ['user-new-form-group-page'], KIXObjectType.USER
             )
         );
         configurationService.registerForm([FormContext.NEW], KIXObjectType.USER, formId);

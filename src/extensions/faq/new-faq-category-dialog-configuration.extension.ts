@@ -17,7 +17,7 @@ import { FAQCategoryProperty } from '../../core/model/kix/faq';
 import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { NewFAQCategoryDialogContext } from '../../core/browser/faq/admin';
 import { SearchOperator } from '../../core/browser';
@@ -97,7 +97,7 @@ export class Extension implements IConfigurationExtension {
                 'faq-category-new-form-field-comment',
                 'Translatable#Comment', FAQCategoryProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_FAQCategoryCreate_Comment',
-                null, null, null, null, null, null, null, 250
+                null, null, null, null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -126,11 +126,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'faq-category-new-form-page', 'Translatable#New FAQ Category',
+                ['faq-category-new-form-group-information']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#New FAQ Category',
-                [
-                    'faq-category-new-form-group-information'
-                ],
+                ['faq-category-new-form-page'],
                 KIXObjectType.FAQ_CATEGORY, true
             )
         );

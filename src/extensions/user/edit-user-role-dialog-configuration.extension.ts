@@ -15,7 +15,7 @@ import {
     WidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { EditUserRoleDialogContext } from '../../core/browser/user';
@@ -65,7 +65,7 @@ export class Extension implements IConfigurationExtension {
             'user-role-edit-form-field-comment',
             'Translatable#Comment', RoleProperty.COMMENT, 'text-area-input', false,
             'Translatable#Helptext_Admin_Users_RoleCreate_Comment',
-            null, null, null, null, null, null, null, 250
+            null, null, null, null, null, null, null, null, 250
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(commentField);
 
@@ -133,13 +133,20 @@ export class Extension implements IConfigurationExtension {
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(agentsGroup);
 
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'user-role-edit-form-group-page', 'Translatable#Edit Role',
+                [
+                    'user-role-edit-form-group-role-information',
+                    'user-role-edit-form-group-permissions',
+                    'user-role-edit-form-group-agents'
+                ]
+            )
+        );
+
         const form = new FormConfiguration(
-            formId, 'Translatable#New Role',
-            [
-                'user-role-edit-form-group-role-information',
-                'user-role-edit-form-group-permissions',
-                'user-role-edit-form-group-agents'
-            ],
+            formId, 'Translatable#Edit Role',
+            ['user-role-edit-form-group-page'],
             KIXObjectType.ROLE, true, FormContext.EDIT
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(form);

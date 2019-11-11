@@ -30,6 +30,7 @@ export class Macro extends KIXObject {
     public constructor(macro?: Macro) {
         super(macro);
         if (macro) {
+            this.ObjectId = macro.ID;
             this.ID = macro.ID;
             this.Name = macro.Name;
             this.Type = macro.Type;

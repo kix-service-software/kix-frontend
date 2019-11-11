@@ -15,7 +15,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationType } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
@@ -68,10 +68,17 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'i18n-translation-edit-form-page', 'Translatable#Edit Translation',
+                ['i18n-translation-edit-form-group-pattern']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#Edit Translation',
                 [
-                    'i18n-translation-edit-form-group-pattern'
+                    'i18n-translation-edit-form-page'
                 ],
                 KIXObjectType.TRANSLATION_PATTERN, true, FormContext.EDIT
             )

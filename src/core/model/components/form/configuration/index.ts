@@ -9,4 +9,5 @@
 
 export { FormFieldConfiguration } from './FormFieldConfiguration';
 export { FormGroupConfiguration } from './FormGroupConfiguration';
+export { FormPageConfiguration } from './FormPageConfiguration';
 export { FormConfiguration } from './FormConfiguration';

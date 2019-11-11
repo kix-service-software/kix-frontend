@@ -15,7 +15,7 @@ import {
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { FAQArticleProperty, FAQCategoryProperty } from '../../core/model/kix/faq';
 import { EditFAQArticleDialogContext } from '../../core/browser/faq';
@@ -174,11 +174,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'faq-article-edit-form-page', 'Translatable#Edit FAQ',
+                ['faq-article-edit-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#Edit FAQ',
-                [
-                    'faq-article-edit-form-group-data'
-                ],
+                ['faq-article-edit-form-page'],
                 KIXObjectType.FAQ_ARTICLE, true, FormContext.EDIT
             )
         );

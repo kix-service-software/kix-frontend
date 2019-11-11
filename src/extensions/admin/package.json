@@ -21,15 +21,6 @@
             },
             "edit-sysconfig-dialog-configuration": {
                 "module": "edit-sysconfig-dialog-configuration.extension"
-            },
-            "new-notification-dialog-configuration": {
-                "module": "new-notification-dialog-configuration.extension"
-            },
-            "notification-details-configuration": {
-                "module": "notification-details-configuration.extension"
-            },
-            "edit-notification-dialog-configuration": {
-                "module": "edit-notification-dialog-configuration.extension"
             }
         },
         "kix:modules": {

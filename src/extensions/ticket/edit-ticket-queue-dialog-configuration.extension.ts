@@ -16,7 +16,7 @@ import {
     KIXObjectProperty, WidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
@@ -132,7 +132,7 @@ export class Extension implements IConfigurationExtension {
                 'queue-edit-form-field-comment',
                 'Translatable#Comment', QueueProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_Tickets_QueueCreate_Comment',
-                null, null, null, null, null, null, null, 250
+                null, null, null, null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -187,12 +187,19 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'Translatable#New Queue',
+            new FormPageConfiguration(
+                'queue-edit-form-page', 'Translatable#Edit Queue',
                 [
                     'queue-edit-form-group-informations',
                     'queue-edit-form-group-signatrue'
-                ],
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#Edit Queue',
+                ['queue-edit-form-page'],
                 KIXObjectType.QUEUE, true, FormContext.EDIT
             )
         );

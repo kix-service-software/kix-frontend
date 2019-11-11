@@ -15,7 +15,7 @@ export class FormGroupConfiguration implements IConfiguration {
     public constructor(
         public id: string,
         public name: string,
-        public fieldConfigurations: string[] = [],
+        public fieldConfigurationIds: string[] = [],
         public separatorString: string = null,
         public formFields: FormFieldConfiguration[] = [],
         public type: ConfigurationType = ConfigurationType.FormGroup

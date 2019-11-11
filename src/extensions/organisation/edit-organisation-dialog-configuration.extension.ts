@@ -18,7 +18,7 @@ import {
 import { ConfigurationType } from "../../core/model/configuration";
 import { ModuleConfigurationService } from "../../services";
 import {
-    FormFieldConfiguration, FormGroupConfiguration, FormConfiguration
+    FormFieldConfiguration, FormGroupConfiguration, FormConfiguration, FormPageConfiguration
 } from "../../core/model/components/form/configuration";
 
 export class Extension implements IConfigurationExtension {
@@ -130,7 +130,7 @@ export class Extension implements IConfigurationExtension {
                 'organisation-edit-form-field-comment',
                 'Translatable#Comment', OrganisationProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Customers_OrganisationCreate_Comment', null, null, null, null,
-                null, null, null, 250
+                null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -156,13 +156,20 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'New Organisation',
+            new FormPageConfiguration(
+                'organisation-edit-form-page', 'Translatable#Edit Organisation',
                 [
                     'organisation-edit-form-group-information',
                     'organisation-edit-form-group-address',
                     'organisation-edit-form-group-other'
-                ],
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#Edit Organisation',
+                ['organisation-edit-form-page'],
                 KIXObjectType.ORGANISATION, true, FormContext.EDIT
             )
         );

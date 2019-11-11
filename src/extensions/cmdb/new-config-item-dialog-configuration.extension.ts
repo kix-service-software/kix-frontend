@@ -17,7 +17,7 @@ import { NewConfigItemDialogContext } from "../../core/browser/cmdb";
 import { ConfigurationType } from "../../core/model/configuration";
 import { ModuleConfigurationService } from "../../services";
 import {
-    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration
+    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from "../../core/model/components/form/configuration";
 import { SearchOperator } from "../../core/browser";
 import { ConfigurationService } from "../../core/services";
@@ -129,13 +129,18 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'cmdb-config-item-new-form-page', 'Translatable#New Config Item',
+                ['cmdb-config-item-new-form-group-main']
+            )
+        );
+
         const formId = 'cmdb-config-item-new-form';
         await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
-                formId, 'Translatable#Edit Config Item',
-                [
-                    'cmdb-config-item-new-form-group-main'
-                ],
+                formId, 'Translatable#New Config Item',
+                ['cmdb-config-item-new-form-page'],
                 KIXObjectType.CONFIG_ITEM, true
             )
         );

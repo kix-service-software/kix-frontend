@@ -16,7 +16,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { NewMailFilterDialogContext } from '../../core/browser/mail-filter';
 import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
@@ -90,7 +90,7 @@ export class Extension implements IConfigurationExtension {
                 'mail-filter-new-form-group-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_MailFilterCreate_Comment', null, null, null,
-                null, null, null, null, 250
+                null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -156,13 +156,20 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'Translatable#New Email Filter',
+            new FormPageConfiguration(
+                'mail-filter-new-form-page', 'Translatable#New Email Filter',
                 [
                     'mail-filter-new-form-group-information',
                     'mail-filter-new-form-group-conditions',
                     'mail-filter-new-form-group-headers'
-                ],
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New Email Filter',
+                ['mail-filter-new-form-page'],
                 KIXObjectType.MAIL_FILTER
             )
         );

@@ -15,7 +15,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { EditTextModuleDialogContext } from '../../core/browser/text-modules';
 import { ConfigurationType } from '../../core/model/configuration';
@@ -85,7 +85,7 @@ export class Extension implements IConfigurationExtension {
                 'text-modules-edit-form-field-comment',
                 'Translatable#Comment', TextModuleProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_TextModuleCreate_Comment', null, null, null,
-                null, null, null, null, 250
+                null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -113,11 +113,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'text-modules-new-form-page', 'Translatable#Edit Text Module',
+                ['text-modules-new-form-group-module']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#Edit Text Module',
-                [
-                    'text-modules-new-form-group-module'
-                ],
+                ['text-modules-new-form-page'],
                 KIXObjectType.TEXT_MODULE, true, FormContext.EDIT
             )
         );

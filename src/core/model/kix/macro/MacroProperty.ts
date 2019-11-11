@@ -7,15 +7,14 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../core/browser';
+export enum MacroProperty {
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+    ID = 'ID',
 
-    public onCreate(): void {
-        this.state = new ComponentState();
-    }
+    NAME = 'Name',
+
+    TYPE = 'Type',
+
+    ACTIONS = 'Actions'
 
 }
-
-module.exports = Component;

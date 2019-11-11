@@ -37,6 +37,7 @@ export class Job extends KIXObject {
     public constructor(job?: Job) {
         super(job);
         if (job) {
+            this.ObjectId = job.ID;
             this.ID = job.ID;
             this.Name = job.Name;
             this.Type = job.Type;

@@ -28,6 +28,7 @@ export class ExecPlan extends KIXObject {
     public constructor(execPlan?: ExecPlan) {
         super(execPlan);
         if (execPlan) {
+            this.ObjectId = execPlan.ID;
             this.ID = execPlan.ID;
             this.Name = execPlan.Name;
             this.Type = execPlan.Type;

@@ -10,48 +10,76 @@
 import { ModuleConfigurationService } from "./ModuleConfigurationService";
 import { ConfigurationType } from "../../core/model/configuration";
 import {
-    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration
+    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from "../../core/model/components/form/configuration";
 import { LoggingService } from "../../core/services";
 
 export class FormConfigurationResolver {
 
     public static async resolve(configuration: FormConfiguration): Promise<FormConfiguration> {
-        for (const groupId of configuration.groupConfigurations) {
-            const groupConfig = await ModuleConfigurationService.getInstance()
-                .loadConfiguration<FormGroupConfiguration>(ConfigurationType.FormGroup, groupId);
+        for (const pageId of configuration.pageConfigurationIds) {
+            const pageConfig = await ModuleConfigurationService.getInstance()
+                .loadConfiguration<FormPageConfiguration>(ConfigurationType.FormPage, pageId);
 
-            for (const fieldId of groupConfig.fieldConfigurations) {
-                const fieldConfig = await ModuleConfigurationService.getInstance()
-                    .loadConfiguration<FormFieldConfiguration>(ConfigurationType.FormField, fieldId);
-                if (fieldConfig) {
-                    await this.resolveFieldConfig(fieldConfig);
-                    groupConfig.formFields.push(fieldConfig);
-                } else {
-                    groupConfig.formFields.push(this.createErrorFormField(fieldId));
-                    LoggingService.getInstance().warning(
-                        `Could not resolve form field: ${fieldId}, group: ${groupId}, form: ${configuration.id}`
-                    );
+            if (pageConfig) {
+                for (const groupId of pageConfig.groupConfigurationIds) {
+                    const groupConfig = await ModuleConfigurationService.getInstance()
+                        .loadConfiguration<FormGroupConfiguration>(ConfigurationType.FormGroup, groupId);
+
+                    if (groupConfig) {
+                        for (const fieldId of groupConfig.fieldConfigurationIds) {
+                            const fieldConfig = await ModuleConfigurationService.getInstance()
+                                .loadConfiguration<FormFieldConfiguration>(ConfigurationType.FormField, fieldId);
+                            if (fieldConfig) {
+                                await this.resolveFieldChildrenConfig(fieldConfig, [
+                                    `group: ${groupId}`, `page: ${pageId}`, `form: ${configuration.id}`
+                                ]);
+                                groupConfig.formFields.push(fieldConfig);
+                            } else {
+                                groupConfig.formFields.push(this.createErrorFormField(fieldId));
+                                LoggingService.getInstance().warning(
+                                    // tslint:disable-next-line: max-line-length
+                                    `Could not resolve form field: ${fieldId} of group: ${groupId} of page: ${pageId} of form: ${configuration.id}`
+                                );
+                            }
+                        }
+
+                        pageConfig.groups.push(groupConfig);
+                    } else {
+                        LoggingService.getInstance().warning(
+                            `Could not resolve form group: ${groupId} of page: ${pageId} of form: ${configuration.id}`
+                        );
+                    }
                 }
+            } else {
+                LoggingService.getInstance().warning(
+                    `Could not resolve form page: ${pageId} of form: ${configuration.id}`
+                );
             }
 
-            configuration.groups.push(groupConfig);
+            configuration.pages.push(pageConfig);
         }
 
         return configuration;
     }
 
-    private static async resolveFieldConfig(config: FormFieldConfiguration): Promise<void> {
-        if (config && config.fieldConfigurations) {
-            for (const configId of config.fieldConfigurations) {
+    private static async resolveFieldChildrenConfig(
+        config: FormFieldConfiguration, ancenstorIds: string[]
+    ): Promise<void> {
+        if (config && config.fieldConfigurationIds) {
+            ancenstorIds.unshift(`field: ${config.id}`);
+            for (const configId of config.fieldConfigurationIds) {
                 const fieldConfig = await ModuleConfigurationService.getInstance()
                     .loadConfiguration<FormFieldConfiguration>(ConfigurationType.FormField, configId);
                 if (fieldConfig) {
+                    if (fieldConfig.fieldConfigurationIds) {
+                        await this.resolveFieldChildrenConfig(fieldConfig, [...ancenstorIds]);
+                    }
                     config.children.push(fieldConfig);
                 } else {
                     config.children.push(this.createErrorFormField(configId));
                     LoggingService.getInstance().warning(
-                        `Could not resolve form field: ${configId}`
+                        `Could not resolve form field: ${configId} of ${ancenstorIds.join(' of ')}`
                     );
                 }
             }

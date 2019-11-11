@@ -19,7 +19,7 @@ import { DialogService } from '../../../../core/browser/components/dialog';
 import { EventService } from '../../../../core/browser/event';
 import { AgentService } from '../../../../core/browser/application/AgentService';
 import {
-    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration
+    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../../../core/model/components/form/configuration';
 
 
@@ -70,8 +70,13 @@ class Component {
         const formName = await TranslationService.translate('Translatable#Personal Settings');
         return new FormConfiguration(
             'personal-settings', formName,
-            [], KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT,
-            null, null, true, null, formGroups
+            [], KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT, null,
+            [
+                new FormPageConfiguration(
+                    'personal-settings-form-page', 'Translatable#Personal Settings',
+                    [], null, true, formGroups
+                )
+            ]
         );
     }
 

@@ -15,7 +15,7 @@ import {
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { FAQArticleProperty, FAQCategoryProperty } from '../../core/model/kix/faq';
 import { NewFAQArticleDialogContext } from '../../core/browser/faq';
@@ -173,11 +173,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'faq-article-new-form-page', 'Translatable#New FAQ',
+                ['faq-article-new-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#New FAQ',
-                [
-                    'faq-article-new-form-group-data'
-                ],
+                ['faq-article-new-form-page'],
                 KIXObjectType.FAQ_ARTICLE
             )
         );

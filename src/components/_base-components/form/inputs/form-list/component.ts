@@ -142,7 +142,7 @@ class Component {
         }
 
         if (!this.toggleTimeout) {
-            this.toggleTimeout = setTimeout(() => {
+            this.toggleTimeout = setTimeout(async () => {
                 if (!this.state.disabled) {
                     if (this.state.expanded && close) {
                         this.state.expanded = false;

@@ -15,7 +15,7 @@ import {
     FormFieldOption, ContextMode, WidgetConfiguration, ConfiguredDialogWidget
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { ConfigurationType } from '../../core/model/configuration';
@@ -71,7 +71,7 @@ export class Extension implements IConfigurationExtension {
                 'ticket-priority-edit-form-field-comment',
                 'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Comment',
-                null, null, null, null, null, null, null, 250
+                null, null, null, null, null, null, null, null, 250
             )
         );
 
@@ -98,8 +98,15 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'ticket-priority-edit-form-page', 'Translatable#Edit Priority',
+                ['ticket-priority-edit-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
-                formId, 'Translatable#Create Priority', ['ticket-priority-edit-form-group-data'],
+                formId, 'Translatable#Edit Priority', ['ticket-priority-edit-form-page'],
                 KIXObjectType.TICKET_PRIORITY, true, FormContext.EDIT
             )
         );

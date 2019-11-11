@@ -9,13 +9,18 @@
 
 import { IUIModule } from "../../application/IUIModule";
 import { ServiceRegistry } from "../..";
-import { CRUD, KIXObjectType } from "../../../model";
+import { CRUD, KIXObjectType, ContextDescriptor, ContextMode, ContextType } from "../../../model";
 import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { LabelService } from "../../LabelService";
-import { JobService, JobLabelProvider, JobTableFactory, JobBrowserFactory } from "../../job";
+import {
+    JobService, JobLabelProvider, JobTableFactory, JobBrowserFactory, JobCreateAction, NewJobDialogContext,
+    JobFormService
+} from "../../job";
 import { TableFactoryService } from "../../table";
 import { FactoryService } from "../../kix";
+import { ActionFactory } from "../../ActionFactory";
+import { ContextService } from "../../context";
 
 export class UIModule implements IUIModule {
 
@@ -26,10 +31,22 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
+
         ServiceRegistry.registerServiceInstance(JobService.getInstance());
+        ServiceRegistry.registerServiceInstance(JobFormService.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.JOB, JobBrowserFactory.getInstance());
         LabelService.getInstance().registerLabelProvider(new JobLabelProvider());
         TableFactoryService.getInstance().registerFactory(new JobTableFactory());
+
+        if (await this.checkPermission('system/automation/jobs', CRUD.CREATE)) {
+            ActionFactory.getInstance().registerAction('job-create-action', JobCreateAction);
+            const newJobDialogContext = new ContextDescriptor(
+                NewJobDialogContext.CONTEXT_ID, [KIXObjectType.JOB],
+                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+                false, 'new-job-dialog', ['jobs'], NewJobDialogContext
+            );
+            await ContextService.getInstance().registerContext(newJobDialogContext);
+        }
     }
 
     private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {

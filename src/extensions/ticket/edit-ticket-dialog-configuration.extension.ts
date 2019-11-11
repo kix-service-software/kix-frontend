@@ -18,7 +18,7 @@ import {
     ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
@@ -298,11 +298,16 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'ticket-edit-form-page', 'Translatable#Edit Ticket',
+                ['ticket-edit-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#Edit Ticket',
-                [
-                    'ticket-edit-form-group-data'
-                ],
+                ['ticket-edit-form-page'],
                 KIXObjectType.TICKET, true, FormContext.EDIT
             )
         );

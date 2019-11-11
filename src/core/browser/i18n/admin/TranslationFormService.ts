@@ -35,7 +35,7 @@ export class TranslationFormService extends KIXObjectFormService<TranslationPatt
     }
 
     protected async prePrepareForm(form: FormConfiguration): Promise<void> {
-        if (!!form.groups.length) {
+        if (!!form.pages.length) {
             const languages = await TranslationService.getInstance().getLanguages();
             [...languages].sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
                 const languageField = new FormFieldConfiguration(
@@ -44,7 +44,7 @@ export class TranslationFormService extends KIXObjectFormService<TranslationPatt
                     'Translatable#Helptext_i18n_TranslationPatternCreateEdit_Translation'
                 );
                 languageField.placeholder = 'Translatable#Translation';
-                form.groups[0].formFields.push(languageField);
+                form.pages[0].groups[0].formFields.push(languageField);
             });
         }
     }

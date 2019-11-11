@@ -84,10 +84,11 @@ export class TicketService extends KIXObjectService<Ticket> {
         return await TicketParameterUtil.getPredefinedParameter(forUpdate);
     }
 
-    protected async prepareDependendValues(
+    protected async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
-    ): Promise<void> {
+    ): Promise<Array<[string, any]>> {
         await this.addQueueSignature(parameter, createOptions);
+        return parameter;
     }
 
     private async addQueueSignature(

@@ -40,14 +40,17 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, ticket: Ticket
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
-            groupLoop: for (const g of form.groups) {
-                for (const f of g.formFields) {
-                    if (f.property === TicketProperty.STATE_ID) {
-                        const stateId = formFieldValues.get(f.instanceId).value;
-                        if (stateId && this.showPendingTimeField(stateId)) {
-                            await this.setPendingTimeField(f, formFieldValues, ticket);
+            PAGES:
+            for (const p of form.pages) {
+                for (const g of p.groups) {
+                    for (const f of g.formFields) {
+                        if (f.property === TicketProperty.STATE_ID) {
+                            const stateId = formFieldValues.get(f.instanceId).value;
+                            if (stateId && this.showPendingTimeField(stateId)) {
+                                await this.setPendingTimeField(f, formFieldValues, ticket);
+                            }
+                            break PAGES;
                         }
-                        break groupLoop;
                     }
                 }
             }

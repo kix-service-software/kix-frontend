@@ -7,4 +7,5 @@
  * --
  */
 
+export { Job } from './Job';
 export { JobProperty } from './JobProperty';
