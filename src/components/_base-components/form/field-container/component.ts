@@ -12,6 +12,7 @@ import { FormService, IdService, ServiceRegistry, ServiceType } from '../../../.
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { KIXObjectFormService } from '../../../../core/browser/kix/KIXObjectFormService';
 import { FormFieldConfiguration } from '../../../../core/model/components/form/configuration';
+import { FormInstance } from '../../../../core/model';
 
 class FieldContainerComponent {
 
@@ -106,6 +107,49 @@ class FieldContainerComponent {
         if (field.children) {
             field.children.forEach((f) => this.setFieldsEmpty(f, empty));
         }
+    }
+
+    public async dragStart(fieldInstanceId: string) {
+        if (fieldInstanceId) {
+            this.state.dragStartIndex = this.state.fields.findIndex((f) => f.instanceId === fieldInstanceId);
+            this.state.dragStartInstanceId = fieldInstanceId;
+        }
+    }
+
+    public async dragEnd() {
+        this.state.dragStartIndex = null;
+        this.state.dragStartInstanceId = null;
+    }
+
+    public allowDrop(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.dataTransfer.dropEffect = 'move';
+        return false;
+    }
+
+    public handleDragEnter(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.target.classList.add('drag-over');
+    }
+
+    public handleDragLeave(event) {
+        event.preventDefault();
+        event.stopPropagation();
+        event.target.classList.remove('drag-over');
+    }
+
+    public async handleDrop(index: number, event) {
+        event.stopPropagation();
+        event.preventDefault();
+        const formInstance = await FormService.getInstance().getFormInstance<FormInstance>(this.formId);
+        if (formInstance && this.state.dragStartInstanceId) {
+            formInstance.changeFieldOrder(this.state.dragStartInstanceId, index);
+        }
+        this.state.dragStartIndex = null;
+        this.state.dragStartInstanceId = null;
+        return false;
     }
 
 }

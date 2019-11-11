@@ -9,6 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { FormService, IdService } from '../../../../../core/browser';
+import { FormInstance } from '../../../../../core/model';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 import { KIXModulesService } from '../../../../../core/browser/modules';
 import { FormFieldConfiguration } from '../../../../../core/model/components/form/configuration';
@@ -30,16 +31,21 @@ class Component {
         if (this.state.level > 14) {
             this.state.level = 14;
         }
+        this.state.canDraggable = typeof input.draggable !== 'undefined'
+            ? input.draggable : this.state.canDraggable;
 
         this.update();
     }
 
     private async update(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject([this.state.field.label]);
+        this.state.translations = await TranslationService.createTranslationObject(
+            [this.state.field.label, 'Translatable#Sort']
+        );
         const hint = await TranslationService.translate(this.state.field.hint);
         this.state.hint = hint
             ? (hint.startsWith('Helptext_') ? null : hint)
             : null;
+
         this.state.show = true;
     }
 
@@ -101,6 +107,32 @@ class Component {
         }
     }
 
+    public setDraggable(draggable: boolean = false, event?: any): void {
+
+        // do nothing if event triggert from child node
+        if (event && !event.srcElement.classList.contains('drag-button')) {
+            return;
+        }
+
+        this.state.draggable = Boolean(draggable).toString();
+    }
+
+    public async handleDragStart(event) {
+        const root = (this as any).getEl();
+        if (root) {
+            root.classList.add('dragging');
+        }
+        event.dataTransfer.setData('Text', this.state.field.instanceId);
+        (this as any).emit('dragStart', this.state.field.instanceId);
+    }
+
+    public async handleDragEnd(event) {
+        const root = (this as any).getEl();
+        if (root) {
+            root.classList.remove('dragging');
+        }
+        (this as any).emit('dragEnd', this.state.field.instanceId);
+    }
 }
 
 module.exports = Component;

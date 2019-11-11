@@ -18,7 +18,9 @@ export class ComponentState extends AbstractComponentState {
         public minimized: boolean = false,
         public level: number = 0,
         public hint: string = '',
-        public show: boolean = false
+        public show: boolean = false,
+        public canDraggable: boolean = false,
+        public draggable: string = 'false'
     ) {
         super();
     }

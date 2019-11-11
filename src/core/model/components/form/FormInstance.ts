@@ -395,4 +395,42 @@ export class FormInstance implements IFormInstance {
         return this.form.formContext;
     }
 
+    public async changeFieldOrder(changeFieldInstanceId: string, targetIndex: number): Promise<void> {
+        if (changeFieldInstanceId && !isNaN(targetIndex)) {
+            const startField = await this.getFormField(changeFieldInstanceId);
+            const fields = await this.getFields(startField);
+
+            if (Array.isArray(fields)) {
+                const changeIndex = fields.findIndex((c) => c.instanceId === changeFieldInstanceId);
+                if (targetIndex !== -1 && targetIndex !== changeIndex) {
+                    fields.splice(changeIndex, 1);
+                    const newIndex = targetIndex > changeIndex ? targetIndex - 1 : targetIndex;
+                    fields.splice(newIndex, 0, startField);
+
+                    this.sortValuesByFieldList(fields);
+
+                    const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+                        this.form.objectType, ServiceType.FORM
+                    );
+                    if (service) {
+                        await service.updateFields(fields);
+                    }
+
+                    this.listeners.forEach((l) => l.updateForm());
+                }
+            }
+        }
+    }
+
+    private sortValuesByFieldList(fields: FormFieldConfiguration[] = []): void {
+        fields.forEach((f) => {
+            const value = this.formFieldValues.get(f.instanceId);
+            this.formFieldValues.delete(f.instanceId);
+            this.formFieldValues.set(f.instanceId, value);
+            if (f.children) {
+                this.sortValuesByFieldList(f.children);
+            }
+        });
+    }
+
 }
