@@ -77,6 +77,7 @@ export class DynamicFieldValue {
     public async init(): Promise<void> {
         await this.setPropertyTree();
         if (this.value.property) {
+            const operator = this.value.operator;
             await this.setProperty(this.value.property);
 
             const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
@@ -88,11 +89,11 @@ export class DynamicFieldValue {
                 this.propertyTreeHandler.setSelection([new TreeNode(property[0], property[1])], true, true);
             }
 
-            if (this.value.operator) {
-                const operationNode = TreeUtil.findNode(this.operationTreeHandler.getTree(), this.value.operator);
+            if (operator) {
+                this.setOperator(operator);
+                const operationNode = TreeUtil.findNode(this.operationTreeHandler.getTree(), operator);
                 if (operationNode) {
                     this.operationTreeHandler.setSelection([operationNode], true);
-                    await this.createValueInput();
                 }
             }
 
@@ -281,8 +282,7 @@ export class DynamicFieldValue {
                         this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
                     }
                 } else {
-
-                    const date = new Date(this.value.value[0]);
+                    const date = new Date(this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                     }
@@ -300,8 +300,7 @@ export class DynamicFieldValue {
                         this.betweenEndTime = DateTimeUtil.getKIXTimeString(endDate);
                     }
                 } else {
-
-                    const date = new Date(this.value.value[0]);
+                    const date = new Date(this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                         this.time = DateTimeUtil.getKIXTimeString(date);
