@@ -17,6 +17,11 @@ msgstr ""
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
 
+#, fuzzy
+#| msgid "Action"
+msgid "{0}. Action"
+msgstr "Aktion"
+
 msgid "0 data sets found."
 msgstr "Nichts gefunden."
 
@@ -54,6 +59,11 @@ msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
 msgid "Action"
+msgstr "Aktion"
+
+#, fuzzy
+#| msgid "Action"
+msgid "Actions"
 msgstr "Aktion"
 
 msgid "Activate dependency to organisation"
@@ -532,6 +542,11 @@ msgstr "FAQ Artikel wird angelegt"
 msgid "Create Filter"
 msgstr "Filter wird angelegt"
 
+#, fuzzy
+#| msgid "Created by"
+msgid "Create Job"
+msgstr "Erstellt von"
+
 msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
 
@@ -667,6 +682,11 @@ msgstr "Adresse bearbeiten"
 msgid "Edit Agent"
 msgstr "Agent bearbeiten"
 
+#, fuzzy
+#| msgid "Edit Class"
+msgid "Edit CI Class"
+msgstr "Klasse bearbeiten"
+
 msgid "Edit Class"
 msgstr "Klasse bearbeiten"
 
@@ -798,6 +818,11 @@ msgstr "Fehler"
 msgid "Error!"
 msgstr "Fehler!"
 
+#, fuzzy
+#| msgid "Error on form validation:"
+msgid "Error on form page validation:"
+msgstr "Fehler beim Validieren des Formulars:"
+
 msgid "Error on form validation:"
 msgstr "Fehler beim Validieren des Formulars:"
 
@@ -819,6 +844,11 @@ msgstr "Event"
 msgid "Event Based"
 msgstr "Eventgesteuert"
 
+#, fuzzy
+#| msgid "Event Based"
+msgid "Event Based Execution"
+msgstr "Eventgesteuert"
+
 msgid "Events"
 msgstr "Events"
 
@@ -833,6 +863,11 @@ msgstr "Jetzt ausführen"
 
 msgid "Execute now?"
 msgstr "Jetzt ausführen?"
+
+#, fuzzy
+#| msgid "Execute now"
+msgid "Execution Plan"
+msgstr "Jetzt ausführen"
 
 msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
@@ -946,6 +981,9 @@ msgstr "Für Tickets"
 msgid "Forward"
 msgstr "Weiterleiten"
 
+msgid "Friday"
+msgstr ""
+
 msgid "From"
 msgstr "Von"
 
@@ -1029,6 +1067,64 @@ msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
 msgstr ""
 "Die General Catalog Klasse kann nur verwendet werden, wenn sie „gültig“ "
 "gesetzt ist."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+msgid "Helptext_Admin_JobCCreateEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgid "Helptext_Admin_JobCCreateEdit_Time"
+msgstr "Der Formulartitel wird im Kopf des Webformulars angezeigt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+msgid "Helptext_Admin_JobCreateEdit_Actions"
+msgstr ""
+"Komma oder Semikolon sind als Texttrenner zulässig. Verwendung von RegEx ist "
+"möglich, diese müssen in Slashs (\"/\") gesetzt werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
+msgstr ""
+"Komma oder Semikolon sind als Texttrenner zulässig. Verwendung von RegEx ist "
+"möglich, diese müssen in Slashs (\"/\") gesetzt werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Modal"
+msgid "Helptext_Admin_JobCreateEdit_Days"
+msgstr ""
+"Wird diese Option aktiviert, ist die Seite im Hintergrund des Webformulars "
+"inaktiv, so lange der Dialog geöffnet ist."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationEdit_Event"
+msgid "Helptext_Admin_JobCreateEdit_Events"
+msgstr ""
+"Wählen Sie aus, welche Ereignisse an Tickets oder Artikeln diese "
+"Benachrichtigung auslösen. Mehrfachauswahl möglich."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgid "Helptext_Admin_JobCreateEdit_Filter"
+msgstr "Der Formulartitel wird im Kopf des Webformulars angezeigt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_StateID"
+msgid "Helptext_Admin_JobCreateEdit_Name"
+msgstr ""
+"Legen Sie fest, welchen Status Tickets erhalten, die über das Webformular "
+"erstellt werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Validity"
+msgid "Helptext_Admin_JobCreateEdit_Validity"
+msgstr ""
+"Um das Webformular verwenden zu können, muss es \"gültig\" gesetzt sein."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
@@ -1628,8 +1724,8 @@ msgstr ""
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgent"
 msgstr ""
 "Damit über das Webformular Tickets im KIX erstellt werden können, muss am "
-"Formular ein Agent zugeordnet sein, der mindestens die Rolle \"Ticket "
-"Creator\" hat."
+"Formular ein Agent zugeordnet sein, der mindestens die Rolle \"Ticket Creator"
+"\" hat."
 
 msgid "Helptext_Admin_WebformCreateEdit_AssignedAgentPassword"
 msgstr ""
@@ -2241,6 +2337,11 @@ msgstr "{0} {1} importieren. Ausführen?"
 msgid "Important functional elements briefly explained"
 msgstr "Wichtige Funktionselemente kurz erklärt"
 
+#, fuzzy
+#| msgid "Import Organisations"
+msgid "Import configurations"
+msgstr "Kunden importieren"
+
 msgid "Import Contacts"
 msgstr "Kontakte importieren"
 
@@ -2289,8 +2390,18 @@ msgstr "Ungültiges Datum bei 'Warten bis'"
 msgid "is to large (max {0})."
 msgstr ""
 
+#, fuzzy
+#| msgid "Role Information"
+msgid "Job Information"
+msgstr "Rollen-Informationen"
+
 msgid "Jobs"
 msgstr ""
+
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Job successfully created."
+msgstr "Rolle wurde erfolgreich angelegt."
 
 msgid "Keywords"
 msgstr "Schlagworte"
@@ -2499,6 +2610,9 @@ msgstr "Änderungsdatum"
 msgid "Modified"
 msgstr "Geändert"
 
+msgid "Monday"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
 
@@ -2571,6 +2685,11 @@ msgstr "Neue FAQ Kategorie"
 msgid "New Filter"
 msgstr "Neuer Filter"
 
+#, fuzzy
+#| msgid "New Role"
+msgid "New Job"
+msgstr "Neue Rolle"
+
 msgid "New Notification"
 msgstr "Neue Benachrichtigung"
 
@@ -2607,6 +2726,11 @@ msgstr "Neu"
 msgid "New Ticket"
 msgstr "Neues Ticket"
 
+#, fuzzy
+#| msgid "New Ticket"
+msgid "New Ticket Job"
+msgstr "Neues Ticket"
+
 msgid "New Tickets"
 msgstr "Neue Tickets"
 
@@ -2614,6 +2738,11 @@ msgid "New Tickets (recent 7 days)"
 msgstr "Neue Tickets der letzten 7 Tage"
 
 msgid "New Translation"
+msgstr "Neu"
+
+#, fuzzy
+#| msgid "New Translation"
+msgid "New Translations"
 msgstr "Neu"
 
 msgid "New Type"
@@ -2630,6 +2759,9 @@ msgstr "Neues Formular"
 
 msgid "next"
 msgstr "weiter"
+
+msgid "Next"
+msgstr ""
 
 msgid "Next Image"
 msgstr "Nächstes Bild"
@@ -2881,6 +3013,11 @@ msgstr "Treffervorschau ({0})"
 msgid "previous"
 msgstr "zurück"
 
+#, fuzzy
+#| msgid "previous"
+msgid "Previous"
+msgstr "zurück"
+
 msgid "Previous Image"
 msgstr "Vorheriges Bild"
 
@@ -3093,6 +3230,9 @@ msgstr "Zeilennummer"
 msgid "Rows with too less values"
 msgstr "Zeilen mit zu wenigen Werten"
 
+msgid "Saturday"
+msgstr ""
+
 msgid "Save"
 msgstr "Speichern"
 
@@ -3207,6 +3347,9 @@ msgstr "' (Einfaches Hochkomma)"
 msgid "Size"
 msgstr "Größe"
 
+msgid "Skip"
+msgstr ""
+
 msgid "SLA"
 msgstr "SLA"
 
@@ -3278,6 +3421,9 @@ msgstr "Erfolgreich!"
 
 msgid "Successfully rated."
 msgstr "Bewertung erfolgreich."
+
+msgid "Sunday"
+msgstr ""
 
 msgid "Switch"
 msgstr "Tauschen"
@@ -3373,6 +3519,9 @@ msgstr ""
 "Sie befinden sich im Administrationsbereich. Wählen Sie ein Modul aus dem "
 "Explorer."
 
+msgid "Thursday"
+msgstr ""
+
 msgid "Ticket"
 msgstr "Ticket"
 
@@ -3448,7 +3597,15 @@ msgstr "Ticket: Typen"
 msgid "Ticket unlocked."
 msgstr "Ticket entsperrt."
 
+msgid "Time"
+msgstr ""
+
 msgid "Time Based"
+msgstr "Zeitgesteuert"
+
+#, fuzzy
+#| msgid "Time Based"
+msgid "Time Based Execution"
 msgstr "Zeitgesteuert"
 
 msgid "Title"
@@ -3486,6 +3643,9 @@ msgstr "Übersetzungen wurden erfolgreich entfernt."
 
 msgid "Translation successfully created."
 msgstr "Übersetzung wurde erfolgreich angelegt."
+
+msgid "Tuesday"
+msgstr ""
 
 msgid "Type"
 msgstr "Typ"
@@ -3691,6 +3851,12 @@ msgstr "Webformular Optionen"
 msgid "Webform successfully created."
 msgstr "Webformular wurde erfolgreich angelegt."
 
+msgid "Wednesday"
+msgstr ""
+
+msgid "Weekday(s)"
+msgstr ""
+
 msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
 
@@ -3738,11 +3904,6 @@ msgstr "PLZ"
 
 #~ msgid "Edit Email Account"
 #~ msgstr "E-Mail-Konto bearbeiten"
-
-#~ msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-#~ msgstr ""
-#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-#~ "Bereich angezeigt werden."
 
 #~ msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 #~ msgstr ""

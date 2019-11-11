@@ -17,6 +17,9 @@ msgstr ""
 msgid "{0}/{1} {2} imported"
 msgstr ""
 
+msgid "{0}. Action"
+msgstr ""
+
 msgid "0 data sets found."
 msgstr "Nothing found."
 
@@ -55,6 +58,11 @@ msgstr ""
 
 msgid "Action"
 msgstr ""
+
+#, fuzzy
+#| msgid "Notifications"
+msgid "Actions"
+msgstr "Notifications"
 
 msgid "Activate dependency to organisation"
 msgstr ""
@@ -526,6 +534,11 @@ msgstr ""
 msgid "Create Filter"
 msgstr ""
 
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Create Job"
+msgstr "Create Team"
+
 msgid "Create Links"
 msgstr ""
 
@@ -661,6 +674,11 @@ msgstr ""
 msgid "Edit Agent"
 msgstr ""
 
+#, fuzzy
+#| msgid "Add CI Class"
+msgid "Edit CI Class"
+msgstr "Add Asset Class"
+
 msgid "Edit Class"
 msgstr ""
 
@@ -790,6 +808,9 @@ msgstr ""
 msgid "Error!"
 msgstr ""
 
+msgid "Error on form page validation:"
+msgstr ""
+
 msgid "Error on form validation:"
 msgstr ""
 
@@ -811,6 +832,9 @@ msgstr ""
 msgid "Event Based"
 msgstr ""
 
+msgid "Event Based Execution"
+msgstr ""
+
 msgid "Events"
 msgstr ""
 
@@ -824,6 +848,9 @@ msgid "Execute now"
 msgstr ""
 
 msgid "Execute now?"
+msgstr ""
+
+msgid "Execution Plan"
 msgstr ""
 
 msgid "Existing Links ({0})"
@@ -936,6 +963,9 @@ msgstr ""
 msgid "Forward"
 msgstr ""
 
+msgid "Friday"
+msgstr ""
+
 msgid "From"
 msgstr ""
 
@@ -1013,6 +1043,61 @@ msgstr ""
 msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
 msgstr ""
 "The General Catalog class can only be used within the system if set “valid”."
+
+#, fuzzy
+#| msgid "Helptext_Admin_FAQCategoryEdit_Comment"
+msgid "Helptext_Admin_JobCCreateEdit_Comment"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgid "Helptext_Admin_JobCCreateEdit_Time"
+msgstr "The form titel will be shown in the web form's titel."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+msgid "Helptext_Admin_JobCreateEdit_Actions"
+msgstr ""
+"Comma or semicolon are allowed to use as text separators. You can also use "
+"RegEx, as long as they are surounded by slashes (\"/\")."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
+msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
+msgstr ""
+"Comma or semicolon are allowed to use as text separators. You can also use "
+"RegEx, as long as they are surounded by slashes (\"/\")."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Modal"
+msgid "Helptext_Admin_JobCreateEdit_Days"
+msgstr ""
+"If this option is activated, the background page behind the webform is "
+"inactive as along as the dialog is open."
+
+#, fuzzy
+#| msgid "Helptext_Admin_NotificationEdit_Event"
+msgid "Helptext_Admin_JobCreateEdit_Events"
+msgstr ""
+"Choose from the list which ticket or article events are supposed to trigger "
+"this notification. Multiselect possible."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Title"
+msgid "Helptext_Admin_JobCreateEdit_Filter"
+msgstr "The form titel will be shown in the web form's titel."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_StateID"
+msgid "Helptext_Admin_JobCreateEdit_Name"
+msgstr ""
+"Tickets created via webform will be assigned to the state you set here."
+
+#, fuzzy
+#| msgid "Helptext_Admin_WebformCreateEdit_Validity"
+msgid "Helptext_Admin_JobCreateEdit_Validity"
+msgstr "To use the webform it has to be set \"valid\"."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
@@ -2117,6 +2202,9 @@ msgstr ""
 msgid "Important functional elements briefly explained"
 msgstr ""
 
+msgid "Import configurations"
+msgstr ""
+
 msgid "Import Contacts"
 msgstr ""
 
@@ -2165,8 +2253,18 @@ msgstr ""
 msgid "is to large (max {0})."
 msgstr ""
 
+#, fuzzy
+#| msgid "Queue Information"
+msgid "Job Information"
+msgstr "Team Information"
+
 msgid "Jobs"
 msgstr ""
+
+#, fuzzy
+#| msgid "Queue successfully created."
+msgid "Job successfully created."
+msgstr "Team successfully created."
 
 msgid "Keywords"
 msgstr ""
@@ -2375,6 +2473,9 @@ msgstr ""
 msgid "Modified"
 msgstr ""
 
+msgid "Monday"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr ""
 
@@ -2447,6 +2548,9 @@ msgstr ""
 msgid "New Filter"
 msgstr ""
 
+msgid "New Job"
+msgstr ""
+
 msgid "New Notification"
 msgstr ""
 
@@ -2483,6 +2587,9 @@ msgstr ""
 msgid "New Ticket"
 msgstr ""
 
+msgid "New Ticket Job"
+msgstr ""
+
 msgid "New Tickets"
 msgstr ""
 
@@ -2491,6 +2598,11 @@ msgstr ""
 
 msgid "New Translation"
 msgstr ""
+
+#, fuzzy
+#| msgid "Load Translation"
+msgid "New Translations"
+msgstr "Loading Translation"
 
 msgid "New Type"
 msgstr ""
@@ -2505,6 +2617,9 @@ msgid "New Webform"
 msgstr ""
 
 msgid "next"
+msgstr ""
+
+msgid "Next"
 msgstr ""
 
 msgid "Next Image"
@@ -2756,6 +2871,9 @@ msgstr ""
 msgid "previous"
 msgstr ""
 
+msgid "Previous"
+msgstr ""
+
 msgid "Previous Image"
 msgstr ""
 
@@ -2963,6 +3081,9 @@ msgstr ""
 msgid "Rows with too less values"
 msgstr ""
 
+msgid "Saturday"
+msgstr ""
+
 msgid "Save"
 msgstr ""
 
@@ -3077,6 +3198,9 @@ msgstr "' (Single Quotes)"
 msgid "Size"
 msgstr ""
 
+msgid "Skip"
+msgstr ""
+
 msgid "SLA"
 msgstr ""
 
@@ -3147,6 +3271,9 @@ msgid "Success!"
 msgstr ""
 
 msgid "Successfully rated."
+msgstr ""
+
+msgid "Sunday"
 msgstr ""
 
 msgid "Switch"
@@ -3239,6 +3366,9 @@ msgid ""
 "This is the administration panel. Please select a module from the explorer."
 msgstr ""
 
+msgid "Thursday"
+msgstr ""
+
 msgid "Ticket"
 msgstr ""
 
@@ -3314,7 +3444,13 @@ msgstr ""
 msgid "Ticket unlocked."
 msgstr ""
 
+msgid "Time"
+msgstr ""
+
 msgid "Time Based"
+msgstr ""
+
+msgid "Time Based Execution"
 msgstr ""
 
 msgid "Title"
@@ -3351,6 +3487,9 @@ msgid "Translations successfully removed."
 msgstr ""
 
 msgid "Translation successfully created."
+msgstr ""
+
+msgid "Tuesday"
 msgstr ""
 
 msgid "Type"
@@ -3557,6 +3696,12 @@ msgstr ""
 msgid "Webform successfully created."
 msgstr ""
 
+msgid "Wednesday"
+msgstr ""
+
+msgid "Weekday(s)"
+msgstr ""
+
 msgid "Welcome to KIX 18"
 msgstr ""
 
@@ -3595,10 +3740,6 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
-
-#~ msgid "Helptext_Admin_FAQCategoryEdit_Comment"
-#~ msgstr ""
-#~ "Insert additional information (only displayed within the admin module)."
 
 #~ msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 #~ msgstr ""
