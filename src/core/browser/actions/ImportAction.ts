@@ -43,7 +43,7 @@ export class ImportAction extends AbstractAction<ITable> {
         return typeof type !== 'undefined' && type !== null;
     }
 
-    public canShow(): boolean {
+    public async canShow(): Promise<boolean> {
         return ImportService.getInstance().hasImportManager(this.data.getObjectType());
     }
 
