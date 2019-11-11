@@ -204,16 +204,18 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
                 );
                 const loadingOptions: KIXObjectLoadingOptions = fieldLoadingOptions
-                    ? fieldLoadingOptions.value
+                    ? { ...fieldLoadingOptions.value }
                     : new KIXObjectLoadingOptions();
 
                 if (loadingOptions.filter) {
+                    loadingOptions.filter = [...loadingOptions.filter];
                     loadingOptions.filter = [
                         ...loadingOptions.filter.map((f) => {
                             if (f.value === SearchProperty.SEARCH_VALUE) {
-                                f.value = searchValue;
+                                return new FilterCriteria(f.property, f.operator, f.type, f.filterType, searchValue);
+                            } else {
+                                return f;
                             }
-                            return f;
                         }),
                         ...filter
                     ];
