@@ -36,12 +36,16 @@
     }
 }
 
-.additionalFieldControls {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-column-gap: .375rem;
-    justify-content: center;
-    align-content: center;
-    padding-left: @margin-small;
-    width: @control-button-size * 2 + .375rem;
+.field-drop-zone {
+    height: 1rem;
+    background-color: @secondary-3;
+    border: 1px dashed @secondary-2;
+    border-radius: @border-radius;
+    transition: height 0.175s, background-color 0.175s;
+    margin-bottom: @margin-small;
+
+    &.drag-over {
+        height: 3rem;
+        background-color: darken(@secondary-3, 10%);
+    }
 }

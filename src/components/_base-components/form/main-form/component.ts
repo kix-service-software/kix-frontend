@@ -63,7 +63,7 @@ class FormComponent {
             this.state.formInstance.registerListener({
                 updateForm: () => (this as any).setStateDirty('formInstance'),
                 formValueChanged: () => { return; },
-                formListenerId: IdService.generateDateBasedId('main-form-container')
+                formListenerId: IdService.generateDateBasedId('main-form-listener')
             });
         }
     }

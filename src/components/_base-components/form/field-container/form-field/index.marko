@@ -6,10 +6,14 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.form-field class={
-    additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
-    "show-object": state.show
-}>
+<div.form-field
+    class={
+        additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
+        "show-object": state.show
+    }
+    draggable=state.draggable
+    on-dragstart("handleDragStart")
+    on-dragend("handleDragEnd")>
     <div.field-label class={
         "no-label": !state.field.label || !state.field.showLabel
     }>
@@ -57,16 +61,30 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </else>
         </span>
     </if>
-    <if(input.additionalFieldControls)>
-        <${input.additionalFieldControls}/>
+    <if(input.additionalFieldControls || state.canDraggable)>
+        <div.additionalFieldControls>
+            <if(input.additionalFieldControls)>
+                <${input.additionalFieldControls}/>
+            </if>
+            <if(state.canDraggable)>
+                <button.form-control-button.button-without-text.drag-button
+                    title=state.translations["Translatable#Sort"]
+                    on-mouseenter("setDraggable", true)
+                    on-mouseleave("setDraggable", false)>
+                    <span.kix-icon-sort-up/>
+                    <span.kix-icon-sort-down/>
+                </button>
+            </if>
+        </div>
     </if>
 </div>
-<if(!state.minimized && (!state.field.empty || state.field.asStructure))>
+<if(!state.minimized && (!state.field.empty || state.field.asStructure) && component.hasChildren())>
     <div.sub-field-container>
         <field-container
             level=(state.level + 1)
             fields=state.field.children
             formId=state.formId
-            additionalFieldControlsNeeded=input.additionalFieldControlsNeeded/>
+            additionalFieldControlsNeeded=input.additionalFieldControlsNeeded
+            draggable=state.field.draggableFields/>
     </div>
 </if>

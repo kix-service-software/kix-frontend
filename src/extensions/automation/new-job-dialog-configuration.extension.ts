@@ -191,7 +191,8 @@ export class Extension implements IConfigurationExtension {
         await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormGroupConfiguration(
                 'job-new-form-group-actions', 'Translatable#Actions',
-                ['job-new-form-field-actions']
+                ['job-new-form-field-actions'],
+                undefined, undefined, true
             )
         );
 

@@ -169,17 +169,21 @@ class Component extends FormInputComponent<any, ComponentState> {
     private dragEnter(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        this.dragCounter++;
-        this.state.dragging = true;
-        this.state.minimized = false;
+        if (event.dataTransfer.items && event.dataTransfer.items[0] && event.dataTransfer.items[0].kind === 'file') {
+            this.dragCounter++;
+            this.state.dragging = true;
+            this.state.minimized = false;
+        }
     }
 
     private dragLeave(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        this.dragCounter--;
-        if (this.dragCounter === 0) {
-            this.state.dragging = false;
+        if (event.dataTransfer.items && event.dataTransfer.items[0] && event.dataTransfer.items[0].kind === 'file') {
+            this.dragCounter--;
+            if (this.dragCounter === 0) {
+                this.state.dragging = false;
+            }
         }
     }
 

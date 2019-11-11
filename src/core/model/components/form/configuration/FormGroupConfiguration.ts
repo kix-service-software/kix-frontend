@@ -18,6 +18,7 @@ export class FormGroupConfiguration implements IConfiguration {
         public fieldConfigurationIds: string[] = [],
         public separatorString: string = null,
         public formFields: FormFieldConfiguration[] = [],
+        public draggableFields: boolean = false,
         public type: ConfigurationType = ConfigurationType.FormGroup
     ) { }
 

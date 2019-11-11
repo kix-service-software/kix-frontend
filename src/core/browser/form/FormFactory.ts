@@ -20,7 +20,7 @@ export class FormFactory {
                 if (p.groups) {
                     groups = p.groups.map(
                         (g) => new FormGroupConfiguration(
-                            g.id, g.name, [], g.separatorString, this.initFormFields(g.formFields)
+                            g.id, g.name, [], g.separatorString, this.initFormFields(g.formFields), g.draggableFields
                         )
                     );
                 }
@@ -38,7 +38,7 @@ export class FormFactory {
                 f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
                 f.fieldConfigurationIds, FormFactory.initFormFields(f.children), f.parentInstanceId, f.countDefault,
                 f.countMax, f.countMin, f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
-                f.placeholder, f.existingFieldId, f.showLabel
+                f.placeholder, f.existingFieldId, f.showLabel, f.name, f.draggableFields
             ))
             : [];
     }
