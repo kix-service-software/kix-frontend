@@ -3359,6 +3359,9 @@ msgstr "Lösung"
 msgid "Solution time"
 msgstr "Lösungszeit"
 
+msgid "Sort"
+msgstr ""
+
 msgid "Source"
 msgstr "Quelle"
 
