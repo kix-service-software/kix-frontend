@@ -15,7 +15,7 @@ import {
     KIXObjectProperty, ConfiguredDialogWidget, ContextMode, WidgetConfiguration
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { ConfigurationType } from '../../core/model/configuration';
@@ -79,7 +79,8 @@ export class Extension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'ticket-state-edit-form-field-comment',
                 'Translatable#Comment', TicketStateProperty.COMMENT, 'text-area-input', false,
-                'Translatable#Helptext_Admin_Tickets_StateCreate_Comment', null, null, null, null, null, null, null, 250
+                'Translatable#Helptext_Admin_Tickets_StateCreate_Comment',
+                null, null, null, null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -106,11 +107,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'ticket-state-edit-form-page', 'Translatable#Edit State',
+                ['ticket-state-edit-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
-                formId, 'Translatable#Create State',
-                [
-                    'ticket-state-edit-form-group-data'
-                ],
+                formId, 'Translatable#Edit State',
+                ['ticket-state-edit-form-page'],
                 KIXObjectType.TICKET_STATE, true, FormContext.EDIT
             )
         );

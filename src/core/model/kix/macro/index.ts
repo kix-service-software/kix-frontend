@@ -9,3 +9,6 @@
 
 export { Macro } from './Macro';
 export { MacroAction } from './MacroAction';
+export { MacroActionType } from './MacroActionType';
+export { MacroActionTypeOption } from './MacroActionTypeOption';
+export { MacroProperty } from './MacroProperty';

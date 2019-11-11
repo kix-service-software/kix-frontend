@@ -61,7 +61,7 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
                 });
             }
             if (!!languageFields.length) {
-                form.groups.push(
+                form.pages[form.pages.length - 1].groups.push(
                     new FormGroupConfiguration(
                         'notification-form-text', 'Translatable#Notification Text', [], null, languageFields
                     )

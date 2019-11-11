@@ -17,7 +17,7 @@ import { EditContactDialogContext } from "../../core/browser/contact";
 import { ConfigurationType } from "../../core/model/configuration";
 import { ModuleConfigurationService } from "../../services";
 import {
-    FormFieldConfiguration, FormConfiguration, FormGroupConfiguration
+    FormFieldConfiguration, FormConfiguration, FormGroupConfiguration, FormPageConfiguration
 } from "../../core/model/components/form/configuration";
 import { ConfigurationService } from "../../core/services";
 import { FormValidationService } from "../../core/browser/form/validation";
@@ -181,7 +181,7 @@ export class Extension implements IConfigurationExtension {
                 'contact-edit-form-field-comment',
                 'Translatable#Comment', ContactProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Customers_ContactCreate_Comment', null, null, null, null,
-                null, null, null, 250
+                null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -204,16 +204,22 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'New Contact',
+            new FormPageConfiguration(
+                'contact-edit-form-page', 'Translatable#New Contact',
                 [
                     'contact-edit-form-group-information',
                     'contact-edit-form-group-communication',
                     'contact-edit-form-group-address',
                     'contact-edit-form-group-other'
-                ],
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'New Contact',
+                ['contact-edit-form-page'],
                 KIXObjectType.CONTACT, true, FormContext.EDIT
             )
         );

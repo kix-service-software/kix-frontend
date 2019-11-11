@@ -22,10 +22,6 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('admin-module-component', 'core/browser/modules/ui-modules/AdminUIModule', []),
         new UIComponent('system-module-component', 'core/browser/modules/ui-modules/SystemUIModule', [
             new UIComponentPermission('system/config/*', [CRUD.UPDATE], true)
-        ]),
-        new UIComponent('job-module-component', 'core/browser/modules/ui-modules/JobsUIModule', [
-            new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true),
-            new UIComponentPermission('system/automation/jobs/*', [CRUD.UPDATE], true)
         ])
     ];
 
@@ -51,35 +47,8 @@ class Extension implements IKIXModuleExtension {
             'i18n-translation-language-list-widget', 'i18n/admin/widgets/i18n-translation-language-list-widget', []
         ),
         new UIComponent(
-            'i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget', []),
-        new UIComponent('admin-notifications', 'notification/admin/notifications', []),
-        new UIComponent('new-notification-dialog', 'notification/admin/dialogs/new-notification-dialog', []),
-        new UIComponent(
-            'notification-input-events',
-            'notification/admin/dialogs/inputs/notification-input-events',
-            []
+            'i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget', []
         ),
-        new UIComponent(
-            'notification-input-email-recipient',
-            'notification/admin/dialogs/inputs/notification-input-email-recipient',
-            []
-        ),
-        new UIComponent(
-            'notification-input-filter',
-            'notification/admin/dialogs/inputs/notification-input-filter',
-            []
-        ),
-        new UIComponent('notification-info-widget', 'notification/admin/widgets/notification-info-widget', []),
-        new UIComponent('notification-label-widget', 'notification/admin/widgets/notification-label-widget', []),
-        new UIComponent('notification-text-widget', 'notification/admin/widgets/notification-text-widget', []),
-        new UIComponent(
-            'notification-filter-cell-content',
-            'notification/admin/table/notification-filter-cell-content',
-            []
-        ),
-        new UIComponent('edit-notification-dialog', 'notification/admin/dialogs/edit-notification-dialog', []),
-
-        new UIComponent('admin-jobs', 'admin/jobs', []),
     ];
 
 }

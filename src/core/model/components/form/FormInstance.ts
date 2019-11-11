@@ -20,7 +20,7 @@ import { KIXObjectType } from "../../kix";
 import { IKIXObjectFormService } from "../../../browser/kix/IKIXObjectFormService";
 import { FormValidationService } from "../../../browser/form/validation";
 import { ContextType } from "../context";
-import { FormConfiguration, FormFieldConfiguration } from "./configuration";
+import { FormConfiguration, FormFieldConfiguration, FormPageConfiguration } from "./configuration";
 
 export class FormInstance implements IFormInstance {
 
@@ -47,7 +47,9 @@ export class FormInstance implements IFormInstance {
             if (service) {
                 this.formFieldValues = await service.initValues(this.form);
             } else {
-                this.form.groups.forEach((g) => this.initValues(g.formFields));
+                this.form.pages.forEach(
+                    (p) => p.groups.forEach((g) => this.initValues(g.formFields))
+                );
             }
         }
     }
@@ -71,7 +73,9 @@ export class FormInstance implements IFormInstance {
     }
 
     private initFormStructure(): void {
-        this.form.groups.forEach((g) => this.initStructure(g.formFields));
+        this.form.pages.forEach(
+            (p) => p.groups.forEach((g) => this.initStructure(g.formFields))
+        );
     }
 
     private async initFormFieldOptions(): Promise<void> {
@@ -134,38 +138,44 @@ export class FormInstance implements IFormInstance {
         let fields: FormFieldConfiguration[];
         if (parent) {
             fields = parent.children;
-        } else if (formField.parent) {
-            parent = await this.getFormField(formField.parent.instanceId);
-            fields = parent.children;
         } else {
-            const group = this.form.groups.find(
-                (g) => g.formFields.some((f) => f.instanceId === formField.instanceId)
-            );
-            if (group) {
-                fields = group.formFields;
-            }
+            fields = await this.getFields(formField);
         }
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
             fields.splice(index, 1);
             this.formFieldValues.delete(formField.instanceId);
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+                this.form.objectType, ServiceType.FORM
+            );
+            if (service) {
+                await service.updateFields(fields);
+            }
             this.listeners.forEach((l) => l.updateForm());
         }
     }
 
-    public async addFormField(formField: FormFieldConfiguration): Promise<void> {
+    public async getFields(formField: FormFieldConfiguration): Promise<FormFieldConfiguration[]> {
         let fields: FormFieldConfiguration[];
         if (formField.parent) {
             const parent = await this.getFormField(formField.parent.instanceId);
             fields = parent.children;
         } else {
-            const group = this.form.groups.find(
-                (g) => g.formFields.some((f) => f.instanceId === formField.instanceId)
-            );
-            if (group) {
-                fields = group.formFields;
+            for (const page of this.form.pages) {
+                const group = page.groups.find(
+                    (g) => g.formFields.some((f) => f.instanceId === formField.instanceId)
+                );
+                if (group) {
+                    fields = group.formFields;
+                    break;
+                }
             }
         }
+        return fields;
+    }
+
+    public async addFormField(formField: FormFieldConfiguration): Promise<void> {
+        const fields: FormFieldConfiguration[] = await this.getFields(formField);
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
             const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
@@ -175,6 +185,7 @@ export class FormInstance implements IFormInstance {
                 const newField = service.getNewFormField(formField);
                 fields.splice(index + 1, 0, newField);
                 this.initValues([newField]);
+                await service.updateFields(fields);
                 this.listeners.forEach((l) => l.updateForm());
             }
         }
@@ -248,10 +259,12 @@ export class FormInstance implements IFormInstance {
     }
 
     public async getFormFieldByProperty(property: string): Promise<FormFieldConfiguration> {
-        for (const g of this.form.groups) {
-            const field = this.findFormFieldByProperty(g.formFields, property);
-            if (field) {
-                return field;
+        for (const p of this.form.pages) {
+            for (const g of p.groups) {
+                const field = this.findFormFieldByProperty(g.formFields, property);
+                if (field) {
+                    return field;
+                }
             }
         }
 
@@ -271,10 +284,12 @@ export class FormInstance implements IFormInstance {
     }
 
     public async getFormField(formFieldInstanceId: string): Promise<FormFieldConfiguration> {
-        for (const g of this.form.groups) {
-            const field = this.findFormField(g.formFields, formFieldInstanceId);
-            if (field) {
-                return field;
+        for (const p of this.form.pages) {
+            for (const g of p.groups) {
+                const field = this.findFormField(g.formFields, formFieldInstanceId);
+                if (field) {
+                    return field;
+                }
             }
         }
 
@@ -329,11 +344,29 @@ export class FormInstance implements IFormInstance {
     public async validateForm(): Promise<ValidationResult[]> {
         let result = [];
 
-        for (const g of this.form.groups) {
-            const groupResult = await this.validateFields(g.formFields);
-            result = [...result, ...groupResult];
+        if (this.form.validation) {
+            for (const p of this.form.pages) {
+                for (const g of p.groups) {
+                    const groupResult = await this.validateFields(g.formFields);
+                    result = [...result, ...groupResult];
+                }
+            }
+            this.listeners.forEach((l) => l.updateForm());
         }
-        this.listeners.forEach((l) => l.updateForm());
+        return result;
+    }
+
+    public async validatePage(page: FormPageConfiguration): Promise<ValidationResult[]> {
+        let result = [];
+
+        if (page && this.form.validation) {
+            for (const g of page.groups) {
+                const groupResult = await this.validateFields(g.formFields);
+                result = [...result, ...groupResult];
+            }
+
+            this.listeners.forEach((l) => l.updateForm());
+        }
         return result;
     }
 

@@ -15,7 +15,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { EditSysConfigDialogContext } from '../../core/browser/sysconfig';
 import { ConfigurationType } from '../../core/model/configuration';
@@ -107,10 +107,17 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'sysconfig-edit-form-page', 'Translatable#SysConfig',
+                ['sysconfig-edit-form-group-information']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#Edit Key',
                 [
-                    'sysconfig-edit-form-group-information'
+                    'sysconfig-edit-form-page'
                 ],
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, false, FormContext.EDIT
             )

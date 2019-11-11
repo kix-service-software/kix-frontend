@@ -17,14 +17,23 @@ export enum JobProperty {
 
     MACROS = 'Macros',
 
+    MACROS_IDS = 'MacroIDs',
+
     EXEC_PLANS = 'ExecPlans',
 
-    TRIGGER_EVENTS = 'TRIGGER_EVENTS',
+    EXEC_PLAN_IDS = 'ExecPlanIDs',
 
-    TRIGGER_TIME = 'TRIGGER_TIME',
+    LAST_EXEC_TIME = 'LastExecutionTime',
 
+    FILTER = 'Filter',
+
+    // ui properties
     ACTION_COUNT = 'ACTION_COUNT',
-
-    LAST_EXEC_TIME = 'LastExecutionTime'
+    MACRO_ACTIONS = 'MACRO_ACTIONS',
+    HAS_TRIGGER_EVENTS = 'HAS_TRIGGER_EVENTS',
+    HAS_TRIGGER_TIMES = 'HAS_TRIGGER_TIMES',
+    EXEC_PLAN_EVENTS = 'EXEC_PLAN_EVENTS',
+    EXEC_PLAN_WEEKDAYS = 'WEEKDAYS',
+    EXEC_PLAN_WEEKDAYS_TIMES = 'WEEKDAYS_TIME'
 
 }

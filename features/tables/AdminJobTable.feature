@@ -33,15 +33,15 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Die Spalte <column> zeigt Spaltenbezeichnung an: <columnTitle>
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
-            | column              | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType |
-            | 'Name'              | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'TRIGGER_EVENTS'    | 1        | 1          | 1          | 110   | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'TRIGGER_TIME'      | 1        | 1          | 1          | 110   | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'ACTION_COUNT'      | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'LastExecutionTime' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'Comment'           | 1        | 1          | 0          | 350   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'ValidID'           | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'CreateTime'        | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Job'      |
-            | 'CreateBy'          | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
-            | 'ChangeTime'        | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Job'      |
-            | 'ChangeBy'          | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
+            | column               | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType |
+            | 'Name'               | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'HAS_TRIGGER_EVENTS' | 1        | 1          | 1          | 110   | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'HAS_TRIGGER_TIMES'  | 1        | 1          | 1          | 110   | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'ACTION_COUNT'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'LastExecutionTime'  | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'Comment'            | 1        | 1          | 0          | 350   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'ValidID'            | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'CreateTime'         | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Job'      |
+            | 'CreateBy'           | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |
+            | 'ChangeTime'         | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Job'      |
+            | 'ChangeBy'           | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Job'      |

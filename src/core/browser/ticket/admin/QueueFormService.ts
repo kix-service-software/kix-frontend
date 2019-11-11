@@ -38,13 +38,16 @@ export class QueueFormService extends KIXObjectFormService<Queue> {
         form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
-            groupLoop: for (const g of form.groups) {
-                for (const f of g.formFields) {
-                    if (f.property === QueueProperty.FOLLOW_UP_ID) {
-                        if (formFieldValues.get(f.instanceId).value === 1) {
-                            await this.setFollowUpLock(f, formFieldValues, queue);
+            PAGES:
+            for (const p of form.pages) {
+                for (const g of p.groups) {
+                    for (const f of g.formFields) {
+                        if (f.property === QueueProperty.FOLLOW_UP_ID) {
+                            if (formFieldValues.get(f.instanceId).value === 1) {
+                                await this.setFollowUpLock(f, formFieldValues, queue);
+                            }
+                            break PAGES;
                         }
-                        break groupLoop;
                     }
                 }
             }

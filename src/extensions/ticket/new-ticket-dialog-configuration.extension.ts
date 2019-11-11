@@ -17,7 +17,7 @@ import {
     ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
@@ -300,8 +300,15 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'ticket-new-form-page', 'Translatable#New Ticket',
+                ['ticket-new-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
-                formId, 'Translatable#New Ticket', ['ticket-new-form-group-data'], KIXObjectType.TICKET
+                formId, 'Translatable#New Ticket', ['ticket-new-form-page'], KIXObjectType.TICKET
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET, formId);

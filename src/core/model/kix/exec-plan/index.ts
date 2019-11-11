@@ -8,3 +8,6 @@
  */
 
 export { ExecPlan } from './ExecPlan';
+export { ExecPlanParameter } from './ExecPlanParameter';
+export { ExecPlanProperty } from './ExecPlanProperty';
+export { ExecPlanTypes } from './ExecPlanTypes';

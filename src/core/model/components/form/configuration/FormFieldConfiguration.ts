@@ -27,7 +27,7 @@ export class FormFieldConfiguration implements IConfiguration {
         public hint?: string,
         public options: FormFieldOption[] = [],
         public defaultValue: FormFieldValue = new FormFieldValue(null),
-        public fieldConfigurations: string[] = [],
+        public fieldConfigurationIds: string[] = [],
         public children: FormFieldConfiguration[] = [],
         public parentInstanceId: string = null,
         public countDefault: number = null,

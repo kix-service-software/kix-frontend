@@ -10,7 +10,7 @@
 import { TableContentProvider } from "../../table/TableContentProvider";
 import { KIXObjectType, KIXObjectLoadingOptions, JobProperty } from "../../../model";
 import { ITable, TableValue } from "../../table";
-import { Job } from "../../../model/kix/job/Job";
+import { Job } from "../../../model/kix/job";
 import { KIXObjectService } from "../../kix";
 import { ExecPlan } from "../../../model/kix/exec-plan";
 
@@ -34,30 +34,20 @@ export class JobTableContentProvider extends TableContentProvider<Job> {
                 KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, true
             ).catch(() => [] as ExecPlan[]);
         }
-        let hasEvents: boolean = false;
-        let hasTimes: boolean = false;
-        if (execPlans.length) {
-            execPlans.forEach((ep) => {
-                if (
-                    !hasEvents && ep.Parameters
-                    && Array.isArray(ep.Parameters.Events) && !!ep.Parameters.Events.length
-                ) {
-                    hasEvents = true;
-                }
-                if (
-                    !hasTimes && ep.Parameters
-                    && Array.isArray(ep.Parameters.Weekdays) && !!ep.Parameters.Weekdays.length
-                ) {
-                    hasTimes = true;
-                }
-            });
-        }
+        const hasEvents: boolean = execPlans && !!execPlans.length && execPlans.some(
+            (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
+        );
+        const hasTimes: boolean = execPlans && !!execPlans.length && execPlans.some(
+            (ep) => ep.Parameters
+                && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
+                && Array.isArray(ep.Parameters.Time) && !!ep.Parameters.Time.length
+        );
         values.push(new TableValue(
-            JobProperty.TRIGGER_EVENTS, hasTimes ? 'Yes' : 'No', undefined, undefined,
+            JobProperty.HAS_TRIGGER_EVENTS, hasTimes ? 'Yes' : 'No', undefined, undefined,
             hasEvents ? ['kix-icon-close'] : null
         ));
         values.push(new TableValue(
-            JobProperty.TRIGGER_TIME, hasTimes ? 'Yes' : 'No', undefined, undefined,
+            JobProperty.HAS_TRIGGER_TIMES, hasTimes ? 'Yes' : 'No', undefined, undefined,
             hasTimes ? ['kix-icon-close'] : null
         ));
     }

@@ -39,14 +39,17 @@ export class MailAccountFormService extends KIXObjectFormService<MailAccount> {
         form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
-            groupLoop: for (const g of form.groups) {
-                for (const f of g.formFields) {
-                    if (f.property === MailAccountProperty.TYPE) {
-                        const type = formFieldValues.get(f.instanceId).value;
-                        if (type && type.match(/^IMAP/)) {
-                            await this.setIMAPFolderField(f, formFieldValues, mailAccount);
+            PAGES:
+            for (const p of form.pages) {
+                for (const g of p.groups) {
+                    for (const f of g.formFields) {
+                        if (f.property === MailAccountProperty.TYPE) {
+                            const type = formFieldValues.get(f.instanceId).value;
+                            if (type && type.match(/^IMAP/)) {
+                                await this.setIMAPFolderField(f, formFieldValues, mailAccount);
+                            }
+                            break PAGES;
                         }
-                        break groupLoop;
                     }
                 }
             }

@@ -14,7 +14,7 @@ import {
     ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { NewUserRoleDialogContext } from '../../core/browser/user';
@@ -63,7 +63,7 @@ export class Extension implements IConfigurationExtension {
             'user-role-new-form-field-comment',
             'Translatable#Comment', RoleProperty.COMMENT, 'text-area-input', false,
             'Translatable#Helptext_Admin_Users_RoleCreate_Comment',
-            null, null, null, null, null, null, null, 250
+            null, null, null, null, null, null, null, null, 250
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(commentField);
 
@@ -131,16 +131,24 @@ export class Extension implements IConfigurationExtension {
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(agentsGroup);
 
-        const form = new FormConfiguration(
-            formId, 'Translatable#New Role',
-            [
-                'user-role-new-form-group-role-information',
-                'user-role-new-form-group-permissions',
-                'user-role-new-form-group-agents'
-            ],
-            KIXObjectType.ROLE
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'user-role-new-form-group-page', 'Translatable#New Role',
+                [
+                    'user-role-new-form-group-role-information',
+                    'user-role-new-form-group-permissions',
+                    'user-role-new-form-group-agents'
+                ]
+            )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(form);
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#New Role',
+                ['user-role-new-form-group-page'],
+                KIXObjectType.ROLE
+            )
+        );
         configurationService.registerForm([FormContext.NEW], KIXObjectType.ROLE, formId);
     }
 

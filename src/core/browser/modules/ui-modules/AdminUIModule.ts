@@ -77,7 +77,8 @@ export class UIModule implements IUIModule {
                 KIXObjectType.TICKET_TYPE,
                 KIXObjectType.USER,
                 KIXObjectType.ROLE,
-                KIXObjectType.PERMISSION
+                KIXObjectType.PERMISSION,
+                KIXObjectType.JOB
             ],
                 ContextType.MAIN, ContextMode.DASHBOARD,
                 false, 'admin', ['admin'], AdminContext

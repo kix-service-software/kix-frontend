@@ -20,7 +20,7 @@ import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator, SearchProperty
 } from '../../core/browser';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
@@ -425,12 +425,17 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'ticket-link-form-page', 'Translatable#Link to ticket',
+                ['ticket-link-form-group-attributes']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#Link to ticket',
-                [
-                    'ticket-link-form-group-attributes'
-                ],
-                KIXObjectType.TICKET, false, FormContext.LINK, null, true
+                ['ticket-link-form-page'],
+                KIXObjectType.TICKET, false, FormContext.LINK
             )
         );
 

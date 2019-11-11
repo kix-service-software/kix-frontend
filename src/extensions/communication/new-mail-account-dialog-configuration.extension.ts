@@ -27,7 +27,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { SearchOperator } from '../../core/browser';
 import { ConfigurationType } from '../../core/model/configuration';
@@ -135,7 +135,7 @@ export class Extension implements IConfigurationExtension {
                 'mail-account-new-form-field-comment',
                 'Translatable#Comment', MailAccountProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_MailAccountCreate_Comment', null, null, null,
-                null, null, null, null, 250
+                null, null, null, null, null, 250
             )
         );
 
@@ -168,11 +168,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'mail-account-new-form-page', 'Translatable#New Account',
+                ['mail-account-new-form-group-information']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#New Account',
-                [
-                    'mail-account-new-form-group-information'
-                ],
+                ['mail-account-new-form-page'],
                 KIXObjectType.MAIL_ACCOUNT
             )
         );

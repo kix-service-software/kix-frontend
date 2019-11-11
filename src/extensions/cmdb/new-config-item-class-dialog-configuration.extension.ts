@@ -17,7 +17,7 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
 import { NewConfigItemClassDialogContext } from '../../core/browser/cmdb';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationType } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
@@ -80,7 +80,7 @@ export class Extension implements IConfigurationExtension {
                 'cmdb-ci-class-new-form-field-comment',
                 'Translatable#Comment', ConfigItemClassProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_CMDB_ConfigItemClassCreate_Comment',
-                null, null, null, null, null, null, null, 200
+                null, null, null, null, null, null, null, null, 200
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -109,11 +109,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'cmdb-ci-class-new-form-page', 'Translatable#Add CI Class',
+                ['cmdb-ci-class-new-form-group-information']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#Add CI Class',
-                [
-                    'cmdb-ci-class-new-form-group-information'
-                ],
+                ['cmdb-ci-class-new-form-page'],
                 KIXObjectType.CONFIG_ITEM_CLASS
             )
         );

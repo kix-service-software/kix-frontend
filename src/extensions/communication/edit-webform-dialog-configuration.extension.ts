@@ -17,7 +17,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { WebformProperty } from '../../core/model/webform';
 import { SearchOperator } from '../../core/browser';
@@ -298,12 +298,19 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(
-                formId, 'Translatable#New Webform',
+            new FormPageConfiguration(
+                'webform-edit-form-page', 'Translatable#Edit Webform',
                 [
                     'webform-edit-form-group-options',
                     'webform-edit-form-group-default-values'
-                ],
+                ]
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(
+                formId, 'Translatable#Edit Webform',
+                ['webform-edit-form-page'],
                 KIXObjectType.WEBFORM, true, FormContext.EDIT
             )
         );

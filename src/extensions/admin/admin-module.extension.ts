@@ -15,7 +15,8 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'system', 'Translatable#System', null, [], [
+                null, 'system', 'Translatable#System', null, [],
+                [
                     new AdminModule(
                         null, 'sysconfig', 'Translatable#SysConfig', null,
                         KIXObjectType.SYS_CONFIG_OPTION, 'system-admin-sysconfig',
@@ -36,26 +37,6 @@ class Extension implements IAdminModuleExtension {
                         KIXObjectType.CONSOLE_COMMAND, 'system-admin-console',
                         [
                             new UIComponentPermission('system/console', [CRUD.READ, CRUD.CREATE])
-                        ]
-                    )
-                ]
-            ),
-            new AdminModuleCategory(
-                null, 'automation', 'Translatable#Automation', null, [], [
-                    new AdminModule(
-                        null, 'notifications', 'Translatable#Notifications', null,
-                        KIXObjectType.NOTIFICATION, 'admin-notifications',
-                        [
-                            new UIComponentPermission('system/communication/notifications', [CRUD.CREATE], true),
-                            new UIComponentPermission('system/communication/notifications/*', [CRUD.UPDATE], true)
-                        ]
-                    ),
-                    new AdminModule(
-                        null, 'jobs', 'Translatable#Jobs', null,
-                        KIXObjectType.JOB, 'admin-jobs',
-                        [
-                            new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true),
-                            new UIComponentPermission('system/automation/jobs/*', [CRUD.UPDATE], true)
                         ]
                     )
                 ]

@@ -10,7 +10,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { NewGeneralCatalogDialogContext } from '../../core/browser/general-catalog';
 import {
@@ -94,7 +94,7 @@ export class Extension implements IConfigurationExtension {
                 'general-catalog-new-form-field-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_GeneralCatalogCreate_Comment', null, null, null,
-                null, null, null, null, 250
+                null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -121,11 +121,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'general-catalog-new-form-page', 'Translatable#New Value',
+                ['general-catalog-new-form-group-information']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
                 formId, 'Translatable#New Value',
-                [
-                    'general-catalog-new-form-group-information'
-                ],
+                ['general-catalog-new-form-page'],
                 KIXObjectType.GENERAL_CATALOG_ITEM
             )
         );

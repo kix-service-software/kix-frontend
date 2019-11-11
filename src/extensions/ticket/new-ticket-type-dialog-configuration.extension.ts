@@ -15,7 +15,7 @@ import {
     KIXObjectProperty, ObjectReferenceOptions, FormFieldOption, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
 } from '../../core/model';
 import {
-    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { ConfigurationType } from '../../core/model/configuration';
@@ -69,7 +69,8 @@ export class Extension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'ticket-type-new-form-field-comment',
                 'Translatable#Comment', TicketTypeProperty.COMMENT, 'text-area-input', false,
-                'Translatable#Helptext_Admin_Tickets_TypeCreate_Comment', null, null, null, null, null, null, null, 250
+                'Translatable#Helptext_Admin_Tickets_TypeCreate_Comment',
+                null, null, null, null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -96,7 +97,14 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
-            new FormConfiguration(formId, 'Translatable#Create Type', ['ticket-type-new-form-group-data'], KIXObjectType.TICKET_TYPE)
+            new FormPageConfiguration(
+                'ticket-type-new-form-page', 'Translatable#Create Type',
+                ['ticket-type-new-form-group-data']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormConfiguration(formId, 'Translatable#Create Type', ['ticket-type-new-form-page'], KIXObjectType.TICKET_TYPE)
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET_TYPE, formId);
     }

@@ -38,8 +38,10 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         await this.prePrepareForm(form);
 
         const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
-        for (const g of form.groups) {
-            await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
+        for (const p of form.pages) {
+            for (const g of p.groups) {
+                await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
+            }
         }
 
         await this.postPrepareForm(form, formFieldValues, kixObject);
@@ -53,8 +55,10 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             kixObject = await context.getObject();
         }
 
-        for (const g of form.groups) {
-            await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
+        for (const p of form.pages) {
+            for (const g of p.groups) {
+                await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
+            }
         }
     }
 
@@ -104,16 +108,18 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return;
     }
 
-    public getNewFormField(f: FormFieldConfiguration, parent?: FormFieldConfiguration): FormFieldConfiguration {
+    public getNewFormField(
+        f: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren: boolean = true
+    ): FormFieldConfiguration {
         const newField = new FormFieldConfiguration(
             f.id,
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
             [], null, (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
-            f.maxLength, f.regEx, f.regExErrorMessage, (f.countDefault === 0 ? true : false), f.asStructure, f.readonly,
+            f.maxLength, f.regEx, f.regExErrorMessage, f.countDefault === 0, f.asStructure, f.readonly,
             f.placeholder
         );
         const children: FormFieldConfiguration[] = [];
-        if (f.children) {
+        if (withChildren && f.children) {
             for (const child of f.children) {
                 const existingChildren = children.filter((c) => c.property === child.property);
                 if (
@@ -179,5 +185,9 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return await AuthenticationSocketClient.getInstance().checkPermissions(
             [new UIComponentPermission(resource, crud)]
         );
+    }
+
+    public async updateFields(fields: FormFieldConfiguration[]): Promise<void> {
+        return;
     }
 }

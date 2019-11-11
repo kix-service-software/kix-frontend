@@ -244,7 +244,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async prepareFormFields(
         formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
+        let parameter: Array<[string, any]> = [];
 
         const predefinedParameterValues = await this.preparePredefinedValues(forUpdate);
         if (predefinedParameterValues) {
@@ -278,7 +278,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
             key = iterator.next();
         }
-        await this.prepareDependendValues(parameter, createOptions);
+        parameter = await this.postPrepareValues(parameter, createOptions);
 
         return parameter;
     }
@@ -287,10 +287,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return await this.prepareCreateValue(property, value);
     }
 
-    protected async prepareDependendValues(
+    protected async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<void> {
-        return;
+    ): Promise<Array<[string, any]>> {
+        return parameter;
     }
 
     protected async preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>> {

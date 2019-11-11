@@ -6,6 +6,11 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
+<form-page-menu
+    pages=(state.formInstance ? state.formInstance.form.pages : [])
+    activePageIndex=state.activePageIndex
+    before=true
+    on-showPage("showPage")/>
 <form.form autocomplete="off">
     <input id="username" style="display:none" type="text" name="fakeusernameremembered"/>
     <input id="password" style="display:none" type="password" name="fakepasswordremembered"/>
@@ -13,30 +18,41 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <search-form formId=state.formId objectType=state.objectType/>
     </if>
     <else-if(state.formInstance && state.formInstance.form && state.formId)>
-        <for|group| of=state.formInstance.form.groups>
-            <if(state.formInstance.form.groups.length > 1 || state.formInstance.form.showSingleGroup)>
-                <widget
-                    instanceId="form-group"
-                    title=group.name
-                    on-minimizedChanged("handleFormGroupMinimizeState", group.name)
-                    key=group.name>
-                    <@content>
+        <for|page, index| of=state.formInstance.form.pages>
+            <${state.formInstance.form.pages.length > 1 ? "div" : ""} class={
+                active: index === state.activePageIndex,
+                "form-page": true
+            }>
+                <for|group| of=page.groups>
+                    <if(page.groups.length > 1 || page.showSingleGroup)>
+                        <widget
+                            instanceId="form-group"
+                            title=group.name
+                            on-minimizedChanged("handleFormGroupMinimizeState", group.name)
+                            key=group.name>
+                            <@content>
+                                <field-container
+                                    fields=group.formFields
+                                    formId=state.formId
+                                    additionalFieldControlsNeeded=state.additionalFieldControlsNeeded/>
+                            </@content>
+                        </widget>
+                        <if(group.separatorString)>
+                            <div.separator>${group.separatorString}</div>
+                        </if>
+                    </if>
+                    <else>
                         <field-container
                             fields=group.formFields
                             formId=state.formId
                             additionalFieldControlsNeeded=state.additionalFieldControlsNeeded/>
-                    </@content>
-                </widget>
-                <if(group.separatorString)>
-                    <div.separator>${group.separatorString}</div>
-                </if>
-            </if>
-            <else>
-                <field-container
-                    fields=group.formFields
-                    formId=state.formId
-                    additionalFieldControlsNeeded=state.additionalFieldControlsNeeded/>
-            </else>
+                    </else>
+                </for>
+            </>
         </for>
     </else-if>
 </form>
+<form-page-menu
+    pages=(state.formInstance ? state.formInstance.form.pages : [])
+    activePageIndex=state.activePageIndex
+    on-showPage("showPage")/>

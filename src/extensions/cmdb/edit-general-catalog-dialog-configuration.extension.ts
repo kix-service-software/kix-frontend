@@ -16,7 +16,7 @@ import {
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
 import {
-    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { EditGeneralCatalogDialogContext } from '../../core/browser/general-catalog';
 import { SearchOperator } from '../../core/browser';
@@ -93,7 +93,7 @@ export class Extension implements IConfigurationExtension {
                 'general-catalog-edit-form-field-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_GeneralCatalogCreate_Comment', null, null, null,
-                null, null, null, null, 250
+                null, null, null, null, null, 250
             )
         );
         await ModuleConfigurationService.getInstance().saveConfiguration(
@@ -121,11 +121,16 @@ export class Extension implements IConfigurationExtension {
         );
 
         await ModuleConfigurationService.getInstance().saveConfiguration(
+            new FormPageConfiguration(
+                'general-catalog-edit-form-page', 'Translatable#Edit Value',
+                ['general-catalog-edit-form-group-information']
+            )
+        );
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
             new FormConfiguration(
-                formId, 'Translatable#New Value',
-                [
-                    'general-catalog-edit-form-group-information'
-                ],
+                formId, 'Translatable#Edit Value',
+                ['general-catalog-edit-form-page'],
                 KIXObjectType.GENERAL_CATALOG_ITEM, true, FormContext.EDIT
             )
         );

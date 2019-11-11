@@ -8,18 +8,26 @@
  */
 
 import {
-    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration
+    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from "../../model/components/form/configuration";
 
 export class FormFactory {
 
     public static initForm(form: FormConfiguration) {
-        if (form.groups) {
-            form.groups = form.groups.map(
-                (g) => new FormGroupConfiguration(
-                    g.id, g.name, [], g.separatorString, this.initFormFields(g.formFields)
-                )
-            );
+        if (form.pages) {
+            form.pages = form.pages.map((p) => {
+                let groups;
+                if (p.groups) {
+                    groups = p.groups.map(
+                        (g) => new FormGroupConfiguration(
+                            g.id, g.name, [], g.separatorString, this.initFormFields(g.formFields)
+                        )
+                    );
+                }
+                return new FormPageConfiguration(
+                    p.id, p.name, [], p.singleFormGroupOpen, p.showSingleGroup, groups
+                );
+            });
         }
     }
 
@@ -28,7 +36,7 @@ export class FormFactory {
             ? fields.map((f) => new FormFieldConfiguration(
                 f.id,
                 f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
-                f.fieldConfigurations, FormFactory.initFormFields(f.children), f.parentInstanceId, f.countDefault,
+                f.fieldConfigurationIds, FormFactory.initFormFields(f.children), f.parentInstanceId, f.countDefault,
                 f.countMax, f.countMin, f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
                 f.placeholder, f.existingFieldId, f.showLabel
             ))

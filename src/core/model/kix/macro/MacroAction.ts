@@ -14,23 +14,21 @@ export class MacroAction extends KIXObject {
 
     public ObjectId: string | number;
 
-    public KIXObjectType: KIXObjectType = KIXObjectType.MACRO;
+    public KIXObjectType: KIXObjectType = KIXObjectType.MACRO_ACTION;
 
     public ID: number;
-
-    public Name: string;
 
     public Type: string;
 
     public MacroID: number;
 
-    public Parameters: any;
+    public Parameters: {};
 
     public constructor(macroAction?: MacroAction) {
         super(macroAction);
         if (macroAction) {
+            this.ObjectId = macroAction.ID;
             this.ID = macroAction.ID;
-            this.Name = macroAction.Name;
             this.Type = macroAction.Type;
             this.MacroID = macroAction.MacroID;
             this.Parameters = macroAction.Parameters;

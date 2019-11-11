@@ -25,7 +25,7 @@ export class CreateConfigItemVersionUtil {
         const form = formInstance.getForm();
 
         let fields: FormFieldConfiguration[] = [];
-        form.groups.forEach((g) => fields = [...fields, ...g.formFields]);
+        form.pages.forEach((p) => p.groups.forEach((g) => fields = [...fields, ...g.formFields]));
 
         let data = null;
         for (const formField of fields) {

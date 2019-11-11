@@ -8,9 +8,9 @@
  */
 
 import { LabelProvider } from "../LabelProvider";
-import { JobProperty, KIXObjectType, KIXObjectLoadingOptions, SortUtil, DateTimeUtil } from "../../model";
+import { JobProperty, KIXObjectType, KIXObjectLoadingOptions, DateTimeUtil } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
-import { Job } from "../../model/kix/job/Job";
+import { Job } from "../../model/kix/job";
 import { KIXObjectService } from "../kix";
 import { Macro } from "../../model/kix/macro";
 import { ExecPlan } from "../../model/kix/exec-plan";
@@ -38,10 +38,10 @@ export class JobLabelProvider extends LabelProvider {
             case JobProperty.TYPE:
                 displayValue = 'Translatable#Type';
                 break;
-            case JobProperty.TRIGGER_EVENTS:
+            case JobProperty.HAS_TRIGGER_EVENTS:
                 displayValue = 'Translatable#Event Based';
                 break;
-            case JobProperty.TRIGGER_TIME:
+            case JobProperty.HAS_TRIGGER_TIMES:
                 displayValue = 'Translatable#Time Based';
                 break;
             case JobProperty.ACTION_COUNT:
@@ -120,48 +120,21 @@ export class JobLabelProvider extends LabelProvider {
                         });
                     }
                     break;
-                case JobProperty.TRIGGER_EVENTS:
-                    let eventExecPlans: ExecPlan[] = [];
-                    let events: string[] = [];
-                    if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
-                        eventExecPlans = job.ExecPlans;
-                    } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
-                        eventExecPlans = await KIXObjectService.loadObjects<ExecPlan>(
-                            KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, true
-                        ).catch(() => [] as ExecPlan[]);
-                    }
-                    if (eventExecPlans) {
-                        eventExecPlans.forEach((ep) => {
-                            if (ep.Parameters && Array.isArray(ep.Parameters.Events)) {
-                                events = [...events, ...ep.Parameters.Events];
-                            }
-                        });
-                    }
-                    // translatable = false;
-                    // displayValue = events.sort((a, b) => SortUtil.compareString(a, b)).join(', ');
-                    displayValue = !!events.length ? 'Translatable#Yes' : 'Translatable#No';
+                case JobProperty.HAS_TRIGGER_EVENTS:
+                    const eventExecPlans: ExecPlan[] = await this.getExecPlans(job);
+                    const hasEvents: boolean = eventExecPlans && eventExecPlans.some(
+                        (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
+                    );
+                    displayValue = hasEvents ? 'Translatable#Yes' : 'Translatable#No';
                     break;
-                case JobProperty.TRIGGER_TIME:
-                    let timeExecPlans: ExecPlan[] = [];
-                    const times: string[] = [];
-                    if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
-                        timeExecPlans = job.ExecPlans;
-                    } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
-                        timeExecPlans = await KIXObjectService.loadObjects<ExecPlan>(
-                            KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, true
-                        ).catch(() => [] as ExecPlan[]);
-                    }
-                    if (timeExecPlans) {
-                        timeExecPlans.forEach((ep) => {
-                            if (ep.Parameters && Array.isArray(ep.Parameters.Weekdays) && ep.Parameters.Time) {
-                                // FIXME: "translate" weekdays and time
-                                times.push(ep.Parameters.Weekdays.join(',') + ': ' + ep.Parameters.Time);
-                            }
-                        });
-                    }
-                    // translatable = false;
-                    // displayValue = times.join('; ');
-                    displayValue = !!times.length ? 'Translatable#Yes' : 'Translatable#No';
+                case JobProperty.HAS_TRIGGER_TIMES:
+                    const timeExecPlans: ExecPlan[] = await this.getExecPlans(job);
+                    const hasTimes: boolean = timeExecPlans && timeExecPlans.some(
+                        (ep) => ep.Parameters
+                            && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
+                            && Array.isArray(ep.Parameters.Time) && !!ep.Parameters.Time.length
+                    );
+                    displayValue = hasTimes ? 'Translatable#Yes' : 'Translatable#No';
                     break;
                 default:
                     displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
@@ -175,6 +148,18 @@ export class JobLabelProvider extends LabelProvider {
         }
 
         return displayValue ? displayValue.toString() : '';
+    }
+
+    private async getExecPlans(job: Job): Promise<ExecPlan[]> {
+        let execPlans: ExecPlan[] = [];
+        if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
+            execPlans = job.ExecPlans;
+        } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
+            execPlans = await KIXObjectService.loadObjects<ExecPlan>(
+                KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, true
+            ).catch(() => [] as ExecPlan[]);
+        }
+        return execPlans;
     }
 
 }

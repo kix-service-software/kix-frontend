@@ -51,6 +51,8 @@ export enum KIXObjectType {
 
     EXEC_PLAN = 'ExecPlan',
 
+    EXEC_PLAN_TYPE = 'ExecPlanType',
+
     FAQ_ARTICLE = 'FAQArticle',
 
     FAQ_ARTICLE_ATTACHMENT = 'Attachment',
@@ -82,6 +84,8 @@ export enum KIXObjectType {
     MACRO = 'Macro',
 
     MACRO_ACTION = 'MacroAction',
+
+    MACRO_ACTION_TYPE = 'MacroActionType',
 
     MAIL_ACCOUNT = 'MailAccount',
 

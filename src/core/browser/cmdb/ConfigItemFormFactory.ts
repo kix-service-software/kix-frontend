@@ -33,7 +33,7 @@ export class ConfigItemFormFactory {
     private constructor() { }
 
     public async addCIClassAttributesToForm(form: FormConfiguration, classId: number): Promise<void> {
-        if (form.groups[0] && classId) {
+        if (form.pages[0] && form.pages[0].groups[0] && classId) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
             );
@@ -46,7 +46,7 @@ export class ConfigItemFormFactory {
                 if (ciClass.CurrentDefinition && ciClass.CurrentDefinition.Definition) {
                     for (const ad of ciClass.CurrentDefinition.Definition) {
                         const field = this.getFormField(ad);
-                        form.groups[0].formFields.push(field);
+                        form.pages[0].groups[0].formFields.push(field);
                     }
                 }
             }
