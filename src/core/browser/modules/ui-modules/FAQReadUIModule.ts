@@ -32,6 +32,8 @@ import { IUIModule } from '../../application/IUIModule';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { BookmarkService } from '../../bookmark/BookmarkService';
 import { TranslationService } from '../../i18n/TranslationService';
+import { EventService } from '../../event';
+import { ApplicationEvent } from '../../application';
 
 export class UIModule implements IUIModule {
 
@@ -69,6 +71,11 @@ export class UIModule implements IUIModule {
         await this.registerContexts();
         this.registerActions();
         await this.registerBookmarks();
+
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
+            eventSubscriberId: 'FAQReadUIModule',
+            eventPublished: () => this.registerBookmarks()
+        });
     }
 
     private async registerContexts(): Promise<void> {
