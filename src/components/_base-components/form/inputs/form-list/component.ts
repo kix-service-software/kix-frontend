@@ -81,7 +81,7 @@ class Component {
         });
 
         this.treeHandler.registerListener(this.state.treeId + '-listener', (nodes: TreeNode[]) => {
-            this.setDropdownStyle();
+            setTimeout(() => this.setDropdownStyle(), 100);
         });
 
         this.state.prepared = true;
