@@ -119,7 +119,8 @@ export class Extension implements IConfigurationExtension {
                 new ConfiguredWidget('job-details-actions-widget', 'job-details-actions-widget')
             ],
             [],
-            ['job-create-action'], [], [],
+            ['job-create-action'], ['job-execute-action'],
+            [],
             [
                 new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget')
             ]

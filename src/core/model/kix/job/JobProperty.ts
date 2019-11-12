@@ -27,6 +27,8 @@ export enum JobProperty {
 
     FILTER = 'Filter',
 
+    EXEC = 'Exec',
+
     // ui properties
     ACTION_COUNT = 'ACTION_COUNT',
     MACRO_ACTIONS = 'MACRO_ACTIONS',
