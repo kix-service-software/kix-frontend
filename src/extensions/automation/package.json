@@ -13,6 +13,9 @@
             },
             "new-job-dialog-configuration": {
                 "module": "new-job-dialog-configuration.extension"
+            },
+            "job-details-configuration": {
+                "module": "job-details-configuration.extension"
             }
         },
         "kix:modules": {

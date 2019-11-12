@@ -7,9 +7,11 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../../core/model";
+import { KIXObjectType, ContextMode, JobProperty } from "../../../../../core/model";
 import { ComponentState } from "./ComponentState";
 import { AbstractNewDialog } from "../../../../../core/browser/components/dialog";
+import { JobDetailsContext } from "../../../../../core/browser/job";
+import { RoutingConfiguration } from "../../../../../core/browser/router";
 
 class Component extends AbstractNewDialog {
 
@@ -19,11 +21,10 @@ class Component extends AbstractNewDialog {
             'Translatable#Create Job',
             'Translatable#Job successfully created.',
             KIXObjectType.JOB,
-            null
-            // new RoutingConfiguration(
-            //     JobDetailsContext.CONTEXT_ID, KIXObjectType.JOB,
-            //     ContextMode.DETAILS, JobProperty.ID, true
-            // )
+            new RoutingConfiguration(
+                JobDetailsContext.CONTEXT_ID, KIXObjectType.JOB,
+                ContextMode.DETAILS, JobProperty.ID, true
+            )
         );
     }
 

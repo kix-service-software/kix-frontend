@@ -11,6 +11,7 @@ import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
 import { Macro } from "../macro";
 import { ExecPlan } from "../exec-plan";
+import { ArticleProperty } from "../ticket";
 
 export class Job extends KIXObject {
 
@@ -34,18 +35,53 @@ export class Job extends KIXObject {
 
     public ExecPlans: ExecPlan[];
 
+    public Filter: {};
+
+    public filterMap: Map<string, string[] | number[]>;
+
+
     public constructor(job?: Job) {
         super(job);
+        this.filterMap = new Map();
         if (job) {
             this.ObjectId = job.ID;
             this.ID = job.ID;
             this.Name = job.Name;
             this.Type = job.Type;
             this.MacroIDs = job.MacroIDs;
-            this.Macros = job.Macros;
+            this.Macros = job.Macros ? job.Macros.map((m) => new Macro(m)) : [];
             this.ExecPlanIDs = job.ExecPlanIDs;
-            this.ExecPlans = job.ExecPlans;
+            this.ExecPlans = job.ExecPlans ? job.ExecPlans.map((e) => new ExecPlan(e)) : [];
+            this.Filter = job.Filter;
+
+            if (job.Filter) {
+                for (const key in job.Filter) {
+                    if (job.Filter[key]) {
+                        let property = key.replace('Ticket::', '');
+                        property = property.replace('Article::', '');
+                        if (!this.filterMap.has(property)) {
+                            let newValue;
+                            if (this.isStringProperty(property)) {
+                                newValue = job.Filter[key][0];
+                            } else {
+                                newValue = job.Filter[key].map((v) => !isNaN(Number(v)) ? Number(v) : v);
+                            }
+                            this.filterMap.set(property, newValue);
+                        }
+                    }
+
+                }
+            }
         }
+    }
+
+    private isStringProperty(property: string): boolean {
+        return property === ArticleProperty.FROM
+            || property === ArticleProperty.TO
+            || property === ArticleProperty.CC
+            || property === ArticleProperty.BCC
+            || property === ArticleProperty.SUBJECT
+            || property === ArticleProperty.BODY;
     }
 
 }

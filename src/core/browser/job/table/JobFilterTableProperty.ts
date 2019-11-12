@@ -7,5 +7,9 @@
  * --
  */
 
-export { NewJobDialogContext } from './NewJobDialogContext';
-export { JobDetailsContext } from './JobDetailsContext';
+export enum JobFilterTableProperty {
+
+    FIELD = 'FIELD',
+
+    VALUE = 'VALUE'
+}

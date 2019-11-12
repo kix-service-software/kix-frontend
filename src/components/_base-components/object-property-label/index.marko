@@ -9,9 +9,16 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div.key-value-pair class={
     "show-object": state.propertyDisplayText !== null || !state.hasText
 }>
-    <div.key title=state.propertyName>
-        <span.property-name>${state.propertyName}</span>
-    </div>
+    <if(input.propertyValue)>
+        <div.key>
+            <${input.propertyValue}/>
+        </div>
+    </if>
+    <else>
+        <div.key title=state.propertyName>
+            <span.property-name>${state.propertyName}</span>
+        </div>
+    </else>
     <div.info>
         <if(input.info && state.propertyDisplayText)>
             <${input.info}/>

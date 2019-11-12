@@ -16,3 +16,4 @@ export { JobFilterManager } from './JobFilterManager';
 export { JobFormService } from './JobFormService';
 export { JobLabelProvider } from './JobLabelProvider';
 export { JobService } from './JobService';
+export { MacroActionLabelProvider } from './MacroActionLabelProvider';

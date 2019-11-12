@@ -7,5 +7,16 @@
  * --
  */
 
-export { NewJobDialogContext } from './NewJobDialogContext';
-export { JobDetailsContext } from './JobDetailsContext';
+export enum MacroActionProperty {
+
+    ID = 'ID',
+
+    TYPE = 'Type',
+
+    MACRO_ID = 'MacroID',
+
+    PARAMETERS = 'Parameters',
+
+    NUMBER = 'number'
+
+}

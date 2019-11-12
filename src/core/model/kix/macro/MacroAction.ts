@@ -24,7 +24,9 @@ export class MacroAction extends KIXObject {
 
     public Parameters: {};
 
-    public constructor(macroAction?: MacroAction) {
+    public number: number;
+
+    public constructor(macroAction?: MacroAction, number?: number) {
         super(macroAction);
         if (macroAction) {
             this.ObjectId = macroAction.ID;
@@ -32,6 +34,7 @@ export class MacroAction extends KIXObject {
             this.Type = macroAction.Type;
             this.MacroID = macroAction.MacroID;
             this.Parameters = macroAction.Parameters;
+            this.number = number;
         }
     }
 
