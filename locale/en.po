@@ -2277,6 +2277,11 @@ msgstr ""
 msgid "Job successfully created."
 msgstr "Team successfully created."
 
+#, fuzzy
+#| msgid "Queue successfully created."
+msgid "Job successfully ran."
+msgstr "Team successfully created."
+
 msgid "Keywords"
 msgstr ""
 
@@ -3097,6 +3102,9 @@ msgstr ""
 msgid "Rows with too less values"
 msgstr ""
 
+msgid "Run"
+msgstr ""
+
 msgid "Saturday"
 msgstr ""
 
@@ -3376,6 +3384,9 @@ msgstr ""
 msgid ""
 "The following FAQ entries will provide you with a basic overview of how KIX "
 "18 works"
+msgstr ""
+
+msgid "The Job {0} will be ran now. Are you sure?"
 msgstr ""
 
 msgid "The search only includes current versions."

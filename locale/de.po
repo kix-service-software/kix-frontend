@@ -2416,6 +2416,11 @@ msgstr ""
 msgid "Job successfully created."
 msgstr "Rolle wurde erfolgreich angelegt."
 
+#, fuzzy
+#| msgid "Role successfully created."
+msgid "Job successfully ran."
+msgstr "Rolle wurde erfolgreich angelegt."
+
 msgid "Keywords"
 msgstr "Schlagworte"
 
@@ -3248,6 +3253,9 @@ msgstr "Zeilennummer"
 msgid "Rows with too less values"
 msgstr "Zeilen mit zu wenigen Werten"
 
+msgid "Run"
+msgstr ""
+
 msgid "Saturday"
 msgstr ""
 
@@ -3530,6 +3538,11 @@ msgid ""
 msgstr ""
 "Um einen grundlegenden Überblick über die Funktionsweise von KIX 18 zu "
 "erhalten, helfen Ihnen folgende FAQ-Einträge"
+
+#, fuzzy
+#| msgid "Search {0} will be deleted. Are you sure?"
+msgid "The Job {0} will be ran now. Are you sure?"
+msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
