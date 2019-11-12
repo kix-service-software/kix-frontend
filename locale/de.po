@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-11-06 13:48+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2019-11-12 16:48+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -17,10 +17,8 @@ msgstr ""
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
 
-#, fuzzy
-#| msgid "Action"
 msgid "{0}. Action"
-msgstr "Aktion"
+msgstr "{0}. Aktion"
 
 msgid "0 data sets found."
 msgstr "Nichts gefunden."
@@ -58,18 +56,14 @@ msgstr "Kontoinformationen"
 msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "Action"
 msgid "Acions"
 msgstr "Aktion"
 
 msgid "Action"
 msgstr "Aktion"
 
-#, fuzzy
-#| msgid "Action"
 msgid "Actions"
-msgstr "Aktion"
+msgstr "Aktionen"
 
 msgid "Activate dependency to organisation"
 msgstr "Abhängigkeit zu Kunden aktivieren"
@@ -500,10 +494,10 @@ msgid "contains"
 msgstr "enthält"
 
 msgid "Could not handle request."
-msgstr ""
+msgstr "Anfrage konnte nicht bearbeitet werden."
 
 msgid "Could not load file '{0}'."
-msgstr ""
+msgstr "Datei '{0}' konnte nicht geladen werden."
 
 msgid "Country"
 msgstr "Land"
@@ -547,10 +541,8 @@ msgstr "FAQ Artikel wird angelegt"
 msgid "Create Filter"
 msgstr "Filter wird angelegt"
 
-#, fuzzy
-#| msgid "Created by"
 msgid "Create Job"
-msgstr "Erstellt von"
+msgstr "Job wird angelegt"
 
 msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
@@ -625,7 +617,7 @@ msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
 msgid "Day(s)"
-msgstr ""
+msgstr "Tag(e)"
 
 msgid "Default"
 msgstr "Standard"
@@ -690,10 +682,8 @@ msgstr "Adresse bearbeiten"
 msgid "Edit Agent"
 msgstr "Agent bearbeiten"
 
-#, fuzzy
-#| msgid "Edit Class"
 msgid "Edit CI Class"
-msgstr "Klasse bearbeiten"
+msgstr "Asset Klasse bearbeiten"
 
 msgid "Edit Class"
 msgstr "Klasse bearbeiten"
@@ -713,10 +703,8 @@ msgstr "bearbeitet"
 msgid "Edit Email Filter"
 msgstr "E-Mail Filter bearbeiten"
 
-#, fuzzy
-#| msgid "Edit FAQ Article"
 msgid "Edit FAQ"
-msgstr "FAQ Artikel bearbeiten"
+msgstr "FAQ bearbeiten"
 
 msgid "Edit FAQ Article"
 msgstr "FAQ Artikel bearbeiten"
@@ -826,8 +814,6 @@ msgstr "Fehler"
 msgid "Error!"
 msgstr "Fehler!"
 
-#, fuzzy
-#| msgid "Error on form validation:"
 msgid "Error on form page validation:"
 msgstr "Fehler beim Validieren des Formulars:"
 
@@ -852,10 +838,8 @@ msgstr "Event"
 msgid "Event Based"
 msgstr "Eventgesteuert"
 
-#, fuzzy
-#| msgid "Event Based"
 msgid "Event Based Execution"
-msgstr "Eventgesteuert"
+msgstr "Eventgesteuerte Ausführung"
 
 msgid "Events"
 msgstr "Events"
@@ -872,10 +856,8 @@ msgstr "Jetzt ausführen"
 msgid "Execute now?"
 msgstr "Jetzt ausführen?"
 
-#, fuzzy
-#| msgid "Execute now"
 msgid "Execution Plan"
-msgstr "Jetzt ausführen"
+msgstr "Ausführungsplan"
 
 msgid "Existing Links ({0})"
 msgstr "Vorhandene Verknüpfungen ({0})"
@@ -990,7 +972,7 @@ msgid "Forward"
 msgstr "Weiterleiten"
 
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
 msgid "From"
 msgstr "Von"
@@ -1076,63 +1058,43 @@ msgstr ""
 "Die General Catalog Klasse kann nur verwendet werden, wenn sie „gültig“ "
 "gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_FAQCategoryEdit_Comment"
 msgid "Helptext_Admin_JobCCreateEdit_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
 "Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_WebformCreateEdit_Title"
 msgid "Helptext_Admin_JobCCreateEdit_Time"
-msgstr "Der Formulartitel wird im Kopf des Webformulars angezeigt."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgid "Helptext_Admin_JobCreateEdit_Actions"
 msgstr ""
-"Komma oder Semikolon sind als Texttrenner zulässig. Verwendung von RegEx ist "
-"möglich, diese müssen in Slashs (\"/\") gesetzt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
-"Komma oder Semikolon sind als Texttrenner zulässig. Verwendung von RegEx ist "
-"möglich, diese müssen in Slashs (\"/\") gesetzt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_WebformCreateEdit_Modal"
 msgid "Helptext_Admin_JobCreateEdit_Days"
 msgstr ""
-"Wird diese Option aktiviert, ist die Seite im Hintergrund des Webformulars "
-"inaktiv, so lange der Dialog geöffnet ist."
+"Wählen Sie die Tage aus, an denen der Job ausgeführt werden soll. "
+"Mehrfachauswahl möglich."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationEdit_Event"
 msgid "Helptext_Admin_JobCreateEdit_Events"
 msgstr ""
-"Wählen Sie aus, welche Ereignisse an Tickets oder Artikeln diese "
-"Benachrichtigung auslösen. Mehrfachauswahl möglich."
+"Wählen Sie aus, welche Events an Tickets oder Artikeln diesen Job auslöst.  "
+"Mehrfachauswahl möglich."
 
-#, fuzzy
-#| msgid "Helptext_Admin_WebformCreateEdit_Title"
 msgid "Helptext_Admin_JobCreateEdit_Filter"
-msgstr "Der Formulartitel wird im Kopf des Webformulars angezeigt."
+msgstr ""
+"Wählen Sie ein Ticket- oder Artikelattribut aus der Liste. Anschließend "
+"können Sie in einem weiteren Feld den Wert eingeben, auf den der Filter "
+"reagiert. Nutzen Sie für jedes weitere Attribut eine neue Zeile. Ist unter \""
+"Events\" mindestens ein artikelbezogenes Event ausgewählt, sind die "
+"Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
-#, fuzzy
-#| msgid "Helptext_Admin_WebformCreateEdit_StateID"
 msgid "Helptext_Admin_JobCreateEdit_Name"
-msgstr ""
-"Legen Sie fest, welchen Status Tickets erhalten, die über das Webformular "
-"erstellt werden."
+msgstr "Der Name des Jobs muss eindeutig sein."
 
-#, fuzzy
-#| msgid "Helptext_Admin_WebformCreateEdit_Validity"
 msgid "Helptext_Admin_JobCreateEdit_Validity"
-msgstr ""
-"Um das Webformular verwenden zu können, muss es \"gültig\" gesetzt sein."
+msgstr "Jobs werden nur ausgeführt, wenn sie \"gültig\" gesetzt sind."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
@@ -1385,8 +1347,6 @@ msgstr ""
 msgid "Helptext_Admin_NotificationEdit_Name"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_PreferencesTooltip"
 msgid "Helptext_Admin_NotificationEdit_PreferencesTooltip"
 msgstr ""
 "Hier können Sie zusätzliche Informationen oder Erläuterungen zu dieser "
@@ -1419,8 +1379,6 @@ msgstr ""
 "alle die Agenten verschickt, denen diese Rollen zugeordnet sind. Zur Auswahl "
 "stehen alle im System verfügbaren, gültigen Rollen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_NotificationCreate_ShowPreferences"
 msgid "Helptext_Admin_NotificationEdit_ShowPreferences"
 msgstr ""
 "Die Benachrichtigung wird an alle Agenten versendet, die als Empfänger "
@@ -2345,10 +2303,8 @@ msgstr "{0} {1} importieren. Ausführen?"
 msgid "Important functional elements briefly explained"
 msgstr "Wichtige Funktionselemente kurz erklärt"
 
-#, fuzzy
-#| msgid "Import Organisations"
 msgid "Import configurations"
-msgstr "Kunden importieren"
+msgstr "Konfigurationen importieren"
 
 msgid "Import Contacts"
 msgstr "Kontakte importieren"
@@ -2398,28 +2354,20 @@ msgstr "Ungültiges Datum bei 'Warten bis'"
 msgid "is to large (max {0})."
 msgstr ""
 
-#, fuzzy
-#| msgid "New Role"
 msgid "Job"
-msgstr "Neue Rolle"
+msgstr "Job"
 
-#, fuzzy
-#| msgid "Role Information"
 msgid "Job Information"
-msgstr "Rollen-Informationen"
+msgstr "Job Informationen"
 
 msgid "Jobs"
-msgstr ""
+msgstr "Jobs"
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Job successfully created."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Job wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "Role successfully created."
 msgid "Job successfully ran."
-msgstr "Rolle wurde erfolgreich angelegt."
+msgstr "Job erfolgreich ausgeführt."
 
 msgid "Keywords"
 msgstr "Schlagworte"
@@ -2535,10 +2483,8 @@ msgstr "Lade FAQ Kategorie"
 msgid "Loading"
 msgstr "Wird geladen"
 
-#, fuzzy
-#| msgid "Load Role"
 msgid "Load Job"
-msgstr "Lade Rolle"
+msgstr "Lade Job"
 
 msgid "Load Organisation"
 msgstr "Lade Kunde"
@@ -2634,7 +2580,7 @@ msgid "Modified"
 msgstr "Geändert"
 
 msgid "Monday"
-msgstr ""
+msgstr "Montag"
 
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
@@ -2708,10 +2654,8 @@ msgstr "Neue FAQ Kategorie"
 msgid "New Filter"
 msgstr "Neuer Filter"
 
-#, fuzzy
-#| msgid "New Role"
 msgid "New Job"
-msgstr "Neue Rolle"
+msgstr "Neuer Job"
 
 msgid "New Notification"
 msgstr "Neue Benachrichtigung"
@@ -2749,10 +2693,8 @@ msgstr "Neu"
 msgid "New Ticket"
 msgstr "Neues Ticket"
 
-#, fuzzy
-#| msgid "New Ticket"
 msgid "New Ticket Job"
-msgstr "Neues Ticket"
+msgstr "Neuer Ticket Job"
 
 msgid "New Tickets"
 msgstr "Neue Tickets"
@@ -2763,10 +2705,8 @@ msgstr "Neue Tickets der letzten 7 Tage"
 msgid "New Translation"
 msgstr "Neu"
 
-#, fuzzy
-#| msgid "New Translation"
 msgid "New Translations"
-msgstr "Neu"
+msgstr "Neue Übersetzungen"
 
 msgid "New Type"
 msgstr "Neuer Typ"
@@ -2784,7 +2724,7 @@ msgid "next"
 msgstr "weiter"
 
 msgid "Next"
-msgstr ""
+msgstr "Nächste"
 
 msgid "Next Image"
 msgstr "Nächstes Bild"
@@ -2871,7 +2811,7 @@ msgid "not modified"
 msgstr "********"
 
 msgid "Not more than 5 files possible."
-msgstr ""
+msgstr "Nicht mehr als 5 Dateien möglich."
 
 msgid "No version available"
 msgstr "Keine Version verfügbar"
@@ -3036,10 +2976,8 @@ msgstr "Treffervorschau ({0})"
 msgid "previous"
 msgstr "zurück"
 
-#, fuzzy
-#| msgid "previous"
 msgid "Previous"
-msgstr "zurück"
+msgstr "Vorherig"
 
 msgid "Previous Image"
 msgstr "Vorheriges Bild"
@@ -3254,10 +3192,10 @@ msgid "Rows with too less values"
 msgstr "Zeilen mit zu wenigen Werten"
 
 msgid "Run"
-msgstr ""
+msgstr "Ausführen"
 
 msgid "Saturday"
-msgstr ""
+msgstr "Samstag"
 
 msgid "Save"
 msgstr "Speichern"
@@ -3374,7 +3312,7 @@ msgid "Size"
 msgstr "Größe"
 
 msgid "Skip"
-msgstr ""
+msgstr "Überspringen"
 
 msgid "SLA"
 msgstr "SLA"
@@ -3386,7 +3324,7 @@ msgid "Solution time"
 msgstr "Lösungszeit"
 
 msgid "Sort"
-msgstr ""
+msgstr "Sortieren"
 
 msgid "Source"
 msgstr "Quelle"
@@ -3452,7 +3390,7 @@ msgid "Successfully rated."
 msgstr "Bewertung erfolgreich."
 
 msgid "Sunday"
-msgstr ""
+msgstr "Sonntag"
 
 msgid "Switch"
 msgstr "Tauschen"
@@ -3539,10 +3477,8 @@ msgstr ""
 "Um einen grundlegenden Überblick über die Funktionsweise von KIX 18 zu "
 "erhalten, helfen Ihnen folgende FAQ-Einträge"
 
-#, fuzzy
-#| msgid "Search {0} will be deleted. Are you sure?"
 msgid "The Job {0} will be ran now. Are you sure?"
-msgstr "Suche {0} wird gelöscht. Sind Sie sicher?"
+msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
@@ -3554,7 +3490,7 @@ msgstr ""
 "Explorer."
 
 msgid "Thursday"
-msgstr ""
+msgstr "Donnerstag"
 
 msgid "Ticket"
 msgstr "Ticket"
@@ -3632,15 +3568,13 @@ msgid "Ticket unlocked."
 msgstr "Ticket entsperrt."
 
 msgid "Time"
-msgstr ""
+msgstr "Zeit"
 
 msgid "Time Based"
 msgstr "Zeitgesteuert"
 
-#, fuzzy
-#| msgid "Time Based"
 msgid "Time Based Execution"
-msgstr "Zeitgesteuert"
+msgstr "Zeitgesteuerte Ausführung"
 
 msgid "Title"
 msgstr "Titel"
@@ -3679,7 +3613,7 @@ msgid "Translation successfully created."
 msgstr "Übersetzung wurde erfolgreich angelegt."
 
 msgid "Tuesday"
-msgstr ""
+msgstr "Dienstag"
 
 msgid "Type"
 msgstr "Typ"
@@ -3886,10 +3820,10 @@ msgid "Webform successfully created."
 msgstr "Webformular wurde erfolgreich angelegt."
 
 msgid "Wednesday"
-msgstr ""
+msgstr "Mittwoch"
 
 msgid "Weekday(s)"
-msgstr ""
+msgstr "Wochentag(e)"
 
 msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
