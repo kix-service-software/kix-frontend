@@ -56,6 +56,11 @@ msgstr ""
 msgid "Account successfully created."
 msgstr ""
 
+#, fuzzy
+#| msgid "Notifications"
+msgid "Acions"
+msgstr "Notifications"
+
 msgid "Action"
 msgstr ""
 
@@ -609,6 +614,9 @@ msgid "Customer Dashboard"
 msgstr ""
 
 msgid "Data has been updated."
+msgstr ""
+
+msgid "Day(s)"
 msgstr ""
 
 msgid "Default"
@@ -2253,6 +2261,9 @@ msgstr ""
 msgid "is to large (max {0})."
 msgstr ""
 
+msgid "Job"
+msgstr ""
+
 #, fuzzy
 #| msgid "Queue Information"
 msgid "Job Information"
@@ -2379,6 +2390,11 @@ msgstr "Loading FAQ Category"
 
 msgid "Loading"
 msgstr ""
+
+#, fuzzy
+#| msgid "Load Role"
+msgid "Load Job"
+msgstr "Loading Role"
 
 msgid "Load Organisation"
 msgstr "Loading Organisation"

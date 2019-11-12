@@ -58,6 +58,11 @@ msgstr "Kontoinformationen"
 msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
+#, fuzzy
+#| msgid "Action"
+msgid "Acions"
+msgstr "Aktion"
+
 msgid "Action"
 msgstr "Aktion"
 
@@ -618,6 +623,9 @@ msgstr "Kunden Dashboard"
 
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
+
+msgid "Day(s)"
+msgstr ""
 
 msgid "Default"
 msgstr "Standard"
@@ -2391,6 +2399,11 @@ msgid "is to large (max {0})."
 msgstr ""
 
 #, fuzzy
+#| msgid "New Role"
+msgid "Job"
+msgstr "Neue Rolle"
+
+#, fuzzy
 #| msgid "Role Information"
 msgid "Job Information"
 msgstr "Rollen-Informationen"
@@ -2516,6 +2529,11 @@ msgstr "Lade FAQ Kategorie"
 
 msgid "Loading"
 msgstr "Wird geladen"
+
+#, fuzzy
+#| msgid "Load Role"
+msgid "Load Job"
+msgstr "Lade Rolle"
 
 msgid "Load Organisation"
 msgstr "Lade Kunde"
