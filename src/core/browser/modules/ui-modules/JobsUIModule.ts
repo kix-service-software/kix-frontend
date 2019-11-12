@@ -15,7 +15,7 @@ import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { LabelService } from "../../LabelService";
 import {
     JobService, JobLabelProvider, JobTableFactory, JobBrowserFactory, JobCreateAction, NewJobDialogContext,
-    JobFormService, JobDetailsContext, MacroActionLabelProvider
+    JobExecuteAction, JobFormService, JobDetailsContext, MacroActionLabelProvider
 } from "../../job";
 import { TableFactoryService } from "../../table";
 import { FactoryService } from "../../kix";
@@ -52,6 +52,10 @@ export class UIModule implements IUIModule {
                 true, 'object-details-page', ['jobs'], JobDetailsContext
             );
             await ContextService.getInstance().registerContext(jobDetailsContext);
+        }
+
+        if (await this.checkPermission('system/automation/jobs/*', CRUD.UPDATE)) {
+            ActionFactory.getInstance().registerAction('job-execute-action', JobExecuteAction);
         }
 
         if (await this.checkPermission('system/automation/jobs', CRUD.CREATE)) {

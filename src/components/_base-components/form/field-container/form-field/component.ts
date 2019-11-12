@@ -61,6 +61,13 @@ class Component {
             }
         });
         this.update();
+        if (this.state.canDraggable) {
+            const root = (this as any).getEl();
+            if (root) {
+                root.addEventListener('dragstart', this.handleDragStart.bind(this), false);
+                root.addEventListener('dragend', this.handleDragEnd.bind(this), false);
+            }
+        }
     }
 
     public async onDestroy(): Promise<void> {

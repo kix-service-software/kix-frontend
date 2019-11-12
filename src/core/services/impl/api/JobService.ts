@@ -273,4 +273,20 @@ export class JobService extends KIXObjectService {
         }
     }
 
+    public async updateObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
+    ): Promise<string | number> {
+        if (objectType === KIXObjectType.JOB) {
+            const uri = this.buildUri(this.RESOURCE_URI, objectId);
+            const id = await super.executeUpdateOrCreateRequest(
+                token, clientRequestId, parameter, uri, this.objectType, 'JobID'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+            return id;
+        }
+    }
+
 }
