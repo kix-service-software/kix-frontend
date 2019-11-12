@@ -73,6 +73,8 @@ export enum KIXObjectType {
 
     JOB = 'Job',
 
+    JOB_FILTER = 'JOB_FILTER',
+
     LINK = 'Link',
 
     LINK_OBJECT = 'LINK_OBJECT',

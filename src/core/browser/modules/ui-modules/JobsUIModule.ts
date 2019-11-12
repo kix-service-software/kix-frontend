@@ -15,12 +15,14 @@ import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { LabelService } from "../../LabelService";
 import {
     JobService, JobLabelProvider, JobTableFactory, JobBrowserFactory, JobCreateAction, NewJobDialogContext,
-    JobFormService
+    JobFormService, JobDetailsContext, MacroActionLabelProvider
 } from "../../job";
 import { TableFactoryService } from "../../table";
 import { FactoryService } from "../../kix";
 import { ActionFactory } from "../../ActionFactory";
 import { ContextService } from "../../context";
+import { JobFilterTableFactory } from "../../job/table/JobFilterTableFactory";
+import { MacroActionTableFactory } from "../../job/table/MacroActionTableFactory";
 
 export class UIModule implements IUIModule {
 
@@ -35,8 +37,22 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(JobService.getInstance());
         ServiceRegistry.registerServiceInstance(JobFormService.getInstance());
         FactoryService.getInstance().registerFactory(KIXObjectType.JOB, JobBrowserFactory.getInstance());
+
         LabelService.getInstance().registerLabelProvider(new JobLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new MacroActionLabelProvider());
+
         TableFactoryService.getInstance().registerFactory(new JobTableFactory());
+        TableFactoryService.getInstance().registerFactory(new JobFilterTableFactory());
+        TableFactoryService.getInstance().registerFactory(new MacroActionTableFactory());
+
+        if (await this.checkPermission('system/automation/jobs/*', CRUD.READ)) {
+            const jobDetailsContext = new ContextDescriptor(
+                JobDetailsContext.CONTEXT_ID, [KIXObjectType.JOB],
+                ContextType.MAIN, ContextMode.DETAILS,
+                true, 'object-details-page', ['jobs'], JobDetailsContext
+            );
+            await ContextService.getInstance().registerContext(jobDetailsContext);
+        }
 
         if (await this.checkPermission('system/automation/jobs', CRUD.CREATE)) {
             ActionFactory.getInstance().registerAction('job-create-action', JobCreateAction);

@@ -8,12 +8,16 @@
  */
 
 import { TableFactory } from "../../table/TableFactory";
-import { KIXObjectType, JobProperty, KIXObjectProperty, DataType, KIXObjectLoadingOptions } from "../../../model";
+import {
+    KIXObjectType, JobProperty, KIXObjectProperty, DataType, KIXObjectLoadingOptions, ContextMode
+} from "../../../model";
 import {
     TableConfiguration, ITable, Table, TableHeaderHeight, TableRowHeight,
     DefaultColumnConfiguration, IColumnConfiguration
 } from "../../table";
 import { JobTableContentProvider } from "./JobTableContentProvider";
+import { JobDetailsContext } from "../context";
+import { RoutingConfiguration } from "../../router";
 
 export class JobTableFactory extends TableFactory {
 
@@ -75,10 +79,10 @@ export class JobTableFactory extends TableFactory {
         }
 
         if (defaultRouting) {
-            // tableConfiguration.routingConfiguration = new RoutingConfiguration(
-            //     NotificationDetailsContext.CONTEXT_ID, KIXObjectType.NOTIFICATION,
-            //     ContextMode.DETAILS, NotificationProperty.ID
-            // );
+            tableConfiguration.routingConfiguration = new RoutingConfiguration(
+                JobDetailsContext.CONTEXT_ID, KIXObjectType.JOB,
+                ContextMode.DETAILS, JobProperty.ID
+            );
         }
 
         return tableConfiguration;

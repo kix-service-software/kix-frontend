@@ -131,6 +131,27 @@ export class DateTimeUtil {
         return `${hours}:${minutes}:${seconds}`;
     }
 
+    public static getDayString(key: string): string {
+        switch (key) {
+            case 'Mon':
+                return 'Translatable#Monday';
+            case 'Tue':
+                return 'Translatable#Tuesday';
+            case 'Wed':
+                return 'Translatable#Wednesday';
+            case 'Thu':
+                return 'Translatable#Thursday';
+            case 'Fri':
+                return 'Translatable#Friday';
+            case 'Sat':
+                return 'Translatable#Saturday';
+            case 'Sun':
+                return 'Translatable#Sunday';
+            default:
+                return key;
+        }
+    }
+
     private static padZero(value: number): string {
         return (value < 10 ? '0' + value : value).toString();
     }

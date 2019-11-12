@@ -35,7 +35,7 @@ export class Macro extends KIXObject {
             this.Name = macro.Name;
             this.Type = macro.Type;
             this.ExecOrder = macro.ExecOrder;
-            this.Actions = macro.Actions;
+            this.Actions = macro.Actions ? macro.Actions.map((a, i) => new MacroAction(a, i + 1)) : [];
         }
     }
 

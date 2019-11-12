@@ -119,9 +119,25 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public getToggleInput(): any {
-        const toggleInput = {};
-        if (this.state.row && this.toggleOptions && this.toggleOptions.inputPropertyName) {
-            toggleInput[this.toggleOptions.inputPropertyName] = this.state.row.getRowObject().getObject();
+        let toggleInput = {};
+        if (this.state.row && this.toggleOptions) {
+            let data = this.state.row.getRowObject().getObject();
+            if (this.toggleOptions.rowObjectProperty) {
+                data = data ? data[this.toggleOptions.rowObjectProperty] : data;
+            }
+
+            if (this.toggleOptions.inputPropertyName) {
+                toggleInput[this.toggleOptions.inputPropertyName] = data;
+            } else {
+                toggleInput = data;
+            }
+
+            if (this.toggleOptions.data) {
+                toggleInput = {
+                    ...toggleInput,
+                    ...this.toggleOptions.data
+                };
+            }
         }
         return toggleInput;
     }

@@ -415,7 +415,6 @@ export class FormInstance implements IFormInstance {
                     if (service) {
                         await service.updateFields(fields);
                     }
-
                     this.listeners.forEach((l) => l.updateForm());
                 }
             }
