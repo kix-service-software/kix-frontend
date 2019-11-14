@@ -9,9 +9,9 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, WidgetService, ContextService, Label } from '../../../../../core/browser';
-import { WidgetType, Job, DateTimeUtil } from '../../../../../core/model';
+import { WidgetType, Job, DateTimeUtil, KIXObjectType } from '../../../../../core/model';
 import { JobDetailsContext } from '../../../../../core/browser/job';
-import { ExecPlan } from '../../../../../core/model/kix/exec-plan';
+import { ExecPlan, ExecPlanTypes } from '../../../../../core/model/kix/exec-plan';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -30,19 +30,36 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<JobDetailsContext>(JobDetailsContext.CONTEXT_ID);
         if (context) {
             this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            this.initWidget(context);
 
-            const job = await context.getObject<Job>();
-            if (job.ExecPlans) {
-                const timeExecPlan = job.ExecPlans.find((ep) => ep.Type === 'TimeBased');
-                await this.prepareTimeBasedPlan(timeExecPlan);
-
-                const eventExecPlan = job.ExecPlans.find((ep) => ep.Type === 'EventBased');
-                this.prepareEventBasedPlan(eventExecPlan);
-            }
+            context.registerListener('jop-exec-plan-widget', {
+                explorerBarToggled: () => { return; },
+                filteredObjectListChanged: () => { return; },
+                objectListChanged: () => { return; },
+                sidebarToggled: () => { return; },
+                scrollInformationChanged: () => { return; },
+                objectChanged: (id: string | number, job: Job, type: KIXObjectType) => {
+                    if (type === KIXObjectType.JOB) {
+                        this.initWidget(context);
+                    }
+                },
+                additionalInformationChanged: () => { return; }
+            });
 
         }
 
         this.state.prepared = true;
+    }
+
+    private async initWidget(context: JobDetailsContext): Promise<void> {
+        const job = await context.getObject<Job>();
+        if (job.ExecPlans) {
+            const timeExecPlan = job.ExecPlans.find((ep) => ep.Type === ExecPlanTypes.TIME_BASED);
+            await this.prepareTimeBasedPlan(timeExecPlan);
+
+            const eventExecPlan = job.ExecPlans.find((ep) => ep.Type === ExecPlanTypes.EVENT_BASED);
+            this.prepareEventBasedPlan(eventExecPlan);
+        }
     }
 
     private async prepareTimeBasedPlan(plan: ExecPlan): Promise<void> {
@@ -53,6 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (plan && plan.Parameters.Weekday) {
+            this.state.weekdayLabels = [];
             for (const w of plan.Parameters.Weekday) {
                 const dayString = await TranslationService.translate(DateTimeUtil.getDayString(w));
                 const label = new Label(null, w, null, dayString);

@@ -7,16 +7,14 @@
  * --
  */
 
-export enum MacroProperty {
+import { AbstractComponentState } from "../../../../../core/browser";
 
-    ID = 'ID',
+export class ComponentState extends AbstractComponentState {
 
-    NAME = 'Name',
-
-    TYPE = 'Type',
-
-    ACTIONS = 'Actions',
-
-    EXEC_ORDER = 'ExecOrder'
+    public constructor(
+        public loading: boolean = false
+    ) {
+        super();
+    }
 
 }

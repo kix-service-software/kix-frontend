@@ -55,6 +55,7 @@ export class Job extends KIXObject {
             this.Filter = job.Filter;
 
             if (job.Filter) {
+                const newFilter = {};
                 for (const key in job.Filter) {
                     if (job.Filter[key]) {
                         let property = key.replace('Ticket::', '');
@@ -68,9 +69,12 @@ export class Job extends KIXObject {
                             }
                             this.filterMap.set(property, newValue);
                         }
-                    }
 
+                        newFilter[property] = Array.isArray(job.Filter[key]) ?
+                            job.Filter[key].map((v) => !isNaN(Number(v)) ? Number(v) : v) : job.Filter[key];
+                    }
                 }
+                this.Filter = newFilter;
             }
         }
     }

@@ -16,7 +16,7 @@ import { ObjectPropertyValue, FormService, ContextService } from '../../../../..
 import { JobService } from '../../../../../../core/browser/job';
 import { FormFieldConfiguration } from '../../../../../../core/model/components/form/configuration';
 
-class Component extends FormInputComponent<Array<[string, string[] | number[]]>, ComponentState> {
+class Component extends FormInputComponent<{}, ComponentState> {
 
     private listenerId: string;
     private formTimeout: any;
@@ -69,12 +69,12 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
                 clearTimeout(this.formTimeout);
             }
             this.formTimeout = setTimeout(async () => {
-                const filterValues: Array<[string, string[] | number[]]> = [];
+                const filterValues = {};
                 if (this.state.manager.hasDefinedValues()) {
                     const values = this.state.manager.getEditableValues();
                     values.forEach((v) => {
                         if (v.value !== null) {
-                            filterValues.push([v.property, v.value]);
+                            filterValues[v.property] = v.value;
                         }
                     });
                 }
@@ -137,21 +137,38 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
     }
 
     public async setCurrentNode(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            for (const value of this.state.defaultValue.value) {
-                let objectType;
-                const inputType = await this.state.manager.getInputType(value[0]);
-                if (inputType && inputType === InputFieldTypes.OBJECT_REFERENCE) {
-                    objectType = await this.state.manager.getObjectReferenceObjectType(value[0]);
-                }
+        if (
+            this.state.defaultValue && this.state.defaultValue.value
+            && typeof this.state.defaultValue.value === 'object'
+        ) {
+            for (const property in this.state.defaultValue.value) {
+                if (property) {
+                    let newProperty = property.replace('Ticket::', '');
+                    newProperty = newProperty.replace('Article::', '');
 
-                objectType = this.isRequiredProperty ? KIXObjectType.ARTICLE : objectType;
-                const isRequired = this.isRequiredProperty(value[0]);
-                this.state.manager.setValue(
-                    new ObjectPropertyValue(
-                        value[0], null, value[1], isRequired, true, objectType, null, null, value[0]
-                    )
-                );
+                    let objectType;
+                    const inputType = await this.state.manager.getInputType(newProperty);
+                    if (inputType) {
+                        if (inputType === InputFieldTypes.OBJECT_REFERENCE) {
+                            objectType = await this.state.manager.getObjectReferenceObjectType(newProperty);
+                        }
+                        if ((inputType === InputFieldTypes.TEXT || inputType === InputFieldTypes.TEXT_AREA)
+                            && Array.isArray(this.state.defaultValue.value[newProperty])
+                        ) {
+                            this.state.defaultValue.value[newProperty]
+                                = this.state.defaultValue.value[newProperty][0];
+                        }
+                    }
+
+                    objectType = this.isRequiredProperty ? KIXObjectType.ARTICLE : objectType;
+                    const isRequired = this.isRequiredProperty(newProperty);
+                    this.state.manager.setValue(
+                        new ObjectPropertyValue(
+                            newProperty, null, this.state.defaultValue.value[newProperty],
+                            isRequired, true, objectType, null, null, newProperty
+                        )
+                    );
+                }
             }
             super.provideValue(this.state.defaultValue.value, true);
         }

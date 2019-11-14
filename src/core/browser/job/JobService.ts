@@ -10,9 +10,10 @@
 import { KIXObjectService } from "../kix";
 import {
     SystemAddress, KIXObjectType, TreeNode, JobProperty, SysConfigKey, SysConfigOption, SortUtil,
-    DataType, KIXObjectSpecificCreateOptions, TicketProperty, KIXObjectProperty, DateTimeUtil, ArticleProperty
+    DataType, KIXObjectSpecificCreateOptions, TicketProperty, ArticleProperty, Job
 } from "../../model";
-import { MacroAction, MacroActionType } from "../../model/kix/macro";
+import { MacroAction, MacroActionType, Macro } from "../../model/kix/macro";
+import { ExecPlan } from "../../model/kix/exec-plan";
 
 export class JobService extends KIXObjectService<SystemAddress> {
 
@@ -91,7 +92,6 @@ export class JobService extends KIXObjectService<SystemAddress> {
                 KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
             ).catch((error): SysConfigOption[] => []);
 
-
             if (articleEventsConfig && articleEventsConfig.length) {
                 const articleEvents = articleEventsConfig[0].Value as string[];
                 hasArticleEvent = events.some((e) => articleEvents.some((ae) => ae === e));
@@ -110,31 +110,43 @@ export class JobService extends KIXObjectService<SystemAddress> {
         switch (property) {
             case JobProperty.FILTER:
                 if (value) {
-                    for (const v of value) {
-                        switch (v[0]) {
-                            case TicketProperty.TYPE_ID:
-                            case TicketProperty.STATE_ID:
-                            case TicketProperty.PRIORITY_ID:
-                            case TicketProperty.QUEUE_ID:
-                            case TicketProperty.LOCK_ID:
-                            case TicketProperty.ORGANISATION_ID:
-                            case TicketProperty.CONTACT_ID:
-                            case TicketProperty.OWNER_ID:
-                            case TicketProperty.RESPONSIBLE_ID:
-                                v[0] = 'Ticket::' + v[0];
-                                break;
-                            case ArticleProperty.SENDER_TYPE_ID:
-                            case ArticleProperty.CHANNEL_ID:
-                            case ArticleProperty.TO:
-                            case ArticleProperty.CC:
-                            case ArticleProperty.FROM:
-                            case ArticleProperty.SUBJECT:
-                            case ArticleProperty.BODY:
-                                v[0] = 'Article::' + v[0];
-                                break;
-                            default:
+                    const newValue = {};
+                    for (const valueProperty in value) {
+                        if (valueProperty) {
+                            let newValutProperty = valueProperty;
+
+                            switch (valueProperty) {
+                                case TicketProperty.TYPE_ID:
+                                case TicketProperty.STATE_ID:
+                                case TicketProperty.PRIORITY_ID:
+                                case TicketProperty.QUEUE_ID:
+                                case TicketProperty.LOCK_ID:
+                                case TicketProperty.ORGANISATION_ID:
+                                case TicketProperty.CONTACT_ID:
+                                case TicketProperty.OWNER_ID:
+                                case TicketProperty.RESPONSIBLE_ID:
+                                    if (!newValutProperty.match(/^Ticket::/)) {
+                                        newValutProperty = 'Ticket::' + newValutProperty;
+                                    }
+                                    break;
+                                case ArticleProperty.SENDER_TYPE_ID:
+                                case ArticleProperty.CHANNEL_ID:
+                                case ArticleProperty.TO:
+                                case ArticleProperty.CC:
+                                case ArticleProperty.FROM:
+                                case ArticleProperty.SUBJECT:
+                                case ArticleProperty.BODY:
+                                    if (!newValutProperty.match(/^Article::/)) {
+                                        newValutProperty = 'Article::' + newValutProperty;
+                                    }
+                                    break;
+                                default:
+                            }
+
+                            newValue[newValutProperty] = value[valueProperty];
                         }
                     }
+                    value = newValue;
                 }
                 break;
             default:
@@ -177,5 +189,33 @@ export class JobService extends KIXObjectService<SystemAddress> {
             JobProperty.MACRO_ACTIONS, Array.from(actions.values())
         ]);
         return parameter;
+    }
+
+    public static async getExecPlansOfJob(job: Job): Promise<ExecPlan[]> {
+        let execPlans: ExecPlan[] = [];
+        if (job) {
+            if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
+                execPlans = job.ExecPlans;
+            } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
+                execPlans = await KIXObjectService.loadObjects<ExecPlan>(
+                    KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, true
+                ).catch(() => [] as ExecPlan[]);
+            }
+        }
+        return execPlans;
+    }
+
+    public static async getMacrosOfJob(job: Job): Promise<Macro[]> {
+        let macros: Macro[] = [];
+        if (job) {
+            if (Array.isArray(job.Macros) && !!job.Macros.length) {
+                macros = job.Macros;
+            } else if (Array.isArray(job.MacroIDs) && !!job.MacroIDs.length) {
+                macros = await KIXObjectService.loadObjects<Macro>(
+                    KIXObjectType.MACRO, job.MacroIDs, undefined, true
+                ).catch(() => [] as Macro[]);
+            }
+        }
+        return macros;
     }
 }

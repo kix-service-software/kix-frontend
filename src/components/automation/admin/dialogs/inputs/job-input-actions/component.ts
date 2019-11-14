@@ -79,7 +79,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 currentNode.selected = true;
                 super.provideValue(currentNode.id, true);
                 this.currentAction = currentNode;
-                this.setFields();
+                this.setFields(false);
             }
         }
     }
@@ -94,20 +94,22 @@ class Component extends FormInputComponent<string[], ComponentState> {
         await super.focusLost();
     }
 
-    private async setFields(clear?: boolean): Promise<void> {
-        const formService = ServiceRegistry.getServiceInstance<JobFormService>(
-            KIXObjectType.JOB, ServiceType.FORM
-        );
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+    private async setFields(clear: boolean = true): Promise<void> {
+        if (!this.state.field.children || !!!this.state.field.children.length || clear) {
+            const formService = ServiceRegistry.getServiceInstance<JobFormService>(
+                KIXObjectType.JOB, ServiceType.FORM
+            );
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
 
-        if (formService && formInstance) {
-            if (this.currentAction) {
-                const childFields = await formService.getFormFieldsForAction(
-                    this.currentAction.id, this.state.field.instanceId
-                );
-                formInstance.addNewFormField(this.state.field, childFields, true);
-            } else {
-                formInstance.addNewFormField(this.state.field, [], true);
+            if (formService && formInstance) {
+                if (this.currentAction) {
+                    const childFields = await formService.getFormFieldsForAction(
+                        this.currentAction.id, this.state.field.instanceId
+                    );
+                    formInstance.addNewFormField(this.state.field, childFields, true);
+                } else {
+                    formInstance.addNewFormField(this.state.field, [], true);
+                }
             }
         }
     }

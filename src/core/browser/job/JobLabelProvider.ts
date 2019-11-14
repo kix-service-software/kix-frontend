@@ -14,6 +14,7 @@ import { Job } from "../../model/kix/job";
 import { KIXObjectService } from "../kix";
 import { Macro } from "../../model/kix/macro";
 import { ExecPlan } from "../../model/kix/exec-plan";
+import { JobService } from "./JobService";
 
 export class JobLabelProvider extends LabelProvider {
 
@@ -121,14 +122,14 @@ export class JobLabelProvider extends LabelProvider {
                     }
                     break;
                 case JobProperty.HAS_TRIGGER_EVENTS:
-                    const eventExecPlans: ExecPlan[] = await this.getExecPlans(job);
+                    const eventExecPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
                     const hasEvents: boolean = eventExecPlans && eventExecPlans.some(
                         (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
                     );
                     displayValue = hasEvents ? 'Translatable#Yes' : 'Translatable#No';
                     break;
                 case JobProperty.HAS_TRIGGER_TIMES:
-                    const timeExecPlans: ExecPlan[] = await this.getExecPlans(job);
+                    const timeExecPlans: ExecPlan[] = await JobService.getExecPlansOfJob(job);
                     const hasTimes: boolean = timeExecPlans && timeExecPlans.some(
                         (ep) => ep.Parameters
                             && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
@@ -148,18 +149,6 @@ export class JobLabelProvider extends LabelProvider {
         }
 
         return displayValue ? displayValue.toString() : '';
-    }
-
-    private async getExecPlans(job: Job): Promise<ExecPlan[]> {
-        let execPlans: ExecPlan[] = [];
-        if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
-            execPlans = job.ExecPlans;
-        } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
-            execPlans = await KIXObjectService.loadObjects<ExecPlan>(
-                KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, true
-            ).catch(() => [] as ExecPlan[]);
-        }
-        return execPlans;
     }
 
 }

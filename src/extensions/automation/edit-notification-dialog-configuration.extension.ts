@@ -35,7 +35,7 @@ export class Extension implements IConfigurationExtension {
     public async createDefaultConfiguration(): Promise<ContextConfiguration> {
 
         const editDialogWidget = new WidgetConfiguration(
-            'notification-edit-dialog-widget', 'Edit DIalog Widget', ConfigurationType.Widget,
+            'notification-edit-dialog-widget', 'Edit Dialog Widget', ConfigurationType.Widget,
             'edit-notification-dialog', 'Translatable#Edit Notification', [], null, null,
             false, false, 'kix-icon-edit'
         );

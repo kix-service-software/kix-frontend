@@ -33,12 +33,12 @@ export class Extension implements IConfigurationExtension {
     }
 
     public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-        const newDIalogWidget = new WidgetConfiguration(
-            'notification-new-dialog-widget', 'New DIalog Widget', ConfigurationType.Widget,
+        const newDialogWidget = new WidgetConfiguration(
+            'notification-new-dialog-widget', 'New Dialog Widget', ConfigurationType.Widget,
             'new-notification-dialog', 'Translatable#New Notification', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(newDIalogWidget);
+        await ModuleConfigurationService.getInstance().saveConfiguration(newDialogWidget);
 
 
         return new ContextConfiguration(

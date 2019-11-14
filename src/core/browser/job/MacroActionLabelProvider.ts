@@ -10,7 +10,7 @@
 import { LabelProvider } from "../LabelProvider";
 import { MacroActionProperty, MacroAction } from "../../model/kix/macro";
 import { TranslationService } from "../i18n/TranslationService";
-import { KIXObjectType, KIXObjectProperty } from "../../model";
+import { KIXObjectType, KIXObjectProperty, ObjectIcon } from "../../model";
 
 export class MacroActionLabelProvider extends LabelProvider {
 
@@ -68,12 +68,35 @@ export class MacroActionLabelProvider extends LabelProvider {
         let displayValue;
         switch (property) {
             case KIXObjectProperty.VALID_ID:
-                displayValue = typeof value !== 'undefined' ? (value ? 'false' : 'true') : 'true';
+                displayValue = value && value === 2
+                    ? await TranslationService.translate('Translatable#Yes')
+                    : await TranslationService.translate('Translatable#No');
                 break;
             default:
                 displayValue = value ? value.toString() : '';
         }
+
         return displayValue;
+    }
+
+    public async getIcons(
+        action: MacroAction, property: string, value?: string | number
+    ): Promise<Array<string | ObjectIcon>> {
+        if (action) {
+            value = action[property];
+        }
+        const icons = [];
+
+        switch (property) {
+            case KIXObjectProperty.VALID_ID:
+                if (value && value === 2) {
+                    icons.push('kix-icon-check');
+                }
+                break;
+            default:
+        }
+
+        return icons;
     }
 
 }

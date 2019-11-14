@@ -39,7 +39,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     context.registerListener(this.table.getTableId() + '-content-provider', {
                         explorerBarToggled: () => { return; },
                         filteredObjectListChanged: () => { return; },
-                        objectChanged: this.objectListChanged.bind(this),
+                        objectChanged: this.objectChanged.bind(this),
                         objectListChanged: this.objectListChanged.bind(this),
                         sidebarToggled: () => { return; },
                         scrollInformationChanged: () => { return; },
@@ -57,6 +57,12 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             if (context) {
                 context.unregisterListener(this.table.getTableId() + '-content-provider');
             }
+        }
+    }
+
+    private objectChanged(id: number | string, object: KIXObject, objectType: KIXObjectType): void {
+        if (objectType === this.objectType) {
+            this.table.reload(true);
         }
     }
 

@@ -39,7 +39,7 @@ export class JobDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.JOB, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadTicketState(changedProperties) as any;
+        const object = await this.loadJob(changedProperties) as any;
 
         if (reload) {
             this.listeners.forEach(
@@ -50,7 +50,7 @@ export class JobDetailsContext extends Context {
         return object;
     }
 
-    private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<Job> {
+    private async loadJob(changedProperties: string[] = [], cache: boolean = true): Promise<Job> {
         const jobId = Number(this.objectId);
 
         const timeout = window.setTimeout(() => {
@@ -61,7 +61,7 @@ export class JobDetailsContext extends Context {
 
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['ExecPlans', 'Macros']);
 
-        const ticketStates = await KIXObjectService.loadObjects<Job>(
+        const jobs = await KIXObjectService.loadObjects<Job>(
             KIXObjectType.JOB, [jobId], loadingOptions, null, cache
         ).catch((error) => {
             console.error(error);
@@ -71,8 +71,8 @@ export class JobDetailsContext extends Context {
         window.clearInterval(timeout);
 
         let job: Job;
-        if (ticketStates && ticketStates.length) {
-            job = ticketStates[0];
+        if (jobs && jobs.length) {
+            job = jobs[0];
             this.objectId = job.ID;
         }
 
