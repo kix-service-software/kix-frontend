@@ -42,28 +42,33 @@ export class WebformFormService extends KIXObjectFormService<Webform> {
         form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
     ): Promise<void> {
         const hasConfigPermissions = await this.checkPermissions('system/config');
-        if (form && hasConfigPermissions && form.formContext === FormContext.NEW) {
+        if (form) {
             for (const p of form.pages) {
                 for (const g of p.groups) {
                     for (const f of g.formFields) {
-                        let value;
-                        switch (f.property) {
-                            case WebformProperty.QUEUE_ID:
-                                value = await this.getDefaultQueueID();
-                                break;
-                            case WebformProperty.PRIORITY_ID:
-                                value = await this.getDefaultPriorityID();
-                                break;
-                            case WebformProperty.TYPE_ID:
-                                value = await this.getDefaultTypeID();
-                                break;
-                            case WebformProperty.STATE_ID:
-                                value = await this.getDefaultStateID();
-                                break;
-                            default:
+                        if (hasConfigPermissions && form.formContext === FormContext.NEW) {
+                            let value;
+                            switch (f.property) {
+                                case WebformProperty.QUEUE_ID:
+                                    value = await this.getDefaultQueueID();
+                                    break;
+                                case WebformProperty.PRIORITY_ID:
+                                    value = await this.getDefaultPriorityID();
+                                    break;
+                                case WebformProperty.TYPE_ID:
+                                    value = await this.getDefaultTypeID();
+                                    break;
+                                case WebformProperty.STATE_ID:
+                                    value = await this.getDefaultStateID();
+                                    break;
+                                default:
+                            }
+                            if (value) {
+                                formFieldValues.set(f.instanceId, new FormFieldValue(value));
+                            }
                         }
-                        if (value) {
-                            formFieldValues.set(f.instanceId, new FormFieldValue(value));
+                        if (form.formContext === FormContext.EDIT && f.property === WebformProperty.USER_PASSWORD) {
+                            formFieldValues.set(f.instanceId, new FormFieldValue('--NOT_CHANGED--'));
                         }
                     }
                 }
