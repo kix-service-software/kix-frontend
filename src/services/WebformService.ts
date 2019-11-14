@@ -71,7 +71,7 @@ export class WebformService {
             if (webformIndex !== -1) {
                 webform.CreateBy = webforms[webformIndex].CreateBy;
                 webform.CreateTime = webforms[webformIndex].CreateTime;
-                if (!webform.webformUserPassword) {
+                if (!webform.webformUserPassword || webform.webformUserPassword === '--NOT_CHANGED--') {
                     webform.webformUserPassword = webforms[webformIndex].webformUserPassword;
                 }
                 webforms.splice(webformIndex, 1, webform);
