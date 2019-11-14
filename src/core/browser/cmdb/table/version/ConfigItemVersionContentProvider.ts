@@ -23,7 +23,7 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
     ) {
-        super(KIXObjectType.CONFIG_ITEM_VERSION, table, objectIds, loadingOptions, contextId);
+        super(KIXObjectType.CONFIG_ITEM, table, objectIds, loadingOptions, contextId);
     }
 
     public async loadData(): Promise<Array<IRowObject<Version>>> {
