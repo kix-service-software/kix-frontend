@@ -23,9 +23,9 @@ class TreeNodeComponent {
         this.state.node = input.node;
 
         if (this.state.node) {
-            this.state.isVisible = this.state.node.clickable || this.hasClickableChildren(this.state.node.children);
+            this.state.isVisible = this.state.node.selectable || this.hasClickableChildren(this.state.node.children);
             if (!this.state.node.expandOnClick) {
-                this.state.node.expandOnClick = !this.state.node.clickable;
+                this.state.node.expandOnClick = !this.state.node.selectable;
             }
         }
 
@@ -43,7 +43,7 @@ class TreeNodeComponent {
 
     private hasClickableChildren(tree: TreeNode[]): boolean {
         for (const t of tree) {
-            if (t.clickable) {
+            if (t.selectable) {
                 return true;
             }
 
@@ -105,7 +105,7 @@ class TreeNodeComponent {
             this.toggleNode(event);
         }
 
-        if (this.state.node.clickable) {
+        if (this.state.node.selectable) {
             (this as any).emit('nodeClicked', this.state.node);
         }
     }

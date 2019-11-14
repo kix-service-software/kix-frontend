@@ -60,7 +60,7 @@ class TreeNodeComponent {
     }
 
     public nodeClicked(): void {
-        if (this.treeHandler) {
+        if (this.treeHandler && this.state.node.selectable) {
             this.treeHandler.setSelection([this.state.node], !this.state.node.selected);
         }
     }
