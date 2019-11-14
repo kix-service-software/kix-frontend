@@ -24,7 +24,7 @@ export class TreeNode {
         public expanded: boolean = false,
         public visible: boolean = true,
         public expandOnClick: boolean = false,
-        public clickable: boolean = true,
+        public selectable: boolean = true,
         public tooltip: string = label,
         public flags: string[] = [],
         public navigationNode: boolean = false,

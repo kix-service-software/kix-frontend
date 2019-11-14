@@ -55,7 +55,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes = nodesOption ? (nodesOption.value as TreeNode[]).map(
                 (n) => new TreeNode(
                     n.id, n.label, n.icon, n.secondaryIcon, n.children, n.parent, n.nextNode, n.previousNode,
-                    n.properties, n.expanded, n.visible, n.expandOnClick, n.clickable, n.tooltip, n.flags,
+                    n.properties, n.expanded, n.visible, n.expandOnClick, n.selectable, n.tooltip, n.flags,
                     n.navigationNode, n.selected
                 )
             ) : [];
