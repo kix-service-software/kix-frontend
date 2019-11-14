@@ -223,6 +223,9 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
+                            ], undefined, undefined, undefined, undefined,
+                            [
+                                ['requiredPermission', 'TicketRead,TicketUpdate']
                             ]
                         )
                     )
@@ -244,6 +247,9 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                                     FilterType.AND, 1
                                 )
+                            ], undefined, undefined, undefined, undefined,
+                            [
+                                ['requiredPermission', 'TicketRead,TicketUpdate']
                             ]
                         )
                     )

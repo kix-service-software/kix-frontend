@@ -262,12 +262,17 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                     new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions([
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ])
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ], undefined, undefined, undefined, undefined,
+                            [
+                                ['requiredPermission', 'TicketRead,TicketUpdate']
+                            ]
+                        )
                     )
                 ]
             )
