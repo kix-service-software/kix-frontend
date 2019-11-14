@@ -15,7 +15,7 @@ import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { LabelService } from "../../LabelService";
 import {
     JobService, JobLabelProvider, JobTableFactory, JobBrowserFactory, JobCreateAction, NewJobDialogContext,
-    JobExecuteAction, JobFormService, JobDetailsContext, MacroActionLabelProvider
+    JobFormService, JobDetailsContext, MacroActionLabelProvider, EditJobDialogContext, JobEditAction, JobExecuteAction
 } from "../../job";
 import { TableFactoryService } from "../../table";
 import { FactoryService } from "../../kix";
@@ -36,6 +36,7 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerServiceInstance(JobService.getInstance());
         ServiceRegistry.registerServiceInstance(JobFormService.getInstance());
+
         FactoryService.getInstance().registerFactory(KIXObjectType.JOB, JobBrowserFactory.getInstance());
 
         LabelService.getInstance().registerLabelProvider(new JobLabelProvider());
@@ -66,6 +67,16 @@ export class UIModule implements IUIModule {
                 false, 'new-job-dialog', ['jobs'], NewJobDialogContext
             );
             await ContextService.getInstance().registerContext(newJobDialogContext);
+        }
+
+        if (await this.checkPermission('system/automation/jobs/*', CRUD.UPDATE)) {
+            ActionFactory.getInstance().registerAction('job-edit-action', JobEditAction);
+            const editJobDialogContext = new ContextDescriptor(
+                EditJobDialogContext.CONTEXT_ID, [KIXObjectType.JOB],
+                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+                false, 'edit-job-dialog', ['jobs'], EditJobDialogContext
+            );
+            await ContextService.getInstance().registerContext(editJobDialogContext);
         }
     }
 

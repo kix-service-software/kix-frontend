@@ -19,6 +19,7 @@ import { NotificationTableFactory } from '../../../src/core/browser/notification
 import { WebformTableFactory } from '../../../src/core/browser/webform';
 import { GeneralCatalogTableFactory } from '../../../src/core/browser/general-catalog';
 import { JobTableFactory } from '../../../src/core/browser/job';
+import { MacroActionTableFactory } from '../../../src/core/browser/job/table/MacroActionTableFactory';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -45,6 +46,7 @@ TableFactoryService.getInstance().registerFactory(new MailFilterSetTableFactory(
 TableFactoryService.getInstance().registerFactory(new WebformTableFactory());
 TableFactoryService.getInstance().registerFactory(new GeneralCatalogTableFactory());
 TableFactoryService.getInstance().registerFactory(new JobTableFactory());
+TableFactoryService.getInstance().registerFactory(new MacroActionTableFactory());
 
 const heights = {
     'l': TableHeaderHeight.LARGE,

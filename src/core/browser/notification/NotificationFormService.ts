@@ -10,13 +10,15 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import {
     KIXObjectType, Notification, NotificationProperty, FormFieldValue,
-    FormFieldOption, FormContext, NotificationMessage
+    FormFieldOption, FormContext, NotificationMessage, ContextType, ArticleProperty
 } from "../../model";
 import { ServiceRegistry } from "../kix";
 import { TranslationService } from "../i18n/TranslationService";
 import {
     FormConfiguration, FormFieldConfiguration, FormGroupConfiguration
 } from "../../model/components/form/configuration";
+import { ContextService } from "../context";
+import { NotificationService } from "./NotificationService";
 
 export class NotificationFormService extends KIXObjectFormService<Notification> {
 
@@ -36,6 +38,17 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.NOTIFICATION;
+    }
+
+    protected async prePrepareForm(form: FormConfiguration, notification: Notification): Promise<void> {
+        if (notification && notification.Events) {
+            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (context) {
+                context.setAdditionalInformation(
+                    NotificationProperty.DATA_EVENTS, notification.Events
+                );
+            }
+        }
     }
 
     protected async postPrepareForm(
@@ -76,9 +89,24 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
         switch (property) {
             case NotificationProperty.DATA_FILTER:
                 if (notification.Filter) {
+                    const articleProperty = [
+                        ArticleProperty.SENDER_TYPE_ID, ArticleProperty.CHANNEL_ID, ArticleProperty.TO,
+                        ArticleProperty.CC, ArticleProperty.FROM, ArticleProperty.SUBJECT, ArticleProperty.BODY
+                    ];
+                    let hasArticleEvent = false;
                     value = [];
+                    const context = ContextService.getInstance().getActiveContext();
+                    if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+                        const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_FILTER);
+                        hasArticleEvent = selectedEvents
+                            ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
+                            : false;
+                    }
+
                     notification.Filter.forEach((v, k) => {
-                        value.push([k, v]);
+                        if (hasArticleEvent || !articleProperty.some((p) => k === p)) {
+                            value.push([k, v]);
+                        }
                     });
                 }
                 break;

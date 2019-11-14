@@ -46,10 +46,10 @@ export class MacroActionTableFactory extends TableFactory {
             ),
             new DefaultColumnConfiguration(null, null, null,
                 MacroActionProperty.TYPE, true, false, true, false, 300, true, true,
-                false, DataType.STRING, true, null, 'Translatable#Action', false
+                true, DataType.STRING, true, null, 'Translatable#Action', false
             ),
             new DefaultColumnConfiguration(null, null, null,
-                KIXObjectProperty.VALID_ID, true, false, true, false, 150, true, true,
+                KIXObjectProperty.VALID_ID, false, true, true, false, 100, true, true,
                 true, DataType.STRING, true, null, 'Translatable#Skip', false
             ),
             new DefaultColumnConfiguration(null, null, null,

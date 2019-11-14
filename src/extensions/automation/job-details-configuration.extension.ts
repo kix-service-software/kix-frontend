@@ -101,7 +101,7 @@ export class Extension implements IConfigurationExtension {
         await ModuleConfigurationService.getInstance().saveConfiguration(
             new WidgetConfiguration(
                 'job-details-actions-widget', 'Actions Widget', ConfigurationType.Widget,
-                'table-widget', 'Translatable#Acions', [],
+                'table-widget', 'Translatable#Actions', [],
                 new ConfigurationDefinition(
                     'job-details-actions-table-widget-config', ConfigurationType.TableWidget
                 ), null, false, true, null, true
@@ -119,8 +119,7 @@ export class Extension implements IConfigurationExtension {
                 new ConfiguredWidget('job-details-actions-widget', 'job-details-actions-widget')
             ],
             [],
-            ['job-create-action'], ['job-execute-action'],
-            [],
+            ['job-create-action'], ['job-edit-action', 'job-execute-action'], [],
             [
                 new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget')
             ]

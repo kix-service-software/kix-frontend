@@ -9,6 +9,8 @@
 
 import { KIXObjectFactory } from "../kix/KIXObjectFactory";
 import { Job } from "../../model/kix/job";
+import { Macro } from "../../model/kix/macro";
+import { ExecPlan } from "../../model/kix/exec-plan";
 
 export class JobBrowserFactory extends KIXObjectFactory<Job> {
 
@@ -27,6 +29,15 @@ export class JobBrowserFactory extends KIXObjectFactory<Job> {
 
     public async create(job: Job): Promise<Job> {
         const newJob = new Job(job);
+
+        newJob.Macros = newJob.Macros
+            ? newJob.Macros.map((a) => new Macro(a))
+            : null;
+
+        newJob.ExecPlans = newJob.ExecPlans
+            ? newJob.ExecPlans.map((ep) => new ExecPlan(ep))
+            : null;
+
         return newJob;
     }
 

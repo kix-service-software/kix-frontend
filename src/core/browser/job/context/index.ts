@@ -7,5 +7,6 @@
  * --
  */
 
+export { EditJobDialogContext } from './EditJobDialogContext';
 export { NewJobDialogContext } from './NewJobDialogContext';
 export { JobDetailsContext } from './JobDetailsContext';

@@ -398,24 +398,26 @@ export class FormInstance implements IFormInstance {
     public async changeFieldOrder(changeFieldInstanceId: string, targetIndex: number): Promise<void> {
         if (changeFieldInstanceId && !isNaN(targetIndex)) {
             const startField = await this.getFormField(changeFieldInstanceId);
-            const fields = await this.getFields(startField);
+            if (startField) {
+                const fields = await this.getFields(startField);
+                if (Array.isArray(fields)) {
+                    const changeIndex = fields.findIndex((c) => c.instanceId === changeFieldInstanceId);
+                    if (changeIndex !== -1 && targetIndex !== changeIndex) {
+                        const newIndex = targetIndex > changeIndex ? targetIndex + 1 : targetIndex;
+                        fields.splice(newIndex, 0, startField);
+                        fields.splice(changeIndex, 1);
 
-            if (Array.isArray(fields)) {
-                const changeIndex = fields.findIndex((c) => c.instanceId === changeFieldInstanceId);
-                if (targetIndex !== -1 && targetIndex !== changeIndex) {
-                    fields.splice(changeIndex, 1);
-                    const newIndex = targetIndex > changeIndex ? targetIndex - 1 : targetIndex;
-                    fields.splice(newIndex, 0, startField);
+                        this.sortValuesByFieldList(fields);
 
-                    this.sortValuesByFieldList(fields);
+                        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+                            this.form.objectType, ServiceType.FORM
+                        );
+                        if (service) {
+                            await service.updateFields(fields);
+                        }
 
-                    const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
-                        this.form.objectType, ServiceType.FORM
-                    );
-                    if (service) {
-                        await service.updateFields(fields);
+                        this.listeners.forEach((l) => l.updateForm());
                     }
-                    this.listeners.forEach((l) => l.updateForm());
                 }
             }
         }

@@ -16,6 +16,9 @@
             },
             "job-details-configuration": {
                 "module": "job-details-configuration.extension"
+            },
+            "edit-job-dialog-configuration": {
+                "module": "edit-job-dialog-configuration.extension"
             }
         },
         "kix:modules": {

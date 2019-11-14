@@ -47,10 +47,10 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('admin-jobs', 'automation/admin/jobs', []),
         new UIComponent('new-job-dialog', 'automation/admin/dialogs/new-job-dialog', []),
         new UIComponent('job-input-events', 'automation/admin/dialogs/inputs/job-input-events', []),
-        new UIComponent('job-input-filter', 'automation/admin/dialogs/inputs/job-input-filter', []
-        ),
+        new UIComponent('job-input-filter', 'automation/admin/dialogs/inputs/job-input-filter', []),
         new UIComponent('job-input-actions', 'automation/admin/dialogs/inputs/job-input-actions', []),
-        new UIComponent('job-details-exec-plans-widget', 'automation/admin/widgets/job-details-exec-plans-widget', [])
+        new UIComponent('job-details-exec-plans-widget', 'automation/admin/widgets/job-details-exec-plans-widget', []),
+        new UIComponent('edit-job-dialog', 'automation/admin/dialogs/edit-job-dialog', [])
     ];
 
 }

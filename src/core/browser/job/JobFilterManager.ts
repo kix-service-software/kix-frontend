@@ -11,7 +11,8 @@ import {
     AbstractDynamicFormManager, LabelService, ObjectPropertyValue, DynamicFormOperationsType, KIXObjectService
 } from "..";
 import {
-    KIXObjectType, TicketProperty, ArticleProperty, InputFieldTypes, TreeNode, ContextType, JobProperty
+    KIXObjectType, TicketProperty, ArticleProperty, InputFieldTypes, TreeNode, ContextType, JobProperty,
+    Organisation, Contact
 } from "../../model";
 import { TicketService } from "../ticket";
 import { ContextService } from "../context";
@@ -97,7 +98,8 @@ export class JobFilterManager extends AbstractDynamicFormManager {
         }
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
+    public async getTreeNodes(property: string, objectIds?: any): Promise<TreeNode[]> {
+        let nodes = [];
         switch (property) {
             case TicketProperty.TYPE_ID:
             case TicketProperty.STATE_ID:
@@ -110,10 +112,27 @@ export class JobFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.LOCK_ID:
             case ArticleProperty.SENDER_TYPE_ID:
             case ArticleProperty.CHANNEL_ID:
-                return TicketService.getInstance().getTreeNodes(property, false);
+                nodes = await TicketService.getInstance().getTreeNodes(property, false);
+                break;
+            case TicketProperty.ORGANISATION_ID:
+                if (Array.isArray(objectIds) && !!objectIds.length) {
+                    const organisations = await KIXObjectService.loadObjects<Organisation>(
+                        KIXObjectType.ORGANISATION, objectIds
+                    );
+                    nodes = await KIXObjectService.prepareTree(organisations);
+                }
+                break;
+            case TicketProperty.CONTACT_ID:
+                if (Array.isArray(objectIds) && !!objectIds.length) {
+                    const contacts = await KIXObjectService.loadObjects<Contact>(
+                        KIXObjectType.ORGANISATION, objectIds
+                    );
+                    nodes = await KIXObjectService.prepareTree(contacts);
+                }
+                break;
             default:
-                return [];
         }
+        return nodes;
     }
 
     public showValueInput(value: ObjectPropertyValue): boolean {

@@ -35,7 +35,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
                 kixObject = await dialogContext.getObject(form.objectType);
             }
         }
-        await this.prePrepareForm(form);
+        await this.prePrepareForm(form, kixObject);
 
         const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
         for (const p of form.pages) {
@@ -156,7 +156,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return newString;
     }
 
-    protected async prePrepareForm(form: FormConfiguration): Promise<void> {
+    protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
         return;
     }
 
