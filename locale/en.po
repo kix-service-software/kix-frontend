@@ -56,9 +56,6 @@ msgstr ""
 msgid "Account successfully created."
 msgstr ""
 
-msgid "Acions"
-msgstr "Actions"
-
 msgid "Action"
 msgstr ""
 
@@ -706,6 +703,11 @@ msgstr ""
 msgid "Edit FAQ Category"
 msgstr ""
 
+#, fuzzy
+#| msgid "Load Job"
+msgid "Edit Job"
+msgstr "Loading Job"
+
 msgid "Edit Key"
 msgstr ""
 
@@ -747,6 +749,11 @@ msgstr ""
 
 msgid "Edit Ticket"
 msgstr ""
+
+#, fuzzy
+#| msgid "Load Ticket"
+msgid "Edit Ticket Job"
+msgstr "Loading Ticket"
 
 msgid "Edit Translation"
 msgstr ""
@@ -1045,7 +1052,8 @@ msgstr ""
 "The General Catalog class can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_JobCCreateEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_JobCCreateEdit_Time"
 msgstr ""
@@ -3564,6 +3572,11 @@ msgstr ""
 msgid "Update FAQ Category"
 msgstr ""
 
+#, fuzzy
+#| msgid "Update Queue"
+msgid "Update Job"
+msgstr "Update Team"
+
 msgid "Update Key"
 msgstr ""
 
@@ -3728,6 +3741,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Acions"
+#~ msgstr "Actions"
 
 #~ msgid "Helptext_Admin_FAQCategoryEdit_Icon"
 #~ msgstr ""

@@ -56,9 +56,6 @@ msgstr "Kontoinformationen"
 msgid "Account successfully created."
 msgstr "Konto wurde erfolgreich angelegt."
 
-msgid "Acions"
-msgstr "Aktion"
-
 msgid "Action"
 msgstr "Aktion"
 
@@ -712,6 +709,11 @@ msgstr "FAQ Artikel bearbeiten"
 msgid "Edit FAQ Category"
 msgstr "FAQ Kategorie bearbeiten"
 
+#, fuzzy
+#| msgid "Edit Role"
+msgid "Edit Job"
+msgstr "Rolle bearbeiten"
+
 msgid "Edit Key"
 msgstr "Schlüssel bearbeiten"
 
@@ -752,6 +754,11 @@ msgid "Edit Text Module"
 msgstr "Textbausteine bearbeiten"
 
 msgid "Edit Ticket"
+msgstr "Ticket bearbeiten"
+
+#, fuzzy
+#| msgid "Edit Ticket"
+msgid "Edit Ticket Job"
 msgstr "Ticket bearbeiten"
 
 msgid "Edit Translation"
@@ -1091,8 +1098,8 @@ msgid "Helptext_Admin_JobCreateEdit_Filter"
 msgstr ""
 "Wählen Sie ein Ticket- oder Artikelattribut aus der Liste. Anschließend "
 "können Sie in einem weiteren Feld den Wert eingeben, auf den der Filter "
-"reagiert. Nutzen Sie für jedes weitere Attribut eine neue Zeile. Ist unter \""
-"Events\" mindestens ein artikelbezogenes Event ausgewählt, sind die "
+"reagiert. Nutzen Sie für jedes weitere Attribut eine neue Zeile. Ist unter "
+"\"Events\" mindestens ein artikelbezogenes Event ausgewählt, sind die "
 "Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
 msgid "Helptext_Admin_JobCreateEdit_Name"
@@ -3704,6 +3711,11 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update FAQ Category"
 msgstr "Aktualisierung wird durchgeführt"
 
+#, fuzzy
+#| msgid "Update Role"
+msgid "Update Job"
+msgstr "Aktualisierung wird durchgeführt"
+
 msgid "Update Key"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -3868,6 +3880,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Acions"
+#~ msgstr "Aktion"
 
 #~ msgid "How to search in KIX 18?"
 #~ msgstr "Wie suche ich in KIX 18?"
