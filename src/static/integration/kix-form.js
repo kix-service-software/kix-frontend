@@ -248,7 +248,7 @@ function sendPostRequest(formId, formElement) {
 function readFile(formId, formElement, files, index) {
     var reader = new FileReader();
     reader.onload = function () {
-        let content = reader.result.toString();
+        var content = reader.result.toString();
         loadedFiles.push({
             name: files[index].name,
             size: files[index].size,

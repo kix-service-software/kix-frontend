@@ -31,6 +31,8 @@ describe('Browser / Components / FormInstance - Order', () => {
             const fieldId = formInstance.getForm().pages[0].groups[0].formFields[5].id;
             const fieldInstanceId = formInstance.getForm().pages[0].groups[0].formFields[5].instanceId;
             const fieldId_2 = formInstance.getForm().pages[0].groups[0].formFields[2].id;
+            const fieldId_4 = formInstance.getForm().pages[0].groups[0].formFields[4].id;
+            const fieldId_6 = formInstance.getForm().pages[0].groups[0].formFields[6].id;
 
             await formInstance.changeFieldOrder(fieldInstanceId, 0);
 
@@ -39,6 +41,12 @@ describe('Browser / Components / FormInstance - Order', () => {
 
             const firstFieldId_3 = formInstance.getForm().pages[0].groups[0].formFields[3].id;
             expect(fieldId_2, 'Former second field should now be 3rd field.').equal(firstFieldId_3);
+
+            const firstFieldId_5 = formInstance.getForm().pages[0].groups[0].formFields[5].id;
+            expect(fieldId_4, 'Former 4th field should now be 5rd field.').equal(firstFieldId_5);
+
+            const firstFieldId_6 = formInstance.getForm().pages[0].groups[0].formFields[6].id;
+            expect(fieldId_6, 'Former 6th field should not changed its position.').equal(firstFieldId_6);
         });
 
         it('Should correctly change field position prior current position', async () => {
@@ -46,6 +54,8 @@ describe('Browser / Components / FormInstance - Order', () => {
             const fieldInstanceId = formInstance.getForm().pages[0].groups[0].formFields[5].instanceId;
             const fieldId_1 = formInstance.getForm().pages[0].groups[0].formFields[1].id;
             const fieldId_2 = formInstance.getForm().pages[0].groups[0].formFields[2].id;
+            const fieldId_4 = formInstance.getForm().pages[0].groups[0].formFields[4].id;
+            const fieldId_6 = formInstance.getForm().pages[0].groups[0].formFields[6].id;
             const fieldId_7 = formInstance.getForm().pages[0].groups[0].formFields[7].id;
 
             await formInstance.changeFieldOrder(fieldInstanceId, 2);
@@ -58,6 +68,12 @@ describe('Browser / Components / FormInstance - Order', () => {
 
             const firstFieldId_3 = formInstance.getForm().pages[0].groups[0].formFields[3].id;
             expect(fieldId_2, 'Former second field should now be 3rd field.').equal(firstFieldId_3);
+
+            const firstFieldId_5 = formInstance.getForm().pages[0].groups[0].formFields[5].id;
+            expect(fieldId_4, 'Former 4th field should now be 5rd field.').equal(firstFieldId_5);
+
+            const firstFieldId_6 = formInstance.getForm().pages[0].groups[0].formFields[6].id;
+            expect(fieldId_6, 'Former 6th field should not changed its position.').equal(firstFieldId_6);
 
             const firstFieldId_7 = formInstance.getForm().pages[0].groups[0].formFields[7].id;
             expect(fieldId_7, 'Former 7th field should not changed its position.').equal(firstFieldId_7);
@@ -84,7 +100,7 @@ describe('Browser / Components / FormInstance - Order', () => {
             const fieldId_1 = formInstance.getForm().pages[0].groups[0].formFields[1].id;
             const fieldId_6 = formInstance.getForm().pages[0].groups[0].formFields[6].id;
             const fieldId_7 = formInstance.getForm().pages[0].groups[0].formFields[7].id;
-            const fieldId_9 = formInstance.getForm().pages[0].groups[0].formFields[9].id;
+            const fieldId_8 = formInstance.getForm().pages[0].groups[0].formFields[8].id;
 
             await formInstance.changeFieldOrder(fieldInstanceId, 7);
 
@@ -100,8 +116,8 @@ describe('Browser / Components / FormInstance - Order', () => {
             const firstFieldId_6 = formInstance.getForm().pages[0].groups[0].formFields[6].id;
             expect(fieldId_7, 'Former 7th field should now be 6th field.').equal(firstFieldId_6);
 
-            const firstFieldId_9 = formInstance.getForm().pages[0].groups[0].formFields[9].id;
-            expect(fieldId_9, 'Former 9th field should not changed its position.').equal(firstFieldId_9);
+            const firstFieldId_8 = formInstance.getForm().pages[0].groups[0].formFields[8].id;
+            expect(fieldId_8, 'Former 8th field should not changed its position.').equal(firstFieldId_8);
         });
 
         it('Should correctly change field position after current (index 1000 => last position)', async () => {
