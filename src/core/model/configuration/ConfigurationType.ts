@@ -39,6 +39,8 @@ export enum ConfigurationType {
 
     Slider = 'Slider',
 
-    LinkedObjects = 'LinkedObjects'
+    LinkedObjects = 'LinkedObjects',
+
+    MainMenu = 'MainMenu'
 
 }

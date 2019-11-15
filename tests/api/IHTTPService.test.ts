@@ -160,13 +160,14 @@ describe('HTTP Service', () => {
                 .reply(404, new Error('404', 'Error', 404));
         });
 
-        it('Should return nothing if object is deleted.', async () => {
-            const response = await HttpService.getInstance().delete("delete/12345", '', null);
-            expect(response).undefined;
+        it('Should return empty error array.', async () => {
+            const response = await HttpService.getInstance().delete(["delete/12345"], '', null);
+            expect(response).an('array');
+            expect(response.length).equals(0);
         });
 
         it('Should return a correct http error if resource not exists.', async () => {
-            const res = await HttpService.getInstance().delete('unknownResource', '', null)
+            const res = await HttpService.getInstance().delete(['unknownResource'], '', null)
                 .catch((err: Error) => {
                     expect(err).exist;
                     expect(err).instanceof(Error);

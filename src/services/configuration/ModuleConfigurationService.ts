@@ -9,16 +9,17 @@
 
 import { IConfiguration, ConfigurationType } from "../../core/model/configuration";
 
-import jsonfile = require('jsonfile');
-import fs = require('fs');
-import path = require('path');
-import { Error } from "../../core/model";
+import {
+    Error, KIXObjectType, SysConfigOptionDefinitionProperty, KIXObjectLoadingOptions,
+    SysConfigOptionDefinition, FilterCriteria, FilterDataType, FilterType, SysConfigOption
+} from "../../core/model";
+import { SysConfigService, ConfigurationService, LoggingService } from "../../core/services";
+import { SearchOperator } from "../../core/browser";
+import { CacheService } from "../../core/cache";
 
 export class ModuleConfigurationService {
 
     private static INSTANCE: ModuleConfigurationService;
-
-    private configurationPath: string;
 
     public static getInstance(): ModuleConfigurationService {
         if (!ModuleConfigurationService.INSTANCE) {
@@ -29,72 +30,155 @@ export class ModuleConfigurationService {
 
     private constructor() { }
 
-    public setConfigurationPath(configurationPath: string): void {
-        this.configurationPath = configurationPath;
+    public async cleanUp(token: string): Promise<void> {
+        LoggingService.getInstance().info('Cleanup configurations');
+        const definitions = await this.loadSysconfigDefinitions(token);
+        await SysConfigService.getInstance().deleteObjects(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+            definitions.map((d) => d.Name)
+        );
     }
 
-    public async saveConfiguration(configuration: IConfiguration): Promise<void> {
-        this.validate(configuration);
-        const configPath = this.getConfigurationPath(configuration);
-        await this.saveConfigurationFile(configPath, configuration);
-    }
+    public async saveConfigurations(token: string, configurations: IConfiguration[]): Promise<void> {
+        const definitions = await this.loadSysconfigDefinitions(token);
 
-    private getConfigurationPath(configuration: IConfiguration): string {
-        return this.getConfigurationFilePath(configuration.type, configuration.id);
-    }
+        LoggingService.getInstance().info(`Save/Update ${configurations.length} configurations`);
 
-    public async loadConfiguration<T extends IConfiguration>(type: string | ConfigurationType, id: string): Promise<T> {
-        const configurationFilePath = this.getConfigurationFilePath(type, id);
-        let configuration;
-        if (fs.existsSync(configurationFilePath)) {
-            this.clearRequireCache(configurationFilePath);
-            try {
-                configuration = require(configurationFilePath);
-                this.validate(configuration);
-                return configuration;
-            } catch (error) {
-                throw new Error("-1", error.toString());
+        for (const config of configurations) {
+            const existingDefinition = definitions.find((d) => d.Name === config.id);
+            if (!existingDefinition) {
+                await this.createConfiguration(token, config);
             }
         }
+
+        await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
     }
 
-    public async loadConfigurations<T extends IConfiguration>(type: ConfigurationType): Promise<T[]> {
-        const configDir = this.getConfigurationDirectoryPath(type);
-        const fileNames = fs.readdirSync(configDir);
+    public async saveConfiguration(token: string, configuration: IConfiguration): Promise<void> {
+        this.validate(configuration);
+        const config = await this.loadConfiguration(token, configuration.id)
+            .catch((error) => {
+                return null;
+            });
 
-        const configurations = [];
-        for (const file of fileNames) {
-            const configId = file.replace('.json', '');
-            const config = await this.loadConfiguration(type, configId);
-            configurations.push(config);
+        if (config) {
+            await this.updateConfiguration(token, configuration);
+        } else {
+            await this.createConfiguration(token, configuration);
+        }
+
+        await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
+    }
+
+    public async loadConfiguration<T extends IConfiguration>(token: string, id: string): Promise<T> {
+        let configuration: T;
+
+        let options = await CacheService.getInstance().get(
+            'ModuleConfigurationService::SysConfigOption', 'ModuleConfigurationService'
+        );
+        if (!options) {
+            options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, null, null, null
+            );
+            CacheService.getInstance().set(
+                'ModuleConfigurationService::SysConfigOption', options, 'ModuleConfigurationService'
+            );
+        }
+
+        if (options && options.length) {
+            const option = options.find((o) => o.Name === id);
+            if (option && option.Value) {
+                configuration = JSON.parse(option.Value);
+            }
+        }
+
+        return configuration;
+    }
+
+    public async loadConfigurations<T extends IConfiguration>(
+        token: string, type: string | ConfigurationType
+    ): Promise<T[]> {
+        const definitions = await this.loadSysconfigDefinitions(token, type);
+        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, null, null, null
+        );
+
+        const configurations: T[] = [];
+        if (options && options.length) {
+            for (const definition of definitions) {
+                const option = options.find((o) => o.Name === definition.Name);
+                if (option && option.Value) {
+                    configurations.push(JSON.parse(option.Value));
+                }
+            }
+
         }
 
         return configurations;
     }
 
-    private getConfigurationDirectoryPath(type: string | ConfigurationType): string {
-        return path.join(this.configurationPath, 'defaults', type.toString());
-    }
+    private async loadSysconfigDefinitions(
+        token: string, type?: string | ConfigurationType
+    ): Promise<SysConfigOptionDefinition[]> {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-    private getConfigurationFilePath(type: string | ConfigurationType, id: string): string {
-        const dir = path.join(this.configurationPath, 'defaults', type.toString());
-        if (!fs.existsSync(dir)) {
-            fs.mkdirSync(dir);
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                SysConfigOptionDefinitionProperty.CONTEXT, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
+            )
+        ]);
+
+        if (type) {
+            loadingOptions.filter.push(
+                new FilterCriteria(
+                    SysConfigOptionDefinitionProperty.CONTEXT_METADATA, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, type
+                )
+            );
         }
-        return path.join(dir, id + '.json');
+
+        const definitions = await SysConfigService.getInstance().loadObjects<SysConfigOptionDefinition>(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, loadingOptions, null
+        );
+
+        return definitions;
     }
 
-    private saveConfigurationFile(filePath: string, configuration: IConfiguration): Promise<void> {
-        return new Promise<void>((resolve, reject) => {
-            jsonfile.writeFile(filePath, configuration,
-                (fileError: Error) => {
-                    if (fileError) {
-                        reject(fileError);
-                    }
+    private async updateConfiguration(token: string, configuration: IConfiguration): Promise<void> {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        LoggingService.getInstance().info(`Update existing configuration: ${configuration.id}`);
+        const name = configuration.name ? configuration.name : configuration.id;
+        await SysConfigService.getInstance().updateObject(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+            [
+                [SysConfigOptionDefinitionProperty.NAME, configuration.id],
+                [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
+                [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
+                [SysConfigOptionDefinitionProperty.CONTEXT, serverConfig.NOTIFICATION_CLIENT_ID],
+                [SysConfigOptionDefinitionProperty.CONTEXT_METADATA, configuration.type],
+                [SysConfigOptionDefinitionProperty.TYPE, 'String']
+            ],
+            configuration.id
+        ).catch((error: Error) => LoggingService.getInstance().error(error.Code, error));
+    }
 
-                    resolve();
-                });
-        });
+    private async createConfiguration(token: string, configuration: IConfiguration): Promise<void> {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        LoggingService.getInstance().info(`Create new configuration: ${configuration.id}`);
+        const name = configuration.name ? configuration.name : configuration.id;
+        await SysConfigService.getInstance().createObject(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+            [
+                [SysConfigOptionDefinitionProperty.NAME, configuration.id],
+                [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
+                [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
+                [SysConfigOptionDefinitionProperty.CONTEXT, serverConfig.NOTIFICATION_CLIENT_ID],
+                [SysConfigOptionDefinitionProperty.CONTEXT_METADATA, configuration.type],
+                [SysConfigOptionDefinitionProperty.TYPE, 'String'],
+                [SysConfigOptionDefinitionProperty.IS_REQUIRED, 0]
+            ], null, null
+        ).catch((error: Error) => LoggingService.getInstance().error(error.Code, error));
     }
 
     private validate(configuration: IConfiguration): void {
@@ -107,15 +191,8 @@ export class ModuleConfigurationService {
         }
     }
 
-    private clearRequireCache(configurationFilePath: string): void {
-        try {
-            const config = require.resolve(configurationFilePath);
-            if (require.cache[config]) {
-                delete require.cache[config];
-            }
-        } catch (error) {
-            return;
-        }
+    public async sysconfigChanged(id: string): Promise<void> {
+        await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
     }
 
 }

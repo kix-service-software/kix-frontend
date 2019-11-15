@@ -22,7 +22,7 @@ import {
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
@@ -31,9 +31,10 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         return EditTicketDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const organisationInformation = new ObjectInformationWidgetConfiguration(
-            'ticket-new-dialog-organisation-information', 'Organisation Information',
+            'ticket-edit-dialog-organisation-information', 'Organisation Information',
             ConfigurationType.ObjectInformation,
             KIXObjectType.ORGANISATION,
             [
@@ -46,20 +47,20 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 OrganisationProperty.COUNTRY
             ], true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(organisationInformation);
+        configurations.push(organisationInformation);
 
         const organisationInfoSidebar = new WidgetConfiguration(
-            'ticket-new-dialog-organisation-widget', 'Organisation Widget', ConfigurationType.Widget,
+            'ticket-edit-dialog-organisation-widget', 'Organisation Widget', ConfigurationType.Widget,
             'object-information-widget', 'Translatable#Organisation', [],
             new ConfigurationDefinition(
-                'ticket-new-dialog-organisation-information', ConfigurationType.ObjectInformation
+                'ticket-edit-dialog-organisation-information', ConfigurationType.ObjectInformation
             ),
             null, false, false, 'kix-icon-man-house', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(organisationInfoSidebar);
+        configurations.push(organisationInfoSidebar);
 
         const contactInformation = new ObjectInformationWidgetConfiguration(
-            'ticket-new-dialog-contact-information', 'Contact Information',
+            'ticket-edit-dialog-contact-information', 'Contact Information',
             ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
             [
@@ -73,80 +74,87 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 ContactProperty.EMAIL
             ], true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(contactInformation);
+        configurations.push(contactInformation);
 
         const contactInfoSidebar = new WidgetConfiguration(
-            'ticket-new-dialog-contact-widget', 'Contact Widget', ConfigurationType.Widget,
+            'ticket-edit-dialog-contact-widget', 'Contact Widget', ConfigurationType.Widget,
             'object-information-widget', 'Translatable#Contact', [],
-            new ConfigurationDefinition('ticket-new-dialog-contact-information', ConfigurationType.ObjectInformation),
+            new ConfigurationDefinition('ticket-edit-dialog-contact-information', ConfigurationType.ObjectInformation),
             null, false, false, 'kix-icon-man-bubble', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(contactInfoSidebar);
+        configurations.push(contactInfoSidebar);
 
         const helpSettings = new HelpWidgetConfiguration(
-            'ticket-new-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
+            'ticket-edit-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Textmodules_TicketEdit', null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
+        configurations.push(helpSettings);
 
         const helpWidget = new WidgetConfiguration(
-            'ticket-new-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
+            'ticket-edit-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
             'help-widget', 'Translatable#Text Modules', [],
-            new ConfigurationDefinition('ticket-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            new ConfigurationDefinition('ticket-edit-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-textblocks'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+        configurations.push(helpWidget);
 
         const widget = new WidgetConfiguration(
             'ticket-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-ticket-dialog', 'Translatable#Edit Ticket', [], null, null, false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            'ticket-new-dialog', 'Ticket New Dialog', ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('ticket-new-dialog-organisation-widget', 'ticket-new-dialog-organisation-widget'),
-                new ConfiguredWidget('ticket-new-dialog-contact-widget', 'ticket-new-dialog-contact-widget'),
-                new ConfiguredWidget('ticket-new-dialog-help-widget', 'ticket-new-dialog-help-widget')
-            ],
-            [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'ticket-edit-dialog-widget', 'ticket-edit-dialog-widget',
-                    KIXObjectType.TICKET, ContextMode.EDIT
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Ticket New Dialog', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'ticket-edit-dialog-organisation-widget', 'ticket-edit-dialog-organisation-widget'
+                    ),
+                    new ConfiguredWidget('ticket-edit-dialog-contact-widget', 'ticket-edit-dialog-contact-widget'),
+                    new ConfiguredWidget('ticket-edit-dialog-help-widget', 'ticket-edit-dialog-help-widget')
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'ticket-edit-dialog-widget', 'ticket-edit-dialog-widget',
+                        KIXObjectType.TICKET, ContextMode.EDIT
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'ticket-edit-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-title',
                 'Translatable#Title', TicketProperty.TITLE, null, true,
                 'Translatable#Helptext_Tickets_TicketEdit_Title'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-contact',
                 'Translatable#Contact', TicketProperty.CONTACT_ID, 'ticket-input-contact', true,
                 'Translatable#Helptext_Tickets_TicketEdit_Contact'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-organisation',
                 'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true,
                 'Translatable#Helptext_Tickets_TicketEdit_Organisation'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-type',
                 'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', true,
@@ -167,7 +175,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-queue',
                 'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', true,
@@ -197,7 +205,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-channel',
                 'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', false,
@@ -208,7 +216,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-owner',
                 'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
@@ -232,7 +240,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-responsible',
                 'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
@@ -256,7 +264,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-priority',
                 'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true,
@@ -277,7 +285,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-state',
                 'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,
@@ -285,7 +293,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'ticket-edit-form-group-data', 'Translatable#Ticket Data',
                 [
@@ -303,14 +311,14 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'ticket-edit-form-page', 'Translatable#Edit Ticket',
                 ['ticket-edit-form-group-data']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Ticket',
                 ['ticket-edit-form-page'],
@@ -318,6 +326,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.TICKET, formId);
+        return configurations;
     }
 
 }

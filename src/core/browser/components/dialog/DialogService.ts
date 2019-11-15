@@ -7,7 +7,9 @@
  * --
  */
 
-import { ObjectIcon, ConfiguredDialogWidget, ContextMode, ContextType, KIXObjectType } from "../../../model";
+import {
+    ObjectIcon, ConfiguredDialogWidget, ContextMode, ContextType, KIXObjectType, Error, ContextConfiguration
+} from "../../../model";
 import { IMainDialogListener } from ".";
 import { IOverlayDialogListener } from "./IOverlayDialogListener";
 import { DisplayImageDescription } from "../../components/DisplayImageDescription";
@@ -42,7 +44,12 @@ export class DialogService {
     }
 
     public async registerDialogs(contextId: string): Promise<void> {
-        const configuration = await ContextService.getInstance().getContextConfiguration(contextId);
+        const configuration = await ContextService.getInstance().getContextConfiguration(contextId)
+            .catch((error: Error): ContextConfiguration => {
+                console.log(error);
+                return null;
+            });
+
         if (configuration) {
             const dialogs = configuration.dialogs;
             if (dialogs) {

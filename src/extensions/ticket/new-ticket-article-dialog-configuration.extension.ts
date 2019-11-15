@@ -18,7 +18,7 @@ import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,12 +27,13 @@ export class Extension implements IConfigurationExtension {
         return NewTicketArticleContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const helpSettings = new HelpWidgetConfiguration(
             'ticket-article-new-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Textmodules_ArticleCreate', null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
+        configurations.push(helpSettings);
 
         const helpWidget = new WidgetConfiguration(
             'ticket-article-new-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
@@ -40,33 +41,39 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-article-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-textblocks'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+        configurations.push(helpWidget);
 
         const newDialogWidget = new WidgetConfiguration(
             'ticket-article-new-dialog-widget', 'New Article DIalog Widget', ConfigurationType.Widget,
             'new-ticket-article-dialog', 'Translatable#New Article', [], null, null,
             false, false, 'kix-icon-new-note'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(newDialogWidget);
+        configurations.push(newDialogWidget);
 
-        return new ContextConfiguration(
-            'ticket-article-new-dialog', 'Ticket Article New Dialog', ConfigurationType.Context, this.getModuleId(),
-            [
-                new ConfiguredWidget('ticket-article-new-dialog-help-widget', 'ticket-article-new-dialog-help-widget')
-            ], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'ticket-article-new-dialog-widget', 'ticket-article-new-dialog-widget',
-                    KIXObjectType.ARTICLE, ContextMode.CREATE_SUB
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Ticket Article New Dialog', ConfigurationType.Context, this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'ticket-article-new-dialog-help-widget', 'ticket-article-new-dialog-help-widget'
+                    )
+                ], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'ticket-article-new-dialog-widget', 'ticket-article-new-dialog-widget',
+                        KIXObjectType.ARTICLE, ContextMode.CREATE_SUB
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'ticket-article-new-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-article-new-form-field-channel',
                 'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true,
@@ -74,7 +81,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'ticket-article-new-form-group-data', 'Translatable#Article Data',
                 [
@@ -83,20 +90,21 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'ticket-article-new-form-page', 'Translatable#New Article',
                 ['ticket-article-new-form-group-data']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(formId, 'Translatable#New Article',
                 ['ticket-article-new-form-page'],
                 KIXObjectType.ARTICLE
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.ARTICLE, formId);
+        return configurations;
     }
 
 }

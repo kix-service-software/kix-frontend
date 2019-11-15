@@ -18,7 +18,7 @@ import { SearchProperty } from '../../core/browser';
 import { OrganisationSearchContext } from '../../core/browser/organisation';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 import { ModuleConfigurationService } from '../../services';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -26,13 +26,14 @@ export class ModuleExtension implements IConfigurationExtension {
         return OrganisationSearchContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const helpSettings = new HelpWidgetConfiguration(
             'organisation-search-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_Organisation',
             []
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
+        configurations.push(helpSettings);
 
         const helpWidget = new WidgetConfiguration(
             'organisation-search-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
@@ -40,44 +41,49 @@ export class ModuleExtension implements IConfigurationExtension {
             new ConfigurationDefinition('organisation-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-textblocks'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+        configurations.push(helpWidget);
 
         const widget = new WidgetConfiguration(
             'organisation-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'search-organisation-dialog', 'Translatable#Organisation Search', [], null, null,
             false, false, 'kix-icon-search-man-house'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Organisation Search Dialog', ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget(
-                    'organisation-search-dialog-help-widget', 'organisation-search-dialog-help-widget', null,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                )
-            ],
-            [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'organisation-search-dialog-widget', 'organisation-search-dialog-widget',
-                    KIXObjectType.ORGANISATION, ContextMode.SEARCH
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Organisation Search Dialog', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'organisation-search-dialog-help-widget', 'organisation-search-dialog-help-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'organisation-search-dialog-widget', 'organisation-search-dialog-widget',
+                        KIXObjectType.ORGANISATION, ContextMode.SEARCH
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'organisation-search-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new SearchForm(
                 formId, 'Translatable#Organisations', KIXObjectType.ORGANISATION, FormContext.SEARCH, null,
                 [SearchProperty.FULLTEXT, OrganisationProperty.NAME, OrganisationProperty.NUMBER]
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.ORGANISATION, formId);
+        return configurations;
     }
 
 }

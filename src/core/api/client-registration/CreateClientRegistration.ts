@@ -8,7 +8,7 @@
  */
 
 import { RequestObject } from '../RequestObject';
-import { PODefinition } from '../../model';
+import { PODefinition, SysConfigOptionDefinition } from '../../model';
 
 export class CreateClientRegistration extends RequestObject {
 
@@ -18,6 +18,7 @@ export class CreateClientRegistration extends RequestObject {
         public NotificationInterval: number,
         public Authorization: string = null,
         public Translations: PODefinition[] = [],
+        public SysConfigOptionDefinitions: SysConfigOptionDefinition[] = []
     ) {
         super();
     }

@@ -16,24 +16,27 @@ import { LoggingService } from "../../core/services";
 
 export class FormConfigurationResolver {
 
-    public static async resolve(configuration: FormConfiguration): Promise<FormConfiguration> {
+    public static async resolve(token: string, configuration: FormConfiguration): Promise<FormConfiguration> {
         for (const pageId of configuration.pageConfigurationIds) {
             const pageConfig = await ModuleConfigurationService.getInstance()
-                .loadConfiguration<FormPageConfiguration>(ConfigurationType.FormPage, pageId);
+                .loadConfiguration<FormPageConfiguration>(token, pageId);
 
             if (pageConfig) {
                 for (const groupId of pageConfig.groupConfigurationIds) {
                     const groupConfig = await ModuleConfigurationService.getInstance()
-                        .loadConfiguration<FormGroupConfiguration>(ConfigurationType.FormGroup, groupId);
+                        .loadConfiguration<FormGroupConfiguration>(token, groupId);
 
                     if (groupConfig) {
                         for (const fieldId of groupConfig.fieldConfigurationIds) {
                             const fieldConfig = await ModuleConfigurationService.getInstance()
-                                .loadConfiguration<FormFieldConfiguration>(ConfigurationType.FormField, fieldId);
+                                .loadConfiguration<FormFieldConfiguration>(token, fieldId);
                             if (fieldConfig) {
-                                await this.resolveFieldChildrenConfig(fieldConfig, [
-                                    `group: ${groupId}`, `page: ${pageId}`, `form: ${configuration.id}`
-                                ]);
+                                await this.resolveFieldChildrenConfig(
+                                    token, fieldConfig,
+                                    [
+                                        `group: ${groupId}`, `page: ${pageId}`, `form: ${configuration.id}`
+                                    ]
+                                );
                                 groupConfig.formFields.push(fieldConfig);
                             } else {
                                 groupConfig.formFields.push(this.createErrorFormField(fieldId));
@@ -64,16 +67,16 @@ export class FormConfigurationResolver {
     }
 
     private static async resolveFieldChildrenConfig(
-        config: FormFieldConfiguration, ancenstorIds: string[]
+        token: string, config: FormFieldConfiguration, ancenstorIds: string[]
     ): Promise<void> {
         if (config && config.fieldConfigurationIds) {
             ancenstorIds.unshift(`field: ${config.id}`);
             for (const configId of config.fieldConfigurationIds) {
                 const fieldConfig = await ModuleConfigurationService.getInstance()
-                    .loadConfiguration<FormFieldConfiguration>(ConfigurationType.FormField, configId);
+                    .loadConfiguration<FormFieldConfiguration>(token, configId);
                 if (fieldConfig) {
                     if (fieldConfig.fieldConfigurationIds) {
-                        await this.resolveFieldChildrenConfig(fieldConfig, [...ancenstorIds]);
+                        await this.resolveFieldChildrenConfig(token, fieldConfig, [...ancenstorIds]);
                     }
                     config.children.push(fieldConfig);
                 } else {

@@ -14,7 +14,7 @@ import {
 } from '../../core/model';
 import { TicketTypeDetailsContext } from '../../core/browser/ticket';
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, ToggleOptions } from '../../core/browser';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -23,27 +23,27 @@ export class Extension implements IConfigurationExtension {
         return 'config-item-class-details';
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const ciClassInfoWidget = new WidgetConfiguration(
             'ci-class-details-object-info', 'Object Info', ConfigurationType.Widget,
             'config-item-class-info-widget', 'Translatable#CI Class Information',
             [], null, null, false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(ciClassInfoWidget);
+        configurations.push(ciClassInfoWidget);
 
         const tabConfig = new TabWidgetConfiguration(
             'ci-class-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             ['ci-class-details-object-info']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+        configurations.push(tabConfig);
 
         const tabLane = new WidgetConfiguration(
             'ci-class-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('ci-class-details-tab-widget-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
+        configurations.push(tabLane);
 
 
         const tableConfig = new TableConfiguration(
@@ -52,7 +52,7 @@ export class Extension implements IConfigurationExtension {
             new ToggleOptions('config-item-class-definition', 'definition', [], true), null,
             TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableConfig);
+        configurations.push(tableConfig);
 
         const tableWidgetConfig = new TableWidgetConfiguration(
             'ci-class-details-version-table-widget-config', 'Table Widget Config', ConfigurationType.TableWidget,
@@ -61,7 +61,7 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('ci-class-details-version-table-config', ConfigurationType.TableWidget),
             null, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+        configurations.push(tableWidgetConfig);
 
         const ciClassVersionsWidget = new WidgetConfiguration(
             'ci-class-details-table-widget', 'Table Widget', ConfigurationType.Widget,
@@ -69,33 +69,36 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('ci-class-details-version-table-widget-config', ConfigurationType.TableWidget),
             null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(ciClassVersionsWidget);
+        configurations.push(ciClassVersionsWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'CI Class Details', ConfigurationType.Context,
-            this.getModuleId(),
-            [], [],
-            [
-                new ConfiguredWidget('ci-class-details-tab-widget', 'ci-class-details-tab-widget'),
-                new ConfiguredWidget('ci-class-details-table-widget', 'ci-class-details-table-widget')
-            ],
-            [],
-            [
-                'cmdb-admin-ci-class-create'
-            ],
-            [
-                'cmdb-admin-ci-class-edit', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget('ci-class-details-object-info', 'ci-class-details-object-info')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'CI Class Details', ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('ci-class-details-tab-widget', 'ci-class-details-tab-widget'),
+                    new ConfiguredWidget('ci-class-details-table-widget', 'ci-class-details-table-widget')
+                ],
+                [],
+                [
+                    'cmdb-admin-ci-class-create'
+                ],
+                [
+                    'cmdb-admin-ci-class-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('ci-class-details-object-info', 'ci-class-details-object-info')
+                ]
 
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

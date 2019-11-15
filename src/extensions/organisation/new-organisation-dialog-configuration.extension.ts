@@ -18,7 +18,7 @@ import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { NewOrganisationDialogContext } from '../../core/browser/organisation';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,31 +27,35 @@ export class Extension implements IConfigurationExtension {
         return NewOrganisationDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'organisation-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'new-organisation-dialog', 'Translatable#New Organisation', [], null, null,
             false, false, 'kix-icon-man-house-new'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'organisation-new-dialog-widget', 'organisation-new-dialog-widget',
-                    KIXObjectType.ORGANISATION, ContextMode.CREATE
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'organisation-new-dialog-widget', 'organisation-new-dialog-widget',
+                        KIXObjectType.ORGANISATION, ContextMode.CREATE
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
 
         const formId = 'organisation-new-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-cno',
                 'Translatable#CNO', OrganisationProperty.NUMBER, null, true,
@@ -59,14 +63,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-name',
                 'Translatable#Name', OrganisationProperty.NAME, null, true,
                 'Translatable#Helptext_Customers_OrganisationCreate_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-url',
                 'Translatable#URL', OrganisationProperty.URL, null, false,
@@ -74,7 +78,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'organisation-new-form-group-information', 'Translatable#Organisation Information',
                 [
@@ -85,28 +89,28 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-street',
                 'Translatable#Street', OrganisationProperty.STREET, null, false,
                 'Translatable#Helptext_Customers_OrganisationCreate_Street'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-zip',
                 'Translatable#Zip', OrganisationProperty.ZIP, null, false,
                 'Translatable#Helptext_Customers_OrganisationCreate_Zip'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-city',
                 'Translatable#City', OrganisationProperty.CITY, null, false,
                 'Translatable#Helptext_Customers_OrganisationCreate_City'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-country',
                 'Translatable#Country', OrganisationProperty.COUNTRY, null, false,
@@ -114,7 +118,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'organisation-new-form-group-address', 'Translatable#Postal Address',
                 [
@@ -126,7 +130,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-comment',
                 'Translatable#Comment', OrganisationProperty.COMMENT, 'text-area-input', false,
@@ -134,7 +138,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'organisation-new-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -146,7 +150,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'organisation-new-form-group-other', 'Translatable#Other',
                 [
@@ -156,7 +160,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'organisation-new-form-page', 'Translatable#New Organisation',
                 [
@@ -167,7 +171,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Organisation',
                 ['organisation-new-form-page'],
@@ -175,6 +179,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.ORGANISATION, formId);
+        return configurations;
     }
 
 }

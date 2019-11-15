@@ -24,7 +24,7 @@ import {
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class TicketModuleFactoryExtension implements IConfigurationExtension {
@@ -33,14 +33,15 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         return TicketContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         // Explorer
         const queueExplorerConfig = new WidgetConfiguration(
             'ticket-dashboard-queue-explorer', 'Ticket Queue Explorer', ConfigurationType.Widget,
             'ticket-queue-explorer', 'Translatable#Queues', [], null,
             false, false, null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(queueExplorerConfig);
+        configurations.push(queueExplorerConfig);
 
 
         // sidebars
@@ -48,7 +49,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             'ticket-dashboard-notes-widget', 'Note Widget', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebarConfig);
+        configurations.push(notesSidebarConfig);
 
         const predefinedTicketFilter = [
             new KIXObjectPropertyFilter('Translatable#Owner', [
@@ -110,14 +111,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 }
             }
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig1);
+        configurations.push(chartConfig1);
 
         const chartWidgetConfig1 = new TicketChartWidgetConfiguration(
             'ticket-dashboard-chart-priorities', 'Ticket Chart Priorities', ConfigurationType.ChartWidget,
             TicketProperty.PRIORITY_ID,
             new ConfigurationDefinition('ticket-dashboard-chart-priorities-config', ConfigurationType.Chart), null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig1);
+        configurations.push(chartWidgetConfig1);
 
         const chartPrioritiesConfig = new WidgetConfiguration(
             'ticket-dashboard-chart-widget-priorities', 'Ticket Chart Priorities', ConfigurationType.Widget,
@@ -125,7 +126,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-priorities', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartPrioritiesConfig);
+        configurations.push(chartPrioritiesConfig);
 
         const chartConfig2 = new ChartComponentConfiguration(
             'ticket-dashboard-chart-states-config', 'Chart Config', ConfigurationType.Chart,
@@ -156,14 +157,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 }
             }
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig2);
+        configurations.push(chartConfig2);
 
         const chartWidgetConfig2 = new TicketChartWidgetConfiguration(
             'ticket-dashboard-chart-states', 'Ticket Chart States', ConfigurationType.ChartWidget,
             TicketProperty.STATE_ID,
             new ConfigurationDefinition('ticket-dashboard-chart-states-config', ConfigurationType.Chart), null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig2);
+        configurations.push(chartWidgetConfig2);
 
         const chartStatesConfig = new WidgetConfiguration(
             'ticket-dashboard-chart-widget-states', 'Ticket Chart States', ConfigurationType.Widget,
@@ -171,7 +172,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-states', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartStatesConfig);
+        configurations.push(chartStatesConfig);
 
         const chartConfig3 = new ChartComponentConfiguration(
             'ticket-dashboard-chart-new-config', 'Chart Config', ConfigurationType.Chart,
@@ -207,14 +208,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                     }
                 }
             });
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig3);
+        configurations.push(chartConfig3);
 
         const chartWidgetConfig3 = new TicketChartWidgetConfiguration(
             'ticket-dashboard-chart-new', 'Ticket Chart New Tickets', ConfigurationType.ChartWidget,
             TicketProperty.CREATED,
             new ConfigurationDefinition('ticket-dashboard-chart-new-config', ConfigurationType.Chart), null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig3);
+        configurations.push(chartWidgetConfig3);
 
         const chartNewConfig = new WidgetConfiguration(
             'ticket-dashboard-chart-widget-new-tickets', 'Ticket Chart New Tickets', ConfigurationType.Widget,
@@ -222,7 +223,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-chart-new', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartNewConfig);
+        configurations.push(chartNewConfig);
 
         const tableConfig = new TableConfiguration(
             'ticket-dashboard-table-config', 'Ticket Dashboard Table COnfiguration', ConfigurationType.Table,
@@ -236,7 +237,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ToggleOptions('ticket-article-details', 'article', [], true),
             null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableConfig);
+        configurations.push(tableConfig);
 
         const tableWidgetConfig = new TableWidgetConfiguration(
             'ticket-dashboard-table-widget-settings', 'Ticket Table Widget Settings', ConfigurationType.TableWidget,
@@ -244,7 +245,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-table-config', ConfigurationType.Table), null,
             null, true, null, predefinedTicketFilter
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+        configurations.push(tableWidgetConfig);
 
         const ticketListConfig = new WidgetConfiguration(
             'ticket-dashboard-ticket-list-widget', 'Ticket List Widget', ConfigurationType.Widget,
@@ -255,67 +256,72 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ticket-dashboard-table-widget-settings', ConfigurationType.TableWidget),
             null, false, false, 'kix-icon-ticket', true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(ticketListConfig);
+        configurations.push(ticketListConfig);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Ticket Dashboard Configuration', ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('ticket-notes', 'ticket-dashboard-notes-widget')
-            ],
-            [
-                new ConfiguredWidget(
-                    'ticket-dashboard-queue-explorer', 'ticket-dashboard-queue-explorer', null,
-                    [
-                        new UIComponentPermission('tickets', [CRUD.READ]),
-                        new UIComponentPermission('system/ticket/queues', [CRUD.READ])
-                    ]
-                )
-            ], [],
-            [
-                new ConfiguredWidget(
-                    'ticket-dashboard-chart-widget-priorities', 'ticket-dashboard-chart-widget-priorities', null,
-                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'ticket-dashboard-chart-widget-states', 'ticket-dashboard-chart-widget-states', null,
-                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'ticket-dashboard-chart-widget-new-tickets', 'ticket-dashboard-chart-widget-new-tickets', null,
-                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'ticket-dashboard-ticket-list-widget', 'ticket-dashboard-ticket-list-widget', null,
-                    [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.LARGE
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Ticket Dashboard Configuration', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget('ticket-notes', 'ticket-dashboard-notes-widget')
+                ],
+                [
+                    new ConfiguredWidget(
+                        'ticket-dashboard-queue-explorer', 'ticket-dashboard-queue-explorer', null,
+                        [
+                            new UIComponentPermission('tickets', [CRUD.READ]),
+                            new UIComponentPermission('system/ticket/queues', [CRUD.READ])
+                        ]
+                    )
+                ], [],
+                [
+                    new ConfiguredWidget(
+                        'ticket-dashboard-chart-widget-priorities', 'ticket-dashboard-chart-widget-priorities', null,
+                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-dashboard-chart-widget-states', 'ticket-dashboard-chart-widget-states', null,
+                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-dashboard-chart-widget-new-tickets', 'ticket-dashboard-chart-widget-new-tickets', null,
+                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-dashboard-ticket-list-widget', 'ticket-dashboard-ticket-list-widget', null,
+                        [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.LARGE
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'ticket-link-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-link-form-field-fulltext',
                 'Translatable#Full Text', SearchProperty.FULLTEXT, null, false,
                 'Translatable#Helptext_Tickets_Link_FullText'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-link-form-field-ticket-number',
                 'Translatable#Ticket Number', TicketProperty.TICKET_NUMBER, null, false,
                 'Translatable#Helptext_Tickets_Link_Number')
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-link-form-field-title',
                 'Translatable#Title', TicketProperty.TITLE, null, false, 'Translatable#Helptext_Tickets_Link_Title'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-link-form-field-type',
                 'Translatable#Type', TicketProperty.TYPE_ID, 'object-reference-input', false,
@@ -336,7 +342,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-link-form-field-queue',
                 'Translatable#Assign Team / Queue', TicketProperty.QUEUE_ID, 'object-reference-input', false,
@@ -365,7 +371,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-link-form-field-priority',
                 'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', false,
@@ -386,7 +392,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-link-form-field-state',
                 'Translatable#State', TicketProperty.STATE_ID, 'object-reference-input', false,
@@ -408,7 +414,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'ticket-link-form-group-attributes',
                 'Translatable#Ticket Attributes',
@@ -424,14 +430,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'ticket-link-form-page', 'Translatable#Link to ticket',
                 ['ticket-link-form-group-attributes']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Link to ticket',
                 ['ticket-link-form-page'],
@@ -440,6 +446,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         );
 
         ConfigurationService.getInstance().registerForm([FormContext.LINK], KIXObjectType.TICKET, formId);
+        return configurations;
     }
 }
 

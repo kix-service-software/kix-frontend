@@ -15,6 +15,7 @@ import {
 import { ITable, IRowObject, TableValue, RowObject } from "../../table";
 import { SysConfigOptionDefinition } from "../../../model/kix/sysconfig/SysConfigOptionDefinition";
 import { KIXObjectService, SearchOperator } from "../..";
+import { AdminContext } from "../../admin";
 
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
 
@@ -33,7 +34,7 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_LEVEL]
         );
 
-        let loadingOptions;
+        let loadingOptions: KIXObjectLoadingOptions;
         if (configLevel && !!configLevel.length) {
             const definitionFilter = [
                 new FilterCriteria(
@@ -48,14 +49,16 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
             loadingOptions = new KIXObjectLoadingOptions(definitionFilter);
         }
 
-        const sysConfigOptions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
+        const sysConfigDefinitions = await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
             KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, this.loadingOptions ? this.loadingOptions : loadingOptions
         );
 
         const rowObjects = [];
-        sysConfigOptions.forEach((fc) => {
-            rowObjects.push(this.createRowObject(fc));
-        });
+        sysConfigDefinitions
+            .filter((scd) => scd.Name !== AdminContext.CONTEXT_ID && scd.Name !== 'admin-dashboard-category-explorer')
+            .forEach((scd) => {
+                rowObjects.push(this.createRowObject(scd));
+            });
 
         return rowObjects;
     }
@@ -65,7 +68,11 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
 
         for (const property in definition) {
             if (definition.hasOwnProperty(property)) {
-                if (property === SysConfigOptionDefinitionProperty.NAME) {
+                if (
+                    property === SysConfigOptionDefinitionProperty.NAME ||
+                    property === SysConfigOptionDefinitionProperty.CONTEXT ||
+                    property === SysConfigOptionDefinitionProperty.CONTEXT_METADATA
+                ) {
                     values.push(new TableValue(property, definition[property], definition[property]));
                 } else {
                     values.push(new TableValue(property, definition[property]));

@@ -60,6 +60,12 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
             case SysConfigOptionDefinitionProperty.IS_MODIFIED:
                 displayValue = 'Translatable#Modified';
                 break;
+            case SysConfigOptionDefinitionProperty.CONTEXT:
+                displayValue = 'Translatable#Context';
+                break;
+            case SysConfigOptionDefinitionProperty.CONTEXT_METADATA:
+                displayValue = 'Translatable#Metadata';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }

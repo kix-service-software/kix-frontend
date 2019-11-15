@@ -108,7 +108,7 @@ export class LinkService extends KIXObjectService {
 
     public async deleteLink(token: string, clientRequestId: string, linkId: number): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, linkId);
-        await this.sendDeleteRequest<void>(token, clientRequestId, uri, this.objectType);
+        await this.sendDeleteRequest<void>(token, clientRequestId, [uri], this.objectType);
     }
 
 }

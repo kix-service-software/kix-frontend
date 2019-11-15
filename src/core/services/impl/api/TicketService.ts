@@ -166,9 +166,9 @@ export class TicketService extends KIXObjectService {
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectId: number,
         deleteOptions: KIXObjectSpecificDeleteOptions
-    ): Promise<void> {
+    ): Promise<Error[]> {
         if (objectType === KIXObjectType.WATCHER) {
-            this.removeWatcher(token, clientRequestId, objectId);
+            return this.removeWatcher(token, clientRequestId, objectId);
         }
     }
 
@@ -355,13 +355,12 @@ export class TicketService extends KIXObjectService {
 
     public async removeWatcher(
         token: string, clientRequestId: string, watcherId: number
-    ): Promise<void> {
+    ): Promise<Error[]> {
         const uri = this.buildUri('watchers', watcherId);
-        await this.sendDeleteRequest<void>(token, clientRequestId, uri, this.objectType);
+        return await this.sendDeleteRequest<void>(token, clientRequestId, [uri], this.objectType);
     }
 
-    // Overrides from KIXObjectService
-
+    // Overwrites from KIXObjectService
     // FIXME: unterschiedliche Behandlung von Filter und Search entfernen, sollte nicht notwendig sein
     protected async buildFilter(
         filter: FilterCriteria[], filterProperty: string, query: any, token?: string

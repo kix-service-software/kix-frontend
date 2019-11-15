@@ -16,7 +16,7 @@ import { IMainMenuExtension, KIXExtensions } from '../core/extensions';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { SocketNameSpace } from './SocketNameSpace';
 import { ConfigurationService, LoggingService } from '../core/services';
-import { PluginService, PermissionService } from '../services';
+import { PluginService, PermissionService, ModuleConfigurationService } from '../services';
 import { UserService } from '../core/services/impl/api/UserService';
 
 export class MainMenuNamespace extends SocketNameSpace {
@@ -50,10 +50,12 @@ export class MainMenuNamespace extends SocketNameSpace {
             KIXExtensions.MAIN_MENU
         ).catch(() => []);
 
-        let configuration: MainMenuConfiguration = ConfigurationService.getInstance().getConfiguration('main-menu');
+        let configuration = await ModuleConfigurationService.getInstance().loadConfiguration<MainMenuConfiguration>(
+            data.token, 'application-main-menu'
+        );
 
         if (!configuration) {
-            configuration = await this.createDefaultConfiguration(extensions, user.UserID)
+            configuration = await this.createDefaultConfiguration(data.token, extensions, user.UserID)
                 .catch(() => null);
         }
 
@@ -79,7 +81,7 @@ export class MainMenuNamespace extends SocketNameSpace {
     }
 
     private async createDefaultConfiguration(
-        extensions: IMainMenuExtension[], userId: number
+        token: string, extensions: IMainMenuExtension[], userId: number
     ): Promise<MainMenuConfiguration> {
 
         const primaryConfiguration = extensions
@@ -97,7 +99,7 @@ export class MainMenuNamespace extends SocketNameSpace {
             );
         const configuration = new MainMenuConfiguration(primaryConfiguration, secondaryConfiguration);
 
-        await ConfigurationService.getInstance().saveConfiguration('main-menu', configuration)
+        await ModuleConfigurationService.getInstance().saveConfiguration(token, configuration)
             .catch(() => null);
 
         return configuration;

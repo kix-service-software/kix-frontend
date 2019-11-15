@@ -16,7 +16,7 @@ import {
 } from "../../core/model";
 import { ConfigItemDetailsContext } from "../../core/browser/cmdb";
 import { UIComponentPermission } from "../../core/model/UIComponentPermission";
-import { ConfigurationType, ConfigurationDefinition } from "../../core/model/configuration";
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from "../../core/model/configuration";
 import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
@@ -25,34 +25,34 @@ export class Extension implements IConfigurationExtension {
         return ConfigItemDetailsContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const configItemInfoLaneTab = new WidgetConfiguration(
             'config-item-details-object-info', 'Object Info', ConfigurationType.Widget,
             'config-item-info-widget', 'Translatable#Config Item Information', [],
             null, null, false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(configItemInfoLaneTab);
+        configurations.push(configItemInfoLaneTab);
 
         const tabConfig = new TabWidgetConfiguration(
             'config-item-details-object-info-tab-config', 'Tab Config', ConfigurationType.TabWidget,
             ['config-item-details-object-info']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+        configurations.push(tabConfig);
 
         const tabLane = new WidgetConfiguration(
             'config-item-details-object-info-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('config-item-details-object-info-tab-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
+        configurations.push(tabLane);
 
         const configItemHistoryLane = new WidgetConfiguration(
             'config-item-details-history-widget', 'History', ConfigurationType.Widget,
             "config-item-history-widget", "Translatable#History", [],
             null, null, true, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(configItemHistoryLane);
+        configurations.push(configItemHistoryLane);
 
         const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
             'config-item-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects,
@@ -62,7 +62,7 @@ export class Extension implements IConfigurationExtension {
                 ["FAQs", KIXObjectType.FAQ_ARTICLE]
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(linkedObjectsConfig);
+        configurations.push(linkedObjectsConfig);
 
         const configItemLinkedObjectsLane = new WidgetConfiguration(
             'config-item-details-linked-object-widget', 'Linked Objects', ConfigurationType.Widget,
@@ -71,14 +71,14 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('config-item-details-linked-objects-config', ConfigurationType.LinkedObjects),
             null, true, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(configItemLinkedObjectsLane);
+        configurations.push(configItemLinkedObjectsLane);
 
 
         const widgetConfig = new TableWidgetConfiguration(
             'config-item-details-version-list-table-widget', 'Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.CONFIG_ITEM_VERSION
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widgetConfig);
+        configurations.push(widgetConfig);
 
         const configItemVersionLane = new WidgetConfiguration(
             'config-item-details-version-widget', 'Version Widget', ConfigurationType.Widget,
@@ -87,47 +87,50 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('config-item-details-version-list-table-widget', ConfigurationType.TableWidget),
             null, false, true, WidgetSize.BOTH, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(configItemVersionLane);
+        configurations.push(configItemVersionLane);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Config Item Details', ConfigurationType.Context,
-            this.getModuleId(),
-            [], [],
-            [
-                new ConfiguredWidget(
-                    'config-item-details-object-info-tab-widget', 'config-item-details-object-info-tab-widget', null,
-                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
-                ),
-                new ConfiguredWidget(
-                    'config-item-details-linked-object-widget', 'config-item-details-linked-object-widget', null,
-                    [new UIComponentPermission('links', [CRUD.READ])]
-                ),
-                new ConfiguredWidget(
-                    'config-item-details-history-widget', 'config-item-details-history-widget', null,
-                    [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
-                )
-            ],
-            [
-                new ConfiguredWidget(
-                    'config-item-details-version-widget', 'config-item-details-version-widget', null,
-                    [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]
-                )
-            ],
-            [
-                'config-item-create-action'
-            ],
-            [
-                'ticket-create-action', 'config-item-edit-action', 'linked-objects-edit-action', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget('config-item-details-object-info', 'config-item-details-object-info')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Config Item Details', ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget(
+                        'config-item-details-object-info-tab-widget', 'config-item-details-object-info-tab-widget',
+                        null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'config-item-details-linked-object-widget', 'config-item-details-linked-object-widget', null,
+                        [new UIComponentPermission('links', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'config-item-details-history-widget', 'config-item-details-history-widget', null,
+                        [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
+                    )
+                ],
+                [
+                    new ConfiguredWidget(
+                        'config-item-details-version-widget', 'config-item-details-version-widget', null,
+                        [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]
+                    )
+                ],
+                [
+                    'config-item-create-action'
+                ],
+                [
+                    'ticket-create-action', 'config-item-edit-action', 'linked-objects-edit-action', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('config-item-details-object-info', 'config-item-details-object-info')
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        // do nothing
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

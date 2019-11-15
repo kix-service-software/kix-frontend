@@ -13,7 +13,7 @@ import {
     KIXObjectType, MailAccountProperty, KIXObjectProperty, ObjectInformationWidgetConfiguration, TabWidgetConfiguration
 } from '../../core/model';
 import { MailAccountDetailsContext } from '../../core/browser/mail-account/context';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -22,8 +22,8 @@ export class Extension implements IConfigurationExtension {
         return MailAccountDetailsContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const objectInfoConfig = new ObjectInformationWidgetConfiguration(
             'mail-account-details-object-info-config', 'Info Config', ConfigurationType.ObjectInformation,
             KIXObjectType.MAIL_ACCOUNT,
@@ -42,7 +42,7 @@ export class Extension implements IConfigurationExtension {
                 KIXObjectProperty.CHANGE_TIME
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(objectInfoConfig);
+        configurations.push(objectInfoConfig);
 
         const mailAccountInfoLane = new WidgetConfiguration(
             'mail-account-details-info-widget', 'Info Widget', ConfigurationType.Widget,
@@ -51,43 +51,47 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('mail-account-details-object-info-config', ConfigurationType.ObjectInformation),
             null, false, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(mailAccountInfoLane);
+        configurations.push(mailAccountInfoLane);
 
         const tabConfig = new TabWidgetConfiguration(
             'mail-account-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             ['mail-account-details-info-widget']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+        configurations.push(tabConfig);
 
         const tabLane = new WidgetConfiguration(
             'mail-account-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('mail-account-tab-widget-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
+        configurations.push(tabLane);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [], [],
-            [
-                new ConfiguredWidget('mail-account-details-tab-widget', 'mail-account-details-tab-widget')
-            ], [],
-            [
-                'mail-account-create'
-            ],
-            [
-                'mail-account-edit', 'mail-account-fetch', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget('mail-account-details-info-widget', 'mail-account-details-info-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('mail-account-details-tab-widget', 'mail-account-details-tab-widget')
+                ], [],
+                [
+                    'mail-account-create'
+                ],
+                [
+                    'mail-account-edit', 'mail-account-fetch', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('mail-account-details-info-widget', 'mail-account-details-info-widget')
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

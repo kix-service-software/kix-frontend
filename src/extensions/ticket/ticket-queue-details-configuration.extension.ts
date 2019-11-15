@@ -12,7 +12,7 @@ import {
     ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TabWidgetConfiguration
 } from '../../core/model';
 import { QueueDetailsContext } from '../../core/browser/ticket';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -21,58 +21,62 @@ export class Extension implements IConfigurationExtension {
         return 'ticket-queue-details';
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const queueInfoWidget = new WidgetConfiguration(
             'queue-details-info-widget', 'Queue Details Info Widget', ConfigurationType.Widget,
             'ticket-queue-info-widget', 'Translatable#Queue Information',
             [], null, null, false, true, WidgetSize.BOTH, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(queueInfoWidget);
+        configurations.push(queueInfoWidget);
 
         const tabConfig = new TabWidgetConfiguration(
             'queue-details-tab-widget-config', 'Queue Details Tab Widget Config', ConfigurationType.TabWidget,
             ['queue-details-info-widget']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+        configurations.push(tabConfig);
 
         const tabLaneWidget = new WidgetConfiguration(
             'queue-details-tab-widget', 'Queue Details Tabs', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('queue-details-tab-widget-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabLaneWidget);
+        configurations.push(tabLaneWidget);
 
         const signatureWidget = new WidgetConfiguration(
             'queue-details-signature-widget', 'Queue Details Signature Widget', ConfigurationType.Widget,
             'ticket-queue-signature', 'Translatable#Signature', [], null, null, true, true, WidgetSize.BOTH, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(signatureWidget);
+        configurations.push(signatureWidget);
 
-        return new ContextConfiguration(
-            'queue-details', 'Queue Details', ConfigurationType.Context,
-            QueueDetailsContext.CONTEXT_ID,
-            [], [],
-            [
-                new ConfiguredWidget('queue-details-tab-widget', 'queue-details-tab-widget'),
-                new ConfiguredWidget('queue-details-signature-widget', 'queue-details-signature-widget')
-            ],
-            [],
-            [
-                'ticket-admin-queue-create'
-            ],
-            [
-                'ticket-admin-queue-edit', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget('queue-details-info-widget', 'queue-details-info-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Queue Details', ConfigurationType.Context,
+                QueueDetailsContext.CONTEXT_ID,
+                [], [],
+                [
+                    new ConfiguredWidget('queue-details-tab-widget', 'queue-details-tab-widget'),
+                    new ConfiguredWidget('queue-details-signature-widget', 'queue-details-signature-widget')
+                ],
+                [],
+                [
+                    'ticket-admin-queue-create'
+                ],
+                [
+                    'ticket-admin-queue-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('queue-details-info-widget', 'queue-details-info-widget')
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

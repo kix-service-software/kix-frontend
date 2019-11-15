@@ -20,7 +20,7 @@ import {
 import { ConfigurationService } from '../../core/services';
 import { EditUserRoleDialogContext } from '../../core/browser/user';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -29,28 +29,33 @@ export class Extension implements IConfigurationExtension {
         return EditUserRoleDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'user-role-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-user-role-dialog', 'Translatable#Edit Role', [], null, null,
             false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Edit User Role Dialog', ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'user-role-edit-dialog-widget', 'user-role-edit-dialog-widget',
-                    KIXObjectType.ROLE, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Edit User Role Dialog', ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'user-role-edit-dialog-widget', 'user-role-edit-dialog-widget',
+                        KIXObjectType.ROLE, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'user-role-edit-form';
@@ -59,7 +64,7 @@ export class Extension implements IConfigurationExtension {
             'Translatable#Name', RoleProperty.NAME, null, true,
             'Translatable#Helptext_Admin_Users_RoleCreate_Name'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(nameField);
+        configurations.push(nameField);
 
         const commentField = new FormFieldConfiguration(
             'user-role-edit-form-field-comment',
@@ -67,7 +72,7 @@ export class Extension implements IConfigurationExtension {
             'Translatable#Helptext_Admin_Users_RoleCreate_Comment',
             null, null, null, null, null, null, null, null, 250
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(commentField);
+        configurations.push(commentField);
 
         const validField = new FormFieldConfiguration(
             'user-role-edit-form-field-validity',
@@ -77,7 +82,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
             ], new FormFieldValue(1)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(validField);
+        configurations.push(validField);
 
         const infoGroup = new FormGroupConfiguration(
             'user-role-edit-form-group-role-information', 'Translatable#Role Information',
@@ -87,13 +92,13 @@ export class Extension implements IConfigurationExtension {
                 'user-role-edit-form-field-validity'
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(infoGroup);
+        configurations.push(infoGroup);
 
         const permissionField = new FormFieldConfiguration(
             'user-role-edit-form-field-permissions',
             null, RoleProperty.PERMISSIONS, 'permissions-form-input', false, null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(permissionField);
+        configurations.push(permissionField);
 
         const permissionGroup = new FormGroupConfiguration(
             'user-role-edit-form-group-permissions', 'Translatable#Permissions',
@@ -101,7 +106,7 @@ export class Extension implements IConfigurationExtension {
                 'user-role-edit-form-field-permissions'
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(permissionGroup);
+        configurations.push(permissionGroup);
 
         const agentsField = new FormFieldConfiguration(
             'user-role-edit-form-field-agents',
@@ -123,7 +128,7 @@ export class Extension implements IConfigurationExtension {
                 )
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(agentsField);
+        configurations.push(agentsField);
 
         const agentsGroup = new FormGroupConfiguration(
             'user-role-edit-form-group-agents', 'Translatable#Agent Assignment',
@@ -131,9 +136,9 @@ export class Extension implements IConfigurationExtension {
                 'user-role-edit-form-field-agents'
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(agentsGroup);
+        configurations.push(agentsGroup);
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'user-role-edit-form-group-page', 'Translatable#Edit Role',
                 [
@@ -149,8 +154,10 @@ export class Extension implements IConfigurationExtension {
             ['user-role-edit-form-group-page'],
             KIXObjectType.ROLE, true, FormContext.EDIT
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(form);
+        configurations.push(form);
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.ROLE, formId);
+
+        return configurations;
     }
 
 }

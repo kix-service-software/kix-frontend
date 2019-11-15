@@ -23,7 +23,7 @@ import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -32,39 +32,42 @@ export class Extension implements IConfigurationExtension {
         return EditNotificationDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const editDialogWidget = new WidgetConfiguration(
             'notification-edit-dialog-widget', 'Edit Dialog Widget', ConfigurationType.Widget,
             'edit-notification-dialog', 'Translatable#Edit Notification', [], null, null,
             false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(editDialogWidget);
+        configurations.push(editDialogWidget);
 
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'notification-edit-dialog-widget', 'notification-edit-dialog-widget',
-                    KIXObjectType.NOTIFICATION, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'notification-edit-dialog-widget', 'notification-edit-dialog-widget',
+                        KIXObjectType.NOTIFICATION, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'notification-edit-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-name',
                 'Translatable#Name', NotificationProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_NotificationEdit_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-show-in-preferences',
                 'Translatable#Show in agent preferences', NotificationProperty.DATA_VISIBLE_FOR_AGENT,
@@ -73,14 +76,14 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue(true)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-tooltip',
                 'Translatable#Agent Preferences Tooltip', NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP, null,
                 false, 'Translatable#Helptext_Admin_NotificationEdit_PreferencesTooltip'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
@@ -88,7 +91,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -98,7 +101,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'notification-edit-form-group-information', 'Translatable#Notification Information',
                 [
@@ -111,7 +114,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-events',
                 'Translatable#Event', NotificationProperty.DATA_EVENTS, 'notification-input-events', true,
@@ -119,7 +122,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'notification-edit-form-group-events', 'Translatable#Events',
                 [
@@ -128,7 +131,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-filter',
                 '', NotificationProperty.DATA_FILTER, 'notification-input-filter', false,
@@ -137,7 +140,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'notification-edit-form-group-filter', 'Translatable#Filter',
                 [
@@ -146,7 +149,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-send-to',
                 'Translatable#Send to', NotificationProperty.DATA_RECIPIENTS, 'default-select-input', false,
@@ -177,7 +180,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-send-to-agents',
                 'Translatable#Send to these agents', NotificationProperty.DATA_RECIPIENT_AGENTS,
@@ -197,7 +200,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-role-members',
                 'Translatable#Send to all role members', NotificationProperty.DATA_RECIPIENT_ROLES,
@@ -217,7 +220,7 @@ export class Extension implements IConfigurationExtension {
             ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-send-despite-out-of-office',
                 'Translatable#Send despite out of office', NotificationProperty.DATA_SEND_DESPITE_OOO,
@@ -226,7 +229,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue(false)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-send-once-a-day',
                 'Translatable#Once a day', NotificationProperty.DATA_SEND_ONCE_A_DAY,
@@ -235,7 +238,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue(false)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-create-article',
                 'Translatable#Create Article', NotificationProperty.DATA_CREATE_ARTICLE,
@@ -245,7 +248,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'notification-edit-form-group-recipients', 'Translatable#Recipients',
                 [
@@ -259,7 +262,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-email',
                 'Translatable#Email', null, null, false, null, null, null,
@@ -286,7 +289,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'notification-edit-form-group-methods', 'Translatable#Notification Methods',
                 [
@@ -295,7 +298,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'notification-edit-form-page', 'Translatable#Edit Notification',
                 [
@@ -308,7 +311,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Notification',
                 ['notification-edit-form-page'],
@@ -316,6 +319,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.NOTIFICATION, formId);
+
+        return configurations;
     }
 }
 

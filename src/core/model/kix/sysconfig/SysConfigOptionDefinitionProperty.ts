@@ -27,5 +27,9 @@ export enum SysConfigOptionDefinitionProperty {
 
     SETTING = 'Setting',
 
-    TYPE = 'Type'
+    TYPE = 'Type',
+
+    CONTEXT = 'Context',
+
+    CONTEXT_METADATA = 'ContextMetadata'
 }

@@ -22,7 +22,7 @@ import {
 import { WebformProperty } from '../../core/model/webform';
 import { SearchOperator } from '../../core/browser';
 import { NewWebformDialogContext } from '../../core/browser/webform';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -31,31 +31,35 @@ export class Extension implements IConfigurationExtension {
         return NewWebformDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const newDialogWidget = new WidgetConfiguration(
             'web-form-new-dialog-widget', 'Webform New Dialog Widget', ConfigurationType.Widget,
             'new-webform-dialog', 'Translatable#New Webform', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(newDialogWidget);
+        configurations.push(newDialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'web-form-new-dialog-widget', 'web-form-new-dialog-widget',
-                    KIXObjectType.WEBFORM, ContextMode.CREATE_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'web-form-new-dialog-widget', 'web-form-new-dialog-widget',
+                        KIXObjectType.WEBFORM, ContextMode.CREATE_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
 
         const formId = 'webform-new-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-activate-button',
                 'Translatable#Name of activate form button', WebformProperty.BUTTON_LABEL, null, false,
@@ -63,14 +67,14 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue('Feedback')
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-title',
                 'Translatable#Form title', WebformProperty.TITLE, null, false,
                 'Translatable#Helptext_Admin_WebformCreateEdit_Title'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-show-title',
                 'Translatable#Show title in form', WebformProperty.SHOW_TITLE, 'checkbox-input', false,
@@ -78,7 +82,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue(true)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-submit-button',
                 'Translatable#Name of form submit button', WebformProperty.SAVE_LABEL, null, false,
@@ -86,14 +90,14 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue('Submit')
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-hint',
                 'Translatable#Information text', WebformProperty.HINT_MESSAGE, 'text-area-input', false,
                 'Translatable#Helptext_Admin_WebformCreateEdit_HintMessage'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-success',
                 'Translatable#Message after sending form', WebformProperty.SUCCESS_MESSAGE, null, false,
@@ -101,14 +105,14 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue('Thank you for your enquiry! We will contact you as soon as possible.')
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-modal',
                 'Translatable#Start modal dialog for form', WebformProperty.MODAL, 'checkbox-input', false,
                 'Translatable#Helptext_Admin_WebformCreateEdit_Modal'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-kix-css',
                 'Translatable#Use KIX CSS', WebformProperty.USE_KIX_CSS, 'checkbox-input', false,
@@ -116,21 +120,21 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue(true)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-allow-attachments',
                 'Translatable#Enable attachments', WebformProperty.ALLOW_ATTACHMENTS, 'checkbox-input', false,
                 'Translatable#Helptext_Admin_WebformCreateEdit_AllowAttachments'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-domains',
                 'Translatable#Accepted domains', WebformProperty.ACCEPTED_DOMAINS, null, true,
                 'Translatable#Helptext_Admin_WebformCreateEdit_AcceptedDomains'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-validy',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -142,7 +146,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'webform-new-form-group-options', 'Translatable#Webform Options',
                 [
@@ -161,7 +165,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-queue',
                 'Translatable#Team', WebformProperty.QUEUE_ID, 'object-reference-input', true,
@@ -184,7 +188,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-priority',
                 'Translatable#Priority', WebformProperty.PRIORITY_ID, 'object-reference-input', true,
@@ -205,7 +209,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-type',
                 'Translatable#Type', WebformProperty.TYPE_ID, 'object-reference-input', true,
@@ -226,7 +230,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-state',
                 'Translatable#State', WebformProperty.STATE_ID, 'object-reference-input', true,
@@ -251,7 +255,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-agent',
                 'Translatable#Assigned agent', WebformProperty.USER_LOGIN, 'object-reference-input', true,
@@ -277,7 +281,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'webform-new-form-field-password',
                 'Translatable#Password', WebformProperty.USER_PASSWORD, null, true,
@@ -288,7 +292,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'webform-new-form-group-default-values', 'Translatable#Default Values',
                 [
@@ -302,7 +306,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'webform-new-form-page', 'Translatable#New Webform',
                 [
@@ -312,7 +316,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Webform',
                 ['webform-new-form-page'],
@@ -320,6 +324,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.WEBFORM, formId);
+
+        return configurations;
     }
 }
 

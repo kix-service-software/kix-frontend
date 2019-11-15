@@ -28,40 +28,40 @@ export class ContextConfigurationResolver {
 
     private constructor() { }
 
-    public async resolve(configuration: ContextConfiguration): Promise<ContextConfiguration> {
+    public async resolve(token: string, configuration: ContextConfiguration): Promise<ContextConfiguration> {
 
-        await this.resolveWidgetConfigurations(configuration.content);
-        await this.resolveWidgetConfigurations(configuration.lanes);
-        await this.resolveWidgetConfigurations(configuration.sidebars);
-        await this.resolveWidgetConfigurations(configuration.explorer);
-        await this.resolveWidgetConfigurations(configuration.overlays);
-        await this.resolveWidgetConfigurations(configuration.others);
-        await this.resolveWidgetConfigurations(configuration.dialogs);
+        await this.resolveWidgetConfigurations(token, configuration.content);
+        await this.resolveWidgetConfigurations(token, configuration.lanes);
+        await this.resolveWidgetConfigurations(token, configuration.sidebars);
+        await this.resolveWidgetConfigurations(token, configuration.explorer);
+        await this.resolveWidgetConfigurations(token, configuration.overlays);
+        await this.resolveWidgetConfigurations(token, configuration.others);
+        await this.resolveWidgetConfigurations(token, configuration.dialogs);
 
         return configuration;
     }
 
-    private async resolveWidgetConfigurations(widgets: ConfiguredWidget[]): Promise<void> {
+    private async resolveWidgetConfigurations(token: string, widgets: ConfiguredWidget[]): Promise<void> {
         for (const w of widgets) {
             const config = await ModuleConfigurationService.getInstance().loadConfiguration<WidgetConfiguration>(
-                ConfigurationType.Widget, w.configurationId
+                token, w.configurationId
             );
 
             if (config) {
                 w.configuration = config;
                 w.configuration.instanceId = w.instanceId;
 
-                await this.resolveSubConfig(w.configuration);
+                await this.resolveSubConfig(token, w.configuration);
             }
         }
     }
 
-    private async resolveSubConfig(config: WidgetConfiguration): Promise<void> {
+    private async resolveSubConfig(token: string, config: WidgetConfiguration): Promise<void> {
         const subconfig = config.subConfigurationDefinition;
 
         if (subconfig && subconfig.configurationId && subconfig.configurationType) {
             const subConfiguration = await ModuleConfigurationService.getInstance().loadConfiguration(
-                subconfig.configurationType, subconfig.configurationId
+                token, subconfig.configurationId
             );
             config.configuration = subConfiguration;
 

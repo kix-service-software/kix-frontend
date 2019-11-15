@@ -52,38 +52,40 @@ export class SysConfigFormService extends KIXObjectFormService<SysConfigOption> 
         property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
     ): Promise<any> {
         let formValue = value;
-        switch (property) {
-            case SysConfigOptionDefinitionProperty.SETTING:
-                if (value && Array.isArray(value)) {
-                    formValue = value.join(',');
-                } else {
-                    formValue = value;
-                }
-                break;
-            case SysConfigOptionDefinitionProperty.DEFAULT:
-                if (typeof formValue !== 'string' && typeof formValue !== 'number') {
-                    formValue = JSON.stringify(value);
-                }
-                break;
-            case SysConfigOptionDefinitionProperty.VALUE:
-                if (sysConfig.IsModified !== 1) {
-                    formValue = sysConfig.Default;
-                }
+        if (sysConfig) {
+            switch (property) {
+                case SysConfigOptionDefinitionProperty.SETTING:
+                    if (value && Array.isArray(value)) {
+                        formValue = value.join(',');
+                    } else {
+                        formValue = value;
+                    }
+                    break;
+                case SysConfigOptionDefinitionProperty.DEFAULT:
+                    if (typeof formValue !== 'string' && typeof formValue !== 'number') {
+                        formValue = JSON.stringify(value);
+                    }
+                    break;
+                case SysConfigOptionDefinitionProperty.VALUE:
+                    if (sysConfig.IsModified !== 1) {
+                        formValue = sysConfig.Default;
+                    }
 
-                if (typeof formValue !== 'string' && typeof formValue !== 'number') {
-                    formValue = JSON.stringify(formValue);
-                }
+                    if (typeof formValue !== 'string' && typeof formValue !== 'number') {
+                        formValue = JSON.stringify(formValue);
+                    }
 
-                if (formValue === null) {
-                    formValue = '';
-                }
-                break;
-            case KIXObjectProperty.VALID_ID:
-                if (sysConfig.IsRequired) {
-                    formField.readonly = true;
-                }
-                break;
-            default:
+                    if (formValue === null) {
+                        formValue = '';
+                    }
+                    break;
+                case KIXObjectProperty.VALID_ID:
+                    if (sysConfig.IsRequired) {
+                        formField.readonly = true;
+                    }
+                    break;
+                default:
+            }
         }
         return formValue;
     }

@@ -11,12 +11,11 @@ import { IConfigurationExtension } from '../../core/extensions';
 import { EditJobDialogContext } from '../../core/browser/job';
 import {
     JobProperty, KIXObjectType, FormContext, ContextConfiguration, KIXObjectProperty, FormFieldOption,
-    ObjectReferenceOptions, FormFieldValue, DefaultSelectInputFormOption, TreeNode, WidgetConfiguration,
+    ObjectReferenceOptions, DefaultSelectInputFormOption, TreeNode, WidgetConfiguration,
     ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import { ConfigurationService } from '../../core/services';
-import { ConfigurationType } from '../../core/model/configuration';
-import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import {
     FormFieldConfiguration, FormGroupConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
@@ -27,40 +26,43 @@ export class Extension implements IConfigurationExtension {
         return EditJobDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const editDialogWidget = new WidgetConfiguration(
             'job-edit-dialog-widget', 'Edit Dialog Widget', ConfigurationType.Widget,
             'edit-job-dialog', 'Translatable#Edit Ticket Job', [], null, null,
             false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(editDialogWidget);
+        configurations.push(editDialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'job-edit-dialog-widget', 'job-edit-dialog-widget',
-                    KIXObjectType.JOB, ContextMode.EDIT_ADMIN
-                )
-            ]
-
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'job-edit-dialog-widget', 'job-edit-dialog-widget',
+                        KIXObjectType.JOB, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'job-edit-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-name',
                 'Translatable#Name', JobProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_JobCreateEdit_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-comment',
                 'Translatable#Name', KIXObjectProperty.COMMENT, 'text-area-input', false,
@@ -68,7 +70,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -78,7 +80,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'job-edit-form-group-information', 'Translatable#Job Information',
                 [
@@ -89,14 +91,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'job-edit-form-page-information', 'Translatable#Job Information',
                 ['job-edit-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-weekdays',
                 'Translatable#Weekday(s)', JobProperty.EXEC_PLAN_WEEKDAYS, 'default-select-input', false,
@@ -118,7 +120,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-times',
                 'Translatable#Time', JobProperty.EXEC_PLAN_WEEKDAYS_TIMES, 'default-select-input', false,
@@ -129,7 +131,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'job-edit-form-group-time_based', 'Translatable#Time Based Execution',
                 [
@@ -139,49 +141,49 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-events',
                 'Translatable#Events', JobProperty.EXEC_PLAN_EVENTS, 'job-input-events', false,
                 'Translatable#Helptext_Admin_JobCreateEdit_Events'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'job-edit-form-group-event_based', 'Translatable#Event Based Execution',
                 ['job-edit-form-field-events']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'job-edit-form-page-execution-plan', 'Translatable#Execution Plan',
                 ['job-edit-form-group-time_based', 'job-edit-form-group-event_based']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-filters',
                 'Translatable#Filter', JobProperty.FILTER, 'job-input-filter', false,
                 'Translatable#Helptext_Admin_JobCreateEdit_Filter'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'job-edit-form-group-filters', 'Translatable#Filter',
                 ['job-edit-form-field-filters']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'job-edit-form-page-filters', 'Translatable#Filter',
                 ['job-edit-form-group-filters']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'job-edit-form-field-actions',
                 '1. Action', JobProperty.MACRO_ACTIONS, 'job-input-actions', false,
@@ -189,7 +191,7 @@ export class Extension implements IConfigurationExtension {
                 undefined, 1, 200, 0
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'job-edit-form-group-actions', 'Translatable#Actions',
                 ['job-edit-form-field-actions'],
@@ -197,14 +199,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'job-edit-form-page-actions', 'Translatable#Actions',
                 ['job-edit-form-group-actions']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Ticket Job',
                 [
@@ -217,6 +219,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.JOB, formId);
+
+        return configurations;
     }
 
     private getTimes(): TreeNode[] {

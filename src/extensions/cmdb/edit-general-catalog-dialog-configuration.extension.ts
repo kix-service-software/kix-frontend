@@ -20,7 +20,7 @@ import {
 } from '../../core/model/components/form/configuration';
 import { EditGeneralCatalogDialogContext } from '../../core/browser/general-catalog';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -29,31 +29,34 @@ export class Extension implements IConfigurationExtension {
         return EditGeneralCatalogDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'general-catalog-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-general-catalog-dialog', 'Translatable#Edit Value', [],
             null, null, false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'general-catalog-edit-dialog-widget', 'general-catalog-edit-dialog-widget',
-                    KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'general-catalog-edit-dialog-widget', 'general-catalog-edit-dialog-widget',
+                        KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'general-catalog-edit-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-edit-form-field-class',
                 'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'object-reference-input', true,
@@ -73,7 +76,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, 100
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-edit-form-field-name',
                 'Translatable#Name', GeneralCatalogItemProperty.NAME, null, true,
@@ -81,14 +84,14 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, 100
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-edit-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Admin_Tickets_GeneralCatalogCreate_Icon.'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-edit-form-field-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
@@ -96,7 +99,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -107,7 +110,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'general-catalog-edit-form-group-information', 'Translatable#General Catalog',
                 [
@@ -120,14 +123,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'general-catalog-edit-form-page', 'Translatable#Edit Value',
                 ['general-catalog-edit-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Value',
                 ['general-catalog-edit-form-page'],
@@ -135,6 +138,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.GENERAL_CATALOG_ITEM, formId);
+
+        return configurations;
     }
 }
 

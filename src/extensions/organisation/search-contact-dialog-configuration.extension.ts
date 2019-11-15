@@ -16,7 +16,7 @@ import { ContactSearchContext } from '../../core/browser/contact';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class ModuleExtension implements IConfigurationExtension {
@@ -25,13 +25,14 @@ export class ModuleExtension implements IConfigurationExtension {
         return ContactSearchContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const helpSettings = new HelpWidgetConfiguration(
             'contact-search-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_Contact',
             []
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
+        configurations.push(helpSettings);
 
         const helpWidget = new WidgetConfiguration(
             'contact-search-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
@@ -39,7 +40,7 @@ export class ModuleExtension implements IConfigurationExtension {
             new ConfigurationDefinition('contact-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-textblocks'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+        configurations.push(helpWidget);
 
 
         const widget = new WidgetConfiguration(
@@ -47,30 +48,35 @@ export class ModuleExtension implements IConfigurationExtension {
             'search-contact-dialog', 'Translatable#Contact Search', [],
             null, null, false, false, 'kix-icon-search-man-bubble'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Contact Search Dialog', ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget(
-                    'contact-search-dialog-help-widget', 'contact-search-dialog-help-widget', null,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                )
-            ],
-            [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'contact-search-dialog-widget', 'contact-search-dialog-widget',
-                    KIXObjectType.CONTACT, ContextMode.SEARCH
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Contact Search Dialog', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'contact-search-dialog-help-widget', 'contact-search-dialog-help-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'contact-search-dialog-widget', 'contact-search-dialog-widget',
+                        KIXObjectType.CONTACT, ContextMode.SEARCH
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'contact-search-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new SearchForm(
                 formId, 'Ansprechpartner', KIXObjectType.CONTACT, FormContext.SEARCH, null,
                 [
@@ -81,6 +87,7 @@ export class ModuleExtension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.CONTACT, formId);
+        return configurations;
     }
 
 }

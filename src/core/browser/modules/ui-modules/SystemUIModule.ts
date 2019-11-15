@@ -15,7 +15,7 @@ import { LabelService } from "../../LabelService";
 import {
     SysConfigService, SysConfigFormService, SysConfigOptionBrowserFactory,
     SysConfigOptionDefinitionBrowserFactory, SysConfigLabelProvider, EditSysConfigDialogContext,
-    SysConfigPlaceholderHandler
+    SysConfigPlaceholderHandler,
 } from "../../sysconfig";
 import { SysConfigTableFactory } from "../../sysconfig/table";
 import { ContextService } from "../..";

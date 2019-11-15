@@ -19,7 +19,7 @@ import {
 } from '../../core/model/components/form/configuration';
 import { FormValidationService } from '../../core/browser/form/validation';
 import { EditSystemAddressDialogContext } from '../../core/browser/system-address';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -28,56 +28,60 @@ export class Extension implements IConfigurationExtension {
         return EditSystemAddressDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'system-address-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-system-address-dialog', 'Translatable#Edit Address',
             [], null, null, false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'system-address-edit-dialog-widget', 'system-address-edit-dialog-widget',
-                    KIXObjectType.SYSTEM_ADDRESS, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'system-address-edit-dialog-widget', 'system-address-edit-dialog-widget',
+                        KIXObjectType.SYSTEM_ADDRESS, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        const formId = 'system-address-new-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const formId = 'system-address-edit-form';
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
-                'system-address-new-form-field-email',
+                'system-address-edit-form-field-email',
                 'Translatable#Email Address', SystemAddressProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_SystemAddressCreate_Name', null, null, null, null, null, null,
                 null, null, null, FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'system-address-new-form-field-name',
+                'system-address-edit-form-field-name',
                 'Translatable#Display Name', SystemAddressProperty.REALNAME, null, true,
                 'Translatable#Helptext_Admin_SystemAddressCreate_DisplayName'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'system-address-new-form-field-comment',
+                'system-address-edit-form-field-comment',
                 'Translatable#Comment', SystemAddressProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_SystemAddressCreate_Comment', null, null, null,
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'system-address-new-form-field-valid',
+                'system-address-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
                 'object-reference-input', true, 'Translatable#Helptext_Admin_SystemAddressCreate_Validity', [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
@@ -85,33 +89,34 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
-                'system-address-new-form-group-information', 'Translatable#System Addresses',
+                'system-address-edit-form-group-information', 'Translatable#System Addresses',
                 [
-                    'system-address-new-form-field-email',
-                    'system-address-new-form-field-name',
-                    'system-address-new-form-field-comment',
-                    'system-address-new-form-field-valid'
+                    'system-address-edit-form-field-email',
+                    'system-address-edit-form-field-name',
+                    'system-address-edit-form-field-comment',
+                    'system-address-edit-form-field-valid'
                 ]
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
-                'system-address-new-form-page', 'Translatable#Edit Address',
-                ['system-address-new-form-group-information']
+                'system-address-edit-form-page', 'Translatable#Edit Address',
+                ['system-address-edit-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Address',
-                ['system-address-new-form-page'],
+                ['system-address-edit-form-page'],
                 KIXObjectType.SYSTEM_ADDRESS, true, FormContext.EDIT
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.SYSTEM_ADDRESS, formId);
+        return configurations;
     }
 }
 

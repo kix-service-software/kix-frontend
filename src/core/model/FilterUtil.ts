@@ -57,7 +57,7 @@ export class FilterUtil {
                     if (typeof value === 'number') {
                         return value === v;
                     } else {
-                        return value.toString().indexOf(v.toString()) !== -1;
+                        return value ? value.toString().indexOf(v.toString()) !== -1 : false;
                     }
                 });
             default:

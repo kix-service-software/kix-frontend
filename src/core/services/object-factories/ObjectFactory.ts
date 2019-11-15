@@ -9,7 +9,7 @@
 
 import { IObjectFactory } from "./IObjectFactory";
 import { KIXObject, KIXObjectType, CRUD } from "../../model";
-import { PermissionService } from "../../../services";
+import { PermissionService } from "../../../services/PermissionService";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 export abstract class ObjectFactory<T extends KIXObject = any> implements IObjectFactory<T> {

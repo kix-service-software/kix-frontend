@@ -13,8 +13,7 @@ import {
     JobProperty, KIXObjectProperty, WidgetConfiguration, ConfiguredWidget, TabWidgetConfiguration,
     TableWidgetConfiguration, SortOrder
 } from '../../core/model';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
-import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -22,9 +21,9 @@ export class Extension implements IConfigurationExtension {
         return 'job-details';
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        configurations.push(
             new ObjectInformationWidgetConfiguration(
                 'job-details-object-info-config', 'Object Info Config', ConfigurationType.ObjectInformation,
                 KIXObjectType.JOB,
@@ -41,7 +40,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'job-details-info-widget', 'Job Information', ConfigurationType.Widget,
                 'object-information-widget', 'Translatable#Job Information', [],
@@ -49,7 +48,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new TabWidgetConfiguration(
                 'jod-details-tab-widget-config', 'Tab widget config', ConfigurationType.TabWidget,
                 [
@@ -58,7 +57,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'job-details-tab-widget', 'Tab widget', ConfigurationType.Widget,
                 'tab-widget', '', [],
@@ -66,14 +65,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'job-details-exec-plans-widget', 'Exec Plan Widget', ConfigurationType.Widget,
                 'job-details-exec-plans-widget', 'Translatable#Execution Plan', []
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new TableWidgetConfiguration(
                 'job-details-filter-table-widget-config', 'Widget Config', ConfigurationType.TableWidget,
                 KIXObjectType.JOB_FILTER, ['Field', SortOrder.UP], null, null, null, false
@@ -81,7 +80,7 @@ export class Extension implements IConfigurationExtension {
         );
 
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'job-details-filter-widget', 'Table Widget', ConfigurationType.Widget,
                 'table-widget', 'Translatable#Filter', [],
@@ -91,14 +90,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new TableWidgetConfiguration(
                 'job-details-actions-table-widget-config', 'Widget Config', ConfigurationType.TableWidget,
                 KIXObjectType.MACRO_ACTION, null, null, null, null, false
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'job-details-actions-widget', 'Actions Widget', ConfigurationType.Widget,
                 'table-widget', 'Translatable#Actions', [],
@@ -108,26 +107,30 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [], [],
-            [
-                new ConfiguredWidget('job-details-tab-widget', 'job-details-tab-widget'),
-                new ConfiguredWidget('job-details-exec-plans-widget', 'job-details-exec-plans-widget'),
-                new ConfiguredWidget('job-details-filter-widget', 'job-details-filter-widget'),
-                new ConfiguredWidget('job-details-actions-widget', 'job-details-actions-widget')
-            ],
-            [],
-            ['job-create-action'], ['job-edit-action', 'job-execute-action'], [],
-            [
-                new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('job-details-tab-widget', 'job-details-tab-widget'),
+                    new ConfiguredWidget('job-details-exec-plans-widget', 'job-details-exec-plans-widget'),
+                    new ConfiguredWidget('job-details-filter-widget', 'job-details-filter-widget'),
+                    new ConfiguredWidget('job-details-actions-widget', 'job-details-actions-widget')
+                ],
+                [],
+                ['job-create-action'], ['job-edit-action', 'job-execute-action'],
+                [],
+                [
+                    new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget')
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

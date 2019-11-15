@@ -18,7 +18,7 @@ import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { EditSysConfigDialogContext } from '../../core/browser/sysconfig';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,31 +27,38 @@ export class Extension implements IConfigurationExtension {
         return EditSysConfigDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
-        const widget = new WidgetConfiguration(
-            'sysconfig-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
-            'edit-sysconfig-dialog', 'Translatable#Edit Key',
-            [], null, null, false, false, 'kix-icon-edit'
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        configurations.push(
+            new WidgetConfiguration(
+                'sysconfig-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+                'edit-sysconfig-dialog', 'Translatable#Edit Key',
+                [], null, null, false, false, 'kix-icon-edit'
+            )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'sysconfig-edit-dialog-widget', 'sysconfig-edit-dialog-widget',
-                    KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'sysconfig-edit-dialog-widget', 'sysconfig-edit-dialog-widget',
+                        KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
+
         const formId = 'sysconfig-edit-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-name',
                 'Translatable#Name', SysConfigOptionDefinitionProperty.NAME, null, true,
@@ -59,7 +66,8 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, false, false, true
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+
+        configurations.push(
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-description',
                 'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, null, false,
@@ -67,7 +75,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, false, false, true
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -76,7 +84,7 @@ export class Extension implements IConfigurationExtension {
             ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-value',
                 'Translatable#Value', SysConfigOptionDefinitionProperty.VALUE, 'text-area-input', false,
@@ -84,7 +92,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldOption('isJSON', true)]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-default-value',
                 'Translatable#Default Value', SysConfigOptionDefinitionProperty.DEFAULT, 'text-area-input', false,
@@ -93,7 +101,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'sysconfig-edit-form-group-information', 'Translatable#SysConfig',
                 [
@@ -106,14 +114,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'sysconfig-edit-form-page', 'Translatable#SysConfig',
                 ['sysconfig-edit-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Key',
                 [
@@ -122,9 +130,12 @@ export class Extension implements IConfigurationExtension {
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, false, FormContext.EDIT
             )
         );
+
         ConfigurationService.getInstance().registerForm(
             [FormContext.EDIT], KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, formId
         );
+
+        return configurations;
     }
 }
 

@@ -18,7 +18,7 @@ import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class ModuleExtension implements IConfigurationExtension {
@@ -27,13 +27,14 @@ export class ModuleExtension implements IConfigurationExtension {
         return FAQArticleSearchContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const helpConfig = new HelpWidgetConfiguration(
             'faq-article-search-dialog-help-widget-config', 'Help COnfig', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_FAQArticle',
             []
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpConfig);
+        configurations.push(helpConfig);
 
         const helpWidget = new WidgetConfiguration(
             'faq-article-search-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
@@ -41,37 +42,42 @@ export class ModuleExtension implements IConfigurationExtension {
             new ConfigurationDefinition('faq-article-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-query', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+        configurations.push(helpWidget);
 
         const widget = new WidgetConfiguration(
             'faq-article-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'search-faq-article-dialog', 'Translatable#FAQ Search', [], null, null,
             false, false, 'kix-icon-search-faq'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget(
-                    'faq-article-search-dialog-help-widget', 'faq-article-search-dialog-help-widget', null,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                )
-            ],
-            [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'faq-article-search-dialog-widget', 'faq-article-search-dialog-widget',
-                    KIXObjectType.FAQ_ARTICLE, ContextMode.SEARCH
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'faq-article-search-dialog-help-widget', 'faq-article-search-dialog-help-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'faq-article-search-dialog-widget', 'faq-article-search-dialog-widget',
+                        KIXObjectType.FAQ_ARTICLE, ContextMode.SEARCH
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'faq-article-search-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new SearchForm(
                 formId, 'FAQ-Artikel', KIXObjectType.FAQ_ARTICLE, FormContext.SEARCH,
                 null,
@@ -83,6 +89,8 @@ export class ModuleExtension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.FAQ_ARTICLE, formId);
+
+        return configurations;
     }
 
 }

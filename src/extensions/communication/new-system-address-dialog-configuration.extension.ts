@@ -19,7 +19,7 @@ import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { FormValidationService } from '../../core/browser/form/validation';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -28,31 +28,35 @@ export class Extension implements IConfigurationExtension {
         return NewSystemAddressDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'system-address-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'new-system-address-dialog', 'Translatable#New Address',
             [], null, null, false, false, 'kix-icon-new-gear'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'system-address-new-dialog-widget', 'system-address-new-dialog-widget',
-                    KIXObjectType.SYSTEM_ADDRESS, ContextMode.CREATE_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'system-address-new-dialog-widget', 'system-address-new-dialog-widget',
+                        KIXObjectType.SYSTEM_ADDRESS, ContextMode.CREATE_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'system-address-new-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'system-address-new-form-field-email',
                 'Translatable#Email Address', SystemAddressProperty.NAME, null, true,
@@ -60,14 +64,14 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'system-address-new-form-field-name',
                 'Translatable#Display Name', SystemAddressProperty.REALNAME, null, true,
                 'Translatable#Helptext_Admin_SystemAddressCreate_DisplayName'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'system-address-new-form-field-comment',
                 'Translatable#Comment', SystemAddressProperty.COMMENT, 'text-area-input', false,
@@ -75,7 +79,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'system-address-new-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -85,7 +89,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'system-address-new-form-group-information', 'Translatable#System Addresses',
                 [
@@ -97,14 +101,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'system-address-new-form-page', 'Translatable#New Address',
                 ['system-address-new-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Address',
                 ['system-address-new-form-page'],
@@ -112,6 +116,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.SYSTEM_ADDRESS, formId);
+
+        return configurations;
     }
 }
 

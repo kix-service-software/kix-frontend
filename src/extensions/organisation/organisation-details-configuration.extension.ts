@@ -16,7 +16,7 @@ import {
 import { TableConfiguration, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration } from '../../core/browser';
 import { OrganisationDetailsContext } from '../../core/browser/organisation';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
@@ -25,7 +25,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         return OrganisationDetailsContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const infoConfig = new ObjectInformationWidgetConfiguration(
             'organisation-details-object-information-config',
             'Organisation Information', ConfigurationType.ObjectInformation,
@@ -46,7 +47,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 KIXObjectProperty.CHANGE_TIME
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(infoConfig);
+        configurations.push(infoConfig);
 
         const organisationInfoLane = new WidgetConfiguration(
             'organisation-details-info-widget', 'Organisation Info Widget', ConfigurationType.Widget,
@@ -56,64 +57,64 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             ),
             null, false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(organisationInfoLane);
+        configurations.push(organisationInfoLane);
 
         const tabConfig = new TabWidgetConfiguration(
             'organisation-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             ['organisation-details-info-widget']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+        configurations.push(tabConfig);
 
         const tabLane = new WidgetConfiguration(
             'organisation-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('organisation-details-tab-widget-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
+        configurations.push(tabLane);
 
         const columnFirstName = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-firstname', 'Firstname', ConfigurationType.TableColumn,
             ContactProperty.FIRSTNAME, true, false, true, true, 200, true, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(columnFirstName);
+        configurations.push(columnFirstName);
 
         const lastNameColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-lastname', 'Lastname', ConfigurationType.TableColumn,
             ContactProperty.LASTNAME, true, false, true, true, 200, true, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(lastNameColumn);
+        configurations.push(lastNameColumn);
 
         const emailColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-email', 'Email', ConfigurationType.TableColumn,
             ContactProperty.EMAIL, true, false, true, true, 250, true, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(emailColumn);
+        configurations.push(emailColumn);
 
         const loginColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-login', 'Login', ConfigurationType.TableColumn,
             ContactProperty.LOGIN, true, false, true, true, 200, true, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(loginColumn);
+        configurations.push(loginColumn);
 
         const openTicketsColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-open-tickets', 'Open Tickets', ConfigurationType.TableColumn,
             ContactProperty.OPEN_TICKETS_COUNT, true, false, true, true, 150, true, false, false, DataType.NUMBER
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(openTicketsColumn);
+        configurations.push(openTicketsColumn);
 
         const reminderTicketsColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-reminder-tickets', 'Reminder TIckets',
             ConfigurationType.TableColumn,
             ContactProperty.REMINDER_TICKETS_COUNT, true, false, true, true, 150, true, false, false, DataType.NUMBER
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(reminderTicketsColumn);
+        configurations.push(reminderTicketsColumn);
 
         const newTicketsColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-new-tickets', 'New Tickets', ConfigurationType.TableColumn,
             ContactProperty.CREATE_NEW_TICKET, true, false, false, true, 150,
             false, false, false, DataType.STRING, false, 'create-new-ticket-cell'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(newTicketsColumn);
+        configurations.push(newTicketsColumn);
 
         const assignedContactsTableConfig = new TableConfiguration(
             'organisation-details-assigned-contacts-table', 'Contacts Table', ConfigurationType.Table,
@@ -132,7 +133,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 'organisation-details-assigned-contacts-new-tickets'
             ], null, null, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(assignedContactsTableConfig);
+        configurations.push(assignedContactsTableConfig);
 
         const assignedContactsLane = new WidgetConfiguration(
             'organisation-details-assigned-contacts-widget', 'Assigned Contacts', ConfigurationType.Widget,
@@ -140,46 +141,51 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             new ConfigurationDefinition('organisation-details-assigned-contacts-table', ConfigurationType.Table),
             null, false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(assignedContactsLane);
+        configurations.push(assignedContactsLane);
 
         const assignedTicketsLane = new WidgetConfiguration(
             'organisation-details-assigned-tickets-widget', 'Assigned Tickets', ConfigurationType.Widget,
             'organisation-assigned-tickets-widget', 'Translatable#Overview Tickets',
             ['organisation-create-ticket-action'], null, null, false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(assignedTicketsLane);
+        configurations.push(assignedTicketsLane);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Organisation Details', ConfigurationType.Context,
-            this.getModuleId(), [], [],
-            [
-                new ConfiguredWidget('organisation-details-tab-widget', 'organisation-details-tab-widget'),
-                new ConfiguredWidget(
-                    'organisation-details-assigned-contacts-widget', 'organisation-details-assigned-contacts-widget',
-                    null, [new UIComponentPermission('contacts', [CRUD.READ])]
-                ),
-                new ConfiguredWidget(
-                    'organisation-details-assigned-tickets-widget', 'organisation-details-assigned-tickets-widget',
-                    null, [new UIComponentPermission('tickets', [CRUD.READ])]
-                )
-            ],
-            [],
-            [
-                'organisation-create-action'
-            ],
-            [
-                'organisation-edit-action', 'contact-create-action', 'ticket-create-action',
-                'config-item-create-action', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget('organisation-details-info-widget', 'organisation-details-info-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Organisation Details', ConfigurationType.Context,
+                this.getModuleId(), [], [],
+                [
+                    new ConfiguredWidget('organisation-details-tab-widget', 'organisation-details-tab-widget'),
+                    new ConfiguredWidget(
+                        'organisation-details-assigned-contacts-widget',
+                        'organisation-details-assigned-contacts-widget',
+                        null, [new UIComponentPermission('contacts', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'organisation-details-assigned-tickets-widget', 'organisation-details-assigned-tickets-widget',
+                        null, [new UIComponentPermission('tickets', [CRUD.READ])]
+                    )
+                ],
+                [],
+                [
+                    'organisation-create-action'
+                ],
+                [
+                    'organisation-edit-action', 'contact-create-action', 'ticket-create-action',
+                    'config-item-create-action', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('organisation-details-info-widget', 'organisation-details-info-widget')
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        // do nothing
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

@@ -12,8 +12,7 @@ import {
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { PersonalSettingsDialogContext } from "../../core/browser";
-import { ConfigurationType } from "../../core/model/configuration";
-import { ModuleConfigurationService } from "../../services";
+import { ConfigurationType, IConfiguration } from "../../core/model/configuration";
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,29 +20,32 @@ export class Extension implements IConfigurationExtension {
         return PersonalSettingsDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'personal-settings-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'personal-settings-dialog', 'Translatable#Edit Personal Settings',
             [], null, null, false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'personal-settings-dialog-widget', 'personal-settings-dialog-widget',
-                    KIXObjectType.PERSONAL_SETTINGS, ContextMode.PERSONAL_SETTINGS
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'personal-settings-dialog-widget', 'personal-settings-dialog-widget',
+                        KIXObjectType.PERSONAL_SETTINGS, ContextMode.PERSONAL_SETTINGS
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 }
 

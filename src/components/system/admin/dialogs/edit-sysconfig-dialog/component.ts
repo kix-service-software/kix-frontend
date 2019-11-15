@@ -44,7 +44,9 @@ class Component extends AbstractEditDialog {
     }
 
     public async submit(): Promise<void> {
+        this.objectType = KIXObjectType.SYS_CONFIG_OPTION;
         await super.submit();
+        FormService.getInstance().loadFormConfigurations();
     }
 
     public async reset(): Promise<void> {

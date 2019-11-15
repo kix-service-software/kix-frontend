@@ -18,7 +18,7 @@ import {
     FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { EditTextModuleDialogContext } from '../../core/browser/text-modules';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,60 +27,66 @@ export class Extension implements IConfigurationExtension {
         return EditTextModuleDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
 
         const widget = new WidgetConfiguration(
             'text-module-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-text-module-dialog', 'Translatable#Edit Text Module',
             [], null, null, false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
 
-        return new ContextConfiguration(
-            'text-module-edit-dialog', 'Textmodule Edit Dialog', ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'text-module-edit-dialog-widget', 'text-module-edit-dialog-widget',
-                    KIXObjectType.TEXT_MODULE, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Textmodule Edit Dialog', ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'text-module-edit-dialog-widget', 'text-module-edit-dialog-widget',
+                        KIXObjectType.TEXT_MODULE, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'text-module-edit-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-name',
                 'Translatable#Name', TextModuleProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-keywords',
                 'Translatable#Keywords', TextModuleProperty.KEYWORDS, null, false,
                 'Translatable#Helptext_Admin_TextModuleCreate_Keywords'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-text',
                 'Translatable#Text', TextModuleProperty.TEXT, 'rich-text-input', true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Text'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-language',
                 'Translatable#Language', TextModuleProperty.LANGUAGE, 'language-input', false,
                 'Translatable#Helptext_Admin_TextModuleCreate_Language'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-comment',
                 'Translatable#Comment', TextModuleProperty.COMMENT, 'text-area-input', false,
@@ -88,7 +94,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -98,9 +104,9 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
-                'text-modules-new-form-group-module', 'Translatable#Text Module',
+                'text-modules-edit-form-group-module', 'Translatable#Text Module',
                 [
                     'text-modules-edit-form-field-name',
                     'text-modules-edit-form-field-keywords',
@@ -112,21 +118,23 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
-                'text-modules-new-form-page', 'Translatable#Edit Text Module',
-                ['text-modules-new-form-group-module']
+                'text-modules-edit-form-page', 'Translatable#Edit Text Module',
+                ['text-modules-edit-form-group-module']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Text Module',
-                ['text-modules-new-form-page'],
+                ['text-modules-edit-form-page'],
                 KIXObjectType.TEXT_MODULE, true, FormContext.EDIT
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.TEXT_MODULE, formId);
+
+        return configurations;
     }
 }
 

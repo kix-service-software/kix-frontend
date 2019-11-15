@@ -601,7 +601,8 @@ return new Extension();
       }
 
       public getDefaultConfiguration(): Promise&lt;ContextConfiguration&gt; {
-          return new ContextConfiguration(
+          await ModuleConfigurationService.getInstance().saveConfiguration(
+ new ContextConfiguration(
               this.getModuleId(),
               [&#39;sidebar01&#39;, &#39;sidebar02&#39;], [sidebarConfig01, sidebarConfig02],
               [&#39;explorer01&#39;], [explorerConfig01],
