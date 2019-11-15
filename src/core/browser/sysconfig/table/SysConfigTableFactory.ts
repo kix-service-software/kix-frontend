@@ -50,6 +50,14 @@ export class SysConfigTableFactory extends TableFactory {
                 SysConfigOptionDefinitionProperty.IS_MODIFIED, true, false, false, false, 100, true, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
+                SysConfigOptionDefinitionProperty.CONTEXT, true, false, true, false, 150, true, true, true,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                SysConfigOptionDefinitionProperty.CONTEXT_METADATA, true, false, true, false, 150, true, true, true,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
                 KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,

@@ -14,8 +14,7 @@ import {
     ObjectInformationWidgetConfiguration, TabWidgetConfiguration
 } from '../../core/model';
 import { MailFilterDetailsContext } from '../../core/browser/mail-filter/context';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
-import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -23,7 +22,8 @@ export class Extension implements IConfigurationExtension {
         return MailFilterDetailsContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const objectInfoConfig = new ObjectInformationWidgetConfiguration(
             'mail-filter-object-info-config', 'Object info', ConfigurationType.ObjectInformation,
             KIXObjectType.MAIL_FILTER,
@@ -38,7 +38,7 @@ export class Extension implements IConfigurationExtension {
                 KIXObjectProperty.CHANGE_TIME
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(objectInfoConfig);
+        configurations.push(objectInfoConfig);
 
         const mailFilterInfoLane = new WidgetConfiguration(
             'mail-filter-details-object-info-widget', 'Info WIdget', ConfigurationType.Widget,
@@ -46,27 +46,27 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('mail-filter-object-info-config', ConfigurationType.ObjectInformation),
             null, false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(mailFilterInfoLane);
+        configurations.push(mailFilterInfoLane);
 
         const tabConfig = new TabWidgetConfiguration(
             'mail-filter-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             ['mail-filter-details-object-info-widget']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+        configurations.push(tabConfig);
 
         const tabLane = new WidgetConfiguration(
             'mail-filter-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('mail-filter-details-tab-widget-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
+        configurations.push(tabLane);
 
         const conditionsTableWidgetConfig = new TableWidgetConfiguration(
             'mail-filter-details-conditions-table-widget-config', 'Table Widget Config',
             ConfigurationType.TableWidget,
             KIXObjectType.MAIL_FILTER_MATCH, ['Key', SortOrder.UP], null, null, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(conditionsTableWidgetConfig);
+        configurations.push(conditionsTableWidgetConfig);
 
         const mailFilterConditionWidget = new WidgetConfiguration(
             'mail-filter-details-conditions-table-widget', 'Table WIdget', ConfigurationType.Widget,
@@ -75,13 +75,13 @@ export class Extension implements IConfigurationExtension {
                 'mail-filter-details-conditions-table-widget-config', ConfigurationType.TableWidget
             ), null, true, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(mailFilterConditionWidget);
+        configurations.push(mailFilterConditionWidget);
 
         const headerTableWidgetConfig = new TableWidgetConfiguration(
             'mail-filter-details-header-table-widget-config', 'Table Widget Config', ConfigurationType.TableWidget,
             KIXObjectType.MAIL_FILTER_SET, ['Key', SortOrder.UP], null, null, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(headerTableWidgetConfig);
+        configurations.push(headerTableWidgetConfig);
 
         const mailFilterHeaderWidget = new WidgetConfiguration(
             'mail-filter-details-header-table-widget', 'Table Widget', ConfigurationType.Widget,
@@ -90,37 +90,43 @@ export class Extension implements IConfigurationExtension {
                 'mail-filter-details-header-table-widget-config', ConfigurationType.TableWidget
             ), null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(mailFilterHeaderWidget);
+        configurations.push(mailFilterHeaderWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [], [],
-            [
-                new ConfiguredWidget('mail-filter-details-tab-widget', 'mail-filter-details-tab-widget'),
-                new ConfiguredWidget(
-                    'mail-filter-details-conditions-table-widget', 'mail-filter-details-conditions-table-widget'
-                ),
-                new ConfiguredWidget(
-                    'mail-filter-details-header-table-widget', 'mail-filter-details-header-table-widget'
-                )
-            ],
-            [],
-            [
-                'mail-filter-create'
-            ],
-            [
-                'mail-filter-edit', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget('mail-filter-details-object-info-widget', 'mail-filter-details-object-info-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('mail-filter-details-tab-widget', 'mail-filter-details-tab-widget'),
+                    new ConfiguredWidget(
+                        'mail-filter-details-conditions-table-widget', 'mail-filter-details-conditions-table-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'mail-filter-details-header-table-widget', 'mail-filter-details-header-table-widget'
+                    )
+                ],
+                [],
+                [
+                    'mail-filter-create'
+                ],
+                [
+                    'mail-filter-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget(
+                        'mail-filter-details-object-info-widget', 'mail-filter-details-object-info-widget'
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

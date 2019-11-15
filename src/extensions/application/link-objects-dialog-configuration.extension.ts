@@ -10,7 +10,7 @@
 import { ContextConfiguration } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { LinkObjectDialogContext } from "../../core/browser/link";
-import { ConfigurationType } from "../../core/model/configuration";
+import { ConfigurationType, IConfiguration } from "../../core/model/configuration";
 
 export class Extension implements IConfigurationExtension {
 
@@ -18,13 +18,17 @@ export class Extension implements IConfigurationExtension {
         return LinkObjectDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context, this.getModuleId()
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context, this.getModuleId()
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         return;
     }
 }

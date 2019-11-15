@@ -128,7 +128,7 @@ export class RoleService extends KIXObjectService {
 
         for (const userId of userIdsToRemove) {
             const deleteUri = this.buildUri(baseUri, userId);
-            await this.sendDeleteRequest(token, clientRequestId, deleteUri, KIXObjectType.ROLE)
+            await this.sendDeleteRequest(token, clientRequestId, [deleteUri], KIXObjectType.ROLE)
                 .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
         }
 
@@ -185,7 +185,7 @@ export class RoleService extends KIXObjectService {
     ): Promise<void> {
         await this.sendDeleteRequest(
             token, clientRequestId,
-            this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionId),
+            [this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionId)],
             KIXObjectType.PERMISSION
         ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
     }

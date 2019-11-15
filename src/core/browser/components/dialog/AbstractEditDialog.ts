@@ -103,8 +103,6 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
     }
 
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
-        await FormService.getInstance().loadFormConfigurations();
-
         DialogService.getInstance().setMainDialogLoading(false);
         DialogService.getInstance().submitMainDialog();
 

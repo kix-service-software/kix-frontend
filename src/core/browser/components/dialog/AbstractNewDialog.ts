@@ -110,8 +110,6 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     }
 
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
-        await FormService.getInstance().loadFormConfigurations();
-
         let previousTabData: PreviousTabData = null;
         if (this.dialogContext) {
             previousTabData = this.dialogContext.getAdditionalInformation(

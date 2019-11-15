@@ -19,7 +19,7 @@ import { ConfigurationService } from '../../core/services';
 import {
     FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -28,13 +28,13 @@ export class Extension implements IConfigurationExtension {
         return EditMailFilterDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const helpConfig = new HelpWidgetConfiguration(
             'mail-filter-edit-dialog-help-widget-config', 'Help Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Admin_MailFilter_Sidebar', []
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpConfig);
+        configurations.push(helpConfig);
 
         const filterHelpSidebar = new WidgetConfiguration(
             'mail-filter-edit-dialog-help-widget', 'Widget', ConfigurationType.Widget,
@@ -42,60 +42,64 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('mail-filter-edit-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-query'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(filterHelpSidebar);
+        configurations.push(filterHelpSidebar);
 
         const dialogWidget = new WidgetConfiguration(
             'mail-filter-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-mail-filter-dialog', 'Translatable#Edit Email Filter',
             [], null, null, false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(dialogWidget);
+        configurations.push(dialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('mail-filter-edit-dialog-help-widget', 'mail-filter-edit-dialog-help-widget')
-            ],
-            [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'mail-filter-edit-dialog-widget', 'mail-filter-edit-dialog-widget',
-                    KIXObjectType.MAIL_FILTER, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget('mail-filter-edit-dialog-help-widget', 'mail-filter-edit-dialog-help-widget')
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'mail-filter-edit-dialog-widget', 'mail-filter-edit-dialog-widget',
+                        KIXObjectType.MAIL_FILTER, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        const formId = 'mail-filter-new-form';
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const formId = 'mail-filter-edit-form';
+        const configurations = [];
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'mail-filter-new-form-group-name',
+                'mail-filter-edit-form-group-name',
                 'Translatable#Name', MailFilterProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_MailFilterCreate_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'mail-filter-new-form-group-stop-after-match',
+                'mail-filter-edit-form-group-stop-after-match',
                 'Translatable#Stop after match', MailFilterProperty.STOP_AFTER_MATCH, 'checkbox-input', true,
                 'Translatable#Helptext_Admin_MailFilterCreate_StopAfterMatch', undefined,
                 new FormFieldValue(false)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'mail-filter-new-form-group-comment',
+                'mail-filter-edit-form-group-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_MailFilterCreate_Comment', null, null, null,
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'mail-filter-new-form-group-valid',
+                'mail-filter-edit-form-group-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
                 'object-reference-input', true, 'Translatable#Helptext_Admin_MailFilterCreate_Validity',
                 [
@@ -105,21 +109,21 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
-                'mail-filter-new-form-group-information', 'Translatable#Email Filter Information',
+                'mail-filter-edit-form-group-information', 'Translatable#Email Filter Information',
                 [
-                    'mail-filter-new-form-group-name',
-                    'mail-filter-new-form-group-stop-after-match',
-                    'mail-filter-new-form-group-comment',
-                    'mail-filter-new-form-group-valid',
+                    'mail-filter-edit-form-group-name',
+                    'mail-filter-edit-form-group-stop-after-match',
+                    'mail-filter-edit-form-group-comment',
+                    'mail-filter-edit-form-group-valid',
                 ]
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'mail-filter-new-form-group-conditions',
+                'mail-filter-edit-form-field-conditions',
                 'Translatable#Filter Conditions', MailFilterProperty.MATCH, 'mail-filter-match-form-input', true,
                 'Translatable#Helptext_Admin_MailFilterCreate_FilterConditions', undefined, undefined,
                 undefined, undefined, undefined, undefined, undefined, undefined, undefined, null,
@@ -127,18 +131,18 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
-                'mail-filter-new-form-group-conditions', 'Translatable#Filter Conditions',
+                'mail-filter-edit-form-group-conditions', 'Translatable#Filter Conditions',
                 [
-                    'mail-filter-new-form-group-conditions',
+                    'mail-filter-edit-form-field-conditions',
                 ]
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
-                'mail-filter-new-form-group-headers',
+                'mail-filter-edit-form-field-headers',
                 'Translatable#Set Email Headers', MailFilterProperty.SET, 'mail-filter-set-form-input', true,
                 'Translatable#Helptext_Admin_MailFilterCreate_SetEmailHeaders', undefined, undefined,
                 undefined, undefined, undefined, undefined, undefined, undefined, undefined, null,
@@ -146,34 +150,36 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
-                'mail-filter-new-form-group-headers', 'Translatable#Set Email Headers',
+                'mail-filter-edit-form-group-headers', 'Translatable#Set Email Headers',
                 [
-                    'mail-filter-new-form-group-headers',
+                    'mail-filter-edit-form-field-headers',
                 ]
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
-                'mail-filter-new-form-page', 'Translatable#New Email Filter',
+                'mail-filter-edit-form-page', 'Translatable#New Email Filter',
                 [
-                    'mail-filter-new-form-group-information',
-                    'mail-filter-new-form-group-conditions',
-                    'mail-filter-new-form-group-headers'
+                    'mail-filter-edit-form-group-information',
+                    'mail-filter-edit-form-group-conditions',
+                    'mail-filter-edit-form-group-headers'
                 ]
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Email Filter',
-                ['mail-filter-new-form-page'],
+                ['mail-filter-edit-form-page'],
                 KIXObjectType.MAIL_FILTER, true, FormContext.EDIT
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.MAIL_FILTER, formId);
+
+        return configurations;
     }
 }
 

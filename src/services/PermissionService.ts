@@ -11,6 +11,7 @@ import { UIComponent } from "../core/model/UIComponent";
 import { HttpService } from "../core/services";
 import { UIComponentPermission } from "../core/model/UIComponentPermission";
 import { ContextConfiguration, ConfiguredWidget } from "../core/model";
+import { isNumber } from "util";
 
 export class PermissionService {
 
@@ -47,6 +48,7 @@ export class PermissionService {
         const overlays = await this.checkConfiguration(token, configuration.overlays);
         const others = await this.checkConfiguration(token, configuration.others);
         const dialogs = await this.checkConfiguration(token, configuration.dialogs);
+
 
         return new ContextConfiguration(
             configuration.id, configuration.name, configuration.type,
@@ -116,9 +118,10 @@ export class PermissionService {
                     return null;
                 });
 
-            if (response !== null) {
-                const accessPermission = response.headers.AllowPermissionValue & permission.value;
-                return accessPermission === permission.value;
+            if (response !== null && permission.value) {
+                const permissionValue = Number(permission.value);
+                const accessPermission = response.headers.AllowPermissionValue & permissionValue;
+                return accessPermission === permissionValue;
             } else {
                 return false;
             }

@@ -12,7 +12,7 @@ import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { UserService } from '../core/services/impl/api/UserService';
 import { SearchEvent, SaveSearchRequest, LoadSearchResponse, DeleteSearchRequest } from '../core/model/socket/search';
 import { ConfigurationService } from '../core/services';
-import { SocketEvent, ISocketRequest, ISocketResponse } from '../core/model';
+import { SocketEvent, ISocketRequest, ISocketResponse, User } from '../core/model';
 
 export class SearchNamespace extends SocketNameSpace {
 
@@ -40,31 +40,28 @@ export class SearchNamespace extends SocketNameSpace {
     }
 
     private async saveSearch(data: SaveSearchRequest): Promise<SocketResponse> {
-        let userId = null;
-        if (data.token) {
-            const user = await UserService.getInstance().getUserByToken(data.token)
-                .catch(() => null);
-            userId = user ? user.UserID : null;
-        }
+        const user = await UserService.getInstance().getUserByToken(data.token)
+            .catch((): User => null);
 
-        if (userId && data.search) {
-            let searchConfig = ConfigurationService.getInstance().getConfiguration('search', userId);
-            if (!searchConfig) {
-                searchConfig = {};
-            }
+        if (user && data.search) {
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
 
-            if (data.existingName !== null && data.existingName !== data.search.name) {
-                delete searchConfig[data.existingName];
+            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
+            let searchConfig = {};
+
+            if (searchPreference) {
+                searchConfig = JSON.parse(searchPreference.Value);
+                if (data.existingName !== null && data.existingName !== data.search.name) {
+                    delete searchConfig[data.existingName];
+                }
             }
             searchConfig[data.search.name] = data.search;
 
-            const response = await ConfigurationService.getInstance().saveConfiguration('search', searchConfig, userId)
-                .then(() => new SocketResponse(SearchEvent.SAVE_SEARCH_FINISHED, { requestId: data.requestId }))
-                .catch((error) =>
-                    new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
-                );
+            const value = JSON.stringify(searchConfig);
+            await UserService.getInstance().setPreferences(data.token, 'SearchNamespace', [[preferenceId, value]]);
 
-            return response;
+            return new SocketResponse(SearchEvent.SAVE_SEARCH_FINISHED, { requestId: data.requestId });
         } else {
             return new SocketResponse(
                 SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user or search available.')
@@ -73,40 +70,47 @@ export class SearchNamespace extends SocketNameSpace {
     }
 
     private async loadSearch(data: ISocketRequest): Promise<SocketResponse> {
-        let userId = null;
-        if (data.token) {
-            const user = await UserService.getInstance().getUserByToken(data.token);
-            userId = user.UserID;
-        }
+        const user = await UserService.getInstance().getUserByToken(data.token);
+        if (user) {
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
 
-        const search = await ConfigurationService.getInstance().getConfiguration('search', userId);
+            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
 
-        const searchConfigs = [];
-        for (const s in search) {
-            if (search[s]) {
-                searchConfigs.push(search[s]);
+            const searchConfigs = [];
+            if (searchPreference) {
+                const search = JSON.parse(searchPreference.Value);
+                for (const s in search) {
+                    if (search[s]) {
+                        searchConfigs.push(search[s]);
+                    }
+                }
             }
-        }
 
-        const response = new LoadSearchResponse(data.requestId, searchConfigs);
-        return new SocketResponse(SearchEvent.SEARCH_LOADED, response);
+            const response = new LoadSearchResponse(data.requestId, searchConfigs);
+            return new SocketResponse(SearchEvent.SEARCH_LOADED, response);
+        }
     }
 
     private async deleteSearch(data: DeleteSearchRequest): Promise<SocketResponse> {
-        let userId = null;
-        if (data.token) {
-            const user = await UserService.getInstance().getUserByToken(data.token);
-            userId = user.UserID;
+        const user = await UserService.getInstance().getUserByToken(data.token);
+        if (user) {
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
+
+            const searchPreference = user.Preferences.find((p) => p.ID === preferenceId);
+
+            if (searchPreference) {
+                const search = JSON.parse(searchPreference.Value);
+                if (data.name && search[data.name]) {
+                    delete search[data.name];
+                    const value = JSON.stringify(search);
+                    UserService.getInstance().setPreferences(data.token, 'SearchNamespace', [[preferenceId, value]]);
+                }
+            }
+
+            const response: ISocketResponse = { requestId: data.requestId };
+            return new SocketResponse(SearchEvent.SEARCH_DELETED, response);
         }
-
-        const search = await ConfigurationService.getInstance().getConfiguration('search', userId);
-
-        if (data.name && search[data.name]) {
-            delete search[data.name];
-            await ConfigurationService.getInstance().saveConfiguration('search', search, userId);
-        }
-
-        const response: ISocketResponse = { requestId: data.requestId };
-        return new SocketResponse(SearchEvent.SEARCH_DELETED, response);
     }
 }

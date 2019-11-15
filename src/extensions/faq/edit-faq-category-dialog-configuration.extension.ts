@@ -21,7 +21,7 @@ import {
 } from '../../core/model/components/form/configuration';
 import { EditFAQCategoryDialogContext } from '../../core/browser/faq/admin';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -30,44 +30,49 @@ export class Extension implements IConfigurationExtension {
         return EditFAQCategoryDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'faq-category-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-faq-category-dialog', 'Translatable#Edit FAQ Category', [], null, null, false,
             false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'faq-category-edit-dialog-widget', 'faq-category-edit-dialog-widget',
-                    KIXObjectType.FAQ_CATEGORY, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'faq-category-edit-dialog-widget', 'faq-category-edit-dialog-widget',
+                        KIXObjectType.FAQ_CATEGORY, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'faq-category-edit-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-category-edit-form-field-name',
                 'Translatable#Name', FAQCategoryProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_FAQCategoryCreate_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-category-edit-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Admin_FAQCategoryCreate_Icon'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-category-edit-form-field-parent',
                 'Translatable#Parent Category', FAQCategoryProperty.PARENT_ID, 'object-reference-input', false,
@@ -91,7 +96,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-category-edit-form-field-comment',
                 'Translatable#Comment', FAQCategoryProperty.COMMENT, 'text-area-input', false,
@@ -99,7 +104,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-category-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -111,7 +116,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'faq-category-edit-form-group-information', 'Translatable#FAQ Category Information',
                 [
@@ -124,14 +129,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'faq-category-edit-form-page', 'Translatable#Edit FAQ Category',
                 ['faq-category-edit-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit FAQ Category',
                 ['faq-category-edit-form-page'],
@@ -139,6 +144,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.FAQ_CATEGORY, formId);
+
+        return configurations;
     }
 
 }

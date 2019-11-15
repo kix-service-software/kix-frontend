@@ -224,8 +224,8 @@ export abstract class KIXObjectService implements IKIXObjectService {
     }
 
     protected async sendDeleteRequest<R>(
-        token: string, clientRequestId: string, uri: string, cacheKeyPrefix: string
-    ): Promise<R> {
+        token: string, clientRequestId: string, uri: string[], cacheKeyPrefix: string
+    ): Promise<Error[]> {
         return await this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix);
     }
 
@@ -236,13 +236,14 @@ export abstract class KIXObjectService implements IKIXObjectService {
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectId: string | number,
         deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
-    ): Promise<void> {
-        return await this.sendDeleteRequest<void>(
-            token, clientRequestId, this.buildUri(ressourceUri, objectId), cacheKeyPrefix
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+    ): Promise<Error[]> {
+        const uri = [this.buildUri(ressourceUri, objectId)];
+
+        return await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix)
+            .catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
     }
 
     protected async createLinks(

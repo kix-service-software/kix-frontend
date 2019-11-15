@@ -17,8 +17,7 @@ import { ConfigItemSearchContext } from '../../core/browser/cmdb';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
-import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -26,13 +25,14 @@ export class ModuleExtension implements IConfigurationExtension {
         return ConfigItemSearchContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const helpConfig = new HelpWidgetConfiguration(
             'cmdb-ci-search-dialog-help-widget-config', 'Help COnfig', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Search_ConfigItem',
             []
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpConfig);
+        configurations.push(helpConfig);
 
         const helpWidget = new WidgetConfiguration(
             'cmdb-ci-search-help-widget', 'Widget', ConfigurationType.Widget,
@@ -40,37 +40,42 @@ export class ModuleExtension implements IConfigurationExtension {
             new ConfigurationDefinition('cmdb-ci-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-query', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+        configurations.push(helpWidget);
 
         const dialogWidget = new WidgetConfiguration(
             'cmdb-ci-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'search-config-item-dialog', 'Translatable#Config Item Search', [], null, null,
             false, false, 'kix-icon-search-ci'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(dialogWidget);
+        configurations.push(dialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget(
-                    'cmdb-ci-search-help-widget', 'cmdb-ci-search-help-widget', null,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                )
-            ],
-            [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'cmdb-ci-search-dialog-widget', 'cmdb-ci-search-dialog-widget',
-                    KIXObjectType.CONFIG_ITEM, ContextMode.SEARCH
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'cmdb-ci-search-help-widget', 'cmdb-ci-search-help-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'cmdb-ci-search-dialog-widget', 'cmdb-ci-search-dialog-widget',
+                        KIXObjectType.CONFIG_ITEM, ContextMode.SEARCH
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'cmdb-config-item-search-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new SearchForm(
                 formId, 'Config Item', KIXObjectType.CONFIG_ITEM, FormContext.SEARCH, null,
                 [
@@ -81,6 +86,7 @@ export class ModuleExtension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.CONFIG_ITEM, formId);
+        return configurations;
     }
 
 }

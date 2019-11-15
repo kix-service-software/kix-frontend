@@ -20,7 +20,7 @@ import {
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -29,45 +29,49 @@ export class Extension implements IConfigurationExtension {
         return EditQueueDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'queue-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-ticket-queue-dialog', 'Translatable#Edit Queue', [], null, null,
             false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            'queue-edit-dialog', 'Queue Edit Dialog', ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'queue-edit-dialog-widget', 'queue-edit-dialog-widget',
-                    KIXObjectType.QUEUE, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Queue Edit Dialog', ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'queue-edit-dialog-widget', 'queue-edit-dialog-widget',
+                        KIXObjectType.QUEUE, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'queue-edit-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-name',
                 'Translatable#Name', QueueProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_Tickets_QueueCreate_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Admin_Tickets_QueueCreate_Icon.'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-parent',
                 'Translatable#Parent Queue', QueueProperty.PARENT_ID, 'object-reference-input', false,
@@ -90,14 +94,14 @@ export class Extension implements IConfigurationExtension {
             ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-followup',
                 'Translatable#Follow Up on Tickets', QueueProperty.FOLLOW_UP_ID, 'queue-input-follow-up',
                 true, 'Translatable#Helptext_Admin_Tickets_QueueCreate_FollowUp', null, new FormFieldValue(3)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-unlock-timeout',
                 'Translatable#Unlock Timeout', QueueProperty.UNLOCK_TIMEOUT, 'number-input',
@@ -107,7 +111,7 @@ export class Extension implements IConfigurationExtension {
             ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-sender-address',
                 'Translatable#Sender Address (Email)', QueueProperty.SYSTEM_ADDRESS_ID, 'object-reference-input',
@@ -127,7 +131,7 @@ export class Extension implements IConfigurationExtension {
             ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-comment',
                 'Translatable#Comment', QueueProperty.COMMENT, 'text-area-input', false,
@@ -135,7 +139,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -145,7 +149,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'queue-edit-form-group-informations', 'Translatable#Queue Information',
                 [
@@ -162,7 +166,7 @@ export class Extension implements IConfigurationExtension {
         );
 
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'queue-edit-form-field-signature',
                 'Translatable#Signature', QueueProperty.SIGNATURE, 'rich-text-input', false,
@@ -177,7 +181,7 @@ export class Extension implements IConfigurationExtension {
                 )
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'queue-edit-form-group-signatrue', 'Translatable#Signature',
                 [
@@ -186,7 +190,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'queue-edit-form-page', 'Translatable#Edit Queue',
                 [
@@ -196,7 +200,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Queue',
                 ['queue-edit-form-page'],
@@ -204,6 +208,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.QUEUE, formId);
+
+        return configurations;
     }
 
 }

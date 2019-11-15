@@ -23,7 +23,7 @@ import {
 import { ConfigurationService, CMDBService } from '../../core/services';
 import { SearchOperator } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -32,19 +32,19 @@ export class Extension implements IConfigurationExtension {
         return CMDBContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const notesSidebar = new WidgetConfiguration(
             'cmdb-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
+        configurations.push(notesSidebar);
 
         const classExplorer = new WidgetConfiguration(
             'cmdb-dashboard-class-explorer', 'Class Explorer', ConfigurationType.Widget,
             'config-item-class-explorer', 'Translatable#CMDB Explorer', [], null, null, false, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(classExplorer);
+        configurations.push(classExplorer);
 
         const chartConfig1 = new ChartComponentConfiguration(
             'cmdb-dashboard-ci-chart-class-items-count', 'Class Items Count Chart', ConfigurationType.Chart,
@@ -82,14 +82,14 @@ export class Extension implements IConfigurationExtension {
                 }
             }
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig1);
+        configurations.push(chartConfig1);
 
         const chartWidgetConfig1 = new ConfigItemChartWidgetConfiguration(
             'cmdb-dashboard-ci-chart-class-items-count-widget', null, ConfigurationType.ChartWidget,
             ConfigItemProperty.CLASS_ID,
             new ConfigurationDefinition('cmdb-dashboard-ci-chart-class-items-count', ConfigurationType.Chart)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig1);
+        configurations.push(chartWidgetConfig1);
 
         const chart1 = new WidgetConfiguration(
             'cmdb-dashboard-ci-chart-items-count', 'Items Count', ConfigurationType.Widget,
@@ -99,7 +99,7 @@ export class Extension implements IConfigurationExtension {
             ),
             null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chart1);
+        configurations.push(chart1);
 
         const chartConfig2 = new ChartComponentConfiguration(
             'cmdb-dashboard-ci-deployment-state-chart', 'CI Deployment States', ConfigurationType.Chart,
@@ -133,7 +133,7 @@ export class Extension implements IConfigurationExtension {
                 }
             }
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig2);
+        configurations.push(chartConfig2);
 
         const chartWidgetConfig2 = new ConfigItemChartWidgetConfiguration(
             'cmdb-dashboard-ci-deployment-state-chart-widget', 'CI Deployment States Chart Widget',
@@ -141,7 +141,7 @@ export class Extension implements IConfigurationExtension {
             ConfigItemProperty.CUR_DEPL_STATE_ID,
             new ConfigurationDefinition('cmdb-dashboard-ci-deployment-state-chart', ConfigurationType.Chart)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig2);
+        configurations.push(chartWidgetConfig2);
 
         const chart2 = new WidgetConfiguration(
             'cmdb-dashboard-ci-chart-deployment-states', 'CI Chart Deployment States', ConfigurationType.Widget,
@@ -151,7 +151,7 @@ export class Extension implements IConfigurationExtension {
             ),
             null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chart2);
+        configurations.push(chart2);
 
         const chartConfig3 = new ChartComponentConfiguration(
             'cmdb-dashboard-ci-incident-state-chart', 'CI Incident States', ConfigurationType.Chart,
@@ -193,7 +193,7 @@ export class Extension implements IConfigurationExtension {
                 }
             }
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartConfig3);
+        configurations.push(chartConfig3);
 
         const chartWidgetConfig3 = new ConfigItemChartWidgetConfiguration(
             'cmdb-dashboard-ci-incident-state-chart-widget', 'CI Incident States Chart Widget',
@@ -201,7 +201,7 @@ export class Extension implements IConfigurationExtension {
             ConfigItemProperty.CUR_INCI_STATE_ID,
             new ConfigurationDefinition('cmdb-dashboard-ci-incident-state-chart', ConfigurationType.Chart)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chartWidgetConfig3);
+        configurations.push(chartWidgetConfig3);
 
         const chart3 = new WidgetConfiguration(
             'cmdb-dashboard-ci-chart-incident-states', 'CI Chart Incident States', ConfigurationType.Widget,
@@ -209,7 +209,7 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('cmdb-dashboard-ci-incident-state-chart-widget', ConfigurationType.ChartWidget),
             null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(chart3);
+        configurations.push(chart3);
 
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         const deploymentStates = await CMDBService.getInstance().getDeploymentStates(serverConfig.BACKEND_API_TOKEN);
@@ -226,7 +226,7 @@ export class Extension implements IConfigurationExtension {
             'cmdb-dashboard-ci-table-widget', 'CI Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.CONFIG_ITEM, null, null, null, null, true, null, filter
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+        configurations.push(tableWidgetConfig);
 
         const ciListWidget = new WidgetConfiguration(
             'cmdb-dashboard-ci-list-widget', 'CI List', ConfigurationType.Widget,
@@ -235,45 +235,50 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('cmdb-dashboard-ci-table-widget', ConfigurationType.TableWidget),
             null, false, false, 'kix-icon-ci', true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(ciListWidget);
+        configurations.push(ciListWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('cmdb-dashboard-notes-widget', 'cmdb-dashboard-notes-widget')
-            ],
-            [
-                new ConfiguredWidget(
-                    'cmdb-dashboard-class-explorer', 'cmdb-dashboard-class-explorer', null,
-                    [new UIComponentPermission('system/cmdb/classes', [CRUD.READ])]
-                )
-            ],
-            [],
-            [
-                new ConfiguredWidget(
-                    'cmdb-dashboard-ci-chart-items-count', 'cmdb-dashboard-ci-chart-items-count', null,
-                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'cmdb-dashboard-ci-chart-deployment-states', 'cmdb-dashboard-ci-chart-deployment-states', null,
-                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'cmdb-dashboard-ci-chart-incident-states', 'cmdb-dashboard-ci-chart-incident-states', null,
-                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
-                ),
-                new ConfiguredWidget(
-                    'cmdb-dashboard-ci-list-widget', 'cmdb-dashboard-ci-list-widget', null,
-                    [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.LARGE
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget('cmdb-dashboard-notes-widget', 'cmdb-dashboard-notes-widget')
+                ],
+                [
+                    new ConfiguredWidget(
+                        'cmdb-dashboard-class-explorer', 'cmdb-dashboard-class-explorer', null,
+                        [new UIComponentPermission('system/cmdb/classes', [CRUD.READ])]
+                    )
+                ],
+                [],
+                [
+                    new ConfiguredWidget(
+                        'cmdb-dashboard-ci-chart-items-count', 'cmdb-dashboard-ci-chart-items-count', null,
+                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                    ),
+                    new ConfiguredWidget(
+                        'cmdb-dashboard-ci-chart-deployment-states', 'cmdb-dashboard-ci-chart-deployment-states', null,
+                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                    ),
+                    new ConfiguredWidget(
+                        'cmdb-dashboard-ci-chart-incident-states', 'cmdb-dashboard-ci-chart-incident-states', null,
+                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.SMALL
+                    ),
+                    new ConfiguredWidget(
+                        'cmdb-dashboard-ci-list-widget', 'cmdb-dashboard-ci-list-widget', null,
+                        [new UIComponentPermission('cmdb/configitems', [CRUD.READ])], WidgetSize.LARGE
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const linkFormId = 'cmdb-config-item-link-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-link-form-field-class',
                 'Translatable#Config Item Class', ConfigItemProperty.CLASS_ID,
@@ -284,21 +289,21 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-link-form-field-name',
                 'Translatable#Name', ConfigItemProperty.NAME, null, false,
                 'Translatable#Helptext_CMDB_ConfigItem_Link_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-link-form-field-number',
                 'Translatable#Number', ConfigItemProperty.NUMBER, null, false,
                 'Translatable#Helptext_CMDB_ConfigItem_Link_Number'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-link-form-field-deployment-state',
                 'Translatable#Deployment State', VersionProperty.CUR_DEPL_STATE_ID, 'object-reference-input',
@@ -322,7 +327,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-link-form-field-incident-state',
                 'Translatable#Incident State', VersionProperty.CUR_INCI_STATE_ID, 'object-reference-input',
@@ -347,7 +352,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'cmdb-config-item-link-form-group-data',
                 'Translatable#Config Item Data',
@@ -361,14 +366,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'cmdb-config-item-link-form-page', 'Translatable#Link Config Item with',
                 ['cmdb-config-item-link-form-group-data']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 linkFormId, 'Translatable#Link Config Item with',
                 ['cmdb-config-item-link-form-page'],
@@ -379,6 +384,8 @@ export class Extension implements IConfigurationExtension {
         ConfigurationService.getInstance().registerForm(
             [FormContext.LINK], KIXObjectType.CONFIG_ITEM, linkFormId
         );
+
+        return configurations;
     }
 
 }

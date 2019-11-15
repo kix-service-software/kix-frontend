@@ -8,8 +8,9 @@
  */
 
 import { MenuEntry } from './MenuEntry';
+import { IConfiguration, ConfigurationType } from '../../configuration';
 
-export class MainMenuConfiguration {
+export class MainMenuConfiguration implements IConfiguration {
 
     public primaryMenuEntryConfigurations: MenuEntry[];
 
@@ -20,7 +21,10 @@ export class MainMenuConfiguration {
     public constructor(
         primaryConfiguration: MenuEntry[],
         secondaryConfiguration: MenuEntry[],
-        showText: boolean = false
+        showText: boolean = false,
+        public id: string = 'application-main-menu',
+        public name: string = 'Main Menu',
+        public type: ConfigurationType = ConfigurationType.MainMenu
     ) {
         this.primaryMenuEntryConfigurations = primaryConfiguration;
         this.secondaryMenuEntryConfigurations = secondaryConfiguration;

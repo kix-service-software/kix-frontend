@@ -8,10 +8,13 @@
  */
 
 import { Server } from './Server';
-import { CoreServiceRegistry, ConfigurationService } from './core/services';
+import { CoreServiceRegistry, ConfigurationService, LoggingService } from './core/services';
 import { PluginService, ModuleConfigurationService } from './services';
 
 import path = require('path');
+import { IConfigurationExtension, KIXExtensions } from './core/extensions';
+import { Error } from './core/model';
+import { IConfiguration } from './core/model/configuration';
 
 process.setMaxListeners(0);
 
@@ -27,19 +30,20 @@ class Startup {
         const configDir = path.join(__dirname, '..', 'config');
         const certDir = path.join(__dirname, '..', 'cert');
         ConfigurationService.getInstance().init(configDir, certDir);
-        ModuleConfigurationService.getInstance().setConfigurationPath(configDir);
 
         PluginService.getInstance().init(['extensions']);
 
+        await this.bindServices();
+
         this.server = Server.getInstance();
         await this.server.initServer();
-        await this.bindServices();
+
         await this.server.initHttpServer();
     }
 
     private async bindServices(): Promise<void> {
         await CoreServiceRegistry.registerCoreServices();
     }
-
 }
+
 const startup = new Startup();

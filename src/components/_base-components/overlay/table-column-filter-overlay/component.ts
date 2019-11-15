@@ -9,7 +9,9 @@
 
 import { AbstractMarkoComponent, IColumn, LabelService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TreeNode, KIXObjectType, ObjectIcon, TreeService, TreeHandler, KIXObject } from '../../../../core/model';
+import {
+    TreeNode, KIXObjectType, ObjectIcon, TreeService, TreeHandler, KIXObject, SortUtil, DataType, SortOrder
+} from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
@@ -70,7 +72,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareListFilter(objectType: KIXObjectType): Promise<void> {
         const filterValues = this.column.getFilterValues();
-        const nodes = [];
+        const nodes: TreeNode[] = [];
         for (const fv of filterValues) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             let label = `${fv[0]} (${fv[1]})`;
@@ -100,6 +102,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             nodes.push(node);
         }
 
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING, SortOrder.UP);
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {
             treeHandler.setTree(nodes);

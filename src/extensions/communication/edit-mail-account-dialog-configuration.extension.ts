@@ -20,7 +20,7 @@ import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -29,38 +29,43 @@ export class Extension implements IConfigurationExtension {
         return EditMailAccountDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const dialogWidget = new WidgetConfiguration(
             'mail-account-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-mail-account-dialog', 'Translatable#Edit Account',
             [], null, null, false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(dialogWidget);
+        configurations.push(dialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'mail-account-edit-dialog-widget', 'mail-account-edit-dialog-widget',
-                    KIXObjectType.MAIL_ACCOUNT, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'mail-account-edit-dialog-widget', 'mail-account-edit-dialog-widget',
+                        KIXObjectType.MAIL_ACCOUNT, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'mail-account-edit-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-username',
                 'Translatable#User Name', MailAccountProperty.LOGIN, null, true,
                 'Translatable#Helptext_Admin_MailAccountCreate_UserName'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-password',
                 'Translatable#Password', MailAccountProperty.PASSWORD, null, true,
@@ -70,21 +75,21 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-host',
                 'Translatable#Host', MailAccountProperty.HOST, null, true,
                 'Translatable#Helptext_Admin_MailAccountCreate_Host'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-type',
                 'Translatable#Type', MailAccountProperty.TYPE, 'mail-account-input-types',
                 true, 'Translatable#Helptext_Admin_MailAccountCreate_Type.'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-accept-header',
                 'Translatable#Accept KIX Header', MailAccountProperty.TRUSTED, 'checkbox-input', true,
@@ -92,7 +97,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldValue(false)
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-dispatching',
                 'Translatable#Dispatching', MailAccountProperty.DISPATCHING_BY, 'object-reference-input',
@@ -119,7 +124,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-comment',
                 'Translatable#Comment', MailAccountProperty.COMMENT, 'text-area-input', false,
@@ -128,7 +133,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -140,7 +145,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'mail-account-edit-form-group-information', 'Translatable#Email Account',
                 [
@@ -156,14 +161,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'mail-account-edit-form-page', 'Translatable#Edit Account',
                 ['mail-account-edit-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Account',
                 ['mail-account-edit-form-page'],
@@ -171,6 +176,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.MAIL_ACCOUNT, formId);
+
+        return configurations;
     }
 }
 

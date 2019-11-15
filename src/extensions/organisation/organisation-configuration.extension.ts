@@ -15,7 +15,7 @@ import { TableConfiguration } from '../../core/browser';
 import { OrganisationContext } from '../../core/browser/organisation';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 import {
-    ConfigurationType, ConfigurationDefinition as SubConfigurationDefinition
+    ConfigurationType, ConfigurationDefinition as SubConfigurationDefinition, IConfiguration
 } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
@@ -25,20 +25,21 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         return OrganisationContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const organisationsTable = new TableConfiguration(
             'customer-dashboard-table', 'Organisations Table', ConfigurationType.Table,
             KIXObjectType.ORGANISATION, null, null,
             null, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(organisationsTable);
+        configurations.push(organisationsTable);
 
         const organsiationTableWidget = new TableWidgetConfiguration(
             'customer-dashboard-table-widget', 'Organisation Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.ORGANISATION, null,
             new SubConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table), null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(organsiationTableWidget);
+        configurations.push(organsiationTableWidget);
 
         const organisationTableWidget = new WidgetConfiguration(
             'customer-dashboard-organisations-widget', 'Organisations Widget', ConfigurationType.Widget,
@@ -47,13 +48,13 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             new SubConfigurationDefinition('customer-dashboard-table-widget', ConfigurationType.TableWidget), null,
             false, true, 'kix-icon-man-house', true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(organisationTableWidget);
+        configurations.push(organisationTableWidget);
 
         const contactsTable = new TableConfiguration(
             'customer-dashboard-contacts-table', 'Contact Table', ConfigurationType.Table,
             KIXObjectType.CONTACT, null, null, null, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(contactsTable);
+        configurations.push(contactsTable);
 
         const contactTableWidget = new TableWidgetConfiguration(
             'customer-dashboard-contacts-table-widget', 'Contacts Table Widget', ConfigurationType.TableWidget,
@@ -61,7 +62,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             new SubConfigurationDefinition('customer-dashboard-contacts-table', ConfigurationType.Table), null,
             null, true, null, null, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(contactTableWidget);
+        configurations.push(contactTableWidget);
 
         const contactListWidget = new WidgetConfiguration(
             'customer-dashboard-contacts-widget', 'Contacts Widget', ConfigurationType.Widget,
@@ -72,37 +73,41 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             ),
             null, false, true, 'kix-icon-man-bubble', true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(contactListWidget);
+        configurations.push(contactListWidget);
 
         const notesSidebar = new WidgetConfiguration(
             'customer-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null,
             false, false, 'kix-icon-note', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
+        configurations.push(notesSidebar);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('customer-dashboard-notes-widget', 'customer-dashboard-notes-widget')
-            ],
-            [], [],
-            [
-                new ConfiguredWidget(
-                    'customer-dashboard-organisations-widget', 'customer-dashboard-organisations-widget', null,
-                    [new UIComponentPermission('organisations', [CRUD.READ])]
-                ),
-                new ConfiguredWidget(
-                    'customer-dashboard-contacts-widget', 'customer-dashboard-contacts-widget', null,
-                    [new UIComponentPermission('contacts', [CRUD.READ])]
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget('customer-dashboard-notes-widget', 'customer-dashboard-notes-widget')
+                ],
+                [], [],
+                [
+                    new ConfiguredWidget(
+                        'customer-dashboard-organisations-widget', 'customer-dashboard-organisations-widget', null,
+                        [new UIComponentPermission('organisations', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'customer-dashboard-contacts-widget', 'customer-dashboard-contacts-widget', null,
+                        [new UIComponentPermission('contacts', [CRUD.READ])]
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        // do nothing
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

@@ -10,7 +10,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { ContextConfiguration, WidgetConfiguration, ConfiguredWidget, TabWidgetConfiguration } from '../../core/model';
 import { TicketTypeDetailsContext } from '../../core/browser/ticket';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -19,50 +19,55 @@ export class Extension implements IConfigurationExtension {
         return 'ticket-type-details';
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const ticketTypesInfoWidget = new WidgetConfiguration(
             'ticket-type-details-info-widget', 'Info Widget', ConfigurationType.Widget,
             'ticket-type-info-widget', 'Translatable#Type Information', [], null, null,
             false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(ticketTypesInfoWidget);
+        configurations.push(ticketTypesInfoWidget);
 
         const tabWidgetSettings = new TabWidgetConfiguration(
             'ticket-type-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             ['ticket-type-details-info-widget']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabWidgetSettings);
+        configurations.push(tabWidgetSettings);
 
         const tabWidget = new WidgetConfiguration(
             'ticket-type-details-tab-widget', 'Ticket Type Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('ticket-type-details-tab-widget-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabWidget);
+        configurations.push(tabWidget);
 
-        return new ContextConfiguration(
-            'ticket-type-details', 'Ticket Type Details', ConfigurationType.Context,
-            TicketTypeDetailsContext.CONTEXT_ID,
-            [], [],
-            [
-                new ConfiguredWidget('ticket-type-details-tab-widget', 'ticket-type-details-tab-widget')
-            ],
-            [],
-            [
-                'ticket-admin-type-create'
-            ],
-            [
-                'ticket-admin-type-edit', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget('ticket-type-details-info-widget', 'ticket-type-details-info-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                'ticket-type-details', 'Ticket Type Details', ConfigurationType.Context,
+                TicketTypeDetailsContext.CONTEXT_ID,
+                [], [],
+                [
+                    new ConfiguredWidget('ticket-type-details-tab-widget', 'ticket-type-details-tab-widget')
+                ],
+                [],
+                [
+                    'ticket-admin-type-create'
+                ],
+                [
+                    'ticket-admin-type-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('ticket-type-details-info-widget', 'ticket-type-details-info-widget')
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

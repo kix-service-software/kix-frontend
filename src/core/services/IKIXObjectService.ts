@@ -11,7 +11,8 @@ import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions,
     KIXObjectSpecificDeleteOptions,
-    KIXObject
+    KIXObject,
+    Error
 } from "../model";
 import { IService } from "../common";
 
@@ -37,6 +38,6 @@ export interface IKIXObjectService extends IService {
     deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectId: string | number,
         deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
-    ): Promise<void>;
+    ): Promise<Error[]>;
 
 }

@@ -19,7 +19,7 @@ import {
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
 import { FormValidationService } from '../../core/browser/form/validation';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class NewContactDialogModuleExtension implements IConfigurationExtension {
@@ -28,52 +28,57 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         return NewContactDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
 
         const widget = new WidgetConfiguration(
             'contact-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'new-contact-dialog', 'Translatable#New Contact',
             [], null, null, false, false, 'kix-icon-man-bubble-new'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'contact-new-dialog-widget', 'contact-new-dialog-widget',
-                    KIXObjectType.CONTACT, ContextMode.CREATE
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'contact-new-dialog-widget', 'contact-new-dialog-widget',
+                        KIXObjectType.CONTACT, ContextMode.CREATE
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'contact-new-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-title',
                 'Translatable#Title', ContactProperty.TITLE, null, false,
                 'Translatable#Helptext_Customers_ContactCreate_Title'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-firstname',
                 'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
                 'Translatable#Helptext_Customers_ContactCreate_Firstname'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-lastname',
                 'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
                 'Translatable#Helptext_Customers_ContactCreate_Lastname'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-login',
                 'Translatable#Login Name', ContactProperty.LOGIN, null, true,
@@ -81,7 +86,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-password',
                 'Translatable#Password', ContactProperty.PASSWORD, null, true,
@@ -91,7 +96,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-organisation',
                 'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'contact-input-organisation',
@@ -99,7 +104,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'contact-new-form-group-information', 'Translatable#Contact Information',
                 [
@@ -113,28 +118,28 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-phone',
                 'Translatable#Phone', ContactProperty.PHONE, null, false,
                 'Translatable#Helptext_Customers_ContactCreate_Phone'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-mobile',
                 'Translatable#Mobile', ContactProperty.MOBILE, null, false,
                 'Translatable#Helptext_Customers_ContactCreate_Mobile'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-fax',
                 'Translatable#Fax', ContactProperty.FAX, null, false,
                 'Translatable#Helptext_Customers_ContactCreate_Fax'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-email',
                 'Translatable#Email', ContactProperty.EMAIL, null, true,
@@ -144,7 +149,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'contact-new-form-group-communication', 'Translatable#Communication',
                 [
@@ -156,28 +161,28 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-street',
                 'Translatable#Street', ContactProperty.STREET, null, false,
                 'Translatable#Helptext_Customers_ContactCreate_Street'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-zip',
                 'Translatable#Zip', ContactProperty.ZIP, null, false,
                 'Translatable#Helptext_Customers_ContactCreate_Zip'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-city',
                 'Translatable#City', ContactProperty.CITY, null, false,
                 'Translatable#Helptext_Customers_ContactCreate_City'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-country',
                 'Translatable#Country', ContactProperty.COUNTRY, null, false,
@@ -185,7 +190,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'contact-new-form-group-address', 'Translatable#Postal Address',
                 [
@@ -197,7 +202,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-comment',
                 'Translatable#Comment', ContactProperty.COMMENT, 'text-area-input', false,
@@ -205,7 +210,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                 null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'contact-new-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -215,7 +220,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'contact-new-form-group-other', 'Translatable#Other',
                 [
@@ -225,7 +230,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'contact-new-form-page', 'Translatable#New Contact',
                 [
@@ -237,7 +242,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Contact',
                 ['contact-new-form-page'],
@@ -245,6 +250,8 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.CONTACT, formId);
+
+        return configurations;
     }
 }
 

@@ -20,7 +20,7 @@ import {
     ContextMode, WidgetConfiguration
 } from '../../core/model';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -29,31 +29,35 @@ export class Extension implements IConfigurationExtension {
         return NewGeneralCatalogDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'general-catalog-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'new-general-catalog-dialog', 'Translatable#New Value', [], null, null, false, false,
             'kix-icon-new-gear'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'general-catalog-new-dialog-widget', 'general-catalog-new-dialog-widget',
-                    KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.CREATE_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'general-catalog-new-dialog-widget', 'general-catalog-new-dialog-widget',
+                        KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.CREATE_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
 
         const formId = 'general-catalog-new-form';
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-new-form-field-class',
                 'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'object-reference-input', true,
@@ -74,7 +78,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, 100
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-new-form-field-name',
                 'Translatable#Name', GeneralCatalogItemProperty.NAME, null, true,
@@ -82,14 +86,14 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, 100
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-new-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Admin_Tickets_GeneralCatalogCreate_Icon.'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-new-form-field-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
@@ -97,7 +101,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'general-catalog-new-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -107,7 +111,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'general-catalog-new-form-group-information', 'Translatable#General Catalog',
                 [
@@ -120,14 +124,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'general-catalog-new-form-page', 'Translatable#New Value',
                 ['general-catalog-new-form-group-information']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Value',
                 ['general-catalog-new-form-page'],
@@ -135,6 +139,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.GENERAL_CATALOG_ITEM, formId);
+        return configurations;
     }
 }
 

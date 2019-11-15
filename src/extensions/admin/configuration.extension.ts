@@ -12,8 +12,7 @@ import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration
 } from '../../core/model';
 import { AdminContext } from '../../core/browser/admin';
-import { ModuleConfigurationService } from '../../services';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,34 +20,40 @@ export class Extension implements IConfigurationExtension {
         return AdminContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(token: string): Promise<ContextConfiguration> {
-        const notesSidebar = new WidgetConfiguration(
-            'admin-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        configurations.push(
+            new WidgetConfiguration(
+                'admin-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
+                'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
+            )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
 
-
-        const adminModuleCategoriesExplorer = new WidgetConfiguration(
-            'admin-dashboard-category-explorer', 'Category Explorer', ConfigurationType.Widget,
-            'admin-modules-explorer', 'Translatable#Administration', [], null, null, false, false, null, false
+        configurations.push(
+            new WidgetConfiguration(
+                'admin-dashboard-category-explorer', 'Category Explorer', ConfigurationType.Widget,
+                'admin-modules-explorer', 'Translatable#Administration', [], null, null, false, false, null, false
+            )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(adminModuleCategoriesExplorer);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Admin Dashboard', ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('admin-dashboard-notes-widget', 'admin-dashboard-notes-widget')
-            ],
-            [
-                new ConfiguredWidget('admin-dashboard-category-explorer', 'admin-dashboard-category-explorer')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Admin Dashboard', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget('admin-dashboard-notes-widget', 'admin-dashboard-notes-widget')
+                ],
+                [
+                    new ConfiguredWidget('admin-dashboard-category-explorer', 'admin-dashboard-category-explorer')
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

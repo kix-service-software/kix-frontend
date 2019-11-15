@@ -36,6 +36,9 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
 
     public Type: string;
 
+    public Context: string;
+
+    public ContextMetadata: string;
 
     public constructor(sysConfigOptionDefinition?: SysConfigOptionDefinition) {
         super(sysConfigOptionDefinition);
@@ -51,6 +54,8 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
             this.Level = sysConfigOptionDefinition.Level;
             this.Setting = sysConfigOptionDefinition.Setting;
             this.Type = sysConfigOptionDefinition.Type;
+            this.Context = sysConfigOptionDefinition.Context;
+            this.ContextMetadata = sysConfigOptionDefinition.ContextMetadata;
         }
     }
 

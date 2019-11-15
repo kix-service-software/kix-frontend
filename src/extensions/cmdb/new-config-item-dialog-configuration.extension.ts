@@ -14,7 +14,7 @@ import {
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { NewConfigItemDialogContext } from "../../core/browser/cmdb";
-import { ConfigurationType } from "../../core/model/configuration";
+import { ConfigurationType, IConfiguration } from "../../core/model/configuration";
 import { ModuleConfigurationService } from "../../services";
 import {
     FormConfiguration, FormGroupConfiguration, FormFieldConfiguration, FormPageConfiguration
@@ -28,29 +28,33 @@ export class Extension implements IConfigurationExtension {
         return NewConfigItemDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const dialogWidget = new WidgetConfiguration(
             'cmdb-ci-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'new-config-item-dialog', 'Translatable#New Config Item',
             [], null, null, false, false, 'kix-icon-new-ci'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(dialogWidget);
+        configurations.push(dialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'cmdb-ci-new-dialog-widget', 'cmdb-ci-new-dialog-widget',
-                    KIXObjectType.CONFIG_ITEM, ContextMode.CREATE
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'cmdb-ci-new-dialog-widget', 'cmdb-ci-new-dialog-widget',
+                        KIXObjectType.CONFIG_ITEM, ContextMode.CREATE
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-new-form-field-name',
                 'Translatable#Name', VersionProperty.NAME, null, true,
@@ -59,7 +63,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, false, false
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-new-form-field-deploymentstate',
                 'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'object-reference-input',
@@ -83,7 +87,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, 1, 1, 1, null, null, null, false, false
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-new-form-field-incidentstate',
                 'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'object-reference-input',
@@ -108,7 +112,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'cmdb-config-item-new-form-field-link',
                 'Translatable#Link Config Item with', ConfigItemProperty.LINKS, 'link-input', false,
@@ -117,7 +121,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'cmdb-config-item-new-form-group-main', 'Translatable#Config Item Data',
                 [
@@ -129,7 +133,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'cmdb-config-item-new-form-page', 'Translatable#New Config Item',
                 ['cmdb-config-item-new-form-group-main']
@@ -137,7 +141,7 @@ export class Extension implements IConfigurationExtension {
         );
 
         const formId = 'cmdb-config-item-new-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Config Item',
                 ['cmdb-config-item-new-form-page'],
@@ -145,6 +149,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.CONFIG_ITEM, formId);
+        return configurations;
     }
 
 }

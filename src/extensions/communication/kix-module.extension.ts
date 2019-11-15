@@ -58,7 +58,6 @@ class KIXModuleExtension implements IKIXModuleExtension {
             'mail-filter-set-form-input', 'communication/admin/dialogs/inputs/mail-filter-set-form-input', []
         ),
         new UIComponent('edit-sysconfig-dialog', 'system/admin/dialogs/edit-sysconfig-dialog', []),
-
         new UIComponent('edit-mail-filter-dialog', 'communication/admin/dialogs/edit-mail-filter-dialog', []),
         new UIComponent('communication-admin-webforms', 'communication/admin/communication-admin-webforms', []),
         new UIComponent('new-webform-dialog', 'communication/admin/dialogs/new-webform-dialog', []),

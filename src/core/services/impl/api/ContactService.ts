@@ -113,7 +113,7 @@ export class ContactService extends KIXObjectService {
         }
     }
 
-    // Overrides from KIXObjectService
+    // Overwrites from KIXObjectService
     // FIXME: unterschiedliche Behandlung von Filter und Search entfernen, sollte nicht notwendig sein
     protected async buildFilter(filter: FilterCriteria[], filterProperty: string, query: any): Promise<void> {
         let objectFilter = {};

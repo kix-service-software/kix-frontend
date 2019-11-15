@@ -18,7 +18,7 @@ import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { NewTextModuleDialogContext } from '../../core/browser/text-modules';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,60 +27,65 @@ export class Extension implements IConfigurationExtension {
         return NewTextModuleDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
 
         const widget = new WidgetConfiguration(
             'text-module-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'new-text-module-dialog', 'Translatable#New Text Module',
             [], null, null, false, false, 'kix-icon-new-gear'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            'text-module-new-dialog', 'Textmodule New Dialog', ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'text-module-new-dialog-widget', 'text-module-new-dialog-widget',
-                    KIXObjectType.TEXT_MODULE, ContextMode.CREATE_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Textmodule New Dialog', ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'text-module-new-dialog-widget', 'text-module-new-dialog-widget',
+                        KIXObjectType.TEXT_MODULE, ContextMode.CREATE_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'text-module-new-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-new-form-field-name',
                 'Translatable#Name', TextModuleProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-new-form-field-keywords',
                 'Translatable#Keywords', TextModuleProperty.KEYWORDS, null, false,
                 'Translatable#Helptext_Admin_TextModuleCreate_Keywords'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-new-form-field-text',
                 'Translatable#Text', TextModuleProperty.TEXT, 'rich-text-input', true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Text'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-new-form-field-language',
                 'Translatable#Language', TextModuleProperty.LANGUAGE, 'language-input', false,
                 'Translatable#Helptext_Admin_TextModuleCreate_Language'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-new-form-field-comment',
                 'Translatable#Comment', TextModuleProperty.COMMENT, 'text-area-input', false,
@@ -88,7 +93,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'text-modules-new-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -98,7 +103,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'text-modules-new-form-group-module', 'Translatable#Text Module',
                 [
@@ -112,14 +117,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'text-modules-new-form-page', 'Translatable#New Text Module',
                 ['text-modules-new-form-group-module']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Text Module',
                 ['text-modules-new-form-page'],
@@ -127,6 +132,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TEXT_MODULE, formId);
+
+        return configurations;
     }
 }
 

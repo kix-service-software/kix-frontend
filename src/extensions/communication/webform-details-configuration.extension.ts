@@ -14,7 +14,7 @@ import {
 } from '../../core/model';
 import { WebformProperty } from '../../core/model/webform';
 import { WebformDetailsContext } from '../../core/browser/webform';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -23,9 +23,9 @@ export class Extension implements IConfigurationExtension {
         return WebformDetailsContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        configurations.push(
             new WidgetConfiguration(
                 'webform-details-object-info-widget', 'Object Info Widget', ConfigurationType.Widget,
                 'object-information-widget', 'Translatable#Webform Options', [], null,
@@ -54,14 +54,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new TabWidgetConfiguration(
                 'webform-details-tab-widget-config', 'Tab Widget', ConfigurationType.TabWidget,
                 ['webform-details-object-info-widget']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'webform-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
                 'tab-widget', '', [],
@@ -69,7 +69,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'webform-details-default-values', 'Object Info', ConfigurationType.Widget,
                 'object-information-widget', 'Translatable#Default Values', [],
@@ -88,32 +88,35 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new WidgetConfiguration(
                 'webform-details-code-widget', 'Code Widget', ConfigurationType.Widget,
                 'webform-code-widget', 'Translatable#Code', [], null, true)
         );
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [], [],
-            [
-                new ConfiguredWidget('webform-details-tab-widget', 'webform-details-tab-widget'),
-                new ConfiguredWidget('webform-details-default-values', 'webform-details-default-values'),
-                new ConfiguredWidget('webform-details-code-widget', 'webform-details-code-widget')
-            ],
-            [],
-            ['webform-create-action'], ['webform-edit-action', 'print-action'],
-            [],
-            [
-                new ConfiguredWidget('webform-details-object-info-widget', 'webform-details-object-info-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('webform-details-tab-widget', 'webform-details-tab-widget'),
+                    new ConfiguredWidget('webform-details-default-values', 'webform-details-default-values'),
+                    new ConfiguredWidget('webform-details-code-widget', 'webform-details-code-widget')
+                ],
+                [],
+                ['webform-create-action'], ['webform-edit-action', 'print-action'],
+                [],
+                [
+                    new ConfiguredWidget('webform-details-object-info-widget', 'webform-details-object-info-widget')
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

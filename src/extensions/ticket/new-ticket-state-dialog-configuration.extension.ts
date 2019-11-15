@@ -18,7 +18,7 @@ import {
     FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,38 +27,42 @@ export class Extension implements IConfigurationExtension {
         return NewTicketStateDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'ticket-state-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'new-ticket-state-dialog', 'Translatable#New State', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            'ticket-state-new-dialog', 'Ticket State New Dialog', ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'ticket-state-new-dialog-widget', 'ticket-state-new-dialog-widget',
-                    KIXObjectType.TICKET_STATE, ContextMode.CREATE_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Ticket State New Dialog', ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'ticket-state-new-dialog-widget', 'ticket-state-new-dialog-widget',
+                        KIXObjectType.TICKET_STATE, ContextMode.CREATE_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const formId = 'ticket-state-new-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-state-new-form-field-name',
                 'Translatable#Name', TicketStateProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_Tickets_StateCreate_Name'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-state-new-form-field-type',
                 'Translatable#State Type', TicketStateProperty.TYPE_ID, 'object-reference-input',
@@ -69,14 +73,14 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-state-new-form-field-icon',
                 'Translatable#Icon', 'ICON', 'icon-input', false,
                 'Translatable#Helptext_Admin_Tickets_StateCreate_Icon'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-state-new-form-field-comment',
                 'Translatable#Comment', TicketStateProperty.COMMENT, 'text-area-input', false,
@@ -84,7 +88,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'ticket-state-new-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -94,7 +98,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'ticket-state-new-form-group-data', 'Translatable#State Data',
                 [
@@ -107,19 +111,20 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'ticket-state-new-form-page', 'Translatable#Create State',
                 ['ticket-state-new-form-group-data']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Create State', ['ticket-state-new-form-page'], KIXObjectType.TICKET_STATE
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TICKET_STATE, formId);
+        return configurations;
     }
 }
 

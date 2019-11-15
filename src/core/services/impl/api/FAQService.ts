@@ -138,7 +138,7 @@ export class FAQService extends KIXObjectService {
 
         for (const attachment of deletableAttachments) {
             const attachmentUri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments', attachment.ID);
-            await this.sendDeleteRequest(token, clientRequestId, attachmentUri, this.objectType);
+            await this.sendDeleteRequest(token, clientRequestId, [attachmentUri], this.objectType);
         }
 
         const newAttachments = attachments ? attachments.filter((a) => !a.ID) : [];

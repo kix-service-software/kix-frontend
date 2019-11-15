@@ -17,8 +17,7 @@ import { ConfigurationService } from '../../core/services';
 import {
     FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
-import { ConfigurationType } from '../../core/model/configuration';
-import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -26,31 +25,36 @@ export class Extension implements IConfigurationExtension {
         return EditTranslationDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
 
         const editDialogWidget = new WidgetConfiguration(
             'i18n-translation-edit-dialog-widget', 'Edit Dialog Widget', ConfigurationType.Widget,
             'edit-translation-dialog', 'Translatable#Edit Translation', [], null, null,
             false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(editDialogWidget);
+        configurations.push(editDialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'i18n-translation-edit-dialog-widget', 'i18n-translation-edit-dialog-widget',
-                    KIXObjectType.TRANSLATION_PATTERN, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'i18n-translation-edit-dialog-widget', 'i18n-translation-edit-dialog-widget',
+                        KIXObjectType.TRANSLATION_PATTERN, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const formId = 'i18n-translation-edit-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'i18n-translation-edit-form-field-pattern',
                 'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true,
@@ -58,7 +62,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'i18n-translation-edit-form-group-pattern', 'Translatable#Translations',
                 [
@@ -67,14 +71,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'i18n-translation-edit-form-page', 'Translatable#Edit Translation',
                 ['i18n-translation-edit-form-group-pattern']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Translation',
                 [
@@ -84,6 +88,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.TRANSLATION_PATTERN, formId);
+
+        return configurations;
     }
 
 }

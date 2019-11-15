@@ -10,7 +10,7 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { ContextConfiguration, ConfiguredWidget, WidgetConfiguration } from '../../core/model';
 import { ReleaseContext, SliderContent, SliderWidgetConfiguration } from '../../core/browser/release';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
@@ -19,8 +19,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         return ReleaseContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const sliderConfig = new SliderWidgetConfiguration(
             'release-welcome-slider-configuration', 'Slider Configuration', ConfigurationType.Slider,
             [
@@ -61,7 +61,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 )
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(sliderConfig);
+        configurations.push(sliderConfig);
 
         const sliderWidget = new WidgetConfiguration(
             'release-welcome-slider-widget', 'Welcome Slider', ConfigurationType.Widget,
@@ -69,28 +69,31 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             new ConfigurationDefinition('release-welcome-slider-configuration', ConfigurationType.Slider),
             null, false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(sliderWidget);
+        configurations.push(sliderWidget);
 
         const helpHintsTricks = new WidgetConfiguration(
             'release-welcome-help-hints-widget', 'Hints Widget', ConfigurationType.Widget,
             'help-hints-tricks-widget', 'Translatable#Help, hints & tricks', [], null, null,
             false, true, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpHintsTricks);
+        configurations.push(helpHintsTricks);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Welcome Page', ConfigurationType.Context,
-            this.getModuleId(),
-            [], [], [],
-            [
-                new ConfiguredWidget('release-welcome-slider-widget', 'release-welcome-slider-widget'),
-                new ConfiguredWidget('release-welcome-help-hints-widget', 'release-welcome-help-hints-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Welcome Page', ConfigurationType.Context,
+                this.getModuleId(),
+                [], [], [],
+                [
+                    new ConfiguredWidget('release-welcome-slider-widget', 'release-welcome-slider-widget'),
+                    new ConfiguredWidget('release-welcome-help-hints-widget', 'release-welcome-help-hints-widget')
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        // do nothing
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

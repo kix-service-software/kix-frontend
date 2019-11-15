@@ -21,7 +21,7 @@ import {
 import { ConfigurationService } from '../../core/services';
 import { EditUserDialogContext } from '../../core/browser/user';
 import { SearchOperator } from '../../core/browser';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -30,31 +30,37 @@ export class Extension implements IConfigurationExtension {
         return EditUserDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const widget = new WidgetConfiguration(
             'user-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-user-dialog', 'Translatable#Edit Agent', [], null, null,
             false, false, 'kix-icon-edit'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Edit User Dialog', ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'user-edit-dialog-widget', 'user-edit-dialog-widget',
-                    KIXObjectType.USER, ContextMode.EDIT_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Edit User Dialog', ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'user-edit-dialog-widget', 'user-edit-dialog-widget',
+                        KIXObjectType.USER, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
         const configurationService = ConfigurationService.getInstance();
 
         const formId = 'user-edit-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-title',
                 'Translatable#Title', UserProperty.USER_TITLE, null, false,
@@ -62,7 +68,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-firstname',
                 'Translatable#First Name', UserProperty.USER_FIRSTNAME, null, true,
@@ -70,7 +76,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-lastname',
                 'Translatable#Last Name', UserProperty.USER_LASTNAME, null, true,
@@ -78,7 +84,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-login',
                 'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
@@ -86,7 +92,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-password',
                 'Translatable#Password', UserProperty.USER_PASSWORD, null, false,
@@ -98,7 +104,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-phone',
                 'Translatable#Phone', UserProperty.USER_PHONE, null, false,
@@ -106,7 +112,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-mobile',
                 'Translatable#Mobile', UserProperty.USER_MOBILE, null, false,
@@ -114,14 +120,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-email',
                 'Translatable#Email', UserProperty.USER_EMAIL, null, true,
                 'Translatable#Helptext_Admin_Users_UserEdit_Email'
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-comment',
                 'Translatable#Comment', UserProperty.USER_COMMENT, 'text-area-input', false,
@@ -129,7 +135,7 @@ export class Extension implements IConfigurationExtension {
                 null, null, null, null, null, null, null, null, 250
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -139,7 +145,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'user-edit-form-group-informations', 'Translatable#Agent Information',
                 [
@@ -157,7 +163,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-roles',
                 'Translatable#Roles', UserProperty.ROLEIDS, 'object-reference-input', false,
@@ -179,13 +185,13 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'user-edit-form-group-roles', 'Translatable#Role Assignment', ['user-edit-form-field-roles']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-language',
                 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE, 'language-input',
@@ -193,7 +199,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-queues',
                 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES, 'object-reference-input',
@@ -216,7 +222,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'user-edit-form-field-notifications',
                 'Translatable#Notifications for Tickets', PersonalSettingsProperty.NOTIFICATIONS,
@@ -245,7 +251,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'user-edit-form-group-preferences', 'Translatable#Preferences',
                 [
@@ -256,7 +262,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'user-edit-form-group-page', 'Translatable#Edit Agent',
                 [
@@ -267,7 +273,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#Edit Agent',
                 ['user-edit-form-group-page'],
@@ -275,6 +281,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         configurationService.registerForm([FormContext.EDIT], KIXObjectType.USER, formId);
+
+        return configurations;
     }
 
 }

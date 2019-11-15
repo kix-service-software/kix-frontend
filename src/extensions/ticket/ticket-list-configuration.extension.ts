@@ -16,7 +16,7 @@ import { TicketListContext } from '../../core/browser/ticket';
 import {
     ToggleOptions, TableHeaderHeight, TableRowHeight, TableConfiguration, SearchOperator
 } from '../../core/browser';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class TicketModuleFactoryExtension implements IConfigurationExtension {
@@ -25,13 +25,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         return TicketListContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
 
         const notesSidebar = new WidgetConfiguration(
             'user-ticket-list-notes-widget', 'User Ticket List Notes Widget', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
+        configurations.push(notesSidebar);
 
         const tableConfig = new TableConfiguration(
             'user-ticket-list-table', 'User Ticket List Table', ConfigurationType.Table,
@@ -43,14 +44,14 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true),
             null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableConfig);
+        configurations.push(tableConfig);
 
         const tableWidgetConfig = new TableWidgetConfiguration(
             'user-ticket-list-table-widget-config', 'User Ticket List Widget Config', ConfigurationType.TableWidget,
             KIXObjectType.TICKET, null,
             new ConfigurationDefinition('user-ticket-list-table', ConfigurationType.Table)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+        configurations.push(tableWidgetConfig);
 
         const tableWidget = new WidgetConfiguration(
             'user-ticket-list-table-widget', 'User Ticket List Table Widget', ConfigurationType.Widget,
@@ -61,23 +62,27 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ConfigurationDefinition('user-ticket-list-table-widget-config', ConfigurationType.TableWidget),
             null, false, false, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidget);
+        configurations.push(tableWidget);
 
-        return new ContextConfiguration(
-            'user-ticket-list', 'User Ticket List', ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('user-ticket-list-notes-widget', 'user-ticket-list-notes-widget')
-            ],
-            [], [],
-            [
-                new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'User Ticket List', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget('user-ticket-list-notes-widget', 'user-ticket-list-notes-widget')
+                ],
+                [], [],
+                [
+                    new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

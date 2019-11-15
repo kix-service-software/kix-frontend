@@ -18,7 +18,6 @@ import {
     UpdateConfigItemClassResponse, UpdateConfigItemClassRequest, UpdateConfigItemClass
 } from "../../../api";
 import { KIXObjectServiceRegistry } from "../../KIXObjectServiceRegistry";
-import { AppUtil } from "../../../common";
 import { LoggingService } from "../LoggingService";
 
 export class ConfigItemClassService extends KIXObjectService {
@@ -86,8 +85,6 @@ export class ConfigItemClassService extends KIXObjectService {
                 await this.createIcons(token, clientRequestId, icon);
             }
 
-            await AppUtil.updateFormConfigurations(true, clientRequestId, true);
-
             return response.ConfigItemClassID;
         }
     }
@@ -135,8 +132,6 @@ export class ConfigItemClassService extends KIXObjectService {
                     }
                 });
             }
-
-            await AppUtil.updateFormConfigurations(true, clientRequestId, true);
 
             return response.ConfigItemClassID;
         }

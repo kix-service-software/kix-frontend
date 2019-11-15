@@ -24,7 +24,7 @@ import {
 import { ConfigurationService } from '../../core/services';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
 import { FAQContext } from '../../core/browser/faq/context/FAQContext';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
@@ -33,21 +33,22 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         return FAQContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const tableConfig = new TableConfiguration(
             'faq-dashboard-article-table', 'FAQ Article Table', ConfigurationType.Table,
             KIXObjectType.FAQ_ARTICLE, null,
             null, null, null, true, null, null, null,
             TableHeaderHeight.LARGE, TableRowHeight.LARGE
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableConfig);
+        configurations.push(tableConfig);
 
         const tableWidget = new TableWidgetConfiguration(
             'faq-dashboard-article-table-widget', 'FAQ Article Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.FAQ_ARTICLE, null,
             new ConfigurationDefinition('faq-dashboard-article-table', ConfigurationType.Table)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidget);
+        configurations.push(tableWidget);
 
         const articleListWidget = new WidgetConfiguration(
             'faq-dashboard-article-widget', 'FAQ Article Widget', ConfigurationType.Widget,
@@ -55,66 +56,71 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             new ConfigurationDefinition('faq-dashboard-article-table-widget', ConfigurationType.TableWidget), null,
             false, false, 'kix-icon-faq', true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(articleListWidget);
+        configurations.push(articleListWidget);
 
         const faqCategoryExplorer = new WidgetConfiguration(
             'faq-dashboard-category-explorer', 'Category Explorer', ConfigurationType.Widget,
             'faq-category-explorer', 'Translatable#FAQ Categories', [], null, null,
             false, false, 'kix-icon-faq', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(faqCategoryExplorer);
+        configurations.push(faqCategoryExplorer);
 
         const notesSidebar = new WidgetConfiguration(
             'faq-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
             'notes-widget', 'Translatable#Notes', [], null, null,
             false, false, 'kix-icon-note', false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notesSidebar);
+        configurations.push(notesSidebar);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('faq-dashboard-notes-widget', 'faq-dashboard-notes-widget')
-            ],
-            [
-                new ConfiguredWidget(
-                    'faq-dashboard-category-explorer', 'faq-dashboard-category-explorer', null,
-                    [new UIComponentPermission('system/faq/categories', [CRUD.READ])]
-                )
-            ],
-            [],
-            [
-                new ConfiguredWidget(
-                    'faq-dashboard-article-widget', 'faq-dashboard-article-widget', null,
-                    [new UIComponentPermission('faq/articles', [CRUD.READ])]
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget('faq-dashboard-notes-widget', 'faq-dashboard-notes-widget')
+                ],
+                [
+                    new ConfiguredWidget(
+                        'faq-dashboard-category-explorer', 'faq-dashboard-category-explorer', null,
+                        [new UIComponentPermission('system/faq/categories', [CRUD.READ])]
+                    )
+                ],
+                [],
+                [
+                    new ConfiguredWidget(
+                        'faq-dashboard-article-widget', 'faq-dashboard-article-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
         const linkFormId = 'faq-article-link-form';
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        const configurations = [];
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-fulltext',
                 "Translatable#Full Text", SearchProperty.FULLTEXT, null, false,
                 "Translatable#Helptext_FAQ_Link_FullText"
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-number',
                 "Translatable#FAQ#", FAQArticleProperty.NUMBER, null, false, "Translatable#Helptext_FAQ_Link_Number"
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-title',
                 'Translatable#Title', FAQArticleProperty.TITLE, null, false, "Translatable#Helptext_FAQ_Link_Title"
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-category',
                 "Category", FAQArticleProperty.CATEGORY_ID, 'object-reference-input', false,
@@ -139,7 +145,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 ]
             )
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
@@ -151,7 +157,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'faq-article-link-form-group-attributes',
                 'Translatable#FAQ Attributes',
@@ -165,14 +171,14 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'faq-article-link-form-page', 'Translatable#Link FAQ with',
                 ['faq-article-link-form-group-attributes']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 linkFormId, 'Translatable#Link FAQ with',
                 ['faq-article-link-form-page'],
@@ -183,6 +189,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         ConfigurationService.getInstance().registerForm(
             [FormContext.LINK], KIXObjectType.FAQ_ARTICLE, linkFormId
         );
+
+        return configurations;
     }
 
 }

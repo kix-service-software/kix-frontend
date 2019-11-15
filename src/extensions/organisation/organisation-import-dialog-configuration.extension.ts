@@ -13,7 +13,7 @@ import {
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { OrganisationImportDialogContext } from "../../core/browser/organisation";
-import { ConfigurationType, ConfigurationDefinition } from "../../core/model/configuration";
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from "../../core/model/configuration";
 import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
@@ -22,12 +22,13 @@ export class Extension implements IConfigurationExtension {
         return OrganisationImportDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const helpSettings = new HelpWidgetConfiguration(
             'organisation-import-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
             'Translatable#Helptext_Customers_OrganisationImport', null
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpSettings);
+        configurations.push(helpSettings);
 
         const helpWidget = new WidgetConfiguration(
             'organisation-import-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
@@ -35,7 +36,7 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('organisation-import-dialog-help-widget-config', ConfigurationType.HelpWidget),
             null, false, false, 'kix-icon-textblocks'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(helpWidget);
+        configurations.push(helpWidget);
 
 
         const widget = new WidgetConfiguration(
@@ -43,26 +44,31 @@ export class Extension implements IConfigurationExtension {
             'import-dialog', 'Translatable#Import Organisations', [], null, null,
             false, false, 'kix-icon-man-house-new'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(widget);
+        configurations.push(widget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), 'Organisation Import Dialog', ConfigurationType.Context,
-            this.getModuleId(),
-            [
-                new ConfiguredWidget('organisation-import-dialog-help-widget', 'organisation-import-dialog-help-widget')
-            ],
-            [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'organisation-import-dialog-widget', 'organisation-import-dialog-widget',
-                    KIXObjectType.ORGANISATION, ContextMode.IMPORT
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Organisation Import Dialog', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'organisation-import-dialog-help-widget', 'organisation-import-dialog-help-widget'
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'organisation-import-dialog-widget', 'organisation-import-dialog-widget',
+                        KIXObjectType.ORGANISATION, ContextMode.IMPORT
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 }
 

@@ -15,7 +15,7 @@ import {
 } from '../../core/model';
 import { NotificationDetailsContext } from '../../core/browser/notification/context';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
-import { ConfigurationType, ConfigurationDefinition } from '../../core/model/configuration';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -24,8 +24,8 @@ export class Extension implements IConfigurationExtension {
         return NotificationDetailsContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
-
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const objectInfoConfig = new ObjectInformationWidgetConfiguration(
             'notification-details-object-info-config', 'Object Info Config', ConfigurationType.ObjectInformation,
             KIXObjectType.NOTIFICATION,
@@ -41,7 +41,7 @@ export class Extension implements IConfigurationExtension {
                 KIXObjectProperty.CHANGE_BY
             ],
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(objectInfoConfig);
+        configurations.push(objectInfoConfig);
 
         const notificationInfoLane = new WidgetConfiguration(
             'notification-details-object-info-widget', 'Object Info Widget', ConfigurationType.Widget,
@@ -49,26 +49,26 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('notification-details-object-info-config', ConfigurationType.ObjectInformation),
             null, false, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notificationInfoLane);
+        configurations.push(notificationInfoLane);
 
         const tabConfig = new TabWidgetConfiguration(
             'notification-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
             ['notification-details-object-info-widget']
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabConfig);
+        configurations.push(tabConfig);
 
         const tabLane = new WidgetConfiguration(
             'notification-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
             new ConfigurationDefinition('notification-details-tab-widget-config', ConfigurationType.TabWidget)
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tabLane);
+        configurations.push(tabLane);
 
         const tableWidgetConfig = new TableWidgetConfiguration(
             'notification-details-filter-table-widget-config', 'Widget Config', ConfigurationType.TableWidget,
             KIXObjectType.NOTIFICATION_FILTER, ['Field', SortOrder.UP], null, null, null, false
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(tableWidgetConfig);
+        configurations.push(tableWidgetConfig);
 
         const notificationFilterWidget = new WidgetConfiguration(
             'notification-details-filter-table-widget', 'Table Widget', ConfigurationType.Widget,
@@ -77,7 +77,7 @@ export class Extension implements IConfigurationExtension {
                 'notification-details-filter-table-widget-config', ConfigurationType.TableWidget
             ), null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notificationFilterWidget);
+        configurations.push(notificationFilterWidget);
 
         const recipientsInfoConfig = new ObjectInformationWidgetConfiguration(
             'notification-details-recipients-info-config', 'Info Config', ConfigurationType.ObjectInformation,
@@ -91,7 +91,7 @@ export class Extension implements IConfigurationExtension {
                 NotificationProperty.DATA_CREATE_ARTICLE
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(recipientsInfoConfig);
+        configurations.push(recipientsInfoConfig);
 
         const notificationRecipientsWidget = new WidgetConfiguration(
             'notification-details-recipient-info-widget', 'Recipient Info Widget', ConfigurationType.Widget,
@@ -101,7 +101,7 @@ export class Extension implements IConfigurationExtension {
             ),
             null, true, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notificationRecipientsWidget);
+        configurations.push(notificationRecipientsWidget);
 
         const methodsInfoConfig = new ObjectInformationWidgetConfiguration(
             'notification-details-notification-methods-info-config', 'Info Config', ConfigurationType.ObjectInformation,
@@ -111,7 +111,7 @@ export class Extension implements IConfigurationExtension {
                 NotificationProperty.DATA_RECIPIENT_SUBJECT
             ]
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(methodsInfoConfig);
+        configurations.push(methodsInfoConfig);
 
         const notificationMethodsWidget = new WidgetConfiguration(
             'notification-details-notification-methods-widget', 'Method Widget', ConfigurationType.Widget,
@@ -120,54 +120,58 @@ export class Extension implements IConfigurationExtension {
                 'notification-details-notification-methods-info-config', ConfigurationType.ObjectInformation
             ), null, true, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notificationMethodsWidget);
+        configurations.push(notificationMethodsWidget);
 
         const notificationTextWidget = new WidgetConfiguration(
             'notification-details-text-widget', 'Text Widget', ConfigurationType.Widget,
             'notification-text-widget', 'Translatable#Notification Text', [],
             null, null, false, true, null, true
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(notificationTextWidget);
+        configurations.push(notificationTextWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(),
-            [], [],
-            [
-                new ConfiguredWidget(
-                    'notification-details-tab-widget', 'notification-details-tab-widget', null,
-                    [new UIComponentPermission('system/communication/notifications', [CRUD.READ])]
-                ),
-                new ConfiguredWidget(
-                    'notification-details-filter-table-widget', 'notification-details-filter-table-widget'
-                ),
-                new ConfiguredWidget(
-                    'notification-details-recipient-info-widget', 'notification-details-recipient-info-widget'
-                ),
-                new ConfiguredWidget(
-                    'notification-details-notification-methods-widget',
-                    'notification-details-notification-methods-widget'
-                ),
-                new ConfiguredWidget('notification-details-text-widget', 'notification-details-text-widget')
-            ],
-            [],
-            [
-                'notification-create'
-            ],
-            [
-                'notification-edit', 'print-action'
-            ],
-            [],
-            [
-                new ConfiguredWidget(
-                    'notification-details-object-info-widget', 'notification-details-object-info-widget'
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget(
+                        'notification-details-tab-widget', 'notification-details-tab-widget', null,
+                        [new UIComponentPermission('system/communication/notifications', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'notification-details-filter-table-widget', 'notification-details-filter-table-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'notification-details-recipient-info-widget', 'notification-details-recipient-info-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'notification-details-notification-methods-widget',
+                        'notification-details-notification-methods-widget'
+                    ),
+                    new ConfiguredWidget('notification-details-text-widget', 'notification-details-text-widget')
+                ],
+                [],
+                [
+                    'notification-create'
+                ],
+                [
+                    'notification-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget(
+                        'notification-details-object-info-widget', 'notification-details-object-info-widget'
+                    )
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

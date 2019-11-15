@@ -18,7 +18,7 @@ import { ConfigurationService } from '../../core/services';
 import {
     FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
 } from '../../core/model/components/form/configuration';
-import { ConfigurationType } from '../../core/model/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
@@ -27,31 +27,36 @@ export class Extension implements IConfigurationExtension {
         return NewTranslationDialogContext.CONTEXT_ID;
     }
 
-    public async createDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
         const newDialogWidget = new WidgetConfiguration(
             'i18n-translation-new-dialog-widget', 'NEw DIalog Widget', ConfigurationType.Widget,
             'new-translation-dialog', 'Translatable#New Translation', [], null, null,
             false, false, 'kix-icon-new-gear'
         );
-        await ModuleConfigurationService.getInstance().saveConfiguration(newDialogWidget);
+        configurations.push(newDialogWidget);
 
-        return new ContextConfiguration(
-            this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-            this.getModuleId(), [], [], [], [], [], [], [], [],
-            [
-                new ConfiguredDialogWidget(
-                    'i18n-translation-new-dialog-widget', 'i18n-translation-new-dialog-widget',
-                    KIXObjectType.TRANSLATION_PATTERN, ContextMode.CREATE_ADMIN
-                )
-            ]
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'i18n-translation-new-dialog-widget', 'i18n-translation-new-dialog-widget',
+                        KIXObjectType.TRANSLATION_PATTERN, ContextMode.CREATE_ADMIN
+                    )
+                ]
+            )
         );
+        return configurations;
     }
 
-    public async createFormConfigurations(overwrite: boolean): Promise<void> {
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
 
         const formId = 'i18n-translation-new-form';
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormFieldConfiguration(
                 'i18n-translation-new-form-field-pattern',
                 'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true,
@@ -59,7 +64,7 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormGroupConfiguration(
                 'i18n-translation-new-form-group-pattern', 'Translatable#Translations',
                 [
@@ -68,14 +73,14 @@ export class Extension implements IConfigurationExtension {
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormPageConfiguration(
                 'i18n-translation-new-form-page', 'Translatable#New Translations',
                 ['i18n-translation-new-form-group-pattern']
             )
         );
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
+        configurations.push(
             new FormConfiguration(
                 formId, 'Translatable#New Translation',
                 [
@@ -85,6 +90,8 @@ export class Extension implements IConfigurationExtension {
             )
         );
         ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.TRANSLATION_PATTERN, formId);
+
+        return configurations;
     }
 
 }
