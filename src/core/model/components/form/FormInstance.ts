@@ -404,8 +404,9 @@ export class FormInstance implements IFormInstance {
                     const changeIndex = fields.findIndex((c) => c.instanceId === changeFieldInstanceId);
                     if (changeIndex !== -1 && targetIndex !== changeIndex) {
                         const newIndex = targetIndex > changeIndex ? targetIndex + 1 : targetIndex;
+                        const removeIndex = targetIndex < changeIndex ? changeIndex + 1 : changeIndex;
                         fields.splice(newIndex, 0, startField);
-                        fields.splice(changeIndex, 1);
+                        fields.splice(removeIndex, 1);
 
                         this.sortValuesByFieldList(fields);
 
