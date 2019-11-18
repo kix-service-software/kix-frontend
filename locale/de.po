@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-11-14 10:18+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2019-11-18 14:48+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -42,7 +42,7 @@ msgid "Accepted domains"
 msgstr "Akzeptierte Domains"
 
 msgid "Accept KIX Header"
-msgstr "KIX Header akzeptieren"
+msgstr "KIX Header zulassen"
 
 msgid "Access denied"
 msgstr "Zugriff verweigert"
@@ -114,7 +114,7 @@ msgid "Agent Information"
 msgstr "Agenten-Informationen"
 
 msgid "Agent Preferences Tooltip"
-msgstr "Kurzinfo für die persönlichen Agenteneinstellungen"
+msgstr "Kurzinfo für Agent"
 
 msgid "Agents"
 msgstr "Agenten"
@@ -2577,7 +2577,7 @@ msgid "Message"
 msgstr "Nachricht"
 
 msgid "Message after sending form"
-msgstr "Nachricht nach Absenden des Formulars"
+msgstr "Info nach Absenden"
 
 #, fuzzy
 #| msgid "Reset data"
@@ -2624,10 +2624,10 @@ msgid "Name"
 msgstr "Name"
 
 msgid "Name of activate form button"
-msgstr "Name des Aufrufen-Buttons für das Formular"
+msgstr "Name Aufruf-Button"
 
 msgid "Name of form submit button"
-msgstr "Name des Speichern-Buttons im Formular"
+msgstr "Name Speichern-Button"
 
 msgid "Negate"
 msgstr "Negieren"
@@ -3275,7 +3275,7 @@ msgid "Send"
 msgstr "Senden"
 
 msgid "Send despite out of office"
-msgstr "Trotz „nicht im Büro“ senden"
+msgstr "Trotz „nicht im Büro“"
 
 msgid "Sender Address (Email)"
 msgstr "Absender E-Mail"
@@ -3287,10 +3287,10 @@ msgid "Send to"
 msgstr "Senden an"
 
 msgid "Send to all role members"
-msgstr "An alle Rollen-Mitglieder senden"
+msgstr "Senden an Agenten-Rollen"
 
 msgid "Send to these agents"
-msgstr "An diese Agenten senden"
+msgstr "Senden an Agenten"
 
 msgid "Service"
 msgstr "Service"
@@ -3308,7 +3308,7 @@ msgid "Show all"
 msgstr "Alle anzeigen"
 
 msgid "Show in agent preferences"
-msgstr "In Agenteneinstellungen zeigen"
+msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -3353,7 +3353,7 @@ msgid "Start Import"
 msgstr "Import starten"
 
 msgid "Start modal dialog for form"
-msgstr "Modalen Dialog für Formular starten"
+msgstr "Modalen Dialog starten"
 
 msgid "Start search"
 msgstr "Suche starten"
@@ -3503,8 +3503,8 @@ msgstr "Es werden nur aktuelle Versionen durchsucht."
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
 msgstr ""
-"Sie befinden sich im Administrationsbereich. Wählen Sie ein Modul aus dem "
-"Explorer."
+"Sie befinden sich im Administrationsbereich. Bitte wählen Sie ein Modul aus "
+"dem Explorer."
 
 msgid "Thursday"
 msgstr "Donnerstag"
