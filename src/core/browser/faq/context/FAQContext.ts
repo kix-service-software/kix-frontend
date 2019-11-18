@@ -43,7 +43,7 @@ export class FAQContext extends Context {
                         KIXObjectType.FAQ_CATEGORY)
                 );
             }
-        } else if (this.faqCategory) {
+        } else if (this.faqCategory || typeof this.faqCategory === 'undefined') {
             this.faqCategory = null;
             await this.loadFAQArticles();
         }
