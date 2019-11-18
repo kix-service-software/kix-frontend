@@ -38,7 +38,7 @@ export class TicketContext extends Context {
                 this.queueId = queueId;
                 await this.loadTickets();
             }
-        } else if (this.queueId) {
+        } else if (this.queueId || typeof this.queueId === 'undefined' ) {
             this.queueId = null;
             await this.loadTickets();
         }

@@ -39,7 +39,7 @@ export class CMDBContext extends Context {
                 this.currentCIClass = ciClass;
                 await this.loadConfigItems();
             }
-        } else if (this.currentCIClass) {
+        } else if (this.currentCIClass || typeof this.currentCIClass === 'undefined') {
             this.currentCIClass = null;
             await this.loadConfigItems();
         }
