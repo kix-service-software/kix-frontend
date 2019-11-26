@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-11-18 14:48+0000\n"
+"PO-Revision-Date: 2019-11-26 10:13+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -490,10 +490,8 @@ msgstr "enthalten in"
 msgid "contains"
 msgstr "enthält"
 
-#, fuzzy
-#| msgid "Contact"
 msgid "Context"
-msgstr "Kontakt"
+msgstr "Kontext"
 
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
@@ -925,7 +923,7 @@ msgid "Fax"
 msgstr "Fax"
 
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 msgid "Fetching Mail Account"
 msgstr "E-Mail-Konto abrufen"
@@ -1072,7 +1070,7 @@ msgstr ""
 "Bereich angezeigt werden."
 
 msgid "Helptext_Admin_JobCCreateEdit_Time"
-msgstr ""
+msgstr "Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird."
 
 msgid "Helptext_Admin_JobCreateEdit_Actions"
 msgstr ""
@@ -1084,6 +1082,8 @@ msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
+"Hier können Sie die Aktion temporär deaktivieren: So lange dieser Haken "
+"gesetzt ist, wird die betreffende Aktion nicht durchgeführt."
 
 msgid "Helptext_Admin_JobCreateEdit_Days"
 msgstr ""
@@ -1798,6 +1798,8 @@ msgstr ""
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_Class"
 msgstr ""
+"Bitte wählen Sie zunächst eine Asset Klasse aus der Liste. Anschließend wird "
+"das vollständige Eingabe-Formular geladen."
 
 msgid "Helptext_CMDB_ConfigItemCreateEdit_DeploymentState"
 msgstr ""
@@ -2579,10 +2581,8 @@ msgstr "Nachricht"
 msgid "Message after sending form"
 msgstr "Info nach Absenden"
 
-#, fuzzy
-#| msgid "Reset data"
 msgid "Metadata"
-msgstr "Daten zurücksetzen"
+msgstr "Metadaten"
 
 msgid "Minutes"
 msgstr "Minuten"
