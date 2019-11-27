@@ -22,6 +22,8 @@ import { ConfigurationType } from '../core/model/configuration';
 import { FormConfiguration } from '../core/model/components/form/configuration';
 import { FormConfigurationResolver } from '../services/configuration/FormConfigurationResolver';
 import { Server } from '../Server';
+import { LoadFormConfigurationRequest } from '../core/model/socket/application/LoadFormConfigurationRequest';
+import { LoadFormConfigurationResponse } from '../core/model/socket/application/LoadFormConfigurationResponse';
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
@@ -47,6 +49,9 @@ export class KIXModuleNamespace extends SocketNameSpace {
 
         this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS,
             this.loadFormConfigurations.bind(this));
+
+        this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATION,
+            this.loadFormConfiguration.bind(this));
 
         this.registerEventHandler(client, KIXModulesEvent.LOAD_RELEASE_INFO,
             this.loadReleaseInfo.bind(this));
@@ -78,22 +83,29 @@ export class KIXModuleNamespace extends SocketNameSpace {
     private async loadFormConfigurations(
         data: LoadFormConfigurationsRequest
     ): Promise<SocketResponse> {
-        const forms = await ModuleConfigurationService.getInstance().loadConfigurations<FormConfiguration>(
-            data.token, ConfigurationType.Form
-        );
-
-        for (const form of forms) {
-            await FormConfigurationResolver.resolve(data.token, form)
-                .catch((error) => {
-                    LoggingService.getInstance().error(error);
-                    LoggingService.getInstance().warning('Could not resolve form configuration ' + form.id);
-                });
-        }
-
         const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
         return new SocketResponse(
             KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
-            new LoadFormConfigurationsResponse(data.requestId, forms, formIdsWithContext)
+            new LoadFormConfigurationsResponse(data.requestId, formIdsWithContext)
+        );
+    }
+
+    private async loadFormConfiguration(
+        data: LoadFormConfigurationRequest
+    ): Promise<SocketResponse> {
+        const form = await ModuleConfigurationService.getInstance().loadConfiguration<FormConfiguration>(
+            data.token, data.formId
+        );
+
+        await FormConfigurationResolver.resolve(data.token, form)
+            .catch((error) => {
+                LoggingService.getInstance().error(error);
+                LoggingService.getInstance().warning('Could not resolve form configuration ' + form.id);
+            });
+
+        return new SocketResponse(
+            KIXModulesEvent.LOAD_FORM_CONFIGURATION_FINISHED,
+            new LoadFormConfigurationResponse(data.requestId, form)
         );
     }
 

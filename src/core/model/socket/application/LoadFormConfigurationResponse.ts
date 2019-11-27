@@ -8,14 +8,13 @@
  */
 
 import { ISocketResponse } from "../../socket";
-import { KIXObjectType } from "../../kix";
-import { FormContext } from "../../components";
+import { FormConfiguration } from "../../components/form/configuration";
 
-export class LoadFormConfigurationsResponse implements ISocketResponse {
+export class LoadFormConfigurationResponse implements ISocketResponse {
 
     public constructor(
         public requestId: string,
-        public formIDsWithContext: Array<[FormContext, KIXObjectType, string]>
+        public form: FormConfiguration
     ) { }
 
 }

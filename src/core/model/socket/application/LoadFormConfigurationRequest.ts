@@ -7,15 +7,15 @@
  * --
  */
 
-import { ISocketResponse } from "../../socket";
-import { KIXObjectType } from "../../kix";
-import { FormContext } from "../../components";
+import { ISocketRequest } from "../../socket";
 
-export class LoadFormConfigurationsResponse implements ISocketResponse {
+export class LoadFormConfigurationRequest implements ISocketRequest {
 
     public constructor(
+        public token: string,
         public requestId: string,
-        public formIDsWithContext: Array<[FormContext, KIXObjectType, string]>
+        public clientRequestId: string,
+        public formId: string
     ) { }
 
 }
