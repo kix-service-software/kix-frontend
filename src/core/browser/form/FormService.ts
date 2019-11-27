@@ -29,21 +29,17 @@ export class FormService {
 
     private formInstances: Map<string, Promise<IFormInstance>> = new Map();
 
-    private forms: FormConfiguration[] = null;
+    private forms: FormConfiguration[] = [];
     private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = null;
 
     private constructor() { }
 
     public async loadFormConfigurations(): Promise<void> {
         const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurations();
-        this.forms = formConfigurations[0];
-        this.formIDsWithContext = formConfigurations[1];
+        this.formIDsWithContext = formConfigurations;
     }
 
     public async addForm(form: FormConfiguration): Promise<void> {
-        if (!this.forms) {
-            await this.loadFormConfigurations();
-        }
         const formIndex = this.forms.findIndex((f) => f.id === form.id);
         if (formIndex !== -1) {
             this.forms.splice(formIndex, 1, form);
@@ -90,10 +86,11 @@ export class FormService {
     }
 
     public async getForm(formId: string): Promise<FormConfiguration> {
-        if (!this.forms) {
-            await this.loadFormConfigurations();
+        let form = this.forms.find((f) => f.id === formId);
+        if (!form) {
+            form = await KIXModulesSocketClient.getInstance().loadFormConfiguration(formId);
         }
-        return this.forms.find((f) => f.id === formId);
+        return form;
     }
 
     public deleteFormInstance(formId: string): void {
