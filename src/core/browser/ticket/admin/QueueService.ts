@@ -73,12 +73,15 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async prepareObjectTree(
-        queues: Queue[], showInvalid?: boolean, filterIds?: number[], includeTicketStats: boolean = false
+        queues: Queue[], showInvalid?: boolean, invalidClickable: boolean = false, filterIds?: number[],
+        includeTicketStats: boolean = false
     ): Promise<TreeNode[]> {
         const nodes = [];
         if (queues && !!queues.length) {
             if (!showInvalid) {
                 queues = queues.filter((q) => q.ValidID === 1);
+            } else if (!invalidClickable) {
+                queues = queues.filter((q) => q.ValidID === 1 || this.hasValidDescendants(q.SubQueues));
             }
 
             if (filterIds && filterIds.length) {
@@ -92,7 +95,7 @@ export class QueueService extends KIXObjectService<Queue> {
                 }
 
                 const subTree = await this.prepareObjectTree(
-                    queue.SubQueues, showInvalid, filterIds, includeTicketStats
+                    queue.SubQueues, showInvalid, invalidClickable, filterIds, includeTicketStats
                 );
 
                 const treeNode = new TreeNode(
@@ -103,13 +106,32 @@ export class QueueService extends KIXObjectService<Queue> {
                     null, null, null,
                     ticketStats,
                     null, null, null,
-                    queue.ValidID === 1
+                    invalidClickable ? true : queue.ValidID === 1,
+                    undefined, undefined, undefined, undefined,
+                    queue.ValidID !== 1
                 );
 
                 nodes.push(treeNode);
             }
         }
         return nodes;
+    }
+
+    private hasValidDescendants(queues: Queue[]): boolean {
+        let hasValidDescendants: boolean = false;
+        if (queues && !!queues.length) {
+            for (const queue of queues) {
+                if (queue.ValidID === 1) {
+                    hasValidDescendants = true;
+                } else {
+                    hasValidDescendants = this.hasValidDescendants(queue.SubQueues);
+                }
+                if (hasValidDescendants) {
+                    break;
+                }
+            }
+        }
+        return hasValidDescendants;
     }
 
     private async getTicketStats(queue: Queue): Promise<TreeNodeProperty[]> {
@@ -148,7 +170,9 @@ export class QueueService extends KIXObjectService<Queue> {
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
     }
 
-    public async getTreeNodes(property: string, showInvalid?: boolean): Promise<TreeNode[]> {
+    public async getTreeNodes(
+        property: string, showInvalid?: boolean, invalidClickable?: boolean
+    ): Promise<TreeNode[]> {
         const values: TreeNode[] = [];
 
         switch (property) {

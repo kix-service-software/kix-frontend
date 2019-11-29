@@ -183,10 +183,6 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                         new KIXObjectLoadingOptions(
                             [
                                 new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                ),
-                                new FilterCriteria(
                                     QueueProperty.PARENT_ID, SearchOperator.EQUALS,
                                     FilterDataType.STRING, FilterType.AND, null
                                 )

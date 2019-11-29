@@ -10,10 +10,10 @@
 import { ComponentState } from './ComponentState';
 import {
     FormInputComponent, KIXObjectType, TreeNode, KIXObjectLoadingOptions, KIXObject,
-    ObjectReferenceOptions, FilterCriteria, SortUtil, DataType, AutoCompleteConfiguration, TreeService
+    ObjectReferenceOptions, FilterCriteria, SortUtil, DataType, AutoCompleteConfiguration, TreeService, FormFieldOptions
 } from '../../../../../core/model';
 import {
-    LabelService, KIXObjectService, ServiceRegistry, IKIXObjectService, SearchProperty, FormService
+    LabelService, KIXObjectService, ServiceRegistry, IKIXObjectService, SearchProperty, FormService, UIUtil
 } from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
 
@@ -61,9 +61,22 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 const structureOption = this.state.field.options.find(
                     (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
                 );
+                const showValidOption = this.state.field.options
+                    ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
+                    : null;
+                const validClickableOption = this.state.field.options
+                    ? this.state.field.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
+                    : null;
+
+                const showInvalid = showValidOption ? showValidOption.value : true;
+                const invalidClickable = validClickableOption ? validClickableOption.value : false;
+
+                const objectId = await UIUtil.getEditObjectId(objectOption.value);
 
                 if (structureOption && structureOption.value) {
-                    nodes = await KIXObjectService.prepareObjectTree(this.objects, true);
+                    nodes = await KIXObjectService.prepareObjectTree(
+                        this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
+                    );
                 } else {
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);

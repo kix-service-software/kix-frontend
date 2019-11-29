@@ -137,7 +137,7 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        const nodes = await FAQService.getInstance().getTreeNodes(property, true);
+        const nodes = await FAQService.getInstance().getTreeNodes(property, true, true);
         return nodes;
     }
 

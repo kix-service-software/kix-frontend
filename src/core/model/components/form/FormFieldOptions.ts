@@ -15,6 +15,8 @@ export enum FormFieldOptions {
 
     SHOW_INVALID = 'SHOW_INVALID',
 
+    INVALID_CLICKABLE = 'INVALID_CLICKABLE',
+
     IS_JSON = 'isJSON'
 
 }

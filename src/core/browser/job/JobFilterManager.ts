@@ -104,7 +104,6 @@ export class JobFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.TYPE_ID:
             case TicketProperty.STATE_ID:
             case TicketProperty.PRIORITY_ID:
-            case TicketProperty.QUEUE_ID:
             case TicketProperty.SERVICE:
             case TicketProperty.SLA:
             case TicketProperty.OWNER_ID:
@@ -114,6 +113,8 @@ export class JobFilterManager extends AbstractDynamicFormManager {
             case ArticleProperty.CHANNEL_ID:
                 nodes = await TicketService.getInstance().getTreeNodes(property, false);
                 break;
+            case TicketProperty.QUEUE_ID:
+                nodes = await TicketService.getInstance().getTreeNodes(property, true, false);
             case TicketProperty.ORGANISATION_ID:
                 if (Array.isArray(objectIds) && !!objectIds.length) {
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
