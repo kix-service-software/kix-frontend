@@ -24,27 +24,12 @@ class Component {
     }
 
     public onInput(input: ComponentInput): void {
-        this.state.releaseInfo = input.releaseInfo;
-        this.state.imprintLink = input.imprintLink;
+        this.state.releaseInfo = !this.state.releaseInfo ? input.releaseInfo : this.state.releaseInfo;
+        this.state.imprintLink = !this.state.imprintLink ? input.imprintLink : this.state.imprintLink;
         this.state.unauthorized = typeof input.unauthorized !== 'undefined' ? input.unauthorized : false;
     }
 
     public async onMount(): Promise<void> {
-        if (!this.state.releaseInfo) {
-            this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
-        }
-
-        if (!this.state.unauthorized) {
-            const currentUser = await AgentService.getInstance().getCurrentUser();
-            this.state.currentUserLogin = currentUser.UserLogin;
-        }
-
-        if (this.state.releaseInfo) {
-            this.state.kixProduct = this.state.releaseInfo.product;
-            this.state.kixVersion = this.state.releaseInfo.version;
-            this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
-        }
-
         if (!this.state.imprintLink) {
             const imprintConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                 KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK]
@@ -60,6 +45,21 @@ class Component {
                     this.state.imprintLink = data[defaultLanguage];
                 }
             }
+        }
+
+        if (!this.state.releaseInfo) {
+            this.state.releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+        }
+
+        if (!this.state.unauthorized) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            this.state.currentUserLogin = currentUser.UserLogin;
+        }
+
+        if (this.state.releaseInfo) {
+            this.state.kixProduct = this.state.releaseInfo.product;
+            this.state.kixVersion = this.state.releaseInfo.version;
+            this.state.buildNumber = this.getBuildNumber(this.state.releaseInfo);
         }
     }
 
