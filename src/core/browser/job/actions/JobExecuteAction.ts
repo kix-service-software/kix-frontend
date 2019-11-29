@@ -9,7 +9,7 @@
 
 import {
     AbstractAction, Job, ComponentContent, ConfirmOverlayContent, OverlayType,
-    KIXObjectType, JobProperty, ToastContent, Error
+    KIXObjectType, JobProperty, ToastContent, Error, StringContent
 } from '../../../model';
 import { ContextService } from '../../context';
 import { TranslationService } from '../../i18n/TranslationService';
@@ -56,6 +56,7 @@ export class JobExecuteAction extends AbstractAction {
 
                 await KIXObjectService.updateObject(KIXObjectType.JOB, [[JobProperty.EXEC, true]], job.ID, false)
                     .then(() => {
+                        EventService.getInstance().publish(ApplicationEvent.REFRESH);
                         setTimeout(() => {
                             const content = new ComponentContent(
                                 'toast',
@@ -64,11 +65,8 @@ export class JobExecuteAction extends AbstractAction {
                             OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
                         }, 1000);
                     }).catch((error: Error) => {
-                        const content = new ComponentContent('list-with-title',
-                            {
-                                title: `Translatable#Error`,
-                                list: [`${error.Code}: ${error.Message}`]
-                            }
+                        const content = new StringContent(
+                            'Translatable#An error occured during job execution. See system log for details.'
                         );
                         OverlayService.getInstance().openOverlay(
                             OverlayType.WARNING, null, content, 'Translatable#Error!', true
@@ -76,7 +74,6 @@ export class JobExecuteAction extends AbstractAction {
                     });
 
                 EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-                EventService.getInstance().publish(ApplicationEvent.REFRESH);
             }
         }
 

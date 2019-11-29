@@ -9,14 +9,15 @@
 
 import { ComponentState } from "./ComponentState";
 import {
-    TreeNode, FormInputComponent, JobProperty, KIXObjectType, TreeService, FormInstance
+    TreeNode, FormInputComponent, JobProperty, KIXObjectType, TreeService, FormInstance, SortUtil
 } from "../../../../../../core/model";
 import { TranslationService } from "../../../../../../core/browser/i18n/TranslationService";
-import { ServiceRegistry, ServiceType, FormService, IdService } from "../../../../../../core/browser";
+import { ServiceRegistry, ServiceType, FormService, IdService, KIXObjectService } from "../../../../../../core/browser";
 import { JobService, JobFormService } from "../../../../../../core/browser/job";
 import { FormFieldConfiguration } from "../../../../../../core/model/components/form/configuration";
+import { MacroActionType } from "../../../../../../core/model/kix/macro";
 
-class Component extends FormInputComponent<string[], ComponentState> {
+class Component extends FormInputComponent<string, ComponentState> {
 
     private currentAction: TreeNode;
     private listenerId: string;
@@ -59,7 +60,14 @@ class Component extends FormInputComponent<string[], ComponentState> {
     private async load(): Promise<TreeNode[]> {
         const nodes = await this.getNodes();
         this.setCurrentNode(nodes);
-        return nodes;
+        const nodesWithTranslation: Array<[TreeNode, string]> = [];
+        for (const node of nodes) {
+            const translatedLabel = await TranslationService.translate(node.label);
+            nodesWithTranslation.push([node, translatedLabel]);
+        }
+        return nodesWithTranslation.sort((a, b) => {
+            return SortUtil.compareString(a[1], b[1]);
+        }).map((nwt) => nwt[0]);
     }
 
     public setCurrentNode(nodes: TreeNode[]): void {
@@ -77,8 +85,12 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
             if (currentNode) {
                 currentNode.selected = true;
-                super.provideValue(currentNode.id, true);
+
+                // instanceId needed to distinguish between values of fields with same action type
+                super.provideValue(`${this.state.field.instanceId}###${currentNode.id}`, true);
+
                 this.currentAction = currentNode;
+                this.setFieldHint();
                 this.setFields(false);
             }
         }
@@ -86,12 +98,32 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public nodesChanged(nodes: TreeNode[]): void {
         this.currentAction = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.currentAction ? this.currentAction.id : null);
+
+        // instanceId needed to distinguish between values of fields with same action type
+        super.provideValue(this.currentAction ? `${this.state.field.instanceId}###${this.currentAction.id}` : null);
+
+        this.setFieldHint();
         this.setFields();
     }
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    private async setFieldHint(): Promise<void> {
+        if (this.currentAction) {
+            const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
+                KIXObjectType.MACRO_ACTION_TYPE, undefined, null, null, true
+            ).catch((error): MacroActionType[] => []);
+            if (macroActionTypes && !!macroActionTypes.length) {
+                const type = macroActionTypes.find((t) => t.Name === this.currentAction.id);
+                if (type) {
+                    this.state.field.hint = type.Description;
+                }
+            }
+        } else {
+            this.state.field.hint = this.state.field.defaultHint;
+        }
     }
 
     private async setFields(clear: boolean = true): Promise<void> {

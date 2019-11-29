@@ -208,7 +208,9 @@ export class JobFormService extends KIXObjectFormService<Job> {
     }
 
     public getNewFormField(f: FormFieldConfiguration, parent?: FormFieldConfiguration): FormFieldConfiguration {
-        return super.getNewFormField(f, parent, false);
+        const field = super.getNewFormField(f, parent, false);
+        field.hint = field.defaultHint;
+        return field;
     }
 
     public async getFormFieldsForAction(
@@ -228,10 +230,12 @@ export class JobFormService extends KIXObjectFormService<Job> {
                             if (action && action.Parameters) {
                                 defaultValue = action.Parameters[option.Name];
                             }
+                            const inputType = (actionType === 'ArticleCreate' || actionType === 'TicketCreate')
+                                && option.Name === 'Body' ? 'rich-text-input' : null;
                             fields.push(
                                 new FormFieldConfiguration(
                                     `job-action-${actionType}-${option.Name}`, option.Label,
-                                    `ACTION###${actionFieldInstanceId}###${actionType}###${option.Name}`, null,
+                                    `ACTION###${actionFieldInstanceId}###${option.Name}`, inputType,
                                     Boolean(option.Required), option.Description, undefined,
                                     typeof defaultValue !== undefined ? new FormFieldValue(defaultValue) : undefined
                                 )
@@ -254,7 +258,7 @@ export class JobFormService extends KIXObjectFormService<Job> {
         }
         return new FormFieldConfiguration(
             `job-action-${actionType}-skip`,
-            'Translatable#Skip', `ACTION###${actionFieldInstanceId}###${actionType}###SKIP`,
+            'Translatable#Skip', `ACTION###${actionFieldInstanceId}###SKIP`,
             'checkbox-input', false,
             'Translatable#Helptext_Admin_JobCreateEdit_ActionSkip', undefined,
             typeof defaultValue !== undefined ? new FormFieldValue(defaultValue) : new FormFieldValue(false)

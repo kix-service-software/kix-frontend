@@ -126,7 +126,7 @@ export class JobFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.CONTACT_ID:
                 if (Array.isArray(objectIds) && !!objectIds.length) {
                     const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.ORGANISATION, objectIds
+                        KIXObjectType.CONTACT, objectIds
                     );
                     nodes = await KIXObjectService.prepareTree(contacts);
                 }

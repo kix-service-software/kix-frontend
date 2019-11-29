@@ -34,30 +34,33 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
         const job = context ? await context.getObject<Job>() : null;
 
         const rowObjects: IRowObject[] = [];
-        if (job && job.Filter) {
+        if (job && job.Filter && typeof job.Filter === 'object') {
             const ticketLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
             const articleLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.ARTICLE);
-            const filterIterator = job.filterMap.entries();
-            let filter = filterIterator.next();
-            while (filter && filter.value) {
-                let displayKey = filter.value[0];
-                let displayValuesAndIcons = [];
-                if (this.isTicketProperty(displayKey)) {
-                    displayValuesAndIcons = await this.getValue(displayKey, filter.value[1], ticketLabelProvider);
-                    displayKey = await ticketLabelProvider.getPropertyText(displayKey);
-                } else {
-                    displayValuesAndIcons = await this.getValue(displayKey, filter.value[1], articleLabelProvider);
-                    displayKey = await articleLabelProvider.getPropertyText(displayKey);
+            for (const filter in job.Filter) {
+                if (filter) {
+                    let displayKey = filter;
+                    let displayValuesAndIcons = [];
+                    if (this.isTicketProperty(displayKey)) {
+                        displayValuesAndIcons = await this.getValue(
+                            displayKey, job.Filter[filter], ticketLabelProvider
+                        );
+                        displayKey = await ticketLabelProvider.getPropertyText(displayKey);
+                    } else {
+                        displayValuesAndIcons = await this.getValue(
+                            displayKey, job.Filter[filter], articleLabelProvider
+                        );
+                        displayKey = await articleLabelProvider.getPropertyText(displayKey);
+                    }
+                    const values: TableValue[] = [
+                        new TableValue(JobFilterTableProperty.FIELD, filter, displayKey),
+                        new TableValue(
+                            JobFilterTableProperty.VALUE, displayValuesAndIcons[0],
+                            displayValuesAndIcons[0].join(', '), null, displayValuesAndIcons[1]
+                        )
+                    ];
+                    rowObjects.push(new RowObject<any>(values));
                 }
-                const values: TableValue[] = [
-                    new TableValue(JobFilterTableProperty.FIELD, filter.value[0], displayKey),
-                    new TableValue(
-                        JobFilterTableProperty.VALUE, displayValuesAndIcons[0],
-                        displayValuesAndIcons[0].join(', '), null, displayValuesAndIcons[1]
-                    )
-                ];
-                rowObjects.push(new RowObject<any>(values));
-                filter = filterIterator.next();
             }
         }
 

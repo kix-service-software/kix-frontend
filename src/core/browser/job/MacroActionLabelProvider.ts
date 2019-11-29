@@ -8,9 +8,10 @@
  */
 
 import { LabelProvider } from "../LabelProvider";
-import { MacroActionProperty, MacroAction } from "../../model/kix/macro";
+import { MacroActionProperty, MacroAction, MacroActionType } from "../../model/kix/macro";
 import { TranslationService } from "../i18n/TranslationService";
 import { KIXObjectType, KIXObjectProperty, ObjectIcon } from "../../model";
+import { KIXObjectService } from "../kix";
 
 export class MacroActionLabelProvider extends LabelProvider {
 
@@ -71,6 +72,16 @@ export class MacroActionLabelProvider extends LabelProvider {
                 displayValue = value && value === 2
                     ? await TranslationService.translate('Translatable#Yes')
                     : await TranslationService.translate('Translatable#No');
+                break;
+            case MacroActionProperty.TYPE:
+                if (value) {
+                    const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
+                        KIXObjectType.MACRO_ACTION_TYPE, [value], null, null, true
+                    ).catch((error): MacroActionType[] => []);
+                    if (macroActionTypes && !!macroActionTypes.length) {
+                        displayValue = macroActionTypes[0].DisplayName;
+                    }
+                }
                 break;
             default:
                 displayValue = value ? value.toString() : '';
