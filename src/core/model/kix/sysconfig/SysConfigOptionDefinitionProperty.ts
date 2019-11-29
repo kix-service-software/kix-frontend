@@ -9,6 +9,8 @@
 
 export enum SysConfigOptionDefinitionProperty {
 
+    ACCSS_LEVEL = 'AccessLevel',
+
     NAME = 'Name',
 
     VALUE = 'Value',
