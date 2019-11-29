@@ -168,7 +168,14 @@ export class TicketBulkManager extends BulkManager {
                         ['requiredPermission', 'TicketRead,TicketUpdate']
                     ]
                 );
-                nodes = await TicketService.getInstance().getTreeNodes(property, false, undefined, loadingOptions);
+                nodes = await TicketService.getInstance().getTreeNodes(
+                    property, false, false, undefined, loadingOptions
+                );
+                break;
+            case TicketProperty.QUEUE_ID:
+                nodes = await TicketService.getInstance().getTreeNodes(
+                    property, true, false
+                );
                 break;
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property);

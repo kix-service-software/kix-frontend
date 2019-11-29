@@ -154,8 +154,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, filterIds?: Array<string | number>,
-        loadingOptions?: KIXObjectLoadingOptions
+        property: string, showInvalid?: boolean, invalidClickable?: boolean,
+        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
@@ -165,7 +165,8 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
                 nodes = await QueueService.getInstance().prepareObjectTree(
-                    queuesHierarchy, showInvalid, filterIds ? filterIds.map((fid) => Number(fid)) : null
+                    queuesHierarchy, showInvalid, invalidClickable,
+                    filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
             case TicketProperty.SERVICE_ID:
@@ -237,7 +238,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(3, 'external'));
                 break;
             default:
-                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
 
         return nodes;

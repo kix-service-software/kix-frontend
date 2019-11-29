@@ -203,7 +203,7 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
                 }
                 break;
             default:
-                nodes = await TicketService.getInstance().getTreeNodes(property, true, objectIds);
+                nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);
         }
         return nodes;
     }

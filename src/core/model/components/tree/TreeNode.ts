@@ -28,6 +28,7 @@ export class TreeNode {
         public tooltip: string = label,
         public flags: string[] = [],
         public navigationNode: boolean = false,
-        public selected: boolean = false
+        public selected: boolean = false,
+        public showAsInvalid: boolean = !selectable
     ) { }
 }

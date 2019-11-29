@@ -79,13 +79,13 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
         switch (property) {
             default:
-                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
 
         return nodes;

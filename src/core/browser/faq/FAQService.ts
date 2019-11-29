@@ -81,7 +81,8 @@ export class FAQService extends KIXObjectService {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid: boolean = false, filterIds?: Array<string | number>
+        property: string, showInvalid: boolean = false, invalidClickable: boolean = false,
+        filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
@@ -105,7 +106,7 @@ export class FAQService extends KIXObjectService {
                     KIXObjectType.FAQ_CATEGORY, null, loadingOptions
                 );
                 nodes = await this.prepareObjectTree(
-                    faqCategories, showInvalid,
+                    faqCategories, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
@@ -127,32 +128,40 @@ export class FAQService extends KIXObjectService {
                 nodes = keywords ? keywords.map((k) => new TreeNode(k, k.toString())) : [];
                 break;
             case FAQArticleProperty.CREATED_BY:
-                nodes = await super.getTreeNodes(KIXObjectProperty.CREATE_BY, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(KIXObjectProperty.CREATE_BY, showInvalid, invalidClickable, filterIds);
                 break;
             case FAQArticleProperty.CHANGED_BY:
-                nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, invalidClickable, filterIds);
                 break;
             default:
-                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
 
         return nodes;
     }
 
     public async prepareObjectTree(
-        faqCategories: FAQCategory[], showInvalid: boolean = false, filterIds?: number[]
+        faqCategories: FAQCategory[], showInvalid: boolean = false, invalidClickable: boolean = false,
+        filterIds?: number[]
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (faqCategories && !!faqCategories.length) {
             if (!showInvalid) {
                 faqCategories = faqCategories.filter((c) => c.ValidID === 1);
+            } else if (!invalidClickable) {
+                faqCategories = faqCategories.filter(
+                    (c) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories)
+                );
             }
+
             if (filterIds && filterIds.length) {
                 faqCategories = faqCategories.filter((c) => !filterIds.some((fid) => fid === c.ID));
             }
 
             for (const category of faqCategories) {
-                const subTree = await this.prepareObjectTree(category.SubCategories, showInvalid, filterIds);
+                const subTree = await this.prepareObjectTree(
+                    category.SubCategories, showInvalid, invalidClickable, filterIds
+                );
 
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
@@ -160,7 +169,9 @@ export class FAQService extends KIXObjectService {
                     null,
                     subTree,
                     null, null, null, null, null, null, null,
-                    category.ValidID === 1
+                    invalidClickable ? true : category.ValidID === 1,
+                    undefined, undefined, undefined, undefined,
+                    category.ValidID !== 1
                 );
 
                 nodes.push(treeNode);
@@ -168,6 +179,23 @@ export class FAQService extends KIXObjectService {
             }
         }
         return nodes;
+    }
+
+    private hasValidDescendants(categories: FAQCategory[]): boolean {
+        let hasValidDescendants: boolean = false;
+        if (categories && !!categories.length) {
+            for (const queue of categories) {
+                if (queue.ValidID === 1) {
+                    hasValidDescendants = true;
+                } else {
+                    hasValidDescendants = this.hasValidDescendants(queue.SubCategories);
+                }
+                if (hasValidDescendants) {
+                    break;
+                }
+            }
+        }
+        return hasValidDescendants;
     }
 
     private preparePossibleValueTree(
