@@ -20,7 +20,6 @@ import { KIXIntegrationRouter } from "../routes/KIXIntegrationRouter";
 import { SysConfigService } from "../core/services";
 import addrparser = require('address-rfc2822');
 import { ModuleConfigurationService } from "./configuration";
-import { SysConfigAccessLevel } from "../core/model/kix/sysconfig/SysConfigAccessLevel";
 
 export class WebformService {
 
@@ -83,19 +82,18 @@ export class WebformService {
         }
 
         const config = {
-            id: 'kix-customer-portal-light-webforms',
-            name: 'customer portal light webforms configuration',
+            id: 'kix-customer-portal-ligt-webforms',
+            name: 'customer portal ligth webforms configuration',
             type: 'Webform',
             webforms
         };
 
-        await ModuleConfigurationService.getInstance().saveConfiguration(
-            token, config, SysConfigAccessLevel.CONFIDENTIAL
-        ).then(() => {
-            KIXIntegrationRouter.getInstance().registerRoute(Number(webform.ObjectId));
-        }).catch((error: Error) => {
-            LoggingService.getInstance().error(error.Message, error);
-        });
+        await ModuleConfigurationService.getInstance().saveConfiguration(token, config)
+            .then(() => {
+                KIXIntegrationRouter.getInstance().registerRoute(Number(webform.ObjectId));
+            }).catch((error: Error) => {
+                LoggingService.getInstance().error(error.Message, error);
+            });
 
         return webform.ObjectId;
     }

@@ -30,10 +30,7 @@ export class PermissionManager extends AbstractDynamicFormManager {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        return [
-            ["1", "Resource"],
-            ["2", "Property Value"]
-        ];
+        return [["1", "Resource"]];
     }
 
     public async getPropertiesPlaceholder(): Promise<string> {

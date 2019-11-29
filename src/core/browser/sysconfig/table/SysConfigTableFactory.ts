@@ -58,10 +58,6 @@ export class SysConfigTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(null, null, null,
-                SysConfigOptionDefinitionProperty.ACCSS_LEVEL, true, false, true, false, 100, true, true, true,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(null, null, null,
                 KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
