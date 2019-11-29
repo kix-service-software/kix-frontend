@@ -47,11 +47,6 @@ msgstr "KIX Header zulassen"
 msgid "Access denied"
 msgstr "Zugriff verweigert"
 
-#, fuzzy
-#| msgid "Access denied"
-msgid "Access Level"
-msgstr "Zugriff verweigert"
-
 msgid "Accounted time"
 msgstr "Erfasste Zeit"
 
@@ -3890,6 +3885,11 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#, fuzzy
+#~| msgid "Access denied"
+#~ msgid "Access Level"
+#~ msgstr "Zugriff verweigert"
 
 #~ msgid "Acions"
 #~ msgstr "Aktion"

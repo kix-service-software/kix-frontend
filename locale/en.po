@@ -47,9 +47,6 @@ msgstr ""
 msgid "Access denied"
 msgstr ""
 
-msgid "Access Level"
-msgstr ""
-
 msgid "Accounted time"
 msgstr ""
 
