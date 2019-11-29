@@ -239,7 +239,7 @@ export class TicketService extends KIXObjectService {
         const body = this.getParameterValue(parameter, ArticleProperty.BODY);
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
-        if (!to && contactId) {
+        if (!to && contactId && senderType !== 3) {
             if (!isNaN(contactId)) {
                 const contacts = await super.load<Contact>(
                     token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact'
