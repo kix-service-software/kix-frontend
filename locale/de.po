@@ -47,6 +47,11 @@ msgstr "KIX Header zulassen"
 msgid "Access denied"
 msgstr "Zugriff verweigert"
 
+#, fuzzy
+#| msgid "Access denied"
+msgid "Access Level"
+msgstr "Zugriff verweigert"
+
 msgid "Accounted time"
 msgstr "Erfasste Zeit"
 
@@ -1441,8 +1446,8 @@ msgstr ""
 msgid "Helptext_Admin_SysConfigEdit_Value"
 msgstr ""
 "Wert der Konfiguration. Der Wert der Konfiguration ist eine einfache "
-"Zeichenkette, Zahl oder im Falle eines komplexen Schlüssels ein JSON-String -"
-" siehe jeweiliger Standardwert."
+"Zeichenkette, Zahl oder im Falle eines komplexen Schlüssels ein JSON-String "
+"- siehe jeweiliger Standardwert."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
