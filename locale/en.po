@@ -152,6 +152,9 @@ msgstr ""
 msgid "and further"
 msgstr ""
 
+msgid "An error occured during job execution. See system log for details."
+msgstr ""
+
 msgid "An error occurred."
 msgstr ""
 

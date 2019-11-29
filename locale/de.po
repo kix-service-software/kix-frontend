@@ -154,6 +154,9 @@ msgstr "und"
 msgid "and further"
 msgstr "und weitere"
 
+msgid "An error occured during job execution. See system log for details."
+msgstr ""
+
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
 
