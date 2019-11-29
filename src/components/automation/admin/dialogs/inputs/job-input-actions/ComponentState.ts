@@ -9,7 +9,7 @@
 
 import { TreeNode, FormInputComponentState } from "../../../../../../core/model";
 
-export class ComponentState extends FormInputComponentState<string[]> {
+export class ComponentState extends FormInputComponentState<string> {
 
     public constructor(
         public placeholder: string = '',

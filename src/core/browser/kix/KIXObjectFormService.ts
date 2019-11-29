@@ -116,7 +116,7 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
             [], null, (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
             f.maxLength, f.regEx, f.regExErrorMessage, f.countDefault === 0, f.asStructure, f.readonly,
-            f.placeholder
+            f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
         );
         const children: FormFieldConfiguration[] = [];
         if (withChildren && f.children) {

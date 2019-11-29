@@ -158,31 +158,43 @@ export class JobService extends KIXObjectService<SystemAddress> {
     protected async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
-        const actionParameter = parameter.filter((p) => p[0].match(/^ACTION###/));
+        const actionAttributesParameter = parameter.filter((p) => p[0].match(/^ACTION###/));
+        const actionTypesParameter = parameter.filter((p) => p[0] === JobProperty.MACRO_ACTIONS);
         parameter = parameter.filter(
             (p) => p[0] !== JobProperty.MACRO_ACTIONS && !p[0].match(/^ACTION###/)
         );
 
         const actions: Map<string, MacroAction> = new Map();
-        actionParameter.forEach((p) => {
-            const actionFieldInstanceId = p[0].replace(/^ACTION###(.+)###.+###.+/, '$1');
-            const actionType = p[0].replace(/^ACTION###.+###(.+)###.+/, '$1');
-            const valueName = p[0].replace(/^ACTION###.+###.+###(.+)/, '$1');
+        actionTypesParameter.forEach((p) => {
+            if (p[1]) {
 
-            let action = actions.get(actionFieldInstanceId);
-            if (!action) {
-                action = new MacroAction();
-                action.Type = actionType;
-                action.Parameters = {};
+                // value prepared in action input component
+                const actionFieldInstanceId = p[1].replace(/^(.+)###.+/, '$1');
+                const actionType = p[1].replace(/^.+###(.+)/, '$1');
+                let action = actions.get(actionFieldInstanceId);
+                if (!action) {
+                    action = new MacroAction();
+                    action.Type = actionType;
+                    action.Parameters = {};
+                    actions.set(actionFieldInstanceId, action);
+                }
             }
+        });
+        actionAttributesParameter.forEach((p) => {
 
-            if (valueName === 'SKIP') {
-                // true means "skip" (checkbox), so valid id have to mean "invalid" (= 2)
-                action.ValidID = p[1] ? 2 : 1;
-            } else {
-                action.Parameters[valueName] = p[1];
+            // key prepared in job form service
+            const actionFieldInstanceId = p[0].replace(/^ACTION###(.+)###.+/, '$1');
+            const valueName = p[0].replace(/^ACTION###.+###(.+)/, '$1');
+
+            const action = actions.get(actionFieldInstanceId);
+            if (action) {
+                if (valueName === 'SKIP') {
+                    // true means "skip" (checkbox), so valid id have to mean "invalid" (= 2)
+                    action.ValidID = p[1] ? 2 : 1;
+                } else {
+                    action.Parameters[valueName] = p[1];
+                }
             }
-            actions.set(actionFieldInstanceId, action);
         });
 
         parameter.push([

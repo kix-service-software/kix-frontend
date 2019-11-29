@@ -198,39 +198,49 @@ export class JobService extends KIXObjectService {
                     && p[0] !== JobProperty.MACRO_ACTIONS
             );
 
-            const loadingOptions = new KIXObjectLoadingOptions(undefined, undefined, 1, [
-                JobProperty.MACROS, JobProperty.EXEC_PLANS
-            ]);
-            const jobs = await super.load<Job>(
-                token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, [jobId], 'Job'
-            ).catch((error: Error) => {
-                throw new Error(error.Code, error.Message);
-            });
-            if (jobs && !!jobs.length) {
-                const execPlanIds: number[] = await this.createOrUpdateExecPlansForJob(
-                    token, clientRequestId, parameter, jobs[0]
-                ).catch((error) => { throw new Error(error.Code, error.Message); });
-
-                const macroId = await this.updateMacroForJob(
-                    token, clientRequestId, parameter, jobs[0]
-                ).catch((error) => {
-                    // FIXME: if new ExecPlans were created, delete them
-                    // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds);
+            const execValue = parameter.find((p) => p[0] === JobProperty.EXEC);
+            if (!execValue) {
+                const loadingOptions = new KIXObjectLoadingOptions(undefined, undefined, 1, [
+                    JobProperty.MACROS, JobProperty.EXEC_PLANS
+                ]);
+                const jobs = await super.load<Job>(
+                    token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, [jobId], 'Job'
+                ).catch((error: Error) => {
                     throw new Error(error.Code, error.Message);
                 });
+                if (jobs && !!jobs.length) {
+                    const execPlanIds: number[] = await this.createOrUpdateExecPlansForJob(
+                        token, clientRequestId, parameter, jobs[0]
+                    ).catch((error) => { throw new Error(error.Code, error.Message); });
 
-                this.prepareFilterParameter(jobParameter);
+                    const macroId = await this.updateMacroForJob(
+                        token, clientRequestId, parameter, jobs[0]
+                    ).catch((error) => {
+                        // FIXME: if new ExecPlans were created, delete them
+                        // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds);
+                        throw new Error(error.Code, error.Message);
+                    });
 
+                    this.prepareFilterParameter(jobParameter);
+
+                    const uri = this.buildUri(this.RESOURCE_URI, jobId);
+                    await super.executeUpdateOrCreateRequest(
+                        token, clientRequestId, jobParameter, uri, this.objectType, 'JobID'
+                    ).catch((error: Error) => {
+                        // FIXME: if new ExecPlans and/or Macro were created, delete them
+                        // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds, macroId);
+                        throw new Error(error.Code, error.Message);
+                    });
+
+                    await this.updateJobRelations(token, clientRequestId, jobs[0], execPlanIds, macroId);
+                }
+            } else {
                 const uri = this.buildUri(this.RESOURCE_URI, jobId);
                 await super.executeUpdateOrCreateRequest(
                     token, clientRequestId, jobParameter, uri, this.objectType, 'JobID'
                 ).catch((error: Error) => {
-                    // FIXME: if new ExecPlans and/or Macro were created, delete them
-                    // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds, macroId);
                     throw new Error(error.Code, error.Message);
                 });
-
-                await this.updateJobRelations(token, clientRequestId, jobs[0], execPlanIds, macroId);
             }
         }
 
@@ -241,19 +251,9 @@ export class JobService extends KIXObjectService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>, job?: Job
     ): Promise<number[]> {
         const jobName = this.getParameterValue(parameter, JobProperty.NAME);
-        let execPlanEvents: string[] = this.getParameterValue(parameter, JobProperty.EXEC_PLAN_EVENTS);
-        let execPlanWeekdays: string[] = this.getParameterValue(parameter, JobProperty.EXEC_PLAN_WEEKDAYS);
-        let execPlanTimes: string[] = this.getParameterValue(parameter, JobProperty.EXEC_PLAN_WEEKDAYS_TIMES);
-
-        if (!Array.isArray(execPlanEvents)) {
-            execPlanEvents = [];
-        }
-        if (!Array.isArray(execPlanWeekdays)) {
-            execPlanWeekdays = [];
-        }
-        if (!Array.isArray(execPlanTimes)) {
-            execPlanTimes = [];
-        }
+        const execPlanEvents: string[] = this.getParameterValue(parameter, JobProperty.EXEC_PLAN_EVENTS);
+        const execPlanWeekdays: string[] = this.getParameterValue(parameter, JobProperty.EXEC_PLAN_WEEKDAYS);
+        const execPlanTimes: string[] = this.getParameterValue(parameter, JobProperty.EXEC_PLAN_WEEKDAYS_TIMES);
 
         const execPlanIds: number[] = [];
 
@@ -269,7 +269,9 @@ export class JobService extends KIXObjectService {
         }
 
         await this.createOrUpdateEventBasedExecPlan(
-            token, clientRequestId, execPlanEvents, jobName,
+            token, clientRequestId,
+            execPlanEvents === null ? [] : execPlanEvents,
+            jobName ? jobName : job ? Job.name : '',
             !!eventExecPlans.length ? eventExecPlans[0].ID : undefined
         ).then((response) => {
             if (response) { execPlanIds.push(response); }
@@ -279,7 +281,10 @@ export class JobService extends KIXObjectService {
         });
 
         await this.createOrUpdateTimeBasedExecPlan(
-            token, clientRequestId, execPlanWeekdays, execPlanTimes, jobName,
+            token, clientRequestId,
+            execPlanWeekdays === null ? [] : execPlanWeekdays,
+            execPlanTimes === null ? [] : execPlanTimes,
+            jobName ? jobName : job ? Job.name : '',
             !!timeExecPlans.length ? timeExecPlans[0].ID : undefined
         ).then((response) => {
             if (response) { execPlanIds.push(response); }
@@ -357,11 +362,11 @@ export class JobService extends KIXObjectService {
                     ma.Type, ma.Parameters, Number(ma.ValidID),
                     ma.Comment ? ma.Comment : `MacroAction for Job "${jobName}"`,
                 )
-            ) : [];
+            ) : macroActions === null ? [] : undefined;
 
         let macroId;
 
-        if (Array.isArray(macroActions) && !!macroActions.length) {
+        if (Array.isArray(createMacroActions)) {
             const macroParameter: Array<[string, any]> = [
                 [MacroProperty.NAME, `Macro for Job "${jobName}"`],
                 [MacroProperty.TYPE, 'Ticket'],
@@ -383,7 +388,11 @@ export class JobService extends KIXObjectService {
     ): Promise<number> {
         let id;
         if (job) {
-            const newJobName = this.getParameterValue(parameter, JobProperty.NAME);
+            let newJobName = this.getParameterValue(parameter, JobProperty.NAME);
+            if (!newJobName) {
+                newJobName = Job.name;
+            }
+
             const macroActions: MacroAction[] = this.getParameterValue(parameter, JobProperty.MACRO_ACTIONS);
 
             const createMacroActions: CreateMacroAction[] = Array.isArray(macroActions) ?
@@ -394,7 +403,7 @@ export class JobService extends KIXObjectService {
                     )
                 ) : [];
 
-            if (Array.isArray(macroActions) && !!macroActions.length) {
+            if (Array.isArray(createMacroActions)) {
                 const jobMacro = job.Macros && !!job.Macros.length ? job.Macros[0] : null;
                 const macroParameter: Array<[string, any]> = [
                     [MacroProperty.NAME, `Macro for Job "${newJobName}"`],
@@ -402,7 +411,7 @@ export class JobService extends KIXObjectService {
                     [KIXObjectProperty.COMMENT, `Macro for Job "${newJobName}"`]
                 ];
                 if (jobMacro) {
-                    const actionIds = await this.updateMacroAction(
+                    const actionIds = await this.updateMacroActions(
                         token, clientRequestId, jobMacro, createMacroActions
                     ).catch((error) => {
                         LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
@@ -428,19 +437,21 @@ export class JobService extends KIXObjectService {
         return id;
     }
 
-    private async updateMacroAction(
+    private async updateMacroActions(
         token: string, clientRequestId: string, macro: Macro, newActions: CreateMacroAction[]
     ): Promise<number[]> {
         const actionIds = macro.Actions.map((a) => a.ID);
         const uri = this.buildUri(this.RESOURCE_URI_Macro, macro.ID, 'actions');
 
         // FIXME: just delete unnecessary action and update/create other actions
-        await this.deleteObject(
-            token, clientRequestId, KIXObjectType.MACRO_ACTION, actionIds.join(','),
-            undefined, KIXObjectType.EXEC_PLAN, uri
-        ).catch((error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-        });
+        if (actionIds && !!actionIds.length) {
+            await this.deleteObject(
+                token, clientRequestId, KIXObjectType.MACRO_ACTION, actionIds.join(','),
+                undefined, KIXObjectType.EXEC_PLAN, uri
+            ).catch((error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+            });
+        }
 
         const newActionIds: number[] = [];
         for (const action of newActions) {
@@ -462,16 +473,20 @@ export class JobService extends KIXObjectService {
 
     private prepareFilterParameter(jobParameter: Array<[string, any]>): void {
         const filterIndex = jobParameter.findIndex((p) => p[0] === JobProperty.FILTER);
-        if (filterIndex !== -1 && Array.isArray(jobParameter[filterIndex][1])) {
+        if (filterIndex !== -1 && typeof jobParameter[filterIndex][1] === 'object') {
             const filter = {};
-            jobParameter[filterIndex][1].forEach((f) => {
-                if (Array.isArray(f[1])) {
-                    filter[f[0]] = f[1];
-                } else if (typeof f[1] !== 'undefined' && f[1] !== null) {
-                    f[1] = [f[1]];
-                    filter[f[0]] = f[1];
+            for (const property in jobParameter[filterIndex][1]) {
+                if (property) {
+                    if (Array.isArray(jobParameter[filterIndex][1][property])) {
+                        filter[property] = jobParameter[filterIndex][1][property];
+                    } else if (
+                        typeof jobParameter[filterIndex][1][property] !== 'undefined'
+                        && jobParameter[filterIndex][1][property] !== null
+                    ) {
+                        filter[property] = [jobParameter[filterIndex][1][property]];
+                    }
                 }
-            });
+            }
             jobParameter[filterIndex][1] = filter;
         }
     }

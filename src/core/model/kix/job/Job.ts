@@ -37,12 +37,8 @@ export class Job extends KIXObject {
 
     public Filter: {};
 
-    public filterMap: Map<string, string[] | number[]>;
-
-
     public constructor(job?: Job) {
         super(job);
-        this.filterMap = new Map();
         if (job) {
             this.ObjectId = job.ID;
             this.ID = job.ID;
@@ -52,6 +48,7 @@ export class Job extends KIXObject {
             this.Macros = job.Macros ? job.Macros.map((m) => new Macro(m)) : [];
             this.ExecPlanIDs = job.ExecPlanIDs;
             this.ExecPlans = job.ExecPlans ? job.ExecPlans.map((e) => new ExecPlan(e)) : [];
+            this.LastExecutionTime = job.LastExecutionTime;
             this.Filter = job.Filter;
 
             if (job.Filter) {
@@ -60,18 +57,13 @@ export class Job extends KIXObject {
                     if (job.Filter[key]) {
                         let property = key.replace('Ticket::', '');
                         property = property.replace('Article::', '');
-                        if (!this.filterMap.has(property)) {
-                            let newValue;
-                            if (this.isStringProperty(property)) {
-                                newValue = job.Filter[key][0];
-                            } else {
-                                newValue = job.Filter[key].map((v) => !isNaN(Number(v)) ? Number(v) : v);
-                            }
-                            this.filterMap.set(property, newValue);
+                        if (this.isStringProperty(property)) {
+                            newFilter[property] = Array.isArray(job.Filter[key]) ?
+                                job.Filter[key][0] : job.Filter[key];
+                        } else {
+                            newFilter[property] = Array.isArray(job.Filter[key]) ?
+                                job.Filter[key].map((v) => !isNaN(Number(v)) ? Number(v) : v) : job.Filter[key];
                         }
-
-                        newFilter[property] = Array.isArray(job.Filter[key]) ?
-                            job.Filter[key].map((v) => !isNaN(Number(v)) ? Number(v) : v) : job.Filter[key];
                     }
                 }
                 this.Filter = newFilter;
