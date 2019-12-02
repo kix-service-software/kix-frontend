@@ -56,23 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (this.state.parameter.toLocaleLowerCase() === 'help') {
             this.showCommandHelp(true);
         } else if (this.command) {
-            const parameterValues = this.state.parameter
-                .trim()
-                .split('--')
-                .filter((p) => p !== '')
-                .map((p) => '--' + p.trim());
-
-            const parameters = [];
-            for (const p of parameterValues) {
-                if (p.match(/\s/)) {
-                    const parameter = p.replace(/(--.+?)\s.*/, '$1');
-                    const value = p.replace(/--.+?\s(.*)/, '$1');
-                    parameters.push(parameter);
-                    parameters.push(value);
-                } else {
-                    parameters.push(p);
-                }
-            }
+            const parameters = this.parseParameters(this.state.parameter);
 
             this.state.run = true;
             const executionDate = await DateTimeUtil.getLocalDateTimeString(Date.now());
@@ -81,13 +65,41 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             await KIXObjectService.createObject(KIXObjectType.CONSOLE_COMMAND, [
                 [ConsoleCommandProperty.COMMAND, this.command.Command],
                 [ConsoleCommandProperty.PARAMETERS, parameters]
-            ])
-                .then((result: ConsoleExecuteResult) => {
-                    this.state.output = `${this.state.output}\n\nExit Code: ${result.ExitCode}\n\n${result.Output}`;
-                    this.state.run = false;
-                })
-                .catch(() => this.state.run = false);
+            ]).then((result: ConsoleExecuteResult) => {
+                this.state.output = `${this.state.output}\n\nExit Code: ${result.ExitCode}\n\n${result.Output}`;
+                this.state.run = false;
+            }).catch(() => this.state.run = false);
         }
+    }
+
+    private parseParameters(paramString: string): string[][] {
+        const textSeparator: string = '["\']';
+        const paramSeparator: string = ' ';
+        const list = [];
+        let quote: string = null;
+
+        for (let column = 0, character = 0; character < paramString.length; character++) {
+            const currentCharacter = paramString[character];
+            list[column] = list[column] || '';
+
+            if (currentCharacter.match(new RegExp(textSeparator))) {
+                if (quote && currentCharacter === quote) {
+                    quote = null;
+                    continue;
+                }
+                if (!quote) {
+                    quote = currentCharacter;
+                    continue;
+                }
+                // no continue here!! - keep "not" quote textSeparator
+            }
+
+            if (currentCharacter.match(new RegExp(paramSeparator)) && !quote) { ++column; continue; }
+
+            list[column] += currentCharacter;
+        }
+
+        return list.filter((v) => v !== '');
     }
 
     public showCommandHelp(all: boolean): void {
