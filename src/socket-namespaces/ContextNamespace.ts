@@ -10,14 +10,12 @@
 import { SocketNameSpace } from './SocketNameSpace';
 import {
     ContextEvent, LoadContextConfigurationRequest, LoadContextConfigurationResponse,
-    ContextConfiguration, SocketEvent, Error
+    ContextConfiguration, SocketEvent
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import {
     PermissionService, ModuleConfigurationService, ContextConfigurationResolver
 } from '../services';
-import { ConfigurationType } from '../core/model/configuration';
-import { LoggingService } from '../core/services';
 
 export class ContextNamespace extends SocketNameSpace {
 

@@ -11,6 +11,7 @@ import { Context, ContextType, MenuEntry, ContextDescriptor } from '../../core/m
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context/ContextService';
 import { MainMenuSocketClient } from './MainMenuSocketClient';
+import { ContextFactory } from '../../core/browser/context/ContextFactory';
 
 class KIXMenuComponent {
 
@@ -63,8 +64,8 @@ class KIXMenuComponent {
 
     private async setShownEntries(entries: MenuEntry[]): Promise<void> {
         for (const entry of entries) {
-            const context = await ContextService.getInstance().getContext(entry.mainContextId);
-            if (context) {
+            const descriptor = ContextFactory.getInstance().getContextDescriptor(entry.mainContextId);
+            if (descriptor) {
                 entry.show = true;
             }
         }

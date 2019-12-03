@@ -39,6 +39,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 400;
 
+    public name: string = 'FAQReadUIModule';
+
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }

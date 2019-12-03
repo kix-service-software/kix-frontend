@@ -75,7 +75,7 @@ export class MainMenuSocketClient extends SocketClient {
 
             this.socket.emit(
                 MainMenuEvent.LOAD_MENU_ENTRIES,
-                new MainMenuEntriesRequest(token, requestId, ClientStorageService.getToken())
+                new MainMenuEntriesRequest(token, requestId, ClientStorageService.getClientRequestId())
             );
         });
 

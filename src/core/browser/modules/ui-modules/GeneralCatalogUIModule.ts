@@ -23,7 +23,9 @@ import { NewGeneralCatalogDialogContext, EditGeneralCatalogDialogContext } from 
 
 export class UIModule implements IUIModule {
 
-    public priority: number = 10000;
+    public priority: number = 9500;
+
+    public name: string = 'GeneralCatalogUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");

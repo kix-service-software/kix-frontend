@@ -19,6 +19,7 @@ import { EventService } from '../../../core/browser/event';
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ContextHistory } from '../../../core/browser/context/ContextHistory';
+import { ContextFactory } from '../../../core/browser/context/ContextFactory';
 
 class KIXHeaderComponent {
 
@@ -34,7 +35,7 @@ class KIXHeaderComponent {
             "Translatable#Help", "Translatable#Logout"
         ]);
 
-        const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.CREATE);
+        const dialogs = ContextFactory.getInstance().getContextDescriptors(ContextMode.CREATE);
         this.state.allowNew = dialogs && (dialogs.length > 0);
     }
 

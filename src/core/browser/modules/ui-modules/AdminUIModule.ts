@@ -20,8 +20,6 @@ import { TranslationFormService } from "../../i18n/admin/TranslationFormService"
 import {
     NewTranslationDialogContext, EditTranslationDialogContext, TranslationDetailsContext
 } from "../../i18n/admin/context";
-import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import { AdministrationSocketClient, AdminContext } from "../../admin";
 import { FormValidationService } from "../../form/validation";
 import {
@@ -49,46 +47,44 @@ export class UIModule implements IUIModule {
 
     public priority: number = 500;
 
+    public name: string = 'AdminUIModule';
+
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }
 
     public async register(): Promise<void> {
-        const adminModules = await AdministrationSocketClient.getInstance().loadAdminCategories();
+        const contextDescriptor = new ContextDescriptor(
+            AdminContext.CONTEXT_ID, [
+            KIXObjectType.CONFIG_ITEM_CLASS,
+            KIXObjectType.GENERAL_CATALOG_ITEM,
+            KIXObjectType.NOTIFICATION,
+            KIXObjectType.SYSTEM_ADDRESS,
+            KIXObjectType.MAIL_ACCOUNT,
+            KIXObjectType.MAIL_FILTER,
+            KIXObjectType.WEBFORM,
+            KIXObjectType.TRANSLATION,
+            KIXObjectType.FAQ_CATEGORY,
+            KIXObjectType.SYS_CONFIG_OPTION,
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+            KIXObjectType.TICKET_PRIORITY,
+            KIXObjectType.TICKET_STATE,
+            KIXObjectType.QUEUE,
+            KIXObjectType.TEXT_MODULE,
+            KIXObjectType.TICKET_TYPE,
+            KIXObjectType.USER,
+            KIXObjectType.ROLE,
+            KIXObjectType.PERMISSION,
+            KIXObjectType.JOB
+        ],
+            ContextType.MAIN, ContextMode.DASHBOARD,
+            false, 'admin', ['admin'], AdminContext
+        );
+        await ContextService.getInstance().registerContext(contextDescriptor);
 
-        if (adminModules && adminModules.length) {
-            const contextDescriptor = new ContextDescriptor(
-                AdminContext.CONTEXT_ID, [
-                KIXObjectType.CONFIG_ITEM_CLASS,
-                KIXObjectType.GENERAL_CATALOG_ITEM,
-                KIXObjectType.NOTIFICATION,
-                KIXObjectType.SYSTEM_ADDRESS,
-                KIXObjectType.MAIL_ACCOUNT,
-                KIXObjectType.MAIL_FILTER,
-                KIXObjectType.WEBFORM,
-                KIXObjectType.TRANSLATION,
-                KIXObjectType.FAQ_CATEGORY,
-                KIXObjectType.SYS_CONFIG_OPTION,
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-                KIXObjectType.TICKET_PRIORITY,
-                KIXObjectType.TICKET_STATE,
-                KIXObjectType.QUEUE,
-                KIXObjectType.TEXT_MODULE,
-                KIXObjectType.TICKET_TYPE,
-                KIXObjectType.USER,
-                KIXObjectType.ROLE,
-                KIXObjectType.PERMISSION,
-                KIXObjectType.JOB
-            ],
-                ContextType.MAIN, ContextMode.DASHBOARD,
-                false, 'admin', ['admin'], AdminContext
-            );
-            await ContextService.getInstance().registerContext(contextDescriptor);
-
-            await this.registerI18N();
-            await this.registerNotifications();
-            await this.registerWebforms();
-        }
+        await this.registerI18N();
+        await this.registerNotifications();
+        await this.registerWebforms();
     }
 
     private async registerI18N(): Promise<void> {
@@ -123,25 +119,21 @@ export class UIModule implements IUIModule {
     }
 
     private async initTranslation(): Promise<void> {
-        if (await this.checkPermission('system/i18n/translations', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
-            const newTranslationDialogContext = new ContextDescriptor(
-                NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
-            );
-            await ContextService.getInstance().registerContext(newTranslationDialogContext);
-        }
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
+        const newTranslationDialogContext = new ContextDescriptor(
+            NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
+        );
+        await ContextService.getInstance().registerContext(newTranslationDialogContext);
 
-        if (await this.checkPermission('system/i18n/translations/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
-            const editTranslationDialogContext = new ContextDescriptor(
-                EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
-            );
-            await ContextService.getInstance().registerContext(editTranslationDialogContext);
-        }
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
+        const editTranslationDialogContext = new ContextDescriptor(
+            EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
+        );
+        await ContextService.getInstance().registerContext(editTranslationDialogContext);
 
         const translationDetailsContext = new ContextDescriptor(
             TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
@@ -163,25 +155,21 @@ export class UIModule implements IUIModule {
     }
 
     private async initNotification(): Promise<void> {
-        if (await this.checkPermission('system/communication/notifications', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('notification-create', NotificationCreateAction);
-            const newNotificationDialogContext = new ContextDescriptor(
-                NewNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                false, 'new-notification-dialog', ['notifications'], NewNotificationDialogContext
-            );
-            await ContextService.getInstance().registerContext(newNotificationDialogContext);
-        }
+        ActionFactory.getInstance().registerAction('notification-create', NotificationCreateAction);
+        const newNotificationDialogContext = new ContextDescriptor(
+            NewNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-notification-dialog', ['notifications'], NewNotificationDialogContext
+        );
+        await ContextService.getInstance().registerContext(newNotificationDialogContext);
 
-        if (await this.checkPermission('system/communication/notifications/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('notification-edit', NotificationEditAction);
-            const editNotificationDialogContext = new ContextDescriptor(
-                EditNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                false, 'edit-notification-dialog', ['notifications'], EditNotificationDialogContext
-            );
-            await ContextService.getInstance().registerContext(editNotificationDialogContext);
-        }
+        ActionFactory.getInstance().registerAction('notification-edit', NotificationEditAction);
+        const editNotificationDialogContext = new ContextDescriptor(
+            EditNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-notification-dialog', ['notifications'], EditNotificationDialogContext
+        );
+        await ContextService.getInstance().registerContext(editNotificationDialogContext);
 
         const notificationDetailsContext = new ContextDescriptor(
             NotificationDetailsContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
@@ -226,11 +214,4 @@ export class UIModule implements IUIModule {
         );
         await ContextService.getInstance().registerContext(editWebformDialogContext);
     }
-
-    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, [crud])]
-        );
-    }
-
 }

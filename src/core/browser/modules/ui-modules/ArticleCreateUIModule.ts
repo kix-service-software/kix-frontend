@@ -22,6 +22,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 103;
 
+    public name: string = 'ArticleCreateUIModule';
+
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }

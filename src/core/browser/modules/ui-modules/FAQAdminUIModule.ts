@@ -10,23 +10,22 @@
 import {
     ContextService, ActionFactory, ServiceRegistry, FactoryService, TableFactoryService, LabelService
 } from '../../../../core/browser';
-import { KIXObjectType, ContextType, ContextMode, ContextDescriptor, CRUD } from '../../../../core/model';
+import { KIXObjectType, ContextType, ContextMode, ContextDescriptor } from '../../../../core/model';
 import {
     FAQCategoryCSVExportAction, FAQService, FAQCategoryLabelProvider, FAQCategoryFormService
 } from '../../../../core/browser/faq';
-import { DialogService } from '../../../../core/browser/components/dialog';
 import {
     FAQCategoryCreateAction, NewFAQCategoryDialogContext, FAQCategoryEditAction,
     EditFAQCategoryDialogContext, FAQCategoryDetailsContext, FAQCategoryTableFactory
 } from '../../../../core/browser/faq/admin';
-import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
-import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
 import { FAQCategoryBrowserFactory } from '../../../../core/browser/faq/FAQCategoryBrowserFactory';
 import { IUIModule } from '../../application/IUIModule';
 
 export class UIModule implements IUIModule {
 
     public priority: number = 403;
+
+    public name: string = 'FAQAdminUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -44,27 +43,23 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('faq-category-csv-export-action', FAQCategoryCSVExportAction);
 
-        if (await this.checkPermission('system/faq/categories', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
+        ActionFactory.getInstance().registerAction('faq-admin-category-create-action', FAQCategoryCreateAction);
 
-            const newFAQCategoryContext = new ContextDescriptor(
-                NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
-                ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'],
-                NewFAQCategoryDialogContext
-            );
-            await ContextService.getInstance().registerContext(newFAQCategoryContext);
-        }
+        const newFAQCategoryContext = new ContextDescriptor(
+            NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
+            ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'],
+            NewFAQCategoryDialogContext
+        );
+        await ContextService.getInstance().registerContext(newFAQCategoryContext);
 
-        if (await this.checkPermission('system/faq/categories/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('faq-admin-category-edit-action', FAQCategoryEditAction);
+        ActionFactory.getInstance().registerAction('faq-admin-category-edit-action', FAQCategoryEditAction);
 
-            const editFAQCategoryContext = new ContextDescriptor(
-                EditFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
-                ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'],
-                EditFAQCategoryDialogContext
-            );
-            await ContextService.getInstance().registerContext(editFAQCategoryContext);
-        }
+        const editFAQCategoryContext = new ContextDescriptor(
+            EditFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
+            ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'],
+            EditFAQCategoryDialogContext
+        );
+        await ContextService.getInstance().registerContext(editFAQCategoryContext);
 
         const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
             FAQCategoryDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY],
@@ -73,12 +68,6 @@ export class UIModule implements IUIModule {
         );
         await ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
 
-    }
-
-    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, [crud])]
-        );
     }
 
 }

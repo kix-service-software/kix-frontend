@@ -11,7 +11,7 @@ import { IConfiguration, ConfigurationType } from "../../core/model/configuratio
 
 import {
     Error, KIXObjectType, SysConfigOptionDefinitionProperty, KIXObjectLoadingOptions,
-    SysConfigOptionDefinition, FilterCriteria, FilterDataType, FilterType, SysConfigOption
+    SysConfigOptionDefinition, FilterCriteria, FilterDataType, FilterType, SysConfigOption, SysConfigOptionProperty
 } from "../../core/model";
 import { SysConfigService, ConfigurationService, LoggingService } from "../../core/services";
 import { SearchOperator } from "../../core/browser";
@@ -30,30 +30,6 @@ export class ModuleConfigurationService {
     }
 
     private constructor() { }
-
-    public async cleanUp(token: string): Promise<void> {
-        LoggingService.getInstance().info('Cleanup configurations');
-        const definitions = await this.loadSysconfigDefinitions(token);
-        await SysConfigService.getInstance().deleteObjects(
-            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-            definitions.map((d) => d.Name)
-        );
-    }
-
-    public async saveConfigurations(token: string, configurations: IConfiguration[]): Promise<void> {
-        const definitions = await this.loadSysconfigDefinitions(token);
-
-        LoggingService.getInstance().info(`Save/Update ${configurations.length} configurations`);
-
-        for (const config of configurations) {
-            const existingDefinition = definitions.find((d) => d.Name === config.id);
-            if (!existingDefinition) {
-                await this.createConfiguration(token, config);
-            }
-        }
-
-        await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
-    }
 
     public async saveConfiguration(
         token: string, configuration: IConfiguration,
@@ -81,8 +57,17 @@ export class ModuleConfigurationService {
             'ModuleConfigurationService::SysConfigOption', 'ModuleConfigurationService'
         );
         if (!options) {
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        SysConfigOptionDefinitionProperty.CONTEXT, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
+                    )
+                ]
+            );
             options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, null, null, null
+                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, null, loadingOptions, null
             );
             CacheService.getInstance().set(
                 'ModuleConfigurationService::SysConfigOption', options, 'ModuleConfigurationService'
@@ -97,56 +82,6 @@ export class ModuleConfigurationService {
         }
 
         return configuration;
-    }
-
-    public async loadConfigurations<T extends IConfiguration>(
-        token: string, type: string | ConfigurationType
-    ): Promise<T[]> {
-        const definitions = await this.loadSysconfigDefinitions(token, type);
-        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, null, null, null
-        );
-
-        const configurations: T[] = [];
-        if (options && options.length) {
-            for (const definition of definitions) {
-                const option = options.find((o) => o.Name === definition.Name);
-                if (option && option.Value) {
-                    configurations.push(JSON.parse(option.Value));
-                }
-            }
-
-        }
-
-        return configurations;
-    }
-
-    private async loadSysconfigDefinitions(
-        token: string, type?: string | ConfigurationType
-    ): Promise<SysConfigOptionDefinition[]> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-        const loadingOptions = new KIXObjectLoadingOptions([
-            new FilterCriteria(
-                SysConfigOptionDefinitionProperty.CONTEXT, SearchOperator.EQUALS,
-                FilterDataType.STRING, FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
-            )
-        ]);
-
-        if (type) {
-            loadingOptions.filter.push(
-                new FilterCriteria(
-                    SysConfigOptionDefinitionProperty.CONTEXT_METADATA, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, type
-                )
-            );
-        }
-
-        const definitions = await SysConfigService.getInstance().loadObjects<SysConfigOptionDefinition>(
-            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, loadingOptions, null
-        );
-
-        return definitions;
     }
 
     private async updateConfiguration(
@@ -203,6 +138,43 @@ export class ModuleConfigurationService {
 
     public async sysconfigChanged(id: string): Promise<void> {
         await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
+    }
+
+    public async cleanUp(token: string): Promise<void> {
+        LoggingService.getInstance().info('Cleanup configurations');
+        const definitions = await this.loadSysconfigDefinitions(token);
+        await SysConfigService.getInstance().deleteObjects(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+            definitions.map((d) => d.Name)
+        );
+    }
+
+    private async loadSysconfigDefinitions(
+        token: string, type?: string | ConfigurationType
+    ): Promise<SysConfigOptionDefinition[]> {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                SysConfigOptionDefinitionProperty.CONTEXT, SearchOperator.EQUALS,
+                FilterDataType.STRING, FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
+            )
+        ]);
+
+        if (type) {
+            loadingOptions.filter.push(
+                new FilterCriteria(
+                    SysConfigOptionDefinitionProperty.CONTEXT_METADATA, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, type
+                )
+            );
+        }
+
+        const definitions = await SysConfigService.getInstance().loadObjects<SysConfigOptionDefinition>(
+            token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, loadingOptions, null
+        );
+
+        return definitions;
     }
 
 }

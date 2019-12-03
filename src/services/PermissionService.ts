@@ -82,14 +82,12 @@ export class PermissionService {
         if (permissions && permissions.length) {
             const andPermissionChecks: Array<Promise<boolean>> = [];
             const orPermissionChecks: Array<Promise<boolean>> = [];
-            if (permissions) {
-                permissions.filter((p) => p.OR).forEach((p) => {
-                    orPermissionChecks.push(this.methodAllowed(token, p));
-                });
-                permissions.filter((p) => !p.OR).forEach((p) => {
-                    andPermissionChecks.push(this.methodAllowed(token, p));
-                });
-            }
+            permissions.filter((p) => p.OR).forEach((p) => {
+                orPermissionChecks.push(this.methodAllowed(token, p));
+            });
+            permissions.filter((p) => !p.OR).forEach((p) => {
+                andPermissionChecks.push(this.methodAllowed(token, p));
+            });
 
             const andChecks = await Promise.all(andPermissionChecks);
             const andCheck = andChecks.every((c) => c);

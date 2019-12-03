@@ -29,6 +29,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 303;
 
+    public name: string = 'ContactReadUIModule';
+
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }

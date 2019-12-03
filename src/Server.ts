@@ -202,8 +202,6 @@ export class Server {
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-            // await ModuleConfigurationService.getInstance().cleanUp(serverConfig.BACKEND_API_TOKEN);
-
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;
                 const definition = new SysConfigOptionDefinition();

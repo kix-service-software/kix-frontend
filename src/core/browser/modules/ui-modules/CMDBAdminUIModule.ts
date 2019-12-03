@@ -27,6 +27,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 204;
 
+    public name: string = 'CMDBAdminUIModule';
+
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -45,27 +47,23 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassLabelProvider());
         LabelService.getInstance().registerLabelProvider(new ConfigItemClassDefinitionLabelProvider());
 
-        if (await this.checkPermission('system/cmdb/classes', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);
+        ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-create', ConfigItemClassCreateAction);
 
-            const newConfigItemClassDetailsContext = new ContextDescriptor(
-                NewConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext
-            );
-            await ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
-        }
+        const newConfigItemClassDetailsContext = new ContextDescriptor(
+            NewConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext
+        );
+        await ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
 
-        if (await this.checkPermission('system/cmdb/classes/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-edit', ConfigItemClassEditAction);
+        ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-edit', ConfigItemClassEditAction);
 
-            const editConfigItemClassContext = new ContextDescriptor(
-                EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext
-            );
-            await ContextService.getInstance().registerContext(editConfigItemClassContext);
-        }
+        const editConfigItemClassContext = new ContextDescriptor(
+            EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext
+        );
+        await ContextService.getInstance().registerContext(editConfigItemClassContext);
 
         const configItemClassDetailsContext = new ContextDescriptor(
             ConfigItemClassDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
@@ -73,12 +71,6 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['configitemclasses'], ConfigItemClassDetailsContext
         );
         await ContextService.getInstance().registerContext(configItemClassDetailsContext);
-    }
-
-    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, [crud])]
-        );
     }
 
 }

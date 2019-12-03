@@ -25,8 +25,6 @@ import {
 } from "../../mail-account";
 import { ActionFactory } from "../../ActionFactory";
 import { ContextService } from "../../context";
-import { UIComponentPermission } from "../../../model/UIComponentPermission";
-import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
 import {
     MailFilterService, MailFilterBrowserFactory, MailFilterTableFactory, MailFilterLabelProvider
 } from "../../mail-filter";
@@ -41,6 +39,8 @@ import { MailFilterFormService } from "../../mail-filter/MailFilterFormService";
 export class UIModule implements IUIModule {
 
     public priority: number = 52;
+
+    public name: string = 'CommunicationUIModule';
 
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -80,27 +80,23 @@ export class UIModule implements IUIModule {
 
     private async registerSystemAddresses(): Promise<void> {
 
-        if (await this.checkPermission('system/communication/systemaddresses', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('system-address-create', SystemAddressCreateAction);
+        ActionFactory.getInstance().registerAction('system-address-create', SystemAddressCreateAction);
 
-            const newSystemAddressDialogContext = new ContextDescriptor(
-                NewSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                false, 'new-system-address-dialog', ['system-addresses'], NewSystemAddressDialogContext
-            );
-            await ContextService.getInstance().registerContext(newSystemAddressDialogContext);
-        }
+        const newSystemAddressDialogContext = new ContextDescriptor(
+            NewSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-system-address-dialog', ['system-addresses'], NewSystemAddressDialogContext
+        );
+        await ContextService.getInstance().registerContext(newSystemAddressDialogContext);
 
-        if (await this.checkPermission('system/communication/systemaddresses/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('system-address-edit', SystemAddressEditAction);
+        ActionFactory.getInstance().registerAction('system-address-edit', SystemAddressEditAction);
 
-            const editSystemAddressDialogContext = new ContextDescriptor(
-                EditSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext
-            );
-            await ContextService.getInstance().registerContext(editSystemAddressDialogContext);
-        }
+        const editSystemAddressDialogContext = new ContextDescriptor(
+            EditSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext
+        );
+        await ContextService.getInstance().registerContext(editSystemAddressDialogContext);
 
         const systemAddressDetailsContext = new ContextDescriptor(
             SystemAddressDetailsContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
@@ -112,28 +108,24 @@ export class UIModule implements IUIModule {
 
     private async registerMailAccounts(): Promise<void> {
 
-        if (await this.checkPermission('system/communication/mailaccounts', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('mail-account-create', MailAccountCreateAction);
+        ActionFactory.getInstance().registerAction('mail-account-create', MailAccountCreateAction);
 
-            const newMailAccountDialogContext = new ContextDescriptor(
-                NewMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext
-            );
-            await ContextService.getInstance().registerContext(newMailAccountDialogContext);
-        }
+        const newMailAccountDialogContext = new ContextDescriptor(
+            NewMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext
+        );
+        await ContextService.getInstance().registerContext(newMailAccountDialogContext);
 
-        if (await this.checkPermission('system/communication/mailaccounts/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('mail-account-edit', MailAccountEditAction);
-            ActionFactory.getInstance().registerAction('mail-account-fetch', MailAccountFetchAction);
+        ActionFactory.getInstance().registerAction('mail-account-edit', MailAccountEditAction);
+        ActionFactory.getInstance().registerAction('mail-account-fetch', MailAccountFetchAction);
 
-            const editMailAccountDialogContext = new ContextDescriptor(
-                EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                false, 'edit-mail-account-dialog', ['mail-accounts'], EditMailAccountDialogContext
-            );
-            await ContextService.getInstance().registerContext(editMailAccountDialogContext);
-        }
+        const editMailAccountDialogContext = new ContextDescriptor(
+            EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-mail-account-dialog', ['mail-accounts'], EditMailAccountDialogContext
+        );
+        await ContextService.getInstance().registerContext(editMailAccountDialogContext);
 
         const mailAccountDetailsContext = new ContextDescriptor(
             MailAccountDetailsContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
@@ -145,27 +137,23 @@ export class UIModule implements IUIModule {
 
     private async registerMailFilters(): Promise<void> {
 
-        if (await this.checkPermission('system/communication/mailfilters', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('mail-filter-create', MailFilterCreateAction);
+        ActionFactory.getInstance().registerAction('mail-filter-create', MailFilterCreateAction);
 
-            const newMailFilterDialogContext = new ContextDescriptor(
-                NewMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext
-            );
-            await ContextService.getInstance().registerContext(newMailFilterDialogContext);
-        }
+        const newMailFilterDialogContext = new ContextDescriptor(
+            NewMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext
+        );
+        await ContextService.getInstance().registerContext(newMailFilterDialogContext);
 
-        if (await this.checkPermission('system/communication/mailfilters/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
+        ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
 
-            const editMailFilterDialogContext = new ContextDescriptor(
-                EditMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext
-            );
-            await ContextService.getInstance().registerContext(editMailFilterDialogContext);
-        }
+        const editMailFilterDialogContext = new ContextDescriptor(
+            EditMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext
+        );
+        await ContextService.getInstance().registerContext(editMailFilterDialogContext);
 
         const mailFilterDetailsContext = new ContextDescriptor(
             MailFilterDetailsContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
@@ -174,11 +162,5 @@ export class UIModule implements IUIModule {
         );
         await ContextService.getInstance().registerContext(mailFilterDetailsContext);
 
-    }
-
-    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, [crud])]
-        );
     }
 }

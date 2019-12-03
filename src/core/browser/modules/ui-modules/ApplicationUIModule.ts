@@ -14,11 +14,10 @@ import {
 } from '../../../../core/browser';
 import { CSVExportAction, BulkAction, ImportAction, PrintAction } from '../../../../core/browser/actions';
 import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
+    ContextDescriptor, KIXObjectType, ContextType, ContextMode
 } from '../../../../core/model';
 import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
 import { SwitchColumnOrderAction } from '../../../../core/browser/table/actions';
-import { DialogService } from '../../../../core/browser/components/dialog';
 import { PermissionLabelProvider } from '../../../../core/browser/permission';
 import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../../../core/browser/application';
 import { ServiceService } from '../../../../core/browser/service/ServiceService';
@@ -44,10 +43,13 @@ import {
 } from '../../notification';
 import { TicketLabelProvider, ArticleLabelProvider } from '../../ticket';
 import { ChannelService } from '../../channel';
+import { ContextFactory } from '../../context/ContextFactory';
 
 export class UIModule implements IUIModule {
 
     public priority: number = 10000;
+
+    public name: string = 'ApplicationUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -118,7 +120,7 @@ export class UIModule implements IUIModule {
     }
 
     public async registerContexts(): Promise<void> {
-        const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.SEARCH);
+        const dialogs = ContextFactory.getInstance().getContextDescriptors(ContextMode.SEARCH);
         if (dialogs && dialogs.length) {
             const searchContext = new ContextDescriptor(
                 SearchContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
