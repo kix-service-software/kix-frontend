@@ -38,6 +38,7 @@ import {
 import { PluginService, MarkoService, SocketService, ModuleConfigurationService } from './services';
 import { SystemInfo, ReleaseInfo, Error, SysConfigOptionDefinition } from './core/model';
 import { IConfiguration } from './core/model/configuration';
+import { SysConfigAccessLevel } from './core/model/kix/sysconfig/SysConfigAccessLevel';
 
 export class Server {
 
@@ -205,18 +206,19 @@ export class Server {
 
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;
-                return {
-                    Name: c.id,
-                    Description: name,
-                    Default: JSON.stringify(c),
-                    Context: serverConfig.NOTIFICATION_CLIENT_ID,
-                    ContextMetadata: c.type,
-                    Type: 'String',
-                    IsRequired: 0
-                };
+                const definition = new SysConfigOptionDefinition();
+                definition.AccessLevel = SysConfigAccessLevel.INTERNAL;
+                definition.Name = c.id;
+                definition.Description = name;
+                definition.Default = JSON.stringify(c);
+                definition.Context = serverConfig.NOTIFICATION_CLIENT_ID;
+                definition.ContextMetadata = c.type;
+                definition.Type = 'String';
+                definition.IsRequired = 0;
+                return definition;
             });
 
-            return sysconfigOptionDefinitions as SysConfigOptionDefinition[];
+            return sysconfigOptionDefinitions;
         }
     }
 }

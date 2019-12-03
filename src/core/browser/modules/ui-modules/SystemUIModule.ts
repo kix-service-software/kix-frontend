@@ -10,7 +10,7 @@
 import { IUIModule } from "../../application/IUIModule";
 import { ServiceRegistry, FactoryService } from "../../kix";
 import { KIXObjectType, ContextDescriptor, ContextType, ContextMode } from "../../../model";
-import { TableFactoryService } from "../../table";
+import { TableFactoryService, TableCSSHandlerRegistry } from "../../table";
 import { LabelService } from "../../LabelService";
 import {
     SysConfigService, SysConfigFormService, SysConfigOptionBrowserFactory,
@@ -20,6 +20,7 @@ import {
 import { SysConfigTableFactory } from "../../sysconfig/table";
 import { ContextService } from "../..";
 import { PlaceholderService } from "../../placeholder";
+import { SysConfigTableCSSHandler } from "../../sysconfig/table/SysConfigTableCSSHandler";
 
 export class UIModule implements IUIModule {
 
@@ -42,6 +43,10 @@ export class UIModule implements IUIModule {
         );
         TableFactoryService.getInstance().registerFactory(new SysConfigTableFactory());
         LabelService.getInstance().registerLabelProvider(new SysConfigLabelProvider());
+
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, new SysConfigTableCSSHandler()
+        );
 
         const editSysConfigDialogContext = new ContextDescriptor(
             EditSysConfigDialogContext.CONTEXT_ID, [KIXObjectType.SYS_CONFIG_OPTION_DEFINITION],

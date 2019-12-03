@@ -38,11 +38,11 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
         if (configLevel && !!configLevel.length) {
             const definitionFilter = [
                 new FilterCriteria(
-                    SysConfigOptionDefinitionProperty.LEVEL, SearchOperator.GREATER_THAN_OR_EQUAL,
+                    SysConfigOptionDefinitionProperty.EXPERIENCE_LEVEL, SearchOperator.GREATER_THAN_OR_EQUAL,
                     FilterDataType.NUMERIC, FilterType.OR, Number(configLevel[0].Value)
                 ),
                 new FilterCriteria(
-                    SysConfigOptionDefinitionProperty.LEVEL, SearchOperator.EQUALS,
+                    SysConfigOptionDefinitionProperty.EXPERIENCE_LEVEL, SearchOperator.EQUALS,
                     FilterDataType.NUMERIC, FilterType.OR, null
                 ),
             ];

@@ -16,6 +16,7 @@ import {
 import { SysConfigService, ConfigurationService, LoggingService } from "../../core/services";
 import { SearchOperator } from "../../core/browser";
 import { CacheService } from "../../core/cache";
+import { SysConfigAccessLevel } from "../../core/model/kix/sysconfig/SysConfigAccessLevel";
 
 export class ModuleConfigurationService {
 
@@ -54,7 +55,10 @@ export class ModuleConfigurationService {
         await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
     }
 
-    public async saveConfiguration(token: string, configuration: IConfiguration): Promise<void> {
+    public async saveConfiguration(
+        token: string, configuration: IConfiguration,
+        accessLevel: SysConfigAccessLevel = SysConfigAccessLevel.INTERNAL
+    ): Promise<void> {
         this.validate(configuration);
         const config = await this.loadConfiguration(token, configuration.id)
             .catch((error) => {
@@ -62,9 +66,9 @@ export class ModuleConfigurationService {
             });
 
         if (config) {
-            await this.updateConfiguration(token, configuration);
+            await this.updateConfiguration(token, configuration, accessLevel);
         } else {
-            await this.createConfiguration(token, configuration);
+            await this.createConfiguration(token, configuration, accessLevel);
         }
 
         await CacheService.getInstance().deleteKeys('ModuleConfigurationService');
@@ -145,13 +149,16 @@ export class ModuleConfigurationService {
         return definitions;
     }
 
-    private async updateConfiguration(token: string, configuration: IConfiguration): Promise<void> {
+    private async updateConfiguration(
+        token: string, configuration: IConfiguration, accessLevel: SysConfigAccessLevel = SysConfigAccessLevel.INTERNAL
+    ): Promise<void> {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         LoggingService.getInstance().info(`Update existing configuration: ${configuration.id}`);
         const name = configuration.name ? configuration.name : configuration.id;
         await SysConfigService.getInstance().updateObject(
             token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
             [
+                [SysConfigOptionDefinitionProperty.ACCESS_LEVEL, accessLevel],
                 [SysConfigOptionDefinitionProperty.NAME, configuration.id],
                 [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
                 [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
@@ -163,13 +170,16 @@ export class ModuleConfigurationService {
         ).catch((error: Error) => LoggingService.getInstance().error(error.Code, error));
     }
 
-    private async createConfiguration(token: string, configuration: IConfiguration): Promise<void> {
+    private async createConfiguration(
+        token: string, configuration: IConfiguration, accessLevel: SysConfigAccessLevel = SysConfigAccessLevel.INTERNAL
+    ): Promise<void> {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         LoggingService.getInstance().info(`Create new configuration: ${configuration.id}`);
         const name = configuration.name ? configuration.name : configuration.id;
         await SysConfigService.getInstance().createObject(
             token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
             [
+                [SysConfigOptionDefinitionProperty.ACCESS_LEVEL, accessLevel],
                 [SysConfigOptionDefinitionProperty.NAME, configuration.id],
                 [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
                 [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
