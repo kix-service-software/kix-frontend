@@ -7,14 +7,16 @@
  * --
  */
 
-import { OverlayService, FormService, ServiceRegistry, BrowserUtil, KIXObjectService } from '../../../../core/browser';
+import {
+    OverlayService, FormService, ServiceRegistry, BrowserUtil, KIXObjectService, ContextService
+} from '../../../../core/browser';
 import {
     ComponentContent, OverlayType, TreeNode, ValidationResult,
     ValidationSeverity, ConfigItemClass, KIXObjectType, ContextMode, ConfigItemProperty, Error,
     KIXObjectLoadingOptions, ConfigItemClassProperty
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
-import { CMDBService, ConfigItemDetailsContext, ConfigItemFormFactory } from '../../../../core/browser/cmdb';
+import { CMDBService, ConfigItemDetailsContext, NewConfigItemDialogContext } from '../../../../core/browser/cmdb';
 import { RoutingService, RoutingConfiguration } from '../../../../core/browser/router';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
@@ -23,18 +25,23 @@ class Component {
 
     private state: ComponentState;
 
+    private classId: string;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.load.bind(this);
+    }
+
+    private async load(): Promise<TreeNode[]> {
+        return await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
     }
 
     public async onMount(): Promise<void> {
-
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Config Item Class', 'Translatable#Save'
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Select Config Item Class');
-        this.state.classNodes = await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
 
         const hint = await TranslationService.translate('Translatable#Helptext_CMDB_ConfigItemCreate_Class');
         this.state.hint = hint.startsWith('Helptext_') ? null : hint;
@@ -50,24 +57,22 @@ class Component {
     }
 
     public async classChanged(nodes: TreeNode[]): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(true);
-        this.state.currentClassNode = nodes && nodes.length ? nodes[0] : null;
+        this.state.prepared = false;
         FormService.getInstance().deleteFormInstance(this.state.formId);
-        this.state.formId = null;
-        let formId: string;
-        if (this.state.currentClassNode) {
-            const ciClass = await this.getCIClass(this.state.currentClassNode.id);
-            if (ciClass) {
-                formId = ConfigItemFormFactory.getInstance().getFormId(ciClass);
+
+        if (nodes && nodes.length) {
+            const context = await ContextService.getInstance().getContext<NewConfigItemDialogContext>(
+                NewConfigItemDialogContext.CONTEXT_ID
+            );
+            if (context) {
+                context.setAdditionalInformation('CI_CLASS_ID', nodes[0].id);
+                this.classId = nodes[0].id;
+                setTimeout(() => {
+                    this.state.prepared = true;
+                }, 50);
             }
-        } else {
-            formId = null;
         }
 
-        setTimeout(() => {
-            this.state.formId = formId;
-            DialogService.getInstance().setMainDialogLoading(false);
-        }, 100);
     }
 
     public async submit(): Promise<void> {
@@ -84,7 +89,7 @@ class Component {
                 const cmdbService
                     = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
-                const ciClass = await this.getCIClass(this.state.currentClassNode.id);
+                const ciClass = await this.getCIClass(this.classId);
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
                         DialogService.getInstance().setMainDialogLoading(false);

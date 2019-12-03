@@ -11,6 +11,7 @@ import { UIComponent } from "../core/model/UIComponent";
 import { HttpService } from "../core/services";
 import { UIComponentPermission } from "../core/model/UIComponentPermission";
 import { ContextConfiguration, ConfiguredWidget } from "../core/model";
+import { isNumber } from "util";
 
 export class PermissionService {
 
@@ -40,26 +41,34 @@ export class PermissionService {
         token: string, configuration: ContextConfiguration
     ): Promise<ContextConfiguration> {
 
-        const sidebars = await this.checkConfiguration(token, configuration.sidebarWidgets);
-        const explorer = await this.checkConfiguration(token, configuration.explorerWidgets);
-        const lanes = await this.checkConfiguration(token, configuration.laneWidgets);
-        const content = await this.checkConfiguration(token, configuration.contentWidgets);
-        const overlays = await this.checkConfiguration(token, configuration.overlayWidgets);
+        const sidebars = await this.checkConfiguration(token, configuration.sidebars);
+        const explorer = await this.checkConfiguration(token, configuration.explorer);
+        const lanes = await this.checkConfiguration(token, configuration.lanes);
+        const content = await this.checkConfiguration(token, configuration.content);
+        const overlays = await this.checkConfiguration(token, configuration.overlays);
+        const others = await this.checkConfiguration(token, configuration.others);
+        const dialogs = await this.checkConfiguration(token, configuration.dialogs);
+
 
         return new ContextConfiguration(
+            configuration.id, configuration.name, configuration.type,
             configuration.contextId,
-            configuration.sidebars, sidebars.map((w) => w),
-            configuration.explorer, explorer.map((w) => w),
-            configuration.lanes, lanes.map((w) => w),
-            configuration.content, content.map((w) => w),
+            sidebars.map((w) => w),
+            explorer.map((w) => w),
+            lanes.map((w) => w),
+            content.map((w) => w),
             configuration.generalActions,
             configuration.actions,
-            overlays
+            overlays,
+            others,
+            dialogs
         );
     }
 
-    private async checkConfiguration(token: string, widgets: ConfiguredWidget[]): Promise<ConfiguredWidget[]> {
-        const allowedWidgets: ConfiguredWidget[] = [];
+    private async checkConfiguration<T extends ConfiguredWidget>(
+        token: string, widgets: T[]
+    ): Promise<T[]> {
+        const allowedWidgets: T[] = [];
         for (const widget of widgets) {
             const allowed = await this.checkPermissions(token, widget.permissions);
             if (allowed) {
@@ -73,14 +82,12 @@ export class PermissionService {
         if (permissions && permissions.length) {
             const andPermissionChecks: Array<Promise<boolean>> = [];
             const orPermissionChecks: Array<Promise<boolean>> = [];
-            if (permissions) {
-                permissions.filter((p) => p.OR).forEach((p) => {
-                    orPermissionChecks.push(this.methodAllowed(token, p));
-                });
-                permissions.filter((p) => !p.OR).forEach((p) => {
-                    andPermissionChecks.push(this.methodAllowed(token, p));
-                });
-            }
+            permissions.filter((p) => p.OR).forEach((p) => {
+                orPermissionChecks.push(this.methodAllowed(token, p));
+            });
+            permissions.filter((p) => !p.OR).forEach((p) => {
+                andPermissionChecks.push(this.methodAllowed(token, p));
+            });
 
             const andChecks = await Promise.all(andPermissionChecks);
             const andCheck = andChecks.every((c) => c);
@@ -109,9 +116,10 @@ export class PermissionService {
                     return null;
                 });
 
-            if (response !== null) {
-                const accessPermission = response.headers.AllowPermissionValue & permission.value;
-                return accessPermission === permission.value;
+            if (response !== null && permission.value) {
+                const permissionValue = Number(permission.value);
+                const accessPermission = response.headers.AllowPermissionValue & permissionValue;
+                return accessPermission === permissionValue;
             } else {
                 return false;
             }

@@ -50,8 +50,8 @@ export class ConfigItemClassTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_CLASS, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.CONFIG_ITEM_CLASS, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -73,7 +73,7 @@ export class ConfigItemClassTableFactory extends TableFactory {
         let config;
         switch (property) {
             case ConfigItemClassProperty.NAME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 200, true, true,
                     false, DataType.STRING, true, null, null, false
                 );

@@ -9,9 +9,11 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, TabWidgetSettings
+    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, TabWidgetConfiguration
 } from '../../core/model';
 import { TicketStateDetailsContext } from '../../core/browser/ticket';
+import { ModuleConfigurationService } from '../../services';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -19,29 +21,54 @@ export class Extension implements IConfigurationExtension {
         return 'ticket-state-details';
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const ticketStateInfoTab = new WidgetConfiguration(
+            'ticket-state-details-info-widget', 'Ticket State Details Info Widget', ConfigurationType.Widget,
+            'ticket-state-info-widget', 'Translatable#State Information',
+            [], null, null, false, true, null, false
+        );
+        configurations.push(ticketStateInfoTab);
 
-        const tabLane = new ConfiguredWidget('ticket-state-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['ticket-state-details-widget']))
+        const tabWidgetSettings = new TabWidgetConfiguration(
+            'ticket-state-details-tab-widget-config', 'Ticket State Details Tabs', ConfigurationType.TabWidget,
+            ['ticket-state-details-info-widget']
+        );
+        configurations.push(tabWidgetSettings);
+
+        const tabWidgetConfig = new WidgetConfiguration(
+            'ticket-state-details-tab-widget', 'Ticket State Details Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('ticket-state-details-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        configurations.push(tabWidgetConfig);
+
+        configurations.push(
+            new ContextConfiguration(
+                'ticket-state-details', 'Ticket State Details', ConfigurationType.Context,
+                TicketStateDetailsContext.CONTEXT_ID, [], [],
+                [
+                    new ConfiguredWidget('ticket-state-details-tab-widget', 'ticket-state-details-tab-widget')
+                ],
+                [],
+                [
+                    'ticket-admin-state-create'
+                ],
+                [
+                    'ticket-admin-state-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('ticket-state-details-info-widget', 'ticket-state-details-info-widget')
+                ]
+            )
         );
 
-        const ticketStateInfoWidget = new ConfiguredWidget('ticket-state-details-widget', new WidgetConfiguration(
-            'ticket-state-info-widget', 'Translatable#State Information', [], null,
-            false, true, null, false
-        ));
-
-        return new ContextConfiguration(
-            TicketStateDetailsContext.CONTEXT_ID, [], [], [], [],
-            ['ticket-state-details-tab-widget'],
-            [tabLane, ticketStateInfoWidget],
-            [], [],
-            ['ticket-admin-state-create'],
-            ['ticket-admin-state-edit', 'print-action']
-        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

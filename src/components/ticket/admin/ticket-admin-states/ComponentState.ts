@@ -9,20 +9,23 @@
 
 import { IdService } from "../../../../core/browser";
 import {
-    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings, TicketStateProperty
+    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetConfiguration, TicketStateProperty
 } from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('ticket-states-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: States',
             [
                 'ticket-admin-state-create', 'csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.TICKET_STATE,
-                [TicketStateProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
+            ], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.TICKET_STATE,
+                [TicketStateProperty.NAME, SortOrder.UP]
+            ), false, false, 'kix-icon-gears')
     ) { }
 
 }

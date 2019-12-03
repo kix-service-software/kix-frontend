@@ -8,12 +8,19 @@
  */
 
 import {
-    ContextConfiguration, FormField, Form, FormContext, KIXObjectType, ContactProperty, KIXObjectProperty
+    ContextConfiguration, FormContext, KIXObjectType,
+    ContactProperty, KIXObjectProperty, ObjectReferenceOptions, FormFieldValue,
+    FormFieldOption, ConfiguredDialogWidget, ContextMode, WidgetConfiguration
 } from "../../core/model";
 import { IConfigurationExtension } from "../../core/extensions";
 import { EditContactDialogContext } from "../../core/browser/contact";
-import { FormGroup } from "../../core/model/components/form/FormGroup";
+import { ConfigurationType, IConfiguration } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
+import {
+    FormFieldConfiguration, FormConfiguration, FormGroupConfiguration, FormPageConfiguration
+} from "../../core/model/components/form/configuration";
 import { ConfigurationService } from "../../core/services";
+import { FormValidationService } from "../../core/browser/form/validation";
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,92 +28,209 @@ export class Extension implements IConfigurationExtension {
         return EditContactDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new ContextConfiguration(this.getModuleId());
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const widget = new WidgetConfiguration(
+            'contact-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-contact-dialog', 'Translatable#Edit Contact', [], null, null, false, false, 'kix-icon-edit'
+        );
+        configurations.push(widget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'contact-edit-dialog-widget', 'contact-edit-dialog-widget',
+                        KIXObjectType.CONTACT, ContextMode.EDIT
+                    )
+                ]
+            )
+        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const formId = 'contact-edit-form';
+        const configurations = [];
 
-        const formId = 'edit-contact-form';
-        const existingForm = configurationService.getConfiguration(formId);
-        if (!existingForm || overwrite) {
-            const groups: FormGroup[] = [];
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-title',
+                'Translatable#Title', ContactProperty.TITLE, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_Title'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-firstname',
+                'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
+                'Translatable#Helptext_Customers_ContactCreate_Firstname'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-lastname',
+                'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
+                'Translatable#Helptext_Customers_ContactCreate_Lastname'
+            )
+        );
 
-            groups.push(new FormGroup('Translatable#Contact Information', [
-                new FormField(
-                    'Translatable#Title', ContactProperty.TITLE, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_Title'
-                ),
-                new FormField(
-                    'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
-                    'Translatable#Helptext_Customers_ContactEdit_Firstname'
-                ),
-                new FormField(
-                    'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
-                    'Translatable#Helptext_Customers_ContactEdit_Lastname'
-                ),
-                new FormField(
-                    'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'contact-input-organisation',
-                    true, 'Translatable#Helptext_Customers_ContactEdit_Organisation'
-                )
-            ]));
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-organisation',
+                'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'contact-input-organisation',
+                true, 'Translatable#Helptext_Customers_ContactCreate_Organisation'
+            )
+        );
 
-            groups.push(new FormGroup('Translatable#Communication', [
-                new FormField(
-                    'Translatable#Phone', ContactProperty.PHONE, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_Phone'
-                ),
-                new FormField(
-                    'Translatable#Mobile', ContactProperty.MOBILE, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_Mobile'
-                ),
-                new FormField(
-                    'Translatable#Fax', ContactProperty.FAX, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_Fax'
-                ),
-                new FormField(
-                    'Translatable#Email', ContactProperty.EMAIL, null, true,
-                    'Translatable#Helptext_Customers_ContactEdit_Email'
-                ),
-            ]));
+        configurations.push(
+            new FormGroupConfiguration(
+                'contact-edit-form-group-information', 'Translatable#Contact Information',
+                [
+                    'contact-edit-form-field-title',
+                    'contact-edit-form-field-firstname',
+                    'contact-edit-form-field-lastname',
+                    'contact-edit-form-field-organisation'
+                ]
+            )
+        );
 
-            groups.push(new FormGroup('Translatable#Postal Address', [
-                new FormField(
-                    'Translatable#Street', ContactProperty.STREET, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_Street'
-                ),
-                new FormField(
-                    'Translatable#Zip', ContactProperty.ZIP, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_Zip'
-                ),
-                new FormField(
-                    'Translatable#City', ContactProperty.CITY, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_City'
-                ),
-                new FormField(
-                    'Translatable#Country', ContactProperty.COUNTRY, null, false,
-                    'Translatable#Helptext_Customers_ContactEdit_Country'
-                )
-            ]));
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-phone',
+                'Translatable#Phone', ContactProperty.PHONE, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_Phone'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-mobile',
+                'Translatable#Mobile', ContactProperty.MOBILE, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_Mobile'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-fax',
+                'Translatable#Fax', ContactProperty.FAX, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_Fax'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-email',
+                'Translatable#Email', ContactProperty.EMAIL, null, true,
+                'Translatable#Helptext_Customers_ContactCreate_Email',
+                null, null, null, null, null, null, null, null, null,
+                FormValidationService.EMAIL_REGEX, FormValidationService.EMAIL_REGEX_ERROR_MESSAGE
+            )
+        );
 
-            groups.push(new FormGroup('Translatable#Other', [
-                new FormField(
-                    'Translatable#Comment', ContactProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_Customers_ContactEdit_Comment', null, null, null, null,
-                    null, null, null, 250
-                ),
-                new FormField(
-                    'Translatable#Validity', KIXObjectProperty.VALID_ID, 'valid-input', false,
-                    'Translatable#Helptext_Customers_ContactEdit_Validity'
-                )
-            ]));
+        configurations.push(
+            new FormGroupConfiguration(
+                'contact-edit-form-group-communication', 'Translatable#Communication',
+                [
+                    'contact-edit-form-field-phone',
+                    'contact-edit-form-field-mobile',
+                    'contact-edit-form-field-fax',
+                    'contact-edit-form-field-email'
+                ]
+            )
+        );
 
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-street',
+                'Translatable#Street', ContactProperty.STREET, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_Street'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-zip',
+                'Translatable#Zip', ContactProperty.ZIP, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_Zip'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-city',
+                'Translatable#City', ContactProperty.CITY, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_City'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-country',
+                'Translatable#Country', ContactProperty.COUNTRY, null, false,
+                'Translatable#Helptext_Customers_ContactCreate_Country'
+            )
+        );
 
-            const form = new Form(formId, 'Edit Contact', groups, KIXObjectType.CONTACT, undefined, FormContext.EDIT);
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.CONTACT, formId);
+        configurations.push(
+            new FormGroupConfiguration(
+                'contact-edit-form-group-address', 'Translatable#Postal Address',
+                [
+                    'contact-edit-form-field-street',
+                    'contact-edit-form-field-zip',
+                    'contact-edit-form-field-city',
+                    'contact-edit-form-field-country'
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-comment',
+                'Translatable#Comment', ContactProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_Customers_ContactCreate_Comment', null, null, null, null,
+                null, null, null, null, 250
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'contact-edit-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_Customers_ContactCreate_Validity', [
+                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+            ], new FormFieldValue(1)
+            )
+        );
+
+        configurations.push(
+            new FormGroupConfiguration(
+                'contact-edit-form-group-other', 'Translatable#Other',
+                [
+                    'contact-edit-form-field-comment',
+                    'contact-edit-form-field-valid'
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormPageConfiguration(
+                'contact-edit-form-page', 'Translatable#New Contact',
+                [
+                    'contact-edit-form-group-information',
+                    'contact-edit-form-group-communication',
+                    'contact-edit-form-group-address',
+                    'contact-edit-form-group-other'
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormConfiguration(
+                formId, 'New Contact',
+                ['contact-edit-form-page'],
+                KIXObjectType.CONTACT, true, FormContext.EDIT
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.CONTACT, formId);
+
+        return configurations;
     }
 }
 

@@ -22,7 +22,7 @@ export class ComponentState extends WidgetComponentState {
         public headerTitleComponents: string[] = [],
         public filterPlaceHolder: string = 'Translatable#All Objects',
         public showFilter: boolean = true,
-        public isFiltering: boolean = false,
+        public isFiltering: boolean = false
     ) {
         super();
     }

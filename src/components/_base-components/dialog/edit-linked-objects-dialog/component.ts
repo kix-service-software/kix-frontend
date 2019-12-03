@@ -80,7 +80,7 @@ class Component {
             const editLinksContext = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
                 EditLinkedObjectsDialogContext.CONTEXT_ID
             );
-            editLinksContext.setObjectList(this.availableLinkObjects);
+            editLinksContext.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
 
             await this.prepareTable();
 
@@ -96,7 +96,7 @@ class Component {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-
+        TableFactoryService.getInstance().destroyTable('edit-linked-objects-dialog');
     }
 
     private async reviseLinkObjects(): Promise<void> {
@@ -202,6 +202,7 @@ class Component {
                     }
                     if (eventId === TableEvent.TABLE_READY) {
                         this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
+                        this.highlightDeletedRows();
                     }
                 }
             }
@@ -254,6 +255,7 @@ class Component {
     private async linksChanged(result: CreateLinkDescription[][]): Promise<void> {
         this.linkDescriptions = result[0];
         await this.addNewLinks(result[1]);
+        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
         this.setCanSubmit();
     }
 
@@ -282,8 +284,8 @@ class Component {
             const context = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
                 EditLinkedObjectsDialogContext.CONTEXT_ID
             );
-            context.setObjectList([...this.availableLinkObjects]);
-            context.getObjectList();
+            context.setObjectList(KIXObjectType.LINK_OBJECT, [...this.availableLinkObjects]);
+            context.getObjectList(KIXObjectType.LINK_OBJECT);
 
             this.state.linkObjectCount = this.availableLinkObjects.length;
 
@@ -321,11 +323,15 @@ class Component {
             );
         }
 
-        this.state.table.setRowsSelectableByObject(this.deleteLinkObjects, false);
-        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
+        this.highlightDeletedRows();
 
         this.state.canDelete = false;
         this.setCanSubmit();
+    }
+
+    private highlightDeletedRows(): void {
+        this.state.table.setRowsSelectableByObject(this.deleteLinkObjects, false);
+        this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
     }
 
 

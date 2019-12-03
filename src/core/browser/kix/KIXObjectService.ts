@@ -244,7 +244,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async prepareFormFields(
         formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
+        let parameter: Array<[string, any]> = [];
 
         const predefinedParameterValues = await this.preparePredefinedValues(forUpdate);
         if (predefinedParameterValues) {
@@ -278,7 +278,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
             key = iterator.next();
         }
-        await this.prepareDependendValues(parameter, createOptions);
+        parameter = await this.postPrepareValues(parameter, createOptions);
 
         return parameter;
     }
@@ -287,10 +287,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return await this.prepareCreateValue(property, value);
     }
 
-    protected async prepareDependendValues(
+    protected async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<void> {
-        return;
+    ): Promise<Array<[string, any]>> {
+        return parameter;
     }
 
     protected async preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>> {
@@ -312,7 +312,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         switch (property) {
@@ -391,18 +391,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async prepareObjectTree(
-        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+        objects: KIXObject[], showInvalid?: boolean, invalidClickable: boolean = false,
+        filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
             const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objects[0].KIXObjectType);
-            nodes = await service.prepareObjectTree(objects, showInvalid, filterIds);
+            nodes = await service.prepareObjectTree(objects, showInvalid, invalidClickable, filterIds);
         }
         return nodes;
     }
 
     public async prepareObjectTree(
-        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {

@@ -10,10 +10,11 @@
 import { Context } from "../../../model/components/context/Context";
 import {
     KIXObject, KIXObjectType, TicketProperty, Organisation, Contact,
-    IFormInstanceListener, FormField, FormFieldValue, FormContext
+    IFormInstanceListener, FormFieldValue, FormContext
 } from "../../../model";
 import { FormService } from "../../form";
 import { KIXObjectService } from "../../kix";
+import { FormFieldConfiguration } from "../../../model/components/form/configuration";
 
 export class NewTicketDialogContext extends Context implements IFormInstanceListener {
 
@@ -35,7 +36,9 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
         return;
     }
 
-    public async formValueChanged(formField: FormField, value: FormFieldValue<any>, oldValue: any): Promise<void> {
+    public async formValueChanged(
+        formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any
+    ): Promise<void> {
         if (formField && formField.property === TicketProperty.ORGANISATION_ID) {
             this.handleOrganisationValue(value);
         } else if (formField && formField.property === TicketProperty.CONTACT_ID) {

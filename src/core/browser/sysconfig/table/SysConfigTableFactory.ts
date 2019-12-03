@@ -42,29 +42,42 @@ export class SysConfigTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 SysConfigOptionDefinitionProperty.NAME, true, false, true, false, 400, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 SysConfigOptionDefinitionProperty.IS_MODIFIED, true, false, false, false, 100, true, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
+                SysConfigOptionDefinitionProperty.CONTEXT, true, false, true, false, 150, true, true, true,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                SysConfigOptionDefinitionProperty.CONTEXT_METADATA, true, false, true, false, 150, true, true, true,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                SysConfigOptionDefinitionProperty.ACCESS_LEVEL, true, false, true, false, 100, true, true, true,
+                DataType.STRING, true, null, null, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
                 KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 SysConfigOptionDefinitionProperty.VALUE, true, false, true, false, 300, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 KIXObjectProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(
+                null, null, null, KIXObjectProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -77,15 +90,10 @@ export class SysConfigTableFactory extends TableFactory {
             tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
                 null, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, ContextMode.EDIT_ADMIN,
                 SysConfigOptionDefinitionProperty.NAME, null, true,
-                undefined, true, 'edit-sysconfig-form'
+                undefined, true, 'sysconfig-edit-form'
             );
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 }

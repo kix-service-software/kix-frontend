@@ -9,13 +9,15 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm, ContactProperty, ConfiguredWidget, WidgetConfiguration, WidgetSize, CRUD
+    ContextConfiguration, KIXObjectType, FormContext, SearchForm, ContactProperty,
+    ConfiguredWidget, WidgetConfiguration, CRUD, HelpWidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import { ContactSearchContext } from '../../core/browser/contact';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -23,47 +25,69 @@ export class ModuleExtension implements IConfigurationExtension {
         return ContactSearchContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const helpWidget = new ConfiguredWidget('20180919-help-widget',
-            new WidgetConfiguration(
-                'help-widget', 'Translatable#Help', [], {
-                    helpText: 'Translatable#Helptext_Search_Contact',
-                    links: [
-                        ['Translatable#How to search in KIX 18?', 'faqarticles/2']
-                    ]
-                },
-                false, false, 'kix-icon-query', false
-            ),
-            [new UIComponentPermission('faq/articles', [CRUD.READ])]
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const helpSettings = new HelpWidgetConfiguration(
+            'contact-search-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
+            'Translatable#Helptext_Search_Contact',
+            []
         );
-        const sidebarWidgets = [helpWidget];
-        const sidebars = ['20180919-help-widget'];
-        return new ContextConfiguration(
-            ContactSearchContext.CONTEXT_ID, sidebars, sidebarWidgets
+        configurations.push(helpSettings);
+
+        const helpWidget = new WidgetConfiguration(
+            'contact-search-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
+            'help-widget', 'Translatable#Help', [],
+            new ConfigurationDefinition('contact-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            null, false, false, 'kix-icon-textblocks'
         );
+        configurations.push(helpWidget);
+
+
+        const widget = new WidgetConfiguration(
+            'contact-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'search-contact-dialog', 'Translatable#Contact Search', [],
+            null, null, false, false, 'kix-icon-search-man-bubble'
+        );
+        configurations.push(widget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Contact Search Dialog', ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'contact-search-dialog-help-widget', 'contact-search-dialog-help-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'contact-search-dialog-widget', 'contact-search-dialog-widget',
+                        KIXObjectType.CONTACT, ContextMode.SEARCH
+                    )
+                ]
+            )
+        );
+
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
-
-        const formId = 'search-contact-form';
-        const existingForm = configurationService.getConfiguration(formId);
-        if (!existingForm || overwrite) {
-            const form = new SearchForm(
-                formId,
-                'Ansprechpartner',
-                KIXObjectType.CONTACT,
-                FormContext.SEARCH,
-                null,
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const formId = 'contact-search-form';
+        configurations.push(
+            new SearchForm(
+                formId, 'Ansprechpartner', KIXObjectType.CONTACT, FormContext.SEARCH, null,
                 [
                     SearchProperty.FULLTEXT,
                     ContactProperty.FIRSTNAME, ContactProperty.LASTNAME,
                     ContactProperty.EMAIL, ContactProperty.LOGIN
                 ]
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.SEARCH], KIXObjectType.CONTACT, formId);
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.CONTACT, formId);
+        return configurations;
     }
 
 }

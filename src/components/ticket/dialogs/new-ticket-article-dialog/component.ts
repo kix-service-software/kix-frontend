@@ -9,7 +9,8 @@
 
 import { ContextService, BrowserUtil, FormService } from '../../../../core/browser';
 import {
-    KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket, FormField, ArticleProperty, FormFieldValue
+    KIXObjectType, CreateTicketArticleOptions, TicketProperty, Ticket,
+    ArticleProperty, FormFieldValue
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { TicketDetailsContext, NewTicketArticleContext } from '../../../../core/browser/ticket';
@@ -17,6 +18,7 @@ import {
     AbstractNewDialog, TabContainerEvent, TabContainerEventData
 } from '../../../../core/browser/components/dialog';
 import { EventService } from '../../../../core/browser/event';
+import { FormFieldConfiguration } from '../../../../core/model/components/form/configuration';
 
 class Component extends AbstractNewDialog {
 
@@ -58,15 +60,16 @@ class Component extends AbstractNewDialog {
         if (formInstance) {
             formInstance.registerListener({
                 formListenerId: 'new-article-dialog-listener',
-                formValueChanged: async (formField: FormField, value: FormFieldValue<any>, oldValue: any) => {
-                    if (formField.property === ArticleProperty.CHANNEL_ID) {
-                        if (value && value.value === 2) {
-                            this.state.buttonLabel = 'Translatable#Send';
-                        } else {
-                            this.state.buttonLabel = 'Translatable#Save';
+                formValueChanged:
+                    async (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
+                        if (formField.property === ArticleProperty.CHANNEL_ID) {
+                            if (value && value.value === 2) {
+                                this.state.buttonLabel = 'Translatable#Send';
+                            } else {
+                                this.state.buttonLabel = 'Translatable#Save';
+                            }
                         }
-                    }
-                },
+                    },
                 updateForm: () => { return; }
             });
         }

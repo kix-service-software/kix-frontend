@@ -49,35 +49,37 @@ export class ArticleTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.NUMBER, true, false, true, false, 60, true, true, false, DataType.STRING, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.ARTICLE_INFORMATION, false, true, true, false, 60,
                 false, false, false, DataType.STRING, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.SENDER_TYPE_ID, true, false, true, false, 120, true, true, true,
-                undefined, undefined, undefined, 'Translatable#Sender'
+                undefined, undefined, undefined, 'Translatable#Sender Type'
             ),
-            new DefaultColumnConfiguration(ArticleProperty.FROM, true, false, true, false, 300, true, true),
             new DefaultColumnConfiguration(
+                null, null, null, ArticleProperty.FROM, true, false, true, false, 300, true, true),
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true, true
             ),
-            new DefaultColumnConfiguration(ArticleProperty.SUBJECT, true, false, true, false, 500, true, true),
             new DefaultColumnConfiguration(
+                null, null, null, ArticleProperty.SUBJECT, true, false, true, false, 500, true, true),
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.INCOMING_TIME, true, false, true, false, 125,
                 true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.ATTACHMENTS, true, true, true, false, 75,
                 false, false, false, DataType.STRING, false, 'article-attachment-cell'
             )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.ARTICLE, null, undefined, tableColumns, true, true, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.ARTICLE, null, undefined, tableColumns, [], true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultToggle = true;
@@ -98,11 +100,6 @@ export class ArticleTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 
 }

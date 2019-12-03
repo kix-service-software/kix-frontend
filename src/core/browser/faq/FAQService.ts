@@ -10,11 +10,12 @@
 import { KIXObjectService, ServiceRegistry } from "../kix";
 import {
     KIXObjectType, FilterCriteria, FilterDataType, FilterType, TreeNode, ObjectIcon, DataType,
-    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty
+    KIXObject, KIXObjectLoadingOptions, KIXObjectProperty, TableFilterCriteria, Attachment
 } from "../../model";
 import { ContextService } from "../context";
 import {
-    FAQArticleProperty, Attachment, FAQCategory, FAQCategoryProperty, FAQArticle, FAQArticleAttachmentLoadingOptions
+    FAQArticleProperty, FAQCategory, FAQCategoryProperty, FAQArticle,
+    FAQArticleAttachmentLoadingOptions, FAQVote
 } from "../../model/kix/faq";
 import { SearchOperator } from "../SearchOperator";
 import { ObjectDefinitionSearchAttribute } from "../../model/kix/object-definition";
@@ -80,7 +81,8 @@ export class FAQService extends KIXObjectService {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid: boolean = false, filterIds?: Array<string | number>
+        property: string, showInvalid: boolean = false, invalidClickable: boolean = false,
+        filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
@@ -103,8 +105,8 @@ export class FAQService extends KIXObjectService {
                 const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
                     KIXObjectType.FAQ_CATEGORY, null, loadingOptions
                 );
-                nodes = this.prepareCategoryTree(
-                    faqCategories, showInvalid,
+                nodes = await this.prepareObjectTree(
+                    faqCategories, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
@@ -126,42 +128,74 @@ export class FAQService extends KIXObjectService {
                 nodes = keywords ? keywords.map((k) => new TreeNode(k, k.toString())) : [];
                 break;
             case FAQArticleProperty.CREATED_BY:
-                nodes = await super.getTreeNodes(KIXObjectProperty.CREATE_BY, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(KIXObjectProperty.CREATE_BY, showInvalid, invalidClickable, filterIds);
                 break;
             case FAQArticleProperty.CHANGED_BY:
-                nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, invalidClickable, filterIds);
                 break;
             default:
-                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
 
         return nodes;
     }
 
-    private prepareCategoryTree(
-        faqCategories: FAQCategory[], showInvalid: boolean = false, filterIds?: number[]
-    ): TreeNode[] {
-        let nodes: TreeNode[] = [];
+    public async prepareObjectTree(
+        faqCategories: FAQCategory[], showInvalid: boolean = false, invalidClickable: boolean = false,
+        filterIds?: number[]
+    ): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
         if (faqCategories && !!faqCategories.length) {
             if (!showInvalid) {
                 faqCategories = faqCategories.filter((c) => c.ValidID === 1);
+            } else if (!invalidClickable) {
+                faqCategories = faqCategories.filter(
+                    (c) => c.ValidID === 1 || this.hasValidDescendants(c.SubCategories)
+                );
             }
+
             if (filterIds && filterIds.length) {
                 faqCategories = faqCategories.filter((c) => !filterIds.some((fid) => fid === c.ID));
             }
 
-            nodes = faqCategories.map((category: FAQCategory) => {
+            for (const category of faqCategories) {
+                const subTree = await this.prepareObjectTree(
+                    category.SubCategories, showInvalid, invalidClickable, filterIds
+                );
+
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
                     new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
-                    this.prepareCategoryTree(category.SubCategories, showInvalid, filterIds),
-                    null, null, null, null, null, null, null, category.ValidID === 1 ? true : false
+                    subTree,
+                    null, null, null, null, null, null, null,
+                    invalidClickable ? true : category.ValidID === 1,
+                    undefined, undefined, undefined, undefined,
+                    category.ValidID !== 1
                 );
-                return treeNode;
-            });
+
+                nodes.push(treeNode);
+
+            }
         }
         return nodes;
+    }
+
+    private hasValidDescendants(categories: FAQCategory[]): boolean {
+        let hasValidDescendants: boolean = false;
+        if (categories && !!categories.length) {
+            for (const queue of categories) {
+                if (queue.ValidID === 1) {
+                    hasValidDescendants = true;
+                } else {
+                    hasValidDescendants = this.hasValidDescendants(queue.SubCategories);
+                }
+                if (hasValidDescendants) {
+                    break;
+                }
+            }
+        }
+        return hasValidDescendants;
     }
 
     private preparePossibleValueTree(
@@ -272,4 +306,16 @@ export class FAQService extends KIXObjectService {
         }
         return inlineContent;
     }
+
+    public async checkFilterValue(article: FAQArticle, criteria: TableFilterCriteria): Promise<boolean> {
+        let match = false;
+        if (criteria.property === FAQArticleProperty.VOTES && article && article.Votes) {
+            const rating = BrowserUtil.calculateAverage(article.Votes.map((v) => v.Rating));
+            match = (criteria.value as []).some((v: FAQVote) => v.Rating === rating);
+        } else {
+            match = await super.checkFilterValue(article, criteria);
+        }
+        return match;
+    }
+
 }

@@ -55,7 +55,7 @@ export class ClientRegistrationService extends KIXObjectService {
     ): Promise<SystemInfo> {
 
         const uri = this.buildUri(this.RESOURCE_URI, createClientRegistration.ClientID);
-        await this.sendDeleteRequest(token, clientRequestId, uri, null)
+        await this.sendDeleteRequest(token, clientRequestId, [uri], null)
             .catch(
                 (error) => LoggingService.getInstance().debug(
                     'Could not delete client registration: ' + createClientRegistration.ClientID
@@ -74,7 +74,7 @@ export class ClientRegistrationService extends KIXObjectService {
 
     public async deleteClientRegistration(token: string, clientRequestId: string, clientId: number): Promise<void> {
         const uri = this.buildUri(this.RESOURCE_URI, clientId);
-        await this.sendDeleteRequest<void>(token, clientRequestId, uri, null);
+        await this.sendDeleteRequest<void>(token, clientRequestId, [uri], null);
     }
 
 }

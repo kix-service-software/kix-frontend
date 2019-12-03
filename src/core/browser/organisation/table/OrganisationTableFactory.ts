@@ -29,7 +29,7 @@ export class OrganisationTableFactory extends TableFactory {
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
-        const table = new Table(tableKey, tableConfiguration);
+        const table = new Table(tableKey, tableConfiguration, contextId);
 
         table.setContentProvider(
             new OrganisationTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
@@ -51,8 +51,8 @@ export class OrganisationTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
         ];
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.ORGANISATION, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.ORGANISATION, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL
             );
             defaultRouting = true;
@@ -75,16 +75,24 @@ export class OrganisationTableFactory extends TableFactory {
         let config;
         switch (property) {
             case OrganisationProperty.NUMBER:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 230, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 230, true, true
+                );
                 break;
             case OrganisationProperty.NAME:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 350, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 350, true, true
+                );
                 break;
             case KIXObjectProperty.VALID_ID:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 150, true, true, true
+                );
                 break;
             default:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 150, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 150, true, true
+                );
         }
         return config;
     }

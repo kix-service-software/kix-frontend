@@ -9,20 +9,23 @@
 
 import { IdService } from "../../../../core/browser";
 import {
-    WidgetConfiguration, KIXObjectType, SortOrder, ConfigItemClassProperty, TableWidgetSettings
+    WidgetConfiguration, KIXObjectType, SortOrder, ConfigItemClassProperty, TableWidgetConfiguration
 } from "../../../../core/model";
 
 export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('cmdb-ci-classes-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#CMDB: CI Classes',
             [
                 'cmdb-admin-ci-class-create', 'csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.CONFIG_ITEM_CLASS,
-                [ConfigItemClassProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
+            ], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.CONFIG_ITEM_CLASS,
+                [ConfigItemClassProperty.NAME, SortOrder.UP]
+            ), false, false, 'kix-icon-gears')
     ) { }
 
 }

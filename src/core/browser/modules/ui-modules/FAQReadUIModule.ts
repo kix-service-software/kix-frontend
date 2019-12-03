@@ -32,10 +32,14 @@ import { IUIModule } from '../../application/IUIModule';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { BookmarkService } from '../../bookmark/BookmarkService';
 import { TranslationService } from '../../i18n/TranslationService';
+import { EventService } from '../../event';
+import { ApplicationEvent } from '../../application';
 
 export class UIModule implements IUIModule {
 
     public priority: number = 400;
+
+    public name: string = 'FAQReadUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -66,44 +70,36 @@ export class UIModule implements IUIModule {
 
         SearchService.getInstance().registerSearchDefinition(new FAQArticleSearchDefinition());
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         this.registerActions();
         await this.registerBookmarks();
+
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
+            eventSubscriberId: 'FAQReadUIModule',
+            eventPublished: () => this.registerBookmarks()
+        });
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const faqContextDescriptor = new ContextDescriptor(
             FAQContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE],
             ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'faq', ['faqarticles'], FAQContext
         );
-        ContextService.getInstance().registerContext(faqContextDescriptor);
+        await ContextService.getInstance().registerContext(faqContextDescriptor);
 
         const faqDetailsContextDescriptor = new ContextDescriptor(
             FAQDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['faqarticles'], FAQDetailsContext
         );
-        ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
+        await ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 
         const searchFAQArticleContext = new ContextDescriptor(
             FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext
         );
-        ContextService.getInstance().registerContext(searchFAQArticleContext);
-    }
-
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'search-faq-article-dialog',
-            new WidgetConfiguration(
-                'search-faq-article-dialog', 'Translatable#FAQ Search', [], {},
-                false, false, 'kix-icon-search-faq'
-            ),
-            KIXObjectType.FAQ_ARTICLE,
-            ContextMode.SEARCH
-        ));
+        await ContextService.getInstance().registerContext(searchFAQArticleContext);
     }
 
     private registerActions(): void {

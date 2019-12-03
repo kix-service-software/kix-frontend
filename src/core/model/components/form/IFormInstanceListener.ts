@@ -7,13 +7,14 @@
  * --
  */
 
-import { FormField, FormFieldValue } from ".";
+import { FormFieldValue } from ".";
+import { FormFieldConfiguration } from "./configuration";
 
 export interface IFormInstanceListener {
 
     formListenerId: string;
 
-    formValueChanged(formField: FormField, value: FormFieldValue<any>, oldValue: any): void;
+    formValueChanged(formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any): void;
 
     updateForm(): void;
 

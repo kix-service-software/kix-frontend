@@ -26,6 +26,7 @@ export class SearchContext extends Context {
     }
 
     public reset(): void {
+        super.reset();
         SearchService.getInstance().clearSearchCache();
     }
 

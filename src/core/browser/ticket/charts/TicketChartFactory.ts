@@ -30,7 +30,7 @@ export class TicketChartFactory {
 
     private constructor() { }
 
-    public async prepareData(property: TicketProperty, tickets: Ticket[]): Promise<Map<string, number>> {
+    public async prepareData(property: TicketProperty, tickets: Ticket[] = []): Promise<Map<string, number>> {
         switch (property) {
             case TicketProperty.STATE_ID:
             case TicketProperty.PRIORITY_ID:

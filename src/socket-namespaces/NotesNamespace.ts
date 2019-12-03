@@ -9,7 +9,7 @@
 
 import { SocketNameSpace } from './SocketNameSpace';
 import {
-    NotesEvent, LoadNotesResponse, SaveNotesRequest, SocketEvent, ISocketRequest
+    NotesEvent, LoadNotesResponse, SaveNotesRequest, SocketEvent, ISocketRequest, User
 } from '../core/model';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { ConfigurationService } from '../core/services';
@@ -40,45 +40,53 @@ export class NotesNamespace extends SocketNameSpace {
     }
 
     private async loadNotes(data: ISocketRequest): Promise<SocketResponse<LoadNotesResponse>> {
-        let userId = null;
-        if (data.token) {
-            const user = await UserService.getInstance().getUserByToken(data.token);
-            userId = user.UserID;
-        }
+        const user = await UserService.getInstance().getUserByToken(data.token).catch((): User => null);
 
-        const notes = await ConfigurationService.getInstance().getConfiguration('notes', userId);
+        let notes = {};
+        if (user) {
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + '_notes';
+
+            const notesPreference = user.Preferences.find((p) => p.ID === preferenceId);
+
+            if (notesPreference) {
+                notes = JSON.parse(notesPreference.Value);
+            }
+        }
 
         const response = new LoadNotesResponse(data.requestId, notes);
         return new SocketResponse(NotesEvent.NOTES_LOADED, response);
     }
 
     private async saveNotes(data: SaveNotesRequest): Promise<SocketResponse> {
-        let userId = null;
         if (data.token) {
             const user = await UserService.getInstance().getUserByToken(data.token)
-                .catch(() => null);
-            userId = user ? user.UserID : null;
-        }
+                .catch((): User => null);
 
-        if (userId) {
-            let notesConfig = ConfigurationService.getInstance().getConfiguration('notes', userId);
-            if (!notesConfig) {
-                notesConfig = {};
-            }
-            notesConfig[data.contextId] = data.notes;
+            if (user) {
+                const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+                const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + '_notes';
 
+                const notesPreference = user.Preferences.find((p) => p.ID === preferenceId);
+                let notesConfig = {};
+                if (notesPreference) {
+                    notesConfig = JSON.parse(notesPreference.Value);
+                }
 
-            const response = await ConfigurationService.getInstance().saveConfiguration('notes', notesConfig, userId)
-                .then(() => new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId }))
-                .catch((error) =>
-                    new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
+                notesConfig[data.contextId] = data.notes;
+                const value = JSON.stringify(notesConfig);
+
+                UserService.getInstance().setPreferences(data.token, 'NotesNamespace', [[preferenceId, value]])
+                    .catch((error: Error) => {
+                        return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
+                    });
+
+                return new SocketResponse(NotesEvent.SAVE_NOTES_FINISHED, { requestId: data.requestId });
+            } else {
+                return new SocketResponse(
+                    SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user available.')
                 );
-
-            return response;
-        } else {
-            return new SocketResponse(
-                SocketEvent.ERROR, new SocketErrorResponse(data.requestId, 'No user available.')
-            );
+            }
         }
     }
 }

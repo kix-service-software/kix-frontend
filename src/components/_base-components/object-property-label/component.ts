@@ -35,10 +35,8 @@ export class ObjectPropertyLabelComponent<T> {
     }
 
     public onMount(): void {
-        if (this.object) {
-            this.prepareDisplayText();
-            this.preparePropertyName();
-        }
+        this.prepareDisplayText();
+        this.preparePropertyName();
     }
 
     private async prepareDisplayText(): Promise<void> {
@@ -55,16 +53,18 @@ export class ObjectPropertyLabelComponent<T> {
     }
 
     private async getIcon(): Promise<string | ObjectIcon> {
-        const icons = await this.labelProvider.getIcons(this.object, this.property);
-        let icon = null;
-        if (icons && icons.length) {
-            icon = icons[0];
+        let icon;
+        if (this.labelProvider) {
+            const icons = await this.labelProvider.getIcons(this.object, this.property);
+            if (icons && icons.length) {
+                icon = icons[0];
+            }
         }
         return icon;
     }
 
     private async getPropertyDisplayText(): Promise<string> {
-        let value = this.property;
+        let value = this.object ? this.object[this.property] : '';
         if (this.labelProvider && this.object) {
             value = await this.labelProvider.getDisplayText(this.object, this.property);
         }
@@ -73,7 +73,7 @@ export class ObjectPropertyLabelComponent<T> {
 
     public getValueClasses(): string {
         let classes = [];
-        if (this.labelProvider) {
+        if (this.labelProvider && this.object) {
             classes = this.labelProvider.getDisplayTextClasses(this.object, this.property);
         }
         return classes.join(',');

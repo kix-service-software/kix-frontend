@@ -10,7 +10,7 @@
 import { WidgetComponentState, AbstractAction, TranslationPattern } from '../../../../../core/model';
 import { TranslationPatternLabelProvider } from '../../../../../core/browser/i18n';
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public labelProvider: TranslationPatternLabelProvider = null,

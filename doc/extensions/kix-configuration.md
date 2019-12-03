@@ -9,7 +9,8 @@ export class ExampleExtension implements IConfigurationExtension {
                     }
 
                     public getDefaultConfiguration(): Promise<ContextConfiguration> {
-                        return new ContextConfiguration(
+                        await ModuleConfigurationService.getInstance().saveConfiguration(
+ new ContextConfiguration(
                             this.getModuleId(),
                             ['sidebar01', 'sidebar02'], [sidebarConfig01, sidebarConfig02],
                             ['explorer01'], [explorerConfig01],

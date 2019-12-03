@@ -7,19 +7,20 @@
  * --
  */
 
-import { IFormFieldValidator, FormField, ValidationResult, ValidationSeverity } from "../../../model";
+import { IFormFieldValidator, ValidationResult, ValidationSeverity } from "../../../model";
 import { FormService } from "../FormService";
 import { TranslationService } from "../../i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../model/components/form/configuration";
 
 export class MaxLengthFormFieldValidator implements IFormFieldValidator {
 
     public validatorId: string = 'MaxLengthValidator';
 
-    public isValidatorFor(formField: FormField, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
         return formField.maxLength !== null && typeof formField.maxLength !== 'undefined' && formField.maxLength > 0;
     }
 
-    public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const value = formInstance.getFormFieldValue(formField.instanceId);
         const fieldValue = value ? value.value : null;

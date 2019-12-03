@@ -50,8 +50,8 @@ export class GeneralCatalogTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.GENERAL_CATALOG_ITEM, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.GENERAL_CATALOG_ITEM, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -63,7 +63,7 @@ export class GeneralCatalogTableFactory extends TableFactory {
             tableConfiguration.routingConfiguration = new DialogRoutingConfiguration(
                 null, KIXObjectType.GENERAL_CATALOG_ITEM, ContextMode.EDIT_ADMIN,
                 GeneralCatalogItemProperty.ID, null, true,
-                undefined, true, 'edit-general-catalog-form'
+                undefined, true, 'general-catalog-edit-form'
             );
         }
 
@@ -74,13 +74,13 @@ export class GeneralCatalogTableFactory extends TableFactory {
         let config;
         switch (property) {
             case GeneralCatalogItemProperty.NAME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true,
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
             case GeneralCatalogItemProperty.CLASS:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 300, true, true,
                     false, DataType.STRING, true, null, null, false
                 );

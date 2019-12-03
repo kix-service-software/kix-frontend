@@ -9,6 +9,8 @@
 
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class KIXModuleExtension implements IKIXModuleExtension {
 
@@ -18,7 +20,14 @@ class KIXModuleExtension implements IKIXModuleExtension {
         new UIComponent(
             'communication-module-component',
             'core/browser/modules/ui-modules/CommunicationUIModule',
-            []
+            [
+                new UIComponentPermission('system/communication/mailfilters/*', [CRUD.UPDATE]),
+                new UIComponentPermission('system/communication/mailfilters', [CRUD.CREATE]),
+                new UIComponentPermission('system/communication/mailaccounts/*', [CRUD.UPDATE]),
+                new UIComponentPermission('system/communication/mailaccounts', [CRUD.CREATE]),
+                new UIComponentPermission('system/communication/systemaddresses/*', [CRUD.UPDATE]),
+                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+            ]
         )
     ];
 
@@ -58,7 +67,6 @@ class KIXModuleExtension implements IKIXModuleExtension {
             'mail-filter-set-form-input', 'communication/admin/dialogs/inputs/mail-filter-set-form-input', []
         ),
         new UIComponent('edit-sysconfig-dialog', 'system/admin/dialogs/edit-sysconfig-dialog', []),
-
         new UIComponent('edit-mail-filter-dialog', 'communication/admin/dialogs/edit-mail-filter-dialog', []),
         new UIComponent('communication-admin-webforms', 'communication/admin/communication-admin-webforms', []),
         new UIComponent('new-webform-dialog', 'communication/admin/dialogs/new-webform-dialog', []),

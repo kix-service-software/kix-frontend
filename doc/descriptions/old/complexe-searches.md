@@ -22,7 +22,7 @@ const searchContactContext = new ContextDescriptor(
             ContactSearchContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-contact-dialog', ContactSearchContext
         );
-ContextService.getInstance().registerContext(searchContactContext);
+await ContextService.getInstance().registerContext(searchContactContext);
 ```
 ### Suchdefinition und Ergebnistabelle registrieren
 
@@ -40,8 +40,8 @@ SearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition
 ```
 DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
             'search-contact-dialog',
-            new WidgetConfiguration(
-                'search-contact-dialog', 'Ansprechpartner', [], {}, false, false, WidgetSize.BOTH, 'kix-icon-man-bubble'
+            new WidgetConfiguration(null,null,null,
+                'search-contact-dialog', 'Ansprechpartner',[], null, null, false, false, WidgetSize.BOTH, 'kix-icon-man-bubble'
             ),
             KIXObjectType.CONTACT,
             ContextMode.SEARCH

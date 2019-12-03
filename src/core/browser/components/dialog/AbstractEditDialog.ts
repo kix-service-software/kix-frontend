@@ -29,12 +29,12 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
     protected objectType: KIXObjectType;
     protected contextId: string;
 
-    protected init(
+    protected async init(
         loadingHint: string, successHint: string = 'Translatable#Changes saved.', objectType: KIXObjectType,
         detailsContextId: string
     ) {
-        this.loadingHint = loadingHint;
-        this.successHint = successHint;
+        this.loadingHint = await TranslationService.translate(loadingHint);
+        this.successHint = await TranslationService.translate(successHint);
         this.objectType = objectType;
         this.contextId = detailsContextId;
     }
@@ -103,8 +103,6 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
     }
 
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
-        await FormService.getInstance().loadFormConfigurations();
-
         DialogService.getInstance().setMainDialogLoading(false);
         DialogService.getInstance().submitMainDialog();
 

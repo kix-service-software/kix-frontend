@@ -14,7 +14,7 @@ const faqContextDescriptor = new ContextDescriptor(
             ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'faq', 'faq', FAQContext
         );
-        ContextService.getInstance().registerContext(faqContextDescriptor);
+        await ContextService.getInstance().registerContext(faqContextDescriptor);
 ```
 
 ## Module registrieren & implementieren

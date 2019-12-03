@@ -39,7 +39,8 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('edit-contact-dialog', 'organisation/dialogs/edit-contact-dialog', []),
         new UIComponent('search-contact-dialog', 'organisation/dialogs/search-contact-dialog', []),
         new UIComponent('contact-input-organisation', 'organisation/dialogs/inputs/contact-input-organisation', []),
-        new UIComponent('create-new-ticket-cell', 'organisation/table/create-new-ticket-cell', [])
+        new UIComponent('create-new-ticket-cell', 'organisation/table/create-new-ticket-cell', []),
+        new UIComponent('contact-list-widget', 'organisation/widgets/contact-list-widget', [])
     ];
 
 }

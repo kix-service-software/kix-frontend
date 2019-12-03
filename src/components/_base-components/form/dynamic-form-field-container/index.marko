@@ -6,129 +6,154 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<for|dynamicValue, index| of=state.dynamicValues>
-    <div.dynamic-form-field-value class={
-        "no-operation": dynamicValue.operationIsNone
-    }>
-        <if(dynamicValue.required)>
-            <span>${dynamicValue.label}*</span>
-        </if>
-        <else>
-            <form-list
-                nodes=dynamicValue.propertyNodes
-                selectedNodes=[dynamicValue.currentPropertyNode]
-                removeNode=false
-                readonly=dynamicValue.readonly
-                placeholder=dynamicValue.propertiesPlaceholder
-                on-nodesChanged("propertyChanged", dynamicValue)/>
-        </else>
-        <if(!dynamicValue.operationIsNone)>
-            <if(dynamicValue.operationIsStringInput)>
-                <input.input-style
-                    value=(dynamicValue.currentOperationNode ? dynamicValue.currentOperationNode.id : "")
-                    type="text"
-                    disabled=dynamicValue.readonly
-                    readonly=dynamicValue.readonly
-                    placeholder=dynamicValue.operationsPlaceholder
-                    on-input("operationStringChanged", dynamicValue)/>
+<if(state.prepared)>
+    <for|dynamicValue, index| of=state.dynamicValues>
+        <div.dynamic-form-field-value
+            class={
+                        "no-operation": dynamicValue.operationIsNone
+                    }
+            key="dynamic-form-field-value-[]">
+            <if(dynamicValue.required)>
+                <span>${dynamicValue.label}*</span>
             </if>
             <else>
                 <form-list
-                    nodes=dynamicValue.operationNodes
-                    selectedNodes=[dynamicValue.currentOperationNode]
-                    removeNode=false
+                    treeId=("property-" + dynamicValue.id)
+                    key=("property-" + dynamicValue.id)
+                    canRemoveNode=false
                     readonly=dynamicValue.readonly
-                    placeholder=dynamicValue.operationsPlaceholder
-                    on-nodesChanged("operationChanged", dynamicValue)/>
+                    placeholder=dynamicValue.propertiesPlaceholder
+                    on-nodesChanged("propertyChanged", dynamicValue)/>
             </else>
-        </if>
-        <div.value>
-            <if(component.showValueInput(dynamicValue))>
-                <if(dynamicValue.isDropdown)>
-                    <form-list
-                        nodes=dynamicValue.nodes
-                        selectedNodes=dynamicValue.currentValueNodes
-                        removeNode=(!dynamicValue.readonly || dynamicValue.changeable)
-                        readonly=dynamicValue.readonly
-                        multiselect=dynamicValue.isMultiselect
-                        invalid=!dynamicValue.value.valid
-                        autocomplete=dynamicValue.isAutocomplete
-                        searchCallback=dynamicValue.autoCompleteCallback
-                        on-nodesChanged("treeValueChanged", dynamicValue)/>
-                </if>
-                <else-if(dynamicValue.isDate)>
+            <if(!dynamicValue.operationIsNone && dynamicValue.value.property)>
+                <if(dynamicValue.operationIsStringInput)>
                     <input.input-style
-                        class={
-                                                invalid: !dynamicValue.value.valid
-                                            }
-                        type="date"
-                        value=dynamicValue.date
-                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-change("dateValueChanged", dynamicValue)/>
-                </else-if>
-                <else-if(dynamicValue.isDateTime)>
-                    <input.input-style
-                        class={
-                                                invalid: !dynamicValue.value.valid
-                                            }
-                        type="date"
-                        value=dynamicValue.date
-                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-change("dateValueChanged", dynamicValue)/>
-                    <input.input-style
-                        class={
-                                                invalid: !dynamicValue.value.valid
-                                            }
-                        type="time"
-                        value=dynamicValue.time
-                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-change("timeValueChanged", dynamicValue)/>
-                </else-if>
-                <else-if(dynamicValue.isTextarea)>
-                    <textarea.input-style
-                        class={
-                                                invalid: !dynamicValue.value.valid
-                                            }
-                        rows=5
-                        cols=25
-                        value=dynamicValue.currentValue
-                        maxlength=component.getInputOptionValue(dynamicValue, "maxLength")
-                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-input("textValueChanged", dynamicValue)/>
-                </else-if>
-                <else-if(dynamicValue.isSpecificInput)>
-                    <${dynamicValue.specificInputType}
-                        propertyId=(dynamicValue.currentPropertyNode ? dynamicValue.currentPropertyNode.id : null)
-                        operationId=(dynamicValue.currentOperationNode ? dynamicValue.currentOperationNode.id : null)
-                        value=dynamicValue.currentValue
-                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        options=dynamicValue.inputOptions
-                        on-change("specificValueChanged", dynamicValue)/>
-                </else-if>
-                <else>
-                    <input.input-style
-                        class={
-                                                invalid: !dynamicValue.value.valid
-                                            }
-                        value=dynamicValue.currentValue
+                        value=dynamicValue.value.operator
                         type="text"
-                        disabled=(dynamicValue.readonly && !dynamicValue.changeable)
-                        on-input("textValueChanged", dynamicValue)/>
+                        disabled=dynamicValue.readonly
+                        readonly=dynamicValue.readonly
+                        placeholder=dynamicValue.operationsPlaceholder
+                        on-input("operationStringChanged", dynamicValue)/>
+                </if>
+                <else>
+                    <form-list
+                        treeId=("operation-" + dynamicValue.id)
+                        key=("operation-" + dynamicValue.id)
+                        canRemoveNode=false
+                        readonly=dynamicValue.readonly
+                        placeholder=dynamicValue.operationsPlaceholder
+                        on-nodesChanged("operationChanged", dynamicValue)/>
                 </else>
             </if>
+            <div.value>
+                <if(component.showValueInput(dynamicValue))>
+                    <if(dynamicValue.isDropdown)>
+                        <form-list
+                            treeId=("value-" + dynamicValue.id)
+                            key=("value-" + dynamicValue.id)
+                            canRemoveNode=(!dynamicValue.readonly || dynamicValue.changeable)
+                            readonly=dynamicValue.readonly
+                            multiselect=dynamicValue.isMultiselect
+                            invalid=!dynamicValue.value.valid
+                            autoCompleteConfiguration=dynamicValue.autoCompleteConfiguration
+                            searchCallback=dynamicValue.autoCompleteCallback
+                            on-nodesChanged("treeValueChanged", dynamicValue)/>
+                    </if>
+                    <else-if(dynamicValue.isDate)>
+                        <span.dynamic-form-date-input class={
+                            between: dynamicValue.isBetween
+                        }>
+                            <input.input-style
+                                class={
+                                                                invalid: !dynamicValue.value.valid
+                                                            }
+                                type="date"
+                                value=dynamicValue.date
+                                disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                                on-change("setDateValue", dynamicValue)/>
+                            <if(dynamicValue.isBetween)>
+                                <div.between-space>
+                                    <translation-string pattern="Translatable#and"/>
+                                </div>
+                                <input.input-style type="date" on-change("setBetweenEndDateValue", dynamicValue) value=dynamicValue.betweenEndDate/>
+                            </if>
+                        </span>
+                    </else-if>
+                    <else-if(dynamicValue.isDateTime)>
+                        <span.dynamic-form-date-time-input class={
+                            between: dynamicValue.isBetween
+                        }>
+                            <input.input-style
+                                class={
+                                                                invalid: !dynamicValue.value.valid
+                                                            }
+                                type="date"
+                                value=dynamicValue.date
+                                disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                                on-change("setDateValue", dynamicValue)/>
+                            <input.input-style
+                                class={
+                                                                invalid: !dynamicValue.value.valid
+                                                            }
+                                type="time"
+                                value=dynamicValue.time
+                                disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                                on-change("setTimeValue", dynamicValue)/>
+                            <if(dynamicValue.isBetween)>
+                                <div.between-space>
+                                    <translation-string pattern="Translatable#and"/>
+                                </div>
+                                <input.input-style type="date" on-change("setBetweenEndDateValue", dynamicValue) value=dynamicValue.betweenEndDate/>
+                                <input.input-style type="time" on-change("setBetweenEndTimeValue", dynamicValue) value=dynamicValue.betweenEndTime/>
+                            </if>
+                        </span>
+                    </else-if>
+                    <else-if(dynamicValue.isTextarea)>
+                        <textarea.input-style
+                            class={
+                                                        invalid: !dynamicValue.value.valid
+                                                    }
+                            rows=5
+                            cols=25
+                            value=dynamicValue.value.value
+                            maxlength=component.getInputOptionValue(dynamicValue, "maxLength")
+                            disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                            on-input("setValue", dynamicValue)/>
+                    </else-if>
+                    <else-if(dynamicValue.isSpecificInput)>
+                        <${dynamicValue.specificInputType}
+                            propertyId=dynamicValue.value.property
+                            operationId=dynamicValue.value.operator
+                            value=dynamicValue.value.value
+                            disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                            options=dynamicValue.inputOptions
+                            on-change("setSpecificValue", dynamicValue)/>
+                    </else-if>
+                    <else>
+                        <input.input-style
+                            class={
+                                                        invalid: !dynamicValue.value.valid
+                                                    }
+                            value=dynamicValue.value.value
+                            type="text"
+                            disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                            on-input("setValue", dynamicValue)/>
+                    </else>
+                </if>
+            </div>
+            <if(
+                !dynamicValue.required &&
+                !dynamicValue.readonly &&
+                state.dynamicValues.length > 1 &&
+                index !== state.dynamicValues.length - 1
+            )>
+                <button.form-control-button.button-without-text
+                    type="button"
+                    title=state.translations["Translatable#Remove parameter"]
+                    on-click("removeValue", dynamicValue)>
+                    <span.kix-icon-minus/>
+                </button>
+            </if>
         </div>
-        <if(
-            !dynamicValue.required &&
-            !dynamicValue.readonly &&
-            state.dynamicValues.length > 1 &&
-            index !== state.dynamicValues.length - 1
-        )>
-            <button.form-control-button.button-without-text
-                type="button"
-                title=state.translations["Translatable#Remove parameter"]
-                on-click("removeValue", dynamicValue)>
-                <span.kix-icon-minus/>
-            </button>
-        </if>
-    </div>
-</for>
+    </for>
+</if>

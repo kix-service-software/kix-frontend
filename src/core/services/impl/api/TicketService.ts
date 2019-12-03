@@ -17,7 +17,7 @@ import {
     Article, Attachment, ArticleProperty, FilterCriteria, TicketProperty,
     KIXObjectType, FilterType, User, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
     KIXObjectSpecificCreateOptions, CreateTicketArticleOptions, CreateTicketWatcherOptions,
-    KIXObjectSpecificDeleteOptions, DeleteTicketWatcherOptions, Error, Contact, KIXObjectProperty, FilterDataType
+    KIXObjectSpecificDeleteOptions, Error, Contact, KIXObjectProperty, FilterDataType
 } from '../../../model';
 
 import { KIXObjectService } from './KIXObjectService';
@@ -164,12 +164,11 @@ export class TicketService extends KIXObjectService {
     }
 
     public async deleteObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, objectId: string | number,
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectId: number,
         deleteOptions: KIXObjectSpecificDeleteOptions
-    ): Promise<void> {
+    ): Promise<Error[]> {
         if (objectType === KIXObjectType.WATCHER) {
-            const watcherOptions = deleteOptions as DeleteTicketWatcherOptions;
-            this.removeWatcher(token, clientRequestId, Number(objectId), watcherOptions.ticketId);
+            return this.removeWatcher(token, clientRequestId, objectId);
         }
     }
 
@@ -240,7 +239,7 @@ export class TicketService extends KIXObjectService {
         const body = this.getParameterValue(parameter, ArticleProperty.BODY);
         const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
         let to = this.getParameterValue(parameter, ArticleProperty.TO);
-        if (!to && contactId) {
+        if (!to && contactId && senderType !== 3) {
             if (!isNaN(contactId)) {
                 const contacts = await super.load<Contact>(
                     token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact'
@@ -343,8 +342,8 @@ export class TicketService extends KIXObjectService {
     // -----------------------------
 
     public async addWatcher(token: string, clientRequestId: string, ticketId: number, userId: number): Promise<number> {
-        const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'watchers');
-        const createWatcher = new CreateWatcher(userId);
+        const uri = this.buildUri('watchers');
+        const createWatcher = new CreateWatcher(userId, "Ticket", ticketId);
         const response = await this.sendCreateRequest<CreateWatcherResponse, CreateWatcherRequest>(
             token, clientRequestId, uri, new CreateWatcherRequest(createWatcher), this.objectType
         ).catch((error) => {
@@ -355,17 +354,16 @@ export class TicketService extends KIXObjectService {
     }
 
     public async removeWatcher(
-        token: string, clientRequestId: string, ticketId: number, watcherId: number
-    ): Promise<void> {
-        const uri = this.buildUri(this.RESOURCE_URI, ticketId, 'watchers', watcherId);
-        await this.sendDeleteRequest<void>(token, clientRequestId, uri, this.objectType);
+        token: string, clientRequestId: string, watcherId: number
+    ): Promise<Error[]> {
+        const uri = this.buildUri('watchers', watcherId);
+        return await this.sendDeleteRequest<void>(token, clientRequestId, [uri], this.objectType);
     }
 
-    // Overrides from KIXObjectService
-
+    // Overwrites from KIXObjectService
     // FIXME: unterschiedliche Behandlung von Filter und Search entfernen, sollte nicht notwendig sein
     protected async buildFilter(
-        filter: FilterCriteria[], filterProperty: string, token: string, query: any
+        filter: FilterCriteria[], filterProperty: string, query: any, token?: string
     ): Promise<void> {
         let objectFilter = {};
         let objectSearch = {};

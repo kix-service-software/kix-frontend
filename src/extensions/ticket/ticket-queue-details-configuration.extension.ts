@@ -9,9 +9,11 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TabWidgetSettings
+    ContextConfiguration, WidgetConfiguration, ConfiguredWidget, WidgetSize, TabWidgetConfiguration
 } from '../../core/model';
 import { QueueDetailsContext } from '../../core/browser/ticket';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -19,35 +21,62 @@ export class Extension implements IConfigurationExtension {
         return 'ticket-queue-details';
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const queueInfoWidget = new WidgetConfiguration(
+            'queue-details-info-widget', 'Queue Details Info Widget', ConfigurationType.Widget,
+            'ticket-queue-info-widget', 'Translatable#Queue Information',
+            [], null, null, false, true, WidgetSize.BOTH, false
+        );
+        configurations.push(queueInfoWidget);
 
-        const tabLane = new ConfiguredWidget('ticket-queue-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['ticket-queue-details-widget']))
+        const tabConfig = new TabWidgetConfiguration(
+            'queue-details-tab-widget-config', 'Queue Details Tab Widget Config', ConfigurationType.TabWidget,
+            ['queue-details-info-widget']
+        );
+        configurations.push(tabConfig);
+
+        const tabLaneWidget = new WidgetConfiguration(
+            'queue-details-tab-widget', 'Queue Details Tabs', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('queue-details-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        configurations.push(tabLaneWidget);
+
+        const signatureWidget = new WidgetConfiguration(
+            'queue-details-signature-widget', 'Queue Details Signature Widget', ConfigurationType.Widget,
+            'ticket-queue-signature', 'Translatable#Signature', [], null, null, true, true, WidgetSize.BOTH, false
+        );
+        configurations.push(signatureWidget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Queue Details', ConfigurationType.Context,
+                QueueDetailsContext.CONTEXT_ID,
+                [], [],
+                [
+                    new ConfiguredWidget('queue-details-tab-widget', 'queue-details-tab-widget'),
+                    new ConfiguredWidget('queue-details-signature-widget', 'queue-details-signature-widget')
+                ],
+                [],
+                [
+                    'ticket-admin-queue-create'
+                ],
+                [
+                    'ticket-admin-queue-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('queue-details-info-widget', 'queue-details-info-widget')
+                ]
+            )
         );
 
-        const ticketQueueInfoWidget = new ConfiguredWidget('ticket-queue-details-widget', new WidgetConfiguration(
-            'ticket-queue-info-widget', 'Translatable#Queue Information', [], null,
-            false, true, WidgetSize.BOTH, false
-        ));
-
-        const signatureWidget = new ConfiguredWidget('ticket-queue-signature', new WidgetConfiguration(
-            'ticket-queue-signature', 'Translatable#Signature', [], null, true, true, WidgetSize.BOTH, false
-        ));
-
-        return new ContextConfiguration(
-            QueueDetailsContext.CONTEXT_ID,
-            [], [],
-            [], [],
-            ['ticket-queue-details-tab-widget', 'ticket-queue-signature'],
-            [tabLane, signatureWidget, ticketQueueInfoWidget],
-            [], [],
-            ['ticket-admin-queue-create'],
-            ['ticket-admin-queue-edit', 'print-action']
-        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

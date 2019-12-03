@@ -8,7 +8,7 @@
  */
 
 import { ContextService } from "./context";
-import { ContextType, ObjectUpdatedEventData, Context, KIXObjectType, ContextMode } from "../model";
+import { ContextType, ObjectUpdatedEventData, Context, KIXObjectType, ContextMode, TicketProperty } from "../model";
 import { BrowserUtil } from "./BrowserUtil";
 import { AgentSocketClient } from "./application/AgentSocketClient";
 
@@ -67,11 +67,22 @@ export class NotificationHandler {
         const objects = namespace.split('.');
         if (objects.length > 1) {
             if (objects[0] === 'FAQ') {
-                return KIXObjectType.FAQ_ARTICLE;
+                if (objects[1] === "Category") {
+                    return KIXObjectType.FAQ_CATEGORY;
+                } else if (objects[1] === "Article") {
+                    return KIXObjectType.FAQ_ARTICLE;
+                }
             } else if (objects[0] === 'CMDB') {
                 return objects[1];
             }
         }
+
+        if (objects[0] === 'State') {
+            return KIXObjectType.TICKET_STATE;
+        } else if (objects[0] === 'Type') {
+            return KIXObjectType.TICKET_TYPE;
+        }
+
         return objects[0];
     }
 

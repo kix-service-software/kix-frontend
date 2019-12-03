@@ -18,6 +18,7 @@ export class ComponentState {
         public flat: boolean = false,
         public properties: string[] = [],
         public labelProvider: ILabelProvider<KIXObject> = null,
+        public prepared: boolean = false
     ) { }
 
 }

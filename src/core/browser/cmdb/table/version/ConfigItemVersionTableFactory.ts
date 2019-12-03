@@ -40,17 +40,19 @@ export class ConfigItemVersionTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(VersionProperty.COUNT_NUMBER, true, false, true, true, 120),
             new DefaultColumnConfiguration(
+                null, null, null, VersionProperty.COUNT_NUMBER, true, false, true, true, 120),
+            new DefaultColumnConfiguration(null, null, null,
                 VersionProperty.CREATE_TIME, true, false, true, true, 150, true, false, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(VersionProperty.CREATE_BY, true, false, true, true, 200),
-            new DefaultColumnConfiguration(VersionProperty.BASED_ON_CLASS_VERSION, true, false, true, false, 300, false)
+            new DefaultColumnConfiguration(null, null, null, VersionProperty.CREATE_BY, true, false, true, true, 200),
+            new DefaultColumnConfiguration(
+                null, null, null, VersionProperty.BASED_ON_CLASS_VERSION, true, false, true, false, 300, false)
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM_VERSION, null, undefined, tableColumns, true, true, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.CONFIG_ITEM_VERSION, null, undefined, tableColumns, [], true, true, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultToggle = true;
@@ -66,11 +68,6 @@ export class ConfigItemVersionTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 
 }

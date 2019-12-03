@@ -9,11 +9,12 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectInformationWidgetSettings,
-    KIXObjectType, MailAccountProperty, KIXObjectProperty
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration,
+    KIXObjectType, MailAccountProperty, KIXObjectProperty, ObjectInformationWidgetConfiguration, TabWidgetConfiguration
 } from '../../core/model';
 import { MailAccountDetailsContext } from '../../core/browser/mail-account/context';
-import { TabWidgetSettings } from '../../core/model/components/TabWidgetSettings';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,46 +22,76 @@ export class Extension implements IConfigurationExtension {
         return MailAccountDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-
-        const tabLane = new ConfiguredWidget('mail-account-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['mail-account-information-lane']))
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const objectInfoConfig = new ObjectInformationWidgetConfiguration(
+            'mail-account-details-object-info-config', 'Info Config', ConfigurationType.ObjectInformation,
+            KIXObjectType.MAIL_ACCOUNT,
+            [
+                MailAccountProperty.LOGIN,
+                MailAccountProperty.HOST,
+                MailAccountProperty.TYPE,
+                MailAccountProperty.IMAP_FOLDER,
+                MailAccountProperty.TRUSTED,
+                MailAccountProperty.DISPATCHING_BY,
+                MailAccountProperty.COMMENT,
+                KIXObjectProperty.VALID_ID,
+                KIXObjectProperty.CREATE_BY,
+                KIXObjectProperty.CREATE_TIME,
+                KIXObjectProperty.CHANGE_BY,
+                KIXObjectProperty.CHANGE_TIME
+            ]
         );
+        configurations.push(objectInfoConfig);
 
-        const mailAccountInfoLane =
-            new ConfiguredWidget('mail-account-information-lane', new WidgetConfiguration(
-                'mail-account-info-widget', 'Translatable#Account Information',
+        const mailAccountInfoLane = new WidgetConfiguration(
+            'mail-account-details-info-widget', 'Info Widget', ConfigurationType.Widget,
+            'mail-account-info-widget', 'Translatable#Account Information',
+            [],
+            new ConfigurationDefinition('mail-account-details-object-info-config', ConfigurationType.ObjectInformation),
+            null, false, true
+        );
+        configurations.push(mailAccountInfoLane);
+
+        const tabConfig = new TabWidgetConfiguration(
+            'mail-account-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['mail-account-details-info-widget']
+        );
+        configurations.push(tabConfig);
+
+        const tabLane = new WidgetConfiguration(
+            'mail-account-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('mail-account-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        configurations.push(tabLane);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('mail-account-details-tab-widget', 'mail-account-details-tab-widget')
+                ], [],
+                [
+                    'mail-account-create'
+                ],
+                [
+                    'mail-account-edit', 'mail-account-fetch', 'print-action'
+                ],
                 [],
-                new ObjectInformationWidgetSettings(KIXObjectType.MAIL_ACCOUNT, [
-                    MailAccountProperty.LOGIN,
-                    MailAccountProperty.HOST,
-                    MailAccountProperty.TYPE,
-                    MailAccountProperty.IMAP_FOLDER,
-                    MailAccountProperty.TRUSTED,
-                    MailAccountProperty.DISPATCHING_BY,
-                    MailAccountProperty.COMMENT,
-                    KIXObjectProperty.VALID_ID,
-                    KIXObjectProperty.CREATE_BY,
-                    KIXObjectProperty.CREATE_TIME,
-                    KIXObjectProperty.CHANGE_BY,
-                    KIXObjectProperty.CHANGE_TIME
-                ]),
-                false, true)
-            );
-
-        return new ContextConfiguration(
-            MailAccountDetailsContext.CONTEXT_ID,
-            [], [],
-            [], [],
-            ['mail-account-details-tab-widget'], [tabLane, mailAccountInfoLane],
-            [], [],
-            ['mail-account-create'],
-            ['mail-account-edit', 'mail-account-fetch', 'print-action']
+                [
+                    new ConfiguredWidget('mail-account-details-info-widget', 'mail-account-details-info-widget')
+                ]
+            )
         );
+
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

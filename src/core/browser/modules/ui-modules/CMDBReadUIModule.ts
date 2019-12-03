@@ -9,7 +9,7 @@
 
 import {
     ServiceRegistry, FactoryService, LabelService,
-    TableFactoryService, ContextService, DialogService, ActionFactory
+    TableFactoryService, ContextService, ActionFactory
 } from "../../../../core/browser";
 import {
     CMDBService, ConfigItemBrowserFactory, ConfigItemClassBrowserFactory,
@@ -21,9 +21,7 @@ import {
     ConfigItemSearchContext, CompareConfigItemVersionDialogContext,
     ConfigItemVersionCompareAction, ConfigItemFormService, ConfigItemHistoryBrowserFactory
 } from "../../../../core/browser/cmdb";
-import {
-    KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration, WidgetSize
-} from "../../../../core/model";
+import { KIXObjectType, ContextDescriptor, ContextType, ContextMode } from "../../../../core/model";
 import { SearchService } from "../../../../core/browser/kix/search/SearchService";
 import { IUIModule } from "../../application/IUIModule";
 import { TableCSSHandlerRegistry } from "../../table";
@@ -32,6 +30,8 @@ import { PostproductivCSSHandler } from "../../cmdb/table/PostproductivCSSHandle
 export class UIModule implements IUIModule {
 
     public priority: number = 200;
+
+    public name: string = 'CMDBReadUIModule';
 
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -72,58 +72,35 @@ export class UIModule implements IUIModule {
             KIXObjectType.CONFIG_ITEM, new PostproductivCSSHandler()
         );
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         this.registerActions();
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const cmdbContext = new ContextDescriptor(
             CMDBContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'cmdb-module', ['configitems'], CMDBContext
         );
-        ContextService.getInstance().registerContext(cmdbContext);
+        await ContextService.getInstance().registerContext(cmdbContext);
 
         const configItemDetailsContext = new ContextDescriptor(
             ConfigItemDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['configitems'], ConfigItemDetailsContext
         );
-        ContextService.getInstance().registerContext(configItemDetailsContext);
+        await ContextService.getInstance().registerContext(configItemDetailsContext);
 
         const searchConfigItemContext = new ContextDescriptor(
             ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext
         );
-        ContextService.getInstance().registerContext(searchConfigItemContext);
+        await ContextService.getInstance().registerContext(searchConfigItemContext);
 
         const compareConfigItemContext = new ContextDescriptor(
             CompareConfigItemVersionDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
             ContextType.DIALOG, ContextMode.EDIT,
             false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext
         );
-        ContextService.getInstance().registerContext(compareConfigItemContext);
-    }
-
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'search-config-item-dialog',
-            new WidgetConfiguration(
-                'search-config-item-dialog', 'Translatable#Config Item Search', [], {},
-                false, false, 'kix-icon-search-ci'
-            ),
-            KIXObjectType.CONFIG_ITEM,
-            ContextMode.SEARCH
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'compare-config-item-version-dialog',
-            new WidgetConfiguration(
-                'compare-config-item-version-dialog', 'Translatable#Compare Versions', [], {},
-                false, false, 'kix-icon-comparison-version'
-            ),
-            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE,
-            ContextMode.EDIT
-        ));
+        await ContextService.getInstance().registerContext(compareConfigItemContext);
     }
 
     private registerActions(): void {

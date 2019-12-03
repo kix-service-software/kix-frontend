@@ -10,10 +10,10 @@
 import { ComponentState } from './ComponentState';
 import {
     ContextService, ActionFactory, TableConfiguration, TableHeaderHeight, TableRowHeight,
-    WidgetService, TableFactoryService, DefaultColumnConfiguration, TableEventData,
+    WidgetService, TableFactoryService, TableEventData,
     TableEvent, AbstractMarkoComponent
 } from '../../../core/browser';
-import { KIXObjectType, Link, KIXObject, WidgetType, ContextType, DataType } from '../../../core/model';
+import { KIXObjectType, Link, KIXObject, WidgetType, ContextType } from '../../../core/model';
 import { LinkUtil } from '../../../core/browser/link';
 import { EventService, IEventSubscriber } from '../../../core/browser/event';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
@@ -43,7 +43,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; }
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(await context.getObject<KIXObject>());
@@ -51,6 +52,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        if (this.state.widgetConfiguration.configuration) {
+            const linkedObjectTypes: Array<[string, KIXObjectType]> =
+                this.state.widgetConfiguration.configuration.linkedObjectTypes;
+            for (const lot of linkedObjectTypes) {
+                TableFactoryService.getInstance().destroyTable(`link-objects-${lot[1]}`);
+            }
+        }
     }
 
     private async initWidget(kixObject?: KIXObject): Promise<void> {
@@ -70,9 +78,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareLinkedObjectsGroups(): Promise<void> {
         const linkedObjectGroups = [];
-        if (this.state.widgetConfiguration.settings) {
+        if (this.state.widgetConfiguration.configuration) {
             const linkedObjectTypes: Array<[string, KIXObjectType]> =
-                this.state.widgetConfiguration.settings.linkedObjectTypes;
+                this.state.widgetConfiguration.configuration.linkedObjectTypes;
 
             let objectsCount = 0;
             for (const lot of linkedObjectTypes) {
@@ -80,8 +88,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
                 const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.kixObject, objectLinks);
 
-                const tableConfiguration = new TableConfiguration(
-                    null, null, null, null, false, false, null, null,
+                const tableConfiguration = new TableConfiguration(null, null, null,
+                    null, null, null, null, [], false, false, null, null,
                     TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
@@ -92,9 +100,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 );
                 if (table) {
                     table.addColumns([
-                        new DefaultColumnConfiguration(
-                            'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
-                        )
+                        TableFactoryService.getInstance().getDefaultColumnConfiguration(lot[1], 'LinkedAs')
                     ]);
 
                     objectsCount += objects.length;

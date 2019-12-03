@@ -17,15 +17,17 @@ import {
 import { EventService, IEventSubscriber } from '../../../../core/browser/event';
 import { ImportService, ImportPropertyOperator } from '../../../../core/browser/import';
 import {
-    KIXObjectType, Form, FormContext, FormField, FormFieldOption,
+    KIXObjectType, FormContext, FormFieldOption,
     DefaultSelectInputFormOption, TreeNode, FormFieldValue, WidgetType,
     KIXObject, OverlayType, ComponentContent, DataType, Error, SortOrder, ContextType, Context
 } from '../../../../core/model';
-import { FormGroup } from '../../../../core/model/components/form/FormGroup';
 import { ImportConfigValue } from './ImportConfigValue';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { ApplicationEvent } from '../../../../core/browser/application';
+import {
+    FormConfiguration, FormFieldConfiguration, FormGroupConfiguration, FormPageConfiguration
+} from '../../../../core/model/components/form/configuration';
 
 class Component {
 
@@ -79,13 +81,7 @@ class Component {
         );
     }
 
-    public async onInput(input: any): Promise<any> {
-        this.reset(input ? input.instanceId : '');
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Replace Values",
-            "Translatable#Close Dialog", "Translatable#Start Import"
-        ]);
-
+    public async onMount(): Promise<void> {
         this.context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (this.context) {
             const types = this.context.getDescriptor().kixObjectTypes;
@@ -93,7 +89,7 @@ class Component {
                 this.objectType = types[0];
 
                 const importManager = ImportService.getInstance().getImportManager(this.objectType);
-                importManager.init();
+                importManager.reset(false);
                 this.state.importManager = importManager;
 
                 this.formListenerId = `import-form-listener-${this.objectType}`;
@@ -109,8 +105,16 @@ class Component {
                 });
             }
         }
+
         this.prepareImportConfigForm();
         this.createTable();
+    }
+
+    public async onInput(input: any): Promise<any> {
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Replace Values",
+            "Translatable#Close Dialog", "Translatable#Start Import"
+        ]);
 
         return input;
     }
@@ -123,33 +127,16 @@ class Component {
         FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
         if (this.state.importManager) {
             this.state.importManager.unregisterListener(this.formListenerId);
+            this.state.importManager.reset();
         }
-    }
-
-    private reset(instanceId: string): void {
-        EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
-        FormService.getInstance().removeFormInstanceListener(this.state.importConfigFormId, this.formListenerId);
-        if (this.state.importManager) {
-            this.state.importManager.unregisterListener(this.formListenerId);
-        }
-        this.state = new ComponentState(instanceId);
-        this.csvObjects = [];
-        this.csvProperties = [];
-        this.cancelImportProcess = false;
-        this.errorObjects = [];
-        this.finishedObjects = [];
-        this.selectedObjects = [];
-        this.propertiesFormTimeout = null;
-        this.importFormTimeout = null;
-        this.fileLoaded = false;
+        TableFactoryService.getInstance().destroyTable(`import-dialog-list-${this.objectType}`);
     }
 
     private async prepareImportConfigForm(): Promise<void> {
-        const formGroup = new FormGroup('Import configurations', [
-            new FormField(
+        const formGroup = new FormGroupConfiguration(
+            'import-form-group-configuration', 'Translatable#Import configurations', [], null, [
+            new FormFieldConfiguration(
+                'import-form-field-source',
                 'Translatable#Source', 'source', 'attachment-input', true,
                 // tslint:disable-next-line:max-line-length
                 'Translatable#Helptext_Import_File',
@@ -158,7 +145,8 @@ class Component {
                     new FormFieldOption('MULTI_FILES', false)
                 ]
             ),
-            new FormField(
+            new FormFieldConfiguration(
+                'import-form-field-charset',
                 'Translatable#Charset', 'character_set', 'default-select-input', true,
                 'Translatable#Helptext_Import_CharacterSet.',
                 [
@@ -169,7 +157,8 @@ class Component {
                 ],
                 new FormFieldValue('UTF-8')
             ),
-            new FormField<string[]>(
+            new FormFieldConfiguration(
+                'import-form-field-option',
                 'Translatable#Split Option', 'value_separator', 'default-select-input', true,
                 'Translatable#Helptext_Import_ValueSeparator.',
                 [
@@ -181,7 +170,8 @@ class Component {
                 ],
                 new FormFieldValue(['COMMA', 'SEMICOLON', 'TAB'])
             ),
-            new FormField(
+            new FormFieldConfiguration(
+                'import-form-field-separator',
                 'Translatable#Text separator', 'text_separator', 'default-select-input', true,
                 'Translatable#Helptext_Import_TextSeparator.',
                 [
@@ -194,16 +184,21 @@ class Component {
             )
         ]);
 
-        const form = new Form(
+        const form = new FormConfiguration(
             'import-file-config', 'Import configuration',
-            [formGroup], KIXObjectType.ANY, true, FormContext.NEW
+            [], KIXObjectType.ANY, true, FormContext.NEW, null,
+            [
+                new FormPageConfiguration(
+                    'import-form-page-configuration', 'Import configurations', [], null, null, [formGroup]
+                )
+            ]
         );
 
         FormService.getInstance().deleteFormInstance(form.id);
         await FormService.getInstance().addForm(form);
         FormService.getInstance().registerFormInstanceListener(form.id, {
             formListenerId: this.formListenerId,
-            formValueChanged: async (formField: FormField, value: FormFieldValue<any>) => {
+            formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>) => {
                 if (this.importFormTimeout) {
                     clearTimeout(this.importFormTimeout);
                 } else {
@@ -223,8 +218,8 @@ class Component {
     private async createTable(): Promise<void> {
         if (this.state.importManager && this.context) {
 
-            const configuration = new TableConfiguration(
-                this.objectType, null, null, await this.getColumnConfig(),
+            const configuration = new TableConfiguration(null, null, null,
+                this.objectType, null, null, await this.getColumnConfig(), [],
                 true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
@@ -241,7 +236,7 @@ class Component {
                 eventPublished: async (data: TableEventData, eventId: string) => {
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.TABLE_INITIALIZED || eventId === TableEvent.TABLE_READY) {
-                            if (!!!this.selectedObjects.length) {
+                            if (!this.selectedObjects || !!!this.selectedObjects.length) {
                                 this.state.table.selectAll();
                             } else {
                                 const selectedObjects = [...this.selectedObjects];
@@ -280,7 +275,7 @@ class Component {
     private async getColumnConfig(): Promise<IColumnConfiguration[]> {
         const requiredProperties = await this.state.importManager.getRequiredProperties();
         let columns: IColumnConfiguration[] = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 'CSV_LINE', true, false, true, false, 150, true, true, false, DataType.NUMBER, false,
                 null, 'Translatable#Row Number'
             )
@@ -569,7 +564,7 @@ class Component {
                     });
                 }
             }
-            this.context.setObjectList(objects);
+            this.context.setObjectList(this.state.importManager.objectType, objects);
         }
     }
 
@@ -622,15 +617,15 @@ class Component {
 
         for (const object of objects) {
             const start = Date.now();
-            let end;
+            let end: number;
 
             await this.state.importManager.execute(object, columns)
                 .then(() => {
                     this.finishedObjects.push(object);
                     this.state.table.selectRowByObject(object, false);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_SUCCESS);
-                })
-                .catch(async (error) => {
+                    end = Date.now();
+                }).catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
                     DialogService.getInstance().setMainDialogLoading(true, 'Translatable#An error occurred.');
@@ -642,12 +637,8 @@ class Component {
                 break;
             }
 
-            if (!end) {
-                end = Date.now();
-            }
-
             objectTimes.push(end - start);
-            await this.setDialogLoadingInfo(objectTimes);
+            await this.setDialogLoadingInfo(objectTimes, objects.length);
         }
 
         if (!this.errorObjects.length) {
@@ -658,14 +649,12 @@ class Component {
         DialogService.getInstance().setMainDialogLoading(false);
     }
 
-    private async setDialogLoadingInfo(times: number[] = []): Promise<void> {
+    private async setDialogLoadingInfo(times: number[] = [], objectsCount: number = 0): Promise<void> {
         const objectName = await LabelService.getInstance().getObjectName(
             this.state.importManager.objectType, true
         );
         const average = BrowserUtil.calculateAverage(times);
-        const time = average * (
-            this.state.importManager.objects.length - this.finishedObjects.length - this.errorObjects.length
-        );
+        const time = average * (objectsCount - this.finishedObjects.length - this.errorObjects.length);
         const finishCount = this.finishedObjects.length + this.errorObjects.length;
         const totalCount = this.state.importManager.objects.length + this.finishedObjects.length;
         const loadingHint = await TranslationService.translate(

@@ -7,15 +7,18 @@
  * --
  */
 
-import { IFormFieldValidator, FormField, ValidationResult, ValidationSeverity, FormFieldOptions } from "../../../model";
+import {
+    IFormFieldValidator, ValidationResult, ValidationSeverity, FormFieldOptions
+} from "../../../model";
 import { FormService } from "../FormService";
 import { TranslationService } from "../../i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../model/components/form/configuration";
 
 export class JSONFormFieldValidator implements IFormFieldValidator {
 
     public validatorId: string = 'JSONValidator';
 
-    public isValidatorFor(formField: FormField, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
         if (formField.options) {
             const option = formField.options.find((o) => o.option === FormFieldOptions.IS_JSON);
             if (option) {
@@ -25,7 +28,7 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
         return false;
     }
 
-    public async  validate(formField: FormField, formId: string): Promise<ValidationResult> {
+    public async  validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const formFieldValue = formInstance.getFormFieldValue<string>(formField.instanceId);
 

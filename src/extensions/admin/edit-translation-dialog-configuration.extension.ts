@@ -10,11 +10,14 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { EditTranslationDialogContext } from '../../core/browser/i18n/admin/context';
 import {
-    ContextConfiguration, ConfiguredWidget, FormField,
-    SortUtil, Form, KIXObjectType, FormContext, SysConfigKey, SysConfigOption, TranslationPatternProperty
+    ContextConfiguration, KIXObjectType, FormContext,
+    TranslationPatternProperty, WidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
-import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import { ConfigurationService } from '../../core/services';
+import {
+    FormGroupConfiguration, FormFieldConfiguration, FormConfiguration, FormPageConfiguration
+} from '../../core/model/components/form/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -22,36 +25,71 @@ export class Extension implements IConfigurationExtension {
         return EditTranslationDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
 
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
+        const editDialogWidget = new WidgetConfiguration(
+            'i18n-translation-edit-dialog-widget', 'Edit Dialog Widget', ConfigurationType.Widget,
+            'edit-translation-dialog', 'Translatable#Edit Translation', [], null, null,
+            false, false, 'kix-icon-edit'
+        );
+        configurations.push(editDialogWidget);
 
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'i18n-translation-edit-dialog-widget', 'i18n-translation-edit-dialog-widget',
+                        KIXObjectType.TRANSLATION_PATTERN, ContextMode.EDIT_ADMIN
+                    )
+                ]
+            )
+        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const formId = 'i18n-translation-edit-form';
 
-        const formId = 'edit-translation-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing) {
-            const fields: FormField[] = [];
+        const configurations = [];
+        configurations.push(
+            new FormFieldConfiguration(
+                'i18n-translation-edit-form-field-pattern',
+                'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true,
+                'Translatable#Helptext_i18n_TranslationPatternCreate_Pattern'
+            )
+        );
 
-            fields.push(new FormField(
-                // tslint:disable-next-line:max-line-length
-                'Translatable#Pattern', TranslationPatternProperty.VALUE, 'text-area-input', true, 'Translatable#Helptext_i18n_TranslationPatternEdit_Pattern'
-            ));
+        configurations.push(
+            new FormGroupConfiguration(
+                'i18n-translation-edit-form-group-pattern', 'Translatable#Translations',
+                [
+                    'i18n-translation-edit-form-field-pattern'
+                ]
+            )
+        );
 
-            const group = new FormGroup('Translatable#Translations', fields);
+        configurations.push(
+            new FormPageConfiguration(
+                'i18n-translation-edit-form-page', 'Translatable#Edit Translation',
+                ['i18n-translation-edit-form-group-pattern']
+            )
+        );
 
-            const form = new Form(
-                formId, 'Translatable#Edit Translation', [group],
+        configurations.push(
+            new FormConfiguration(
+                formId, 'Translatable#Edit Translation',
+                [
+                    'i18n-translation-edit-form-page'
+                ],
                 KIXObjectType.TRANSLATION_PATTERN, true, FormContext.EDIT
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.EDIT], KIXObjectType.TRANSLATION_PATTERN, formId);
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.TRANSLATION_PATTERN, formId);
+
+        return configurations;
     }
 
 }

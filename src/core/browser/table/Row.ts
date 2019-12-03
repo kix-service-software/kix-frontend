@@ -89,7 +89,7 @@ export class Row<T = any> implements IRow<T> {
         }
 
         if (criteriaMatch) {
-            criteriaMatch = criteriaMatch && await this.checkFilterValue(filterValue);
+            criteriaMatch = await this.checkFilterValue(filterValue);
         }
 
         if (this.children && this.children.length) {

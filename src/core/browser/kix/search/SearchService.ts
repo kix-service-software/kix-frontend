@@ -8,8 +8,7 @@
  */
 
 import {
-    KIXObjectType, KIXObject, SearchFormInstance,
-    InputFieldTypes, TreeNode, KIXObjectLoadingOptions, FilterCriteria,
+    KIXObjectType, KIXObject, SearchFormInstance, KIXObjectLoadingOptions, FilterCriteria,
     FilterDataType, FilterType, CacheState, SearchCache, Bookmark, SortUtil
 } from "../../../model";
 import { SearchDefinition } from "./SearchDefinition";
@@ -18,14 +17,13 @@ import { FormService } from "../../form";
 import { IKIXObjectSearchListener } from "./IKIXObjectSearchListener";
 import { SearchResultCategory } from "./SearchResultCategory";
 import { KIXObjectService } from "../KIXObjectService";
-import { ServiceRegistry } from "../ServiceRegistry";
-import { SearchProperty } from "../../SearchProperty";
 import { ITable } from "../../table";
 import { ContextService } from "../../context";
 import { SearchContext } from "../../search/context/SearchContext";
 import { SearchSocketClient } from "./SearchSocketClient";
 import { BrowserUtil } from "../../BrowserUtil";
 import { BookmarkService } from "../../bookmark/BookmarkService";
+import { SearchProperty } from "../../SearchProperty";
 
 export class SearchService {
 
@@ -68,16 +66,6 @@ export class SearchService {
         }
     }
 
-    public async getInputComponentId(objectType: KIXObjectType, fieldId: string): Promise<string> {
-        const definition = this.getSearchDefinition(objectType);
-        let id;
-        if (definition) {
-            const components = await definition.getInputComponents();
-            id = components.get(fieldId);
-        }
-        return id;
-    }
-
     public getFormResultTable<T extends KIXObject>(objectType: KIXObjectType): ITable {
         let tableConfig;
         if (this.formTableConfigs.has(objectType)) {
@@ -86,13 +74,13 @@ export class SearchService {
         return tableConfig;
     }
 
-    public async provideResult(objects: KIXObject[] = null): Promise<void> {
+    public async provideResult(objectType: KIXObjectType, objects: KIXObject[] = null): Promise<void> {
         const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
-        if (context) {
+        if (context && this.searchCache) {
             if (objects) {
-                context.setObjectList(objects);
+                context.setObjectList(objectType, objects);
             } else {
-                context.setObjectList(this.searchCache ? this.searchCache.result : []);
+                context.setObjectList(this.searchCache.objectType, this.searchCache.result);
             }
         }
     }
@@ -116,7 +104,7 @@ export class SearchService {
                     : null;
                 this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
                 objects = await this.doSearch();
-                this.provideResult();
+                this.provideResult(objectType);
             } else {
                 const formFieldValues = formInstance.getAllFormFieldValues();
                 let criteria = [];
@@ -150,7 +138,15 @@ export class SearchService {
                     ));
                 }
 
-                const loadingOptions = new KIXObjectLoadingOptions(criteria);
+                criteria = criteria.filter((c) => {
+                    if (Array.isArray(c.value)) {
+                        return c.value.length > 0;
+                    } else {
+                        return c.value !== null && c.value !== undefined && c.value !== '';
+                    }
+                });
+
+                const loadingOptions = searchDefinition.getLoadingOptions(criteria);
                 objects = await KIXObjectService.loadObjects(objectType, null, loadingOptions, null, false);
             }
         } else {
@@ -171,6 +167,14 @@ export class SearchService {
             this.searchCache.objectType, null, loadingOptions, null, false
         );
         this.searchCache.result = objects;
+
+        const category = await this.getSearchResultCategories();
+        if (category) {
+            const ids: any = objects.map((o) => o.ObjectId);
+            category.objectIds = ids;
+            this.setActiveSearchResultExplorerCategory(category);
+        }
+
         this.listeners.forEach((l) => l.searchFinished());
         return objects;
     }
@@ -206,41 +210,6 @@ export class SearchService {
             properties = await searchDefinition.getProperties(parameter);
         }
         return properties;
-    }
-
-    public async getSearchOperations(
-        objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
-    ): Promise<SearchOperator[]> {
-        const searchDefinition = this.getSearchDefinition(objectType);
-        let operations = [];
-        if (searchDefinition) {
-            operations = await searchDefinition.getOperations(property, parameter);
-        }
-        return operations;
-    }
-
-    public async getSearchInputType(
-        objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
-    ): Promise<InputFieldTypes> {
-        const searchDefinition = this.getSearchDefinition(objectType);
-        let type = InputFieldTypes.TEXT;
-        if (searchDefinition) {
-            type = await searchDefinition.getInputFieldType(property, parameter);
-        }
-        return type;
-    }
-
-    public async getTreeNodes(
-        objectType: KIXObjectType, property: string, parameter: Array<[string, any]>
-    ): Promise<TreeNode[]> {
-        const objectService = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        let nodes = await objectService.getTreeNodes(property);
-        if (!nodes || !nodes.length) {
-            const searchDefinition = this.getSearchDefinition(objectType);
-            nodes = await searchDefinition.getTreeNodes(property, parameter);
-        }
-
-        return nodes;
     }
 
     public getSearchCache(): SearchCache<KIXObject> {
@@ -358,6 +327,7 @@ export class SearchService {
             this.searchCache = new SearchCache(
                 searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name
             );
+
             await this.doSearch();
         }
     }

@@ -35,11 +35,15 @@ export class ContextFactory {
 
     public async getContext(
         contextId: string, objectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number, reset?: boolean
+        objectId?: string | number, reset?: boolean, compareContext?: Context
     ): Promise<Context> {
         let context = this.contextInstances.find(
             (c) => this.isContext(contextId, c.getDescriptor(), objectType, contextMode)
         );
+
+        if (compareContext && (compareContext === context)) {
+            reset = false;
+        }
 
         if (!context) {
             context = await this.createContextInstance(contextId, objectType, contextMode, objectId);
@@ -55,6 +59,18 @@ export class ContextFactory {
     public getContextDescriptor(contextId: string): ContextDescriptor {
         const descriptor = this.registeredDescriptors.find((c) => c.contextId === contextId);
         return descriptor;
+    }
+
+    public getContextDescriptors(contextMode: ContextMode, objectType?: KIXObjectType): ContextDescriptor[] {
+        let descriptors = [];
+        if (contextMode && !objectType) {
+            descriptors = this.registeredDescriptors.filter((c) => c.contextMode === contextMode);
+        } else if (contextMode && objectType) {
+            descriptors = this.registeredDescriptors.filter(
+                (c) => c.contextMode === contextMode && c.kixObjectTypes.some((ot) => ot === objectType)
+            );
+        }
+        return descriptors;
     }
 
     public static async getContextForUrl(

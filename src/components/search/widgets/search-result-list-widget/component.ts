@@ -49,6 +49,13 @@ class Component implements IKIXObjectSearchListener {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            const category = SearchService.getInstance().getActiveSearchResultExplorerCategory();
+            TableFactoryService.getInstance().destroyTable(
+                `search-result-list-${category ? category.objectType : cache.objectType}`
+            );
+        }
     }
 
     public searchCleared(): void {
@@ -56,18 +63,14 @@ class Component implements IKIXObjectSearchListener {
     }
 
     public searchFinished<T extends KIXObject = KIXObject>(): void {
-        this.state.table = null;
-
-        setTimeout(() => {
-            const cache = SearchService.getInstance().getSearchCache();
-            if (cache) {
-                this.state.noSearch = false;
-                const category = SearchService.getInstance().getActiveSearchResultExplorerCategory();
-                this.initWidget(category ? category.objectType : cache.objectType, cache);
-            } else {
-                this.state.noSearch = true;
-            }
-        }, 100);
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            this.state.noSearch = false;
+            const category = SearchService.getInstance().getActiveSearchResultExplorerCategory();
+            this.initWidget(category ? category.objectType : cache.objectType, cache);
+        } else {
+            this.state.noSearch = true;
+        }
     }
 
     private async initWidget(
@@ -98,13 +101,18 @@ class Component implements IKIXObjectSearchListener {
                 emptyResultHint = 'Translatable#No search query found.';
             }
 
-            const tableConfiguration = new TableConfiguration(
-                objectType, null, null, null, true, null, null, null,
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(
+                objectType
+            );
+
+            const tableConfiguration = new TableConfiguration(null, null, null,
+                objectType, searchDefinition.getLoadingOptionsForResultList(),
+                null, null, [], true, null, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.SMALL, emptyResultHint
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `search-result-list-${objectType}`, objectType, tableConfiguration,
-                objectIds, undefined, true, true, false
+                objectIds, undefined, true, true, false, true
             );
 
             this.tableSubscriber = {
@@ -118,9 +126,6 @@ class Component implements IKIXObjectSearchListener {
                                     parameter.push([c.property, c.value]);
                                 }
                             }
-                            const searchDefinition = SearchService.getInstance().getSearchDefinition(
-                                objectType
-                            );
                             const columns = await searchDefinition.getTableColumnConfiguration(parameter);
                             table.addColumns(columns);
                         }
@@ -136,11 +141,13 @@ class Component implements IKIXObjectSearchListener {
 
             await this.prepareActions(table);
 
-            this.state.table = table;
-            EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-            EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-            this.setActionsDirty();
+            setTimeout(() => {
+                this.state.table = table;
+                EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+                EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+                EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+                this.setActionsDirty();
+            }, 50);
         } else {
             this.state.resultIcon = null;
             const titleLabel = await TranslationService.translate('Translatable#Hit List', []);
@@ -153,7 +160,7 @@ class Component implements IKIXObjectSearchListener {
     }
 
     private async prepareActions(table: ITable): Promise<void> {
-        // WidgetService.getInstance().setActionData(this.state.instanceId, table);
+        WidgetService.getInstance().setActionData(this.state.instanceId, table);
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance()
                 .generateActions(this.state.widgetConfiguration.actions, table);

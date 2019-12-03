@@ -10,13 +10,12 @@
 import { ComponentState } from './ComponentState';
 import {
     Version, KIXObjectType, ConfigItemAttachment, DateTimeUtil, LabelValueGroup,
-    KIXObjectLoadingOptions, ArticleLoadingOptions, ConfigItemProperty, VersionProperty, ConfigItem
+    KIXObjectLoadingOptions, VersionProperty, ConfigItem
 } from '../../../core/model';
 import { BrowserUtil, KIXObjectService } from '../../../core/browser';
 import { PreparedData } from '../../../core/model/kix/cmdb/PreparedData';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ConfigItemVersionLoadingOptions } from '../../../core/model/kix/cmdb/ConfigItemVersionLoadingOptions';
-import { TicketHistoryResponse } from '../../../core/api';
 
 class Component {
 
@@ -26,34 +25,37 @@ class Component {
         this.state = new ComponentState();
     }
 
-    public async onInput(input: any): Promise<void> {
+    public onInput(input: any): void {
         if (input.version) {
             this.state.version = input.version;
-            this.setVersion(this.state.version);
+            this.prepareVersion();
         } else if (input.configItem) {
-            const ci = input.configItem as ConfigItem;
-            if (ci.CurrentVersion) {
-                const versions = await KIXObjectService.loadObjects<Version>(
-                    KIXObjectType.CONFIG_ITEM_VERSION, null,
-                    new KIXObjectLoadingOptions(null, null, 1, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
-                    new ConfigItemVersionLoadingOptions(ci.ConfigItemID)
-                );
-
-                if (versions && versions.length) {
-                    this.state.version = versions[0];
-                    this.setVersion(this.state.version);
-                }
-            }
+            this.loadVersion(input.configItem);
         }
     }
 
-    public async onMount(): Promise<void> {
-        this.state.preparedData = await this.addStateData(this.state.version);
-        this.state.preparedData = this.state.preparedData.concat(this.state.version.PreparedData);
-        this.setVersion(this.state.version);
+    private async loadVersion(configItem: ConfigItem): Promise<void> {
+        const versions = await KIXObjectService.loadObjects<Version>(
+            KIXObjectType.CONFIG_ITEM_VERSION, null,
+            new KIXObjectLoadingOptions(null, null, 1, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
+            new ConfigItemVersionLoadingOptions(configItem.ConfigItemID)
+        );
+
+        if (versions && versions.length) {
+            this.state.version = versions[0];
+            this.prepareVersion();
+        }
     }
 
-    private async setVersion(version: Version): Promise<void> {
+    private async prepareVersion(): Promise<void> {
+        if (this.state.version) {
+            this.state.preparedData = await this.addStateData(this.state.version);
+            this.state.preparedData = this.state.preparedData.concat(this.state.version.PreparedData);
+            this.setVersion();
+        }
+    }
+
+    private async setVersion(): Promise<void> {
         if (this.state.version && this.state.preparedData) {
             this.state.groups = await this.prepareLabelValueGroups(this.state.preparedData);
         }

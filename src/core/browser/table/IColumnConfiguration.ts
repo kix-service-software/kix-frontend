@@ -8,8 +8,9 @@
  */
 
 import { DataType } from "../../model";
+import { IConfiguration } from "../../model/configuration";
 
-export interface IColumnConfiguration {
+export interface IColumnConfiguration extends IConfiguration {
 
     property: string;
     showText: boolean;
@@ -25,6 +26,7 @@ export interface IColumnConfiguration {
     componentId: string;
     defaultText: string;
     translatable: boolean;
-    titleTranslatable;
+    titleTranslatable: boolean;
+    useObjectServiceForFilter: boolean;
 
 }

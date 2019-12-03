@@ -13,7 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <for|sliderElement, index| of=state.sliderList>
                     <span
                         class={
-                                                activ: index === state.activeSliderIndex
+                                                active: index === state.activeSliderIndex
                                             }
                         title=state.translations[sliderElement.title]
                         on-click("showSlider", index)/>

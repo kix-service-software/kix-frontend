@@ -7,12 +7,13 @@
  * --
  */
 
-import { ContextConfiguration } from "../../core/model";
-import { IConfigurationExtension } from "../../core/extensions";
 import {
-    EditLinkedObjectsDialogContext,
-    EditLinkedObjectsDialogContextConfiguration
-} from "../../core/browser/link";
+    ContextConfiguration, WidgetConfiguration, ConfiguredDialogWidget, KIXObjectType, ContextMode
+} from "../../core/model";
+import { IConfigurationExtension } from "../../core/extensions";
+import { EditLinkedObjectsDialogContext } from "../../core/browser/link";
+import { ConfigurationType, IConfiguration } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -20,12 +21,32 @@ export class Extension implements IConfigurationExtension {
         return EditLinkedObjectsDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new EditLinkedObjectsDialogContextConfiguration();
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+
+        const widget = new WidgetConfiguration(
+            'link-objects-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-linked-objects-dialog', 'Translatable#Edit Links', [], null, null, false, false, 'kix-icon-link'
+        );
+        configurations.push(widget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'link-objects-edit-dialog-widget', 'link-objects-edit-dialog-widget',
+                        KIXObjectType.LINK, ContextMode.EDIT_LINKS
+                    )
+                ]
+            )
+        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 }
 

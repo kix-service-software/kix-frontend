@@ -11,6 +11,8 @@ export interface IUIModule {
 
     priority: number;
 
+    name: string;
+
     register(): Promise<void>;
 
     unRegister(): Promise<void>;

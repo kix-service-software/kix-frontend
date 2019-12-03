@@ -20,7 +20,7 @@ export class DialogRoutingConfiguration extends RoutingConfiguration {
         public contextMode: ContextMode,
         public objectIdProperty: string,
         public objectId?: string | number,
-        public resetContext?: boolean,
+        public resetContext: boolean = false,
         public title?: string,
         public singleTab?: boolean,
         public formId?: string,

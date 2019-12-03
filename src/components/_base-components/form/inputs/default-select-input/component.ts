@@ -7,19 +7,22 @@
  * --
  */
 
-import { FormInputComponent, TreeNode, DefaultSelectInputFormOption } from '../../../../../core/model';
+import {
+    FormInputComponent, TreeNode, DefaultSelectInputFormOption, FormInstance, TreeService
+} from '../../../../../core/model';
 import { CompontentState } from './CompontentState';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
+import { FormService } from '../../../../../core/browser';
 
 class Component extends FormInputComponent<string | number | string[] | number[], CompontentState> {
 
     public onCreate(): void {
         this.state = new CompontentState();
+        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
         super.onInput(input);
-
         this.update();
     }
 
@@ -32,50 +35,102 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.prepareList();
-        this.setCurrentNode();
-    }
 
-    private prepareList(): void {
         if (this.state.field && this.state.field.options && !!this.state.field.options) {
-            const nodesOption = this.state.field.options.find(
-                (o) => o.option === DefaultSelectInputFormOption.NODES
-            );
-            this.state.nodes = nodesOption ? nodesOption.value : [];
-
             const asMultiselectOption = this.state.field.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.MULTI
             );
             this.state.asMultiselect = asMultiselectOption && typeof asMultiselectOption.value === 'boolean'
                 ? asMultiselectOption.value : false;
         }
+        this.state.prepared = true;
     }
 
-    public setCurrentNode(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            if (Array.isArray(this.state.defaultValue.value)) {
-                this.state.selectedNodes = this.state.nodes.filter(
-                    (n) => (this.state.defaultValue.value as Array<string | number>).some((dv) => dv === n.id)
+    public async load(): Promise<TreeNode[]> {
+        let nodes = [];
+        if (this.state.field && this.state.field.options && !!this.state.field.options) {
+            const nodesOption = this.state.field.options.find(
+                (o) => o.option === DefaultSelectInputFormOption.NODES
+            );
+            nodes = nodesOption ? (nodesOption.value as TreeNode[]).map(
+                (n) => new TreeNode(
+                    n.id, n.label, n.icon, n.secondaryIcon, n.children, n.parent, n.nextNode, n.previousNode,
+                    n.properties, n.expanded, n.visible, n.expandOnClick, n.selectable, n.tooltip, n.flags,
+                    n.navigationNode, n.selected
+                )
+            ) : [];
+
+            if (this.state.field.countMax && this.state.field.countMax > 1) {
+                const uniqueOption = this.state.field.options.find(
+                    (o) => o.option === DefaultSelectInputFormOption.UNIQUE
                 );
-            } else {
-                const node = this.state.nodes.find((n) => n.id === this.state.defaultValue.value);
-                this.state.selectedNodes = node ? [node] : [];
+                const unique = uniqueOption && typeof uniqueOption.value === 'boolean' ? uniqueOption.value : true;
+                if (unique) {
+                    nodes = await this.handleUnique(nodes);
+                }
             }
-            super.provideValue(
-                this.state.selectedNodes && !!this.state.selectedNodes.length
-                    ? this.state.selectedNodes.map((sn) => sn.id) : null);
+        }
+
+        await this.setCurrentNode(nodes);
+        return nodes;
+    }
+
+    public async setCurrentNode(nodes: TreeNode[]): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const defaultValue = formInstance.getFormFieldValue<string | number | string[] | number[]>(
+            this.state.field.instanceId
+        );
+        if (defaultValue && defaultValue.value !== null) {
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            let selectedNodes = [];
+            if (treeHandler) {
+                if (Array.isArray(defaultValue.value)) {
+                    selectedNodes = nodes.filter(
+                        (n) => (defaultValue.value as Array<string | number>).some((dv) => dv === n.id)
+                    );
+                    selectedNodes.forEach((n) => n.selected = true);
+                } else {
+                    const node = nodes.find((n) => n.id === defaultValue.value);
+                    if (node) {
+                        node.selected = true;
+                        selectedNodes = [node];
+                    }
+                }
+                super.provideValue(selectedNodes && !!selectedNodes.length ? selectedNodes.map((sn) => sn.id) : null);
+                treeHandler.setSelection(selectedNodes, true, false, true);
+            }
         }
     }
 
     public valueChanged(nodes: TreeNode[]): void {
-        this.state.selectedNodes = nodes && nodes.length ? nodes : null;
-        super.provideValue(
-            this.state.selectedNodes && !!this.state.selectedNodes.length
-                ? this.state.selectedNodes.map((sn) => sn.id) : null);
+        const selectedNodes = nodes && nodes.length ? nodes : null;
+        super.provideValue(selectedNodes && !!selectedNodes.length ? selectedNodes.map((sn) => sn.id) : null);
     }
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    private async handleUnique(nodes: TreeNode[]): Promise<TreeNode[]> {
+        const formInstance = await FormService.getInstance().getFormInstance<FormInstance>(this.state.formId);
+        if (formInstance) {
+            const fieldList = await formInstance.getFields(this.state.field);
+            let usedValues = [];
+            fieldList.forEach((f) => {
+                if (f.property === this.state.field.property && f.instanceId !== this.state.field.instanceId) {
+                    const fieldValue = formInstance.getFormFieldValue(f.instanceId);
+                    if (fieldValue && fieldValue.value !== null) {
+                        if (Array.isArray(fieldValue.value)) {
+                            usedValues = [...usedValues, ...fieldValue.value];
+                        } else {
+                            usedValues.push(fieldValue.value);
+                        }
+                    }
+                }
+            });
+            nodes = nodes.filter((n) => !usedValues.some((v) => v === n.id));
+        }
+        return nodes;
     }
 }
 

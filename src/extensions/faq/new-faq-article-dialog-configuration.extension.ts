@@ -8,13 +8,21 @@
  */
 
 import {
-    ContextConfiguration, FormField, FormContext, KIXObjectType, Form, FormFieldValue
+    ContextConfiguration, FormContext, KIXObjectType,
+    FormFieldValue, KIXObjectProperty, ObjectReferenceOptions,
+    FormFieldOption, KIXObjectLoadingOptions, FilterCriteria, FilterType,
+    FilterDataType, WidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { FAQArticleProperty } from '../../core/model/kix/faq';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
+} from '../../core/model/components/form/configuration';
+import { FAQArticleProperty, FAQCategoryProperty } from '../../core/model/kix/faq';
 import { NewFAQArticleDialogContext } from '../../core/browser/faq';
 import { ConfigurationService } from '../../core/services';
+import { SearchOperator } from '../../core/browser';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -22,46 +30,170 @@ export class Extension implements IConfigurationExtension {
         return NewFAQArticleDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new ContextConfiguration(this.getModuleId());
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const widget = new WidgetConfiguration(
+            'faq-article-new-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'new-faq-article-dialog', 'Translatable#New FAQ', [], null, null,
+            false, false, 'kix-icon-new-faq'
+        );
+        configurations.push(widget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'faq-article-new-dialog-widget', 'faq-article-new-dialog-widget',
+                        KIXObjectType.FAQ_ARTICLE, ContextMode.CREATE
+                    )
+                ]
+            )
+        );
+
+        return configurations;
     }
 
-    // tslint:disable:max-line-length
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const formId = 'faq-article-new-form';
 
-        const formId = 'new-faq-article-form';
-        const existingForm = configurationService.getConfiguration(formId);
-        if (!existingForm || overwrite) {
-            const fields: FormField[] = [];
-            fields.push(new FormField('Translatable#Title', FAQArticleProperty.TITLE, null, true, 'Translatable#Helptext_FAQ_ArticleCreate_Title'));
-            fields.push(new FormField(
-                'Translatable#Category', FAQArticleProperty.CATEGORY_ID, 'faq-category-input', true, 'Translatable#Helptext_FAQ_ArticleCreate_Category')
-            );
-            fields.push(new FormField(
-                'Translatable#Language', FAQArticleProperty.LANGUAGE, 'language-input', true, 'Translatable#Helptext_FAQ_ArticleCreate_Language',
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-title',
+                'Translatable#Title', FAQArticleProperty.TITLE, null, true,
+                'Translatable#Helptext_FAQ_ArticleCreate_Title'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-category',
+                'Translatable#Category', FAQArticleProperty.CATEGORY_ID, 'object-reference-input', true,
+                'Translatable#Helptext_FAQ_ArticleCreate_Category',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    FAQCategoryProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING,
+                                    FilterType.AND, null
+                                )
+                            ],
+                            null, null,
+                            [FAQCategoryProperty.SUB_CATEGORIES],
+                            [FAQCategoryProperty.SUB_CATEGORIES]
+                        )
+                    )
+                ]
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-language',
+                'Translatable#Language', FAQArticleProperty.LANGUAGE, 'language-input', true,
+                'Translatable#Helptext_FAQ_ArticleCreate_Language',
                 null, new FormFieldValue('de')
-            ));
-            fields.push(new FormField('Translatable#Tags', FAQArticleProperty.KEYWORDS, null, false, 'Translatable#Helptext_FAQ_ArticleCreate_Tags'));
-            fields.push(new FormField('Translatable#Attachments', FAQArticleProperty.ATTACHMENTS, 'attachment-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Attachments'));
-            fields.push(new FormField(
-                'Link FAQ with', FAQArticleProperty.LINK, 'link-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Links')
-            );
-            fields.push(new FormField('Translatable#Symptom', FAQArticleProperty.FIELD_1, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Symptom'));
-            fields.push(new FormField('Translatable#Cause', FAQArticleProperty.FIELD_2, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Cause'));
-            fields.push(new FormField('Translatable#Solution', FAQArticleProperty.FIELD_3, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Solution'));
-            fields.push(new FormField('Translatable#Comment', FAQArticleProperty.FIELD_6, 'rich-text-input', false, 'Translatable#Helptext_FAQ_ArticleCreate_Comment'));
-            fields.push(new FormField(
-                'Translatable#Validity', FAQArticleProperty.VALID_ID, 'valid-input', true, 'Translatable#Helptext_FAQ_ArticleCreate_Valid',
-                null, new FormFieldValue(1)
-            ));
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-tags',
+                'Translatable#Tags', FAQArticleProperty.KEYWORDS, null, false,
+                'Translatable#Helptext_FAQ_ArticleCreate_Tags'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-attachments',
+                'Translatable#Attachments', FAQArticleProperty.ATTACHMENTS, 'attachment-input', false,
+                'Translatable#Helptext_FAQ_ArticleCreate_Attachments'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-links',
+                'Link FAQ with', FAQArticleProperty.LINK, 'link-input', false,
+                'Translatable#Helptext_FAQ_ArticleCreate_Links'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-symptom',
+                'Translatable#Symptom', FAQArticleProperty.FIELD_1, 'rich-text-input', false,
+                'Translatable#Helptext_FAQ_ArticleCreate_Symptom'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-cause',
+                'Translatable#Cause', FAQArticleProperty.FIELD_2, 'rich-text-input', false,
+                'Translatable#Helptext_FAQ_ArticleCreate_Cause'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-solution',
+                'Translatable#Solution', FAQArticleProperty.FIELD_3, 'rich-text-input', false,
+                'Translatable#Helptext_FAQ_ArticleCreate_Solution'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-comment',
+                'Translatable#Comment', FAQArticleProperty.FIELD_6, 'rich-text-input', false,
+                'Translatable#Helptext_FAQ_ArticleCreate_Comment'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'faq-article-new-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_FAQ_ArticleCreate_Valid',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ],
+                new FormFieldValue(1)
+            )
+        );
 
-            const group = new FormGroup('Translatable#FAQ Data', fields);
+        configurations.push(
+            new FormGroupConfiguration(
+                'faq-article-new-form-group-data', 'Translatable#FAQ Data',
+                [
+                    'faq-article-new-form-field-title',
+                    'faq-article-new-form-field-category',
+                    'faq-article-new-form-field-language',
+                    'faq-article-new-form-field-tags',
+                    'faq-article-new-form-field-attachments',
+                    'faq-article-new-form-field-links',
+                    'faq-article-new-form-field-symptom',
+                    'faq-article-new-form-field-cause',
+                    'faq-article-new-form-field-solution',
+                    'faq-article-new-form-field-comment',
+                    'faq-article-new-form-field-valid'
+                ]
+            )
+        );
 
-            const form = new Form(formId, 'Translatable#New FAQ', [group], KIXObjectType.FAQ_ARTICLE);
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.FAQ_ARTICLE, formId);
+        configurations.push(
+            new FormPageConfiguration(
+                'faq-article-new-form-page', 'Translatable#New FAQ',
+                ['faq-article-new-form-group-data']
+            )
+        );
+
+        configurations.push(
+            new FormConfiguration(
+                formId, 'Translatable#New FAQ',
+                ['faq-article-new-form-page'],
+                KIXObjectType.FAQ_ARTICLE
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.FAQ_ARTICLE, formId);
+        return configurations;
     }
 
 }

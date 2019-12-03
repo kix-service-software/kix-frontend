@@ -19,6 +19,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected listeners: Map<string, () => void> = new Map();
 
+    public uniqueProperties: boolean = true;
+
     public abstract async getProperties(): Promise<Array<[string, string]>>;
 
     public registerListener(listenerId: string, callback: () => void): void {
@@ -38,11 +40,14 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public init(): void {
-        this.reset();
+        return;
     }
 
-    public reset(): void {
+    public reset(notify: boolean = true): void {
         this.values = [];
+        if (notify) {
+            this.notifyListeners();
+        }
     }
 
     public hasDefinedValues(): boolean {
@@ -104,12 +109,13 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return [];
     }
 
-    public async getPropertiesPlaceholder(): Promise<string> {
-        return '';
+    public async isHiddenProperty(property: string): Promise<boolean> {
+        return false;
     }
 
-    public async propertiesAreUnique(): Promise<boolean> {
-        return true;
+
+    public async getPropertiesPlaceholder(): Promise<string> {
+        return '';
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
@@ -132,7 +138,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return;
     }
 
-    public getOperatorDisplayText(operator: string): string {
+    public async getOperatorDisplayText(operator: string): Promise<string> {
         return operator;
     }
 
@@ -154,6 +160,23 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public validate(): Promise<void> {
         return;
+    }
+
+    public async shouldAddEmptyField(): Promise<boolean> {
+        let addEmpty: boolean = false;
+        if (this.uniqueProperties) {
+            const properties = await this.getProperties();
+            let visiblePropertiesCount = 0;
+            for (const p of properties) {
+                if (!await this.isHiddenProperty(p[0])) {
+                    visiblePropertiesCount++;
+                }
+            }
+            addEmpty = this.values.length < visiblePropertiesCount;
+        } else {
+            addEmpty = true;
+        }
+        return addEmpty;
     }
 
 }

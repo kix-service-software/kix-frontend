@@ -53,8 +53,8 @@ export class FAQCategoryTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.FAQ_CATEGORY, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.FAQ_CATEGORY, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -76,13 +76,13 @@ export class FAQCategoryTableFactory extends TableFactory {
         let config;
         switch (property) {
             case FAQCategoryProperty.NAME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 200, true, true,
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
             case FAQCategoryProperty.COMMENT:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 275, true, true, false,
                     DataType.STRING, true, undefined, null, false
                 );

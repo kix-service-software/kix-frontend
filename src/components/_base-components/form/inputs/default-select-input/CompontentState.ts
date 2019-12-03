@@ -8,12 +8,14 @@
  */
 
 import { FormInputComponentState, TreeNode } from '../../../../../core/model';
+import { IdService } from '../../../../../core/browser';
 
 export class CompontentState extends FormInputComponentState<string | number | string[] | number[]> {
 
     public constructor(
-        public nodes: TreeNode[] = [],
-        public selectedNodes: TreeNode[] = null,
+        public treeId: string = IdService.generateDateBasedId('default-select-input-'),
+        public prepared: boolean = false,
+        public loadNodes: () => Promise<TreeNode[]> = null,
         public asMultiselect: boolean = false,
         public placeholder: string = ''
     ) {

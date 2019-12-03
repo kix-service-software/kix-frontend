@@ -13,7 +13,7 @@ import { ITable } from "../../../../core/browser";
 export class ComponentState {
 
     public constructor(
-        public instanceId: string = 'search-result-list-widget',
+        public instanceId: string = 'search-dashboard-result-list-widget',
         public widgetConfiguration: WidgetConfiguration = null,
         public resultTitle: string = "Translatable#Hit List",
         public resultIcon: string | ObjectIcon = null,

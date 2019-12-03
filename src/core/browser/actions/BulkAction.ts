@@ -15,6 +15,7 @@ import { EventService, IEventSubscriber } from '../event';
 import { IdService } from '../IdService';
 import { ITable } from '../table';
 import { DialogEvents, DialogEventData } from '../components/dialog';
+import { TicketContext } from '../ticket';
 
 export class BulkAction extends AbstractAction<ITable> implements IEventSubscriber {
 
@@ -39,7 +40,7 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         return canRun;
     }
 
-    public canShow(): boolean {
+    public async canShow(): Promise<boolean> {
         return BulkService.getInstance().hasBulkManager(this.data.getObjectType());
     }
 
@@ -62,7 +63,7 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
         );
 
         if (context) {
-            context.setObjectList(selectedObjects);
+            context.setObjectList(this.objectType, selectedObjects);
         }
 
         context.setDialogSubscriberId(this.eventSubscriberId);
@@ -88,7 +89,14 @@ export class BulkAction extends AbstractAction<ITable> implements IEventSubscrib
 
             const bulkManager = BulkService.getInstance().getBulkManager(this.objectType);
             if (bulkManager && bulkManager.getBulkRunState()) {
-                await this.data.reload();
+                const tableConstextId = this.data.getContextId();
+                const context = tableConstextId ? await ContextService.getInstance().getContext(tableConstextId) : null;
+
+                if (context) {
+                    await context.reloadObjectList(this.data.getObjectType());
+                } else {
+                    await this.data.reload();
+                }
                 if (selectedObjects && selectedObjects.length) {
                     selectedObjects.forEach((o) => this.data.selectRowByObject(o));
                 }

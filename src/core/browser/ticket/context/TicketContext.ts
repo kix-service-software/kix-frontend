@@ -9,7 +9,7 @@
 
 import {
     KIXObjectType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType,
-    FilterType, TicketProperty, KIXObject
+    FilterType, TicketProperty
 } from "../../../model";
 import { Context } from '../../../model/components/context/Context';
 import { KIXObjectService } from "../../kix";
@@ -33,8 +33,15 @@ export class TicketContext extends Context {
     }
 
     public async setQueue(queueId: number): Promise<void> {
-        this.queueId = queueId;
-        await this.loadTickets();
+        if (queueId) {
+            if (queueId !== this.queueId) {
+                this.queueId = queueId;
+                await this.loadTickets();
+            }
+        } else if (this.queueId || typeof this.queueId === 'undefined' ) {
+            this.queueId = null;
+            await this.loadTickets();
+        }
     }
 
     private async loadTickets(): Promise<void> {
@@ -68,21 +75,21 @@ export class TicketContext extends Context {
 
         window.clearTimeout(timeout);
 
-        this.setObjectList(tickets);
+        this.setObjectList(KIXObjectType.TICKET, tickets);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-    }
-
-    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
-        if (reload) {
-            await this.loadTickets();
-        }
-        return await super.getObjectList();
     }
 
     public reset(): void {
         super.reset();
         this.queueId = null;
+        this.loadTickets();
+    }
+
+    public async reloadObjectList(objectType: KIXObjectType): Promise<void> {
+        if (objectType === KIXObjectType.TICKET) {
+            this.loadTickets();
+        }
     }
 
 }

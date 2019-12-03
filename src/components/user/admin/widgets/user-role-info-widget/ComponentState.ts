@@ -10,7 +10,7 @@
 import { WidgetComponentState, AbstractAction, Role } from "../../../../../core/model";
 import { RoleLabelProvider } from "../../../../../core/browser/user";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public labelProvider: RoleLabelProvider = null,

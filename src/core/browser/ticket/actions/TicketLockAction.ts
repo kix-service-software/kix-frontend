@@ -17,6 +17,7 @@ import { BrowserUtil } from '../../BrowserUtil';
 import { ApplicationEvent } from '../../application/ApplicationEvent';
 import { UIComponentPermission } from '../../../model/UIComponentPermission';
 import { CacheService } from '../../cache';
+import { AgentService } from '../../application/AgentService';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
 
@@ -39,6 +40,10 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         this.text = ticket.LockID === 1 ? 'Translatable#Lock' : 'Translatable#Unlock';
         this.icon = ticket.LockID === 1 ? 'kix-icon-lock-close' : 'kix-icon-lock-open';
         this.currentLockId = ticket.LockID;
+    }
+
+    public async canShow(): Promise<boolean> {
+        return this.data && this.data.OwnerID !== 1;
     }
 
     public async run(): Promise<void> {

@@ -12,6 +12,7 @@ import { ConfiguredWidget, Context, ContextType } from '../../../core/model/';
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../core/browser';
 import { KIXModulesService } from '../../../core/browser/modules';
+import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 
 class Component {
 
@@ -53,12 +54,13 @@ class Component {
             if (this.state.explorer.length) {
                 context.registerListener(this.contextListernerId, {
                     sidebarToggled: () => { return; },
-                    explorerBarToggled: () => {
+                    explorerBarToggled: async () => {
                         const activeContext = ContextService.getInstance().getActiveContext();
                         const structur = activeContext.getAdditionalInformation('STRUCTURE');
                         const explorerStructur = structur ? [...structur] : [];
                         if (explorerStructur && !!explorerStructur.length) {
-                            this.state.explorerStructurStringLastElement = explorerStructur.pop();
+                            this.state.explorerStructurStringLastElement = await TranslationService.translate(
+                                explorerStructur.pop());
                             this.state.explorerStructurString = !!explorerStructur.length ?
                                 explorerStructur.join(' | ') + ' | ' : '';
                         }
@@ -67,7 +69,8 @@ class Component {
                     objectChanged: () => { return; },
                     objectListChanged: () => { return; },
                     filteredObjectListChanged: () => { return; },
-                    scrollInformationChanged: () => { return; }
+                    scrollInformationChanged: () => { return; },
+                    additionalInformationChanged: () => { return; }
                 });
             }
             (this as any).setStateDirty('explorer');

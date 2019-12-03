@@ -8,19 +8,20 @@
  */
 
 import { ConfiguredWidget } from "./ConfiguredWidget";
-import { WidgetConfiguration } from "./WidgetConfiguration";
 import { KIXObjectType } from "../../kix";
 import { ContextMode } from "../context";
+import { UIComponentPermission } from "../../UIComponentPermission";
 
-export class ConfiguredDialogWidget<T = any> extends ConfiguredWidget<T> {
+export class ConfiguredDialogWidget extends ConfiguredWidget {
 
     public constructor(
         instanceId: string,
-        configuration: WidgetConfiguration<T>,
+        configurationId: string,
         public kixObjectType: KIXObjectType,
-        public contextMode: ContextMode
+        public contextMode: ContextMode,
+        public permissions: UIComponentPermission[] = []
     ) {
-        super(instanceId, configuration);
+        super(instanceId, configurationId);
     }
 
 }

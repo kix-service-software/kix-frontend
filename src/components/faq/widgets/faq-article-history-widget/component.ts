@@ -40,11 +40,16 @@ class Component {
                 if (type === KIXObjectType.FAQ_ARTICLE) {
                     this.initWidget(faqArticle);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(await context.getObject<FAQArticle>());
 
+    }
+
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('faq-article-history');
     }
 
     private async initWidget(faqArticle: FAQArticle): Promise<void> {

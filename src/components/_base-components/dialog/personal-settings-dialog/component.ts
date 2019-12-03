@@ -10,15 +10,17 @@
 import { ComponentState } from './ComponentState';
 import { FormService, OverlayService, BrowserUtil } from '../../../../core/browser';
 import {
-    KIXObjectType, FormField, FormFieldValue, PersonalSetting, Form, FormContext,
-    ValidationSeverity, OverlayType, ComponentContent, ValidationResult, Error
+    KIXObjectType, PersonalSetting, FormContext,
+    ValidationSeverity, OverlayType, ComponentContent, ValidationResult, Error, FormFieldValue
 } from '../../../../core/model';
-import { FormGroup } from '../../../../core/model/components/form/FormGroup';
 import { ApplicationEvent } from '../../../../core/browser/application';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { EventService } from '../../../../core/browser/event';
 import { AgentService } from '../../../../core/browser/application/AgentService';
+import {
+    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration, FormPageConfiguration
+} from '../../../../core/model/components/form/configuration';
 
 
 class Component {
@@ -47,28 +49,34 @@ class Component {
         }
     }
 
-    private async prepareForm(): Promise<Form> {
+    private async prepareForm(): Promise<FormConfiguration> {
         const personalSettings: PersonalSetting[] = await AgentService.getInstance().getPersonalSettings();
 
-        const formGroups: FormGroup[] = [];
+        const formGroups: FormGroupConfiguration[] = [];
         personalSettings.forEach((ps) => {
             const group = formGroups.find((g) => g.name === ps.group);
-            const formField = new FormField(
+            const formField = new FormFieldConfiguration(
+                ps.property,
                 ps.label, ps.property, ps.inputComponent, !!ps.required, ps.hint,
                 ps.options, new FormFieldValue(ps.defaultValue)
             );
             if (group) {
                 group.formFields.push(formField);
             } else {
-                formGroups.push(new FormGroup(ps.group, [formField]));
+                formGroups.push(new FormGroupConfiguration(ps.property, ps.group, [], null, [formField]));
             }
         });
 
         const formName = await TranslationService.translate('Translatable#Personal Settings');
-        return new Form(
+        return new FormConfiguration(
             'personal-settings', formName,
-            formGroups, KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT,
-            null, null, true
+            [], KIXObjectType.PERSONAL_SETTINGS, true, FormContext.EDIT, null,
+            [
+                new FormPageConfiguration(
+                    'personal-settings-form-page', 'Translatable#Personal Settings',
+                    [], null, true, formGroups
+                )
+            ]
         );
     }
 

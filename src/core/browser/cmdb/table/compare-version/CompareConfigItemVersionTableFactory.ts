@@ -41,23 +41,17 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
     ): TableConfiguration {
         const columns = tableConfiguration
             ? tableConfiguration.tableColumns
-            : [new DefaultColumnConfiguration(
+            : [new DefaultColumnConfiguration(null, null, null,
                 'CONFIG_ITEM_ATTRIBUTE', true, false, true, false, 250, false, false, false, DataType.STRING, true,
                 'multiline-cell'
             )];
 
-        tableConfiguration = new TableConfiguration(
-            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns,  false, false, null, null,
+        tableConfiguration = new TableConfiguration(null, null, null,
+            KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, null, null, columns, [], false, false, null, null,
             TableHeaderHeight.LARGE, TableRowHeight.LARGE, null, null, true
         );
         tableConfiguration.displayLimit = 18;
 
         return tableConfiguration;
     }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
-    }
-
 }

@@ -7,15 +7,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <if(state.field)>
-    <textarea.input-style
-        rows=5
-        cols=50
-        class={
-                invalid: state.invalid
-            }
-        maxlength=state.field.maxLength
-        placeholder=state.placeholder
-        readonly=state.field.readonly
-        on-blur("focusLost")
-        on-change("valueChanged")>${state.currentValue}</textarea>
+  <textarea.input-style rows=5 cols=50 class={
+    invalid: state.invalid
+  } maxlength=state.field.maxLength placeholder=state.placeholder readonly=state.field.readonly on-blur("focusLost") on-change("valueChanged")>${state.currentValue}</textarea>
 </if>

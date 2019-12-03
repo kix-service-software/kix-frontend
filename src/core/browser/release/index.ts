@@ -9,4 +9,4 @@
 
 export { ReleaseContext } from './ReleaseContext';
 export { SliderContent } from './SliderContent';
-export { SliderWidgetSettings } from './SliderWidgetSettings';
+export { SliderWidgetConfiguration } from './SliderWidgetConfiguration';

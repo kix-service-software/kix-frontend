@@ -7,13 +7,15 @@
  * --
  */
 
-import { KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context } from "../../../../core/model";
+import {
+    KIXObjectType, WidgetType, KIXObjectLoadingOptions, ObjectIcon, Context, Attachment
+} from "../../../../core/model";
 import {
     ContextService, ActionFactory, WidgetService, BrowserUtil, IdService, KIXObjectService, LabelService
 } from "../../../../core/browser";
 import { ComponentState } from './ComponentState';
 import {
-    FAQArticle, Attachment, FAQArticleAttachmentLoadingOptions, FAQArticleProperty
+    FAQArticle, FAQArticleAttachmentLoadingOptions, FAQArticleProperty
 } from "../../../../core/model/kix/faq";
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 import { FAQDetailsContext } from "../../../../core/browser/faq/context/FAQDetailsContext";
@@ -60,7 +62,8 @@ class Component {
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; }
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(context, await context.getObject<FAQArticle>());

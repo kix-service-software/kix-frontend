@@ -50,7 +50,8 @@ class Component {
             explorerBarToggled: () => { return; },
             objectListChanged: () => { return; },
             scrollInformationChanged: () => { return; },
-            filteredObjectListChanged: () => { return; }
+            filteredObjectListChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(context, await context.getObject<ConfigItem>());

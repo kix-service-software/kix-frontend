@@ -9,11 +9,9 @@
 
 import { Context } from "../../../model/components/context/Context";
 import {
-    ContextDescriptor, ContextConfiguration, KIXObject, KIXObjectType, KIXObjectLoadingOptions,
-    VersionProperty, ContextMode, ConfigItemClass, ConfigItem, ConfigItemClassProperty
+    ContextDescriptor, ContextConfiguration, KIXObject, KIXObjectType, KIXObjectLoadingOptions, VersionProperty
 } from "../../../model";
 import { KIXObjectService } from "../../kix";
-import { ConfigItemFormFactory } from "../ConfigItemFormFactory";
 
 export class EditConfigItemDialogContext extends Context {
 
@@ -43,27 +41,6 @@ export class EditConfigItemDialogContext extends Context {
             object = objects && objects.length ? objects[0] : null;
         }
         return object;
-    }
-
-    public async getFormId(
-        contextMode: ContextMode, objectType: KIXObjectType, objectId: string | number
-    ): Promise<string> {
-        let formId: string;
-        const configItems = await KIXObjectService.loadObjects<ConfigItem>(KIXObjectType.CONFIG_ITEM, [objectId]);
-        if (configItems && configItems.length) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, [ConfigItemClassProperty.CURRENT_DEFINITION]
-            );
-            const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-                KIXObjectType.CONFIG_ITEM_CLASS, [configItems[0].ClassID], loadingOptions
-            );
-
-            if (ciClasses && ciClasses.length) {
-                formId = ConfigItemFormFactory.getInstance().getFormId(ciClasses[0], true);
-            }
-        }
-
-        return formId;
     }
 
 }

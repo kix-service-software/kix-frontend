@@ -39,7 +39,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.FAQ_CATEGORY) {
                     this.initWidget(faqCategory);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 

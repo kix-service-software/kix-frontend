@@ -7,10 +7,10 @@
  * --
  */
 
-import { SliderContent, SliderWidgetSettings } from "../../../../core/browser/release";
+import { SliderContent, SliderWidgetConfiguration } from "../../../../core/browser/release";
 import { WidgetComponentState } from "../../../../core/model";
 
-export class ComponentState extends WidgetComponentState<SliderWidgetSettings> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public sliderList: SliderContent[] = [],

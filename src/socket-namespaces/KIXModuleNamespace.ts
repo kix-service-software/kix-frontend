@@ -9,15 +9,21 @@
 
 import { SocketNameSpace } from './SocketNameSpace';
 import { Socket } from 'socket.io';
-import { SocketResponse, AppUtil, SocketErrorResponse } from '../core/common';
+import { SocketResponse, SocketErrorResponse } from '../core/common';
 import {
     KIXModulesEvent, LoadKIXModulesRequest, LoadKIXModulesResponse,
     LoadFormConfigurationsRequest, LoadFormConfigurationsResponse,
     ISocketRequest, LoadReleaseInfoResponse, LoadObjectDefinitionsResponse, SocketEvent
 } from '../core/model';
 import { KIXExtensions, IKIXModuleExtension, KIXModuleFactory } from '../core/extensions';
-import { PluginService } from '../services';
-import { ConfigurationService, ObjectDefinitionService } from '../core/services';
+import { PluginService, ModuleConfigurationService } from '../services';
+import { ConfigurationService, ObjectDefinitionService, LoggingService } from '../core/services';
+import { ConfigurationType } from '../core/model/configuration';
+import { FormConfiguration } from '../core/model/components/form/configuration';
+import { FormConfigurationResolver } from '../services/configuration/FormConfigurationResolver';
+import { Server } from '../Server';
+import { LoadFormConfigurationRequest } from '../core/model/socket/application/LoadFormConfigurationRequest';
+import { LoadFormConfigurationResponse } from '../core/model/socket/application/LoadFormConfigurationResponse';
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
@@ -43,6 +49,9 @@ export class KIXModuleNamespace extends SocketNameSpace {
 
         this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATIONS,
             this.loadFormConfigurations.bind(this));
+
+        this.registerEventHandler(client, KIXModulesEvent.LOAD_FORM_CONFIGURATION,
+            this.loadFormConfiguration.bind(this));
 
         this.registerEventHandler(client, KIXModulesEvent.LOAD_RELEASE_INFO,
             this.loadReleaseInfo.bind(this));
@@ -74,23 +83,34 @@ export class KIXModuleNamespace extends SocketNameSpace {
     private async loadFormConfigurations(
         data: LoadFormConfigurationsRequest
     ): Promise<SocketResponse> {
-        const response = await AppUtil.updateFormConfigurations()
-            .then(() => {
-                const forms = ConfigurationService.getInstance().getRegisteredForms();
-                const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
-                return new SocketResponse(
-                    KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
-                    new LoadFormConfigurationsResponse(data.requestId, forms, formIdsWithContext)
-                );
-            })
-            .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+        const formIdsWithContext = ConfigurationService.getInstance().getFormIDsWithContext();
+        return new SocketResponse(
+            KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
+            new LoadFormConfigurationsResponse(data.requestId, formIdsWithContext)
+        );
+    }
 
-        return response;
+    private async loadFormConfiguration(
+        data: LoadFormConfigurationRequest
+    ): Promise<SocketResponse> {
+        const form = await ModuleConfigurationService.getInstance().loadConfiguration<FormConfiguration>(
+            data.token, data.formId
+        );
 
+        await FormConfigurationResolver.resolve(data.token, form)
+            .catch((error) => {
+                LoggingService.getInstance().error(error);
+                LoggingService.getInstance().warning('Could not resolve form configuration ' + form.id);
+            });
+
+        return new SocketResponse(
+            KIXModulesEvent.LOAD_FORM_CONFIGURATION_FINISHED,
+            new LoadFormConfigurationResponse(data.requestId, form)
+        );
     }
 
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {
-        const releaseInfo = ConfigurationService.getInstance().getConfiguration('release-info');
+        const releaseInfo = await Server.getInstance().getReleaseInformation();
         return new SocketResponse(
             KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, new LoadReleaseInfoResponse(data.requestId, releaseInfo)
         );

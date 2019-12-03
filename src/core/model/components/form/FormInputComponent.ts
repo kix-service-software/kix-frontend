@@ -56,9 +56,9 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         FormService.getInstance().removeFormInstanceListener(this.state.formId, this.inputComponentFormListenerId);
     }
 
-    protected async provideValue(value: T): Promise<void> {
+    protected async provideValue(value: T, silent?: boolean): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.provideFormFieldValue<any>(this.state.field.instanceId, value);
+        formInstance.provideFormFieldValue<any>(this.state.field.instanceId, value, silent);
     }
 
     protected async setInvalidState(): Promise<void> {

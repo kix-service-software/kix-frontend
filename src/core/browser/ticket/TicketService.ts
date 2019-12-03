@@ -84,10 +84,11 @@ export class TicketService extends KIXObjectService<Ticket> {
         return await TicketParameterUtil.getPredefinedParameter(forUpdate);
     }
 
-    protected async prepareDependendValues(
+    protected async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
-    ): Promise<void> {
+    ): Promise<Array<[string, any]>> {
         await this.addQueueSignature(parameter, createOptions);
+        return parameter;
     }
 
     private async addQueueSignature(
@@ -153,7 +154,8 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, invalidClickable?: boolean,
+        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
@@ -163,7 +165,8 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
                 nodes = await QueueService.getInstance().prepareObjectTree(
-                    queuesHierarchy, showInvalid, filterIds ? filterIds.map((fid) => Number(fid)) : null
+                    queuesHierarchy, showInvalid, invalidClickable,
+                    filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
             case TicketProperty.SERVICE_ID:
@@ -211,7 +214,7 @@ export class TicketService extends KIXObjectService<Ticket> {
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
                 let users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null, null, null, true
+                    KIXObjectType.USER, null, loadingOptions, null, true
                 ).catch((error) => [] as User[]);
                 if (!showInvalid) {
                     users = users.filter((s) => s.ValidID === 1);
@@ -235,7 +238,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(3, 'external'));
                 break;
             default:
-                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
 
         return nodes;

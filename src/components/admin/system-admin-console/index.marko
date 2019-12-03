@@ -11,9 +11,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.console>
             <div.console-command>
                 <form-list
-                    nodes=state.commands
+                    loadNodes=state.loadNodes
                     placeholder="Translatable#Choose a command"
-                    selectedNodes=state.currentCommands
                     readonly=state.run
                     on-nodesChanged("commandChanged")/>
                 <button.button.button-without-text

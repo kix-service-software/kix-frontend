@@ -1,0 +1,35 @@
+{
+    "name": "kix-automation",
+    "extensions": {
+        "kix:configuration": {
+            "new-notification-dialog-configuration": {
+                "module": "new-notification-dialog-configuration.extension"
+            },
+            "notification-details-configuration": {
+                "module": "notification-details-configuration.extension"
+            },
+            "edit-notification-dialog-configuration": {
+                "module": "edit-notification-dialog-configuration.extension"
+            },
+            "new-job-dialog-configuration": {
+                "module": "new-job-dialog-configuration.extension"
+            },
+            "job-details-configuration": {
+                "module": "job-details-configuration.extension"
+            },
+            "edit-job-dialog-configuration": {
+                "module": "edit-job-dialog-configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "automation-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "automation-admin": {
+                "module": "admin-module.extension"
+            }
+        }
+    }
+}

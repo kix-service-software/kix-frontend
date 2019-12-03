@@ -84,7 +84,7 @@ class OverlayComponent {
             document.addEventListener("click", this.clickListener, false);
         }
 
-        setTimeout(() => {
+        setTimeout(async () => {
             this.state.title = title;
             this.state.icon = this.getWidgetIcon(type);
             this.state.content = content;
@@ -110,7 +110,7 @@ class OverlayComponent {
                 if (type && type === OverlayType.SUCCESS_TOAST) {
                     const toastContent = this.state.content.getComponentData() as ToastContent;
                     if (toastContent && typeof toastContent.title === 'undefined') {
-                        toastContent.title = 'Translatable#Success!';
+                        toastContent.title = await TranslationService.translate('Translatable#Success!');
                     }
                 }
                 this.toastTimeout = setTimeout(() => {

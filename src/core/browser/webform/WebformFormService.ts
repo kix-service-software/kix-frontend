@@ -10,12 +10,13 @@
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
 import { Webform, WebformProperty } from "../../model/webform";
 import {
-    KIXObjectType, FormFieldValue, Form, SysConfigOption, SysConfigKey, FormContext, Queue,
+    KIXObjectType, FormFieldValue, SysConfigOption, SysConfigKey, FormContext, Queue,
     KIXObjectLoadingOptions, FilterCriteria, QueueProperty, FilterDataType, FilterType, TicketPriority,
     TicketPriorityProperty, TicketType, TicketTypeProperty, TicketState, TicketStateProperty, User, UserProperty
 } from "../../model";
 import { KIXObjectService } from "../kix";
 import { SearchOperator } from "../SearchOperator";
+import { FormConfiguration } from "../../model/components/form/configuration";
 
 export class WebformFormService extends KIXObjectFormService<Webform> {
 
@@ -37,31 +38,38 @@ export class WebformFormService extends KIXObjectFormService<Webform> {
         return kixObjectType === KIXObjectType.WEBFORM;
     }
 
-    protected async doAdditionalPreparations(
-        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
     ): Promise<void> {
         const hasConfigPermissions = await this.checkPermissions('system/config');
-        if (form && hasConfigPermissions && form.formContext === FormContext.NEW) {
-            for (const g of form.groups) {
-                for (const f of g.formFields) {
-                    let value;
-                    switch (f.property) {
-                        case WebformProperty.QUEUE_ID:
-                            value = await this.getDefaultQueueID();
-                            break;
-                        case WebformProperty.PRIORITY_ID:
-                            value = await this.getDefaultPriorityID();
-                            break;
-                        case WebformProperty.TYPE_ID:
-                            value = await this.getDefaultTypeID();
-                            break;
-                        case WebformProperty.STATE_ID:
-                            value = await this.getDefaultStateID();
-                            break;
-                        default:
-                    }
-                    if (value) {
-                        formFieldValues.set(f.instanceId, new FormFieldValue(value));
+        if (form) {
+            for (const p of form.pages) {
+                for (const g of p.groups) {
+                    for (const f of g.formFields) {
+                        if (hasConfigPermissions && form.formContext === FormContext.NEW) {
+                            let value;
+                            switch (f.property) {
+                                case WebformProperty.QUEUE_ID:
+                                    value = await this.getDefaultQueueID();
+                                    break;
+                                case WebformProperty.PRIORITY_ID:
+                                    value = await this.getDefaultPriorityID();
+                                    break;
+                                case WebformProperty.TYPE_ID:
+                                    value = await this.getDefaultTypeID();
+                                    break;
+                                case WebformProperty.STATE_ID:
+                                    value = await this.getDefaultStateID();
+                                    break;
+                                default:
+                            }
+                            if (value) {
+                                formFieldValues.set(f.instanceId, new FormFieldValue(value));
+                            }
+                        }
+                        if (form.formContext === FormContext.EDIT && f.property === WebformProperty.USER_PASSWORD) {
+                            formFieldValues.set(f.instanceId, new FormFieldValue('--NOT_CHANGED--'));
+                        }
                     }
                 }
             }

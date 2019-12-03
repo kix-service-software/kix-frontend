@@ -42,10 +42,15 @@ class Component {
                 if (type === KIXObjectType.CONFIG_ITEM) {
                     this.initWidget(configItem);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(await context.getObject<ConfigItem>());
+    }
+
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('config-item-history');
     }
 
     private async initWidget(configItem: ConfigItem): Promise<void> {

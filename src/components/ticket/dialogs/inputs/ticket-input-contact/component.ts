@@ -32,6 +32,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.setCurrentNode.bind(this);
     }
 
     public onInput(input: any): void {
@@ -67,8 +68,6 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         }
 
         this.state.actions = actions;
-
-        this.setCurrentNode();
     }
 
     private async actionClicked(action: FormInputAction): Promise<void> {
@@ -86,7 +85,8 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         }
     }
 
-    public async setCurrentNode(): Promise<void> {
+    public async setCurrentNode(): Promise<TreeNode[]> {
+        let nodes = [];
         const newTicketDialogContext = await ContextService.getInstance().getContext<NewTicketDialogContext>(
             NewTicketDialogContext.CONTEXT_ID
         );
@@ -95,29 +95,47 @@ class Component extends FormInputComponent<number | string, ComponentState> {
             contactId = newTicketDialogContext.getAdditionalInformation(`${KIXObjectType.CONTACT}-ID`);
         }
 
-        if (contactId || (this.state.defaultValue && this.state.defaultValue.value)) {
-            contactId = contactId || this.state.defaultValue.value;
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+
+        if (contactId || (defaultValue && defaultValue.value)) {
+            contactId = contactId || defaultValue.value;
             if (!isNaN(Number(contactId))) {
-                this.setContact(Number(contactId));
+                const currentNode = await this.getContactNode(Number(contactId));
+                if (currentNode) {
+                    nodes.push(currentNode);
+                    currentNode.selected = true;
+                }
             } else {
-                this.state.currentNode = new TreeNode(contactId, contactId.toString(), 'kix-icon-man-bubble');
-                this.state.nodes = [this.state.currentNode];
+                const currentNode = new TreeNode(contactId, contactId.toString(), 'kix-icon-man-bubble');
+                currentNode.selected = true;
+                nodes = [currentNode];
             }
             super.provideValue(contactId);
         }
+        return nodes;
     }
 
-    public async contactChanged(nodes: TreeNode[]): Promise<void> {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        let contactId = this.state.currentNode ? this.state.currentNode.id : null;
+    public async nodesChanged(nodes: TreeNode[]): Promise<void> {
+        const currentNode = nodes && nodes.length ? nodes[0] : null;
+        let contactId = currentNode ? currentNode.id : null;
         if (contactId) {
-            if (!isNaN(contactId)) {
-                await this.setContact(contactId);
-            } else {
+            if (isNaN(contactId)) {
                 contactId = await this.handleUnknownContactId(contactId);
             }
         }
         super.provideValue(contactId);
+    }
+
+    private async getContactNode(contactId: number): Promise<TreeNode> {
+        const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId]);
+        if (contacts && contacts.length) {
+            const contact = contacts[0];
+            const node = await this.createTreeNode(contact);
+            return node;
+        }
+
+        return null;
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
@@ -127,31 +145,19 @@ class Component extends FormInputComponent<number | string, ComponentState> {
             KIXObjectType.CONTACT, null, loadingOptions, null, true
         );
 
-        this.state.nodes = [];
+        const nodes = [];
         if (searchValue && searchValue !== '') {
-            const nodes = [];
             for (const c of this.contacts) {
                 const node = await this.createTreeNode(c);
                 nodes.push(node);
             }
-            this.state.nodes = nodes;
         }
 
-        return this.state.nodes;
+        return nodes;
     }
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
-    }
-
-    private async setContact(contactId: number): Promise<void> {
-        const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, [contactId]);
-        if (contacts && contacts.length) {
-            const contact = contacts[0];
-            this.state.currentNode = await this.createTreeNode(contact);
-            this.state.nodes = [this.state.currentNode];
-            contactId = contact.ID;
-        }
     }
 
     private async handleUnknownContactId(contactId: number | string): Promise<string | number> {
@@ -167,8 +173,8 @@ class Component extends FormInputComponent<number | string, ComponentState> {
             );
             if (contacts && contacts.length) {
                 const contact = contacts[0];
-                this.state.currentNode = await this.createTreeNode(contact);
-                this.state.nodes = [this.state.currentNode];
+                const currentNode = await this.createTreeNode(contact);
+                const nodes = [currentNode];
                 contactId = contact.ID;
             }
         } else {

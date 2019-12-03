@@ -10,7 +10,7 @@
 import { WidgetComponentState } from "../../../../../core/model";
 import { Webform } from "../../../../../core/model/webform";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public webform: Webform = null,

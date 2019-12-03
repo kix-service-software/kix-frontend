@@ -40,7 +40,6 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('new-faq-article-dialog', 'faq/dialogs/new-faq-article-dialog', []),
         new UIComponent('edit-faq-article-dialog', 'faq/dialogs/edit-faq-article-dialog', []),
         new UIComponent('search-faq-article-dialog', 'faq/dialogs/search-faq-article-dialog', []),
-        new UIComponent('faq-category-input', 'faq/dialogs/inputs/faq-category-input', []),
         new UIComponent('faq-visibility-input', 'faq/dialogs/inputs/faq-visibility-input', []),
         new UIComponent('faq-article-info-widget', 'faq/widgets/faq-article-info-widget', []),
         new UIComponent('faq-article-content-widget', 'faq/widgets/faq-article-content-widget', []),

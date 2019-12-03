@@ -9,11 +9,12 @@
 
 import { IConfigurationExtension } from '../../core/extensions';
 import {
-    WidgetConfiguration, ConfiguredWidget, ContextConfiguration, ObjectInformationWidgetSettings,
-    KIXObjectType, MailFilterProperty, KIXObjectProperty, TableWidgetSettings, SortOrder, TabWidgetSettings, CRUD
+    WidgetConfiguration, ConfiguredWidget, ContextConfiguration,
+    KIXObjectType, MailFilterProperty, KIXObjectProperty, TableWidgetConfiguration, SortOrder,
+    ObjectInformationWidgetConfiguration, TabWidgetConfiguration
 } from '../../core/model';
 import { MailFilterDetailsContext } from '../../core/browser/mail-filter/context';
-import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,73 +22,111 @@ export class Extension implements IConfigurationExtension {
         return MailFilterDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-
-        const tabLane = new ConfiguredWidget('mail-filter-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['mail-filter-information-lane']))
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const objectInfoConfig = new ObjectInformationWidgetConfiguration(
+            'mail-filter-object-info-config', 'Object info', ConfigurationType.ObjectInformation,
+            KIXObjectType.MAIL_FILTER,
+            [
+                MailFilterProperty.NAME,
+                MailFilterProperty.STOP_AFTER_MATCH,
+                KIXObjectProperty.COMMENT,
+                KIXObjectProperty.VALID_ID,
+                KIXObjectProperty.CREATE_BY,
+                KIXObjectProperty.CREATE_TIME,
+                KIXObjectProperty.CHANGE_BY,
+                KIXObjectProperty.CHANGE_TIME
+            ]
         );
+        configurations.push(objectInfoConfig);
 
-        const mailFilterInfoLane = new ConfiguredWidget('mail-filter-information-lane',
-            new WidgetConfiguration(
-                'object-information-widget', 'Translatable#Email Filter Information',
-                ['mail-filter-edit'],
-                new ObjectInformationWidgetSettings(
-                    KIXObjectType.MAIL_FILTER,
-                    [
-                        MailFilterProperty.NAME,
-                        MailFilterProperty.STOP_AFTER_MATCH,
-                        KIXObjectProperty.COMMENT,
-                        KIXObjectProperty.VALID_ID,
-                        KIXObjectProperty.CREATE_BY,
-                        KIXObjectProperty.CREATE_TIME,
-                        KIXObjectProperty.CHANGE_BY,
-                        KIXObjectProperty.CHANGE_TIME
-                    ]
-                ),
-                false, true, null, false
-            ),
-            [new UIComponentPermission('system/communication/mailfilters', [CRUD.READ])]
+        const mailFilterInfoLane = new WidgetConfiguration(
+            'mail-filter-details-object-info-widget', 'Info WIdget', ConfigurationType.Widget,
+            'object-information-widget', 'Translatable#Email Filter Information', [],
+            new ConfigurationDefinition('mail-filter-object-info-config', ConfigurationType.ObjectInformation),
+            null, false, true, null, false
         );
+        configurations.push(mailFilterInfoLane);
 
-        const mailFilterMatchWidget = new ConfiguredWidget('mail-filter-match-widget',
-            new WidgetConfiguration(
-                'table-widget', 'Translatable#Filter Conditions', [],
-                new TableWidgetSettings(
-                    KIXObjectType.MAIL_FILTER_MATCH, ['Key', SortOrder.UP], undefined, undefined, false
-                ),
-                true, true, null, true
+        const tabConfig = new TabWidgetConfiguration(
+            'mail-filter-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['mail-filter-details-object-info-widget']
+        );
+        configurations.push(tabConfig);
+
+        const tabLane = new WidgetConfiguration(
+            'mail-filter-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('mail-filter-details-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        configurations.push(tabLane);
+
+        const conditionsTableWidgetConfig = new TableWidgetConfiguration(
+            'mail-filter-details-conditions-table-widget-config', 'Table Widget Config',
+            ConfigurationType.TableWidget,
+            KIXObjectType.MAIL_FILTER_MATCH, ['Key', SortOrder.UP], null, null, null, false
+        );
+        configurations.push(conditionsTableWidgetConfig);
+
+        const mailFilterConditionWidget = new WidgetConfiguration(
+            'mail-filter-details-conditions-table-widget', 'Table WIdget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Filter Conditions', [],
+            new ConfigurationDefinition(
+                'mail-filter-details-conditions-table-widget-config', ConfigurationType.TableWidget
+            ), null, true, true, null, true
+        );
+        configurations.push(mailFilterConditionWidget);
+
+        const headerTableWidgetConfig = new TableWidgetConfiguration(
+            'mail-filter-details-header-table-widget-config', 'Table Widget Config', ConfigurationType.TableWidget,
+            KIXObjectType.MAIL_FILTER_SET, ['Key', SortOrder.UP], null, null, null, false
+        );
+        configurations.push(headerTableWidgetConfig);
+
+        const mailFilterHeaderWidget = new WidgetConfiguration(
+            'mail-filter-details-header-table-widget', 'Table Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Set Email Headers', [],
+            new ConfigurationDefinition(
+                'mail-filter-details-header-table-widget-config', ConfigurationType.TableWidget
+            ), null, false, true, null, true
+        );
+        configurations.push(mailFilterHeaderWidget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('mail-filter-details-tab-widget', 'mail-filter-details-tab-widget'),
+                    new ConfiguredWidget(
+                        'mail-filter-details-conditions-table-widget', 'mail-filter-details-conditions-table-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'mail-filter-details-header-table-widget', 'mail-filter-details-header-table-widget'
+                    )
+                ],
+                [],
+                [
+                    'mail-filter-create'
+                ],
+                [
+                    'mail-filter-edit', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget(
+                        'mail-filter-details-object-info-widget', 'mail-filter-details-object-info-widget'
+                    )
+                ]
             )
         );
 
-        const mailFilterSetWidget = new ConfiguredWidget('mail-filter-set-widget', new WidgetConfiguration(
-            'table-widget', 'Translatable#Set Email Headers', [],
-            new TableWidgetSettings(
-                KIXObjectType.MAIL_FILTER_SET, ['Key', SortOrder.UP], undefined, undefined, false
-            ),
-            false, true, null, true)
-        );
-
-        const lanes = [
-            'mail-filter-details-tab-widget', 'mail-filter-match-widget', 'mail-filter-set-widget'
-        ];
-
-        const laneWidgets: Array<ConfiguredWidget<any>> = [
-            tabLane, mailFilterInfoLane, mailFilterMatchWidget, mailFilterSetWidget
-        ];
-
-        return new ContextConfiguration(
-            this.getModuleId(),
-            [], [],
-            [], [],
-            lanes, laneWidgets,
-            [], [],
-            ['mail-filter-create'],
-            ['mail-filter-edit', 'print-action']
-        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        return;
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

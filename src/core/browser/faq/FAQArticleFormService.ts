@@ -8,9 +8,10 @@
  */
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectType, FormField, CRUD } from "../../model";
+import { KIXObjectType, CRUD } from "../../model";
 import { FAQArticleProperty, FAQArticle } from "../../model/kix/faq";
 import { FAQService } from "./FAQService";
+import { FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
 
@@ -55,7 +56,7 @@ export class FAQArticleFormService extends KIXObjectFormService<FAQArticle> {
         return value;
     }
 
-    public async hasPermissions(field: FormField): Promise<boolean> {
+    public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         let hasPermissions = true;
         switch (field.property) {
             case FAQArticleProperty.CATEGORY_ID:

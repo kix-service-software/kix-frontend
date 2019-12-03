@@ -18,7 +18,6 @@ import { AuthenticationService } from './AuthenticationService';
 import { CacheService } from '../../../cache';
 import { PermissionError } from '../../../model/PermissionError';
 import { OptionsResponse, RequestMethod } from '../../../api';
-import { UserService } from './UserService';
 
 export class HttpService {
 
@@ -114,15 +113,20 @@ export class HttpService {
     }
 
     public async delete<T>(
-        resource: string, token: any, clientRequestId: string, cacheKeyPrefix: string = ''
-    ): Promise<T> {
+        resources: string[], token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+    ): Promise<Error[]> {
         const options = {
             method: RequestMethod.DELETE,
         };
 
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        const errors = [];
+        for (const resource of resources) {
+            await this.executeRequest<T>(resource, token, clientRequestId, options)
+                .catch((error: Error) => errors.push(error));
+        }
+
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        return response;
+        return errors;
     }
 
     public async options(token: string, resource: string): Promise<OptionsResponse> {

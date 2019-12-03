@@ -16,6 +16,8 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
 
     public KIXObjectType: KIXObjectType = KIXObjectType.SYS_CONFIG_OPTION_DEFINITION;
 
+    public AccessLevel: string;
+
     public Name: string;
 
     public Value: any;
@@ -36,10 +38,14 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
 
     public Type: string;
 
+    public Context: string;
+
+    public ContextMetadata: string;
 
     public constructor(sysConfigOptionDefinition?: SysConfigOptionDefinition) {
         super(sysConfigOptionDefinition);
         if (sysConfigOptionDefinition) {
+            this.AccessLevel = sysConfigOptionDefinition.AccessLevel;
             this.Name = sysConfigOptionDefinition.Name;
             this.ObjectId = this.Name;
             this.Value = sysConfigOptionDefinition.Value;
@@ -51,6 +57,8 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
             this.Level = sysConfigOptionDefinition.Level;
             this.Setting = sysConfigOptionDefinition.Setting;
             this.Type = sysConfigOptionDefinition.Type;
+            this.Context = sysConfigOptionDefinition.Context;
+            this.ContextMetadata = sysConfigOptionDefinition.ContextMetadata;
         }
     }
 

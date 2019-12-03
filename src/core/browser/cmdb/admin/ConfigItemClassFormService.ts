@@ -8,7 +8,7 @@
  */
 
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
-import { KIXObjectType, ConfigItemClass, FormField, ConfigItemClassProperty } from "../../../model";
+import { KIXObjectType, ConfigItemClass, ConfigItemClassProperty } from "../../../model";
 
 export class ConfigItemClassFormService extends KIXObjectFormService<ConfigItemClass> {
 

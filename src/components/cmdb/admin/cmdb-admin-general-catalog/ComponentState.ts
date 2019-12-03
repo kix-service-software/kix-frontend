@@ -9,7 +9,7 @@
 
 import { IdService } from "../../../../core/browser";
 import {
-    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings
+    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetConfiguration
 } from "../../../../core/model";
 import { GeneralCatalogItemProperty } from "../../../../core/model/kix/general-catalog/GeneralCatalogItemProperty";
 
@@ -17,13 +17,16 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('cmdb-general-catalog-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Assets: General Catalog',
             [
                 'cmdb-admin-general-catalog-create', 'csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.GENERAL_CATALOG_ITEM,
-                [GeneralCatalogItemProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
+            ], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.GENERAL_CATALOG_ITEM,
+                [GeneralCatalogItemProperty.NAME, SortOrder.UP]
+            ), false, false, 'kix-icon-gears')
     ) { }
 
 }

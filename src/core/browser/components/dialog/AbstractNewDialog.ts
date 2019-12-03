@@ -9,7 +9,7 @@
 
 import {
     ValidationResult, ValidationSeverity, ComponentContent, OverlayType, KIXObjectType,
-    KIXObjectSpecificCreateOptions, Error, ContextMode, FormContext, Context
+    KIXObjectSpecificCreateOptions, Error, ContextMode, FormContext, Context, Translation
 } from "../../../model";
 import { OverlayService } from "../../OverlayService";
 import { DialogService } from "./DialogService";
@@ -35,12 +35,12 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     protected options: KIXObjectSpecificCreateOptions;
     protected dialogContext: Context;
 
-    protected init(
+    protected async init(
         loadingHint: string, successHint: string, objectType: KIXObjectType,
         routingConfiguration: RoutingConfiguration
     ) {
-        this.loadingHint = loadingHint;
-        this.successHint = successHint;
+        this.loadingHint = await TranslationService.translate(loadingHint);
+        this.successHint = await TranslationService.translate(successHint);
         this.objectType = objectType;
         this.routingConfiguration = routingConfiguration;
     }
@@ -110,8 +110,6 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     }
 
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
-        await FormService.getInstance().loadFormConfigurations();
-
         let previousTabData: PreviousTabData = null;
         if (this.dialogContext) {
             previousTabData = this.dialogContext.getAdditionalInformation(

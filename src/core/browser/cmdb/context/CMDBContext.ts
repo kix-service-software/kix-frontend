@@ -34,8 +34,15 @@ export class CMDBContext extends Context {
     }
 
     public async setCIClass(ciClass: ConfigItemClass): Promise<void> {
-        this.currentCIClass = ciClass;
-        await this.loadConfigItems();
+        if (ciClass) {
+            if (!this.currentCIClass || ciClass.ID !== this.currentCIClass.ID) {
+                this.currentCIClass = ciClass;
+                await this.loadConfigItems();
+            }
+        } else if (this.currentCIClass || typeof this.currentCIClass === 'undefined') {
+            this.currentCIClass = null;
+            await this.loadConfigItems();
+        }
     }
 
     public async loadConfigItems(): Promise<void> {
@@ -69,7 +76,7 @@ export class CMDBContext extends Context {
 
         window.clearTimeout(timeout);
 
-        this.setObjectList(configItems);
+        this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
@@ -81,16 +88,14 @@ export class CMDBContext extends Context {
         return catalogItems.map((c) => c.ItemID);
     }
 
-    public async getObjectList(reload: boolean = false): Promise<KIXObject[]> {
-        if (reload) {
-            await this.loadConfigItems();
-        }
-        return await super.getObjectList();
+    public async getObjectList(objectType: KIXObjectType): Promise<KIXObject[]> {
+        return await super.getObjectList(objectType);
     }
 
     public reset(): void {
         super.reset();
         this.currentCIClass = null;
+        this.loadConfigItems();
     }
 
 }

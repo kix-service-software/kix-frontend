@@ -41,9 +41,7 @@ class TicketArticleMetadataComponent {
     }
 
     private getReceiverString(receiver: ArticleReceiver): string {
-        const email = receiver.email;
-        const realName = receiver.realName;
-        return realName === email ? email : `${realName} ${email}`;
+        return receiver.email;
     }
 
     public showOverlay(property: string, event: any): void {

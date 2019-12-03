@@ -56,7 +56,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.TRANSLATION_LANGUAGE) {
                     this.state.translation = translation;
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.prepareFilter();
@@ -69,6 +70,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        TableFactoryService.getInstance().destroyTable('i18n-languages');
     }
 
     private prepareTitle(): void {
@@ -121,8 +123,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.predefinedTableFilter = languages.map(
             (l) => new KIXObjectPropertyFilter(
                 l[0], [
-                    new TableFilterCriteria(TranslationLanguageProperty.LANGUAGE, SearchOperator.EQUALS, l[0])
-                ]
+                new TableFilterCriteria(TranslationLanguageProperty.LANGUAGE, SearchOperator.EQUALS, l[0])
+            ]
             )
         );
     }

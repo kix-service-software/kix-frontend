@@ -51,8 +51,8 @@ export class NotificationTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.NOTIFICATION, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.NOTIFICATION, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -74,7 +74,7 @@ export class NotificationTableFactory extends TableFactory {
         let config;
         switch (property) {
             case NotificationProperty.NAME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 300, true, true,
                     false, DataType.STRING, true, null, null, false
                 );

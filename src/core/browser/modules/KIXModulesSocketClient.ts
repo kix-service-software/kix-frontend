@@ -8,7 +8,7 @@
  */
 
 import {
-    LoadKIXModulesRequest, KIXModulesEvent, LoadKIXModulesResponse, Form, FormContext,
+    LoadKIXModulesRequest, KIXModulesEvent, LoadKIXModulesResponse, FormContext,
     KIXObjectType, LoadFormConfigurationsResponse, LoadFormConfigurationsRequest,
     ISocketRequest, LoadReleaseInfoResponse, ReleaseInfo, LoadObjectDefinitionsResponse,
     SocketEvent
@@ -20,6 +20,9 @@ import { IKIXModuleExtension } from '../../extensions';
 import { IdService } from '../IdService';
 import { SocketErrorResponse } from '../../common';
 import { ObjectDefinition } from '../../model/kix/object-definition';
+import { FormConfiguration } from '../../model/components/form/configuration';
+import { LoadFormConfigurationRequest } from '../../model/socket/application/LoadFormConfigurationRequest';
+import { LoadFormConfigurationResponse } from '../../model/socket/application/LoadFormConfigurationResponse';
 
 export class KIXModulesSocketClient extends SocketClient {
 
@@ -67,7 +70,7 @@ export class KIXModulesSocketClient extends SocketClient {
         });
     }
 
-    public loadFormConfigurations(): Promise<[Form[], Array<[FormContext, KIXObjectType, string]>]> {
+    public loadFormConfigurations(): Promise<Array<[FormContext, KIXObjectType, string]>> {
         return new Promise((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
@@ -83,7 +86,7 @@ export class KIXModulesSocketClient extends SocketClient {
                 (result: LoadFormConfigurationsResponse) => {
                     if (requestId === result.requestId) {
                         window.clearTimeout(timeout);
-                        resolve([result.forms, result.formIDsWithContext]);
+                        resolve(result.formIDsWithContext);
                     }
                 }
             );
@@ -97,6 +100,39 @@ export class KIXModulesSocketClient extends SocketClient {
             });
 
             this.socket.emit(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS, request);
+        });
+    }
+
+    public loadFormConfiguration(formId: string): Promise<FormConfiguration> {
+        return new Promise((resolve, reject) => {
+            const token = ClientStorageService.getToken();
+            const requestId = IdService.generateDateBasedId();
+            const request = new LoadFormConfigurationRequest(
+                token, requestId, ClientStorageService.getClientRequestId(), formId
+            );
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + KIXModulesEvent.LOAD_FORM_CONFIGURATION);
+            }, 30000);
+
+            this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATION_FINISHED,
+                (result: LoadFormConfigurationResponse) => {
+                    if (requestId === result.requestId) {
+                        window.clearTimeout(timeout);
+                        resolve(result.form);
+                    }
+                }
+            );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            this.socket.emit(KIXModulesEvent.LOAD_FORM_CONFIGURATION, request);
         });
     }
 

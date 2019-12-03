@@ -8,11 +8,13 @@
  */
 
 import {
-    FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm, Form, IFormInstanceListener
+    FormInstance, FormContext, KIXObjectType, IFormInstance, SearchFormInstance, SearchForm,
+    IFormInstanceListener
 } from "../../model";
 import { FormFactory } from "./FormFactory";
 import { KIXModulesSocketClient } from "../modules/KIXModulesSocketClient";
 import { BrowserUtil } from "../BrowserUtil";
+import { FormConfiguration } from "../../model/components/form/configuration";
 
 export class FormService {
 
@@ -27,21 +29,17 @@ export class FormService {
 
     private formInstances: Map<string, Promise<IFormInstance>> = new Map();
 
-    private forms: Form[] = null;
+    private forms: FormConfiguration[] = [];
     private formIDsWithContext: Array<[FormContext, KIXObjectType, string]> = null;
 
     private constructor() { }
 
     public async loadFormConfigurations(): Promise<void> {
         const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurations();
-        this.forms = formConfigurations[0];
-        this.formIDsWithContext = formConfigurations[1];
+        this.formIDsWithContext = formConfigurations;
     }
 
-    public async addForm(form: Form): Promise<void> {
-        if (!this.forms) {
-            await this.loadFormConfigurations();
-        }
+    public async addForm(form: FormConfiguration): Promise<void> {
         const formIndex = this.forms.findIndex((f) => f.id === form.id);
         if (formIndex !== -1) {
             this.forms.splice(formIndex, 1, form);
@@ -51,7 +49,7 @@ export class FormService {
     }
 
     public async getFormInstance<T extends IFormInstance>(
-        formId: string, cache: boolean = true, form?: Form
+        formId: string, cache: boolean = true, form?: FormConfiguration
     ): Promise<T> {
         if (formId) {
             if (!this.formInstances.has(formId) || !cache) {
@@ -63,7 +61,7 @@ export class FormService {
         return;
     }
 
-    private getNewFormInstance(formId: string, form?: Form): Promise<IFormInstance> {
+    private getNewFormInstance(formId: string, form?: FormConfiguration): Promise<IFormInstance> {
         return new Promise<IFormInstance>(async (resolve, reject) => {
             this.deleteFormInstance(formId);
             if (!form) {
@@ -87,11 +85,12 @@ export class FormService {
         });
     }
 
-    public async getForm(formId: string): Promise<Form> {
-        if (!this.forms) {
-            await this.loadFormConfigurations();
+    public async getForm(formId: string): Promise<FormConfiguration> {
+        let form = this.forms.find((f) => f.id === formId);
+        if (!form) {
+            form = await KIXModulesSocketClient.getInstance().loadFormConfiguration(formId);
         }
-        return this.forms.find((f) => f.id === formId);
+        return form;
     }
 
     public deleteFormInstance(formId: string): void {
@@ -117,13 +116,17 @@ export class FormService {
 
     public async registerFormInstanceListener(formId: string, listener: IFormInstanceListener): Promise<void> {
         const formInstance = await this.getFormInstance(formId);
-        formInstance.registerListener(listener);
+        if (formInstance) {
+            formInstance.registerListener(listener);
+        }
     }
 
     public async removeFormInstanceListener(formId: string, listenerId: string): Promise<void> {
         if (this.formInstances.has(formId)) {
             const formInstance = await this.getFormInstance(formId);
-            formInstance.removeListener(listenerId);
+            if (formInstance) {
+                formInstance.removeListener(listenerId);
+            }
         }
     }
 

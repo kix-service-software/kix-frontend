@@ -16,7 +16,7 @@ export class FAQArticleVoteAction extends AbstractAction {
     public hasLink: boolean = false;
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('faq/articles', [CRUD.CREATE])
+        new UIComponentPermission('faq/articles/*/votes', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

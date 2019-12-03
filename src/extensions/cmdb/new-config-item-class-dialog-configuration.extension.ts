@@ -9,13 +9,18 @@
 
 
 import {
-    ContextConfiguration, FormField, ConfigItemClassProperty, FormFieldValue, Form,
-    KIXObjectType, FormContext, ConfiguredWidget, FormFieldOption
+    ContextConfiguration, ConfigItemClassProperty, FormFieldValue,
+    KIXObjectType, FormContext, FormFieldOption, KIXObjectProperty,
+    ObjectReferenceOptions, WidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
 import { IConfigurationExtension } from '../../core/extensions';
 import { ConfigurationService } from '../../core/services';
 import { NewConfigItemClassDialogContext } from '../../core/browser/cmdb';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
+} from '../../core/model/components/form/configuration';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -23,67 +28,105 @@ export class Extension implements IConfigurationExtension {
         return NewConfigItemClassDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const sidebars = [];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [];
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const newDialogWidget = new WidgetConfiguration(
+            'cmdb-ci-class-new-dialog-widget', 'Dialog WIdget', ConfigurationType.Widget,
+            'new-config-item-class-dialog', 'Translatable#New Class', [], null, null, false, false,
+            'kix-icon-new-gear'
+        );
+        configurations.push(newDialogWidget);
 
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'cmdb-ci-class-new-dialog-widget', 'cmdb-ci-class-new-dialog-widget',
+                        KIXObjectType.CONFIG_ITEM_CLASS, ContextMode.CREATE_ADMIN
+                    )
+                ]
+            )
+        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const formId = 'cmdb-ci-class-new-form';
 
-        const formId = 'new-config-item-class-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing || overwrite) {
-            const infoGroup = new FormGroup('Translatable#CI Class Information', [
-                new FormField(
-                    'Translatable#Name', ConfigItemClassProperty.NAME, null, true,
-                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Name'
-                ),
-                new FormField(
-                    'Translatable#Icon', ConfigItemClassProperty.ICON, 'icon-input', false,
-                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Icon'
-                ),
-                new FormField(
-                    'Translatable#Class Definition', ConfigItemClassProperty.DEFINITION_STRING, 'text-area-input', true,
-                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Definition',
-                    null, null, null, null, null, null, null
-                ),
-                new FormField(
-                    'Translatable#Comment', ConfigItemClassProperty.COMMENT, 'text-area-input', false,
-                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Comment',
-                    null, null, null, null, null, null, null, 200
-                ),
-                new FormField(
-                    'Translatable#Validity', ConfigItemClassProperty.VALID_ID, 'valid-input', true,
-                    'Translatable#Helptext_CMDB_ConfigItemClassCreate_Valid',
-                    null, new FormFieldValue(1)
-                )
-            ]);
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-ci-class-new-form-field-name',
+                'Translatable#Name', ConfigItemClassProperty.NAME, null, true,
+                'Translatable#Helptext_CMDB_ConfigItemClassCreate_Name'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-ci-class-new-form-field-icon',
+                'Translatable#Icon', ConfigItemClassProperty.ICON, 'icon-input', false,
+                'Translatable#Helptext_CMDB_ConfigItemClassCreate_Icon'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-ci-class-new-form-field-definition',
+                'Translatable#Class Definition', ConfigItemClassProperty.DEFINITION_STRING, 'text-area-input', true,
+                'Translatable#Helptext_CMDB_ConfigItemClassCreate_Definition',
+                null, null, null, null, null, null, null
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-ci-class-new-form-field-comment',
+                'Translatable#Comment', ConfigItemClassProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Helptext_CMDB_ConfigItemClassCreate_Comment',
+                null, null, null, null, null, null, null, null, 200
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-ci-class-new-form-field-valid',
+                'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                'object-reference-input', true, 'Translatable#Helptext_CMDB_ConfigItemClassCreate_Valid',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ],
+                new FormFieldValue(1)
+            )
+        );
 
-            const objectPermissionGroup = new FormGroup('Translatable#Permissions', [
-                new FormField(
-                    null, 'OBJECT_PERMISSION', 'assign-role-permission-input', false, null
-                )
-            ]);
+        configurations.push(
+            new FormGroupConfiguration(
+                'cmdb-ci-class-new-form-group-information', 'Translatable#CI Class Information',
+                [
+                    'cmdb-ci-class-new-form-field-name',
+                    'cmdb-ci-class-new-form-field-icon',
+                    'cmdb-ci-class-new-form-field-definition',
+                    'cmdb-ci-class-new-form-field-comment',
+                    'cmdb-ci-class-new-form-field-valid'
+                ]
+            )
+        );
 
-            const dependentObjectPermissionGroup = new FormGroup('Translatable#Permissions on dependent objects', [
-                new FormField(
-                    null, 'PROPERTY_VALUE_PERMISSION', 'assign-role-permission-input', false, null, [
-                        new FormFieldOption('FOR_PROPERTY_VALUE_PERMISSION', true),
-                    ]
-                )
-            ]);
+        configurations.push(
+            new FormPageConfiguration(
+                'cmdb-ci-class-new-form-page', 'Translatable#Add CI Class',
+                ['cmdb-ci-class-new-form-group-information']
+            )
+        );
 
-            const form = new Form(formId, 'Translatable#Add CI Class', [
-                infoGroup,
-                // objectPermissionGroup,
-                // dependentObjectPermissionGroup
-            ], KIXObjectType.CONFIG_ITEM_CLASS);
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.CONFIG_ITEM_CLASS, formId);
+        configurations.push(
+            new FormConfiguration(
+                formId, 'Translatable#Add CI Class',
+                ['cmdb-ci-class-new-form-page'],
+                KIXObjectType.CONFIG_ITEM_CLASS
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.CONFIG_ITEM_CLASS, formId);
+        return configurations;
     }
 
 }

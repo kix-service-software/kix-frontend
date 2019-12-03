@@ -38,7 +38,6 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('edit-config-item-dialog', 'cmdb/dialogs/edit-config-item-dialog', []),
         new UIComponent('search-config-item-dialog', 'cmdb/dialogs/search-config-item-dialog', []),
         new UIComponent('config-item-version-details', 'cmdb/config-item-version-details', []),
-        new UIComponent('ci-class-reference-input', 'cmdb/inputs/ci-class-reference-input', []),
         new UIComponent('ci-class-input', 'cmdb/inputs/ci-class-input', []),
         new UIComponent('config-item-info-widget', 'cmdb/widgets/config-item-info-widget', []),
         new UIComponent('config-item-history-widget', 'cmdb/widgets/config-item-history-widget', []),

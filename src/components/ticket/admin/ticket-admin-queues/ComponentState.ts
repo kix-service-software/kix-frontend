@@ -11,7 +11,7 @@ import {
     IdService, TableConfiguration, SearchOperator, TableHeaderHeight, TableRowHeight
 } from "../../../../core/browser";
 import {
-    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetSettings, QueueProperty,
+    WidgetConfiguration, KIXObjectType, SortOrder, TableWidgetConfiguration, QueueProperty,
     KIXObjectLoadingOptions, FilterCriteria, FilterType, FilterDataType
 } from "../../../../core/model";
 
@@ -19,13 +19,15 @@ export class ComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('ticket-queues-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Queues',
             [
                 'ticket-admin-queue-create', 'csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.QUEUE, [QueueProperty.NAME, SortOrder.UP],
-                new TableConfiguration(
+            ], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.QUEUE, [QueueProperty.NAME, SortOrder.UP], null,
+                new TableConfiguration(null, null, null,
                     KIXObjectType.QUEUE,
                     new KIXObjectLoadingOptions(
                         [
@@ -35,7 +37,7 @@ export class ComponentState {
                             ),
                         ], null, null,
                         [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]
-                    ), null, null, true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                    ), null, null, [], true, null, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ),
             false, false, 'kix-icon-gears')

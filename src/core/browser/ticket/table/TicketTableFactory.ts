@@ -48,63 +48,71 @@ export class TicketTableFactory extends TableFactory {
 
         if (short) {
             tableColumns = [
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true, DataType.STRING, false
                 ),
-                new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
-                new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 160, true, true),
-                new DefaultColumnConfiguration(TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
                 new DefaultColumnConfiguration(
+                    null, null, null, TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
+                new DefaultColumnConfiguration(
+                    null, null, null, TicketProperty.TITLE, true, false, true, false, 160, true, true),
+                new DefaultColumnConfiguration(
+                    null, null, null, TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.CREATED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 )
             ];
         } else {
             tableColumns = [
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.PRIORITY_ID, false, true, true, false, 65, true, true, true, DataType.STRING, false
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.UNSEEN, false, true, false, false, 41, true, false, false, DataType.STRING, false
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.WATCHERS, false, true, false, false, 41, true, false, false, DataType.STRING, false
                 ),
-                new DefaultColumnConfiguration(TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
-                new DefaultColumnConfiguration(TicketProperty.TITLE, true, false, true, false, 260, true, true),
-                new DefaultColumnConfiguration(TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
-                new DefaultColumnConfiguration(TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true),
                 new DefaultColumnConfiguration(
+                    null, null, null, TicketProperty.TICKET_NUMBER, true, false, true, false, 135, true, true),
+                new DefaultColumnConfiguration(
+                    null, null, null, TicketProperty.TITLE, true, false, true, false, 260, true, true),
+                new DefaultColumnConfiguration(
+                    null, null, null, TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
+                new DefaultColumnConfiguration(
+                    null, null, null, TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true),
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.ORGANISATION_ID, true, false, true, false, 150, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.AGE, true, false, true, false, 90, true, true, false, DataType.DATE_TIME
                 )
             ];
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(KIXObjectType.TICKET, null, null, tableColumns, true);
+            tableConfiguration = new TableConfiguration(
+                null, null, null, KIXObjectType.TICKET, null, null, tableColumns, [], true);
             defaultToggle = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
@@ -123,11 +131,6 @@ export class TicketTableFactory extends TableFactory {
 
         tableConfiguration.objectType = KIXObjectType.TICKET;
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 
 }

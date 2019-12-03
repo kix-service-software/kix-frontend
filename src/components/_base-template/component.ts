@@ -50,15 +50,21 @@ class Component {
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
 
         this.state.loading = true;
+        const startTranslation = Date.now();
         this.state.loadingHint = await TranslationService.translate('Translatable#Loading');
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Close Sidebars']);
+        const endTranslation = Date.now();
+        console.debug(`translation initialization finished: ${endTranslation - startTranslation}ms`);
 
         await this.checkAuthentication();
 
         ClientNotificationSocketClient.getInstance();
 
+        const startInitModules = Date.now();
         await KIXModulesService.getInstance().init();
         await this.initModules();
+        const endInitModules = Date.now();
+        console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);
 
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'BASE-TEMPLATE',
@@ -70,7 +76,7 @@ class Component {
             contextRegistered: () => { return; }
         });
 
-        await this.bootstrapServices();
+        await this.registerHomeContext();
 
         this.setContext();
 
@@ -125,17 +131,17 @@ class Component {
         }
     }
 
-    private async bootstrapServices(): Promise<void> {
+    private async registerHomeContext(): Promise<void> {
         const homeContext = new ContextDescriptor(
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', ['home'], HomeContext
         );
-        ContextService.getInstance().registerContext(homeContext);
+        await ContextService.getInstance().registerContext(homeContext);
         const releaseContext = new ContextDescriptor(
             ReleaseContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'release', ['release'], ReleaseContext
         );
-        ContextService.getInstance().registerContext(releaseContext);
+        await ContextService.getInstance().registerContext(releaseContext);
     }
 
     private setContext(context: Context = ContextService.getInstance().getActiveContext()): void {
@@ -153,7 +159,8 @@ class Component {
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
                 filteredObjectListChanged: () => { return; },
-                scrollInformationChanged: () => { return; }
+                scrollInformationChanged: () => { return; },
+                additionalInformationChanged: () => { return; }
             });
         }
     }
@@ -174,7 +181,7 @@ class Component {
     private async initModules(): Promise<void> {
         const modules = KIXModulesService.getInstance().getModules();
 
-        let uiModules: IUIModule[] = [];
+        const uiModules: IUIModule[] = [];
         for (let i = 0; i < modules.length; i++) {
             for (const c of modules[i].initComponents) {
                 try {
@@ -188,10 +195,13 @@ class Component {
             }
         }
 
-        uiModules = uiModules.sort((a, b) => a.priority - b.priority);
+        uiModules.sort((a, b) => a.priority - b.priority);
         for (let i = 0; i < uiModules.length; i++) {
             if (uiModules[i].register) {
+                const start = Date.now();
                 await uiModules[i].register();
+                const end = Date.now();
+                console.debug(`regsiter module: ${uiModules[i].priority} - ${uiModules[i].name} - ${end - start}ms`);
             } else {
                 console.warn(`module with prioritiy ${uiModules[i].priority} did not implement register() method.`);
             }

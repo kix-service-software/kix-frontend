@@ -13,7 +13,7 @@ import * as path from 'path';
 
 import { IServerConfiguration } from './core/common';
 
-import { KIXExtensions, IStaticContentExtension } from './core/extensions';
+import { KIXExtensions, IStaticContentExtension, IConfigurationExtension } from './core/extensions';
 
 import nodeRequire = require('marko/node-require');
 nodeRequire.install(); // Allow Node.js to require and load `.marko` files
@@ -35,8 +35,10 @@ import { CreateClientRegistration } from './core/api';
 import {
     ConfigurationService, LoggingService, ClientRegistrationService, TranslationService, AuthenticationService
 } from './core/services';
-import { PluginService, MarkoService, SocketService } from './services';
-import { SystemInfo } from './core/model';
+import { PluginService, MarkoService, SocketService, ModuleConfigurationService } from './services';
+import { SystemInfo, ReleaseInfo, Error, SysConfigOptionDefinition } from './core/model';
+import { IConfiguration } from './core/model/configuration';
+import { SysConfigAccessLevel } from './core/model/kix/sysconfig/SysConfigAccessLevel';
 
 export class Server {
 
@@ -51,6 +53,7 @@ export class Server {
 
     public application: express.Application;
     private serverConfig: IServerConfiguration;
+    private systemInfo: SystemInfo;
 
     public async initServer(): Promise<void> {
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -79,14 +82,13 @@ export class Server {
         }
 
         await this.registerStaticContent();
-        const systemInfo = await this.createClientRegistration();
-        await this.createReleaseInformation(systemInfo);
+        await this.createClientRegistration();
 
         // tslint:disable-next-line:no-unused-expression
         new ServerRouter(this.application);
     }
 
-    private async createClientRegistration(): Promise<SystemInfo> {
+    private async createClientRegistration(): Promise<void> {
         let poDefinitions = [];
 
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -97,28 +99,29 @@ export class Server {
             poDefinitions = await TranslationService.getInstance().getPODefinitions();
         }
 
+        const configurations = await this.createDefaultConfigurations();
         const createClientRegistration = new CreateClientRegistration(
             this.serverConfig.NOTIFICATION_CLIENT_ID,
             this.serverConfig.NOTIFICATION_URL,
             this.serverConfig.NOTIFICATION_INTERVAL,
             'Token ' + AuthenticationService.getInstance().getCallbackToken(),
-            poDefinitions
+            poDefinitions, configurations
         );
 
-        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
+
+
+        this.systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
             this.serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
         ).catch((error) => {
             LoggingService.getInstance().error(error);
             return null;
         });
-
-        return systemInfo;
     }
 
-    private async createReleaseInformation(systemInfo: SystemInfo): Promise<void> {
+    public async getReleaseInformation(): Promise<ReleaseInfo> {
         const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
-        releaseInfo.backendSystemInfo = systemInfo;
-        ConfigurationService.getInstance().saveConfiguration('release-info', releaseInfo);
+        releaseInfo.backendSystemInfo = this.systemInfo;
+        return releaseInfo;
     }
 
     public async initHttpServer(): Promise<void> {
@@ -160,6 +163,60 @@ export class Server {
                 staticContent.getName(),
                 express.static(path.join('node_modules', staticContent.getPath())
                 ));
+        }
+    }
+
+    private async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
+        LoggingService.getInstance().info('Create Default Configurations');
+        const extensions = await PluginService.getInstance().getExtensions<IConfigurationExtension>(
+            KIXExtensions.CONFIGURATION
+        ).catch((): IConfigurationExtension[] => []);
+
+        if (extensions) {
+            LoggingService.getInstance().info(`Found ${extensions.length} configuration extensions`);
+
+            let configurations: IConfiguration[] = [];
+            for (const extension of extensions) {
+                let formConfigurations = await extension.getFormConfigurations().catch(
+                    (error: Error): IConfiguration[] => {
+                        LoggingService.getInstance().error(error.Message);
+                        return [];
+                    }
+                );
+                let defaultConfigurations = await extension.getDefaultConfiguration().catch(
+                    (error: Error): IConfiguration[] => {
+                        LoggingService.getInstance().error(error.Message);
+                        return [];
+                    }
+                );
+
+                formConfigurations = formConfigurations || [];
+                defaultConfigurations = defaultConfigurations || [];
+
+                configurations = [
+                    ...configurations,
+                    ...formConfigurations,
+                    ...defaultConfigurations
+                ];
+            }
+
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+            const sysconfigOptionDefinitions = configurations.map((c) => {
+                const name = c.name ? c.name : c.id;
+                const definition = new SysConfigOptionDefinition();
+                definition.AccessLevel = SysConfigAccessLevel.INTERNAL;
+                definition.Name = c.id;
+                definition.Description = name;
+                definition.Default = JSON.stringify(c);
+                definition.Context = serverConfig.NOTIFICATION_CLIENT_ID;
+                definition.ContextMetadata = c.type;
+                definition.Type = 'String';
+                definition.IsRequired = 0;
+                return definition;
+            });
+
+            return sysconfigOptionDefinitions;
         }
     }
 }

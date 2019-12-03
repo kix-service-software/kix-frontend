@@ -9,11 +9,11 @@
 
 import { KIXObject } from "../KIXObject";
 import { KIXObjectType } from "../KIXObjectType";
-import { Attachment } from "./Attachment";
 import { FAQHistory } from "./FAQHistory";
 import { FAQVote } from "./FAQVote";
 import { User } from "../user";
 import { Link } from "../link";
+import { Attachment } from "../Attachment";
 
 export class FAQArticle extends KIXObject<FAQArticle> {
 

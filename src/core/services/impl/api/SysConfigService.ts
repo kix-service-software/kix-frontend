@@ -9,13 +9,15 @@
 
 import { KIXObjectService } from './KIXObjectService';
 import {
-    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions, SysConfigOption, Error
+    KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
+    SysConfigOption, Error, KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, FilterCriteria
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { SysConfigOptionFactory } from '../../object-factories/SysConfigOptionFactory';
 import { SysConfigOptionDefinition } from '../../../model/kix/sysconfig/SysConfigOptionDefinition';
 import { SysConfigOptionDefinitionFactory } from '../../object-factories/SysConfigOptionDefinitionFactory';
 import { LoggingService } from '..';
+import { ModuleConfigurationService } from '../../../../services';
 
 export class SysConfigService extends KIXObjectService {
 
@@ -64,16 +66,67 @@ export class SysConfigService extends KIXObjectService {
     }
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
-    ): Promise<number> {
-        const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        const id = await super.executeUpdateOrCreateRequest<number>(
-            token, clientRequestId, parameter, uri, this.objectType, 'Name'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
-        return id;
+        parameter: Array<[string, any]>, objectId: string
+    ): Promise<string> {
+        if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
+            const uri = this.buildUri(this.RESOURCE_URI, objectId);
+            const id = await super.executeUpdateOrCreateRequest<string>(
+                token, clientRequestId, parameter, uri, this.objectType, 'Name'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+            ModuleConfigurationService.getInstance().sysconfigChanged(id);
+            return id;
+        } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'definitions', objectId);
+            const id = await super.executeUpdateOrCreateRequest<string>(
+                token, clientRequestId, parameter, uri, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, 'Option'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+            ModuleConfigurationService.getInstance().sysconfigChanged(id);
+            return id;
+        }
+    }
+
+    public async createObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        createOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
+    ): Promise<string | number> {
+        if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
+            const id = await super.executeUpdateOrCreateRequest<string>(
+                token, clientRequestId, parameter, uri, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+                'Option', true
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+            ModuleConfigurationService.getInstance().sysconfigChanged(id);
+            return id;
+        } else {
+            return super.createObject(token, clientRequestId, objectType, parameter, createOptions, cacheKeyPrefix);
+        }
+    }
+
+    public async deleteObjects(
+        token: string, clientRequestId: string, objectType: KIXObjectType, objectIds: Array<string | number>,
+        deleteOptions?: KIXObjectSpecificDeleteOptions
+    ): Promise<Error[]> {
+        if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
+            const uris = objectIds.map((id) => this.buildUri(this.RESOURCE_URI, 'definitions', id));
+            return await this.sendDeleteRequest<void>(token, clientRequestId, uris, objectType)
+                .catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
+                });
+        }
+    }
+
+    protected prepareAPISearch(criteria: FilterCriteria[]): FilterCriteria[] {
+        return [];
     }
 
 }

@@ -6,11 +6,13 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.search-form on-keydown("keyDown")>
+<div.search-form key="search-form">
     <widget instanceId="search-form-group" title=state.translations["Translatable#Attributes"] key="attributes">
         <@content>
             <div.search-criteria>
-                <search-value-container formId=input.formId objectType=input.objectType/>
+                <if(state.manager && state.prepared)>
+                    <dynamic-form-field-container manager=state.manager key="search-dynamic-form"/>
+                </if>
             </div>
         </@content>
     </widget>
@@ -29,12 +31,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </button>
     </div>
     <div.result-table>
-        <div.result-table-head>
-            <span>
-                <translation-string pattern="Translatable#Preview ({0})" placeholders=[state.resultCount]/>
-            </span>
-        </div>
-        <if(state.table)>
+        <if(state.prepared && state.table)>
+            <div.result-table-head>
+                <span>
+                    <translation-string pattern="Translatable#Preview ({0})" placeholders=[state.resultCount]/>
+                </span>
+            </div>
             <standard-table-NEW table=state.table/>
         </if>
     </div>

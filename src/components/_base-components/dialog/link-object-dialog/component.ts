@@ -7,25 +7,17 @@
  * --
  */
 
-/**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
- * --
- * This software comes with ABSOLUTELY NO WARRANTY. For details, see
- * the enclosed file LICENSE for license information (GPL3). If you
- * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
- * --
- */
-
 import {
     WidgetService, TableConfiguration, TableRowHeight,
     TableHeaderHeight, KIXObjectService, SearchOperator, BrowserUtil,
     TableFactoryService, ContextService, TableEvent, DefaultColumnConfiguration, ValueState,
-    TableEventData, LabelService
+    TableEventData, LabelService, ITable
 } from '../../../../core/browser';
 import { FormService } from '../../../../core/browser/form';
 import {
     FormContext, KIXObject, KIXObjectType, WidgetType, CreateLinkDescription, LinkTypeDescription,
-    TreeNode, LinkType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, DataType
+    TreeNode, LinkType, KIXObjectLoadingOptions, FilterCriteria, FilterDataType, FilterType, DataType,
+    TreeService
 } from '../../../../core/model';
 import { ComponentState } from './ComponentState';
 import { LinkUtil, LinkObjectDialogContext } from '../../../../core/browser/link';
@@ -44,10 +36,15 @@ class LinkDialogComponent {
     private rootObject: KIXObject = null;
     public selectedObjects: KIXObject[] = [];
 
+    private linkLabel: string;
+
     private tableSubscriber: IEventSubscriber;
+
+    private objectType: KIXObjectType;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.loadNodes.bind(this);
     }
 
     public onInput(input: any): void {
@@ -55,7 +52,7 @@ class LinkDialogComponent {
             ? input.linkDescriptions || []
             : this.state.linkDescriptions;
         this.newLinks = [];
-        this.state.objectType = input.objectType;
+        this.objectType = input.objectType;
         this.resultListenerId = input.resultListenerId;
         this.rootObject = input.rootObject;
     }
@@ -67,60 +64,40 @@ class LinkDialogComponent {
             ["Translatable#Link to", "Translatable#Search"]
         );
 
-        await this.setLinkableObjects();
-        await this.setDefaultLinkableObject();
-
         WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
 
-        const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
-            LinkObjectDialogContext.CONTEXT_ID
-        );
-        context.setObjectList([]);
-
         this.setLinkTypes();
-        if (this.state.currentLinkableObjectNode) {
-            this.prepareResultTable();
-        }
 
         this.setSubmitState();
         this.state.loading = false;
     }
 
-    public onDestroy(): void {
+    public async onDestroy(): Promise<void> {
         this.state.linkDescriptions = null;
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         FormService.getInstance().deleteFormInstance(this.state.formId);
+        TableFactoryService.getInstance().destroyTable(`link-object-dialog-`, true);
     }
 
-    private async setLinkableObjects(): Promise<void> {
-        this.linkPartners = await LinkUtil.getPossibleLinkPartners(this.state.objectType);
+    private async loadNodes(): Promise<TreeNode[]> {
+        this.linkPartners = await LinkUtil.getPossibleLinkPartners(this.objectType);
 
+        const nodes: TreeNode[] = [];
         for (const lp of this.linkPartners) {
             const formId = await FormService.getInstance().getFormIdByContext(FormContext.LINK, lp[1]);
             const icon = await LabelService.getInstance().getObjectTypeIcon(lp[1]);
             if (formId) {
-                this.state.linkableObjectNodes.push(new TreeNode(formId, lp[0], icon));
+                const node = new TreeNode(formId, lp[0], icon);
+                nodes.push(node);
+                if (lp[1] === KIXObjectType.TICKET) {
+                    node.selected = true;
+                    this.linkableObjectChanged([node]);
+                }
             }
         }
 
-        if (this.state.linkableObjectNodes.length) {
-            (this as any).setStateDirty('linkableObjectNodes');
-        }
-    }
-
-    private async setDefaultLinkableObject(): Promise<void> {
-        if (this.state.linkableObjectNodes.length) {
-            const ticketNode = this.state.linkableObjectNodes.find((lo) => lo.label === KIXObjectType.TICKET);
-            if (ticketNode) {
-                this.state.currentLinkableObjectNode = ticketNode;
-            } else {
-                this.state.currentLinkableObjectNode = this.state.linkableObjectNodes[0];
-            }
-
-            this.state.formId = this.state.currentLinkableObjectNode.id.toString();
-            await FormService.getInstance().getFormInstance(this.state.formId, false);
-        }
+        return nodes;
     }
 
     public async keyPressed(event: any): Promise<void> {
@@ -135,7 +112,6 @@ class LinkDialogComponent {
     public async linkableObjectChanged(nodes: TreeNode[]): Promise<void> {
         DialogService.getInstance().setOverlayDialogLoading(true);
 
-        this.state.currentLinkableObjectNode = nodes && nodes.length ? nodes[0] : null;
         this.selectedObjects = [];
         this.state.resultCount = 0;
 
@@ -144,13 +120,14 @@ class LinkDialogComponent {
         const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
             LinkObjectDialogContext.CONTEXT_ID
         );
-        context.setObjectList([]);
 
-        let formId;
-        if (this.state.currentLinkableObjectNode) {
-            formId = this.state.currentLinkableObjectNode.id.toString();
-            await FormService.getInstance().getFormInstance(formId, false);
-            await this.prepareResultTable();
+        let formId: string;
+        if (nodes && nodes.length) {
+            formId = nodes[0].id.toString();
+            this.linkLabel = nodes[0].label;
+            const formInstance = await FormService.getInstance().getFormInstance(formId, false);
+            context.setObjectList(this.objectType, []);
+            formInstance.reset();
         } else {
             this.state.table = null;
             formId = null;
@@ -161,9 +138,10 @@ class LinkDialogComponent {
 
         (this as any).setStateDirty('currentLinkableObjectNode');
 
-        setTimeout(() => {
-            this.state.formId = formId;
+        setTimeout(async () => {
             this.setSubmitState();
+            this.state.formId = formId;
+            await this.prepareResultTable();
             DialogService.getInstance().setOverlayDialogLoading(false);
         }, 50);
     }
@@ -171,17 +149,20 @@ class LinkDialogComponent {
     private async executeSearch(): Promise<void> {
         DialogService.getInstance().setOverlayDialogLoading(true);
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (this.state.currentLinkableObjectNode && formInstance.hasValues()) {
+        if (this.state.formId && formInstance.hasValues()) {
+            const excludeObjects = this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
+                ? [this.rootObject]
+                : null;
+
             const objects = await SearchService.getInstance().executeSearch(
-                this.state.currentLinkableObjectNode.id,
-                this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
-                    ? [this.rootObject] : null
+                this.state.formId, excludeObjects
             );
 
             const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
                 LinkObjectDialogContext.CONTEXT_ID
             );
-            context.setObjectList(objects);
+
+            context.setObjectList(formInstance.getObjectType(), objects);
             await this.prepareResultTable();
             this.state.resultCount = objects.length;
             this.setSubmitState();
@@ -193,34 +174,29 @@ class LinkDialogComponent {
     private async prepareResultTable(): Promise<void> {
         this.state.table = null;
 
-        if (this.state.currentLinkableObjectNode) {
-            const formInstance = await FormService.getInstance().getFormInstance(
-                this.state.currentLinkableObjectNode.id
-            );
+        if (this.state.formId) {
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
 
             const objectType = formInstance.getObjectType();
 
-            const tableConfiguration = new TableConfiguration(
-                objectType, null, 5, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            const tableConfiguration = new TableConfiguration(null, null, null,
+                objectType, null, 5, null, [], true, false,
+                null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
                 `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
                 LinkObjectDialogContext.CONTEXT_ID, true, null, true
             );
             table.addColumns([
-                new DefaultColumnConfiguration(
-                    'LinkedAs', true, false, true, false, 120, true, true, false, DataType.STRING
-                )
+                TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
             ]);
-
-            this.state.table = table;
 
             this.tableSubscriber = {
                 eventSubscriberId: 'link-object-dialog',
                 eventPublished: (data: TableEventData, eventId: string) => {
                     if (data && data.tableId === table.getTableId()) {
                         if (eventId === TableEvent.TABLE_READY) {
-                            this.setLinkedAsValues(this.state.linkDescriptions);
+                            this.setLinkedAsValues(table, this.state.linkDescriptions);
                             this.markNotSelectableRows();
                         }
                         this.selectedObjects = table.getSelectedRows().map((r) => r.getRowObject().getObject());
@@ -231,10 +207,12 @@ class LinkDialogComponent {
 
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
+
+            setTimeout(() => this.state.table = table, 50);
         }
     }
 
-    private setLinkedAsValues(links: CreateLinkDescription[] = []) {
+    private setLinkedAsValues(table: ITable, links: CreateLinkDescription[] = []) {
         const values = links.map((ld) => {
             const name = ld.linkTypeDescription.asSource
                 ? ld.linkTypeDescription.linkType.SourceName
@@ -244,7 +222,7 @@ class LinkDialogComponent {
             return value;
         });
         if (!!values.length) {
-            this.state.table.setRowObjectValues(values);
+            table.setRowObjectValues(values);
         }
     }
 
@@ -286,25 +264,23 @@ class LinkDialogComponent {
                 'Translatable#{0} link(s) assigned.', [newLinks.length]
             );
             BrowserUtil.openSuccessOverlay(toast);
-            this.setLinkedAsValues(newLinks);
+            this.setLinkedAsValues(this.state.table, newLinks);
             this.markNotSelectableRows();
             this.state.table.selectNone();
         }
     }
 
     private async setLinkTypes(): Promise<void> {
-        this.state.currentLinkTypeNode = null;
-        this.state.linkTypeNodes = [];
-
         this.linkTypeDescriptions = [];
+        const linkTypeNodes = [];
 
-        if (this.state.currentLinkableObjectNode) {
+        if (this.linkLabel) {
             const linkPartner = this.linkPartners.find(
-                (lp) => lp[0] === this.state.currentLinkableObjectNode.label
+                (lp) => lp[0] === this.linkLabel
             );
             const loadingOptions = new KIXObjectLoadingOptions([
                 new FilterCriteria(
-                    'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.state.objectType
+                    'Source', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, this.objectType
                 ),
                 new FilterCriteria(
                     'Target', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, linkPartner[1]
@@ -315,29 +291,33 @@ class LinkDialogComponent {
                 KIXObjectType.LINK_TYPE, null, loadingOptions, null, false
             );
 
-            linkTypes.forEach((lt) => {
+            linkTypes.forEach(async (lt) => {
                 const id = this.linkTypeDescriptions.length;
                 this.linkTypeDescriptions.push(new LinkTypeDescription(lt, true));
-                const node = new TreeNode(id, lt.SourceName);
-                this.state.linkTypeNodes.push(node);
+                const node = new TreeNode(id, await TranslationService.translate(lt.SourceName));
+                linkTypeNodes.push(node);
                 if (lt.Pointed === 1) {
                     const pointedLinkType = new LinkType(lt);
                     this.linkTypeDescriptions.push(new LinkTypeDescription(pointedLinkType, false));
-                    const pointedNode = new TreeNode(id + 1, pointedLinkType.TargetName);
-                    this.state.linkTypeNodes.push(pointedNode);
+                    const pointedNode = new TreeNode(id + 1,
+                        await TranslationService.translate(pointedLinkType.TargetName));
+                    linkTypeNodes.push(pointedNode);
                 }
             });
         } else {
-            this.state.linkTypeNodes = [];
             this.state.currentLinkTypeDescription = null;
         }
-        (this as any).setStateDirty('linkTypeNodes');
+
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.linkTypeTreeId);
+        if (treeHandler) {
+            treeHandler.selectNone();
+            treeHandler.setTree(linkTypeNodes);
+        }
     }
 
     public linkTypeChanged(nodes: TreeNode[]): void {
-        this.state.currentLinkTypeNode = nodes && nodes.length ? nodes[0] : null;
-        this.state.currentLinkTypeDescription = this.state.currentLinkTypeNode ?
-            this.linkTypeDescriptions[this.state.currentLinkTypeNode.id] : null;
+        const node = nodes && nodes.length ? nodes[0] : null;
+        this.state.currentLinkTypeDescription = node ? this.linkTypeDescriptions[node.id] : null;
         this.setSubmitState();
     }
 

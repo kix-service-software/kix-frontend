@@ -12,7 +12,7 @@ import { AbstractComponentState } from "../../../../../core/browser";
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public formId: string = 'edit-user-role-form'
+        public formId: string = 'user-role-edit-form'
     ) {
         super();
     }

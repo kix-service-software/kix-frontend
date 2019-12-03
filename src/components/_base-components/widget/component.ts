@@ -121,17 +121,14 @@ class WidgetComponent implements IEventSubscriber {
             classes.push('minimized');
         }
 
-        if (this.state.widgetType) {
-            classes.push(this.getWidgetTypeClass(this.state.widgetType));
-        } else {
-            classes.push(this.getWidgetTypeClass(this.state.widgetType));
-        }
+        classes.push(this.getWidgetTypeClass(this.state.widgetType));
+        classes.push(WidgetService.getInstance().getWidgetClasses(this.state.instanceId));
 
         return classes;
     }
 
     private getWidgetTypeClass(type: WidgetType): string {
-        let typeClass = 'widget-content';
+        let typeClass: string;
 
         if (this.state.isDialog) {
             typeClass = "dialog-widget";

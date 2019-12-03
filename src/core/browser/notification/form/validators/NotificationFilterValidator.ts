@@ -8,7 +8,7 @@
  */
 
 import {
-    IFormFieldValidator, FormField, ValidationResult, ValidationSeverity, FormFieldValue,
+    IFormFieldValidator, ValidationResult, ValidationSeverity, FormFieldValue,
     NotificationProperty, ArticleProperty, KIXObjectType, ContextType
 } from "../../../../model";
 import { FormService } from "../../../form";
@@ -16,16 +16,17 @@ import { TranslationService } from "../../../i18n/TranslationService";
 import { LabelService } from "../../../LabelService";
 import { ContextService } from "../../../context";
 import { NotificationService } from "../../NotificationService";
+import { FormFieldConfiguration } from "../../../../model/components/form/configuration";
 
 export class NotificationFilterValidator implements IFormFieldValidator {
 
     public validatorId: string = 'NotificationFilterValidator';
 
-    public isValidatorFor(formField: FormField, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
         return formField.property === NotificationProperty.DATA_FILTER;
     }
 
-    public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
 
         if (formField.property === NotificationProperty.DATA_FILTER) {
             const formInstance = await FormService.getInstance().getFormInstance(formId);

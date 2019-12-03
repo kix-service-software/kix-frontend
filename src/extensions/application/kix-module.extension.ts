@@ -45,12 +45,10 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('default-select-input', '_base-components/form/inputs/default-select-input', []),
         new UIComponent('form-list', '_base-components/form/inputs/form-list', []),
         new UIComponent('rich-text-input', '_base-components/form/inputs/rich-text-input', []),
-        new UIComponent('valid-input', '_base-components/form/inputs/valid-input', []),
         new UIComponent('attachment-input', '_base-components/form/inputs/attachment-input', []),
         new UIComponent('icon-input', '_base-components/form/inputs/icon-input', []),
         new UIComponent('link-input', '_base-components/form/inputs/link-input', []),
         new UIComponent('language-input', '_base-components/form/inputs/language-input', []),
-        new UIComponent('general-catalog-input', '_base-components/form/inputs/general-catalog-input', []),
         new UIComponent(
             'general-catalog-class-input', 'cmdb/admin/dialogs/inputs/general-catalog-class-input', []
         ),

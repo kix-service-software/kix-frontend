@@ -7,5 +7,5 @@
  * --
  */
 
-export { TicketChartConfiguration } from './TicketChartConfiguration';
+export { TicketChartWidgetConfiguration } from './TicketChartWidgetConfiguration';
 export { TicketChartFactory } from './TicketChartFactory';

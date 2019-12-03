@@ -57,7 +57,7 @@ export class ContextHistory {
                     state.contextId, null, null, null
                 );
 
-                RoutingService.getInstance().routeToContext(routingConfiguration, state.objectId, false);
+                RoutingService.getInstance().routeToContext(routingConfiguration, state.objectId, false, false);
             }
         }
     }

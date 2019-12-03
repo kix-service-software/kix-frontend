@@ -9,27 +9,24 @@
 
 import { IUIModule } from "../../application/IUIModule";
 import { ServiceRegistry, FactoryService } from "../../kix";
-import {
-    KIXObjectType, ContextDescriptor, ContextType, ContextMode, ConfiguredDialogWidget,
-    WidgetConfiguration,
-    CRUD
-} from "../../../model";
-import { TableFactoryService } from "../../table";
+import { KIXObjectType, ContextDescriptor, ContextType, ContextMode } from "../../../model";
+import { TableFactoryService, TableCSSHandlerRegistry } from "../../table";
 import { LabelService } from "../../LabelService";
 import {
     SysConfigService, SysConfigFormService, SysConfigOptionBrowserFactory,
     SysConfigOptionDefinitionBrowserFactory, SysConfigLabelProvider, EditSysConfigDialogContext,
-    SysConfigPlaceholderHandler
+    SysConfigPlaceholderHandler,
 } from "../../sysconfig";
 import { SysConfigTableFactory } from "../../sysconfig/table";
-import { ContextService, DialogService } from "../..";
-import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../model/UIComponentPermission";
+import { ContextService } from "../..";
 import { PlaceholderService } from "../../placeholder";
+import { SysConfigTableCSSHandler } from "../../sysconfig/table/SysConfigTableCSSHandler";
 
 export class UIModule implements IUIModule {
 
     public priority: number = 500;
+
+    public name: string = 'SystemUIUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -49,30 +46,16 @@ export class UIModule implements IUIModule {
         TableFactoryService.getInstance().registerFactory(new SysConfigTableFactory());
         LabelService.getInstance().registerLabelProvider(new SysConfigLabelProvider());
 
-        // if (await this.checkPermission('system/config/*', CRUD.UPDATE)) {
+        TableCSSHandlerRegistry.getInstance().registerObjectCSSHandler(
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, new SysConfigTableCSSHandler()
+        );
+
         const editSysConfigDialogContext = new ContextDescriptor(
             EditSysConfigDialogContext.CONTEXT_ID, [KIXObjectType.SYS_CONFIG_OPTION_DEFINITION],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-sysconfig-dialog', ['sysconfig'], EditSysConfigDialogContext
         );
-        ContextService.getInstance().registerContext(editSysConfigDialogContext);
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'edit-sysconfig-dialog',
-            new WidgetConfiguration(
-                'edit-sysconfig-dialog', 'Translatable#Edit Key',
-                [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-            ContextMode.EDIT_ADMIN
-        ));
-        // }
-    }
-
-    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, [crud])]
-        );
+        await ContextService.getInstance().registerContext(editSysConfigDialogContext);
     }
 
 }

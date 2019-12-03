@@ -8,23 +8,24 @@
  */
 
 import {
-    IFormFieldValidator, FormField, ValidationResult, ValidationSeverity,
+    IFormFieldValidator, ValidationResult, ValidationSeverity,
     FormFieldValue, SystemAddress, KIXObjectType, NotificationProperty
 } from "../../../../model";
 import { FormService } from "../../..";
 import { KIXObjectService } from "../../../kix";
 import { FormValidationService } from "../../../form/validation";
 import { TranslationService } from "../../../i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../../model/components/form/configuration";
 
 export class NotificationEmailRecipientValidator implements IFormFieldValidator {
 
     public validatorId: string = 'NotificationEmailRecipientValidator';
 
-    public isValidatorFor(formField: FormField, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
         return formField.property === NotificationProperty.DATA_RECIPIENT_EMAIL;
     }
 
-    public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const emailValue = await formInstance.getFormFieldValueByProperty<string[]>(
             NotificationProperty.DATA_RECIPIENT_EMAIL

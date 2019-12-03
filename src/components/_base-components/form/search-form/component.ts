@@ -13,7 +13,8 @@ import {
 import { FormService } from '../../../../core/browser/form';
 import {
     WidgetService, IdService, TableConfiguration, TableHeaderHeight,
-    TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty, TableEventData
+    TableRowHeight, BrowserUtil, ITable, TableFactoryService, TableEvent, SearchProperty,
+    TableEventData, ObjectPropertyValue
 } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
@@ -31,6 +32,9 @@ class Component implements ISearchFormListener {
     public listenerId: string;
 
     private subscriber: IEventSubscriber;
+
+    private keyListenerElement: any;
+    private keyListener: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -52,21 +56,6 @@ class Component implements ISearchFormListener {
 
         this.state.table = await this.createTable();
 
-        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
-        if (formInstance) {
-            formInstance.registerSearchFormListener(this);
-        }
-
-        if (SearchService.getInstance().getSearchCache()) {
-            const cache = SearchService.getInstance().getSearchCache();
-            if (cache.status === CacheState.VALID && cache.objectType === this.objectType) {
-                SearchService.getInstance().provideResult();
-                await this.setCanSearch();
-            } else {
-                this.formReset();
-            }
-        }
-
         this.subscriber = {
             eventSubscriberId: 'search-result-list',
             eventPublished: async (data: TableEventData, eventId: string) => {
@@ -82,6 +71,45 @@ class Component implements ISearchFormListener {
 
         EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this.subscriber);
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
+
+        const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
+        if (formInstance) {
+            formInstance.registerSearchFormListener(this);
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(formInstance.getObjectType());
+            this.state.manager = searchDefinition.formManager;
+
+            const cache = SearchService.getInstance().getSearchCache();
+            if (cache && cache.objectType === this.objectType) {
+                if (cache.status === CacheState.VALID) {
+                    SearchService.getInstance().provideResult(this.objectType);
+                    await this.setCanSearch();
+                    this.state.manager.reset(false);
+                    for (const criteria of cache.criteria) {
+                        this.state.manager.setValue(
+                            new ObjectPropertyValue(criteria.property, criteria.operator, criteria.value)
+                        );
+                    }
+                } else {
+                    await this.setDefaults(formInstance);
+                }
+            } else {
+                await this.setDefaults(formInstance);
+            }
+
+            this.state.manager.registerListener(this.listenerId, () => {
+                formInstance.clearCriteria();
+                const values = this.state.manager.getValues();
+                values.forEach((v) => formInstance.setFilterCriteria(searchDefinition.getFilterCriteria(v)));
+            });
+        }
+
+        this.keyListenerElement = (this as any).getEl();
+        if (this.keyListenerElement) {
+            this.keyListener = this.keyDown.bind(this);
+            this.keyListenerElement.addEventListener('keydown', this.keyListener);
+        }
+
+        this.state.prepared = true;
     }
 
     public async onDestroy(): Promise<void> {
@@ -89,6 +117,22 @@ class Component implements ISearchFormListener {
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             formInstance.removeSearchFormListener(this.listenerId);
+        }
+        TableFactoryService.getInstance().destroyTable(`search-form-results-${this.objectType}`);
+
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));
+        }
+    }
+
+    private async setDefaults(formInstance: SearchFormInstance): Promise<void> {
+        const defaultProperties = formInstance.form.defaultSearchProperties;
+        if (defaultProperties) {
+            this.state.manager.reset(false);
+            for (const p of defaultProperties) {
+                const operators = await this.state.manager.getOperations(p);
+                this.state.manager.setValue(new ObjectPropertyValue(p, operators ? operators[0] : null, null));
+            }
         }
     }
 
@@ -106,15 +150,36 @@ class Component implements ISearchFormListener {
     }
 
     public async formReset(): Promise<void> {
-        SearchService.getInstance().provideResult([]);
+        this.state.prepared = false;
+        await SearchService.getInstance().provideResult(this.objectType, []);
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            cache.status = CacheState.INVALID;
+        }
+
+        this.state.resultCount = 0;
 
         const formInstance = await FormService.getInstance().getFormInstance<SearchFormInstance>(this.formId);
         if (formInstance) {
             formInstance.reset();
         }
+
+        if (this.state.manager) {
+            this.setDefaults(formInstance);
+        }
+
+        this.state.table = await this.createTable();
+
+        setTimeout(() => {
+            this.state.prepared = true;
+        }, 50);
     }
 
     public cancel(): void {
+        const cache = SearchService.getInstance().getSearchCache();
+        if (cache) {
+            cache.status = CacheState.VALID;
+        }
         DialogService.getInstance().closeMainDialog();
     }
 
@@ -176,13 +241,13 @@ class Component implements ISearchFormListener {
     }
 
     private async createTable(): Promise<ITable> {
-        const tableConfiguration = new TableConfiguration(
-            this.objectType, null, null, null, false, false, null, null,
+        const tableConfiguration = new TableConfiguration(null, null, null,
+            this.objectType, null, null, null, [], false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(
             `search-form-results-${this.objectType}`, this.objectType, tableConfiguration,
-            null, SearchContext.CONTEXT_ID, true, false, true
+            null, SearchContext.CONTEXT_ID, true, false, true, true, true
         );
 
         return table;

@@ -10,7 +10,7 @@
 import { TableConfiguration, ITable } from "../../../../core/browser";
 import { Contact, WidgetComponentState, AbstractAction } from "../../../../core/model";
 
-export class ComponentState extends WidgetComponentState<TableConfiguration> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public contact: Contact = null,

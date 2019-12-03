@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { KIXObjectPropertyFilter, TreeNode } from '../../../core/model';
+import { KIXObjectPropertyFilter, TreeNode, TreeHandler, TreeService } from '../../../core/model';
 import { TranslationService } from '../../../core/browser/i18n/TranslationService';
 import { ComponentInput } from './ComponentInput';
 
@@ -16,26 +16,47 @@ class Component {
 
     private state: ComponentState;
 
+    private predefinedFilter: KIXObjectPropertyFilter[];
+
+    private treeHandler: TreeHandler;
+
+    private currentFilterId: string;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.treeHandler = new TreeHandler([]);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
     }
 
     public onInput(input: ComponentInput): void {
         if (input.predefinedFilter) {
-            this.state.predefinedFilter = input.predefinedFilter;
-            this.state.predefinedFilterList = this.state.predefinedFilter.map(
-                (pf: KIXObjectPropertyFilter, index) => new TreeNode(index, pf.name, pf.icon ? pf.icon : null)
+            this.predefinedFilter = input.predefinedFilter;
+            const selectedNodes = this.treeHandler.getSelectedNodes();
+            const nodes = this.predefinedFilter.map(
+                (pf: KIXObjectPropertyFilter, index) => new TreeNode(
+                    index, pf.name, pf.icon ? pf.icon : null, undefined, undefined, undefined, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    selectedNodes.some((n) => n.id === index)
+                )
             );
+            this.treeHandler.setTree(nodes);
         } else {
-            this.state.predefinedFilter = [];
-            this.state.predefinedFilterList = [];
+            this.predefinedFilter = [];
         }
+
+        this.state.hasFilterList = this.predefinedFilter && this.predefinedFilter.length > 0;
 
         this.state.disabled = typeof input.disabled !== 'undefined' ? input.disabled : false;
 
         this.state.icon = typeof input.icon !== 'undefined' ? input.icon : 'kix-icon-filter';
         this.state.showFilterCount = typeof input.showFilterCount !== 'undefined' ? input.showFilterCount : true;
         this.setFilterCount(input.filterCount);
+
+        const nds = this.treeHandler.getTree();
+        nds.forEach(async (n) => {
+            n.tooltip = await TranslationService.translate(n.tooltip);
+        });
+        this.treeHandler.setTree(nds);
 
         this.update(input);
     }
@@ -55,7 +76,7 @@ class Component {
     }
 
     public predefinedFilterChanged(nodes: TreeNode[]): void {
-        this.state.currentFilter = nodes && nodes.length ? nodes[0] : null;
+        this.currentFilterId = nodes && nodes.length ? nodes[0].id : null;
         (this as any).setStateDirty('currentFilter');
         this.filter();
     }
@@ -69,14 +90,15 @@ class Component {
 
     public filter(): void {
         if (!this.state.disabled) {
-            const filter = this.state.currentFilter ? this.state.predefinedFilter[this.state.currentFilter.id] : null;
+            const filter = this.predefinedFilter[this.currentFilterId];
             (this as any).emit('filter', this.state.textFilterValue, filter);
         }
     }
 
     public reset(): void {
         this.state.textFilterValue = null;
-        this.state.currentFilter = null;
+        this.currentFilterId = null;
+        this.treeHandler.setSelection(this.treeHandler.getSelectedNodes(), false);
     }
 
     private setFilterCount(filterCount: number = null) {
