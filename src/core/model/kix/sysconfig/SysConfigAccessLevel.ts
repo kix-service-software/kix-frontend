@@ -7,13 +7,12 @@
  * --
  */
 
-.pending-time-reached,
-.escalated,
-.unseen,
-.confidential {
-    color: @tertiary-1;
-}
+export enum SysConfigAccessLevel {
 
-.article-unread {
-    font-weight: bold;
+    PUBLIC = 'public',
+
+    INTERNAL = 'internal',
+
+    CONFIDENTIAL = 'confidential'
+
 }
