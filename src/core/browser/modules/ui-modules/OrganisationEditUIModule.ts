@@ -20,6 +20,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 301;
 
+    public name: string = 'OrganisationEditUIModule';
+
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }

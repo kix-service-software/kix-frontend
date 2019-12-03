@@ -25,8 +25,9 @@ class Extension implements IKIXModuleExtension {
         ]),
         new UIComponent('general-catalog-admin-module-component',
             'core/browser/modules/ui-modules/GeneralCatalogUIModule', [
-                new UIComponentPermission('system/generalcatalog', [CRUD.READ], true),
-            ])
+            new UIComponentPermission('system/generalcatalog', [CRUD.READ], true),
+            new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true)
+        ])
     ];
 
     public external: boolean = false;

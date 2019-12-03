@@ -24,6 +24,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 302;
 
+    public name: string = 'OrganisationReadUIModule';
+
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }

@@ -18,6 +18,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 201;
 
+    public name: string = 'CMDBEditUIModule';
+
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }

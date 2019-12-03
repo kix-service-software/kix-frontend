@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, ContextService, ICell, DialogService } from '../../../../core/browser';
 import { KIXObjectType, ContextMode, Contact } from '../../../../core/model';
+import { ContextFactory } from '../../../../core/browser/context/ContextFactory';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -21,12 +22,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (input.cell) {
             const cell: ICell = input.cell;
             const contact: Contact = cell.getRow().getRowObject().getObject();
-            if (contact && contact instanceof Contact) {
-                const dialogs = DialogService.getInstance().getRegisteredDialogs(
-                    ContextMode.CREATE, KIXObjectType.TICKET
-                );
-                this.state.show = contact.ValidID === 1 && dialogs && dialogs.length > 0;
-            }
+            this.update(contact);
+        }
+    }
+
+    private async update(contact: Contact): Promise<void> {
+        if (contact && contact instanceof Contact) {
+            const dialogs = ContextFactory.getInstance().getContextDescriptors(
+                ContextMode.CREATE, KIXObjectType.TICKET
+            );
+            this.state.show = contact.ValidID === 1 && dialogs && dialogs.length > 0;
         }
     }
 

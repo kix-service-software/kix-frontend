@@ -65,7 +65,7 @@ export class CacheService {
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
-            LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
+            // LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
             if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
                 await this.deleteKeys(event.Namespace);
             }

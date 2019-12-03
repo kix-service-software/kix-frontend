@@ -11,6 +11,9 @@ import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
 import { UIComponentPermission } from "../../core/model/UIComponentPermission";
 import { CRUD } from "../../core/model";
+import { AdministrationNamespace } from "../../socket-namespaces/AdministrationNamespace";
+import { AdminModuleService } from "../../services";
+import { ConfigurationService } from "../../core/services";
 
 class Extension implements IKIXModuleExtension {
 
@@ -19,7 +22,9 @@ class Extension implements IKIXModuleExtension {
     public id = 'application-admin-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('admin-module-component', 'core/browser/modules/ui-modules/AdminUIModule', []),
+        new UIComponent('admin-module-component', 'core/browser/modules/ui-modules/AdminUIModule', [
+            new UIComponentPermission('system/config/*', [CRUD.UPDATE], true)
+        ]),
         new UIComponent('system-module-component', 'core/browser/modules/ui-modules/SystemUIModule', [
             new UIComponentPermission('system/config/*', [CRUD.UPDATE], true)
         ])
@@ -50,7 +55,6 @@ class Extension implements IKIXModuleExtension {
             'i18n-translation-info-widget', 'i18n/admin/widgets/i18n-translation-info-widget', []
         ),
     ];
-
 }
 
 module.exports = (data, host, options) => {

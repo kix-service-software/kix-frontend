@@ -15,13 +15,13 @@ import {
 import { BulkService } from '../../../../core/browser/bulk';
 import { ContextDescriptor, KIXObjectType, ContextType, ContextMode, CRUD } from '../../../../core/model';
 import { FormValidationService } from '../../../../core/browser/form/validation';
-import { AuthenticationSocketClient } from '../../../../core/browser/application/AuthenticationSocketClient';
-import { UIComponentPermission } from '../../../../core/model/UIComponentPermission';
 import { IUIModule } from '../../application/IUIModule';
 
 export class UIModule implements IUIModule {
 
     public priority: number = 101;
+
+    public name: string = 'TicketUpdateUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -36,18 +36,10 @@ export class UIModule implements IUIModule {
 
         TicketFormService.getInstance();
 
-        if (await this.checkPermissions('tickets/*', [CRUD.UPDATE])) {
-            BulkService.getInstance().registerBulkManager(new TicketBulkManager());
-        }
+        BulkService.getInstance().registerBulkManager(new TicketBulkManager());
 
         await this.registerContexts();
         this.registerTicketActions();
-    }
-
-    private async checkPermissions(resource: string, crud: CRUD[]): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, crud)]
-        );
     }
 
     private async registerContexts(): Promise<void> {

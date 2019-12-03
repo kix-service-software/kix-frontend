@@ -61,6 +61,18 @@ export class ContextFactory {
         return descriptor;
     }
 
+    public getContextDescriptors(contextMode: ContextMode, objectType?: KIXObjectType): ContextDescriptor[] {
+        let descriptors = [];
+        if (contextMode && !objectType) {
+            descriptors = this.registeredDescriptors.filter((c) => c.contextMode === contextMode);
+        } else if (contextMode && objectType) {
+            descriptors = this.registeredDescriptors.filter(
+                (c) => c.contextMode === contextMode && c.kixObjectTypes.some((ot) => ot === objectType)
+            );
+        }
+        return descriptors;
+    }
+
     public static async getContextForUrl(
         contextUrl: string, objectId?: string | number, contextMode?: ContextMode
     ): Promise<Context> {

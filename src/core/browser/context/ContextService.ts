@@ -21,7 +21,6 @@ import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { BrowserHistoryState } from './BrowserHistoryState';
 import { TableFactoryService } from '../table';
 import { ContextSocketClient } from './ContextSocketClient';
-import { config } from 'memcached';
 
 export class ContextService {
 
@@ -50,7 +49,6 @@ export class ContextService {
 
     public async registerContext(contextDescriptor: ContextDescriptor): Promise<void> {
         ContextFactory.getInstance().registerContext(contextDescriptor);
-        await DialogService.getInstance().registerDialogs(contextDescriptor.contextId);
         this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
     }
 
@@ -117,7 +115,7 @@ export class ContextService {
         );
 
         if (!context) {
-            const dialogs = DialogService.getInstance().getRegisteredDialogs(contextMode);
+            const dialogs = await DialogService.getInstance().getRegisteredDialogs(contextMode);
             if (dialogs && dialogs.length) {
                 context = await ContextFactory.getInstance().getContext(
                     contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, resetContext

@@ -10,15 +10,13 @@
 import { IUIModule } from "../../application/IUIModule";
 import { PlaceholderService } from "../../placeholder";
 import { PermissionTableCSSHandler } from "../../application";
-import { KIXObjectType, CRUD, ContextDescriptor, ContextMode, ContextType, } from "../../../model";
+import { KIXObjectType, ContextDescriptor, ContextMode, ContextType, } from "../../../model";
 import { TableCSSHandlerRegistry, TableFactoryService } from "../../table";
 import { ServiceRegistry, FactoryService } from "../../kix";
 import { LabelService } from "../../LabelService";
 import { PermissionTypeBrowserFactory } from "../../permission";
 import { ActionFactory } from "../../ActionFactory";
 import { ContextService } from "../../context";
-import { AuthenticationSocketClient } from "../../application/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../model/UIComponentPermission";
 import {
     UserFormService, RoleService, UserPlaceholderHandler, UserLabelProvider, RoleLabelProvider,
     UserRoleFormService, RoleTableFactory, UserTableFactory, UserBrowserFactory, RoleBrowserFactory,
@@ -29,6 +27,8 @@ import {
 export class UIModule implements IUIModule {
 
     public priority: number = 50;
+
+    public name: string = 'UserUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -64,27 +64,23 @@ export class UIModule implements IUIModule {
 
     private async registerUser(): Promise<void> {
 
-        if (await this.checkPermission('system/users', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
+        ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
 
-            const newUserContext = new ContextDescriptor(
-                NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                false, 'new-user-dialog', ['users'], NewUserDialogContext
-            );
-            await ContextService.getInstance().registerContext(newUserContext);
-        }
+        const newUserContext = new ContextDescriptor(
+            NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-user-dialog', ['users'], NewUserDialogContext
+        );
+        await ContextService.getInstance().registerContext(newUserContext);
 
-        if (await this.checkPermission('system/users/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
+        ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
 
-            const editUserContext = new ContextDescriptor(
-                EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                false, 'edit-user-dialog', ['users'], EditUserDialogContext
-            );
-            await ContextService.getInstance().registerContext(editUserContext);
-        }
+        const editUserContext = new ContextDescriptor(
+            EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-user-dialog', ['users'], EditUserDialogContext
+        );
+        await ContextService.getInstance().registerContext(editUserContext);
 
         const userDetailsContextDescriptor = new ContextDescriptor(
             UserDetailsContext.CONTEXT_ID, [KIXObjectType.USER],
@@ -96,27 +92,23 @@ export class UIModule implements IUIModule {
 
     private async registerRole(): Promise<void> {
 
-        if (await this.checkPermission('system/roles', CRUD.CREATE)) {
-            ActionFactory.getInstance().registerAction('user-admin-role-create-action', UserRoleCreateAction);
+        ActionFactory.getInstance().registerAction('user-admin-role-create-action', UserRoleCreateAction);
 
-            const newUserRoleContext = new ContextDescriptor(
-                NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
-                ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-                false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext
-            );
-            await ContextService.getInstance().registerContext(newUserRoleContext);
-        }
+        const newUserRoleContext = new ContextDescriptor(
+            NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
+            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
+            false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext
+        );
+        await ContextService.getInstance().registerContext(newUserRoleContext);
 
-        if (await this.checkPermission('system/roles/*', CRUD.UPDATE)) {
-            ActionFactory.getInstance().registerAction('user-admin-role-edit-action', UserRoleEditAction);
+        ActionFactory.getInstance().registerAction('user-admin-role-edit-action', UserRoleEditAction);
 
-            const editUserRoleContext = new ContextDescriptor(
-                EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
-                ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-                false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
-            );
-            await ContextService.getInstance().registerContext(editUserRoleContext);
-        }
+        const editUserRoleContext = new ContextDescriptor(
+            EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
+            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
+            false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
+        );
+        await ContextService.getInstance().registerContext(editUserRoleContext);
 
         const roleDetailsContextDescriptor = new ContextDescriptor(
             RoleDetailsContext.CONTEXT_ID, [KIXObjectType.ROLE],
@@ -124,12 +116,6 @@ export class UIModule implements IUIModule {
             true, 'object-details-page', ['roles'], RoleDetailsContext
         );
         await ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
-    }
-
-    private async checkPermission(resource: string, crud: CRUD): Promise<boolean> {
-        return await AuthenticationSocketClient.getInstance().checkPermissions(
-            [new UIComponentPermission(resource, [crud])]
-        );
     }
 
 }

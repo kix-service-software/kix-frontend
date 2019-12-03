@@ -16,6 +16,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 102;
 
+    public name: string = 'TicketCreateUIModule';
+
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -30,7 +32,7 @@ export class UIModule implements IUIModule {
             NewTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.CREATE,
             false, 'new-ticket-dialog', ['tickets'], NewTicketDialogContext
         );
-        await await ContextService.getInstance().registerContext(newTicketContext);
+        await ContextService.getInstance().registerContext(newTicketContext);
     }
 
     private registerTicketActions(): void {

@@ -21,6 +21,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 1000;
 
+    public name: string = 'LinksUIModule';
+
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }

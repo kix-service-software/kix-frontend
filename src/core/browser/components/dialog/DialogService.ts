@@ -17,6 +17,7 @@ import { IImageDialogListener } from "./IImageDialogListener";
 import { ContextService } from '../../context/ContextService';
 import { TranslationService } from "../../i18n/TranslationService";
 import { CacheService } from "../../cache";
+import { ContextFactory } from "../../context/ContextFactory";
 
 export class DialogService {
 
@@ -29,8 +30,6 @@ export class DialogService {
 
     private imageDialogListener: IImageDialogListener;
 
-    private dialogs: ConfiguredDialogWidget[] = [];
-
     public activeDialog: ConfiguredDialogWidget = null;
 
     private constructor() { }
@@ -41,28 +40,6 @@ export class DialogService {
         }
 
         return DialogService.INSTANCE;
-    }
-
-    public async registerDialogs(contextId: string): Promise<void> {
-        const configuration = await ContextService.getInstance().getContextConfiguration(contextId)
-            .catch((error: Error): ContextConfiguration => {
-                console.log(error);
-                return null;
-            });
-
-        if (configuration) {
-            const dialogs = configuration.dialogs;
-            if (dialogs) {
-                dialogs.forEach((d) => this.dialogs.push(d));
-            }
-        }
-    }
-
-    public unregisterDialog(instanceId: string): void {
-        const index = this.dialogs.findIndex((d) => d.instanceId === instanceId);
-        if (index !== -1) {
-            this.dialogs.splice(index, 1);
-        }
     }
 
     public registerMainDialogListener(listener: IMainDialogListener): void {
@@ -147,7 +124,7 @@ export class DialogService {
                     dialogTitle = 'Dialog';
             }
 
-            const dialogs = this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null));
+            const dialogs = await this.getRegisteredDialogs(contextMode, (singleTab ? kixObjectType : null));
             this.activeDialog = dialogs.find((d) => d.kixObjectType === kixObjectType);
             this.mainDialogListener.open(
                 dialogTitle,
@@ -201,10 +178,26 @@ export class DialogService {
         }
     }
 
-    public getRegisteredDialogs(contextMode: ContextMode, objectType?: KIXObjectType): ConfiguredDialogWidget[] {
-        return this.dialogs.filter(
-            (d) => d.contextMode === contextMode && (objectType ? d.kixObjectType === objectType : true)
-        );
+    public async getRegisteredDialogs(
+        contextMode: ContextMode, objectType?: KIXObjectType
+    ): Promise<ConfiguredDialogWidget[]> {
+        let dialogs = [];
+
+        const descriptors = ContextFactory.getInstance().getContextDescriptors(contextMode, objectType);
+        if (descriptors) {
+            for (const descriptor of descriptors) {
+                const context = await ContextService.getInstance().getContext(descriptor.contextId);
+                if (context && context.getConfiguration() && context.getConfiguration().dialogs) {
+                    dialogs = [
+                        ...dialogs,
+                        ...context.getConfiguration().dialogs.filter(
+                            (d) => d.contextMode === contextMode && (objectType ? d.kixObjectType === objectType : true)
+                        )
+                    ];
+                }
+            }
+        }
+        return dialogs;
     }
 
     public setMainDialogTitle(title: string): void {

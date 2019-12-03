@@ -45,6 +45,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 100;
 
+    public name: string = 'TicketReadUIModule';
+
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(new TicketPlaceholderHandler());
 

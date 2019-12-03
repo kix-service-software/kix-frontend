@@ -10,7 +10,7 @@
 import { KIXObjectService } from './KIXObjectService';
 import {
     KIXObjectType, KIXObjectLoadingOptions, KIXObjectSpecificLoadingOptions,
-    SysConfigOption, Error, KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions
+    SysConfigOption, Error, KIXObjectSpecificCreateOptions, KIXObjectSpecificDeleteOptions, FilterCriteria
 } from '../../../model';
 import { KIXObjectServiceRegistry } from '../../KIXObjectServiceRegistry';
 import { SysConfigOptionFactory } from '../../object-factories/SysConfigOptionFactory';
@@ -123,6 +123,10 @@ export class SysConfigService extends KIXObjectService {
                     throw new Error(error.Code, error.Message);
                 });
         }
+    }
+
+    protected prepareAPISearch(criteria: FilterCriteria[]): FilterCriteria[] {
+        return [];
     }
 
 }
