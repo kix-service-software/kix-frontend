@@ -27,11 +27,11 @@ export class ChartWidgetConfigurationResolver implements IConfigurationResolver<
 
     private constructor() { }
 
-    public async resolve(configuration: IConfiguration): Promise<void> {
+    public async resolve(token: string, configuration: IConfiguration): Promise<void> {
         if (configuration && configuration.subConfigurationDefinition) {
             const chartConfig = await ModuleConfigurationService.getInstance()
                 .loadConfiguration<ChartComponentConfiguration>(
-                    ConfigurationType.Chart, configuration.subConfigurationDefinition.configurationId
+                    token, configuration.subConfigurationDefinition.configurationId
                 );
 
             configuration.configuration = chartConfig;

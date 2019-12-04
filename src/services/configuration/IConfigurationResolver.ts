@@ -11,6 +11,6 @@ import { IConfiguration } from "../../core/model/configuration";
 
 export interface IConfigurationResolver<T extends IConfiguration = IConfiguration> {
 
-    resolve(configuration: T): Promise<void>;
+    resolve(token: string, configuration: T): Promise<void>;
 
 }

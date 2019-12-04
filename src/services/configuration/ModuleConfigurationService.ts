@@ -53,32 +53,36 @@ export class ModuleConfigurationService {
     public async loadConfiguration<T extends IConfiguration>(token: string, id: string): Promise<T> {
         let configuration: T;
 
-        let options = await CacheService.getInstance().get(
+        let cachedOptions = await CacheService.getInstance().get(
             'ModuleConfigurationService::SysConfigOption', 'ModuleConfigurationService'
         );
-        if (!options) {
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        SysConfigOptionDefinitionProperty.CONTEXT, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
-                    )
-                ]
-            );
-            options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, null, loadingOptions, null
-            );
-            CacheService.getInstance().set(
-                'ModuleConfigurationService::SysConfigOption', options, 'ModuleConfigurationService'
-            );
+
+        let option;
+        if (!cachedOptions) {
+            cachedOptions = [];
         }
 
-        if (options && options.length) {
-            const option = options.find((o) => o.Name === id);
-            if (option && option.Value) {
-                configuration = JSON.parse(option.Value);
+        option = cachedOptions.find((o) => o.Name === id);
+        if (!option) {
+            const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, [id], null, null
+            ).catch((error) => {
+                LoggingService.getInstance().error(`Could not load configuration: ${id}`);
+                return null;
+            });
+
+            if (options && options.length) {
+                option = options[0];
+                cachedOptions.push(option);
             }
+        }
+
+        CacheService.getInstance().set(
+            'ModuleConfigurationService::SysConfigOption', cachedOptions, 'ModuleConfigurationService'
+        );
+
+        if (option && option.Value) {
+            configuration = JSON.parse(option.Value);
         }
 
         return configuration;

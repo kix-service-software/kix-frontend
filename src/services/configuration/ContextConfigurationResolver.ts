@@ -81,7 +81,7 @@ export class ContextConfigurationResolver {
                 }
 
                 if (resolver) {
-                    await resolver.resolve(subConfiguration);
+                    await resolver.resolve(token, subConfiguration);
                 }
             }
         }
