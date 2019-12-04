@@ -27,7 +27,7 @@ export class TableConfigurationResolver implements IConfigurationResolver<TableC
 
     private constructor() { }
 
-    public async resolve(tableConfig: TableConfiguration): Promise<void> {
+    public async resolve(token: string, tableConfig: TableConfiguration): Promise<void> {
         if (tableConfig && tableConfig.tableColumnConfigurations) {
             if (!tableConfig.tableColumns
                 && tableConfig.tableColumnConfigurations
@@ -38,7 +38,7 @@ export class TableConfigurationResolver implements IConfigurationResolver<TableC
 
             for (const columnConfigId of tableConfig.tableColumnConfigurations) {
                 const columnConfig = await ModuleConfigurationService.getInstance()
-                    .loadConfiguration<IColumnConfiguration>(ConfigurationType.TableColumn, columnConfigId);
+                    .loadConfiguration<IColumnConfiguration>(token, columnConfigId);
 
                 if (columnConfig) {
                     tableConfig.tableColumns.push(columnConfig);

@@ -11,6 +11,8 @@ import { Context, KIXObjectType, ContextMode, ContextDescriptor, ContextType } f
 import { ContextSocketClient } from "./ContextSocketClient";
 import { AdditionalContextInformation } from "./AdditionalContextInformation";
 import { FormService } from "../form";
+import { EventService } from "../event";
+import { ApplicationEvent } from "../application";
 
 export class ContextFactory {
 
@@ -48,7 +50,25 @@ export class ContextFactory {
         if (!context) {
             context = await this.createContextInstance(contextId, objectType, contextMode, objectId);
         } else if (reset) {
+            let timeout;
+
+            if (typeof window !== 'undefined') {
+                timeout = window.setTimeout(() => {
+                    EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                        loading: true, hint: ''
+                    });
+                }, 300);
+            }
+
             const configuration = await ContextSocketClient.loadContextConfiguration(context.getDescriptor().contextId);
+
+            if (timeout) {
+                window.clearTimeout(timeout);
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                    loading: false
+                });
+            }
+
             context.setConfiguration(configuration);
             context.reset();
         }
@@ -133,9 +153,26 @@ export class ContextFactory {
 
             let context: Context;
             if (descriptor) {
+                let timeout;
+                if (typeof window !== 'undefined') {
+                    timeout = window.setTimeout(() => {
+                        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                            loading: true, hint: ''
+                        });
+                    }, 300);
+                }
+
                 const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId).catch(
                     (error) => { reject(error); }
                 );
+
+                if (timeout) {
+                    window.clearTimeout(timeout);
+                    EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                        loading: false
+                    });
+                }
+
                 if (configuration) {
                     context = new descriptor.contextClass(descriptor, objectId, configuration);
                     await context.initContext();

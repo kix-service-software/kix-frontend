@@ -27,16 +27,16 @@ export class TableWidgetConfigurationResolver implements IConfigurationResolver<
 
     private constructor() { }
 
-    public async resolve(configuration: TableWidgetConfiguration): Promise<void> {
+    public async resolve(token: string, configuration: TableWidgetConfiguration): Promise<void> {
         if (configuration) {
             if (configuration.subConfigurationDefinition) {
                 const tableConfig = await ModuleConfigurationService.getInstance()
                     .loadConfiguration<TableConfiguration>(
-                        ConfigurationType.Table, configuration.subConfigurationDefinition.configurationId
+                        token, configuration.subConfigurationDefinition.configurationId
                     );
 
                 configuration.tableConfiguration = tableConfig;
-                await TableConfigurationResolver.getInstance().resolve(tableConfig);
+                await TableConfigurationResolver.getInstance().resolve(token, tableConfig);
             }
         }
     }
