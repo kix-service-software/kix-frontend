@@ -59,7 +59,8 @@ export class Extension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'organisation-edit-form-field-cno',
                 'Translatable#CNO', OrganisationProperty.NUMBER, null, true,
-                'Translatable#Helptext_Customers_OrganisationCreate_Number'
+                'Translatable#Helptext_Customers_OrganisationCreate_Number',
+                null, null, null, null, null, null, null, null, null, null, null, null, null, true
             )
         );
 
