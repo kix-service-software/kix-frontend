@@ -8,7 +8,9 @@
  */
 
 import { KIXObjectService } from "../kix";
-import { SysConfigOption, KIXObjectType, SysConfigKey } from "../../model";
+import {
+    SysConfigOption, KIXObjectType, SysConfigKey, SysConfigOptionDefinitionProperty, KIXObjectSpecificCreateOptions
+} from "../../model";
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -41,4 +43,19 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
+
+    protected async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<Array<[string, any]>> {
+
+        const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
+        const value = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.VALUE);
+
+        if (value && defaultParameter && value[1] === defaultParameter[1]) {
+            value[1] = null;
+        }
+
+        return parameter;
+    }
+
 }

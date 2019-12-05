@@ -330,7 +330,7 @@ export abstract class Context {
         return new BreadcrumbInformation(this.getIcon(), [], text);
     }
 
-    public reset(): void {
+    public reset(refresh?: boolean): void {
         this.resetAdditionalInformation();
         this.objectLists.clear();
     }
