@@ -57,4 +57,8 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
 
         return rowObjects;
     }
+
+    protected getContextObjectType(): KIXObjectType | string {
+        return KIXObjectType.ROLE;
+    }
 }

@@ -8,7 +8,7 @@
  */
 
 import {
-    Context, User, BreadcrumbInformation, KIXObjectType, KIXObject, KIXObjectLoadingOptions, UserProperty
+    Context, User, BreadcrumbInformation, KIXObjectType, KIXObject, KIXObjectLoadingOptions, UserProperty, Role
 } from "../../../../../model";
 import { LabelService } from "../../../../LabelService";
 import { AdminContext } from "../../../../admin";
@@ -39,7 +39,12 @@ export class UserDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.USER, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const user = await this.loadUser(changedProperties) as any;
+        const user = await this.loadUser(changedProperties);
+
+        if (user && user.RoleIDs && user.RoleIDs.length > 0) {
+            const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, user.RoleIDs);
+            this.setObjectList(KIXObjectType.ROLE, roles, true);
+        }
 
         if (reload) {
             this.listeners.forEach(
@@ -47,7 +52,7 @@ export class UserDetailsContext extends Context {
             );
         }
 
-        return user;
+        return user as any;
     }
 
     private async loadUser(changedProperties: string[] = [], cache: boolean = true): Promise<User> {

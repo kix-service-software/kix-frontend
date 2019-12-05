@@ -8,7 +8,7 @@
  */
 
 import {
-    Context, Role, BreadcrumbInformation, KIXObject, KIXObjectType, KIXObjectLoadingOptions, RoleProperty
+    Context, Role, BreadcrumbInformation, KIXObject, KIXObjectType, KIXObjectLoadingOptions, RoleProperty, User
 } from "../../../../model";
 import { LabelService } from "../../../LabelService";
 import { AdminContext } from "../../../admin";
@@ -39,15 +39,20 @@ export class RoleDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.ROLE, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadRole(changedProperties) as any;
+        const role = await this.loadRole(changedProperties);
+
+        if (role && role.UserIDs && role.UserIDs.length > 0) {
+            const users = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, role.UserIDs);
+            this.setObjectList(KIXObjectType.USER, users, true);
+        }
 
         if (reload) {
             this.listeners.forEach(
-                (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.ROLE, changedProperties)
+                (l) => l.objectChanged(Number(this.objectId), role, KIXObjectType.ROLE, changedProperties)
             );
         }
 
-        return object;
+        return role as any;
     }
 
     private async loadRole(changedProperties: string[] = [], cache: boolean = true): Promise<Role> {

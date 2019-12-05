@@ -114,9 +114,11 @@ export abstract class Context {
         return this.objectLists.get(objectType);
     }
 
-    public setObjectList(objectType: KIXObjectType, objectList: KIXObject[]) {
+    public setObjectList(objectType: KIXObjectType, objectList: KIXObject[], silent?: boolean) {
         this.objectLists.set(objectType, objectList);
-        this.listeners.forEach((l) => l.objectListChanged(objectType, objectList));
+        if (!silent) {
+            this.listeners.forEach((l) => l.objectListChanged(objectType, objectList));
+        }
     }
 
     public async setObjectId(objectId: string | number): Promise<void> {
