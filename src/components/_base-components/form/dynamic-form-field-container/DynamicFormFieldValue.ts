@@ -90,7 +90,7 @@ export class DynamicFieldValue {
             }
 
             if (operator) {
-                this.setOperator(operator);
+                await this.setOperator(operator);
                 const operationNode = TreeUtil.findNode(this.operationTreeHandler.getTree(), operator);
                 if (operationNode) {
                     this.operationTreeHandler.setSelection([operationNode], true);
