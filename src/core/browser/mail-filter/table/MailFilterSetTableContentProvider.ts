@@ -47,4 +47,8 @@ export class MailFilterSetTableContentProvider extends TableContentProvider<Mail
 
         return rowObjects;
     }
+
+    protected getContextObjectType(): KIXObjectType | string {
+        return KIXObjectType.MAIL_FILTER;
+    }
 }
