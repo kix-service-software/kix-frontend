@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../model/components/action/AbstractAction';
-import { ContextMode, KIXObjectType } from '../../model';
+import { ContextMode, KIXObjectType, ContextType } from '../../model';
 import { ContextService } from '../context';
 import { ITable } from '../table';
 import { ImportService } from '../import';
@@ -71,6 +71,8 @@ export class ImportAction extends AbstractAction<ITable> {
 
             const importManager = ImportService.getInstance().getImportManager(this.objectType);
             if (importManager && importManager.getImportRunState()) {
+                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                context.reset();
                 await this.data.reload();
             }
         }
