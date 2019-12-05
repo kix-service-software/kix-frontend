@@ -276,13 +276,13 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         if (targetObjectType === KIXObjectType.CONTACT) {
             tickets.forEach((t) => {
-                if (!ids.some((cid) => cid === t.ContactID)) {
+                if (!ids.some((cid) => cid === t.ContactID) && !isNaN(Number(t.ContactID))) {
                     ids.push(t.ContactID);
                 }
             });
         } else if (targetObjectType === KIXObjectType.ORGANISATION) {
             tickets.forEach((t) => {
-                if (!ids.some((cid) => cid === t.OrganisationID)) {
+                if (!ids.some((cid) => cid === t.OrganisationID) && !isNaN(Number(t.OrganisationID))) {
                     ids.push(t.OrganisationID);
                 }
             });
