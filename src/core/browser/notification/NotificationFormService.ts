@@ -97,7 +97,7 @@ export class NotificationFormService extends KIXObjectFormService<Notification> 
                     value = [];
                     const context = ContextService.getInstance().getActiveContext();
                     if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
-                        const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_FILTER);
+                        const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
                         hasArticleEvent = selectedEvents
                             ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
                             : false;
