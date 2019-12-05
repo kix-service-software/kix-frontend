@@ -291,7 +291,7 @@ class LinkDialogComponent {
                 KIXObjectType.LINK_TYPE, null, loadingOptions, null, false
             );
 
-            linkTypes.forEach(async (lt) => {
+            for (const lt of linkTypes) {
                 const id = this.linkTypeDescriptions.length;
                 this.linkTypeDescriptions.push(new LinkTypeDescription(lt, true));
                 const node = new TreeNode(id, await TranslationService.translate(lt.SourceName));
@@ -299,11 +299,11 @@ class LinkDialogComponent {
                 if (lt.Pointed === 1) {
                     const pointedLinkType = new LinkType(lt);
                     this.linkTypeDescriptions.push(new LinkTypeDescription(pointedLinkType, false));
-                    const pointedNode = new TreeNode(id + 1,
-                        await TranslationService.translate(pointedLinkType.TargetName));
+                    const targetName = await TranslationService.translate(pointedLinkType.TargetName);
+                    const pointedNode = new TreeNode(id + 1, targetName);
                     linkTypeNodes.push(pointedNode);
                 }
-            });
+            }
         } else {
             this.state.currentLinkTypeDescription = null;
         }
