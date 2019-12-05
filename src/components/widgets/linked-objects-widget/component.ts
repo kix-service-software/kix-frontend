@@ -162,8 +162,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private checkLink(link: Link, objectType: KIXObjectType): boolean {
         const objectId = this.state.kixObject.ObjectId.toString();
-        return (link.SourceObject === objectType && link.SourceKey !== objectId) ||
-            (link.TargetObject === objectType && link.TargetKey !== objectId);
+        const rootObjectType = this.state.kixObject.KIXObjectType;
+
+        // source or target object have to be of relevant 'objectType'
+        // AND this object should not be the root object: other type OR at least id
+        return (link.SourceObject === objectType &&
+            (link.SourceObject !== rootObjectType || link.SourceKey !== objectId)
+        ) || (link.TargetObject === objectType &&
+            (link.TargetObject !== rootObjectType || link.TargetKey !== objectId)
+            );
     }
 
 }
