@@ -20,7 +20,6 @@ import { ConfigItemClassAttributeUtil } from "./ConfigItemClassAttributeUtil";
 import { IColumnConfiguration, DefaultColumnConfiguration } from "../table";
 import { LabelService } from "../LabelService";
 import { ConfigItemSearchFormManager } from "./ConfigItemSearchFormManager";
-import { ObjectPropertyValue } from "../ObjectPropertyValue";
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 
@@ -105,7 +104,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                     break;
                 default:
                     if (classIds) {
-                        const path = await ConfigItemClassAttributeUtil.getAttributeType(
+                        const path = await ConfigItemClassAttributeUtil.getAttributePath(
                             searchCriteria.property, classIds
                         );
                         if (path) {
