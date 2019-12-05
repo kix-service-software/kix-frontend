@@ -38,7 +38,7 @@ export class UIModule implements IUIModule {
     public async registerContexts(): Promise<void> {
         const linkObjectDialogContext = new ContextDescriptor(
             LinkObjectDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
-            ContextType.DIALOG, ContextMode.CREATE,
+            ContextType.DIALOG, ContextMode.CREATE_LINK,
             false, 'link-objects-dialog', ['links'], LinkObjectDialogContext
         );
         await ContextService.getInstance().registerContext(linkObjectDialogContext);

@@ -13,6 +13,8 @@ export enum ContextMode {
 
     CREATE = 'CREATE',
 
+    CREATE_LINK = 'CREATE_LINK',
+
     CREATE_SUB = 'CREATE_SUB',
 
     CREATE_ADMIN = 'CREATE_ADMIN',
