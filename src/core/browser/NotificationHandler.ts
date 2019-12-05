@@ -31,6 +31,11 @@ export class NotificationHandler {
             .some((uid) => uid === user.UserID);
 
         userIsAffacted = userIsAffacted || events
+            .filter((e) => e.Namespace === KIXObjectType.ROLE)
+            .map((e) => Number(e.ObjectID))
+            .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
+
+        userIsAffacted = userIsAffacted || events
             .filter((e) => e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.PERMISSION}`)
             .map((e) => Number(e.ObjectID.split('::')[0]))
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
