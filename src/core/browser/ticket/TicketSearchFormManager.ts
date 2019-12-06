@@ -182,7 +182,7 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public isMultiselect(property: string): boolean {
-        return true;
+        return property !== TicketProperty.LOCK_ID;
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
@@ -229,6 +229,8 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
     public getFilterDataType(property: string): FilterDataType {
         if (this.isDateTime(property)) {
             return FilterDataType.DATETIME;
+        } else if (property === KIXObjectProperty.CREATE_BY || property === KIXObjectProperty.CHANGE_BY) {
+            return FilterDataType.NUMERIC;
         }
 
         return FilterDataType.STRING;
