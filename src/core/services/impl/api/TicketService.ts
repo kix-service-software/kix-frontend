@@ -378,6 +378,7 @@ export class TicketService extends KIXObjectService {
                 && f.property !== TicketProperty.CREATED
                 && f.property !== KIXObjectProperty.CREATE_TIME
                 && f.property !== TicketProperty.CHANGED
+                && f.property !== TicketProperty.CLOSE_TIME
                 && f.property !== KIXObjectProperty.CHANGE_TIME
         ).map((f) => {
             this.setUserID(f, user);
@@ -413,6 +414,7 @@ export class TicketService extends KIXObjectService {
                 && f.property !== TicketProperty.CREATED
                 && f.property !== KIXObjectProperty.CREATE_TIME
                 && f.property !== TicketProperty.CHANGED
+                && f.property !== TicketProperty.CLOSE_TIME
                 && f.property !== KIXObjectProperty.CHANGE_TIME
         ).map((f) => {
             this.setUserID(f, user);
