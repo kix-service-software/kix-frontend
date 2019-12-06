@@ -38,7 +38,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             'customer-dashboard-table-widget', 'Organisation Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.ORGANISATION, null,
             new SubConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table), null,
-            null, null, null, null, false
+            null, true, null, null, false
         );
         configurations.push(organsiationTableWidget);
 

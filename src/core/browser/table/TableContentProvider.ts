@@ -61,11 +61,15 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     private objectChanged(id: number | string, object: KIXObject, objectType: KIXObjectType): void {
-        this.table.reload(true);
+        if (objectType === this.getContextObjectType()) {
+            this.table.reload(true);
+        }
     }
 
     private objectListChanged(objectType: KIXObjectType, filteredObjectList: KIXObject[]): void {
-        this.table.reload(true);
+        if (objectType === this.getContextObjectType()) {
+            this.table.reload(true);
+        }
     }
 
     protected getContextObjectType(): KIXObjectType | string {
