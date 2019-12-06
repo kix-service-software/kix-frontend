@@ -36,6 +36,7 @@ import { LabelService } from "../../LabelService";
 import { ChannelLabelProvider } from "../../channel/ChannelLabelProvider";
 import { ArticleTableFactory } from "../../ticket/table/ArticleTableFactory";
 import { ChannelBrowserFactory } from "../../channel/ChannelBrowserFactory";
+import { UserLabelProvider, UserBrowserFactory } from "../../user";
 
 export class UIModule implements IUIModule {
 
@@ -74,6 +75,9 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
         LabelService.getInstance().registerLabelProvider(new QueueLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketTemplateLabelProvider());
+
+        FactoryService.getInstance().registerFactory(KIXObjectType.USER, UserBrowserFactory.getInstance());
+        LabelService.getInstance().registerLabelProvider(new UserLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
