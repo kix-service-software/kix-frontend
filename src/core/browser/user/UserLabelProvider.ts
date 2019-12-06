@@ -8,7 +8,7 @@
  */
 
 import {
-    User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, KIXObjectProperty, PersonalSettingsProperty
+    User, KIXObjectType, UserProperty, ObjectIcon, DateTimeUtil, KIXObjectProperty, PersonalSettingsProperty, KIXObject
 } from "../../model";
 import { TranslationService } from "../i18n/TranslationService";
 import { LabelProvider } from "../LabelProvider";
