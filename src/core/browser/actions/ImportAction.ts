@@ -68,13 +68,6 @@ export class ImportAction extends AbstractAction<ITable> {
         if (eventData && eventData.dialogId.match('import-dialog') && subscriberId === this.eventSubscriberId) {
             EventService.getInstance().unsubscribe(DialogEvents.DIALOG_CANCELED, this);
             EventService.getInstance().unsubscribe(DialogEvents.DIALOG_FINISHED, this);
-
-            const importManager = ImportService.getInstance().getImportManager(this.objectType);
-            if (importManager && importManager.getImportRunState()) {
-                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                context.reset();
-                await this.data.reload();
-            }
         }
     }
 }
