@@ -1,7 +1,4 @@
-#### Extensions & Extension Points
-
-
-##### Use a extension point
+#### Use a extension point
 `package.json`:
 ```json
 {
@@ -18,10 +15,10 @@
 | -------------------------------- | --------------------------------------------------------------- |
 | extensions                       | the fixed key for the extension object                          |
 | EXTENSION_POINT_ID               | the id of the extension point which is provided by the software |
-| EXTENSION_ID                     | the id of the extension point which add/extend the software     |
+| EXTENSION_ID                     | the id of the extension which add/extend the software           |
 | PATH_TO_EXTENSION_IMPLEMENTATION | the path to the implementation of the extension point interface |
 
-##### Implementation
+#### Implementation
 
 ```javascript
 export class Extension [extends | implements] Extensions {
