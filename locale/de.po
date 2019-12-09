@@ -192,8 +192,14 @@ msgstr "Artikel wurde erfolgreich angelegt."
 msgid "Article Text"
 msgstr "Artikelinhalt"
 
+msgid "Assets"
+msgstr ""
+
 msgid "Assets: General Catalog"
 msgstr "Assets: General Catalog"
+
+msgid "Assets: Import/Export"
+msgstr ""
 
 msgid "Assigned agent"
 msgstr "Zugeordneter Agent"
@@ -969,6 +975,11 @@ msgstr "Tickets werden gesperrt"
 
 msgid "Force"
 msgstr "Erzwingen"
+
+#, fuzzy
+#| msgid "Form title"
+msgid "Format"
+msgstr "Formulartitel"
 
 msgid "Form title"
 msgstr "Formulartitel"
@@ -2332,8 +2343,26 @@ msgstr "Kontakte importieren"
 msgid "Import Data"
 msgstr "Daten importieren"
 
+#, fuzzy
+#| msgid "Import"
+msgid "Import/Export"
+msgstr "Import"
+
+msgid "Import/Export Template"
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove Templates"
+msgid "Import/Export Templates"
+msgstr "Vorlagen entfernen"
+
 msgid "Import Organisations"
 msgstr "Kunden importieren"
+
+#, fuzzy
+#| msgid "Import Data"
+msgid "Importstate"
+msgstr "Daten importieren"
 
 msgid "Imprint"
 msgstr "Impressum"
@@ -3883,9 +3912,6 @@ msgstr "PLZ"
 
 #~ msgid "New Template"
 #~ msgstr "Neue Vorlage"
-
-#~ msgid "Remove Templates"
-#~ msgstr "Vorlagen entfernen"
 
 #~ msgid "Template"
 #~ msgstr "Vorlage"

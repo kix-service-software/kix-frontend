@@ -188,7 +188,13 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "Assets"
+msgstr ""
+
 msgid "Assets: General Catalog"
+msgstr ""
+
+msgid "Assets: Import/Export"
 msgstr ""
 
 msgid "Assigned agent"
@@ -962,6 +968,9 @@ msgid "Follow Up Ticket Lock"
 msgstr ""
 
 msgid "Force"
+msgstr ""
+
+msgid "Format"
 msgstr ""
 
 msgid "Form title"
@@ -2207,7 +2216,19 @@ msgstr ""
 msgid "Import Data"
 msgstr ""
 
+msgid "Import/Export"
+msgstr ""
+
+msgid "Import/Export Template"
+msgstr ""
+
+msgid "Import/Export Templates"
+msgstr ""
+
 msgid "Import Organisations"
+msgstr ""
+
+msgid "Importstate"
 msgstr ""
 
 msgid "Imprint"
