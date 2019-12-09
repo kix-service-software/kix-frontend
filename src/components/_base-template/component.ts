@@ -7,10 +7,10 @@
  * --
  */
 
-import { Context, ContextType, ContextDescriptor, KIXObjectType, ContextMode } from '../../core/model';
+import { Context, ContextDescriptor, ContextMode, ContextType, KIXObjectType } from '../../core/model';
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../core/browser/context';
-import { IdService, ServiceRegistry, FactoryService } from '../../core/browser';
+import { FactoryService, IdService, ServiceRegistry } from '../../core/browser';
 import { RoutingService } from '../../core/browser/router';
 import { HomeContext } from '../../core/browser/home';
 import { EventService } from '../../core/browser/event';
@@ -21,7 +21,7 @@ import { ApplicationEvent } from '../../core/browser/application';
 import { AuthenticationSocketClient } from '../../core/browser/application/AuthenticationSocketClient';
 import { AgentService } from '../../core/browser/application/AgentService';
 import { SysConfigService } from '../../core/browser/sysconfig';
-import { TranslationPatternBrowserFactory, TranslationBrowserFactory } from '../../core/browser/i18n';
+import { TranslationBrowserFactory, TranslationPatternBrowserFactory } from '../../core/browser/i18n';
 import { IUIModule } from '../../core/browser/application/IUIModule';
 import { ClientNotificationSocketClient } from '../../core/browser/notification/ClientNotificationSocketClient';
 
@@ -95,7 +95,10 @@ class Component {
             eventPublished: (data: any, eventId: string) => {
                 if (eventId === ApplicationEvent.REFRESH) {
                     this.state.reload = true;
-
+                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                    if (context) {
+                        context.reset(true);
+                    }
                     setTimeout(() => {
                         this.state.reload = false;
                         setTimeout(() => {

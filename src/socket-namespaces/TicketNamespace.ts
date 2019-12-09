@@ -9,12 +9,13 @@
 
 import {
     LoadArticleAttachmentResponse, LoadArticleAttachmentRequest, SetArticleSeenFlagRequest,
-    TicketEvent, LoadArticleZipAttachmentRequest, SocketEvent,
+    TicketEvent, LoadArticleZipAttachmentRequest, SocketEvent, KIXObjectType,
 } from '../core/model/';
 
 import { SocketNameSpace } from './SocketNameSpace';
 import { SocketResponse, SocketErrorResponse } from '../core/common';
 import { TicketService } from '../core/services';
+import { CacheService } from '../core/browser/cache';
 
 export class TicketNamespace extends SocketNameSpace {
 
@@ -75,6 +76,9 @@ export class TicketNamespace extends SocketNameSpace {
         ).then(() =>
             new SocketResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId })
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
+
+        CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+        CacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
 
         return response;
     }

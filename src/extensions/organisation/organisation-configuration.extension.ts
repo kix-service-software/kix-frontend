@@ -37,7 +37,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         const organsiationTableWidget = new TableWidgetConfiguration(
             'customer-dashboard-table-widget', 'Organisation Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.ORGANISATION, null,
-            new SubConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table), null
+            new SubConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table), null,
+            null, true, null, null, false
         );
         configurations.push(organsiationTableWidget);
 
@@ -60,7 +61,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
             'customer-dashboard-contacts-table-widget', 'Contacts Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.CONTACT, null,
             new SubConfigurationDefinition('customer-dashboard-contacts-table', ConfigurationType.Table), null,
-            null, true, null, null, null, false
+            null, true, null, null, false, false
         );
         configurations.push(contactTableWidget);
 

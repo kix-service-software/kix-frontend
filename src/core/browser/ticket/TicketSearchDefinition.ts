@@ -63,6 +63,12 @@ export class TicketSearchDefinition extends SearchDefinition {
 
             criteria = [...criteria, ...this.getFulltextCriteria(value as string)];
         }
+
+        const lockIndex = criteria.findIndex((c) => c.property === TicketProperty.LOCK_ID);
+        if (lockIndex !== -1 && criteria[lockIndex].value && Array.isArray(criteria[lockIndex].value)) {
+            criteria[lockIndex].value = criteria[lockIndex].value[0];
+        }
+
         return criteria;
     }
 

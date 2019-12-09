@@ -378,13 +378,18 @@ export class TicketService extends KIXObjectService {
                 && f.property !== TicketProperty.CREATED
                 && f.property !== KIXObjectProperty.CREATE_TIME
                 && f.property !== TicketProperty.CHANGED
+                && f.property !== TicketProperty.CLOSE_TIME
+                && f.property !== TicketProperty.LAST_CHANGE_TIME
                 && f.property !== KIXObjectProperty.CHANGE_TIME
         ).map((f) => {
             this.setUserID(f, user);
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
         const andSearch = filter.filter(
-            (f) => f.filterType === FilterType.AND && f.operator !== SearchOperator.NOT_EQUALS
+            (f) => f.filterType === FilterType.AND
+                && f.operator !== SearchOperator.NOT_EQUALS
+                && f.property !== KIXObjectProperty.CREATE_BY
+                && f.property !== KIXObjectProperty.CHANGE_BY
         ).map((f) => {
             this.setUserID(f, user);
             if (f.property === TicketProperty.CREATED) {
@@ -413,22 +418,28 @@ export class TicketService extends KIXObjectService {
                 && f.property !== TicketProperty.CREATED
                 && f.property !== KIXObjectProperty.CREATE_TIME
                 && f.property !== TicketProperty.CHANGED
+                && f.property !== TicketProperty.CLOSE_TIME
+                && f.property !== TicketProperty.LAST_CHANGE_TIME
                 && f.property !== KIXObjectProperty.CHANGE_TIME
         ).map((f) => {
             this.setUserID(f, user);
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
-        let orSearch = filter.filter((f) => f.filterType === FilterType.OR && f.operator !== SearchOperator.NOT_EQUALS)
-            .map((f) => {
-                this.setUserID(f, user);
-                if (f.property === TicketProperty.CREATED) {
-                    f.property = KIXObjectProperty.CREATE_TIME;
-                }
-                if (f.property === TicketProperty.CHANGED) {
-                    f.property = KIXObjectProperty.CHANGE_TIME;
-                }
-                return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
-            });
+        let orSearch = filter.filter(
+            (f) => f.filterType === FilterType.OR
+                && f.operator !== SearchOperator.NOT_EQUALS
+                && f.property !== KIXObjectProperty.CREATE_BY
+                && f.property !== KIXObjectProperty.CHANGE_BY
+        ).map((f) => {
+            this.setUserID(f, user);
+            if (f.property === TicketProperty.CREATED) {
+                f.property = KIXObjectProperty.CREATE_TIME;
+            }
+            if (f.property === TicketProperty.CHANGED) {
+                f.property = KIXObjectProperty.CHANGE_TIME;
+            }
+            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
+        });
 
         if (fulltext) {
             const fulltextSearch = this.getFulltextSearch(fulltext[0]);

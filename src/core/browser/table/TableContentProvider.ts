@@ -61,15 +61,19 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     private objectChanged(id: number | string, object: KIXObject, objectType: KIXObjectType): void {
-        if (objectType === this.objectType) {
+        if (objectType === this.getContextObjectType()) {
             this.table.reload(true);
         }
     }
 
     private objectListChanged(objectType: KIXObjectType, filteredObjectList: KIXObject[]): void {
-        if (objectType === this.objectType) {
+        if (objectType === this.getContextObjectType()) {
             this.table.reload(true);
         }
+    }
+
+    protected getContextObjectType(): KIXObjectType | string {
+        return this.objectType;
     }
 
     public getObjectType(): KIXObjectType {
@@ -78,15 +82,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public async loadData(): Promise<Array<IRowObject<T>>> {
         let objects = [];
-        if (this.contextId) {
+        if (this.contextId && !this.objectIds) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList(this.objectType) : [];
-        } else {
-            if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
-                objects = await KIXObjectService.loadObjects<KIXObject>(
-                    this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
-                );
-            }
+        } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
+            objects = await KIXObjectService.loadObjects<KIXObject>(
+                this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
+            );
         }
 
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
