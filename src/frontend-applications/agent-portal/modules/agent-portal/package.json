@@ -1,0 +1,15 @@
+{
+    "name": "kix-agent-portal-authentication-login",
+    "extensions": {
+        "kix:agent-portal:marko-application": {
+            "agent-portal-main-application": {
+                "module": "application.extension"
+            }
+        },
+        "kix:socket:namespace": {
+            "agent-portal-application-registry": {
+                "module": "NamespaceRegistry.extension"
+            }
+        }
+    }
+}

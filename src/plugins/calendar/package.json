@@ -1,0 +1,20 @@
+{
+    "name": "kix-calendar",
+    "extensions": {
+        "kix:menu:main": {
+            "kix-calendar-menu-main": {
+                "module": "main-menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "kix-calendar-configuration": {
+                "module": "configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "kix-calendar": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

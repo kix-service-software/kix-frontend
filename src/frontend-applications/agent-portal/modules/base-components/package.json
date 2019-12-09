@@ -1,0 +1,10 @@
+{
+    "name": "kix-module-base-components",
+    "extensions": {
+        "kix:modules": {
+            "base-components-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

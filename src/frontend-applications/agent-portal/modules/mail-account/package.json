@@ -1,0 +1,31 @@
+{
+    "name": "kix-module-mail-account",
+    "extensions": {
+        "kix:admin-module": {
+            "mail-account-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "mail-account-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "mail-account-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "edit-mail-account-dialog-configuration": {
+                "module": "edit-mail-account-dialog-configuration.extension"
+            },
+            "new-mail-account-dialog-configuration": {
+                "module": "new-mail-account-dialog-configuration.extension"
+            },
+            "mail-account-details-configuration": {
+                "module": "mail-account-details-configuration.extension"
+            }
+        }
+    }
+}

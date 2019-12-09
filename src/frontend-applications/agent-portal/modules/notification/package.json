@@ -1,0 +1,31 @@
+{
+    "name": "kix-module-notification",
+    "extensions": {
+        "kix:admin-module": {
+            "notification-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "notification-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "notification-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-notification-dialog-configuration": {
+                "module": "new-notification-dialog-configuration.extension"
+            },
+            "notification-details-configuration": {
+                "module": "notification-details-configuration.extension"
+            },
+            "edit-notification-dialog-configuration": {
+                "module": "edit-notification-dialog-configuration.extension"
+            }
+        }
+    }
+}

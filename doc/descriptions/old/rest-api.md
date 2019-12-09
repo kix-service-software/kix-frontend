@@ -19,7 +19,7 @@ export class FAQArticle extends KIXObject<FAQArticle> {
 
     public ObjectId: string | number;
 
-    public KIXObjectType: KIXObjectType = KIXObjectType.FAQ_ARTICLE;
+    public KIXObjectType: KIXObjectType | string = KIXObjectType.FAQ_ARTICLE;
 
     // Object Properties (REST DOKU)
 
@@ -90,7 +90,7 @@ export class FAQService extends KIXObjectService implements IFAQService {
         ServiceRegistry.registerServiceInstance(this);
     }
 
-    public isServiceFor(type: KIXObjectType): boolean {
+    public isServiceFor(type: KIXObjectType | string): boolean {
         return type === KIXObjectType.FAQ_ARTICLE
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
@@ -101,7 +101,7 @@ export class FAQService extends KIXObjectService implements IFAQService {
     protected RESOURCE_URI: string = 'faq';
 
     public async loadObjects(
-        token: string, objectType: KIXObjectType, objectIds: Array<number | string>,
+        token: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<KIXObject[]> {
         let objects = [];

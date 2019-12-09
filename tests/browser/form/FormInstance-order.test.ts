@@ -11,8 +11,13 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { FormInstance, KIXObjectType, FormContext, FormFieldValue } from '../../../src/core/model';
-import { FormConfiguration, FormFieldConfiguration, FormPageConfiguration, FormGroupConfiguration } from '../../../src/core/model/components/form/configuration';
+import { FormInstance } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/FormInstance';
+import { FormConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/FormConfiguration';
+import { FormFieldConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../src/frontend-applications/agent-portal/model/configuration/FormFieldValue';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { FormPageConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/FormPageConfiguration';
+import { FormGroupConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/FormGroupConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

@@ -1,6 +1,0 @@
-{
-    "dependencies": [
-        "require ../../core/browser/application",
-        "require ../_login"
-    ]
-}

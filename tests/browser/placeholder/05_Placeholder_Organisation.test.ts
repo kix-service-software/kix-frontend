@@ -11,10 +11,16 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { TicketPlaceholderHandler } from '../../../src/core/browser/ticket';
-import { LabelService, KIXObjectService } from '../../../src/core/browser';
-import { DateTimeUtil, KIXObjectProperty, Ticket, OrganisationProperty, Organisation, KIXObjectType } from '../../../src/core/model';
-import { OrganisationPlaceholderHandler, OrganisationLabelProvider } from '../../../src/core/browser/organisation';
+import { Organisation } from '../../../src/frontend-applications/agent-portal/modules/customer/model/Organisation';
+import { OrganisationPlaceholderHandler, OrganisationLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core';
+import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
+import { OrganisationProperty } from '../../../src/frontend-applications/agent-portal/modules/customer/model/OrganisationProperty';
+import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
+import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
+import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
+import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

@@ -10,7 +10,7 @@
 // tslint:disable
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { PluginService } from '../src/services';
+import { PluginService } from '../src/server/services/PluginService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

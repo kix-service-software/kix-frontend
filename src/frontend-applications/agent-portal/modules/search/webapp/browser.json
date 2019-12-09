@@ -1,0 +1,10 @@
+{
+    "dependencies": [
+        "require ./components/save-search-template-overlay",
+        "require ./components/search-criteria-widget",
+        "require ./components/search-module",
+        "require ./components/search-result-explorer",
+        "require ./components/search-result-list-widget",
+        "require ./core"
+    ]
+}

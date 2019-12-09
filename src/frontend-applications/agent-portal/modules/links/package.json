@@ -1,0 +1,23 @@
+{
+    "name": "kix-module-links",
+    "extensions": {
+        "kix:services": {
+            "links-module-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "links-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "link-objects-dialog-configuration": {
+                "module": "link-objects-dialog-configuration.extension"
+            },
+            "edit-linked-objects-dialog-configuration": {
+                "module": "edit-linked-objects-dialog-configuration.extension"
+            }
+        }
+    }
+}

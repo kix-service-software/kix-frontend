@@ -11,8 +11,8 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { AttachmentUtil } from '../../src/core/browser';
-import { AttachmentError } from '../../src/core/model';
+import { AttachmentUtil } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AttachmentUtil';
+import { AttachmentError } from '../../src/frontend-applications/agent-portal/model/AttachmentError';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

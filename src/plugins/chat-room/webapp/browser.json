@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+        "require ./components/chat-room-module",
+        "require ./components/chat-room-widget",
+        "require ./core"
+    ]
+}

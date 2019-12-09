@@ -23,7 +23,7 @@ export class DashboardMainMenuExtension implements IMainMenuExtension {
 
     public contextMode: ContextMode = ContextMode.DASHBOARD;
 
-    public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
+    public KIXObjectType: KIXObjectType | string = KIXObjectType.ANY;
 
 }
 

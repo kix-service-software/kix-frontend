@@ -1,0 +1,31 @@
+{
+    "name": "kix-module-job",
+    "extensions": {
+        "kix:modules": {
+            "job-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:services": {
+            "job-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:admin-module": {
+            "job-admin": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-job-dialog-configuration": {
+                "module": "new-job-dialog-configuration.extension"
+            },
+            "job-details-configuration": {
+                "module": "job-details-configuration.extension"
+            },
+            "edit-job-dialog-configuration": {
+                "module": "edit-job-dialog-configuration.extension"
+            }
+        }
+    }
+}

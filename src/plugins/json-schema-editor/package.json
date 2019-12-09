@@ -1,0 +1,20 @@
+{
+    "name": "kix-json-schema-editor",
+    "extensions": {
+        "kix:menu:main": {
+            "kix-json-schema-editor-menu-main": {
+                "module": "main-menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "kix-json-schema-editor-configuration": {
+                "module": "configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "kix-json-schema-editor": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

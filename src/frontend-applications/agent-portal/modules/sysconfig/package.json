@@ -1,0 +1,25 @@
+{
+    "name": "kix-module-sysconfig",
+    "extensions": {
+        "kix:admin-module": {
+            "sysconfig-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "sysconfig-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "sysconfig-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "edit-sysconfig-dialog-configuration": {
+                "module": "edit-sysconfig-dialog-configuration.extension"
+            }
+        }
+    }
+}

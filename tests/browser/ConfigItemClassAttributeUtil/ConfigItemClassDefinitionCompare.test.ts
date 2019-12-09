@@ -11,9 +11,12 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ConfigItemClassAttributeUtil } from '../../../src/core/browser/cmdb/ConfigItemClassAttributeUtil';
-import { AttributeDefinition, ConfigItemClass, ConfigItemClassDefinition } from '../../../src/core/model';
-import { TranslationService } from '../../../src/core/browser/i18n/TranslationService';
+
+import { ConfigItemClassAttributeUtil } from '../../../src/frontend-applications/agent-portal/modules/cmdb/webapp/core';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core';
+import { ConfigItemClass } from '../../../src/frontend-applications/agent-portal/modules/cmdb/model/ConfigItemClass';
+import { AttributeDefinition } from '../../../src/frontend-applications/agent-portal/modules/cmdb/model/AttributeDefinition';
+import { ConfigItemClassDefinition } from '../../../src/frontend-applications/agent-portal/modules/cmdb/model/ConfigItemClassDefinition';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
