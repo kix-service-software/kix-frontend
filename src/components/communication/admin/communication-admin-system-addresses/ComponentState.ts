@@ -8,19 +8,19 @@
  */
 
 import {
-    WidgetConfiguration, KIXObjectType, TableWidgetSettings, SortOrder, SystemAddressProperty
+    WidgetConfiguration, KIXObjectType, TableWidgetConfiguration, SortOrder, SystemAddressProperty
 } from "../../../../core/model";
 import { IdService } from "../../../../core/browser";
 
 export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('communication-system-addresses-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Communication: Email: Email Addresses',
             [
                 'system-address-create', 'system-addresses-table-delete', 'csv-export-action'
-            ],
-            new TableWidgetSettings(KIXObjectType.SYSTEM_ADDRESS,
+            ], null,
+            new TableWidgetConfiguration(null, null, null, KIXObjectType.SYSTEM_ADDRESS,
                 [SystemAddressProperty.REALNAME, SortOrder.UP]), false, false, 'kix-icon-gears')
     ) { }
 

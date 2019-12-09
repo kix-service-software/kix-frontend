@@ -41,29 +41,37 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.USER) {
                     this.initWidget(user);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         await this.initWidget(await context.getObject<User>());
     }
 
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('user-assigned-roles');
+    }
+
     private async initWidget(user: User): Promise<void> {
         const columns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.NAME, true, false, true, false, 250, true, true, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 RoleProperty.COMMENT, true, false, true, false, 250, true, true, false
             ),
-            new DefaultColumnConfiguration(RoleProperty.VALID_ID, true, false, true, false, 100, true, true)
+            new DefaultColumnConfiguration(
+                null, null, null, RoleProperty.VALID_ID, true, false, true, false, 100, true, true
+            )
         ];
-        const tableConfiguration = new TableConfiguration(
-            KIXObjectType.ROLE, null, null, columns,  false, false, null, null,
+        const tableConfiguration = new TableConfiguration(null, null, null,
+            KIXObjectType.ROLE, null, null, columns, [], false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
-        const table = await await TableFactoryService.getInstance().createTable(
-            'user-assigned-roles', KIXObjectType.ROLE, tableConfiguration, user.RoleIDs, null, true,
+        const table = await TableFactoryService.getInstance().createTable(
+            'user-assigned-roles', KIXObjectType.ROLE, tableConfiguration, null,
+            UserDetailsContext.CONTEXT_ID, true,
             undefined, false, true, true
         );
         this.state.table = table;

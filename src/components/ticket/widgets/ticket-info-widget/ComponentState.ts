@@ -10,7 +10,7 @@
 import { ILabelProvider } from '../../../../core/browser';
 import { AbstractAction, Ticket, WidgetComponentState, Organisation, Contact } from '../../../../core/model';
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public ticket: Ticket = null,
@@ -21,7 +21,8 @@ export class ComponentState extends WidgetComponentState<any> {
         public organisationProperties: string[] = null,
         public contactProperties: string[] = null,
         public organisation: Organisation = null,
-        public contact: Contact = null
+        public contact: Contact = null,
+        public prepared: boolean = false
     ) {
         super();
     }

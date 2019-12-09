@@ -40,22 +40,21 @@ export class NotificationFilterTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 NotificationFilterTableProperty.FIELD, true, false, true, false, 200, true, true,
                 false, DataType.STRING, true, null, 'Translatable#Field', false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 NotificationFilterTableProperty.VALUE, true, false, true, false, 500, true, true,
                 false, DataType.STRING, true, 'notification-filter-cell-content', 'Translatable#Value', false
             )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.NOTIFICATION_FILTER, null, null, tableColumns, false, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.NOTIFICATION_FILTER, null, null, tableColumns, [], false, false, null, null,
                 TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
-            defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
         }

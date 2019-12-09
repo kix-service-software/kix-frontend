@@ -8,11 +8,19 @@
  */
 
 import { IConfigurationExtension } from '../../core/extensions';
-import { ContextConfiguration, KIXObjectType, ConfigItemClass, KIXObjectLoadingOptions } from '../../core/model';
 import {
-    EditConfigItemDialogContext, ConfigItemFormFactory
-} from '../../core/browser/cmdb';
-import { ConfigurationService, KIXObjectServiceRegistry } from '../../core/services';
+    ContextConfiguration, KIXObjectType, KIXObjectLoadingOptions, WidgetConfiguration, ContextMode,
+    ConfiguredDialogWidget, FormContext, VersionProperty, FormFieldOption, ObjectReferenceOptions,
+    FilterCriteria, KIXObjectProperty, FilterType, FilterDataType, GeneralCatalogItemProperty
+} from '../../core/model';
+import { EditConfigItemDialogContext } from '../../core/browser/cmdb';
+import { ConfigurationType, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
+import {
+    FormConfiguration, FormGroupConfiguration, FormFieldConfiguration, FormPageConfiguration
+} from '../../core/model/components/form/configuration';
+import { SearchOperator } from '../../core/browser';
+import { ConfigurationService } from '../../core/services';
 
 export class EditConfigItemDialogModuleExtension implements IConfigurationExtension {
 
@@ -20,35 +28,131 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
         return EditConfigItemDialogContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        return new ContextConfiguration(this.getModuleId());
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const dialogWidget = new WidgetConfiguration(
+            'cmdb-ci-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'edit-config-item-dialog', 'Translatable#Edit Config Item',
+            [], null, null, false, false, 'kix-icon-edit'
+        );
+        configurations.push(dialogWidget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(), [], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'cmdb-ci-edit-dialog-widget', 'cmdb-ci-edit-dialog-widget',
+                        KIXObjectType.CONFIG_ITEM, ContextMode.EDIT
+                    )
+                ]
+            )
+        );
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
-        const token = configurationService.getServerConfiguration().BACKEND_API_TOKEN;
-
-        const configItemClassService = KIXObjectServiceRegistry.getServiceInstance(
-            KIXObjectType.CONFIG_ITEM_CLASS
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-config-item-edit-form-field-class',
+                'Translatable#Config Item Class', VersionProperty.CLASS_ID, null, false,
+                'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Class',
+                null, null, null, null, null, 1, 1, 1,
+                null, null, null, false, false, true
+            )
         );
 
-        const options = new KIXObjectLoadingOptions(null, null, null, [
-            'CurrentDefinition'
-        ]);
-
-        const ciClasses = await configItemClassService.loadObjects<ConfigItemClass>(
-            token, null, KIXObjectType.CONFIG_ITEM_CLASS, null, options, null
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-config-item-edit-form-field-name',
+                'Translatable#Name', VersionProperty.NAME, null, true,
+                'Translatable#Helptext_CMDB_ConfigItemCreateEdit_Name',
+                null, null, null, null, null, 1, 1, 1,
+                null, null, null, false, false
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-config-item-edit-form-field-deploymentstate',
+                'Translatable#Deployment State', VersionProperty.DEPL_STATE_ID, 'object-reference-input',
+                true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_DeploymentState',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            ),
+                            new FilterCriteria(
+                                GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                                FilterType.AND, 'ITSM::ConfigItem::DeploymentState'
+                            )
+                        ])
+                    ),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+                ],
+                null, null, null, null, 1, 1, 1, null, null, null, false, false
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
+                'cmdb-config-item-edit-form-field-incidentstate',
+                'Translatable#Incident state', VersionProperty.INCI_STATE_ID, 'object-reference-input',
+                true, 'Translatable#Helptext_CMDB_ConfigItemCreateEdit_IncidentState',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_ITEM),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            ),
+                            new FilterCriteria(
+                                GeneralCatalogItemProperty.CLASS, SearchOperator.EQUALS, FilterDataType.STRING,
+                                FilterType.AND, 'ITSM::Core::IncidentState'
+                            )
+                        ])
+                    ),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+                ],
+                null, null, null, null, 1, 1, 1, null, null, null, false, false
+            )
         );
 
-        for (const ciClass of ciClasses) {
-            const formId = ConfigItemFormFactory.getInstance().getFormId(ciClass, true);
-            const existingForm = configurationService.getConfiguration(formId);
-            if (formId && !existingForm || overwrite) {
-                const form = await ConfigItemFormFactory.getInstance().createCIForm(ciClass, formId, true);
-                await configurationService.saveConfiguration(formId, form);
-            }
-            configurationService.registerFormId(formId);
-        }
+        configurations.push(
+            new FormGroupConfiguration(
+                'cmdb-config-item-edit-form-group-main', 'Translatable#Config Item Data',
+                [
+                    'cmdb-config-item-edit-form-field-class',
+                    'cmdb-config-item-edit-form-field-name',
+                    'cmdb-config-item-edit-form-field-deploymentstate',
+                    'cmdb-config-item-edit-form-field-incidentstate'
+                ]
+            )
+        );
+
+        configurations.push(
+            new FormPageConfiguration(
+                'cmdb-config-item-edit-form-page', 'Translatable#Edit Config Item',
+                ['cmdb-config-item-edit-form-group-main']
+            )
+        );
+
+        const formId = 'cmdb-config-item-edit-form';
+        configurations.push(
+            new FormConfiguration(
+                formId, 'Translatable#Edit Config Item',
+                ['cmdb-config-item-edit-form-page'],
+                KIXObjectType.CONFIG_ITEM, true, FormContext.EDIT
+            )
+        );
+
+        ConfigurationService.getInstance().registerForm([FormContext.EDIT], KIXObjectType.CONFIG_ITEM, formId);
+
+        return configurations;
     }
 
 }

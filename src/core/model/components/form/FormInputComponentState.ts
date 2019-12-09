@@ -7,15 +7,16 @@
  * --
  */
 
-import { FormField, FormFieldValue } from ".";
+import { FormFieldValue } from ".";
 import { FormContext } from "./FormContext";
 import { AbstractComponentState } from "../../../browser/components/AbstractComponentState";
+import { FormFieldConfiguration } from "./configuration";
 
 export class FormInputComponentState<T> extends AbstractComponentState {
 
     public constructor(
         public fieldId: string = null,
-        public field: FormField = null,
+        public field: FormFieldConfiguration = null,
         public formId: string = null,
         public defaultValue: FormFieldValue<T> = null,
         public invalid: boolean = false,

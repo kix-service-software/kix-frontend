@@ -99,6 +99,10 @@ export class CacheService {
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
+        } else if (objectNamespace === 'State') {
+            cacheKeyPrefixes.push(KIXObjectType.TICKET_STATE);
+        } else if (objectNamespace === 'Type') {
+            cacheKeyPrefixes.push(KIXObjectType.TICKET_TYPE);
         } else {
             cacheKeyPrefixes.push(objectNamespace);
         }
@@ -172,6 +176,10 @@ export class CacheService {
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
                 cacheKeyPrefixes.push(KIXObjectType.CONFIG_ITEM);
+                break;
+            case KIXObjectType.GENERAL_CATALOG_ITEM:
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
+                cacheKeyPrefixes.push(KIXObjectType.GENERAL_CATALOG_CLASS);
                 break;
             case KIXObjectType.SYS_CONFIG_OPTION_DEFINITION:
             case KIXObjectType.SYS_CONFIG_OPTION:

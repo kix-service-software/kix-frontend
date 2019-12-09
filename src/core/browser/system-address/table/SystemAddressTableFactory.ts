@@ -42,30 +42,32 @@ export class SystemAddressTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 SystemAddressProperty.NAME, true, false, true, false, 150, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 SystemAddressProperty.REALNAME, true, false, true, false, 150, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 SystemAddressProperty.VALID_ID, true, false, true, false, 100, true, true, true
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 SystemAddressProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(SystemAddressProperty.CREATE_BY, true, false, true, false, 150, true, true),
             new DefaultColumnConfiguration(
+                null, null, null, SystemAddressProperty.CREATE_BY, true, false, true, false, 150, true, true),
+            new DefaultColumnConfiguration(null, null, null,
                 SystemAddressProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
-            new DefaultColumnConfiguration(SystemAddressProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(
+                null, null, null, SystemAddressProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.SYSTEM_ADDRESS, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.SYSTEM_ADDRESS, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -81,10 +83,5 @@ export class SystemAddressTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 }

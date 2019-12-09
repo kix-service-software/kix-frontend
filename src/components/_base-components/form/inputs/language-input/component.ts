@@ -7,7 +7,7 @@
  * --
  */
 
-import { FormInputComponent, TreeNode, KIXObjectType } from '../../../../../core/model';
+import { FormInputComponent, TreeNode, KIXObjectType, TreeService } from '../../../../../core/model';
 import { CompontentState } from './CompontentState';
 import { ServiceRegistry } from '../../../../../core/browser';
 import { TranslationService } from '../../../../../core/browser/i18n/TranslationService';
@@ -16,6 +16,7 @@ class Component extends FormInputComponent<string, CompontentState> {
 
     public onCreate(): void {
         this.state = new CompontentState();
+        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -33,15 +34,16 @@ class Component extends FormInputComponent<string, CompontentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
-            KIXObjectType.TRANSLATION_PATTERN
-        );
-        const languages = await translationService.getLanguages();
-        this.state.nodes = languages.map((l) => new TreeNode(l[0], l[1]));
-        await this.setCurrentNode();
     }
 
-    public async setCurrentNode(): Promise<void> {
+    private async load(): Promise<TreeNode[]> {
+        const languages = await TranslationService.getInstance().getLanguages();
+        const nodes = languages.map((l) => new TreeNode(l[0], l[1]));
+        await this.setCurrentNode(nodes);
+        return nodes;
+    }
+
+    public async setCurrentNode(nodes: TreeNode[]): Promise<void> {
         let lang: string;
         if (this.state.defaultValue && this.state.defaultValue.value) {
             lang = this.state.defaultValue.value;
@@ -50,18 +52,17 @@ class Component extends FormInputComponent<string, CompontentState> {
         }
 
         if (lang) {
-            this.state.currentNode = this.state.nodes.find((n) => n.id === lang);
-            super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
+            const currentNode = nodes.find((n) => n.id === lang);
+            if (currentNode) {
+                currentNode.selected = true;
+                super.provideValue(currentNode.id);
+            }
         }
     }
 
     public valueChanged(nodes: TreeNode[]): void {
-        this.state.currentNode = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.state.currentNode ? this.state.currentNode.id : null);
-    }
-
-    public async focusLost(event: any): Promise<void> {
-        await super.focusLost();
+        const currentNode = nodes && nodes.length ? nodes[0] : null;
+        super.provideValue(currentNode ? currentNode.id : null);
     }
 }
 

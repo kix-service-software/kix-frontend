@@ -42,7 +42,7 @@ export class WebformNameSpace extends SocketNameSpace {
     }
 
     private async loadWebforms(data: ISocketRequest): Promise<SocketResponse> {
-        const webforms = WebformService.getInstance().loadWebforms();
+        const webforms = await WebformService.getInstance().loadWebforms(data.token);
 
         return new SocketResponse(
             WebformEvent.LOAD_WEBFORMS_FINISHED,
@@ -54,7 +54,9 @@ export class WebformNameSpace extends SocketNameSpace {
         const user = await UserService.getInstance().getUserByToken(data.token);
         const userId = user.UserID;
 
-        const objectId = await WebformService.getInstance().saveWebform(userId, data.webform, data.webformId);
+        const objectId = await WebformService.getInstance().saveWebform(
+            data.token, userId, data.webform, data.webformId
+        );
 
         return new SocketResponse(WebformEvent.WEBFORM_SAVED, new CreateObjectResponse(data.requestId, objectId));
     }

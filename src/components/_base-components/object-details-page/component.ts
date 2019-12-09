@@ -40,6 +40,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             contextChanged: this.contextChanged.bind(this),
             contextRegistered: () => { return; }
         });
+
+        context.registerListener(this.state.instanceId, {
+            additionalInformationChanged: () => { return; },
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectChanged: () => this.initWidget(this.context),
+            objectListChanged: () => { return; },
+            scrollInformationChanged: () => { return; },
+            sidebarToggled: () => { return; }
+        });
     }
 
     private async contextChanged(

@@ -10,13 +10,16 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm, ConfiguredWidget, WidgetConfiguration, CRUD, KIXObjectProperty
+    FormContext, SearchForm, ConfiguredWidget, WidgetConfiguration, CRUD, KIXObjectProperty,
+    ConfiguredDialogWidget, ContextMode, HelpWidgetConfiguration
 } from '../../core/model';
 import { FAQArticleSearchContext } from '../../core/browser/faq';
 import { FAQArticleProperty } from '../../core/model/kix/faq';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -24,47 +27,70 @@ export class ModuleExtension implements IConfigurationExtension {
         return FAQArticleSearchContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const helpWidget = new ConfiguredWidget('20180919-help-widget',
-            new WidgetConfiguration(
-                'help-widget', 'Translatable#Help', [], {
-                    helpText: 'Translatable#Helptext_Search_FAQArticle',
-                    links: [
-                        ['Translatable#How to search in KIX 18?', 'faqarticles/2']
-                    ]
-                }, false, false, 'kix-icon-query', false
-            ),
-            [new UIComponentPermission('faq/articles', [CRUD.READ])]
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const helpConfig = new HelpWidgetConfiguration(
+            'faq-article-search-dialog-help-widget-config', 'Help COnfig', ConfigurationType.HelpWidget,
+            'Translatable#Helptext_Search_FAQArticle',
+            []
         );
-        const sidebarWidgets = [helpWidget];
-        const sidebars = ['20180919-help-widget'];
-        return new ContextConfiguration(
-            FAQArticleSearchContext.CONTEXT_ID,
-            sidebars, sidebarWidgets
+        configurations.push(helpConfig);
+
+        const helpWidget = new WidgetConfiguration(
+            'faq-article-search-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
+            'help-widget', 'Translatable#Help', [],
+            new ConfigurationDefinition('faq-article-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            null, false, false, 'kix-icon-query', false
         );
+        configurations.push(helpWidget);
+
+        const widget = new WidgetConfiguration(
+            'faq-article-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'search-faq-article-dialog', 'Translatable#FAQ Search', [], null, null,
+            false, false, 'kix-icon-search-faq'
+        );
+        configurations.push(widget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'faq-article-search-dialog-help-widget', 'faq-article-search-dialog-help-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'faq-article-search-dialog-widget', 'faq-article-search-dialog-widget',
+                        KIXObjectType.FAQ_ARTICLE, ContextMode.SEARCH
+                    )
+                ]
+            )
+        );
+
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
-
-        const formId = 'search-faq-article-form';
-        const existingForm = configurationService.getConfiguration(formId);
-        if (!existingForm || overwrite) {
-            const form = new SearchForm(
-                formId,
-                'FAQ-Artikel',
-                KIXObjectType.FAQ_ARTICLE,
-                FormContext.SEARCH,
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const formId = 'faq-article-search-form';
+        const configurations = [];
+        configurations.push(
+            new SearchForm(
+                formId, 'FAQ-Artikel', KIXObjectType.FAQ_ARTICLE, FormContext.SEARCH,
                 null,
                 [
                     SearchProperty.FULLTEXT,
                     FAQArticleProperty.TITLE, FAQArticleProperty.CATEGORY_ID,
                     KIXObjectProperty.VALID_ID
                 ]
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.SEARCH], KIXObjectType.FAQ_ARTICLE, formId);
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.FAQ_ARTICLE, formId);
+
+        return configurations;
     }
 
 }

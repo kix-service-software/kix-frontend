@@ -14,11 +14,10 @@ import {
 } from '../../../../core/browser';
 import { CSVExportAction, BulkAction, ImportAction, PrintAction } from '../../../../core/browser/actions';
 import {
-    ContextDescriptor, KIXObjectType, ContextType, ContextMode, ConfiguredDialogWidget, WidgetConfiguration
+    ContextDescriptor, KIXObjectType, ContextType, ContextMode
 } from '../../../../core/model';
 import { SearchContext } from '../../../../core/browser/search/context/SearchContext';
 import { SwitchColumnOrderAction } from '../../../../core/browser/table/actions';
-import { DialogService } from '../../../../core/browser/components/dialog';
 import { PermissionLabelProvider } from '../../../../core/browser/permission';
 import { PermissionsTableFactory, PermissionTableCSSHandler } from '../../../../core/browser/application';
 import { ServiceService } from '../../../../core/browser/service/ServiceService';
@@ -38,13 +37,19 @@ import { SearchService } from '../../kix/search/SearchService';
 import { InvalidObjectCSSHandler } from '../../table/InvalidObjectCSSHandler';
 import { FormValidationService } from '../../form/validation';
 import { UserPasswordValidator } from '../../user/UserPasswordValidator';
+import { ValidObjectLabelProvider } from '../../valid/ValidObjectLabelProvider';
 import {
     NotificationService, NotificationTableFactory, NotificationLabelProvider, NotificationBrowserFactory
 } from '../../notification';
+import { TicketLabelProvider, ArticleLabelProvider } from '../../ticket';
+import { ChannelService } from '../../channel';
+import { ContextFactory } from '../../context/ContextFactory';
 
 export class UIModule implements IUIModule {
 
     public priority: number = 10000;
+
+    public name: string = 'ApplicationUIModule';
 
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -57,6 +62,7 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
         ServiceRegistry.registerServiceInstance(ServiceService.getInstance());
         ServiceRegistry.registerServiceInstance(ValidService.getInstance());
+        ServiceRegistry.registerServiceInstance(ChannelService.getInstance());
 
         ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
@@ -78,6 +84,10 @@ export class UIModule implements IUIModule {
         );
 
         LabelService.getInstance().registerLabelProvider(new PermissionLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ValidObjectLabelProvider());
+
+        LabelService.getInstance().registerLabelProvider(new TicketLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new ArticleLabelProvider());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.SLA, SlaBrowserFactory.getInstance()
@@ -105,19 +115,18 @@ export class UIModule implements IUIModule {
 
         FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         await this.registerBookmarks();
     }
 
-    public registerContexts(): void {
-        const dialogs = DialogService.getInstance().getRegisteredDialogs(ContextMode.SEARCH);
+    public async registerContexts(): Promise<void> {
+        const dialogs = ContextFactory.getInstance().getContextDescriptors(ContextMode.SEARCH);
         if (dialogs && dialogs.length) {
             const searchContext = new ContextDescriptor(
                 SearchContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
                 false, 'search', ['search'], SearchContext
             );
-            ContextService.getInstance().registerContext(searchContext);
+            await ContextService.getInstance().registerContext(searchContext);
         }
 
         const bulkDialogContext = new ContextDescriptor(
@@ -125,35 +134,14 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.EDIT_BULK,
             false, 'bulk-dialog', ['bulk'], BulkDialogContext
         );
-        ContextService.getInstance().registerContext(bulkDialogContext);
+        await ContextService.getInstance().registerContext(bulkDialogContext);
 
         const settingsDialogContext = new ContextDescriptor(
             PersonalSettingsDialogContext.CONTEXT_ID, [KIXObjectType.PERSONAL_SETTINGS],
             ContextType.DIALOG, ContextMode.PERSONAL_SETTINGS,
             false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
         );
-        ContextService.getInstance().registerContext(settingsDialogContext);
-    }
-
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'personal-settings-dialog',
-            new WidgetConfiguration(
-                'personal-settings-dialog', 'Translatable#Edit Personal Settings',
-                [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.PERSONAL_SETTINGS,
-            ContextMode.PERSONAL_SETTINGS
-        ));
-
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'bulk-dialog',
-            new WidgetConfiguration(
-                'bulk-dialog', 'Translatable#Edit Objects', [], {}, false, false, 'kix-icon-edit'
-            ),
-            KIXObjectType.ANY,
-            ContextMode.EDIT_BULK
-        ));
+        await ContextService.getInstance().registerContext(settingsDialogContext);
     }
 
     private async registerBookmarks(): Promise<void> {

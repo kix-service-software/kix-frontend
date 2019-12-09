@@ -32,14 +32,21 @@ export class FAQContext extends Context {
     }
 
     public async setFAQCategory(faqCategory: FAQCategory): Promise<void> {
-        this.faqCategory = faqCategory;
-        await this.loadFAQArticles();
-        this.listeners.forEach(
-            (l) => l.objectChanged(
-                this.faqCategory ? this.faqCategory.ID : null,
-                this.faqCategory,
-                KIXObjectType.FAQ_CATEGORY)
-        );
+        if (faqCategory) {
+            if (!this.faqCategory || faqCategory.ID !== this.faqCategory.ID) {
+                this.faqCategory = faqCategory;
+                await this.loadFAQArticles();
+                this.listeners.forEach(
+                    (l) => l.objectChanged(
+                        this.faqCategory ? this.faqCategory.ID : null,
+                        this.faqCategory,
+                        KIXObjectType.FAQ_CATEGORY)
+                );
+            }
+        } else if (this.faqCategory || typeof this.faqCategory === 'undefined') {
+            this.faqCategory = null;
+            await this.loadFAQArticles();
+        }
     }
 
     private async loadFAQArticles(): Promise<void> {
@@ -71,7 +78,7 @@ export class FAQContext extends Context {
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false
         ).catch((error) => []);
         window.clearTimeout(timeout);
-        this.setObjectList(faqArticles);
+        this.setObjectList(KIXObjectType.FAQ_ARTICLE, faqArticles);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
@@ -79,6 +86,7 @@ export class FAQContext extends Context {
     public reset(): void {
         super.reset();
         this.faqCategory = null;
+        this.loadFAQArticles();
     }
 
 }

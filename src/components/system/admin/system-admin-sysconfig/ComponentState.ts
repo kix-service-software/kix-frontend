@@ -8,19 +8,22 @@
  */
 
 import {
-    WidgetConfiguration, KIXObjectType, TableWidgetSettings, SortOrder, SysConfigOptionDefinitionProperty
+    WidgetConfiguration, KIXObjectType, TableWidgetConfiguration, SortOrder, SysConfigOptionDefinitionProperty
 } from "../../../../core/model";
 import { IdService } from "../../../../core/browser";
 
 export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('system-sysconfig-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#System: SysConfig',
-            [
-            ],
-            new TableWidgetSettings(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-                [SysConfigOptionDefinitionProperty.NAME, SortOrder.UP]), false, false, 'kix-icon-gears')
+            [], null,
+            new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+                [SysConfigOptionDefinitionProperty.NAME, SortOrder.UP]
+            ), false, false, 'kix-icon-gears'
+        )
     ) { }
 
 }

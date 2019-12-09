@@ -15,3 +15,5 @@ install-unstable.sh
 license-feature-header.txt
 license-html-header.txt
 license-ts-header.txt
+test-result.tar.gz
+allure-result

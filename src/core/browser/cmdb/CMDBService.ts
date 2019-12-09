@@ -51,14 +51,14 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     public async createConfigItem(formId: string, classId: number): Promise<string | number> {
         const parameter = await CreateConfigItemUtil.createParameter(formId, classId);
-        const configItemId = await KIXObjectService.createObject(KIXObjectType.CONFIG_ITEM, parameter);
+        const configItemId = await KIXObjectService.createObject(KIXObjectType.CONFIG_ITEM, parameter, null, false);
         return configItemId;
     }
 
     public async createConfigItemVersion(formId: string, configItemId: number): Promise<string | number> {
         const parameter = await CreateConfigItemVersionUtil.createParameter(formId);
         const versionId = await KIXObjectService.createObject(
-            KIXObjectType.CONFIG_ITEM_VERSION, parameter, new CreateConfigItemVersionOptions(configItemId)
+            KIXObjectType.CONFIG_ITEM_VERSION, parameter, new CreateConfigItemVersionOptions(configItemId), false
         );
         return versionId;
     }
@@ -131,7 +131,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
@@ -168,7 +168,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 );
                 break;
             default:
-                nodes = await super.getTreeNodes(property, showInvalid, filterIds);
+                nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
         }
 
         return nodes;

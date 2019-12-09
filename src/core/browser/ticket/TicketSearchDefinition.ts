@@ -9,20 +9,19 @@
 
 import { SearchDefinition, SearchResultCategory, KIXObjectService } from "../kix";
 import {
-    KIXObjectType, TicketProperty, InputFieldTypes, FilterCriteria,
-    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag, TreeNode, Organisation,
-    ObjectIcon, Contact, KIXObjectProperty
+    KIXObjectType, TicketProperty, FilterCriteria,
+    KIXObjectLoadingOptions, FilterDataType, FilterType, ArchiveFlag
 } from "../../model";
 import { SearchOperator } from "../SearchOperator";
 import { SearchProperty } from "../SearchProperty";
-import { OrganisationService } from "../organisation";
-import { LabelService } from "../LabelService";
-import { ContactService } from "../contact";
+import { TicketSearchFormManager } from "./TicketSearchFormManager";
+import { ObjectPropertyValue } from "../ObjectPropertyValue";
 
 export class TicketSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.TICKET);
+        this.formManager = new TicketSearchFormManager();
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
@@ -31,144 +30,6 @@ export class TicketSearchDefinition extends SearchDefinition {
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(null, null, null, ['Watchers']);
-    }
-
-    public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
-            [SearchProperty.FULLTEXT, null],
-            [TicketProperty.TICKET_NUMBER, null],
-            [TicketProperty.TITLE, null],
-            [TicketProperty.CREATED, null],
-            [TicketProperty.CLOSE_TIME, null],
-            [TicketProperty.CHANGED, null],
-            [TicketProperty.PENDING_TIME, null],
-            [TicketProperty.LAST_CHANGE_TIME, null]
-        ];
-
-        if (await this.checkReadPermissions('organisations')) {
-            properties.push([TicketProperty.ORGANISATION_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('contacts')) {
-            properties.push([TicketProperty.CONTACT_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/types')) {
-            properties.push([TicketProperty.TYPE_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/states')) {
-            properties.push([TicketProperty.STATE_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/queues')) {
-            properties.push([TicketProperty.QUEUE_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/priorities')) {
-            properties.push([TicketProperty.PRIORITY_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/locks')) {
-            properties.push([TicketProperty.LOCK_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/users')) {
-            properties.push([TicketProperty.OWNER_ID, null]);
-            properties.push([TicketProperty.RESPONSIBLE_ID, null]);
-            properties.push([KIXObjectProperty.CREATE_BY, null]);
-            properties.push([KIXObjectProperty.CHANGE_BY, null]);
-        }
-
-        return properties;
-    }
-
-    public async getOperations(property: string): Promise<SearchOperator[]> {
-        let operations: SearchOperator[] = [];
-
-        switch (property) {
-            case TicketProperty.TICKET_NUMBER:
-            case TicketProperty.TITLE:
-                operations = this.getStringOperators();
-                break;
-            case TicketProperty.TYPE_ID:
-            case TicketProperty.STATE_ID:
-            case TicketProperty.QUEUE_ID:
-            case TicketProperty.PRIORITY_ID:
-            case TicketProperty.ORGANISATION_ID:
-            case TicketProperty.CONTACT_ID:
-            case TicketProperty.OWNER_ID:
-            case TicketProperty.RESPONSIBLE_ID:
-            case KIXObjectProperty.CREATE_BY:
-            case KIXObjectProperty.CHANGE_BY:
-                operations = [SearchOperator.IN];
-                break;
-            case TicketProperty.LOCK_ID:
-                operations = [SearchOperator.EQUALS];
-                break;
-            case TicketProperty.AGE:
-            case TicketProperty.CREATED:
-            case TicketProperty.CLOSE_TIME:
-            case TicketProperty.CHANGED:
-            case TicketProperty.PENDING_TIME:
-            case TicketProperty.LAST_CHANGE_TIME:
-            case TicketProperty.ESCALATION_TIME:
-            case TicketProperty.ESCALATION_RESPONSE_TIME:
-            case TicketProperty.ESCALATION_UPDATE_TIME:
-            case TicketProperty.ESCALATION_SOLUTION_TIME:
-                operations = this.getDateTimeOperators();
-                break;
-            default:
-                operations = [];
-        }
-
-        return operations;
-    }
-
-    public async getInputFieldType(property: string, parameter?: Array<[string, any]>): Promise<InputFieldTypes> {
-        if (this.isDropDown(property)) {
-            return InputFieldTypes.DROPDOWN;
-        } else if (this.isDateTime(property)) {
-            return InputFieldTypes.DATE_TIME;
-        } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
-            return InputFieldTypes.OBJECT_REFERENCE;
-        }
-
-        return InputFieldTypes.TEXT;
-    }
-
-    private isDropDown(property: string): boolean {
-        return property === TicketProperty.QUEUE_ID
-            || property === TicketProperty.STATE_ID
-            || property === TicketProperty.PRIORITY_ID
-            || property === TicketProperty.TYPE_ID
-            || property === TicketProperty.LOCK_ID
-            || property === TicketProperty.OWNER_ID
-            || property === TicketProperty.RESPONSIBLE_ID;
-    }
-
-    private isDateTime(property: string): boolean {
-        return property === TicketProperty.AGE
-            || property === TicketProperty.CREATED
-            || property === TicketProperty.CLOSE_TIME
-            || property === TicketProperty.CHANGED
-            || property === TicketProperty.PENDING_TIME
-            || property === TicketProperty.LAST_CHANGE_TIME
-            || property === TicketProperty.ESCALATION_TIME
-            || property === TicketProperty.ESCALATION_RESPONSE_TIME
-            || property === TicketProperty.ESCALATION_SOLUTION_TIME
-            || property === TicketProperty.ESCALATION_UPDATE_TIME;
-    }
-
-    public async getInputComponents(): Promise<Map<string, string>> {
-        const components = new Map<string, string>();
-        components.set(TicketProperty.TYPE_ID, 'ticket-input-type');
-        components.set(TicketProperty.PRIORITY_ID, 'ticket-input-priority');
-        components.set(TicketProperty.STATE_ID, 'ticket-input-state');
-        components.set(TicketProperty.QUEUE_ID, 'ticket-input-queue');
-        components.set(TicketProperty.ARCHIVE_FLAG, 'ticket-input-archive-search');
-
-        return components;
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
@@ -202,109 +63,33 @@ export class TicketSearchDefinition extends SearchDefinition {
 
             criteria = [...criteria, ...this.getFulltextCriteria(value as string)];
         }
+
+        const lockIndex = criteria.findIndex((c) => c.property === TicketProperty.LOCK_ID);
+        if (lockIndex !== -1 && criteria[lockIndex].value && Array.isArray(criteria[lockIndex].value)) {
+            criteria[lockIndex].value = criteria[lockIndex].value[0];
+        }
+
         return criteria;
     }
 
     public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
         let criteria = [];
         switch (property) {
-            case TicketProperty.SLA_ID:
-            case TicketProperty.TYPE_ID:
-            case TicketProperty.SERVICE_ID:
-            case TicketProperty.PRIORITY_ID:
-            case TicketProperty.QUEUE_ID:
-            case TicketProperty.STATE_ID:
-                if (value) {
-                    criteria.push(new FilterCriteria(
-                        property, SearchOperator.EQUALS,
-                        FilterDataType.NUMERIC, FilterType.AND, value
-                    ));
-                }
+            case TicketProperty.TICKET_NUMBER:
+            case TicketProperty.TITLE:
+                criteria = [
+                    ...criteria,
+                    new FilterCriteria(property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value)
+                ];
                 break;
             case SearchProperty.FULLTEXT:
                 criteria = [...criteria, ...this.getFulltextCriteria(value)];
                 break;
-            case TicketProperty.ARCHIVE_FLAG:
-                if (value === ArchiveFlag.ALL) {
-                    criteria.push(new FilterCriteria(
-                        TicketProperty.ARCHIVE_FLAG, SearchOperator.IN,
-                        FilterDataType.STRING, FilterType.AND, ['y', 'n']
-                    ));
-                } else if (value === ArchiveFlag.ARCHIVED) {
-                    criteria.push(new FilterCriteria(
-                        TicketProperty.ARCHIVE_FLAG, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'y')
-                    );
-                } else if (value === ArchiveFlag.NOT_ARCHIVED) {
-                    criteria.push(new FilterCriteria(
-                        TicketProperty.ARCHIVE_FLAG, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'n')
-                    );
-                }
-                break;
             default:
-                criteria.push(
-                    new FilterCriteria(property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value)
-                );
+                criteria = [...criteria, ...super.prepareSearchFormValue(property, value)];
         }
 
         return criteria;
-    }
-
-    public async searchValues(
-        property: string, parameter: Array<[string, any]>, searchValue: string, limit: number
-    ): Promise<TreeNode[]> {
-        if (property === TicketProperty.ORGANISATION_ID) {
-            const filter = await OrganisationService.getInstance().prepareFullTextFilter(searchValue);
-            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
-            const organisations = await KIXObjectService.loadObjects<Organisation>(
-                KIXObjectType.ORGANISATION, null, loadingOptions, null, true
-            );
-            const nodes = [];
-            for (const c of organisations) {
-                const displayValue = await LabelService.getInstance().getText(c);
-                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
-            }
-            return nodes;
-        } else if (property === TicketProperty.CONTACT_ID) {
-            const filter = await ContactService.getInstance().prepareFullTextFilter(searchValue);
-            const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
-            const contacts = await KIXObjectService.loadObjects<Contact>(
-                KIXObjectType.CONTACT, null, loadingOptions, null, true
-            );
-            const nodes = [];
-            for (const c of contacts) {
-                const displayValue = await LabelService.getInstance().getText(c);
-                nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
-            }
-            return nodes;
-        }
-    }
-
-    public async getValueNodesForAutocomplete(property: string, values: Array<string | number>): Promise<TreeNode[]> {
-        const nodes: TreeNode[] = [];
-        if (Array.isArray(values) && !!values.length) {
-            switch (property) {
-                case TicketProperty.ORGANISATION_ID:
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, values, null, null, true
-                    ).catch((error) => []);
-                    for (const o of organisations) {
-                        const displayValue = await LabelService.getInstance().getText(o);
-                        nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(o.KIXObjectType, o.ID)));
-                    }
-                    break;
-                case TicketProperty.CONTACT_ID:
-                    const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.CONTACT, values, null, null, true
-                    ).catch((error) => []);
-                    for (const c of contacts) {
-                        const displayValue = await LabelService.getInstance().getText(c);
-                        nodes.push(new TreeNode(c.ID, displayValue, new ObjectIcon(c.KIXObjectType, c.ID)));
-                    }
-                    break;
-                default:
-            }
-        }
-        return nodes;
     }
 
     private getFulltextCriteria(value: string): FilterCriteria[] {
@@ -314,6 +99,22 @@ export class TicketSearchDefinition extends SearchDefinition {
                 TicketProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
             ));
         }
+        return criteria;
+
+    }
+
+    public getFilterCriteria(searchValue: ObjectPropertyValue): FilterCriteria {
+        const criteria = super.getFilterCriteria(searchValue);
+
+        if (criteria.property === TicketProperty.CREATED
+            || criteria.property === TicketProperty.CHANGED
+            || criteria.property === TicketProperty.CLOSE_TIME
+            || criteria.property === TicketProperty.PENDING_TIME
+            || criteria.property === TicketProperty.LAST_CHANGE_TIME
+        ) {
+            criteria.type = FilterDataType.DATETIME;
+        }
+
         return criteria;
     }
 }

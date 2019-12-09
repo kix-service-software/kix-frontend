@@ -10,12 +10,16 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import { NewTicketArticleContext } from '../../core/browser/ticket';
 import {
-    ContextConfiguration, ConfiguredWidget, WidgetSize, WidgetConfiguration, TicketProperty,
-    FormField, ArticleProperty, KIXObjectType, Form, FormContext, FormFieldOption, FormFieldValue, FormFieldOptions
+    ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
+    ArticleProperty, KIXObjectType, FormContext,
+    HelpWidgetConfiguration, ConfiguredDialogWidget, ContextMode
 } from '../../core/model';
-import { FormGroup } from '../../core/model/components/form/FormGroup';
-import { AutocompleteOption, AutocompleteFormFieldOption } from '../../core/browser/components';
+import {
+    FormGroupConfiguration, FormConfiguration, FormFieldConfiguration, FormPageConfiguration
+} from '../../core/model/components/form/configuration';
 import { ConfigurationService } from '../../core/services';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
+import { ModuleConfigurationService } from '../../services';
 
 export class Extension implements IConfigurationExtension {
 
@@ -23,40 +27,84 @@ export class Extension implements IConfigurationExtension {
         return NewTicketArticleContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const helpSettings = new HelpWidgetConfiguration(
+            'ticket-article-new-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
+            'Translatable#Helptext_Textmodules_ArticleCreate', null
+        );
+        configurations.push(helpSettings);
 
-        const helpWidget = new ConfiguredWidget('20180919-help-widget', new WidgetConfiguration(
-            'help-widget', 'Translatable#Text Modules', [], {
-                // tslint:disable-next-line:max-line-length
-                helpText: 'Translatable#Helptext_Textmodules_ArticleCreate'
-            },
-            false, false, 'kix-icon-textblocks'
-        ));
+        const helpWidget = new WidgetConfiguration(
+            'ticket-article-new-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
+            'help-widget', 'Translatable#Text Modules', [],
+            new ConfigurationDefinition('ticket-article-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            null, false, false, 'kix-icon-textblocks'
+        );
+        configurations.push(helpWidget);
 
-        const sidebars = ['20180919-help-widget'];
-        const sidebarWidgets: Array<ConfiguredWidget<any>> = [helpWidget];
+        const newDialogWidget = new WidgetConfiguration(
+            'ticket-article-new-dialog-widget', 'New Article DIalog Widget', ConfigurationType.Widget,
+            'new-ticket-article-dialog', 'Translatable#New Article', [], null, null,
+            false, false, 'kix-icon-new-note'
+        );
+        configurations.push(newDialogWidget);
 
-        return new ContextConfiguration(this.getModuleId(), sidebars, sidebarWidgets);
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), 'Ticket Article New Dialog', ConfigurationType.Context, this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'ticket-article-new-dialog-help-widget', 'ticket-article-new-dialog-help-widget'
+                    )
+                ], [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'ticket-article-new-dialog-widget', 'ticket-article-new-dialog-widget',
+                        KIXObjectType.ARTICLE, ContextMode.CREATE_SUB
+                    )
+                ]
+            )
+        );
+
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
-
-        const formId = 'new-ticket-article-form';
-        const existing = configurationService.getConfiguration(formId);
-        if (!existing) {
-            const fields: FormField[] = [];
-            fields.push(new FormField(
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const formId = 'ticket-article-new-form';
+        const configurations = [];
+        configurations.push(
+            new FormFieldConfiguration(
+                'ticket-article-new-form-field-channel',
                 'Translatable#Channel', ArticleProperty.CHANNEL_ID, 'channel-input', true,
                 'Translatable#Helptext_Tickets_ArticleCreate_Channel'
-            ));
+            )
+        );
 
-            const group = new FormGroup('Translatable#Article Data', fields);
+        configurations.push(
+            new FormGroupConfiguration(
+                'ticket-article-new-form-group-data', 'Translatable#Article Data',
+                [
+                    'ticket-article-new-form-field-channel'
+                ]
+            )
+        );
 
-            const form = new Form(formId, 'Translatable#New Article', [group], KIXObjectType.ARTICLE);
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.NEW], KIXObjectType.ARTICLE, formId);
+        configurations.push(
+            new FormPageConfiguration(
+                'ticket-article-new-form-page', 'Translatable#New Article',
+                ['ticket-article-new-form-group-data']
+            )
+        );
+
+        configurations.push(
+            new FormConfiguration(formId, 'Translatable#New Article',
+                ['ticket-article-new-form-page'],
+                KIXObjectType.ARTICLE
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.NEW], KIXObjectType.ARTICLE, formId);
+        return configurations;
     }
 
 }

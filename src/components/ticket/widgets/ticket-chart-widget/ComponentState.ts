@@ -7,7 +7,7 @@
  * --
  */
 
-import { WidgetComponentState, IAction, KIXObjectPropertyFilter } from '../../../../core/model';
+import { WidgetComponentState } from '../../../../core/model';
 import { ChartConfiguration } from 'chart.js';
 
 export class ComponentState extends WidgetComponentState {

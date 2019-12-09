@@ -31,6 +31,8 @@ export class CMDBService extends KIXObjectService {
 
     protected objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
+    protected enableSearchQuery: boolean = false;
+
     private static INSTANCE: CMDBService;
 
     public static getInstance(): CMDBService {
@@ -148,7 +150,7 @@ export class CMDBService extends KIXObjectService {
             }
 
         } else if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'ConfigItem', token, query);
+            await this.buildFilter(loadingOptions.filter, 'ConfigItem', query);
             const uri = this.buildUri('cmdb', 'configitems');
             const response = await this.getObjectByUri<ConfigItemsResponse>(token, uri, query);
             configItems = response.ConfigItem;
@@ -199,7 +201,7 @@ export class CMDBService extends KIXObjectService {
                 }
 
             } else if (loadingOptions.filter) {
-                await this.buildFilter(loadingOptions.filter, 'Image', token, query);
+                await this.buildFilter(loadingOptions.filter, 'Image', query);
                 const uri = this.buildUri('cmdb', subResource);
                 const response = await this.getObjectByUri<ConfigItemImagesResponse>(token, uri, query);
                 images = response.Image;
@@ -287,5 +289,9 @@ export class CMDBService extends KIXObjectService {
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
+    }
+
+    protected prepareAPISearch(criteria: FilterCriteria[]): FilterCriteria[] {
+        return [];
     }
 }

@@ -6,12 +6,10 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <form-list
-    nodes=state.nodes
-    selectedNodes=[state.currentNode]
     placeholder=state.placeholder
     on-focusLost("focusLost")
-    on-nodesChanged("fromChanged")
+    on-nodesChanged("nodesChanged")
     invalid=state.invalid
-    multiselect=false/>
+    multiselect=false
+    key="article-email-from-input"/>

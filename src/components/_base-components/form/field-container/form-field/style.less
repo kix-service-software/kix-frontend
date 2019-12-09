@@ -1,0 +1,43 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.form-field {
+    position: relative;
+
+    &[draggable="true"] {
+        -khtml-user-drag: element;
+    }
+
+    &.dragging {
+        .no-select();
+        background-color: @secondary-3;
+        border-radius: @border-radius;
+    }
+
+    >.additionalFieldControls {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 1fr;
+        grid-column-gap: .375rem;
+        justify-content: center;
+        align-items: center;
+        padding-left: @margin-small;
+
+        >.drag-button {
+            display: grid;
+            cursor: row-resize;
+            height: 1.5rem;
+            align-content: center;
+
+            >span:last-child {
+                margin-top: -0.3rem;
+            }
+        }
+    }
+}

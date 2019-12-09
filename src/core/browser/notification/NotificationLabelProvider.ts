@@ -332,4 +332,7 @@ export class NotificationLabelProvider extends LabelProvider {
         }
         return values;
     }
+    public getObjectTooltip(notification: Notification): string {
+        return notification.VisibleForAgentTooltip ? notification.VisibleForAgentTooltip : '';
+    }
 }

@@ -12,7 +12,7 @@ export class LoadNotesResponse implements ISocketResponse {
 
     public constructor(
         public requestId: string,
-        public notes: string
+        public notes: any
     ) { }
 
 }

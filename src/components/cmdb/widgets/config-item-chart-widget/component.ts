@@ -10,14 +10,14 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from "../../../../core/browser/context";
 import { IdService } from '../../../../core/browser';
-import { KIXObject, ConfigItem } from '../../../../core/model';
-import { ConfigItemChartConfiguration, ConfigItemChartFactory } from '../../../../core/browser/cmdb';
+import { KIXObject, ConfigItem, KIXObjectType } from '../../../../core/model';
+import { ConfigItemChartFactory, ConfigItemChartWidgetConfiguration } from '../../../../core/browser/cmdb';
 
 class Component {
 
     public state: ComponentState;
 
-    private cmdbChartConfiguration: ConfigItemChartConfiguration;
+    private cmdbChartConfiguration: ConfigItemChartWidgetConfiguration;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -34,13 +34,13 @@ class Component {
             : undefined;
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'CMDB';
-        this.cmdbChartConfiguration = this.state.widgetConfiguration.settings;
+        this.cmdbChartConfiguration = this.state.widgetConfiguration.configuration;
 
         this.initChartConfig();
 
         if (this.state.widgetConfiguration.contextDependent) {
-            this.cmdbChartConfiguration.chartConfiguration.data.labels = [];
-            this.cmdbChartConfiguration.chartConfiguration.data.datasets[0].data = [];
+            this.cmdbChartConfiguration.configuration.chartConfiguration.data.labels = [];
+            this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
             currentContext.registerListener('CMDBChartComponent' + IdService.generateDateBasedId(), {
                 explorerBarToggled: () => { return; },
@@ -48,41 +48,44 @@ class Component {
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
                 scrollInformationChanged: () => { return; },
-                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
+                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this),
+                additionalInformationChanged: () => { return; }
             });
 
-            this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
+            this.contextFilteredObjectListChanged(
+                KIXObjectType.CONFIG_ITEM, currentContext.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
+            );
         }
 
-        this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
+        this.state.chartConfig = this.cmdbChartConfiguration.configuration.chartConfiguration;
     }
 
     private initChartConfig(): void {
-        if (!this.cmdbChartConfiguration.chartConfiguration.data) {
-            this.cmdbChartConfiguration.chartConfiguration.data = {
+        if (!this.cmdbChartConfiguration.configuration.chartConfiguration.data) {
+            this.cmdbChartConfiguration.configuration.chartConfiguration.data = {
                 datasets: [{ data: [] }],
                 labels: []
             };
         }
 
-        if (!this.cmdbChartConfiguration.chartConfiguration.data.datasets) {
-            this.cmdbChartConfiguration.chartConfiguration.data.datasets = [{ data: [] }];
+        if (!this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets) {
+            this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets = [{ data: [] }];
         }
 
-        if (!this.cmdbChartConfiguration.chartConfiguration.data.labels) {
-            this.cmdbChartConfiguration.chartConfiguration.data.labels = [];
+        if (!this.cmdbChartConfiguration.configuration.chartConfiguration.data.labels) {
+            this.cmdbChartConfiguration.configuration.chartConfiguration.data.labels = [];
         }
     }
 
-    private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {
+    private async contextFilteredObjectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): Promise<void> {
         this.state.chartConfig = null;
         const data = await ConfigItemChartFactory.getInstance().prepareData(
             this.cmdbChartConfiguration.property, (objectList as ConfigItem[])
         );
 
-        this.cmdbChartConfiguration.chartConfiguration.data.labels = data[0];
-        this.cmdbChartConfiguration.chartConfiguration.data.datasets = data[1];
-        this.state.chartConfig = this.cmdbChartConfiguration.chartConfiguration;
+        this.cmdbChartConfiguration.configuration.chartConfiguration.data.labels = data[0];
+        this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets = data[1];
+        this.state.chartConfig = this.cmdbChartConfiguration.configuration.chartConfiguration;
     }
 
 }

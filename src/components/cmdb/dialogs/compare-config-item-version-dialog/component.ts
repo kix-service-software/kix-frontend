@@ -13,6 +13,7 @@ import { CompareConfigItemVersionDialogContext } from "../../../../core/browser/
 import { DialogService } from "../../../../core/browser/components/dialog";
 import { TranslationService } from "../../../../core/browser/i18n/TranslationService";
 import { KIXModulesService } from "../../../../core/browser/modules";
+import { KIXObjectType } from "../../../../core/model";
 
 class Component {
 
@@ -33,9 +34,9 @@ class Component {
         this.context = await ContextService.getInstance().getContext<CompareConfigItemVersionDialogContext>(
             CompareConfigItemVersionDialogContext.CONTEXT_ID
         );
-        this.state.compareWidget = this.context.getWidget('compare-ci-version-widget');
+        this.state.compareWidget = this.context.getWidgetConfiguration('compare-ci-version-widget');
 
-        const versions = await this.context.getObjectList();
+        const versions = await this.context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
         if (versions) {
             const text = await TranslationService.translate('Translatable#Selected Versions', []);
             this.state.title = `${text} (${versions.length})`;
@@ -47,7 +48,7 @@ class Component {
     }
 
     public getCompareWidgetTemplate(instanceId: string): any {
-        return KIXModulesService.getComponentTemplate(this.state.compareWidget.configuration.widgetId);
+        return KIXModulesService.getComponentTemplate(this.state.compareWidget.widgetId);
     }
 
 }

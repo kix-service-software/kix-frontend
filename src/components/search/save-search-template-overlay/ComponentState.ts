@@ -8,13 +8,12 @@
  */
 
 import { TreeNode } from "../../../core/model";
-import { AbstractComponentState } from "../../../core/browser";
+import { AbstractComponentState, IdService } from "../../../core/browser";
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public nodes: TreeNode[] = [],
-        public currentNodes: TreeNode[] = [],
+        public loadNodes: () => Promise<TreeNode[]> = null,
         public name: string = '',
         public nameInvalid: boolean = false
     ) {

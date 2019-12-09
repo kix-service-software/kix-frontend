@@ -116,7 +116,8 @@ export class RoutingService {
     }
 
     public async routeToContext(
-        routingConfiguration: RoutingConfiguration, objectId: string | number, addHistory: boolean = true
+        routingConfiguration: RoutingConfiguration, objectId: string | number, addHistory: boolean = true,
+        reset: boolean = true
     ): Promise<void> {
         if (routingConfiguration) {
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
@@ -124,7 +125,7 @@ export class RoutingService {
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,
                 routingConfiguration.contextMode,
-                objectId, true, routingConfiguration.history,
+                objectId, reset, routingConfiguration.history,
                 addHistory
             );
         }

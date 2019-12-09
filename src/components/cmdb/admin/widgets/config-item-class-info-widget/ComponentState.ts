@@ -10,7 +10,7 @@
 import { WidgetComponentState, AbstractAction, ConfigItemClass } from "../../../../../core/model";
 import { ConfigItemClassLabelProvider } from "../../../../../core/browser/cmdb";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public labelProvider: ConfigItemClassLabelProvider = null,

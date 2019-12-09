@@ -13,6 +13,8 @@ export class ToggleOptions {
         public componentId: string,
         public inputPropertyName: string,
         public actions: string[] = [],
-        public toggleFirst: boolean = false
+        public toggleFirst: boolean = false,
+        public data: {} = {},
+        public rowObjectProperty?: string
     ) { }
 }

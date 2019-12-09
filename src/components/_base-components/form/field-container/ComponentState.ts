@@ -7,14 +7,16 @@
  * --
  */
 
-import { FormField } from '../../../../core/model';
 import { AbstractComponentState } from '../../../../core/browser';
+import { FormFieldConfiguration } from '../../../../core/model/components/form/configuration';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public level: number = 0,
-        public fields: FormField[] = []
+        public fields: FormFieldConfiguration[] = [],
+        public dragStartInstanceId: string = null,
+        public dragStartIndex: number = null
     ) {
         super();
     }

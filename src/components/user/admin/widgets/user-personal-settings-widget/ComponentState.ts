@@ -11,7 +11,7 @@ import { WidgetComponentState, AbstractAction, User } from "../../../../../core/
 import { UserLabelProvider } from "../../../../../core/browser/user";
 import { Label } from "../../../../../core/browser";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public actions: AbstractAction[] = [],

@@ -65,6 +65,9 @@ class Component {
             }
             this.config.options.responsive = true;
             this.config.options.maintainAspectRatio = false;
+            if (this.chart) {
+                this.chart['options'] = this.config.options;
+            }
         }
     }
 
@@ -85,7 +88,8 @@ class Component {
             objectChanged: () => { return; },
             objectListChanged: () => { return; },
             filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; }
+            scrollInformationChanged: () => { return; },
+            additionalInformationChanged: () => { return; }
         });
 
         window.addEventListener('resize', this.createChart.bind(this), false);

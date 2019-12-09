@@ -33,14 +33,14 @@ Feature: As a user I want to get a correct default configuration of a table
         Then Die Spalte <column> zeigt Spaltenbezeichnung an: <columnTitle>
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
-            | column        | sortable | filterable | listFilter | width | flexible | showText | showIcon | type     | columnTitle | columnIcon | objectType |
-            | 'title'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'QueueID'     | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'PrioritiyID' | 1        | 1          | 1          | 80    | 0        | 0        | 1        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'TypeID'      | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'StateID'     | 1        | 1          | 1          | 120   | 1        | 1        | 1        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'ValidID'     | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'ChangeTime'  | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'ChangeBy'    | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'CreateTime'  | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
-            | 'CreateBy'    | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'WEBFORM'  |
+            | column        | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType |
+            | 'title'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'WEBFORM'  |
+            | 'QueueID'     | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'WEBFORM'  |
+            | 'PrioritiyID' | 1        | 1          | 1          | 80    | 0        | 0        | 1        | 'STRING'   | 1           | 0          | 'WEBFORM'  |
+            | 'TypeID'      | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'WEBFORM'  |
+            | 'StateID'     | 1        | 1          | 1          | 120   | 1        | 1        | 1        | 'STRING'   | 1           | 0          | 'WEBFORM'  |
+            | 'ValidID'     | 1        | 1          | 1          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'WEBFORM'  |
+            | 'ChangeTime'  | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'WEBFORM'  |
+            | 'ChangeBy'    | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'WEBFORM'  |
+            | 'CreateTime'  | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'WEBFORM'  |
+            | 'CreateBy'    | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'WEBFORM'  |

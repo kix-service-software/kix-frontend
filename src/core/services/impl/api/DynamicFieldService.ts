@@ -63,7 +63,7 @@ export class DynamicFieldService extends KIXObjectService {
 
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions.filter) {
-            await this.buildFilter(loadingOptions.filter, 'DynamicField', token, query);
+            await this.buildFilter(loadingOptions.filter, 'DynamicField', query);
         }
 
         const response = await this.getObjectByUri<DynamicFieldResponse | DynamicFieldsResponse>(token, uri, query);

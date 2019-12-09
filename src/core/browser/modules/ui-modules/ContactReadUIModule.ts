@@ -23,10 +23,13 @@ import {
 import { DialogService } from '../../../../core/browser/components/dialog';
 import { SearchService } from '../../../../core/browser/kix/search/SearchService';
 import { IUIModule } from '../../application/IUIModule';
+import { ContactTableDependingAction } from '../../organisation';
 
 export class UIModule implements IUIModule {
 
     public priority: number = 303;
+
+    public name: string = 'ContactReadUIModule';
 
     public unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
@@ -43,45 +46,29 @@ export class UIModule implements IUIModule {
         FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
         SearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 
-        this.registerContexts();
-        this.registerDialogs();
+        await this.registerContexts();
         this.registerActions();
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const organisationDetailsContext = new ContextDescriptor(
             ContactDetailsContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['contacts'], ContactDetailsContext
         );
-        ContextService.getInstance().registerContext(organisationDetailsContext);
+        await ContextService.getInstance().registerContext(organisationDetailsContext);
 
         const searchContactContext = new ContextDescriptor(
             ContactSearchContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-contact-dialog', ['contacts'], ContactSearchContext
         );
-        ContextService.getInstance().registerContext(searchContactContext);
+        await ContextService.getInstance().registerContext(searchContactContext);
     }
 
-    private registerDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'search-contact-dialog',
-            new WidgetConfiguration(
-                'search-contact-dialog',
-                'Translatable#Contact Search',
-                [],
-                {},
-                false,
-                false,
-                'kix-icon-search-man-bubble'
-            ),
-            KIXObjectType.CONTACT,
-            ContextMode.SEARCH
-        ));
-    }
 
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-search-action', ContactSearchAction);
         ActionFactory.getInstance().registerAction('contact-csv-export-action', ContactCSVExportAction);
+        ActionFactory.getInstance().registerAction('contact-table-depending-action', ContactTableDependingAction);
     }
 
 }

@@ -15,13 +15,15 @@ export interface IDynamicFormManager {
 
     objectType: KIXObjectType;
 
+    uniqueProperties: boolean;
+
     registerListener(listenerId: string, callback: () => void): void;
 
     unregisterListener(listenerId: string): void;
 
     init(): void;
 
-    reset(): void;
+    reset(notify?: boolean): void;
 
     getValues(): ObjectPropertyValue[];
 
@@ -39,13 +41,13 @@ export interface IDynamicFormManager {
 
     getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>>;
 
-    getTreeNodes(property: string): Promise<TreeNode[]>;
+    getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]>;
 
     getProperties(): Promise<Array<[string, string]>>;
 
     getPropertiesPlaceholder(): Promise<string>;
 
-    propertiesAreUnique(): Promise<boolean>;
+    isHiddenProperty(property: string): Promise<boolean>;
 
     hasValueForProperty(property: string): boolean;
 
@@ -55,7 +57,7 @@ export interface IDynamicFormManager {
 
     getOpertationsType(property: string): Promise<DynamicFormOperationsType>;
 
-    getOperatorDisplayText(o: string): string;
+    getOperatorDisplayText(o: string): Promise<string>;
 
     clearValueOnPropertyChange(property: string): Promise<boolean>;
 
@@ -64,4 +66,6 @@ export interface IDynamicFormManager {
     searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]>;
 
     validate(): Promise<void>;
+
+    shouldAddEmptyField(): Promise<boolean>;
 }

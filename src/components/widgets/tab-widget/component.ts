@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent, ContextService } from '../../../core/browser';
 import { ComponentInput } from './ComponentInput';
-import { ContextType, TabWidgetSettings } from '../../../core/model';
+import { ContextType, TabWidgetConfiguration } from '../../../core/model';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -32,10 +32,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             : undefined;
 
         if (this.state.widgetConfiguration) {
-            const settings: TabWidgetSettings = this.state.widgetConfiguration.settings;
+            const settings: TabWidgetConfiguration = this.state.widgetConfiguration.configuration;
             const widgets = [];
             settings.widgets.forEach((w) => {
-                const config = context.getWidget(w);
+                const config = context.getWidgetConfiguration(w);
                 if (config) {
                     widgets.push(config);
                 }

@@ -39,10 +39,11 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                     context.registerListener(this.table.getTableId() + '-content-provider', {
                         explorerBarToggled: () => { return; },
                         filteredObjectListChanged: () => { return; },
-                        objectChanged: this.objectListChanged.bind(this),
+                        objectChanged: this.objectChanged.bind(this),
                         objectListChanged: this.objectListChanged.bind(this),
                         sidebarToggled: () => { return; },
-                        scrollInformationChanged: () => { return; }
+                        scrollInformationChanged: () => { return; },
+                        additionalInformationChanged: () => { return; }
                     });
                     this.initialized = true;
                 }
@@ -59,8 +60,20 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         }
     }
 
-    private objectListChanged(): void {
-        this.table.reload(true);
+    private objectChanged(id: number | string, object: KIXObject, objectType: KIXObjectType): void {
+        if (objectType === this.getContextObjectType()) {
+            this.table.reload(true);
+        }
+    }
+
+    private objectListChanged(objectType: KIXObjectType, filteredObjectList: KIXObject[]): void {
+        if (objectType === this.getContextObjectType()) {
+            this.table.reload(true);
+        }
+    }
+
+    protected getContextObjectType(): KIXObjectType | string {
+        return this.objectType;
     }
 
     public getObjectType(): KIXObjectType {
@@ -69,31 +82,32 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public async loadData(): Promise<Array<IRowObject<T>>> {
         let objects = [];
-        if (this.contextId) {
+        if (this.contextId && !this.objectIds) {
             const context = await ContextService.getInstance().getContext(this.contextId);
-            objects = context ? await context.getObjectList() : [];
-        } else {
-            if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
-                objects = await KIXObjectService.loadObjects<KIXObject>(
-                    this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
-                );
-            }
+            objects = context ? await context.getObjectList(this.objectType) : [];
+        } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
+            objects = await KIXObjectService.loadObjects<KIXObject>(
+                this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
+            );
         }
 
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
-        for (const o of objects) {
-            rowObjectPromises.push(new Promise<RowObject<T>>(async (resolve, reject) => {
-                const values: TableValue[] = [];
+        if (objects) {
+            for (const o of objects) {
+                rowObjectPromises.push(new Promise<RowObject<T>>(async (resolve, reject) => {
+                    const values: TableValue[] = [];
 
-                for (const property in o) {
-                    if (o.hasOwnProperty(property)) {
-                        const value = await this.getTableValue(o, property);
-                        values.push(value);
+                    for (const property in o) {
+                        if (o.hasOwnProperty(property)) {
+                            const value = await this.getTableValue(o, property);
+                            values.push(value);
+                        }
                     }
-                }
+                    await this.addSpecificValues(values, o);
 
-                resolve(new RowObject<T>(values, o));
-            }));
+                    resolve(new RowObject<T>(values, o));
+                }));
+            }
         }
 
         const rowObjects = await Promise.all(rowObjectPromises);
@@ -112,5 +126,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
         }
         return new TableValue(property, object[property], displayValue);
+    }
+
+    protected async addSpecificValues(values: TableValue[], object: any): Promise<any> {
+        return;
     }
 }

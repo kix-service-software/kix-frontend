@@ -42,5 +42,8 @@ export class FAQVote extends KIXObject<FAQVote> {
         return this.ID === faqVote.ID;
     }
 
+    public toString(): string {
+        return this.Rating.toString();
+    }
 
 }

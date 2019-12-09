@@ -35,7 +35,10 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]>;
 
-    getTreeNodes(property: string, showInvalid?: boolean, filterIds?: Array<string | number>): Promise<TreeNode[]>;
+    getTreeNodes(
+        property: string, showInvalid?: boolean, invalidClickable?: boolean,
+        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions
+    ): Promise<TreeNode[]>;
 
     checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean>;
 
@@ -54,7 +57,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
     getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string>;
 
     prepareObjectTree(
-        objects: KIXObject[], showInvalid?: boolean, filterIds?: Array<string | number>
+        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]>;
 
 }

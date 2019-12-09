@@ -41,39 +41,46 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.ROLE) {
                     this.initWidget(role);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         await this.initWidget(await context.getObject<Role>());
     }
 
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('user-role-assigned-users');
+    }
+
     private async initWidget(role: Role): Promise<void> {
         if (role) {
             const columns = [
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     UserProperty.USER_LOGIN, true, false, true, false, 250, true, true, false,
                     DataType.STRING, true, null, null, false
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true, true
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
                     DataType.STRING, true, null, null, false
                 ),
-                new DefaultColumnConfiguration(
+                new DefaultColumnConfiguration(null, null, null,
                     UserProperty.USER_EMAIL, true, false, true, false, 250, true, true, true
                 ),
-                new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true)
+                new DefaultColumnConfiguration(
+                    null, null, null, KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true
+                )
             ];
-            const tableConfiguration = new TableConfiguration(
-                KIXObjectType.USER, null, 32, columns,  false, false, null, null,
+            const tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.USER, null, 32, columns, [], false, false, null, null,
                 TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
             const table = await TableFactoryService.getInstance().createTable(
-                'user-role-assigned-users', KIXObjectType.USER, tableConfiguration, role.UserIDs,
-                null, true, undefined, false, true, true
+                'user-role-assigned-users', KIXObjectType.USER, tableConfiguration, null,
+                RoleDetailsContext.CONTEXT_ID, true, undefined, false, true, true
             );
             this.state.table = table;
             this.prepareActions(role);

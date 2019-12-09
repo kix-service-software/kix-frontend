@@ -9,7 +9,7 @@
 
 import {
     Attachment, LoadArticleZipAttachmentRequest, LoadArticleAttachmentRequest, LoadArticleAttachmentResponse,
-    TicketEvent, SetArticleSeenFlagRequest, ISocketResponse, SocketEvent,
+    TicketEvent, SetArticleSeenFlagRequest, ISocketResponse, SocketEvent, KIXObjectType,
 } from '../../model';
 
 import { SocketClient } from '../SocketClient';
@@ -17,6 +17,8 @@ import { ClientStorageService } from '../ClientStorageService';
 import { IdService } from '../IdService';
 import { SocketErrorResponse } from '../../common';
 import { CacheService } from '../cache';
+import { EventService } from '../event';
+import { ApplicationEvent } from '../application';
 
 export class TicketSocketClient extends SocketClient {
 
@@ -124,6 +126,9 @@ export class TicketSocketClient extends SocketClient {
 
             this.socket.on(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, (result: ISocketResponse) => {
                 if (result.requestId === requestId) {
+                    CacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
+                    CacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
+                    EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
                     window.clearTimeout(timeout);
                     resolve();
                 }

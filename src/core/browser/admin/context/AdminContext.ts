@@ -32,10 +32,12 @@ export class AdminContext extends Context {
         }
     }
 
-    public reset(): void {
+    public reset(refresh?: boolean): void {
         super.reset();
-        this.adminModule = null;
-        this.categoryName = null;
+        if (!refresh) {
+            this.adminModule = null;
+            this.categoryName = null;
+        }
     }
 
 }

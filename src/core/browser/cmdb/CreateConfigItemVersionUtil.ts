@@ -8,10 +8,12 @@
  */
 
 import {
-    VersionProperty, FormField, FormFieldOptions, InputFieldTypes, IFormInstance, DateTimeUtil, Attachment
+    VersionProperty, FormFieldOptions, InputFieldTypes, IFormInstance, DateTimeUtil,
+    Attachment, ConfigItemProperty
 } from "../../model";
 import { FormService } from "../form";
 import { BrowserUtil } from "../BrowserUtil";
+import { FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class CreateConfigItemVersionUtil {
 
@@ -22,8 +24,8 @@ export class CreateConfigItemVersionUtil {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const form = formInstance.getForm();
 
-        let fields: FormField[] = [];
-        form.groups.forEach((g) => fields = [...fields, ...g.formFields]);
+        let fields: FormFieldConfiguration[] = [];
+        form.pages.forEach((p) => p.groups.forEach((g) => fields = [...fields, ...g.formFields]));
 
         let data = null;
         for (const formField of fields) {
@@ -40,6 +42,8 @@ export class CreateConfigItemVersionUtil {
                 case VersionProperty.INCI_STATE_ID:
                     parameter.push([property, value]);
                     break;
+                case ConfigItemProperty.LINKS:
+                    continue;
                 default:
                     data = await CreateConfigItemVersionUtil.prepareData(data, formField, formInstance);
             }
@@ -53,7 +57,7 @@ export class CreateConfigItemVersionUtil {
     }
 
     private static async prepareData(
-        versionData: any, formField: FormField, formInstance: IFormInstance
+        versionData: any, formField: FormFieldConfiguration, formInstance: IFormInstance
     ): Promise<any> {
         const data = await CreateConfigItemVersionUtil.perpareFormFieldData(formField, formInstance);
         if (data) {
@@ -74,7 +78,7 @@ export class CreateConfigItemVersionUtil {
     }
 
     private static async perpareFormFieldData(
-        formField: FormField, formInstance: IFormInstance
+        formField: FormFieldConfiguration, formInstance: IFormInstance
     ): Promise<any> {
         let data;
         let fieldType: string;
@@ -91,13 +95,6 @@ export class CreateConfigItemVersionUtil {
             let value;
             if (formValue && formValue.value) {
                 switch (fieldType) {
-                    case InputFieldTypes.TEXT:
-                    case InputFieldTypes.TEXT_AREA:
-                    case InputFieldTypes.GENERAL_CATALOG:
-                    case InputFieldTypes.CI_REFERENCE:
-                    case InputFieldTypes.OBJECT_REFERENCE:
-                        value = formValue.value;
-                        break;
                     case InputFieldTypes.DATE:
                         if (formValue.value !== '') {
                             value = DateTimeUtil.getKIXDateString(formValue.value as Date);
@@ -112,8 +109,10 @@ export class CreateConfigItemVersionUtil {
                         value = await CreateConfigItemVersionUtil.prepareAttachment(formValue.value as File[]);
                         break;
                     case InputFieldTypes.DUMMY:
-                    default:
                         value = null;
+                        break;
+                    default:
+                        value = formValue.value;
                 }
             }
 

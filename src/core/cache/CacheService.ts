@@ -65,8 +65,8 @@ export class CacheService {
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
         for (const event of events) {
-            LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
             if (!event.Namespace.startsWith(KIXObjectType.TRANSLATION_PATTERN)) {
+                LoggingService.getInstance().debug('Backend Notification: ' + JSON.stringify(event));
                 await this.deleteKeys(event.Namespace);
             }
         }
@@ -95,6 +95,10 @@ export class CacheService {
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
+        } else if (objectNamespace === 'State') {
+            cacheKeyPrefixes.push(KIXObjectType.TICKET_STATE);
+        } else if (objectNamespace === 'Type') {
+            cacheKeyPrefixes.push(KIXObjectType.TICKET_TYPE);
         } else {
             cacheKeyPrefixes.push(objectNamespace);
         }
@@ -167,6 +171,9 @@ export class CacheService {
             case KIXObjectType.TICKET_TYPE:
             case KIXObjectType.TICKET_PRIORITY:
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                break;
+            case KIXObjectType.GENERAL_CATALOG_ITEM:
+                cacheKeyPrefixes.push(KIXObjectType.GENERAL_CATALOG_CLASS);
                 break;
             default:
         }

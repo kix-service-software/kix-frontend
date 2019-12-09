@@ -35,6 +35,8 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     protected abstract RESOURCE_URI: string;
 
+    protected enableSearchQuery: boolean = true;
+
     public constructor(factories: IObjectFactory[] = []) {
         factories.forEach((f) => ObjectFactoryService.registerFactory(f));
     }
@@ -54,7 +56,7 @@ export abstract class KIXObjectService implements IKIXObjectService {
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
-            await this.buildFilter(loadingOptions.filter, responseProperty, token, query);
+            await this.buildFilter(loadingOptions.filter, responseProperty, query, token);
         }
 
         let objects: O[] = [];
@@ -222,8 +224,8 @@ export abstract class KIXObjectService implements IKIXObjectService {
     }
 
     protected async sendDeleteRequest<R>(
-        token: string, clientRequestId: string, uri: string, cacheKeyPrefix: string
-    ): Promise<R> {
+        token: string, clientRequestId: string, uri: string[], cacheKeyPrefix: string
+    ): Promise<Error[]> {
         return await this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix);
     }
 
@@ -233,14 +235,15 @@ export abstract class KIXObjectService implements IKIXObjectService {
 
     public async deleteObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, objectId: string | number,
-        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string
-    ): Promise<void> {
-        return await this.sendDeleteRequest<void>(
-            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), cacheKeyPrefix
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        deleteOptions: KIXObjectSpecificDeleteOptions, cacheKeyPrefix: string, ressourceUri: string = this.RESOURCE_URI
+    ): Promise<Error[]> {
+        const uri = [this.buildUri(ressourceUri, objectId)];
+
+        return await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix)
+            .catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
     }
 
     protected async createLinks(
@@ -436,37 +439,62 @@ export abstract class KIXObjectService implements IKIXObjectService {
     }
 
     protected async buildFilter(
-        filter: FilterCriteria[], filterProperty: string, token: string, query: any
+        filter: FilterCriteria[], objectProperty: string, query: any, token?: string
     ): Promise<void> {
         let objectFilter = {};
 
-        const andFilter = filter.filter((f) => f.filterType === FilterType.AND).map((f) => {
+        const filterCriteria = this.prepareAPIFilter(filter);
+        let hasAPIFilter = false;
+        if (filterCriteria && filterCriteria.length) {
+            hasAPIFilter = true;
+            objectFilter = this.prepareObjectFilter(filterCriteria, objectFilter);
+        }
+
+        const searchCriteria = this.prepareAPISearch(filter);
+        let hasAPISearch = false;
+        if (searchCriteria && searchCriteria.length) {
+            hasAPISearch = true;
+            objectFilter = this.prepareObjectFilter(filterCriteria, objectFilter);
+        }
+
+        if (hasAPIFilter) {
+            const apiFilter = {};
+            apiFilter[objectProperty] = objectFilter;
+            query.filter = JSON.stringify(apiFilter);
+        }
+
+        if (hasAPISearch) {
+            const apiSearch = {};
+            apiSearch[objectProperty] = objectFilter;
+            query.search = JSON.stringify(apiSearch);
+        }
+    }
+
+    protected prepareAPIFilter(criteria: FilterCriteria[]): FilterCriteria[] {
+        return criteria;
+    }
+
+    protected prepareAPISearch(criteria: FilterCriteria[]): FilterCriteria[] {
+        return criteria;
+    }
+
+    private prepareObjectFilter(filterCriteria: FilterCriteria[], objectFilter: any): any {
+        const andFilter = filterCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
 
         if (andFilter && andFilter.length) {
-            objectFilter = {
-                ...objectFilter,
-                AND: andFilter
-            };
+            objectFilter = { ...objectFilter, AND: andFilter };
         }
 
-        const orFilter = filter.filter((f) => f.filterType === FilterType.OR).map((f) => {
+        const orFilter = filterCriteria.filter((f) => f.filterType === FilterType.OR).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });
 
         if (orFilter && orFilter.length) {
-            objectFilter = {
-                ...objectFilter,
-                OR: orFilter
-            };
+            objectFilter = { ...objectFilter, OR: orFilter };
         }
 
-        if ((andFilter && !!andFilter.length) || (orFilter && !!orFilter.length)) {
-            const apiFilter = {};
-            apiFilter[filterProperty] = objectFilter;
-            query.filter = JSON.stringify(apiFilter);
-            query.search = JSON.stringify(apiFilter);
-        }
+        return objectFilter;
     }
 }

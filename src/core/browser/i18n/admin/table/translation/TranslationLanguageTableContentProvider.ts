@@ -51,4 +51,8 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
 
         return rowObjects;
     }
+
+    protected getContextObjectType(): KIXObjectType | string {
+        return KIXObjectType.TRANSLATION_PATTERN;
+    }
 }

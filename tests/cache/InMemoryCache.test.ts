@@ -19,6 +19,9 @@ const expect = chai.expect;
 
 describe('Cache / InMemoryCache', () => {
 
+    before(async () => {
+        require('../TestSetup');
+    });
 
     describe('set cache values', () => {
 

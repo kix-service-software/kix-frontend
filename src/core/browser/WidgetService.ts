@@ -15,7 +15,9 @@ export class WidgetService {
     private static INSTANCE: WidgetService;
 
     private widgetActions: Map<string, [IAction[], boolean]> = new Map();
-    private listeners: IActionListener[] = [];
+    private widgetClasses: Map<string, string[]> = new Map();
+    private widgetTitle: Map<string, string> = new Map();
+    private actionListenerListeners: IActionListener[] = [];
 
     public static getInstance(): WidgetService {
         if (!WidgetService.INSTANCE) {
@@ -26,8 +28,27 @@ export class WidgetService {
 
     private widgetTypes: Map<string, WidgetType> = new Map();
 
+    public setWidgetTitle(instanceId: string, title: string): void {
+        this.widgetTitle.set(instanceId, title);
+    }
+
+    public getWidgetTitle(instanceId: string): string {
+        return this.widgetTitle.get(instanceId);
+    }
+
     public setWidgetType(instanceId: string, widgetType: WidgetType): void {
         this.widgetTypes.set(instanceId, widgetType);
+    }
+
+    public getWidgetClasses(instanceId: string): string[] {
+        if (this.widgetClasses.has(instanceId)) {
+            return this.widgetClasses.get(instanceId);
+        }
+        return [];
+    }
+
+    public setWidgetClasses(instanceId: string, classes: string[]): void {
+        this.widgetClasses.set(instanceId, classes);
     }
 
     public getWidgetType(instanceId: string, context?: Context): WidgetType {
@@ -42,7 +63,7 @@ export class WidgetService {
 
     public registerActions(instanceId: string, actions: IAction[], displayText?: boolean): void {
         this.widgetActions.set(instanceId, [actions, displayText]);
-        const listener = this.listeners.find((l) => l.listenerInstanceId === instanceId);
+        const listener = this.actionListenerListeners.find((l) => l.listenerInstanceId === instanceId);
         if (listener) {
             listener.actionsChanged();
         }
@@ -50,7 +71,7 @@ export class WidgetService {
 
     public unregisterActions(instanceId: string): void {
         this.widgetActions.delete(instanceId);
-        const listener = this.listeners.find((l) => l.listenerInstanceId === instanceId);
+        const listener = this.actionListenerListeners.find((l) => l.listenerInstanceId === instanceId);
         if (listener) {
             listener.actionsChanged();
         }
@@ -61,20 +82,20 @@ export class WidgetService {
     }
 
     public registerActionListener(listener: IActionListener) {
-        const existingListenerIndex = this.listeners.findIndex(
+        const existingListenerIndex = this.actionListenerListeners.findIndex(
             (l) => l.listenerInstanceId === listener.listenerInstanceId
         );
         if (existingListenerIndex !== -1) {
-            this.listeners.splice(existingListenerIndex, 1, listener);
+            this.actionListenerListeners.splice(existingListenerIndex, 1, listener);
         } else {
-            this.listeners.push(listener);
+            this.actionListenerListeners.push(listener);
         }
     }
 
     public setActionData(instanceId: string, data: KIXObject[] | ITable) {
         if (this.widgetActions.has(instanceId)) {
             this.widgetActions.get(instanceId)[0].forEach((a) => a.setData(data));
-            const listener = this.listeners.find((l) => l.listenerInstanceId === instanceId);
+            const listener = this.actionListenerListeners.find((l) => l.listenerInstanceId === instanceId);
             if (listener) {
                 listener.actionDataChanged(data);
             }
@@ -82,7 +103,7 @@ export class WidgetService {
     }
 
     public updateActions(instanceId: string) {
-        const listener = this.listeners.find((l) => l.listenerInstanceId === instanceId);
+        const listener = this.actionListenerListeners.find((l) => l.listenerInstanceId === instanceId);
         if (listener) {
             listener.actionDataChanged();
         }

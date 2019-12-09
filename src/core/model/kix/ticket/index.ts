@@ -12,7 +12,6 @@ export { Article } from './Article';
 export { ArticleFlag } from './ArticleFlag';
 export { ArticleReceiver } from './ArticleReceiver';
 export { ArticleProperty } from './ArticleProperty';
-export { Attachment } from './Attachment';
 export { SenderType } from './SenderType';
 export { StateType } from './StateType';
 export { Ticket } from './Ticket';
@@ -36,7 +35,6 @@ export { FollowUpType } from './FollowUpType';
 export { TicketStats } from './TicketStats';
 export { CreateTicketArticleOptions } from './CreateTicketArticleOptions';
 export { CreateTicketWatcherOptions } from './CreateTicketWatcherOptions';
-export { DeleteTicketWatcherOptions } from './DeleteTicketWatcherOptions';
 export { TicketPriorityProperty } from './TicketPriorityProperty';
 
 export { ArticleLoadingOptions } from './ArticleLoadingOptions';

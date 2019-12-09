@@ -17,7 +17,8 @@ export class FormComponentState {
         public formInstance: IFormInstance = null,
         public isSearchContext: boolean = false,
         public loading: boolean = true,
-        public additionalFieldControlsNeeded: boolean = false
+        public additionalFieldControlsNeeded: boolean = false,
+        public activePageIndex: number = 0
     ) { }
 
 }

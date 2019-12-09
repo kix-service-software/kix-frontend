@@ -8,7 +8,8 @@
  */
 
 import {
-    KIXObject, KIXObjectType, FormFieldValue, Form, FormField, ObjectIcon, FormContext, ContextType, CRUD
+    KIXObject, KIXObjectType, FormFieldValue,
+    ObjectIcon, FormContext, ContextType, CRUD
 } from "../../model";
 import { IKIXObjectFormService } from "./IKIXObjectFormService";
 import { ServiceType } from "./ServiceType";
@@ -17,6 +18,7 @@ import { ContextService } from "../context";
 import { InlineContent } from "../components";
 import { AuthenticationSocketClient } from "../application/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
+import { FormConfiguration, FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> implements IKIXObjectFormService<T> {
 
@@ -26,38 +28,42 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return kixObjectServiceType === ServiceType.FORM;
     }
 
-    public async initValues(form: Form, kixObject?: KIXObject): Promise<Map<string, FormFieldValue<any>>> {
+    public async initValues(form: FormConfiguration, kixObject?: KIXObject): Promise<Map<string, FormFieldValue<any>>> {
         if (!kixObject) {
             const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
             if (dialogContext) {
                 kixObject = await dialogContext.getObject(form.objectType);
             }
         }
-        await this.prepareForm(form);
+        await this.prePrepareForm(form, kixObject);
 
         const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
-        for (const g of form.groups) {
-            await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
+        for (const p of form.pages) {
+            for (const g of p.groups) {
+                await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
+            }
         }
 
-        await this.doAdditionalPreparations(form, formFieldValues, kixObject);
+        await this.postPrepareForm(form, formFieldValues, kixObject);
         return formFieldValues;
     }
 
-    public async initOptions(form: Form): Promise<void> {
+    public async initOptions(form: FormConfiguration): Promise<void> {
         let kixObject: KIXObject;
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (context && form.formContext && form.formContext === FormContext.EDIT) {
             kixObject = await context.getObject();
         }
 
-        for (const g of form.groups) {
-            await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
+        for (const p of form.pages) {
+            for (const g of p.groups) {
+                await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
+            }
         }
     }
 
     protected async prepareFormFieldValues(
-        formFields: FormField[], kixObject: KIXObject, formFieldValues: Map<string, FormFieldValue<any>>,
+        formFields: FormFieldConfiguration[], kixObject: KIXObject, formFieldValues: Map<string, FormFieldValue<any>>,
         formContext: FormContext
     ): Promise<void> {
         for (const f of formFields) {
@@ -96,26 +102,33 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         }
     }
 
-    protected async prepareFormFieldOptions(formFields: FormField[], kixObject: KIXObject, formContext: FormContext) {
+    protected async prepareFormFieldOptions(
+        formFields: FormFieldConfiguration[], kixObject: KIXObject, formContext: FormContext
+    ) {
         return;
     }
 
-    public getNewFormField(f: FormField, parent?: FormField): FormField {
-        const newField = new FormField(
+    public getNewFormField(
+        f: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren: boolean = true
+    ): FormFieldConfiguration {
+        const newField = new FormFieldConfiguration(
+            f.id,
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
-            [], (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
-            f.maxLength, f.regEx, f.regExErrorMessage, (f.countDefault === 0 ? true : false), f.asStructure, f.readonly,
-            f.placeholder
+            [], null, (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
+            f.maxLength, f.regEx, f.regExErrorMessage, f.countDefault === 0, f.asStructure, f.readonly,
+            f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
         );
-        const children: FormField[] = [];
-        for (const child of f.children) {
-            const existingChildren = children.filter((c) => c.property === child.property);
-            if (
-                !!!existingChildren.length
-                || typeof child.countDefault !== 'number'
-                || child.countDefault > existingChildren.length
-            ) {
-                children.push(this.getNewFormField(child, newField));
+        const children: FormFieldConfiguration[] = [];
+        if (withChildren && f.children) {
+            for (const child of f.children) {
+                const existingChildren = children.filter((c) => c.property === child.property);
+                if (
+                    !!!existingChildren.length
+                    || typeof child.countDefault !== 'number'
+                    || child.countDefault > existingChildren.length
+                ) {
+                    children.push(this.getNewFormField(child, newField));
+                }
             }
         }
         newField.children = children;
@@ -123,7 +136,9 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return newField;
     }
 
-    protected async getValue(property: string, value: any, object: KIXObject, formField: FormField): Promise<any> {
+    protected async getValue(
+        property: string, value: any, object: KIXObject, formField: FormFieldConfiguration
+    ): Promise<any> {
         return value;
     }
 
@@ -141,17 +156,17 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return newString;
     }
 
-    protected async prepareForm(form: Form): Promise<void> {
+    protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
         return;
     }
 
-    protected async doAdditionalPreparations(
-        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
     ): Promise<void> {
         return;
     }
 
-    public async hasPermissions(field: FormField): Promise<boolean> {
+    public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         return true;
     }
 
@@ -170,5 +185,9 @@ export abstract class KIXObjectFormService<T extends KIXObject = KIXObject> impl
         return await AuthenticationSocketClient.getInstance().checkPermissions(
             [new UIComponentPermission(resource, crud)]
         );
+    }
+
+    public async updateFields(fields: FormFieldConfiguration[]): Promise<void> {
+        return;
     }
 }

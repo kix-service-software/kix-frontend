@@ -1,0 +1,51 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions>
+    <@content>
+        <if(state.prepared)>
+            <widget key="time-based-group" instanceId="job-exec-plan-group" title="Translatable#Time Based Execution">
+                <@content>
+                    <div.exec-plans>
+                        <object-property-label>
+                            <@propertyValue>
+                                <translation-string pattern="Translatable#Day(s)"/>
+                            </@propertyValue>
+                            <@value>
+                                <if(state.weekdayLabels && state.weekdayLabels.length)>
+                                    <label-list labels=state.weekdayLabels removeLabels=false/>
+                                </if>
+                            </@value>
+                        </object-property-label>
+                        <object-property-label>
+                            <@propertyValue>
+                                <translation-string pattern="Translatable#Time"/>
+                            </@propertyValue>
+                            <@value>
+                                <if(state.timeLabels && state.timeLabels.length)>
+                                    <label-list labels=state.timeLabels removeLabels=false/>
+                                </if>
+                            </@value>
+                        </object-property-label>
+                    </div>
+                </@content>
+            </widget>
+            <widget key="event-based-group" instanceId="job-exec-plan-group" title="Translatable#Event Based Execution">
+                <@content>
+                    <if(state.eventLabels && state.eventLabels.length)>
+                        <label-list labels=state.eventLabels removeLabels=false/>
+                    </if>
+                </@content>
+            </widget>
+            $ component.setGroupMinimizedStates();
+        </if>
+    </@content>
+</widget>

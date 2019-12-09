@@ -9,10 +9,14 @@
 
 import { IColumnConfiguration } from "./IColumnConfiguration";
 import { DataType } from "../../model";
+import { ConfigurationType } from "../../model/configuration";
 
 export class DefaultColumnConfiguration implements IColumnConfiguration {
 
     public constructor(
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
         public property: string,
         public showText: boolean = true,
         public showIcon: boolean = true,
@@ -27,7 +31,8 @@ export class DefaultColumnConfiguration implements IColumnConfiguration {
         public componentId: string = null,
         public defaultText: string = null,
         public translatable: boolean = true,
-        public titleTranslatable: boolean = true
+        public titleTranslatable: boolean = true,
+        public useObjectServiceForFilter: boolean = false
     ) {
     }
 }

@@ -21,14 +21,12 @@ class Component {
     }
 
     public onInput(input: any): void {
+        this.formListenerId = 'LinkableObjectsSearchButton';
         this.state.formId = input.formId;
     }
 
     public async onMount(): Promise<void> {
-
         this.state.translations = await TranslationService.createTranslationObject(["Translatable#Start search"]);
-
-        this.formListenerId = 'LinkableObjectsSearchButton';
         await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,
             formValueChanged: async () => {

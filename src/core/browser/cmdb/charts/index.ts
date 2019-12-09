@@ -7,5 +7,5 @@
  * --
  */
 
-export { ConfigItemChartConfiguration } from './ConfigItemChartConfiguration';
+export { ConfigItemChartWidgetConfiguration } from './ConfigItemChartWidgetConfiguration';
 export { ConfigItemChartFactory } from './ConfigItemChartFactory';

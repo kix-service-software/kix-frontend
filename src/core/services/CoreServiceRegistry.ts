@@ -17,6 +17,7 @@ import {
 } from "./impl";
 import { CacheService } from "../cache";
 import { UserService } from "./impl/api/UserService";
+import { JobService } from "./impl/api/JobService";
 
 export class CoreServiceRegistry {
 
@@ -38,7 +39,7 @@ export class CoreServiceRegistry {
         const registry = CoreServiceRegistry.getInstance();
         if (!registry.initialized) {
 
-            await CacheService.getInstance().init();
+            CacheService.getInstance().init();
 
             TranslationService.getInstance();
             ChannelService.getInstance();
@@ -71,6 +72,7 @@ export class CoreServiceRegistry {
             NotificationService.getInstance();
             LogFileService.getInstance();
             ConsoleCommandService.getInstance();
+            JobService.getInstance();
 
             registry.initialized = true;
         }

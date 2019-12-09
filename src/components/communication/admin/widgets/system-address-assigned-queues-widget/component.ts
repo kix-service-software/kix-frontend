@@ -48,7 +48,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.SYSTEM_ADDRESS) {
                     this.initWidget(systemAddress);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -63,17 +64,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             context.unregisterListener('system-address-assigned-queues-widget');
         }
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.subscriber);
+        TableFactoryService.getInstance().destroyTable('system-address-assigned-queues');
     }
 
     private async initWidget(systemAddress: SystemAddress): Promise<void> {
         const columns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 QueueProperty.NAME, true, false, true, false, 250, true, true, false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 QueueProperty.COMMENT, true, false, true, false, 350, true, true, false
             ),
-            new DefaultColumnConfiguration(KIXObjectProperty.VALID_ID, true, false, true, false, 150, true, true)
+            new DefaultColumnConfiguration(
+                null, null, null, KIXObjectProperty.VALID_ID, true, false, true, false, 150, true, true
+            )
         ];
 
         const filter =
@@ -85,8 +89,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             ];
         const loadingOptions = new KIXObjectLoadingOptions(filter);
 
-        const tableConfiguration = new TableConfiguration(
-            KIXObjectType.QUEUE, loadingOptions, null, columns, false, false, null, null,
+        const tableConfiguration = new TableConfiguration(null, null, null,
+            KIXObjectType.QUEUE, loadingOptions, null, columns, [], false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(

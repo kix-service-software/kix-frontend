@@ -54,8 +54,8 @@ export class MailAccountTableFactory extends TableFactory {
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.MAIL_ACCOUNT, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.MAIL_ACCOUNT, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
@@ -77,7 +77,7 @@ export class MailAccountTableFactory extends TableFactory {
         let config;
         switch (property) {
             case MailAccountProperty.HOST:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 200, true, true,
                     false, DataType.STRING, true, null, null, false
                 );

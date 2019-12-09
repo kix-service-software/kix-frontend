@@ -7,14 +7,15 @@
  * --
  */
 
-import { FormField, ValidationResult } from ".";
+import { ValidationResult } from ".";
+import { FormFieldConfiguration } from "./configuration";
 
 export interface IFormFieldValidator {
 
     validatorId: string;
 
-    isValidatorFor(formField: FormField, formId: string): boolean;
+    isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean;
 
-    validate(formField: FormField, formId: string): Promise<ValidationResult>;
+    validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult>;
 
 }

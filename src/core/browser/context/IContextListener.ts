@@ -19,10 +19,12 @@ export interface IContextListener {
         objectId: string | number, object: KIXObject | any, type: KIXObjectType, changedProperties?: string[]
     ): void;
 
-    objectListChanged(objectList: KIXObject[]): void;
+    objectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): void;
 
-    filteredObjectListChanged(objectList: KIXObject[]): void;
+    filteredObjectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): void;
 
     scrollInformationChanged(objectType: KIXObjectType, objectId: string | number): void;
+
+    additionalInformationChanged(key: string, value: any): void;
 
 }

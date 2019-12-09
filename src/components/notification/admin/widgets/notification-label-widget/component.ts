@@ -12,7 +12,8 @@ import {
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, Notification, ContextType, ObjectInformationWidgetSettings, NotificationProperty, SortUtil, DataType
+    KIXObjectType, Notification, ContextType, NotificationProperty, SortUtil, DataType,
+    ObjectInformationWidgetConfiguration
 } from '../../../../../core/model';
 import { NotificationLabelProvider } from '../../../../../core/browser/notification';
 
@@ -45,7 +46,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.NOTIFICATION) {
                     this.initWidget(notification);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
@@ -76,7 +78,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async setPropertiesAndLabels(notification: Notification): Promise<void> {
-        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration.settings;
+        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration.configuration;
         if (settings && Array.isArray(settings.properties)) {
             this.state.properties = [...settings.properties];
         }

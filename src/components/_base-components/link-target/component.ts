@@ -95,7 +95,10 @@ class Component {
             if (event.preventDefault) {
                 event.preventDefault();
             }
-            RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
+            RoutingService.getInstance().routeToContext(
+                this.state.routingConfiguration, this.state.objectId,
+                undefined, this.state.routingConfiguration.resetContext
+            );
         }
     }
 

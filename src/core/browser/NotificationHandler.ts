@@ -8,7 +8,7 @@
  */
 
 import { ContextService } from "./context";
-import { ContextType, ObjectUpdatedEventData, Context, KIXObjectType, ContextMode } from "../model";
+import { ContextType, ObjectUpdatedEventData, Context, KIXObjectType, ContextMode, TicketProperty } from "../model";
 import { BrowserUtil } from "./BrowserUtil";
 import { AgentSocketClient } from "./application/AgentSocketClient";
 
@@ -29,6 +29,11 @@ export class NotificationHandler {
             .filter((e) => e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.USER}`)
             .map((e) => Number(e.ObjectID.split('::')[1]))
             .some((uid) => uid === user.UserID);
+
+        userIsAffacted = userIsAffacted || events
+            .filter((e) => e.Namespace === KIXObjectType.ROLE)
+            .map((e) => Number(e.ObjectID))
+            .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         userIsAffacted = userIsAffacted || events
             .filter((e) => e.Namespace === `${KIXObjectType.ROLE}.${KIXObjectType.PERMISSION}`)
@@ -67,11 +72,22 @@ export class NotificationHandler {
         const objects = namespace.split('.');
         if (objects.length > 1) {
             if (objects[0] === 'FAQ') {
-                return KIXObjectType.FAQ_ARTICLE;
+                if (objects[1] === "Category") {
+                    return KIXObjectType.FAQ_CATEGORY;
+                } else if (objects[1] === "Article") {
+                    return KIXObjectType.FAQ_ARTICLE;
+                }
             } else if (objects[0] === 'CMDB') {
                 return objects[1];
             }
         }
+
+        if (objects[0] === 'State') {
+            return KIXObjectType.TICKET_STATE;
+        } else if (objects[0] === 'Type') {
+            return KIXObjectType.TICKET_TYPE;
+        }
+
         return objects[0];
     }
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { FormField, FormInputComponentState, InputFieldTypes } from '../../../../../core/model';
+import { FormInputComponentState } from '../../../../../core/model';
 
 export class ComponentState extends FormInputComponentState<string> {
 

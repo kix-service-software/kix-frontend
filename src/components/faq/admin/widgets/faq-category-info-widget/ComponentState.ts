@@ -11,7 +11,7 @@ import { WidgetComponentState, AbstractAction } from "../../../../../core/model"
 import { FAQCategory } from "../../../../../core/model/kix/faq";
 import { FAQCategoryLabelProvider } from "../../../../../core/browser/faq";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public labelProvider: FAQCategoryLabelProvider = null,

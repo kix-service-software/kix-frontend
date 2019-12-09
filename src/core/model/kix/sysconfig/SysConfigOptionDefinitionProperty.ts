@@ -9,6 +9,8 @@
 
 export enum SysConfigOptionDefinitionProperty {
 
+    ACCESS_LEVEL = 'AccessLevel',
+
     NAME = 'Name',
 
     VALUE = 'Value',
@@ -23,9 +25,13 @@ export enum SysConfigOptionDefinitionProperty {
 
     IS_REQUIRED = 'IsRequired',
 
-    LEVEL = 'Level',
+    EXPERIENCE_LEVEL = 'ExperienceLevel',
 
     SETTING = 'Setting',
 
-    TYPE = 'Type'
+    TYPE = 'Type',
+
+    CONTEXT = 'Context',
+
+    CONTEXT_METADATA = 'ContextMetadata'
 }

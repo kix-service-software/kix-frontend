@@ -12,6 +12,7 @@ import { KIXRouter } from './KIXRouter';
 import { WebformService } from '../services';
 import { Error } from '../core/model';
 import cors = require('cors');
+import { ConfigurationService } from '../core/services';
 
 export class KIXIntegrationRouter extends KIXRouter {
 
@@ -32,12 +33,13 @@ export class KIXIntegrationRouter extends KIXRouter {
         return "/integrations";
     }
 
-    protected initialize(): void {
-        const forms = WebformService.getInstance().loadWebforms();
+    protected async initialize(): Promise<void> {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        const forms = await WebformService.getInstance().loadWebforms(serverConfig.BACKEND_API_TOKEN);
         if (forms && !!forms.length) {
-            forms.forEach((form) => {
-                this.registerRoute(Number(form.ObjectId));
-            });
+            for (const form of forms) {
+                await this.registerRoute(Number(form.ObjectId));
+            }
         }
         this.router.get(
             "/",
@@ -52,7 +54,9 @@ export class KIXIntegrationRouter extends KIXRouter {
     private async handleGetRequest(req: Request, res: Response): Promise<void> {
         if (req.path.match(/^\/\d+$/)) {
             const formId = req.path.substring(1);
-            const form = WebformService.getInstance().getWebform(formId);
+
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
             if (form && form.ValidID === 1) {
                 const languages = req.acceptsLanguages();
                 let userLanguage;
@@ -84,7 +88,9 @@ export class KIXIntegrationRouter extends KIXRouter {
     private async handlePostRequest(req: Request, res: Response): Promise<void> {
         if (req.path.match(/^\/\d+$/)) {
             const formId = req.path.substring(1);
-            const form = WebformService.getInstance().getWebform(formId);
+
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
             if (form && form.ValidID === 1) {
                 const languages = req.acceptsLanguages();
                 const language = languages ? languages[0].split('-')[0] : null;
@@ -105,11 +111,12 @@ export class KIXIntegrationRouter extends KIXRouter {
         }
     }
 
-    private getCorsOptions(req, callback) {
+    private async getCorsOptions(req, callback) {
         let corsOptions;
         if (req.path.match(/^\/\d+$/)) {
             const formId = req.path.substring(1);
-            const form = WebformService.getInstance().getWebform(formId);
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
             if (form && form.ValidID === 1) {
                 corsOptions = {
                     origin: form.acceptedDomains.filter((d) => d).map((d) => {
@@ -125,8 +132,9 @@ export class KIXIntegrationRouter extends KIXRouter {
         callback(null, corsOptions ? corsOptions : { origin: false });
     }
 
-    public registerRoute(formId: number): void {
-        const form = WebformService.getInstance().getWebform(formId);
+    public async registerRoute(formId: number): Promise<void> {
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
         if (form && form.acceptedDomains && !!form.acceptedDomains.length) {
             this.router.route(`/${formId}`)
                 .options(cors(this.getCorsOptions.bind(this)))

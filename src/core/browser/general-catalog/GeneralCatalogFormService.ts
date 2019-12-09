@@ -8,12 +8,7 @@
  */
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { KIXObjectService } from '../kix/';
-import {
-    GeneralCatalogItem, KIXObjectType, Form, FormFieldValue, FormField, GeneralCatalogItemProperty, KIXObjectProperty
-} from "../../model";
-import { ContextService } from "..";
-import { EditGeneralCatalogDialogContext } from ".";
+import { GeneralCatalogItem, KIXObjectType } from "../../model";
 
 export class GeneralCatalogFormService extends KIXObjectFormService<GeneralCatalogItem> {
 

@@ -1,0 +1,30 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.freeText || state.tree.length > 7 || state.autocompleteConfiguration)>
+    <input.input-style
+        type="text"
+        placeholder=state.placeholder
+        value=state.filterValue
+        key="form-list-input"
+        on-keyup("keyup")
+        on-keydown("keydown")
+        on-focus("stopEvent")
+        onblur("stopEvent")/>
+    <if(state.loading)>
+        <div.form-list-loading>
+            <loading-spinner/>
+        </div>
+    </if>
+    <if(state.autocompleteConfiguration && (!state.tree || state.tree.length === 0))>
+        <div.form-list-autocomplete-no-results>
+            <span>${state.autocompleteNotFoundText}</span>
+        </div>
+    </if>
+</if>
+<input.hidden-input type="text" key="hidden-filter-input" on-keydown("keydown")/>

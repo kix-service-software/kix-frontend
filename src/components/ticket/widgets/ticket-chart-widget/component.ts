@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from "../../../../core/browser/context";
-import { TicketChartConfiguration, TicketChartFactory } from '../../../../core/browser/ticket';
+import { TicketChartWidgetConfiguration, TicketChartFactory } from '../../../../core/browser/ticket';
 import { IdService, KIXObjectService } from '../../../../core/browser';
 import { KIXObject, Ticket, KIXObjectType } from '../../../../core/model';
 
@@ -17,7 +17,7 @@ class Component {
 
 
     public state: ComponentState;
-    private ticketChartConfiguration: TicketChartConfiguration;
+    private ticketChartConfiguration: TicketChartWidgetConfiguration;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -34,13 +34,13 @@ class Component {
             : undefined;
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Tickets';
-        this.ticketChartConfiguration = this.state.widgetConfiguration.settings;
+        this.ticketChartConfiguration = this.state.widgetConfiguration.configuration;
 
         this.initChartConfig();
 
         if (this.state.widgetConfiguration.contextDependent) {
-            this.ticketChartConfiguration.chartConfiguration.data.labels = [];
-            this.ticketChartConfiguration.chartConfiguration.data.datasets[0].data = [];
+            this.ticketChartConfiguration.configuration.chartConfiguration.data.labels = [];
+            this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
             currentContext.registerListener('TicketChartComponent' + IdService.generateDateBasedId(), {
                 explorerBarToggled: () => { return; },
@@ -48,36 +48,39 @@ class Component {
                 objectChanged: () => { return; },
                 objectListChanged: () => { return; },
                 scrollInformationChanged: () => { return; },
-                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this)
+                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this),
+                additionalInformationChanged: () => { return; }
             });
 
-            this.contextFilteredObjectListChanged(currentContext.getFilteredObjectList());
+            this.contextFilteredObjectListChanged(
+                KIXObjectType.TICKET, currentContext.getFilteredObjectList(KIXObjectType.TICKET)
+            );
         } else {
             const tickets = await KIXObjectService.loadObjects<Ticket>(
                 KIXObjectType.TICKET, null, this.ticketChartConfiguration.loadingOptions
             );
-            this.contextFilteredObjectListChanged(tickets);
+            this.contextFilteredObjectListChanged(KIXObjectType.TICKET, tickets);
         }
     }
 
     private initChartConfig(): void {
-        if (!this.ticketChartConfiguration.chartConfiguration.data) {
-            this.ticketChartConfiguration.chartConfiguration.data = {
+        if (!this.ticketChartConfiguration.configuration.chartConfiguration.data) {
+            this.ticketChartConfiguration.configuration.chartConfiguration.data = {
                 datasets: [{ data: [] }],
                 labels: []
             };
         }
 
-        if (!this.ticketChartConfiguration.chartConfiguration.data.datasets) {
-            this.ticketChartConfiguration.chartConfiguration.data.datasets = [{ data: [] }];
+        if (!this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets) {
+            this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets = [{ data: [] }];
         }
 
-        if (!this.ticketChartConfiguration.chartConfiguration.data.labels) {
-            this.ticketChartConfiguration.chartConfiguration.data.labels = [];
+        if (!this.ticketChartConfiguration.configuration.chartConfiguration.data.labels) {
+            this.ticketChartConfiguration.configuration.chartConfiguration.data.labels = [];
         }
     }
 
-    private async contextFilteredObjectListChanged(objectList: KIXObject[]): Promise<void> {
+    private async contextFilteredObjectListChanged(objectType: KIXObjectType, objectList: KIXObject[]): Promise<void> {
         this.state.chartConfig = null;
         const data = await TicketChartFactory.getInstance().prepareData(
             this.ticketChartConfiguration.property, (objectList as Ticket[])
@@ -90,9 +93,9 @@ class Component {
             newData.push(count);
         });
 
-        this.ticketChartConfiguration.chartConfiguration.data.labels = labels;
-        this.ticketChartConfiguration.chartConfiguration.data.datasets[0].data = newData;
-        this.state.chartConfig = this.ticketChartConfiguration.chartConfiguration;
+        this.ticketChartConfiguration.configuration.chartConfiguration.data.labels = labels;
+        this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = newData;
+        this.state.chartConfig = this.ticketChartConfiguration.configuration.chartConfiguration;
     }
 
 }

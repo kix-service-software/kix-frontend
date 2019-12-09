@@ -29,12 +29,12 @@ class Component {
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
         if (context) {
-            const objects = await context.getObjectList();
+            const objects = await context.getObjectList(null);
             if (objects && !!objects.length) {
                 const objectType = objects[0].KIXObjectType;
                 BulkService.getInstance().initBulkManager(objectType, objects);
                 const bulkManager = BulkService.getInstance().getBulkManager(objectType);
-                bulkManager.reset();
+                bulkManager.reset(false);
                 this.state.bulkManager = bulkManager;
 
                 const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
@@ -46,6 +46,12 @@ class Component {
                     TabContainerEvent.CHANGE_TITLE, new TabContainerEventData('bulk-dialog', title)
                 );
             }
+        }
+    }
+
+    public onDestroy(): void {
+        if (this.state.bulkManager) {
+            this.state.bulkManager.reset();
         }
     }
 }

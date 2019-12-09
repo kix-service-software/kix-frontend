@@ -45,7 +45,7 @@ export class ConfigItemVersionCompareAction extends AbstractAction<ITable> {
         );
 
         if (context) {
-            context.setObjectList(versions);
+            context.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, versions);
         }
 
         ContextService.getInstance().setDialogContext(

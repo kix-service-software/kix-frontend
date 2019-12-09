@@ -41,10 +41,15 @@ class Component {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(await context.getObject<Ticket>());
+    }
+
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('ticket-history');
     }
 
     private async initWidget(ticket: Ticket): Promise<void> {

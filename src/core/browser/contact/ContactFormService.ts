@@ -8,7 +8,8 @@
  */
 
 import { KIXObjectFormService } from "../kix/KIXObjectFormService";
-import { Contact, KIXObjectType, CRUD, ContactProperty, FormField } from "../../model";
+import { Contact, KIXObjectType, ContactProperty } from "../../model";
+import { FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export class ContactFormService extends KIXObjectFormService<Contact> {
 
@@ -29,7 +30,7 @@ export class ContactFormService extends KIXObjectFormService<Contact> {
         return objectType === KIXObjectType.CONTACT;
     }
 
-    public async hasPermissions(field: FormField): Promise<boolean> {
+    public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         let hasPermissions = true;
         switch (field.property) {
             case ContactProperty.PRIMARY_ORGANISATION_ID:

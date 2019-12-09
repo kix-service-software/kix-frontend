@@ -14,9 +14,9 @@ export class PropertyOperatorUtil {
     public static getText(operator: PropertyOperator): string {
         switch (operator) {
             case PropertyOperator.CHANGE:
-                return 'Ändern in';
+                return 'Translatable#Change to';
             case PropertyOperator.CLEAR:
-                return 'Leeren';
+                return 'Translatable#Clear';
             default:
                 return operator;
         }

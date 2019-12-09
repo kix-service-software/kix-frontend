@@ -54,7 +54,8 @@ class Component {
                 if (type === KIXObjectType.TICKET) {
                     this.initWidget(ticket);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         this.setWidgetContentHeight();

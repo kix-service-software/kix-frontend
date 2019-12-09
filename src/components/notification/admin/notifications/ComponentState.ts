@@ -9,7 +9,7 @@
 
 import { IdService, TableConfiguration, TableHeaderHeight, TableRowHeight } from "../../../../core/browser";
 import {
-    WidgetConfiguration, TableWidgetSettings, KIXObjectType, SortOrder, NotificationProperty
+    WidgetConfiguration, TableWidgetConfiguration, KIXObjectType, SortOrder, NotificationProperty
 } from "../../../../core/model";
 
 export class ComponentState {
@@ -17,11 +17,14 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('admin-notifications-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
+            null, null, null,
             'table-widget', 'Translatable#Automation: Notifications', ['notification-create', 'csv-export-action'],
-            new TableWidgetSettings(
-                KIXObjectType.NOTIFICATION, [NotificationProperty.NAME, SortOrder.UP],
+            null, new TableWidgetConfiguration(
+                null, null, null,
+                KIXObjectType.NOTIFICATION, [NotificationProperty.NAME, SortOrder.UP], null,
                 new TableConfiguration(
-                    KIXObjectType.NOTIFICATION, null, null, null, true, false, null, null,
+                    null, null, null,
+                    KIXObjectType.NOTIFICATION, null, null, null, [], true, false, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ),

@@ -6,6 +6,7 @@
         "bulk-form",
         "dynamic-form-field-container",
         "inputs",
+        "main-form",
         "search-form",
         "field-container"
     ]

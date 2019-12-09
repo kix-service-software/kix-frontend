@@ -66,7 +66,8 @@ class BreadcrumbComponent implements IContextServiceListener {
                 explorerBarToggled: () => { return; },
                 filteredObjectListChanged: () => { return; },
                 sidebarToggled: () => { return; },
-                scrollInformationChanged: () => { return; }
+                scrollInformationChanged: () => { return; },
+                additionalInformationChanged: () => { return; }
             });
             this.state.loading = false;
         }
@@ -74,7 +75,7 @@ class BreadcrumbComponent implements IContextServiceListener {
 
     public getRoutingConfiguration(contextId: string, index: number): RoutingConfiguration {
         if (index < this.state.contexts.length - 1) {
-            return new RoutingConfiguration(contextId, null, null, null);
+            return new RoutingConfiguration(contextId, null, null, null, null, false, null, false);
         }
         return null;
     }

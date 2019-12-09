@@ -29,7 +29,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
     protected abstract async getSpecificObject(object: {}): Promise<KIXObject>;
 
     public init(): void {
-        this.reset();
+        super.init();
         this.importRun = false;
     }
 
@@ -121,7 +121,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
         ];
     }
 
-    public getOperatorDisplayText(operator: ImportPropertyOperator): string {
+    public async getOperatorDisplayText(operator: ImportPropertyOperator): Promise<string> {
         return ImportPropertyOperatorUtil.getText(operator);
     }
 

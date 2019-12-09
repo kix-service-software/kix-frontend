@@ -13,8 +13,7 @@ import { AbstractComponentState } from "../../../core/browser";
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public commands: TreeNode[] = [],
-        public currentCommands: TreeNode[] = [],
+        public loadNodes: () => Promise<TreeNode[]> = null,
         public parameter: string = '',
         public output: string = '',
         public canRun: boolean = false,

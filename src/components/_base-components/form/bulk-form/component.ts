@@ -42,14 +42,13 @@ class Component {
         this.state.bulkManager.registerListener('bulk-dialog-listener', () => {
             this.state.canRun = this.state.bulkManager.hasDefinedValues() && !!this.state.bulkManager.objects.length;
         });
-
-        this.createTable();
-        this.update();
     }
 
-    public async update(): Promise<void> {
+    public async onMount(): Promise<void> {
+        this.createTable();
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Reset data", "Translatable#Close Dialog", "Translatable#Execute now!"
+            "Translatable#Cancel", "Translatable#Reset data", "Translatable#Close Dialog",
+            "Translatable#Execute now", "Translatable#Attributes to be edited"
         ]);
     }
 
@@ -57,13 +56,14 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        TableFactoryService.getInstance().destroyTable(`bulk-form-list-${this.state.bulkManager.objectType}`);
     }
 
     public async reset(): Promise<void> {
         this.state.bulkManager.reset();
-        const component = (this as any).getComponent('bulk-value-container');
-        if (component) {
-            component.reset();
+        const dynamicFormComponent = (this as any).getComponent('bulk-dynamic-form');
+        if (dynamicFormComponent) {
+            dynamicFormComponent.updateValues();
         }
     }
 
@@ -78,12 +78,12 @@ class Component {
     }
 
     private async createTable(): Promise<void> {
-        if (this.state.bulkManager) {
+        if (this.state.bulkManager && !this.state.table) {
 
             if (this.state.bulkManager.objects) {
 
-                const configuration = new TableConfiguration(
-                    null, null, null, null, true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                const configuration = new TableConfiguration(null, null, null,
+                    null, null, null, null, [], true, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
                 );
 
                 const table = await TableFactoryService.getInstance().createTable(
@@ -215,13 +215,13 @@ class Component {
 
     private async updateTable(): Promise<void> {
         const context = await ContextService.getInstance().getContext<BulkDialogContext>(BulkDialogContext.CONTEXT_ID);
-        const oldObjects = await context.getObjectList();
+        const oldObjects = await context.getObjectList(this.state.bulkManager.objectType);
         const idsToLoad = oldObjects ? oldObjects.map((o) => o.ObjectId) : null;
 
         const newObjects = await KIXObjectService.loadObjects(
             this.state.bulkManager.objectType, idsToLoad, null, null, false
         );
-        context.setObjectList(newObjects);
+        context.setObjectList(this.state.bulkManager.objectType, newObjects);
     }
 
     private async setLoadingInformation(

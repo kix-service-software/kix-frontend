@@ -8,7 +8,7 @@
  */
 
 import {
-    Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectIcon
+    Context, ContextType, KIXObjectType, ContextMode, ContextDescriptor, ObjectIcon, ContextConfiguration
 } from '../../model';
 import { IContextServiceListener } from './IContextServiceListener';
 import { ContextHistoryEntry } from './ContextHistoryEntry';
@@ -19,6 +19,8 @@ import { DialogService } from '../components/dialog/DialogService';
 import { FormService } from '../form';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { BrowserHistoryState } from './BrowserHistoryState';
+import { TableFactoryService } from '../table';
+import { ContextSocketClient } from './ContextSocketClient';
 
 export class ContextService {
 
@@ -45,7 +47,7 @@ export class ContextService {
         this.serviceListener.delete(listenerId);
     }
 
-    public registerContext(contextDescriptor: ContextDescriptor): void {
+    public async registerContext(contextDescriptor: ContextDescriptor): Promise<void> {
         ContextFactory.getInstance().registerContext(contextDescriptor);
         this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
     }
@@ -59,7 +61,7 @@ export class ContextService {
         const oldContext = this.getActiveContext();
 
         const context = await ContextFactory.getInstance().getContext(
-            contextId, kixObjectType, contextMode, objectId, (!history && reset)
+            contextId, kixObjectType, contextMode, objectId, (!history && reset), oldContext
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
@@ -80,9 +82,6 @@ export class ContextService {
                 await ContextHistory.getInstance().addHistoryEntry(oldContext);
             } else if (replaceHistory) {
                 window.history.replaceState(state, displayText, '/' + url);
-            }
-            if (!history) {
-                context.reset();
             }
             DialogService.getInstance().closeMainDialog();
             this.activeMainContext = context;
@@ -116,7 +115,7 @@ export class ContextService {
         );
 
         if (!context) {
-            const dialogs = DialogService.getInstance().getRegisteredDialogs(contextMode);
+            const dialogs = await DialogService.getInstance().getRegisteredDialogs(contextMode);
             if (dialogs && dialogs.length) {
                 context = await ContextFactory.getInstance().getContext(
                     contextId, dialogs[0].kixObjectType, dialogs[0].contextMode, null, resetContext
@@ -161,6 +160,9 @@ export class ContextService {
     }
 
     public closeDialogContext(): void {
+        if (this.activeDialogContext) {
+            TableFactoryService.getInstance().deleteDialogTables(this.activeDialogContext.getDescriptor().contextId);
+        }
         this.activeContextType = ContextType.MAIN;
         this.activeDialogContext = null;
         ContextFactory.getInstance().resetDialogContexts();
@@ -199,6 +201,11 @@ export class ContextService {
             )
             .sort((a, b) => b.lastVisitDate - a.lastVisitDate)
             .slice(0, limit);
+    }
+
+    public async getContextConfiguration(contextId: string): Promise<ContextConfiguration> {
+        const configuration = await ContextSocketClient.loadContextConfiguration(contextId);
+        return configuration;
     }
 
 }

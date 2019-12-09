@@ -8,7 +8,7 @@
  */
 
 import {
-    IFormFieldValidator, FormField, ValidationResult, ValidationSeverity,
+    IFormFieldValidator, ValidationResult, ValidationSeverity,
     ArticleProperty, FormFieldValue, SystemAddress, KIXObjectType, ContextType, ContextMode, TicketProperty
 } from "../../../../model";
 import { FormService } from "../../..";
@@ -16,18 +16,19 @@ import { KIXObjectService } from "../../../kix";
 import { ContextService } from "../../../context";
 import { FormValidationService } from "../../../form/validation";
 import { TranslationService } from "../../../i18n/TranslationService";
+import { FormFieldConfiguration } from "../../../../model/components/form/configuration";
 
 export class EmailRecipientValidator implements IFormFieldValidator {
 
     public validatorId: string = 'EmailRecipientValidator';
 
-    public isValidatorFor(formField: FormField, formId: string): boolean {
+    public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
         return formField.property === ArticleProperty.TO
             || formField.property === ArticleProperty.CC
             || formField.property === ArticleProperty.BCC;
     }
 
-    public async validate(formField: FormField, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         let toValue = await formInstance.getFormFieldValueByProperty<string[]>(ArticleProperty.TO);
         let checkToValue = true;

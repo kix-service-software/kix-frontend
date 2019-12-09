@@ -9,12 +9,13 @@
 
 import { AbstractMarkoComponent, IColumn, LabelService } from '../../../../core/browser';
 import { ComponentState } from './ComponentState';
-import { TreeNode, KIXObjectType, ObjectIcon } from '../../../../core/model';
+import {
+    TreeNode, KIXObjectType, ObjectIcon, TreeService, TreeHandler, KIXObject, SortUtil, DataType, SortOrder
+} from '../../../../core/model';
 import { TranslationService } from '../../../../core/browser/i18n/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    public filterValues: TreeNode[];
     private column: IColumn;
 
     public onCreate(): void {
@@ -23,8 +24,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.column = input.column;
-        this.state.nodes = null;
-        this.filterValues = null;
         this.state.filterText = null;
         this.update();
     }
@@ -33,7 +32,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.placeholder = await TranslationService.translate('Translatable#insert filter value');
 
         if (this.column && this.column.getColumnConfiguration().hasListFilter) {
-            this.state.hasListFilter = true;
             const table = this.column.getTable();
             const objectType = table ? table.getObjectType() : null;
             if (objectType) {
@@ -41,27 +39,40 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         } else {
             this.state.hasListFilter = false;
+            const filterText = this.column.getFilter()[0];
+            if (filterText) {
+                this.state.filterText = filterText;
+            }
             setTimeout(() => {
                 const inputElement = (this as any).getEl('column-filter-input');
                 if (inputElement) {
                     inputElement.focus();
+                    if (this.state.filterText) {
+                        inputElement.selectionStart = inputElement.selectionEnd = this.state.filterText.length;
+                    }
                 }
             }, 100);
         }
-        this.getCurrentValue();
     }
 
     public async onMount(): Promise<void> {
-        // nothing
+        const treeHandler = new TreeHandler([], null);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+        treeHandler.registerSelectionListener(this.state.treeId, (nodes: TreeNode[]) => {
+            if (this.state.hasListFilter) {
+                this.column.filter(nodes.map((n) => n.id));
+            }
+        });
+        this.state.prepared = true;
     }
 
     public onDestroy(): void {
-        // nothing
+        TreeService.getInstance().removeTreeHandler(this.state.treeId);
     }
 
     private async prepareListFilter(objectType: KIXObjectType): Promise<void> {
         const filterValues = this.column.getFilterValues();
-        const nodes = [];
+        const nodes: TreeNode[] = [];
         for (const fv of filterValues) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
             let label = `${fv[0]} (${fv[1]})`;
@@ -72,37 +83,30 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 const icons = await labelProvider.getIcons(null, this.column.getColumnId(), fv[0]);
                 icon = icons && icons.length ? icons[0] : null;
             }
-            nodes.push(new TreeNode(fv[0], label, icon, null));
-        }
-        this.state.nodes = nodes;
-    }
 
-    private getCurrentValue(): void {
-        if (this.column) {
-            const currentfilter = this.column.getFilter();
-            if (currentfilter) {
-                if (this.state.hasListFilter) {
-                    const values = currentfilter[1] && !!currentfilter[1].length
-                        ? currentfilter[1][0].value as any[] : [];
-                    this.state.selectedNodes = this.state.nodes.filter((n) => values.some((v) => v === n.id));
-                } else {
-                    this.state.filterText = currentfilter[0];
-                }
+            const node = new TreeNode(fv[0], label, icon, null);
+
+            const filter = this.column.getFilter();
+            const hasFilterValue = filter && filter[1] && filter[1].some(
+                (f) => (f.value as []).some((v: any) => {
+                    if (v instanceof KIXObject) {
+                        return v.equals(fv[0]);
+                    } else {
+                        return v === fv[0];
+                    }
+                })
+            );
+            if (hasFilterValue) {
+                node.selected = true;
             }
+            nodes.push(node);
         }
-    }
 
-    public nodeClicked(node: TreeNode): void {
-        const nodeIndex = this.state.selectedNodes.findIndex((n) => n.id === node.id);
-        if (nodeIndex !== -1) {
-            this.state.selectedNodes.splice(nodeIndex, 1);
-        } else {
-            this.state.selectedNodes.push(node);
+        SortUtil.sortObjects(nodes, 'label', DataType.STRING, SortOrder.UP);
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes);
         }
-        (this as any).setStateDirty('selectedNodes');
-
-        this.filterValues = this.state.selectedNodes.map((n) => n.id);
-        this.filter();
     }
 
     public textFilterValueChanged(event: any): void {
@@ -118,12 +122,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private filter(): void {
         if (this.column) {
-            if (this.state.hasListFilter) {
-                this.column.filter(this.filterValues);
-            } else {
-                this.column.filter(null, this.state.filterText);
-                (this as any).emit('closeOverlay');
-            }
+            this.column.filter(null, this.state.filterText);
+            (this as any).emit('closeOverlay');
         }
     }
 }

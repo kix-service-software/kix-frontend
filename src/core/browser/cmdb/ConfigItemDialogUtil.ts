@@ -8,7 +8,7 @@
  */
 
 import { ContextService } from "../context";
-import { KIXObjectType, ContextMode, ConfigItem, ConfigItemClass } from "../../model";
+import { KIXObjectType, ContextMode, ConfigItem } from "../../model";
 import { ConfigItemDetailsContext, EditConfigItemDialogContext, NewConfigItemDialogContext } from "./context";
 
 export class ConfigItemDialogUtil {
@@ -21,20 +21,46 @@ export class ConfigItemDialogUtil {
 
     public static async edit(configItemId?: string | number): Promise<void> {
         if (!configItemId) {
-            const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
-                ConfigItemDetailsContext.CONTEXT_ID
-            );
-
-            if (context) {
-                configItemId = context.getObjectId();
-            }
+            configItemId = await this.getConfigItemId();
         }
 
         if (configItemId) {
+            await this.setContextClassId();
+
             ContextService.getInstance().setDialogContext(
                 EditConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM, ContextMode.EDIT, configItemId
             );
         }
+    }
+
+    private static async  getConfigItemId(): Promise<number> {
+        let configItemId: number;
+
+        const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
+            ConfigItemDetailsContext.CONTEXT_ID
+        );
+
+        if (context) {
+            configItemId = Number(context.getObjectId());
+        }
+
+        return configItemId;
+    }
+
+    private static async setContextClassId(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<ConfigItemDetailsContext>(
+            ConfigItemDetailsContext.CONTEXT_ID
+        );
+        const configItem = await context.getObject<ConfigItem>();
+        if (configItem) {
+            const editContext = await ContextService.getInstance().getContext<EditConfigItemDialogContext>(
+                EditConfigItemDialogContext.CONTEXT_ID
+            );
+            if (editContext) {
+                editContext.setAdditionalInformation('CI_CLASS_ID', configItem.ClassID);
+            }
+        }
+
     }
 
 }

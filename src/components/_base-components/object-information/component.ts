@@ -21,6 +21,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: ComponentInput): void {
+        this.state.properties = [];
+        this.state.prepared = false;
         this.state.properties = input.properties;
         this.routingConfigurations = input.routingConfigurations;
         this.state.flat = input.flat;
@@ -30,9 +32,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async init(object: KIXObject): Promise<void> {
         if (object) {
             this.state.labelProvider = LabelService.getInstance().getLabelProvider(object);
+
+            if (!this.state.properties) {
+                this.state.properties = [];
+                for (const key in object) {
+                    if (object[key]) {
+                        this.state.properties.push(key);
+                    }
+                }
+            }
         }
 
         this.state.object = object;
+
+        setTimeout(() => this.state.prepared = true, 20);
     }
 
     public getRoutingConfiguration(property: string): RoutingConfiguration {

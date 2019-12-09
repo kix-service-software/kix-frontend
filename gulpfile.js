@@ -60,7 +60,7 @@ gulp.task('default', (cb) => {
             'license-header-tests',
             'license-header-cucumber',
             'compile-src',
-            'test', 'copy-extensions',
+            'copy-extensions',
             'compile-themes',
             'copy-component-templates',
             'copy-static',
@@ -77,7 +77,6 @@ gulp.task('default', (cb) => {
             'license-header-tests',
             'license-header-cucumber',
             'compile-src',
-            'test',
             'copy-extensions',
             'compile-themes',
             'copy-component-templates',
@@ -162,19 +161,6 @@ gulp.task('minify-js', (cb) => {
         .pipe(gulp.dest('dist/'));
 });
 
-gulp.task('test', () => {
-    process.env.NODE_ENV = 'test';
-    return gulp.src([
-        'tests/**/*.test.ts',
-        'tests/browser/**/*.test.ts'
-    ])
-        .pipe(mocha({
-            reporter: 'spec',
-            compilers: 'ts:ts-node/register',
-            timeout: '15000'
-        }));
-});
-
 gulp.task('copy-extensions', () => {
     return gulp
         .src(['src/extensions/**/package.json'])
@@ -183,12 +169,6 @@ gulp.task('copy-extensions', () => {
 
 
 gulp.task('compile-themes', () => {
-    let config = prodTSCConfig;
-    if (process.env.NODE_ENV === "development" || process.env.NODE_ENV === "test") {
-        console.log("Use tsconfig for development.")
-        config = devTSCConfig;
-    }
-
     return gulp
         .src(['static/less/themes/*.less'])
         .pipe(less({

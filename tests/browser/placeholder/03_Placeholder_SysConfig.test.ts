@@ -96,7 +96,6 @@ class someTestFunctions {
                 sysConfigDefs.push(option);
             }
         }
-        console.log(sysConfigDefs);
         return sysConfigDefs;
     }
 

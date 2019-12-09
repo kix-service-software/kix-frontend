@@ -29,7 +29,6 @@ import { SearchOperator } from "../SearchOperator";
 
 export class Table implements ITable {
 
-    private id: string = IdService.generateDateBasedId();
     private rows: IRow[] = [];
     private filteredRows: IRow[] = null;
     private columns: IColumn[] = [];
@@ -52,10 +51,6 @@ export class Table implements ITable {
     ) { }
 
     public getTableId(): string {
-        return this.id;
-    }
-
-    public getTableKey(): string {
         return this.tableKey;
     }
 
@@ -520,9 +515,9 @@ export class Table implements ITable {
                 row.getRowObject().addValue(new TableValue(value[0], value[1]));
                 const cell = row.getCell(value[0]);
                 if (cell) {
-                    cell.setValue(new TableValue(value[0], value[1]));
+                    cell.setValue(new TableValue(value[0], value[1], value[1]));
                 } else {
-                    row.addCell(new TableValue(value[0], value[1]));
+                    row.addCell(new TableValue(value[0], value[1], value[1]));
                 }
                 EventService.getInstance().publish(
                     TableEvent.ROW_VALUE_CHANGED,
@@ -533,12 +528,14 @@ export class Table implements ITable {
     }
 
     public setRowObjectValueState(objects: any[], state: ValueState): void {
-        objects.forEach((o) => {
-            const row = this.getRowByObject(o);
-            if (row) {
-                row.setValueState(state);
-            }
-        });
+        if (objects && !!objects.length) {
+            objects.forEach((o) => {
+                const row = this.getRowByObject(o);
+                if (row) {
+                    row.setValueState(state);
+                }
+            });
+        }
     }
 
     public getRowByObjectId(objectId: string | number): IRow {

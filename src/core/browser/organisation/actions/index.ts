@@ -10,3 +10,4 @@
 export { OrganisationCreateAction } from './OrganisationCreateAction';
 export { OrganisationSearchAction } from './OrganisationSearchAction';
 export { OrganisationEditAction } from './OrganisationEditAction';
+export { ContactTableDependingAction } from './ContactTableDependingAction';

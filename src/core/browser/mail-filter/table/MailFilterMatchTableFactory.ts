@@ -39,23 +39,23 @@ export class MailFilterMatchTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 'Key', true, false, true, false, 200, true, true,
                 false, DataType.STRING, true, null, 'Translatable#Email Header', false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 'Not', false, true, true, false, 100, true, false,
                 false, DataType.NUMBER, true, null, 'Translatable#Negate', false
             ),
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 'Value', true, false, true, false, 300, true, true,
                 false, DataType.STRING, true, null, 'Translatable#Pattern', false
             )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.MAIL_FILTER_MATCH, null, null, tableColumns, false, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.MAIL_FILTER_MATCH, null, null, tableColumns, [], false, false, null, null,
                 TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
         } else if (!tableConfiguration.tableColumns) {
@@ -63,9 +63,5 @@ export class MailFilterMatchTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 }

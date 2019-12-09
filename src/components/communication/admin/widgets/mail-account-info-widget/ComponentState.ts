@@ -10,7 +10,7 @@
 import { WidgetComponentState, AbstractAction, MailAccount } from "../../../../../core/model";
 import { RoutingConfiguration } from "../../../../../core/browser/router";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public account: MailAccount = null,

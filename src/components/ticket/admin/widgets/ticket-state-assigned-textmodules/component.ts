@@ -43,6 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
+        TableFactoryService.getInstance().destroyTable('ticket-state-assigned-text-modules');
     }
 
     private prepareTitle(): void {
@@ -53,8 +54,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTable(): Promise<void> {
-        const tableConfiguration = new TableConfiguration(
-            KIXObjectType.TEXT_MODULE, null, null, null, false, false, null, null,
+        const tableConfiguration = new TableConfiguration(null, null, null,
+            KIXObjectType.TEXT_MODULE, null, null, null, [], false, false, null, null,
             TableHeaderHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(

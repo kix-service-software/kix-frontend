@@ -12,7 +12,7 @@ import {
 } from '../../../../../core/browser';
 import { ComponentState } from './ComponentState';
 import {
-    KIXObjectType, Notification, ContextType, ObjectInformationWidgetSettings, NotificationProperty, WidgetType
+    KIXObjectType, Notification, ContextType, WidgetType
 } from '../../../../../core/model';
 import { NotificationLabelProvider } from '../../../../../core/browser/notification';
 
@@ -46,7 +46,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (type === KIXObjectType.NOTIFICATION) {
                     this.initWidget(notification);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 

@@ -19,6 +19,8 @@ import { IdService } from "../core/browser";
 import { KIXIntegrationRouter } from "../routes/KIXIntegrationRouter";
 import { SysConfigService } from "../core/services";
 import addrparser = require('address-rfc2822');
+import { ModuleConfigurationService } from "./configuration";
+import { SysConfigAccessLevel } from "../core/model/kix/sysconfig/SysConfigAccessLevel";
 
 export class WebformService {
 
@@ -33,19 +35,21 @@ export class WebformService {
 
     private constructor() { }
 
-    public loadWebforms(withPassword: boolean = false): Webform[] {
-        const webformsConfiguration = ConfigurationService.getInstance().getConfiguration('webforms');
-        const webforms: Webform[] = webformsConfiguration ? webformsConfiguration : [];
+    public async loadWebforms(token: string, withPassword: boolean = false): Promise<Webform[]> {
+        const configuration = await ModuleConfigurationService.getInstance().loadConfiguration<any>(
+            token, 'kix-customer-portal-light-webforms'
+        );
+        const webforms: Webform[] = configuration ? configuration.webforms : [];
         if (!withPassword) {
             webforms.forEach((wf) => delete wf.webformUserPassword);
         }
         return webforms;
     }
 
-    public getWebform(formId: number, withPassword?: boolean): Webform {
+    public async getWebform(token: string, formId: number, withPassword?: boolean): Promise<Webform> {
         let form;
         if (formId) {
-            const forms = this.loadWebforms(withPassword);
+            const forms = await this.loadWebforms(token, withPassword);
             if (forms && forms.length) {
                 form = forms.find((f) => f.ObjectId === Number(formId));
             }
@@ -53,10 +57,10 @@ export class WebformService {
         return form;
     }
 
-    public async saveWebform(userId: number, webform: Webform, webformId?: number): Promise<number> {
+    public async saveWebform(token: string, userId: number, webform: Webform, webformId?: number): Promise<number> {
         const date = DateTimeUtil.getKIXDateTimeString(new Date());
 
-        const webforms = this.loadWebforms(true);
+        const webforms = await this.loadWebforms(token, true);
 
         webform.ChangeBy = userId;
         webform.ChangeTime = date;
@@ -71,20 +75,27 @@ export class WebformService {
             if (webformIndex !== -1) {
                 webform.CreateBy = webforms[webformIndex].CreateBy;
                 webform.CreateTime = webforms[webformIndex].CreateTime;
-                if (!webform.webformUserPassword) {
+                if (!webform.webformUserPassword || webform.webformUserPassword === '--NOT_CHANGED--') {
                     webform.webformUserPassword = webforms[webformIndex].webformUserPassword;
                 }
                 webforms.splice(webformIndex, 1, webform);
             }
         }
 
-        await ConfigurationService.getInstance().saveConfiguration('webforms', webforms)
-            .then(() => {
-                KIXIntegrationRouter.getInstance().registerRoute(Number(webform.ObjectId));
-            })
-            .catch((error: Error) => {
-                LoggingService.getInstance().error(error.Message, error);
-            });
+        const config = {
+            id: 'kix-customer-portal-light-webforms',
+            name: 'customer portal light webforms configuration',
+            type: 'Webform',
+            webforms
+        };
+
+        await ModuleConfigurationService.getInstance().saveConfiguration(
+            token, config, SysConfigAccessLevel.CONFIDENTIAL
+        ).then(() => {
+            KIXIntegrationRouter.getInstance().registerRoute(Number(webform.ObjectId));
+        }).catch((error: Error) => {
+            LoggingService.getInstance().error(error.Message, error);
+        });
 
         return webform.ObjectId;
     }
@@ -92,7 +103,9 @@ export class WebformService {
     public async createTicket(request: CreateWebformTicketRequest, formId: number, language?: string): Promise<number> {
         let errorString = await this.checkRequest(request, language);
         if (formId && !errorString) {
-            const form = this.getWebform(formId, true);
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            const form = await this.getWebform(serverConfig.BACKEND_API_TOKEN, formId, true);
+
             if (form && form.userLogin && form.webformUserPassword) {
                 const parameter = this.prepareParameter(request, form);
                 const token = await AuthenticationService.getInstance().login(

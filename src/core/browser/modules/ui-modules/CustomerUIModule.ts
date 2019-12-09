@@ -16,6 +16,8 @@ export class UIModule implements IUIModule {
 
     public priority: number = 300;
 
+    public name: string = 'CustomerUIModule';
+
     public async unRegister(): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -25,7 +27,7 @@ export class UIModule implements IUIModule {
             OrganisationContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'organisations', ['organisations', 'contacts'], OrganisationContext
         );
-        ContextService.getInstance().registerContext(organisationListContext);
+        await ContextService.getInstance().registerContext(organisationListContext);
     }
 
 }

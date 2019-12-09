@@ -7,16 +7,17 @@
  * --
  */
 
-import { KIXObjectType, ContextMode, DataType } from "../../../model";
-import { FAQArticleProperty } from "../../../model/kix/faq";
+import { KIXObjectType, ContextMode, DataType, KIXObject } from "../../../model";
+import { FAQArticleProperty, FAQVote } from "../../../model/kix/faq";
 import { RoutingConfiguration } from "../../router";
 import {
     TableConfiguration, ITable, Table,
-    DefaultColumnConfiguration, IColumnConfiguration
+    DefaultColumnConfiguration, IColumnConfiguration, IRow, IColumn
 } from "../../table";
 import { FAQArticleTableContentProvider } from "./FAQArticleTableContentProvider";
 import { TableFactory } from "../../table/TableFactory";
 import { FAQDetailsContext } from "../context/FAQDetailsContext";
+import { BrowserUtil } from "../../BrowserUtil";
 
 export class FAQArticleTableFactory extends TableFactory {
 
@@ -68,8 +69,8 @@ export class FAQArticleTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.FAQ_ARTICLE, null, null, tableColumns, true, false
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.FAQ_ARTICLE, null, null, tableColumns, [], true, false
             );
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
@@ -91,37 +92,75 @@ export class FAQArticleTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         switch (property) {
             case FAQArticleProperty.NUMBER:
-                return new DefaultColumnConfiguration(
+                return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.NUMBER, true, false, true, false, 120, true, true
                 );
             case FAQArticleProperty.TITLE:
-                return new DefaultColumnConfiguration(
+                return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.TITLE, true, false, true, false, 300, true, true, false, DataType.STRING, true,
                     undefined, undefined, false
                 );
             case FAQArticleProperty.LANGUAGE:
-                return new DefaultColumnConfiguration(
+                return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
                 );
             case FAQArticleProperty.VOTES:
-                return new DefaultColumnConfiguration(
-                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false
+                return new DefaultColumnConfiguration(null, null, null,
+                    FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false,
+                    null, null, null, null, true
                 );
             case FAQArticleProperty.CATEGORY_ID:
-                return new DefaultColumnConfiguration(
+                return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.CATEGORY_ID, true, false, true, false, 125, true, true, true
                 );
             case FAQArticleProperty.CHANGED:
-                return new DefaultColumnConfiguration(
+                return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 );
             case FAQArticleProperty.CHANGED_BY:
-                return new DefaultColumnConfiguration(
+                return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.CHANGED_BY, true, false, true, false, 150, true, true
                 );
             default:
                 return super.getDefaultColumnConfiguration(property);
         }
+    }
+
+    public getColumnFilterValues<T extends KIXObject>(
+        rows: IRow[], column: IColumn, values: Array<[T, number]> = []
+    ): Array<[T, number]> {
+        if (column.getColumnId() === FAQArticleProperty.VOTES) {
+            rows.forEach((r) => {
+                const cell = r.getCell(column.getColumnId());
+                if (cell) {
+                    let cellValues = [];
+                    const cellValue = cell.getValue();
+                    if (Array.isArray(cellValue.objectValue)) {
+                        cellValues = cellValue.objectValue;
+                    }
+
+                    const rating = BrowserUtil.calculateAverage(cellValues.map((cv: FAQVote) => cv.Rating));
+                    const vote = new FAQVote();
+                    vote.ID = rating;
+                    vote.Rating = rating;
+
+                    const existingValue = values.find((ev) => (ev[0] as any).Rating === rating);
+                    if (existingValue) {
+                        existingValue[1] = existingValue[1] + 1;
+                    } else {
+                        values.push([vote as any, 1]);
+                    }
+                }
+                const childRows = r.getChildren();
+                if (childRows && !!childRows.length) {
+                    this.getColumnFilterValues(childRows, column, values);
+                }
+            });
+        } else {
+            values = TableFactory.getColumnFilterValues(rows, column);
+        }
+
+        return values;
     }
 
 }

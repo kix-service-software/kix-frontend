@@ -9,6 +9,8 @@
 
 import { IKIXModuleExtension } from "../../core/extensions";
 import { UIComponent } from "../../core/model/UIComponent";
+import { UIComponentPermission } from "../../core/model/UIComponentPermission";
+import { CRUD } from "../../core/model";
 
 class Extension implements IKIXModuleExtension {
 
@@ -17,7 +19,14 @@ class Extension implements IKIXModuleExtension {
     public id = 'user-module';
 
     public initComponents: UIComponent[] = [
-        new UIComponent('user-module-component', 'core/browser/modules/ui-modules/UserUIModule', [])
+        new UIComponent('user-module-component', 'core/browser/modules/ui-modules/UserUIModule',
+            [
+                new UIComponentPermission('system/roles/*', [CRUD.UPDATE]),
+                new UIComponentPermission('system/roles', [CRUD.CREATE]),
+                new UIComponentPermission('system/users/*', [CRUD.UPDATE]),
+                new UIComponentPermission('system/users', [CRUD.CREATE])
+            ]
+        )
     ];
 
     public external: boolean = false;

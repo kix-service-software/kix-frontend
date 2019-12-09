@@ -7,34 +7,33 @@
  * --
  */
 
-import { FormFieldValue } from "./events";
-import { KIXObject, KIXObjectType } from "../../kix";
-import { FormField } from "./FormField";
+import { KIXObjectType } from "../../kix";
 import { ValidationResult } from "./ValidationResult";
 import { IFormInstanceListener } from "./IFormInstanceListener";
 import { AutoCompleteConfiguration } from "./AutoCompleteConfiguration";
 import { FormContext } from "./FormContext";
-import { Form } from "./Form";
+import { FormFieldConfiguration, FormConfiguration } from "./configuration";
+import { FormFieldValue } from "./events";
 
 export interface IFormInstance {
 
-    provideFormField(newFormField: FormField): Promise<void>;
+    provideFormField(newFormFieldConfiguration: FormFieldConfiguration): Promise<void>;
 
-    removeFormField(formField: FormField, parent?: FormField): void;
+    removeFormField(FormFieldConfiguration: FormFieldConfiguration, parent?: FormFieldConfiguration): void;
 
-    addFormField(formField: FormField, fields?: FormField[]): void;
+    addFormField(FormFieldConfiguration: FormFieldConfiguration, fields?: FormFieldConfiguration[]): void;
 
-    provideFormFieldValue<T>(formFieldInstanceId: string, value: T): void;
+    provideFormFieldValue<T>(FormFieldConfigurationInstanceId: string, value: T, silent?: boolean): void;
 
-    getFormFieldValue<T>(formFieldInstanceId: string): FormFieldValue<T>;
+    getFormFieldValue<T>(FormFieldConfigurationInstanceId: string): FormFieldValue<T>;
 
     getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>>;
 
-    getFormFieldByProperty(property: string): Promise<FormField>;
+    getFormFieldByProperty(property: string): Promise<FormFieldConfiguration>;
 
     getAllFormFieldValues(): Map<string, FormFieldValue<any>>;
 
-    getFormField(formFieldInstanceId: string): Promise<FormField>;
+    getFormField(FormFieldConfigurationInstanceId: string): Promise<FormFieldConfiguration>;
 
     hasValues(): boolean;
 
@@ -52,10 +51,12 @@ export interface IFormInstance {
 
     getFormContext(): FormContext;
 
-    getForm(): Form;
+    getForm(): FormConfiguration;
 
-    validateField(field: FormField): Promise<ValidationResult>;
+    validateField(field: FormFieldConfiguration): Promise<ValidationResult>;
 
-    addNewFormField(parent: FormField, newFields: FormField[], clearChildren?: boolean): void;
+    addNewFormField(
+        parent: FormFieldConfiguration, newFields: FormFieldConfiguration[], clearChildren?: boolean
+    ): void;
 
 }

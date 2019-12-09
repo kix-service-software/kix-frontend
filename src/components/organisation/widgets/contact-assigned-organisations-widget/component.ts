@@ -38,10 +38,15 @@ class Component {
                 if (type === KIXObjectType.CONTACT) {
                     this.initWidget(contact);
                 }
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         this.initWidget(await context.getObject<Contact>());
+    }
+
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('contact-assigned-organisation');
     }
 
     private async initWidget(contact?: Contact): Promise<void> {
@@ -66,7 +71,7 @@ class Component {
         if (this.state.contact && this.state.widgetConfiguration) {
             this.state.table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-organisation', KIXObjectType.ORGANISATION,
-                this.state.widgetConfiguration.settings, this.state.contact.OrganisationIDs,
+                this.state.widgetConfiguration.configuration, this.state.contact.OrganisationIDs,
                 null, true
             );
         }

@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.show)>
     <div.main-dialog-container>
         <div.shield/>
@@ -21,7 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <@content>
                         <tab-container
                             key="main-dialog-tab-container"
-                            tabWidgets=component.dialogWidgets
+                            tabWidgets=state.dialogWidgets
                             tabId=component.dialogId
                             minimizable=false
                             contextType="DIALOG"

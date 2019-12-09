@@ -9,11 +9,12 @@
 
 import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
-    Ticket, KIXObjectType, TicketProperty, FormField, CRUD, ArticleProperty, FormContext,
-    FormFieldValue, Form, TicketState, StateType
+    Ticket, KIXObjectType, TicketProperty, CRUD, ArticleProperty, FormContext,
+    FormFieldValue, TicketState, StateType
 } from '../../model';
 import { KIXObjectService } from '../kix';
 import { LabelService } from '../LabelService';
+import { FormFieldConfiguration, FormConfiguration } from '../../model/components/form/configuration';
 
 export class TicketFormService extends KIXObjectFormService<Ticket> {
 
@@ -35,18 +36,21 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         return kixObjectType === KIXObjectType.TICKET;
     }
 
-    protected async doAdditionalPreparations(
-        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, ticket: Ticket
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, ticket: Ticket
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
-            groupLoop: for (const g of form.groups) {
-                for (const f of g.formFields) {
-                    if (f.property === TicketProperty.STATE_ID) {
-                        const stateId = formFieldValues.get(f.instanceId).value;
-                        if (stateId && this.showPendingTimeField(stateId)) {
-                            await this.setPendingTimeField(f, formFieldValues, ticket);
+            PAGES:
+            for (const p of form.pages) {
+                for (const g of p.groups) {
+                    for (const f of g.formFields) {
+                        if (f.property === TicketProperty.STATE_ID) {
+                            const stateId = formFieldValues.get(f.instanceId).value;
+                            if (stateId && this.showPendingTimeField(stateId)) {
+                                await this.setPendingTimeField(f, formFieldValues, ticket);
+                            }
+                            break PAGES;
                         }
-                        break groupLoop;
                     }
                 }
             }
@@ -75,15 +79,16 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
     }
 
     private async setPendingTimeField(
-        typeField: FormField, formFieldValues: Map<string, FormFieldValue<any>>, ticket?: Ticket
+        typeField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, ticket?: Ticket
     ): Promise<void> {
         const label = await LabelService.getInstance().getPropertyText(
             TicketProperty.PENDING_TIME, KIXObjectType.TICKET
         );
-        const pendingField = new FormField(
+        const pendingField = new FormFieldConfiguration(
+            'pending-time-field',
             label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
             null, null, new FormFieldValue(ticket.PendingTime), undefined, undefined, undefined, undefined, undefined,
-            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false
+            null, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false
         );
         typeField.children.push(pendingField);
         formFieldValues.set(pendingField.instanceId, new FormFieldValue(ticket.PendingTime));
@@ -104,7 +109,7 @@ export class TicketFormService extends KIXObjectFormService<Ticket> {
         return value;
     }
 
-    public async hasPermissions(field: FormField): Promise<boolean> {
+    public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
         let hasPermissions = true;
         switch (field.property) {
             case TicketProperty.QUEUE_ID:

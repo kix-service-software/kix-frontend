@@ -7,8 +7,8 @@
  * --
  */
 
-import { WidgetComponentState, AbstractAction } from "../../../../core/model";
-import { FAQArticle, Attachment } from "../../../../core/model/kix/faq";
+import { WidgetComponentState, AbstractAction, Attachment } from "../../../../core/model";
+import { FAQArticle } from "../../../../core/model/kix/faq";
 import { InlineContent } from "../../../../core/browser/components";
 
 export class ComponentState extends WidgetComponentState {

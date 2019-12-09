@@ -12,7 +12,7 @@ import { RoutingConfiguration } from "../../router";
 import { ConfigItemDetailsContext } from "../context";
 import {
     TableConfiguration, ITable, Table, DefaultColumnConfiguration,
-    ToggleOptions, TableRowHeight, IColumnConfiguration
+    ToggleOptions, TableRowHeight
 } from "../../table";
 import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
 import { TableFactory } from "../../table/TableFactory";
@@ -31,7 +31,9 @@ export class ConfigItemTableFactory extends TableFactory {
         );
 
         const table = new Table(tableKey, tableConfiguration, contextId);
-        table.setContentProvider(new ConfigItemTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(
+            new ConfigItemTableContentProvider(table, objectIds, tableConfiguration.loadingOptions, contextId)
+        );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;
@@ -40,53 +42,34 @@ export class ConfigItemTableFactory extends TableFactory {
     private setDefaultTableConfiguration(
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
     ): TableConfiguration {
-        let tableColumns;
+        const tableColumns = [
+            new DefaultColumnConfiguration(
+                null, null, null, ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
+            new DefaultColumnConfiguration(
+                null, null, null, ConfigItemProperty.NAME, true, false, true, false, 300, true, true),
+            new DefaultColumnConfiguration(
+                null, null, null,
+                ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, false, true, 55,
+                true, true, true, DataType.STRING, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                ConfigItemProperty.CUR_INCI_STATE_ID, false, true, false, true, 55,
+                true, true, true, DataType.STRING, false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                ConfigItemProperty.CLASS_ID, true, false, true, false, 200, true, true, true
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                ConfigItemProperty.CHANGE_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
+            ),
+            new DefaultColumnConfiguration(
+                null, null, null, ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+        ];
 
-        if (short) {
-            tableColumns = [
-                new DefaultColumnConfiguration(ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
-                new DefaultColumnConfiguration(ConfigItemProperty.NAME, true, false, true, false, 300, true, true),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, false, true, 55,
-                    true, true, true, DataType.STRING, false
-                ),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CUR_INCI_STATE_ID, false, true, false, true, 55,
-                    true, true, true, DataType.STRING, false
-                ),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CLASS_ID, true, false, true, false, 200, true, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CHANGE_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
-                ),
-                new DefaultColumnConfiguration(ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
-            ];
-        } else {
-            tableColumns = [
-                new DefaultColumnConfiguration(ConfigItemProperty.NUMBER, true, false, true, false, 135, true, true),
-                new DefaultColumnConfiguration(ConfigItemProperty.NAME, true, false, true, false, 300, true, true),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CUR_DEPL_STATE_ID, false, true, false, true, 55,
-                    true, true, true, DataType.STRING, false
-                ),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CUR_INCI_STATE_ID, false, true, false, true, 55,
-                    true, true, true, DataType.STRING, false
-                ),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CLASS_ID, true, false, true, false, 200, true, true, true
-                ),
-                new DefaultColumnConfiguration(
-                    ConfigItemProperty.CHANGE_TIME, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
-                ),
-                new DefaultColumnConfiguration(ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
-            ];
-        }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.CONFIG_ITEM, null, null, tableColumns,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.CONFIG_ITEM, null, null, tableColumns, [],
                 true, true, null, null, null, TableRowHeight.LARGE
             );
             defaultToggle = true;
@@ -111,10 +94,5 @@ export class ConfigItemTableFactory extends TableFactory {
 
         tableConfiguration.objectType = KIXObjectType.CONFIG_ITEM;
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 }

@@ -7,15 +7,20 @@
  * --
  */
 
-import { KIXObject, FormFieldValue, Form, FormField } from "../../model";
+import { KIXObject, FormFieldValue, } from "../../model";
 import { IKIXService } from "./IKIXService";
+import { FormConfiguration, FormFieldConfiguration } from "../../model/components/form/configuration";
 
 export interface IKIXObjectFormService<T extends KIXObject = KIXObject> extends IKIXService {
 
-    initValues(form: Form): Promise<Map<string, FormFieldValue<any>>>;
+    initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>>;
 
-    initOptions(form: Form): Promise<void>;
+    initOptions(form: FormConfiguration): Promise<void>;
 
-    getNewFormField(formField: FormField): FormField;
+    getNewFormField(
+        formField: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren?: boolean
+    ): FormFieldConfiguration;
+
+    updateFields(fields: FormFieldConfiguration[]): Promise<void>;
 
 }

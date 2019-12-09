@@ -11,6 +11,8 @@ import { Context, KIXObjectType, ContextMode, ContextDescriptor, ContextType } f
 import { ContextSocketClient } from "./ContextSocketClient";
 import { AdditionalContextInformation } from "./AdditionalContextInformation";
 import { FormService } from "../form";
+import { EventService } from "../event";
+import { ApplicationEvent } from "../application";
 
 export class ContextFactory {
 
@@ -35,16 +37,38 @@ export class ContextFactory {
 
     public async getContext(
         contextId: string, objectType: KIXObjectType, contextMode: ContextMode,
-        objectId?: string | number, reset?: boolean
+        objectId?: string | number, reset?: boolean, compareContext?: Context
     ): Promise<Context> {
         let context = this.contextInstances.find(
             (c) => this.isContext(contextId, c.getDescriptor(), objectType, contextMode)
         );
 
+        if (compareContext && (compareContext === context)) {
+            reset = false;
+        }
+
         if (!context) {
             context = await this.createContextInstance(contextId, objectType, contextMode, objectId);
         } else if (reset) {
+            let timeout;
+
+            if (typeof window !== 'undefined') {
+                timeout = window.setTimeout(() => {
+                    EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                        loading: true, hint: ''
+                    });
+                }, 300);
+            }
+
             const configuration = await ContextSocketClient.loadContextConfiguration(context.getDescriptor().contextId);
+
+            if (timeout) {
+                window.clearTimeout(timeout);
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                    loading: false
+                });
+            }
+
             context.setConfiguration(configuration);
             context.reset();
         }
@@ -55,6 +79,18 @@ export class ContextFactory {
     public getContextDescriptor(contextId: string): ContextDescriptor {
         const descriptor = this.registeredDescriptors.find((c) => c.contextId === contextId);
         return descriptor;
+    }
+
+    public getContextDescriptors(contextMode: ContextMode, objectType?: KIXObjectType): ContextDescriptor[] {
+        let descriptors = [];
+        if (contextMode && !objectType) {
+            descriptors = this.registeredDescriptors.filter((c) => c.contextMode === contextMode);
+        } else if (contextMode && objectType) {
+            descriptors = this.registeredDescriptors.filter(
+                (c) => c.contextMode === contextMode && c.kixObjectTypes.some((ot) => ot === objectType)
+            );
+        }
+        return descriptors;
     }
 
     public static async getContextForUrl(
@@ -117,9 +153,26 @@ export class ContextFactory {
 
             let context: Context;
             if (descriptor) {
+                let timeout;
+                if (typeof window !== 'undefined') {
+                    timeout = window.setTimeout(() => {
+                        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                            loading: true, hint: ''
+                        });
+                    }, 300);
+                }
+
                 const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId).catch(
                     (error) => { reject(error); }
                 );
+
+                if (timeout) {
+                    window.clearTimeout(timeout);
+                    EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                        loading: false
+                    });
+                }
+
                 if (configuration) {
                     context = new descriptor.contextClass(descriptor, objectId, configuration);
                     await context.initContext();

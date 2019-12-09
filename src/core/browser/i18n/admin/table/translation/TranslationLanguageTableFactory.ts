@@ -37,15 +37,18 @@ export class TranslationLanguageTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(
+            new DefaultColumnConfiguration(null, null, null,
                 TranslationLanguageProperty.LANGUAGE, true, false, true, true, 150, true, true, true
             ),
-            new DefaultColumnConfiguration(TranslationLanguageProperty.VALUE, true, false, true, true, 400, true, true)
+            new DefaultColumnConfiguration(null, null, null,
+                TranslationLanguageProperty.VALUE, true, false, true, true, 400, true, true, false,
+                null, true, null, null, false
+            )
         ];
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.TRANSLATION_LANGUAGE, null, null, tableColumns,  false, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.TRANSLATION_LANGUAGE, null, null, tableColumns, [], false, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
         } else if (!tableConfiguration.tableColumns) {
@@ -57,10 +60,5 @@ export class TranslationLanguageTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
-    }
-
-    // TODO: implementieren
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
-        return;
     }
 }

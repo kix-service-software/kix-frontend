@@ -10,10 +10,12 @@
 import { IConfigurationExtension } from "../../core/extensions";
 import {
     ContextConfiguration, ConfiguredWidget, WidgetConfiguration,
-    KIXObjectType, CRUD, TabWidgetSettings
+    KIXObjectType, CRUD, TabWidgetConfiguration, LinkedObjectsWidgetConfiguration
 } from "../../core/model";
 import { UIComponentPermission } from "../../core/model/UIComponentPermission";
 import { FAQDetailsContext } from "../../core/browser/faq/context/FAQDetailsContext";
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from "../../core/model/configuration";
+import { ModuleConfigurationService } from "../../services";
 
 export class Extension implements IConfigurationExtension {
 
@@ -21,77 +23,100 @@ export class Extension implements IConfigurationExtension {
         return FAQDetailsContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-
-        const tabLane = new ConfiguredWidget('faq-details-tab-widget',
-            new WidgetConfiguration('tab-widget', '', [], new TabWidgetSettings(['faq-article-info-lane']))
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const faqInfoWidget = new WidgetConfiguration(
+            'faq-article-info-widget', 'FAQ Article Info', ConfigurationType.Widget,
+            'faq-article-info-widget', 'Translatable#FAQ Information',
+            [], null, null, false, true, null, false
         );
+        configurations.push(faqInfoWidget);
 
-        const faqInfoLaneTab =
-            new ConfiguredWidget('faq-article-info-lane',
-                new WidgetConfiguration(
-                    'faq-article-info-widget', 'Translatable#FAQ Information',
-                    [],
-                    {}, false, true, null, false
-                )
-            );
-        const faqLinkedObjectsLane =
-            new ConfiguredWidget('faq-article-linked-objects-widget',
-                new WidgetConfiguration(
-                    'linked-objects-widget', 'Translatable#Linked Objects',
-                    ['linked-objects-edit-action'],
-                    {
-                        linkedObjectTypes: [
-                            ["Tickets", KIXObjectType.TICKET],
-                            ["FAQs", KIXObjectType.FAQ_ARTICLE],
-                            ["Config Items", KIXObjectType.CONFIG_ITEM]
-                        ]
-                    },
-                    true, true, null, false
-                ),
-                [new UIComponentPermission('links', [CRUD.READ])]
-            );
+        const tabWidgetConfig = new TabWidgetConfiguration(
+            'faq-article-info-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
+            ['faq-article-info-widget']
+        );
+        configurations.push(tabWidgetConfig);
 
-        const faqHistoryLane =
-            new ConfiguredWidget('faq-article-history-widget',
-                new WidgetConfiguration(
-                    'faq-article-history-widget', 'Translatable#History', [], {},
-                    true, true, null, false
-                ),
-                [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
-            );
+        const tabLane = new WidgetConfiguration(
+            'faq-article-info-tab-widget', 'Tab Widget', ConfigurationType.Widget,
+            'tab-widget', '', [],
+            new ConfigurationDefinition('faq-article-info-tab-widget-config', ConfigurationType.TabWidget)
+        );
+        configurations.push(tabLane);
 
-        const faqArticleWidget =
-            new ConfiguredWidget('20181017-faq-article-content-widget',
-                new WidgetConfiguration(
-                    'faq-article-content-widget', 'Translatable#FAQ Article',
-                    ['faq-article-vote-action', 'faq-article-edit-action'],
-                    {},
-                    false, true, null, false
-                )
-            );
-
-        const actions = ['faq-article-create-action'];
-        const faqActions = [
-            'linked-objects-edit-action', 'faq-article-edit-action', 'print-action'
-        ];
-
-        return new ContextConfiguration(
-            this.getModuleId(),
-            [], [],
-            [], [],
+        const linkedObjectConfig = new LinkedObjectsWidgetConfiguration(
+            'faq-article-linked-objects-config', 'Linked Objects', ConfigurationType.LinkedObjects,
             [
-                'faq-details-tab-widget',
-                'faq-article-linked-objects-widget', 'faq-article-history-widget'
-            ],
-            [tabLane, faqInfoLaneTab, faqLinkedObjectsLane, faqHistoryLane],
-            ['20181017-faq-article-content-widget'], [faqArticleWidget],
-            actions, faqActions
+                ["Tickets", KIXObjectType.TICKET],
+                ["FAQs", KIXObjectType.FAQ_ARTICLE],
+                ["Config Items", KIXObjectType.CONFIG_ITEM]
+            ]
         );
+        configurations.push(linkedObjectConfig);
+
+        const faqLinkedObjectsLane = new WidgetConfiguration(
+            'faq-article-linked-objects-widget', 'Linked Objects', ConfigurationType.Widget,
+            'linked-objects-widget', 'Translatable#Linked Objects',
+            ['linked-objects-edit-action'],
+            new ConfigurationDefinition('faq-article-linked-objects-config', ConfigurationType.LinkedObjects),
+            null, true, true, null, false
+        );
+        configurations.push(faqLinkedObjectsLane);
+
+        const faqHistoryLane = new WidgetConfiguration(
+            'faq-article-history-widget', 'History Widget', ConfigurationType.Widget,
+            'faq-article-history-widget', 'Translatable#History', [], null, null,
+            true, true, null, false
+        );
+        configurations.push(faqHistoryLane);
+
+        const faqArticleWidget = new WidgetConfiguration(
+            'faq-article-content-widget', 'FAQ Article Content', ConfigurationType.Widget,
+            'faq-article-content-widget', 'Translatable#FAQ Article',
+            ['faq-article-vote-action', 'faq-article-edit-action'],
+            null, null, false, true, null, false
+        );
+        configurations.push(faqArticleWidget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [], [],
+                [
+                    new ConfiguredWidget('faq-article-info-tab-widget', 'faq-article-info-tab-widget'),
+                    new ConfiguredWidget(
+                        'faq-article-linked-objects-widget', 'faq-article-linked-objects-widget', null,
+                        [new UIComponentPermission('links', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'faq-article-history-widget', 'faq-article-history-widget', null,
+                        [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
+                    )
+                ],
+                [
+                    new ConfiguredWidget('faq-article-content-widget', 'faq-article-content-widget')
+                ],
+                [
+                    'faq-article-create-action'
+                ],
+                [
+                    'linked-objects-edit-action', 'faq-article-edit-action', 'print-action'
+                ],
+                [],
+                [
+                    new ConfiguredWidget('faq-article-info-widget', 'faq-article-info-widget')
+                ]
+
+            )
+        );
+
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        // do nothing
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        return [];
     }
 
 }

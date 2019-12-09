@@ -204,7 +204,7 @@ export class UserService extends KIXObjectService {
 
         for (const roleId of rolesToDelete) {
             const deleteUri = this.buildUri(baseUri, roleId);
-            await this.sendDeleteRequest(token, clientReqeustId, deleteUri, KIXObjectType.USER)
+            await this.sendDeleteRequest(token, clientReqeustId, [deleteUri], KIXObjectType.USER)
                 .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
         }
 

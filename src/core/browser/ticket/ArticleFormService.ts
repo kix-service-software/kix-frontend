@@ -9,7 +9,7 @@
 
 import { KIXObjectFormService } from '../kix/KIXObjectFormService';
 import {
-    KIXObjectType, Channel, FormField, ArticleProperty,
+    KIXObjectType, Channel, ArticleProperty,
     FormFieldOptions, FormFieldOption, ContextType, ContextMode, FormContext, FormFieldValue, IFormInstance,
     Article, Ticket, Context, SystemAddress, DateTimeUtil, Attachment
 } from '../../model';
@@ -19,6 +19,7 @@ import { FormService } from "../form";
 import { TicketService } from './TicketService';
 import { KIXObjectService } from '../kix';
 import { TranslationService } from '../i18n/TranslationService';
+import { FormFieldConfiguration } from '../../model/components/form/configuration';
 
 export class ArticleFormService extends KIXObjectFormService<Article> {
 
@@ -66,21 +67,26 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         return value;
     }
 
-    protected async prepareFormFieldOptions(formFields: FormField[], ticket: Ticket, formContext: FormContext) {
+    protected async prepareFormFieldOptions(
+        formFields: FormFieldConfiguration[], ticket: Ticket, formContext: FormContext
+    ) {
         for (const f of formFields) {
-            switch (f.property) {
-                case ArticleProperty.CHANNEL_ID:
-                    const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-                    if (dialogContext) {
-                        const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
-                        if (isForwardDialog) {
-                            f.options.push(
-                                new FormFieldOption('CHANNELS', [2])
-                            );
-                        }
+            if (f.property === ArticleProperty.CHANNEL_ID) {
+                const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                if (dialogContext) {
+                    const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+                    let channels = [1, 2];
+                    if (isForwardDialog) {
+                        channels = [2];
                     }
-                    break;
-                default:
+                    const option = f.options.find((o) => o.option === 'CHANNELS');
+                    if (option) {
+                        option.value = channels;
+                    } else {
+                        f.options.push(new FormFieldOption('CHANNELS', channels));
+                    }
+
+                }
             }
 
             if (f.children) {
@@ -91,8 +97,8 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
 
     public async getFormFieldsForChannel(
         channel: Channel, formId: string, clear: boolean = false
-    ): Promise<FormField[]> {
-        const fields: FormField[] = [];
+    ): Promise<FormFieldConfiguration[]> {
+        const fields: FormFieldConfiguration[] = [];
 
         const formInstance = await FormService.getInstance().getFormInstance(formId);
 
@@ -111,11 +117,12 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         return fields;
     }
 
-    private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+    private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
         const referencedValue = await this.getSubjectFieldValue();
-        let field = new FormField(
+        let field = new FormFieldConfiguration(
+            'subject-input',
             'Translatable#Subject', ArticleProperty.SUBJECT, undefined, true,
             isTicket
                 ? 'Translatable#Helptext_Tickets_TicketCreate_Subject'
@@ -135,7 +142,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         return field;
     }
 
-    private async getBodyField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+    private async getBodyField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
 
@@ -149,13 +156,14 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
 
         const referencedValue = await this.getBodyFieldValue();
 
-        let field = new FormField(
+        let field = new FormFieldConfiguration(
+            'body-input',
             articleLabelText, ArticleProperty.BODY, 'rich-text-input',
             true, helpText, [
-                new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
-                    new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
-                ]))
-            ], referencedValue ? new FormFieldValue(referencedValue) : null
+            new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
+                new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
+            ]))
+        ], referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
             const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.BODY);
@@ -170,10 +178,11 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         return field;
     }
 
-    private async getAttachmentField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+    private async getAttachmentField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const referencedValue = await this.getAttachmentFieldValue();
 
-        let field = new FormField(
+        let field = new FormFieldConfiguration(
+            'attachemnt-input',
             'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input', false,
             'Translatable#Helptext_Tickets_ArticleCreate_Attachments',
             null, referencedValue ? new FormFieldValue(referencedValue) : null
@@ -191,8 +200,9 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         return field;
     }
 
-    private async getFromField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
-        let field = new FormField(
+    private async getFromField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+        let field = new FormFieldConfiguration(
+            'from-input',
             'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true,
             'Translatable#Helptext_Tickets_ArticleCreate_From'
         );
@@ -209,7 +219,7 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
         return field;
     }
 
-    private async getToOrCcField(formInstance: IFormInstance, clear: boolean): Promise<FormField> {
+    private async getToOrCcField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         let property = ArticleProperty.CC;
         let label = 'Translatable#Cc';
         let actions = [ArticleProperty.BCC];
@@ -223,7 +233,8 @@ export class ArticleFormService extends KIXObjectFormService<Article> {
             referencedValue = await this.getToFieldValue(dialogContext);
         }
 
-        let field = new FormField(
+        let field = new FormFieldConfiguration(
+            'recipient-input',
             label, property, 'article-email-recipient-input', !!referencedArticle,
             property === ArticleProperty.TO
                 ? 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverTo'

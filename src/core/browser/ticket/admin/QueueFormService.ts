@@ -9,9 +9,10 @@
 
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
 import {
-    KIXObjectType, Queue, FormField, FormFieldValue, QueueProperty, Form, FormContext
+    KIXObjectType, Queue, FormFieldValue, QueueProperty, FormContext
 } from "../../../model";
 import { LabelService } from "../../LabelService";
+import { FormConfiguration, FormFieldConfiguration } from "../../../model/components/form/configuration";
 
 export class QueueFormService extends KIXObjectFormService<Queue> {
 
@@ -33,17 +34,20 @@ export class QueueFormService extends KIXObjectFormService<Queue> {
         return kixObjectType === KIXObjectType.QUEUE;
     }
 
-    protected async doAdditionalPreparations(
-        form: Form, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
-            groupLoop: for (const g of form.groups) {
-                for (const f of g.formFields) {
-                    if (f.property === QueueProperty.FOLLOW_UP_ID) {
-                        if (formFieldValues.get(f.instanceId).value === 1) {
-                            await this.setFollowUpLock(f, formFieldValues, queue);
+            PAGES:
+            for (const p of form.pages) {
+                for (const g of p.groups) {
+                    for (const f of g.formFields) {
+                        if (f.property === QueueProperty.FOLLOW_UP_ID) {
+                            if (formFieldValues.get(f.instanceId).value === 1) {
+                                await this.setFollowUpLock(f, formFieldValues, queue);
+                            }
+                            break PAGES;
                         }
-                        break groupLoop;
                     }
                 }
             }
@@ -51,7 +55,7 @@ export class QueueFormService extends KIXObjectFormService<Queue> {
     }
 
     private async setFollowUpLock(
-        followUpField: FormField, formFieldValues: Map<string, FormFieldValue<any>>, queue?: Queue
+        followUpField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, queue?: Queue
     ): Promise<void> {
         const label = await LabelService.getInstance().getPropertyText(
             QueueProperty.FOLLOW_UP_LOCK, KIXObjectType.QUEUE
@@ -60,7 +64,8 @@ export class QueueFormService extends KIXObjectFormService<Queue> {
             typeof queue.FollowUpLock !== 'undefined' && queue.FollowUpLock !== null ?
                 Number(queue.FollowUpLock) : 0
         );
-        const lockField = new FormField(
+        const lockField = new FormFieldConfiguration(
+            'followup-field',
             label, QueueProperty.FOLLOW_UP_LOCK, 'checkbox-input', false,
             'Translatable#Helptext_Admin_QueueEdit_FollowUpTicketLock', null,
             new FormFieldValue(value)

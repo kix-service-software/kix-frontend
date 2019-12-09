@@ -61,8 +61,8 @@ export class TextModulesTableFactory extends TableFactory {
         }
 
         if (!tableConfiguration) {
-            tableConfiguration = new TableConfiguration(
-                KIXObjectType.TEXT_MODULE, null, null, tableColumns, true, false, null, null,
+            tableConfiguration = new TableConfiguration(null, null, null,
+                KIXObjectType.TEXT_MODULE, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
         } else if (!tableConfiguration.tableColumns) {
@@ -83,19 +83,20 @@ export class TextModulesTableFactory extends TableFactory {
         let config;
         switch (property) {
             case TextModuleProperty.NAME:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 200, true, true,
                     false, DataType.STRING, true, null, null, false
                 );
                 break;
             case TextModuleProperty.KEYWORDS:
-                config = new DefaultColumnConfiguration(
+                config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 250, true, true,
                     false, DataType.STRING, true, 'label-list-cell-content', null, false
                 );
                 break;
             case TextModuleProperty.LANGUAGE:
-                config = new DefaultColumnConfiguration(property, true, false, true, false, 200, true, true, true);
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 200, true, true, true);
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

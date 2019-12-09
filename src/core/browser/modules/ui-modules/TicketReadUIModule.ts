@@ -19,7 +19,7 @@ import { DialogService } from "../../components";
 import {
     TicketPlaceholderHandler, TicketService, TicketFormService, ArticleFormService, TicketTypeService,
     TicketStateService, TicketPriorityService, QueueService, TicketTemplateService, PendingTimeValidator,
-    EmailRecipientValidator, TicketSearchDefinition, TicketLabelProvider, ArticleLabelProvider,
+    EmailRecipientValidator, TicketSearchDefinition,
     TicketHistoryLabelProvider, TicketTypeLabelProvider, TicketPriorityLabelProvider, TicketStateLabelProvider,
     TicketStateTypeLabelProvider, QueueLabelProvider, TicketTemplateLabelProvider, TicketTableFactory,
     TicketHistoryTableFactory, TicketTableCSSHandler, TicketBrowserFactory, TicketHistoryBrowserFactory,
@@ -29,7 +29,6 @@ import {
     TicketWatchAction, ShowUserTicketsAction, TicketLockAction, TicketContext, TicketDetailsContext,
     TicketSearchContext, TicketListContext
 } from "../../ticket";
-import { ChannelService } from "../../channel";
 import { ServiceRegistry, FactoryService } from "../../kix";
 import { FormValidationService } from "../../form/validation";
 import { SearchService } from "../../kix/search/SearchService";
@@ -37,6 +36,7 @@ import { LabelService } from "../../LabelService";
 import { ChannelLabelProvider } from "../../channel/ChannelLabelProvider";
 import { ArticleTableFactory } from "../../ticket/table/ArticleTableFactory";
 import { ChannelBrowserFactory } from "../../channel/ChannelBrowserFactory";
+import { UserLabelProvider, UserBrowserFactory } from "../../user";
 
 export class UIModule implements IUIModule {
 
@@ -46,11 +46,12 @@ export class UIModule implements IUIModule {
 
     public priority: number = 100;
 
+    public name: string = 'TicketReadUIModule';
+
     public async register(): Promise<void> {
         PlaceholderService.getInstance().registerPlaceholderHandler(new TicketPlaceholderHandler());
 
         ServiceRegistry.registerServiceInstance(TicketService.getInstance());
-        ServiceRegistry.registerServiceInstance(ChannelService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
@@ -66,8 +67,6 @@ export class UIModule implements IUIModule {
 
         SearchService.getInstance().registerSearchDefinition(new TicketSearchDefinition());
 
-        LabelService.getInstance().registerLabelProvider(new TicketLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new ArticleLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketHistoryLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketTypeLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketPriorityLabelProvider());
@@ -76,6 +75,9 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
         LabelService.getInstance().registerLabelProvider(new QueueLabelProvider());
         LabelService.getInstance().registerLabelProvider(new TicketTemplateLabelProvider());
+
+        FactoryService.getInstance().registerFactory(KIXObjectType.USER, UserBrowserFactory.getInstance());
+        LabelService.getInstance().registerLabelProvider(new UserLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new TicketTableFactory());
         TableFactoryService.getInstance().registerFactory(new ArticleTableFactory());
@@ -114,9 +116,8 @@ export class UIModule implements IUIModule {
             KIXObjectType.TICKET_TEMPLATE, TicketTemplateBrowserFactory.getInstance()
         );
 
-        this.registerContexts();
+        await this.registerContexts();
         this.registerTicketActions();
-        this.registerTicketDialogs();
     }
 
     private registerTicketActions(): void {
@@ -128,44 +129,32 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
     }
 
-    private registerContexts(): void {
+    private async registerContexts(): Promise<void> {
         const ticketContext = new ContextDescriptor(
             TicketContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'tickets', ['tickets'], TicketContext
         );
-        ContextService.getInstance().registerContext(ticketContext);
+        await ContextService.getInstance().registerContext(ticketContext);
 
         const ticketDetailsContextDescriptor = new ContextDescriptor(
             TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['tickets'], TicketDetailsContext
         );
-        ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+        await ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
         const searchContext = new ContextDescriptor(
             TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.SEARCH,
             false, 'search-ticket-dialog', ['tickets'], TicketSearchContext
         );
-        ContextService.getInstance().registerContext(searchContext);
+        await ContextService.getInstance().registerContext(searchContext);
 
         const ticketListContext = new ContextDescriptor(
             TicketListContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'ticket-list-module', ['ticket-list'], TicketListContext
         );
-        ContextService.getInstance().registerContext(ticketListContext);
+        await ContextService.getInstance().registerContext(ticketListContext);
     }
 
-
-    private registerTicketDialogs(): void {
-        DialogService.getInstance().registerDialog(new ConfiguredDialogWidget(
-            'search-ticket-dialog',
-            new WidgetConfiguration(
-                'search-ticket-dialog', 'Translatable#Ticket Search', [], {},
-                false, false, 'kix-icon-search-ticket'
-            ),
-            KIXObjectType.TICKET,
-            ContextMode.SEARCH
-        ));
-    }
 }

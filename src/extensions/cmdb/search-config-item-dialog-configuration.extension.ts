@@ -10,12 +10,14 @@
 import { IConfigurationExtension } from '../../core/extensions';
 import {
     ContextConfiguration, KIXObjectType,
-    FormContext, SearchForm, ConfiguredWidget, WidgetConfiguration, ConfigItemProperty, CRUD
+    FormContext, SearchForm, ConfiguredWidget, WidgetConfiguration, ConfigItemProperty,
+    CRUD, ConfiguredDialogWidget, ContextMode, HelpWidgetConfiguration
 } from '../../core/model';
 import { ConfigItemSearchContext } from '../../core/browser/cmdb';
 import { ConfigurationService } from '../../core/services';
 import { SearchProperty } from '../../core/browser';
 import { UIComponentPermission } from '../../core/model/UIComponentPermission';
+import { ConfigurationType, ConfigurationDefinition, IConfiguration } from '../../core/model/configuration';
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -23,47 +25,68 @@ export class ModuleExtension implements IConfigurationExtension {
         return ConfigItemSearchContext.CONTEXT_ID;
     }
 
-    public async getDefaultConfiguration(): Promise<ContextConfiguration> {
-        const helpWidget = new ConfiguredWidget('20181022-help-widget',
-            new WidgetConfiguration(
-                'help-widget', 'Translatable#Help', [], {
-                    helpText: 'Translatable#Helptext_Search_ConfigItem',
-                    links: [
-                        ['Translatable#How to search in KIX 18?', 'faqarticles/2']
-                    ]
-                }, false, false, 'kix-icon-query', false
-            ),
-            [new UIComponentPermission('faq/articles', [CRUD.READ])]
+    public async getDefaultConfiguration(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const helpConfig = new HelpWidgetConfiguration(
+            'cmdb-ci-search-dialog-help-widget-config', 'Help COnfig', ConfigurationType.HelpWidget,
+            'Translatable#Helptext_Search_ConfigItem',
+            []
         );
-        const sidebarWidgets = [helpWidget];
-        const sidebars = ['20181022-help-widget'];
-        return new ContextConfiguration(
-            ConfigItemSearchContext.CONTEXT_ID,
-            sidebars, sidebarWidgets
+        configurations.push(helpConfig);
+
+        const helpWidget = new WidgetConfiguration(
+            'cmdb-ci-search-help-widget', 'Widget', ConfigurationType.Widget,
+            'help-widget', 'Translatable#Help', [],
+            new ConfigurationDefinition('cmdb-ci-search-dialog-help-widget-config', ConfigurationType.HelpWidget),
+            null, false, false, 'kix-icon-query', false
         );
+        configurations.push(helpWidget);
+
+        const dialogWidget = new WidgetConfiguration(
+            'cmdb-ci-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
+            'search-config-item-dialog', 'Translatable#Config Item Search', [], null, null,
+            false, false, 'kix-icon-search-ci'
+        );
+        configurations.push(dialogWidget);
+
+        configurations.push(
+            new ContextConfiguration(
+                this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
+                this.getModuleId(),
+                [
+                    new ConfiguredWidget(
+                        'cmdb-ci-search-help-widget', 'cmdb-ci-search-help-widget', null,
+                        [new UIComponentPermission('faq/articles', [CRUD.READ])]
+                    )
+                ],
+                [], [], [], [], [], [], [],
+                [
+                    new ConfiguredDialogWidget(
+                        'cmdb-ci-search-dialog-widget', 'cmdb-ci-search-dialog-widget',
+                        KIXObjectType.CONFIG_ITEM, ContextMode.SEARCH
+                    )
+                ]
+            )
+        );
+
+        return configurations;
     }
 
-    public async createFormDefinitions(overwrite: boolean): Promise<void> {
-        const configurationService = ConfigurationService.getInstance();
-
-        const formId = 'search-config-item-form';
-        const existingForm = configurationService.getConfiguration(formId);
-        if (!existingForm || overwrite) {
-            const form = new SearchForm(
-                formId,
-                'Config Item',
-                KIXObjectType.CONFIG_ITEM,
-                FormContext.SEARCH,
-                null,
+    public async getFormConfigurations(): Promise<IConfiguration[]> {
+        const configurations = [];
+        const formId = 'cmdb-config-item-search-form';
+        configurations.push(
+            new SearchForm(
+                formId, 'Config Item', KIXObjectType.CONFIG_ITEM, FormContext.SEARCH, null,
                 [
                     SearchProperty.FULLTEXT, ConfigItemProperty.CLASS_ID,
                     ConfigItemProperty.NAME, ConfigItemProperty.NUMBER,
                     ConfigItemProperty.CUR_INCI_STATE_ID, ConfigItemProperty.CUR_DEPL_STATE_ID
                 ]
-            );
-            await configurationService.saveConfiguration(form.id, form);
-        }
-        configurationService.registerForm([FormContext.SEARCH], KIXObjectType.CONFIG_ITEM, formId);
+            )
+        );
+        ConfigurationService.getInstance().registerForm([FormContext.SEARCH], KIXObjectType.CONFIG_ITEM, formId);
+        return configurations;
     }
 
 }

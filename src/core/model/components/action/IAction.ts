@@ -27,7 +27,7 @@ export interface IAction<T = any> {
 
     canRun(): boolean;
 
-    canShow(): boolean;
+    canShow(): Promise<boolean>;
 
     run(event: any): void;
 

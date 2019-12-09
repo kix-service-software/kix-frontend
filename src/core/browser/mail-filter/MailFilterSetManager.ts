@@ -38,10 +38,6 @@ export class MailFilterSetManager extends AbstractDynamicFormManager {
         return '';
     }
 
-    public async propertiesAreUnique(): Promise<boolean> {
-        return true;
-    }
-
     public async getOperationsPlaceholder(): Promise<string> {
         return;
     }

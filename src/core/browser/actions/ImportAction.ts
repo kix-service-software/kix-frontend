@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../model/components/action/AbstractAction';
-import { ContextMode, KIXObjectType } from '../../model';
+import { ContextMode, KIXObjectType, ContextType } from '../../model';
 import { ContextService } from '../context';
 import { ITable } from '../table';
 import { ImportService } from '../import';
@@ -43,7 +43,7 @@ export class ImportAction extends AbstractAction<ITable> {
         return typeof type !== 'undefined' && type !== null;
     }
 
-    public canShow(): boolean {
+    public async canShow(): Promise<boolean> {
         return ImportService.getInstance().hasImportManager(this.data.getObjectType());
     }
 
@@ -68,11 +68,6 @@ export class ImportAction extends AbstractAction<ITable> {
         if (eventData && eventData.dialogId.match('import-dialog') && subscriberId === this.eventSubscriberId) {
             EventService.getInstance().unsubscribe(DialogEvents.DIALOG_CANCELED, this);
             EventService.getInstance().unsubscribe(DialogEvents.DIALOG_FINISHED, this);
-
-            const importManager = ImportService.getInstance().getImportManager(this.objectType);
-            if (importManager && importManager.getImportRunState()) {
-                await this.data.reload();
-            }
         }
     }
 }

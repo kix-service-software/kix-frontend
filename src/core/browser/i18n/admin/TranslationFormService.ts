@@ -8,10 +8,11 @@
  */
 
 import {
-    TranslationPattern, KIXObjectType, TranslationPatternProperty, Form, FormField, SortUtil
+    TranslationPattern, KIXObjectType, TranslationPatternProperty, SortUtil
 } from "../../../model";
 import { KIXObjectFormService } from "../../kix/KIXObjectFormService";
 import { TranslationService } from "../TranslationService";
+import { FormConfiguration, FormFieldConfiguration } from "../../../model/components/form/configuration";
 
 export class TranslationFormService extends KIXObjectFormService<TranslationPattern> {
 
@@ -33,16 +34,17 @@ export class TranslationFormService extends KIXObjectFormService<TranslationPatt
         return kixObjectType === KIXObjectType.TRANSLATION_PATTERN;
     }
 
-    protected async prepareForm(form: Form): Promise<void> {
-        if (!!form.groups.length) {
+    protected async prePrepareForm(form: FormConfiguration): Promise<void> {
+        if (!!form.pages.length) {
             const languages = await TranslationService.getInstance().getLanguages();
             [...languages].sort((a, b) => SortUtil.compareString(a[1], b[1])).forEach((l) => {
-                const languageField = new FormField(
+                const languageField = new FormFieldConfiguration(
+                    'pattern-field',
                     l[1], l[0], 'text-area-input', false,
                     'Translatable#Helptext_i18n_TranslationPatternCreateEdit_Translation'
                 );
                 languageField.placeholder = 'Translatable#Translation';
-                form.groups[0].formFields.push(languageField);
+                form.pages[0].groups[0].formFields.push(languageField);
             });
         }
     }

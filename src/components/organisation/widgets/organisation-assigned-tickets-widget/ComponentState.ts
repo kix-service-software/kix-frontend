@@ -10,7 +10,7 @@
 import { ITable } from "../../../../core/browser";
 import { Organisation, WidgetComponentState, AbstractAction } from "../../../../core/model";
 
-export class ComponentState extends WidgetComponentState<any> {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public organisation: Organisation = null,

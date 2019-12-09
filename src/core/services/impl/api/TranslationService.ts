@@ -155,7 +155,7 @@ export class TranslationService extends KIXObjectService {
                     );
                 } else {
                     const uri = this.buildUri('system', this.RESOURCE_URI, translationId, 'languages', param[0]);
-                    await this.sendDeleteRequest(token, clientRequestId, uri, KIXObjectType.TRANSLATION_PATTERN)
+                    await this.sendDeleteRequest(token, clientRequestId, [uri], KIXObjectType.TRANSLATION_PATTERN)
                         .catch((error: Error) => {
                             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                             throw new Error(error.Code, error.Message);

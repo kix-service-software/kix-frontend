@@ -73,7 +73,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onDestroy(): void {
-        this.state.table.destroy();
         EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
         EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
@@ -136,7 +135,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
                             window.scroll(0, top);
                         }
-
                     }
                 }
             }
@@ -151,7 +149,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     .filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')
                     .map((r) => r.getRowObject().getObject());
 
-                context.setFilteredObjectList(objects);
+                context.setFilteredObjectList(this.state.table.getObjectType(), objects);
             }
         }
     }

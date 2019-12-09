@@ -8,8 +8,8 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ContextService, LabelService, ActionFactory, IdService } from '../../../core/browser';
-import { KIXObjectType, KIXObject, ObjectInformationWidgetSettings } from '../../../core/model';
+import { ContextService, ActionFactory, IdService } from '../../../core/browser';
+import { KIXObjectType, KIXObject, ObjectInformationWidgetConfiguration } from '../../../core/model';
 import { ComponentInput } from './ComponentInput';
 
 class Component {
@@ -30,8 +30,8 @@ class Component {
         const context = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        const settings: ObjectInformationWidgetSettings = this.state.widgetConfiguration ?
-            this.state.widgetConfiguration.settings : null;
+        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration ?
+            this.state.widgetConfiguration.configuration : null;
         if (settings) {
             this.state.properties = settings.properties;
             this.state.flat = settings.displayFlatList;
@@ -47,7 +47,8 @@ class Component {
             scrollInformationChanged: () => { return; },
             objectChanged: async (contactId: string, object: KIXObject, type: KIXObjectType) => {
                 this.initWidget(settings);
-            }
+            },
+            additionalInformationChanged: () => { return; }
         });
 
         await this.initWidget(settings);
@@ -58,7 +59,7 @@ class Component {
         context.unregisterListener(this.contextListenerId);
     }
 
-    private async initWidget(settings: ObjectInformationWidgetSettings): Promise<void> {
+    private async initWidget(settings: ObjectInformationWidgetConfiguration): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         const object = settings ? await context.getObject(settings.objectType) : null;
         this.state.object = null;
