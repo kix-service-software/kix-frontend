@@ -210,9 +210,6 @@ msgstr "Zugeordneter Kunde"
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
 
-msgid "Assigned Queues"
-msgstr "Zugeordnete Teams"
-
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
@@ -734,9 +731,6 @@ msgstr "Benachrichtigung bearbeiten"
 
 msgid "Edit Object"
 msgstr "Objekt bearbeiten"
-
-msgid "Edit Objects"
-msgstr "Objekte bearbeiten"
 
 msgid "Edit Organisation"
 msgstr "Kunde bearbeiten"
@@ -2506,9 +2500,6 @@ msgstr "Lade FAQ Artikel"
 msgid "Load FAQ Category"
 msgstr "Lade FAQ Kategorie"
 
-msgid "Loading"
-msgstr "Wird geladen"
-
 msgid "Load Job"
 msgstr "Lade Job"
 
@@ -2712,9 +2703,6 @@ msgstr "Neue Suche"
 
 msgid "New State"
 msgstr "Neuer Status"
-
-msgid "New Template"
-msgstr "Neue Vorlage"
 
 msgid "New Text Module"
 msgstr "Neu"
@@ -3143,9 +3131,6 @@ msgstr "Prioritäten entfernen"
 msgid "Remove States"
 msgstr "Status entfernen"
 
-msgid "Remove Templates"
-msgstr "Vorlagen entfernen"
-
 msgid "Remove translations"
 msgstr "Übersetzungen entfernen"
 
@@ -3466,14 +3451,8 @@ msgstr "Ziel"
 msgid "Team"
 msgstr "Team"
 
-msgid "Template"
-msgstr "Vorlage"
-
 msgid "Templates"
 msgstr "Vorlagen"
-
-msgid "Templates successfully removed."
-msgstr "Vorlagen wurden erfolgreich entfernt."
 
 msgid "Text"
 msgstr "Text"
@@ -3583,9 +3562,6 @@ msgstr "Ticket: Status"
 
 msgid "Ticket successfully created."
 msgstr "Ticket wurde erfolgreich angelegt."
-
-msgid "Ticket: Templates"
-msgstr "Ticket: Vorlagen"
 
 msgid "Ticket: Text Modules"
 msgstr "Ticket: Textbausteine"
@@ -3895,6 +3871,30 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Assigned Queues"
+#~ msgstr "Zugeordnete Teams"
+
+#~ msgid "Edit Objects"
+#~ msgstr "Objekte bearbeiten"
+
+#~ msgid "Loading"
+#~ msgstr "Wird geladen"
+
+#~ msgid "New Template"
+#~ msgstr "Neue Vorlage"
+
+#~ msgid "Remove Templates"
+#~ msgstr "Vorlagen entfernen"
+
+#~ msgid "Template"
+#~ msgstr "Vorlage"
+
+#~ msgid "Templates successfully removed."
+#~ msgstr "Vorlagen wurden erfolgreich entfernt."
+
+#~ msgid "Ticket: Templates"
+#~ msgstr "Ticket: Vorlagen"
 
 #~ msgid "Acions"
 #~ msgstr "Aktion"

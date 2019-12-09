@@ -206,9 +206,6 @@ msgstr ""
 msgid "Assigned Organisations"
 msgstr ""
 
-msgid "Assigned Queues"
-msgstr "Assigned Teams"
-
 msgid "Assigned Roles"
 msgstr ""
 
@@ -727,9 +724,6 @@ msgid "Edit Notification"
 msgstr ""
 
 msgid "Edit Object"
-msgstr ""
-
-msgid "Edit Objects"
 msgstr ""
 
 msgid "Edit Organisation"
@@ -2381,9 +2375,6 @@ msgstr "Loading FAQ Articles"
 msgid "Load FAQ Category"
 msgstr "Loading FAQ Category"
 
-msgid "Loading"
-msgstr ""
-
 msgid "Load Job"
 msgstr "Loading Job"
 
@@ -2586,9 +2577,6 @@ msgid "New Search"
 msgstr ""
 
 msgid "New State"
-msgstr ""
-
-msgid "New Template"
 msgstr ""
 
 msgid "New Text Module"
@@ -3014,9 +3002,6 @@ msgstr ""
 msgid "Remove States"
 msgstr ""
 
-msgid "Remove Templates"
-msgstr ""
-
 msgid "Remove translations"
 msgstr ""
 
@@ -3335,13 +3320,7 @@ msgstr ""
 msgid "Team"
 msgstr ""
 
-msgid "Template"
-msgstr ""
-
 msgid "Templates"
-msgstr ""
-
-msgid "Templates successfully removed."
 msgstr ""
 
 msgid "Text"
@@ -3447,9 +3426,6 @@ msgid "Ticket: States"
 msgstr ""
 
 msgid "Ticket successfully created."
-msgstr ""
-
-msgid "Ticket: Templates"
 msgstr ""
 
 msgid "Ticket: Text Modules"
@@ -3762,6 +3738,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Assigned Queues"
+#~ msgstr "Assigned Teams"
 
 #~ msgid "Acions"
 #~ msgstr "Actions"
