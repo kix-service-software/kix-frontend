@@ -1,0 +1,28 @@
+{
+    "name": "kix-module-general-catalog",
+    "extensions": {
+        "kix:admin-module": {
+            "general-catalog-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "general-catalog-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "general-catalog-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-general-catalog-dialog-configuration": {
+                "module": "new-general-catalog-dialog-configuration.extension"
+            },
+            "edit-general-catalog-dialog-configuration": {
+                "module": "edit-general-catalog-dialog-configuration.extension"
+            }
+        }
+    }
+}

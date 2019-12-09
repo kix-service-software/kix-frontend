@@ -19,6 +19,8 @@ const uglify = require('gulp-uglify-es').default;
 const license = require('gulp-header-license');
 const fs = require('fs');
 
+var plugins = require('gulp-load-plugins')();
+
 const tslintConfig = require('./tslint.json');
 const orgEnv = process.env.NODE_ENV;
 
@@ -61,9 +63,14 @@ gulp.task('default', (cb) => {
             'license-header-cucumber',
             'compile-src',
             'copy-extensions',
+            'copy-modules',
+            'copy-module-templates',
+            'copy-extensions',
             'compile-themes',
+            'copy-application-templates',
             'copy-component-templates',
             'copy-static',
+            'build-apps-agent',
             cb
         );
     } else {
@@ -78,10 +85,14 @@ gulp.task('default', (cb) => {
             'license-header-cucumber',
             'compile-src',
             'copy-extensions',
+            'copy-modules',
+            'copy-module-templates',
             'compile-themes',
+            'copy-application-templates',
             'copy-component-templates',
             'uglify',
             'copy-static',
+            'build-apps-agent',
             cb);
     }
 });
@@ -167,20 +178,36 @@ gulp.task('copy-extensions', () => {
         .pipe(gulp.dest('dist/extensions'));
 });
 
+gulp.task('copy-modules', () => {
+    return gulp
+        .src(['src/modules/**/package.json'])
+        .pipe(gulp.dest('dist/modules'));
+});
+
 
 gulp.task('compile-themes', () => {
     return gulp
         .src(['static/less/themes/*.less'])
-        .pipe(less({
-            paths: [path.join(__dirname, 'less', 'includes')]
-        }))
+        .pipe(less())
         .pipe(gulp.dest('dist/themes'));
+});
+
+gulp.task('copy-application-templates', () => {
+    return gulp
+        .src(['src/applications/**/*.marko', 'src/applications/**/*.less', 'src/applications/**/*.json', , 'src/applications/**/static/**/*'])
+        .pipe(gulp.dest('dist/applications'));
 });
 
 gulp.task('copy-component-templates', () => {
     return gulp
         .src(['src/components/**/*.marko', 'src/components/**/*.less', 'src/components/**/*.json', , 'src/components/**/static/**/*'])
         .pipe(gulp.dest('dist/components'));
+});
+
+gulp.task('copy-module-templates', () => {
+    return gulp
+        .src(['src/modules/**/*.marko', 'src/modules/**/*.less', 'src/modules/**/*.json', , 'src/modules/**/static/**/*'])
+        .pipe(gulp.dest('dist/modules'));
 });
 
 gulp.task('copy-static', () => {
@@ -198,3 +225,6 @@ gulp.task("uglify", function () {
         }))
         .pipe(gulp.dest("dist/"));
 });
+
+console.log(__dirname);
+gulp.task('build-apps-agent', require('./src/frontend-applications/agent-portal/gulpfile.js')(gulp, plugins));

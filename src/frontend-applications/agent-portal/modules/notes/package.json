@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-notes",
+    "extensions": {
+        "kix:socket:namespace": {
+            "socket-namespace-registry-notes-module": {
+                "module": "NamespaceRegistry.extension"
+            }
+        },
+        "kix:modules": {
+            "notes-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

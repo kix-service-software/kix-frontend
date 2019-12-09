@@ -24,7 +24,7 @@ export class FAQService extends KIXObjectService<FAQArticle> {
         super();
     }
 
-    public isServiceFor(type: KIXObjectType) {
+    public isServiceFor(type: KIXObjectType | string) {
         return type === KIXObjectType.FAQ_ARTICLE
             || type === KIXObjectType.FAQ_ARTICLE_ATTACHMENT
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY

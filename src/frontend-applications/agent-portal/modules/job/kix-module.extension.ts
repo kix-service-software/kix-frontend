@@ -1,0 +1,47 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
+import { UIComponent } from "../../model/UIComponent";
+
+class Extension implements IKIXModuleExtension {
+
+    public applications: string[] = ['agent-portal'];
+
+    public tags: Array<[string, string]>;
+
+    public id = 'job-module';
+
+    public external: boolean = false;
+
+    public initComponents: UIComponent[] = [
+        new UIComponent('job-component', '/kix-module-job$0/webapp/core/JobUIModule', [])
+    ];
+
+    public uiComponents: UIComponent[] = [
+        new UIComponent('admin-jobs', '/kix-module-job$0/webapp/components/admin-jobs', []),
+        new UIComponent(
+            'job-details-exec-plans-widget', '/kix-module-job$0/webapp/components/job-details-exec-plans-widget', []
+        ),
+        new UIComponent('job-input-events', '/kix-module-job$0/webapp/components/job-input-events', []),
+        new UIComponent('job-input-filter', '/kix-module-job$0/webapp/components/job-input-filter', []),
+        new UIComponent('job-input-actions', '/kix-module-job$0/webapp/components/job-input-actions', []),
+        new UIComponent('new-job-dialog', '/kix-module-job$0/webapp/components/new-job-dialog', []),
+        new UIComponent('edit-job-dialog', '/kix-module-job$0/webapp/components/edit-job-dialog', [])
+    ];
+
+    public webDependencies: string[] = [
+        './job/webapp'
+    ];
+
+}
+
+module.exports = (data, host, options) => {
+    return new Extension();
+};

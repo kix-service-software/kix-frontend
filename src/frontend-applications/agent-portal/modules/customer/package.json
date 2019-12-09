@@ -1,0 +1,55 @@
+{
+    "name": "kix-module-customer",
+    "extensions": {
+        "kix:services": {
+            "customer-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "customer-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:menu:main": {
+            "customer-menu-main": {
+                "module": "menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "organisation-configuration": {
+                "module": "organisation-configuration.extension"
+            },
+            "organisation-details-configuration": {
+                "module": "organisation-details-configuration.extension"
+            },
+            "new-organisation-dialog-configuration": {
+                "module": "new-organisation-dialog-configuration.extension"
+            },
+            "edit-organisation-dialog-configuration": {
+                "module": "edit-organisation-dialog-configuration.extension"
+            },
+            "contact-details-configuration": {
+                "module": "contact-details-configuration.extension"
+            },
+            "new-contact-dialog-configuration": {
+                "module": "new-contact-dialog-configuration.extension"
+            },
+            "edit-contact-dialog-configuration": {
+                "module": "edit-contact-dialog-configuration.extension"
+            },
+            "search-contact-dialog-configuration": {
+                "module": "search-contact-dialog-configuration.extension"
+            },
+            "search-organisation-dialog-configuration": {
+                "module": "search-organisation-dialog-configuration.extension"
+            },
+            "organisation-import-dialog-configuration": {
+                "module": "organisation-import-dialog-configuration.extension"
+            },
+            "contact-import-dialog-configuration": {
+                "module": "contact-import-dialog-configuration.extension"
+            }
+        }
+    }
+}

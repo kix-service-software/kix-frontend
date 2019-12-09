@@ -11,8 +11,8 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { FormValidationService } from '../../src/core/browser/form/validation';
 import addrparser = require('address-rfc2822');
+import { FormValidationService } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/FormValidationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

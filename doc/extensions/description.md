@@ -1,17 +1,5 @@
 #### Extensions & Extension Points
-The frontend server provides extension points to add or extend existing functionality. An extension point has a defined interface which has to be implemented to successfully add an extension to the software.
 
-The `PluginService` scans the configured directories for registered extensions. A registration for an extension has to be done in a `package.json` file with an object `extensions`. 
-
-The configuration for the search directories can be done in the `server.config.json`. By default the following directories are configured:
-```json
-...
-"PLUGIN_FOLDERS": [
-        "node_modules/@kix",
-        "extensions"
-    ],
-...
-```
 
 ##### Use a extension point
 `package.json`:

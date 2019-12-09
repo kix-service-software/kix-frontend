@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+        "require ./core",
+        "require ./components/admin-module",
+        "require ./components/admin-modules-explorer"
+    ]
+}

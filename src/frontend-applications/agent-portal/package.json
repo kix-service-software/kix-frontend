@@ -1,0 +1,15 @@
+{
+    "name": "kix-agent-portal-server",
+    "extensions": {
+        "kix:application-server": {
+            "agent-portal-server": {
+                "module": "server.extension"
+            }
+        },
+        "kix:socket:namespace": {
+            "socket-namespace-registry": {
+                "module": "NamespaceRegistry.extension"
+            }
+        }
+    }
+}

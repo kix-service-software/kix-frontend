@@ -1,0 +1,23 @@
+body {
+    background: url("/static/img/background.png") 0 0 repeat-x #f5f5f5;
+    background-size: contain;
+}
+
+.container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    height: 60px;
+    border-radius: 15px;
+    background-color: #096392;
+    color: #fff;
+}
+
+.kix-logo {
+    width: 60px;
+    height: 60px;
+    float: left;
+    margin-right: 30px;
+}

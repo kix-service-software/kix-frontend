@@ -9,13 +9,17 @@
 
 /* tslint:disable*/
 import * as chai from 'chai';
-import { UIComponent } from '../src/core/model/UIComponent';
-import { UIComponentPermission } from '../src/core/model/UIComponentPermission';
-import { PermissionService } from '../src/services/PermissionService';
-import { HttpService } from '../src/core/services';
-import { OptionsResponse, RequestMethod } from '../src/core/api';
-import { CRUD, ContextConfiguration, ConfiguredWidget, Error } from '../src/core/model';
 import { HTTPUtil } from './utils/HTTPUtil';
+import { UIComponentPermission } from '../src/frontend-applications/agent-portal/model/UIComponentPermission';
+import { CRUD } from '../src/server/model/rest/CRUD';
+import { UIComponent } from '../src/frontend-applications/agent-portal/model/UIComponent';
+import { HttpService } from '../src/frontend-applications/agent-portal/server/services/HttpService';
+import { OptionsResponse } from '../src/server/model/rest/OptionsResponse';
+import { RequestMethod } from '../src/server/model/rest/RequestMethod';
+import { PermissionService } from '../src/frontend-applications/agent-portal/server/services/PermissionService';
+import { ContextConfiguration } from '../src/frontend-applications/agent-portal/model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../src/frontend-applications/agent-portal/model/configuration/ConfiguredWidget';
+import { Error } from '../src/server/model/Error';
 
 const expect = chai.expect;
 describe('Permission Service', () => {

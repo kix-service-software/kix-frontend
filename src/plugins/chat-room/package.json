@@ -1,0 +1,25 @@
+{
+    "name": "kix-chat-room",
+    "extensions": {
+        "kix:menu:main": {
+            "kix-chat-room-menu-main": {
+                "module": "main-menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "kix-chat-room-configuration": {
+                "module": "configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "kix-chat-room": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:socket:namespace": {
+            "socket-namespace-registry-chat-module": {
+                "module": "NamespaceRegistry.extension"
+            }
+        }
+    }
+}

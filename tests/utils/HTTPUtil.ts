@@ -7,7 +7,9 @@
  * --
  */
 
-import { RequestMethod, OptionsResponse, ResponseHeader } from "../../src/core/api";
+import { RequestMethod } from "../../src/server/model/rest/RequestMethod";
+import { OptionsResponse } from "../../src/server/model/rest/OptionsResponse";
+import { ResponseHeader } from "../../src/server/model/rest/ResponseHeader";
 
 export class HTTPUtil {
 

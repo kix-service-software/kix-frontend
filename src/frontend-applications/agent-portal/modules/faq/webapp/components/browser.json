@@ -1,0 +1,9 @@
+{
+    "dependencies": [
+        "./admin/",
+        "./dialogs/",
+        "require ./faq-module",
+        "require ./faq-vote-selector",
+        "./widgets"
+    ]
+}
