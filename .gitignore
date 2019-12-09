@@ -20,5 +20,5 @@ logs
 coverage
 .nyc_output
 
-src/frontend-applications/agent-portal/plugins/*
-!src/frontend-applications/agent-portal/plugins/.gitkeep
+src/plugins/*
+!src/plugins/.gitkeep

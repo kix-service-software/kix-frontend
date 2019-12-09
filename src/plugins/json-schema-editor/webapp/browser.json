@@ -1,8 +1,0 @@
-{
-    "dependencies": [
-        "require ./components/json-schema-editor-module",
-        "require ./components/json-schema-editor-widget",
-        "require ./core",
-        "./static/jsoneditor.min.js"
-    ]
-}

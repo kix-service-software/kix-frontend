@@ -1,9 +1,0 @@
-{
-    "dependencies": [
-        "require ./components/kanban-module",
-        "require ./components/kanban-widget",
-        "require ./core",
-        "./static/jkanban.min.js",
-        "./static/jkanban.min.css"
-    ]
-}
