@@ -20,6 +20,7 @@ import { JobTableFactory } from '../../../src/frontend-applications/agent-portal
 import { MacroActionTableFactory } from '../../../src/frontend-applications/agent-portal/modules/job/webapp/core/table/MacroActionTableFactory';
 import { TableHeaderHeight } from '../../../src/frontend-applications/agent-portal/model/configuration/TableHeaderHeight';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { ImportExportTemplateTableFactory } from '../../../src/frontend-applications/agent-portal/modules/import-export/webapp/core/table/ImportExportTemplateTableFactory';
 
 
 let table: ITable;
@@ -48,6 +49,7 @@ TableFactoryService.getInstance().registerFactory(new WebformTableFactory());
 TableFactoryService.getInstance().registerFactory(new GeneralCatalogTableFactory());
 TableFactoryService.getInstance().registerFactory(new JobTableFactory());
 TableFactoryService.getInstance().registerFactory(new MacroActionTableFactory());
+TableFactoryService.getInstance().registerFactory(new ImportExportTemplateTableFactory());
 
 const heights = {
     'l': TableHeaderHeight.LARGE,

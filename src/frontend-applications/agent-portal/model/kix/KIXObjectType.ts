@@ -71,6 +71,8 @@ export enum KIXObjectType {
 
     GENERAL_CATALOG_CLASS = 'GeneralCatalogClass',
 
+    IMPORT_EXPORT_TEMPLATE = 'ImportExportTemplate',
+
     JOB = 'Job',
 
     JOB_FILTER = 'JOB_FILTER',
