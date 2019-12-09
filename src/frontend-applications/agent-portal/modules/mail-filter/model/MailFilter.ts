@@ -14,7 +14,7 @@ import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 
 export class MailFilter extends KIXObject {
 
-    public KIXObjectType: KIXObjectType;
+    public KIXObjectType: KIXObjectType = KIXObjectType.MAIL_FILTER;
 
     public ObjectId: string | number;
 
