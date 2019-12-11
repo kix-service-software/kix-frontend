@@ -71,6 +71,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.loading = true;
                 this.state.instanceId = this.context.getDescriptor().contextId;
                 await this.initWidget(this.context);
+
+                context.registerListener(this.state.instanceId, {
+                    additionalInformationChanged: () => { return; },
+                    explorerBarToggled: () => { return; },
+                    filteredObjectListChanged: () => { return; },
+                    objectChanged: () => this.initWidget(this.context),
+                    objectListChanged: () => { return; },
+                    scrollInformationChanged: () => { return; },
+                    sidebarToggled: () => { return; }
+                });
             }
         }
     }
