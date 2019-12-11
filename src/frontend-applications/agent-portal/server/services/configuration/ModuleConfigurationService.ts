@@ -100,6 +100,56 @@ export class ModuleConfigurationService {
         return configuration;
     }
 
+    public async loadConfigurations<T extends IConfiguration>(token: string, ids: string[]): Promise<T[]> {
+        let configurations: T[];
+
+        let cachedOptions = await CacheService.getInstance().get(
+            'ModuleConfigurationService::SysConfigOption', 'ModuleConfigurationService'
+        );
+
+        const options = [];
+        if (!cachedOptions) {
+            cachedOptions = [];
+        }
+
+        const optionsToLoad = [];
+        ids.forEach((id) => {
+            const option = cachedOptions.find((o) => o.Name === id);
+            if (option) {
+                options.push(option);
+            } else {
+                optionsToLoad.push(id);
+            }
+        });
+
+        if (optionsToLoad.length) {
+            const loadedOptions = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, optionsToLoad, null, null
+            ).catch((error) => {
+                LoggingService.getInstance().error(`Could not load configuration: ${optionsToLoad}`);
+                return null;
+            });
+
+            if (loadedOptions && loadedOptions.length) {
+                loadedOptions.forEach((lo) => {
+                    cachedOptions.push(lo);
+                    options.push(lo);
+                });
+            }
+        }
+
+        CacheService.getInstance().set(
+            'ModuleConfigurationService::SysConfigOption', cachedOptions, 'ModuleConfigurationService'
+        );
+
+        if (options) {
+            configurations = options.filter((o) => o.Value).map((o) => JSON.parse(o.Value));
+        }
+
+
+        return configurations;
+    }
+
     private async updateConfiguration(
         token: string, configuration: IConfiguration, accessLevel: SysConfigAccessLevel = SysConfigAccessLevel.INTERNAL
     ): Promise<void> {
