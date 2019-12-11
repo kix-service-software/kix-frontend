@@ -17,19 +17,21 @@ import { LoggingService } from "../../../../../server/services/LoggingService";
 export class FormConfigurationResolver {
 
     public static async resolve(token: string, configuration: FormConfiguration): Promise<FormConfiguration> {
+        const pageConfigs = await ModuleConfigurationService.getInstance()
+            .loadConfigurations<FormPageConfiguration>(token, configuration.pageConfigurationIds);
         for (const pageId of configuration.pageConfigurationIds) {
-            const pageConfig = await ModuleConfigurationService.getInstance()
-                .loadConfiguration<FormPageConfiguration>(token, pageId);
+            const pageConfig = pageConfigs.find((pc) => pc.id === pageId);
 
             if (pageConfig) {
+                const groupConfigs = await ModuleConfigurationService.getInstance()
+                    .loadConfigurations<FormGroupConfiguration>(token, pageConfig.groupConfigurationIds);
                 for (const groupId of pageConfig.groupConfigurationIds) {
-                    const groupConfig = await ModuleConfigurationService.getInstance()
-                        .loadConfiguration<FormGroupConfiguration>(token, groupId);
-
+                    const groupConfig = groupConfigs.find((gc) => gc.id === groupId);
                     if (groupConfig) {
+                        const fieldConfigs = await ModuleConfigurationService.getInstance()
+                            .loadConfigurations<FormFieldConfiguration>(token, groupConfig.fieldConfigurationIds);
                         for (const fieldId of groupConfig.fieldConfigurationIds) {
-                            const fieldConfig = await ModuleConfigurationService.getInstance()
-                                .loadConfiguration<FormFieldConfiguration>(token, fieldId);
+                            const fieldConfig = fieldConfigs.find((fc) => fc.id === fieldId);
                             if (fieldConfig) {
                                 await this.resolveFieldChildrenConfig(
                                     token, fieldConfig,
@@ -71,9 +73,12 @@ export class FormConfigurationResolver {
     ): Promise<void> {
         if (config && config.fieldConfigurationIds) {
             ancenstorIds.unshift(`field: ${config.id}`);
+
+            const fieldConfigs = await ModuleConfigurationService.getInstance()
+                .loadConfigurations<FormFieldConfiguration>(token, config.fieldConfigurationIds);
+
             for (const configId of config.fieldConfigurationIds) {
-                const fieldConfig = await ModuleConfigurationService.getInstance()
-                    .loadConfiguration<FormFieldConfiguration>(token, configId);
+                const fieldConfig = fieldConfigs.find((fc) => fc.id === configId);
                 if (fieldConfig) {
                     if (fieldConfig.fieldConfigurationIds) {
                         await this.resolveFieldChildrenConfig(token, fieldConfig, [...ancenstorIds]);
