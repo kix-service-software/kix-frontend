@@ -53,7 +53,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
 
         const stateTypeFilterCriteria = new FilterCriteria(
-            'open', SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
+            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
         );
 
         const chartConfig1 = new ChartComponentConfiguration(
