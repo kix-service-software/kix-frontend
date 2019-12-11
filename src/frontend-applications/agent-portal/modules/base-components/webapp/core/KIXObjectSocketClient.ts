@@ -56,8 +56,6 @@ export class KIXObjectSocketClient extends SocketClient {
         this.socket = this.createSocket('kixobjects', true);
     }
 
-    private requestPromises: Map<string, Promise<any>> = new Map();
-
     public async loadObjects<T extends KIXObject>(
         kixObjectType: KIXObjectType | string, objectIds: Array<string | number> = null,
         loadingOptions: KIXObjectLoadingOptions = null, objectLoadingOptions: KIXObjectSpecificLoadingOptions = null,
@@ -73,23 +71,21 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const cacheKey = JSON.stringify({ kixObjectType, objectIds, loadingOptions, objectLoadingOptions });
 
+        let requestPromise: Promise<T[]>;
         if (cache) {
-            if (await BrowserCacheService.getInstance().has(cacheKey, kixObjectType)) {
-                return BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
+            requestPromise = await BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
+            if (!requestPromise) {
+                requestPromise = this.createRequestPromise<T>(request);
+                BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
             }
+            return requestPromise;
         }
 
-        if (this.requestPromises.has(cacheKey)) {
-            return this.requestPromises.get(cacheKey);
-        }
-
-        const requestPromise = this.createRequestPromise<T>(request, cacheKey);
-        this.requestPromises.set(cacheKey, requestPromise);
-
+        requestPromise = this.createRequestPromise<T>(request);
         return requestPromise;
     }
 
-    private createRequestPromise<T extends KIXObject>(request: LoadObjectsRequest, cacheKey: string): Promise<T[]> {
+    private createRequestPromise<T extends KIXObject>(request: LoadObjectsRequest): Promise<T[]> {
         return new Promise<T[]>(async (resolve, reject) => {
             this.sendRequest<LoadObjectsResponse<T>>(
                 request,
@@ -101,13 +97,9 @@ export class KIXObjectSocketClient extends SocketClient {
                     objects.push(factoryObject);
                 }
 
-                await BrowserCacheService.getInstance().set(cacheKey, objects, request.objectType);
-                this.requestPromises.delete(cacheKey);
                 resolve(objects);
             }).catch(async (error) => {
-                this.requestPromises.delete(cacheKey);
                 if (error instanceof PermissionError) {
-                    await BrowserCacheService.getInstance().set(cacheKey, [], request.objectType);
                     resolve([]);
                 } else {
                     reject(error);
