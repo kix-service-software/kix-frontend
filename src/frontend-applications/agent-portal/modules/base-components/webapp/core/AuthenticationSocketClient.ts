@@ -18,6 +18,9 @@ import { PermissionCheckRequest } from "./PermissionCheckRequest";
 import { IdService } from "../../../../model/IdService";
 import { UIComponentPermission } from "../../../../model/UIComponentPermission";
 
+import { BrowserCacheService } from "./CacheService";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+
 export class AuthenticationSocketClient extends SocketClient {
 
     private authenticationSocket: SocketIO.Server;
@@ -130,7 +133,18 @@ export class AuthenticationSocketClient extends SocketClient {
         });
     }
 
-    public checkPermissions(permissions: UIComponentPermission[]): Promise<boolean> {
+    public async checkPermissions(permissions: UIComponentPermission[]): Promise<boolean> {
+        const key = JSON.stringify(permissions);
+        let requestPromise = await BrowserCacheService.getInstance().get(key);
+        if (!requestPromise) {
+            requestPromise = this.createPermissionRequest(permissions);
+            BrowserCacheService.getInstance().set(key, requestPromise, KIXObjectType.ROLE);
+        }
+
+        return requestPromise;
+    }
+
+    private createPermissionRequest(permissions: UIComponentPermission[]): Promise<boolean> {
         return new Promise((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
@@ -167,5 +181,4 @@ export class AuthenticationSocketClient extends SocketClient {
             this.authenticationSocket.emit(AuthenticationEvent.PERMISSION_CHECK, request);
         });
     }
-
 }
