@@ -33,6 +33,7 @@
         "require ./label-value-group",
         "require ./language-input",
         "require ./link-target",
+        "require ./list-with-title",
         "require ./loading-shield",
         "require ./loading-spinner",
         "require ./main-form",
