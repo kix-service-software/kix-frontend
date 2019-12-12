@@ -31,6 +31,7 @@ import { TableHeaderHeight } from '../../../../../model/configuration/TableHeade
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { Error } from '../../../../../../../server/model/Error';
+import { ContextService } from '../../core/ContextService';
 
 class Component implements ISearchFormListener {
 
@@ -135,6 +136,11 @@ class Component implements ISearchFormListener {
     }
 
     private async setDefaults(formInstance: SearchFormInstance): Promise<void> {
+        const context = await ContextService.getInstance().getContext(SearchContext.CONTEXT_ID);
+        if (context) {
+            context.reset();
+        }
+
         const defaultProperties = formInstance.form.defaultSearchProperties;
         if (defaultProperties) {
             this.state.manager.reset(false);
