@@ -738,6 +738,9 @@ msgstr "Benachrichtigung bearbeiten"
 msgid "Edit Object"
 msgstr "Objekt bearbeiten"
 
+msgid "Edit Objects"
+msgstr "Objekte bearbeiten"
+
 msgid "Edit Organisation"
 msgstr "Kunde bearbeiten"
 
@@ -3903,9 +3906,6 @@ msgstr "PLZ"
 
 #~ msgid "Assigned Queues"
 #~ msgstr "Zugeordnete Teams"
-
-#~ msgid "Edit Objects"
-#~ msgstr "Objekte bearbeiten"
 
 #~ msgid "Loading"
 #~ msgstr "Wird geladen"

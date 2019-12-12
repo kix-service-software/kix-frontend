@@ -732,6 +732,11 @@ msgstr ""
 msgid "Edit Object"
 msgstr ""
 
+#, fuzzy
+#| msgid "Load Job"
+msgid "Edit Objects"
+msgstr "Loading Job"
+
 msgid "Edit Organisation"
 msgstr ""
 
