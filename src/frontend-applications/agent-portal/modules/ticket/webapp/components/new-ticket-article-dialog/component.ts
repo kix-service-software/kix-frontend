@@ -45,14 +45,16 @@ class Component extends AbstractNewDialog {
             const tabTitle = dialogContext.getAdditionalInformation('NEW_ARTICLE_TAB_TITLE');
             if (tabTitle) {
                 EventService.getInstance().publish(
-                    TabContainerEvent.CHANGE_TITLE, new TabContainerEventData('new-ticket-article-dialog', tabTitle)
+                    TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(
+                        'ticket-article-new-dialog-widget', tabTitle)
                 );
             }
+
             const tabIcon = dialogContext.getAdditionalInformation('NEW_ARTICLE_TAB_ICON');
             if (tabIcon) {
                 EventService.getInstance().publish(
                     TabContainerEvent.CHANGE_ICON,
-                    new TabContainerEventData('new-ticket-article-dialog', null, tabIcon)
+                    new TabContainerEventData('ticket-article-new-dialog-widget', null, tabIcon)
                 );
             }
         }
