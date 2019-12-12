@@ -8,10 +8,28 @@
  */
 
 import { ReleaseInfo } from "../frontend-applications/agent-portal/model/ReleaseInfo";
+import { SystemInfo } from "../frontend-applications/agent-portal/model/SystemInfo";
 
 export class ReleaseInfoUtil {
 
-    public static async getReleaseInfo(): Promise<ReleaseInfo> {
+    private static INSTANCE: ReleaseInfoUtil;
+
+    private systemInfo: SystemInfo;
+
+    public static getInstance(): ReleaseInfoUtil {
+        if (!ReleaseInfoUtil.INSTANCE) {
+            ReleaseInfoUtil.INSTANCE = new ReleaseInfoUtil();
+        }
+        return ReleaseInfoUtil.INSTANCE;
+    }
+
+    private constructor() { }
+
+    public setSysteminfo(systemInfo: SystemInfo): void {
+        this.systemInfo = systemInfo;
+    }
+
+    public async getReleaseInfo(): Promise<ReleaseInfo> {
         return new Promise<ReleaseInfo>((resolve, reject) => {
             const reader = require('readline').createInterface({
                 input: require('fs').createReadStream('./RELEASE')
@@ -36,6 +54,7 @@ export class ReleaseInfoUtil {
             });
 
             reader.on('close', () => {
+                releaseInfo.backendSystemInfo = this.systemInfo;
                 resolve(releaseInfo);
             });
         });
