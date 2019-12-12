@@ -64,10 +64,6 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('edit-contact-dialog', '/kix-module-customer$0/webapp/components/edit-contact-dialog', []),
         new UIComponent('search-contact-dialog', '/kix-module-customer$0/webapp/components/search-contact-dialog', []),
         new UIComponent(
-            'contact-input-organisation',
-            '/kix-module-customer$0/webapp/components/contact-input-organisation', []
-        ),
-        new UIComponent(
             'create-new-ticket-cell', '/kix-module-customer$0/webapp/components/create-new-ticket-cell', []
         ),
         new UIComponent('contact-list-widget', '/kix-module-customer$0/webapp/components/contact-list-widget', []),

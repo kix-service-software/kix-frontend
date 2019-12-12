@@ -88,8 +88,13 @@ export class Extension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'contact-edit-form-field-organisation',
-                'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'contact-input-organisation',
-                true, 'Translatable#Helptext_Customers_ContactCreate_Organisation'
+                'Translatable#Organisation', ContactProperty.PRIMARY_ORGANISATION_ID, 'object-reference-input',
+                true, 'Translatable#Helptext_Customers_ContactCreate_Organisation',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true)
+                ]
             )
         );
 
