@@ -12,6 +12,8 @@
         "require ./components/user-role-assigned-users-widget",
         "require ./components/user-role-info-widget",
         "require ./components/personal-settings-dialog",
+        "require ./components/permissions-form-input",
+        "require ./components/permission-input",
         "require ./core"
     ]
 }

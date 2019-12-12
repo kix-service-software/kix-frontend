@@ -54,6 +54,14 @@ class Extension implements IKIXModuleExtension {
         new UIComponent(
             'personal-settings-dialog',
             '/kix-module-user$0/webapp/components/personal-settings-dialog', []
+        ),
+        new UIComponent(
+            'permissions-form-input',
+            '/kix-module-user$0/webapp/components/permissions-form-input', []
+        ),
+        new UIComponent(
+            'permission-input',
+            '/kix-module-user$0/webapp/components/permission-input', []
         )
     ];
 
