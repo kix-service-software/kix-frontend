@@ -53,6 +53,7 @@ class Extension implements IKIXModuleExtension {
         new UIComponent('label-value-group', '/kix-module-base-components$0/webapp/components/label-value-group', []),
         new UIComponent('language-input', '/kix-module-base-components$0/webapp/components/language-input', []),
         new UIComponent('link-target', '/kix-module-base-components$0/webapp/components/link-target', []),
+        new UIComponent('list-with-title', '/kix-module-base-components$0/webapp/components/list-with-title', []),
         new UIComponent('loading-shield', '/kix-module-base-components$0/webapp/components/loading-shield', []),
         new UIComponent('loading-spinner', '/kix-module-base-components$0/webapp/components/loading-spinner', []),
         new UIComponent('main-form', '/kix-module-base-components$0/webapp/components/main-form', []),
