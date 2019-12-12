@@ -123,7 +123,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
 
 
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {
-        const releaseInfo = await ReleaseInfoUtil.getReleaseInfo();
+        const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
         return new SocketResponse(
             KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, new LoadReleaseInfoResponse(data.requestId, releaseInfo)
         );

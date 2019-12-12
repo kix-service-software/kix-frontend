@@ -43,6 +43,8 @@ import { SocketService } from './services/SocketService';
 import { IServiceExtension } from './extensions/IServiceExtension';
 import { TranslationAPIService } from '../modules/translation/server/TranslationService';
 import { SysConfigAccessLevel } from '../modules/sysconfig/model/SysConfigAccessLevel';
+import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
+import { SystemInfo } from '../model/SystemInfo';
 
 export class Server implements IServer {
 
@@ -124,11 +126,13 @@ export class Server implements IServer {
             poDefinitions, configurations
         );
 
-        await ClientRegistrationService.getInstance().createClientRegistration(
+        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
             this.serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
-        ).catch((error) => {
+        ).catch((error): SystemInfo => {
             LoggingService.getInstance().error(error);
+            return null;
         });
+        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
     }
 
     public async initHttpServer(): Promise<void> {
