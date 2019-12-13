@@ -8,45 +8,46 @@
  */
 
 import { LabelProvider } from "../../../base-components/webapp/core/LabelProvider";
-import { ImportExportTemplate } from "../../model/ImportExportTemplate";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ImportExportTemplateProperty } from "../../model/ImportExportTemplateProperty";
 import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { ImportExportTemplateRunTypes } from "../../model/ImportExportTemplateRunTypes";
+import { ImportExportTemplateRun } from "../../model/ImportExportTemplateRun";
+import { ImportExportTemplateRunProperty } from "../../model/ImportExportTemplateRunProperty";
+import { DateTimeUtil } from "../../../base-components/webapp/core/DateTimeUtil";
 
-export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExportTemplate> {
+export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportExportTemplateRun> {
 
-    public kixObjectType: KIXObjectType = KIXObjectType.IMPORT_EXPORT_TEMPLATE;
+    public kixObjectType: KIXObjectType = KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN;
 
     public isLabelProviderForType(objectType: KIXObjectType): boolean {
         return objectType === this.kixObjectType;
     }
 
-    public isLabelProviderFor(object: ImportExportTemplate): boolean {
-        return object instanceof ImportExportTemplate;
+    public isLabelProviderFor(object: ImportExportTemplateRun): boolean {
+        return object instanceof ImportExportTemplateRun;
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case ImportExportTemplateProperty.NAME:
-                displayValue = 'Translatable#Name';
+            case ImportExportTemplateRunProperty.LIST_NUMBER:
+                displayValue = 'Translatable#Task Number';
                 break;
-            case ImportExportTemplateProperty.FORMAT:
-                displayValue = 'Translatable#Format';
+            case ImportExportTemplateRunProperty.STATE_ID:
+            case ImportExportTemplateRunProperty.STATE:
+                displayValue = 'Translatable#Task State';
                 break;
-            case ImportExportTemplateProperty.OBJECT:
-                displayValue = 'Translatable#Object';
+            case ImportExportTemplateRunProperty.START_TIME:
+                displayValue = 'Translatable#Task Start Time';
                 break;
-            case ImportExportTemplateProperty.NUMBER:
-                displayValue = 'Translatable#Number';
+            case ImportExportTemplateRunProperty.END_TIME:
+                displayValue = 'Translatable#Task End Time';
                 break;
-            case ImportExportTemplateProperty.ID:
-                displayValue = 'Translatable#Id';
+            case ImportExportTemplateRunProperty.SUCCESS_COUNT:
+                displayValue = 'Translatable#Successfully processed lines';
                 break;
-            case ImportExportTemplateProperty.IMPORT_STATE:
-                displayValue = 'Translatable#Importstate';
+            case ImportExportTemplateRunProperty.FAIL_COUNT:
+                displayValue = 'Translatable#Incorrectly processed lines';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
@@ -64,21 +65,14 @@ export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExpor
     }
 
     public async getDisplayText(
-        template: ImportExportTemplate, property: string, value?: string, translatable: boolean = true
+        templateRun: ImportExportTemplateRun, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = template[property];
+        let displayValue = templateRun[property];
 
         switch (property) {
-            case ImportExportTemplateProperty.ID:
-                displayValue = template.Name;
-                break;
-            case ImportExportTemplateProperty.IMPORT_STATE:
-                displayValue = '';
-                if (template.Runs && !!template.Runs.length) {
-                    displayValue = template.Runs.some(
-                        (r) => r.StateID === 1 && r.Type === ImportExportTemplateRunTypes.IMPORT
-                    ) ? 'Translatable#running' : '';
-                }
+            case ImportExportTemplateRunProperty.STATE_ID:
+                displayValue = templateRun.State ? templateRun.State :
+                    displayValue === 1 ? 'Translatable#running' : 'Translatable#finished';
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
@@ -96,6 +90,10 @@ export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExpor
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
+            case ImportExportTemplateRunProperty.START_TIME:
+            case ImportExportTemplateRunProperty.END_TIME:
+                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -107,39 +105,29 @@ export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExpor
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getDisplayTextClasses(object: ImportExportTemplate, property: string): string[] {
+    public getDisplayTextClasses(object: ImportExportTemplateRun, property: string): string[] {
         return [];
     }
 
-    public getObjectClasses(object: ImportExportTemplate): string[] {
+    public getObjectClasses(object: ImportExportTemplateRun): string[] {
         return [];
     }
 
-    public async getObjectText(
-        object: ImportExportTemplate, id?: boolean, title?: boolean, translatable?: boolean
-    ): Promise<string> {
-        return `${object.Name}`;
-    }
-
-    public getObjectAdditionalText(object: ImportExportTemplate, translatable: boolean = true): string {
+    public getObjectAdditionalText(object: ImportExportTemplateRun, translatable: boolean = true): string {
         return '';
     }
 
-    public getObjectIcon(object: ImportExportTemplate): string | ObjectIcon {
-        return new ObjectIcon('ImportExportTemplate', object.ID);
-    }
-
-    public getObjectTooltip(object: ImportExportTemplate): string {
-        return object.Name;
+    public getObjectIcon(object: ImportExportTemplateRun): string | ObjectIcon {
+        return new ObjectIcon('ImportExportTemplateRun', object.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(
-                plural ? 'Translatable#Import/Export Templates' : 'Translatable#Import/Export Template'
+                plural ? 'Translatable#Import/Export Template Runs' : 'Translatable#Import/Export Template Run'
             );
         }
-        return plural ? 'Import/Export Templates' : 'Import/Export Template';
+        return plural ? 'Import/Export Template Runs' : 'Import/Export Template Run';
     }
 
 }

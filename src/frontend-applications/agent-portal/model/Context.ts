@@ -126,6 +126,13 @@ export abstract class Context {
         }
     }
 
+    public deleteObjectList(objectType: KIXObjectType | string) {
+        if (this.objectLists.has(objectType)) {
+            this.objectLists.delete(objectType);
+            this.listeners.forEach((l) => l.objectListChanged(objectType, []));
+        }
+    }
+
     public async setObjectId(objectId: string | number): Promise<void> {
         this.objectId = objectId;
         await this.getObject(undefined, true);

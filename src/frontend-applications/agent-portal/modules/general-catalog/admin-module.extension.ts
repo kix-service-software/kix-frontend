@@ -19,7 +19,7 @@ class Extension implements IAdminModuleExtension {
     public getAdminModules(): AdminModuleCategory[] {
         return [
             new AdminModuleCategory(
-                null, 'cmdb', 'Translatable#CMDB', null, [], [
+                null, 'cmdb', 'Translatable#Assets', null, [], [
                 new AdminModule(
                     null, 'general-catalog', 'Translatable#General Catalog', null,
                     KIXObjectType.GENERAL_CATALOG_ITEM, 'admin-general-catalog',

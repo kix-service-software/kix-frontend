@@ -94,7 +94,10 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
             );
         }
+        return await this.getRowObjects(objects);
+    }
 
+    protected async getRowObjects(objects: T[]): Promise<RowObject[]> {
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
         if (objects) {
             for (const o of objects) {
@@ -132,7 +135,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return new TableValue(property, object[property], displayValue);
     }
 
-    protected async addSpecificValues(values: TableValue[], object: any): Promise<any> {
+    protected async addSpecificValues(values: TableValue[], object: any): Promise<void> {
         return;
     }
 }

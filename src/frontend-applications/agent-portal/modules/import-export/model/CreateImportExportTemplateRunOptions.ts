@@ -7,5 +7,14 @@
  * --
  */
 
-export { ImportExportTemplateTableFactory } from './ImportExportTemplateTableFactory';
-export { ImportExportTemplateRunTableFactory } from './ImportExportTemplateRunTableFactory';
+import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
+
+export class CreateImportExportTemplateRunOptions extends KIXObjectSpecificCreateOptions {
+
+    public constructor(
+        public templateId: number
+    ) {
+        super();
+    }
+
+}

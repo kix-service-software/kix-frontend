@@ -48,7 +48,9 @@ export class UIModule implements IUIModule {
             KIXObjectType.USER,
             KIXObjectType.ROLE,
             KIXObjectType.PERMISSION,
-            KIXObjectType.JOB
+            KIXObjectType.JOB,
+            KIXObjectType.IMPORT_EXPORT_TEMPLATE,
+            KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN
         ],
             ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'admin', ['admin'], AdminContext

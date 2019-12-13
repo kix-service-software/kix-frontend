@@ -73,6 +73,8 @@ export enum KIXObjectType {
 
     IMPORT_EXPORT_TEMPLATE = 'ImportExportTemplate',
 
+    IMPORT_EXPORT_TEMPLATE_RUN = 'ImportExportTemplateRun',
+
     JOB = 'Job',
 
     JOB_FILTER = 'JOB_FILTER',

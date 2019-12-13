@@ -40,8 +40,8 @@ class Extension implements IKIXModuleExtension {
             []
         ),
         new UIComponent(
-            'template-importstate-content',
-            '/kix-module-import-export$0/webapp/components/template-importstate-content',
+            'template-import-content',
+            '/kix-module-import-export$0/webapp/components/template-import-content',
             []
         )
     ];

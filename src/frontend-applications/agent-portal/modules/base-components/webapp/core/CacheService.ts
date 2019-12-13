@@ -191,6 +191,9 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION);
                 cacheKeyPrefixes.push(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION);
                 break;
+            case KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN:
+                cacheKeyPrefixes.push(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
+                break;
             default:
         }
 

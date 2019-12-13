@@ -83,6 +83,8 @@ export class BrowserUtil {
                     content = content.split(',')[1];
                     resolve(content);
                 };
+
+                // get base64 string
                 reader.readAsDataURL(file);
             }
         });

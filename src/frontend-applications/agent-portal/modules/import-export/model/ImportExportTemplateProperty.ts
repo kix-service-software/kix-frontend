@@ -19,6 +19,8 @@ export enum ImportExportTemplateProperty {
 
     NUMBER = 'Number',
 
-    IMPORT_STATE = 'IMPORT_STATE'
+    IMPORT_STATE = 'IMPORT_STATE',
+
+    RUNS = 'Runs'
 
 }

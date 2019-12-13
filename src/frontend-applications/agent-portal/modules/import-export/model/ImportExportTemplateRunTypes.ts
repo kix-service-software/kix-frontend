@@ -7,5 +7,9 @@
  * --
  */
 
-export { ImportExportTemplateTableFactory } from './ImportExportTemplateTableFactory';
-export { ImportExportTemplateRunTableFactory } from './ImportExportTemplateRunTableFactory';
+export enum ImportExportTemplateRunTypes {
+
+    IMPORT = 'import',
+
+    EXPORT = 'export'
+}
