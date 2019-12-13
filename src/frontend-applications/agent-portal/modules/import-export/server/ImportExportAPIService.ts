@@ -15,9 +15,9 @@ import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecifi
 import { ImportExportTemplate } from "../model/ImportExportTemplate";
 import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
 import { LoggingService } from "../../../../../server/services/LoggingService";
-import { ImportExportTemplateProperty } from "../model/ImportExportTemplateProperty";
 import { ImportExportTemplateFactory } from "./ImportExportTemplateFactory";
 import { Error } from "../../../../../server/model/Error";
+import { CreateImportExportTemplateRunOptions } from "../model/CreateImportExportTemplateRunOptions";
 
 export class ImportExportAPIService extends KIXObjectAPIService {
 
@@ -40,7 +40,8 @@ export class ImportExportAPIService extends KIXObjectAPIService {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
-        return kixObjectType === this.objectType;
+        return kixObjectType === this.objectType
+            || kixObjectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN;
     }
 
     public async loadObjects<T>(
@@ -58,4 +59,30 @@ export class ImportExportAPIService extends KIXObjectAPIService {
 
         return objects;
     }
+
+    public async createObject(
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
+        createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<number> {
+        let id;
+
+        if (objectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN) {
+            const templateId = createOptions ?
+                (createOptions as CreateImportExportTemplateRunOptions).templateId : null;
+            if (templateId) {
+                const uri = this.buildUri(this.RESOURCE_URI, templateId, 'runs');
+                id = await super.executeUpdateOrCreateRequest(
+                    token, clientRequestId, parameter, uri, KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, 'TaskID', true
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
+                });
+            } else {
+                throw new Error('', 'templateId is missing');
+            }
+        }
+
+        return id;
+    }
+
 }

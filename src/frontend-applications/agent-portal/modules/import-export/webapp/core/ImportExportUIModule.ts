@@ -16,7 +16,10 @@ import { LabelService } from "../../../base-components/webapp/core/LabelService"
 import { ImportExportService } from "./ImportExportService";
 import { ImportExportTemplateBrowserFactory } from "./ImportExportTemplateBrowserFactory";
 import { ImportExportTemplateLabelProvider } from "./ImportExportTemplateLabelProvider";
-import { ImportExportTemplateTableFactory } from "./table/ImportExportTemplateTableFactory";
+import { ActionFactory } from "../../../base-components/webapp/core/ActionFactory";
+import { TemplateImportAction } from "./actions";
+import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from "./table";
+import { ImportExportTemplateRunLabelProvider } from "./ImportExportTemplateRunLabelProvider";
 
 
 export class UIModule implements IUIModule {
@@ -31,10 +34,16 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ImportExportService.getInstance());
+
         FactoryService.getInstance().registerFactory(
             KIXObjectType.IMPORT_EXPORT_TEMPLATE, ImportExportTemplateBrowserFactory.getInstance()
         );
         TableFactoryService.getInstance().registerFactory(new ImportExportTemplateTableFactory());
         LabelService.getInstance().registerLabelProvider(new ImportExportTemplateLabelProvider());
+
+        TableFactoryService.getInstance().registerFactory(new ImportExportTemplateRunTableFactory());
+        LabelService.getInstance().registerLabelProvider(new ImportExportTemplateRunLabelProvider());
+
+        ActionFactory.getInstance().registerAction('template-import-action', TemplateImportAction);
     }
 }

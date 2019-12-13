@@ -9,6 +9,7 @@
 
 import { KIXObject } from "../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ImportExportTemplateRun } from "./ImportExportTemplateRun";
 
 export class ImportExportTemplate extends KIXObject {
 
@@ -21,6 +22,7 @@ export class ImportExportTemplate extends KIXObject {
     public Format: string;
     public Object: string;
     public Number: string;
+    public Runs: ImportExportTemplateRun[];
 
     public constructor(template?: ImportExportTemplate) {
         super(template);
@@ -31,6 +33,7 @@ export class ImportExportTemplate extends KIXObject {
             this.Format = template.Format;
             this.Object = template.Object;
             this.Number = template.Number;
+            this.Runs = template.Runs ? template.Runs.map((r, i) => new ImportExportTemplateRun(r, ++i)) : [];
         }
     }
 

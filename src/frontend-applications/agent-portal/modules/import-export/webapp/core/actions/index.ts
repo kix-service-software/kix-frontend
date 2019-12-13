@@ -7,5 +7,4 @@
  * --
  */
 
-export { ImportExportTemplateTableFactory } from './ImportExportTemplateTableFactory';
-export { ImportExportTemplateRunTableFactory } from './ImportExportTemplateRunTableFactory';
+export { TemplateImportAction } from './TemplateImportAction';

@@ -179,6 +179,9 @@ export class CacheService {
             case KIXObjectType.GENERAL_CATALOG_ITEM:
                 cacheKeyPrefixes.push(KIXObjectType.GENERAL_CATALOG_CLASS);
                 break;
+            case KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN:
+                cacheKeyPrefixes.push(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
+                break;
             default:
         }
 

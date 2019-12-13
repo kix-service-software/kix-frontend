@@ -1,7 +1,7 @@
 {
     "dependencies": [
         "require ./components/admin-import-export-templates",
-        "require ./components/template-importstate-content",
+        "require ./components/template-import-content",
         "require ./core"
     ]
 }

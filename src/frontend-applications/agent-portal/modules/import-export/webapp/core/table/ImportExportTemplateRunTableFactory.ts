@@ -10,19 +10,18 @@
 import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table, ToggleOptions } from "../../../../base-components/webapp/core/table";
-import { ImportExportTemplateTableContentProvider } from "./ImportExportTemplateTableContentProvider";
-import { ImportExportTemplateProperty } from "../../../model/ImportExportTemplateProperty";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
+import { ITable, Table } from "../../../../base-components/webapp/core/table";
 import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
 import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../model/DataType";
+import { ImportExportTemplateRunProperty } from "../../../model/ImportExportTemplateRunProperty";
+import { ImportExportTemplateRunTableContentProvider } from "./ImportExportTemplateRunTableContentProvider";
 
-export class ImportExportTemplateTableFactory extends TableFactory {
+export class ImportExportTemplateRunTableFactory extends TableFactory {
 
-    public objectType: KIXObjectType = KIXObjectType.IMPORT_EXPORT_TEMPLATE;
+    public objectType: KIXObjectType = KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN;
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
@@ -32,7 +31,7 @@ export class ImportExportTemplateTableFactory extends TableFactory {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);
 
-        table.setContentProvider(new ImportExportTemplateTableContentProvider(
+        table.setContentProvider(new ImportExportTemplateRunTableContentProvider(
             table, objectIds, tableConfiguration.loadingOptions, contextId
         ));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
@@ -44,33 +43,21 @@ export class ImportExportTemplateTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            this.getDefaultColumnConfiguration(ImportExportTemplateProperty.NAME),
-            this.getDefaultColumnConfiguration(KIXObjectProperty.COMMENT),
-            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
-            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
-            this.getDefaultColumnConfiguration(ImportExportTemplateProperty.IMPORT_STATE)
+            this.getDefaultColumnConfiguration(ImportExportTemplateRunProperty.LIST_NUMBER),
+            this.getDefaultColumnConfiguration(ImportExportTemplateRunProperty.STATE_ID),
+            this.getDefaultColumnConfiguration(ImportExportTemplateRunProperty.START_TIME),
+            this.getDefaultColumnConfiguration(ImportExportTemplateRunProperty.END_TIME),
+            this.getDefaultColumnConfiguration(ImportExportTemplateRunProperty.SUCCESS_COUNT),
+            this.getDefaultColumnConfiguration(ImportExportTemplateRunProperty.FAIL_COUNT)
         ];
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
-                KIXObjectType.IMPORT_EXPORT_TEMPLATE, null, null, tableColumns, [], true, false, null, null,
-                TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, null, null, tableColumns, [], false, false, null, null,
+                TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
-            defaultRouting = true;
-            defaultToggle = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
-        }
-
-        if (defaultRouting) {
-            // nothing
-        }
-
-        if (defaultToggle) {
-            tableConfiguration.toggle = true;
-            tableConfiguration.toggleOptions = new ToggleOptions(
-                'template-import-content', 'template', []
-            );
         }
 
         return tableConfiguration;
@@ -79,15 +66,30 @@ export class ImportExportTemplateTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
-            case ImportExportTemplateProperty.NAME:
+            case ImportExportTemplateRunProperty.LIST_NUMBER:
                 config = new DefaultColumnConfiguration(null, null, null,
-                    property, true, false, true, false, 200, true, true,
-                    false, DataType.STRING, true, null, null, false
+                    property, true, false, true, false, 100, true, false,
+                    false, DataType.NUMBER, true, null, null, false
                 );
                 break;
-            case ImportExportTemplateProperty.IMPORT_STATE:
+            case ImportExportTemplateRunProperty.STATE_ID:
+            case ImportExportTemplateRunProperty.STATE:
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, true
+                );
+                break;
+            case ImportExportTemplateRunProperty.SUCCESS_COUNT:
+            case ImportExportTemplateRunProperty.FAIL_COUNT:
+                config = new DefaultColumnConfiguration(null, null, null,
+                    property, true, false, true, false, 150, true, false,
+                    false, DataType.NUMBER, true, null, null, false
+                );
+                break;
+            case ImportExportTemplateRunProperty.START_TIME:
+            case ImportExportTemplateRunProperty.END_TIME:
+                config = new DefaultColumnConfiguration(null, null, null,
+                    property, true, false, true, false, 150, true, true,
+                    false, DataType.DATE_TIME
                 );
                 break;
             default:

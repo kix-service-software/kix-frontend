@@ -23,6 +23,7 @@ import { UpdateObjectResponse } from "../../modules/base-components/webapp/core/
 import { DeleteObjectRequest } from "../../modules/base-components/webapp/core/DeleteObjectRequest";
 import { DeleteObjectResponse } from "../../modules/base-components/webapp/core/DeleteObjectResponse";
 import { PermissionError } from "../../modules/user/model/PermissionError";
+import { Error } from "../../../../server/model/Error";
 
 export class KIXObjectNamespace extends SocketNameSpace {
 
@@ -130,8 +131,8 @@ export class KIXObjectNamespace extends SocketNameSpace {
                 response = new SocketResponse(
                     KIXObjectEvent.UPDATE_OBJECT_FINISHED, new UpdateObjectResponse(data.requestId, id)
                 );
-            }).catch((error) => {
-                LoggingService.getInstance().error(error);
+            }).catch((error: Error) => {
+                LoggingService.getInstance().error(error && error.Message ? error.Message : error.toString());
                 response = new SocketResponse(
                     KIXObjectEvent.UPDATE_OBJECT_ERROR, new SocketErrorResponse(data.requestId, error)
                 );
