@@ -51,29 +51,12 @@ export class ContextFactory {
             reset = false;
         }
 
-        let timeout;
-
-        if (typeof window !== 'undefined') {
-            timeout = window.setTimeout(() => {
-                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                    loading: true, hint: ''
-                });
-            }, 500);
-        }
-
         if (!context) {
             context = await this.createContextInstance(contextId, objectType, contextMode, objectId);
         } else if (reset) {
             const configuration = await ContextSocketClient.loadContextConfiguration(context.getDescriptor().contextId);
             context.setConfiguration(configuration);
             context.reset();
-        }
-
-        if (timeout) {
-            window.clearTimeout(timeout);
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: false
-            });
         }
 
         return context;

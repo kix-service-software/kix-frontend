@@ -82,10 +82,16 @@ export class MainDialogComponent implements IMainDialogListener {
     public async tabChanged(tab: WidgetConfiguration): Promise<void> {
         if (tab) {
             const dialog = this.dialogWidgets.find((d) => d.instanceId === tab.instanceId);
+
+            DialogService.getInstance().setMainDialogLoading(true);
+
             await ContextService.getInstance().setDialogContext(
                 null, dialog.kixObjectType, dialog.contextMode, undefined, false, undefined,
                 false, undefined, undefined, false
             );
+
+            DialogService.getInstance().setMainDialogLoading(false);
+
             this.dialogId = tab.instanceId;
         }
     }
