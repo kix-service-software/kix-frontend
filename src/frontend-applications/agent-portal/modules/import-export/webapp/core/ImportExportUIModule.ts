@@ -17,7 +17,7 @@ import { ImportExportService } from "./ImportExportService";
 import { ImportExportTemplateBrowserFactory } from "./ImportExportTemplateBrowserFactory";
 import { ImportExportTemplateLabelProvider } from "./ImportExportTemplateLabelProvider";
 import { ActionFactory } from "../../../base-components/webapp/core/ActionFactory";
-import { TemplateImportAction } from "./actions";
+import { TemplateImportAction, TemplateExportAction } from "./actions";
 import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from "./table";
 import { ImportExportTemplateRunLabelProvider } from "./ImportExportTemplateRunLabelProvider";
 
@@ -45,5 +45,6 @@ export class UIModule implements IUIModule {
         LabelService.getInstance().registerLabelProvider(new ImportExportTemplateRunLabelProvider());
 
         ActionFactory.getInstance().registerAction('template-import-action', TemplateImportAction);
+        ActionFactory.getInstance().registerAction('template-export-action', TemplateExportAction);
     }
 }

@@ -23,6 +23,7 @@ export class ImportExportTemplate extends KIXObject {
     public Object: string;
     public Number: string;
     public Runs: ImportExportTemplateRun[];
+    public ObjectData: any;
 
     public constructor(template?: ImportExportTemplate) {
         super(template);
@@ -34,6 +35,7 @@ export class ImportExportTemplate extends KIXObject {
             this.Object = template.Object;
             this.Number = template.Number;
             this.Runs = template.Runs ? template.Runs.map((r, i) => new ImportExportTemplateRun(r, ++i)) : [];
+            this.ObjectData = template.ObjectData ? template.ObjectData : {};
         }
     }
 

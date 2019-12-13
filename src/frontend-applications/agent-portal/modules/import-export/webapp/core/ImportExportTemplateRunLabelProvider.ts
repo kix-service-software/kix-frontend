@@ -75,6 +75,7 @@ export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportEx
                     displayValue === 1 ? 'Translatable#running' : 'Translatable#finished';
                 break;
             default:
+                translatable = false;
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue);
         }
 
@@ -94,6 +95,11 @@ export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportEx
             case ImportExportTemplateRunProperty.END_TIME:
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
+            case ImportExportTemplateRunProperty.LIST_NUMBER:
+            case ImportExportTemplateRunProperty.SUCCESS_COUNT:
+            case ImportExportTemplateRunProperty.FAIL_COUNT:
+                translatable = false;
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -102,7 +108,7 @@ export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportEx
             displayValue = await TranslationService.translate(displayValue.toString());
         }
 
-        return displayValue ? displayValue.toString() : '';
+        return displayValue !== null && typeof displayValue !== 'undefined' ? displayValue.toString() : '';
     }
 
     public getDisplayTextClasses(object: ImportExportTemplateRun, property: string): string[] {

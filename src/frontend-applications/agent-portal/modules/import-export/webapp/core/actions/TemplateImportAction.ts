@@ -58,9 +58,7 @@ export class TemplateImportAction extends AbstractAction {
     private async executeTemplateFileUpload(template: ImportExportTemplate): Promise<void> {
         if (template) {
             document.body.insertAdjacentHTML(
-                'beforeend',
-                // tslint:disable-next-line: max-line-length
-                '<input id="template-import-execute" type="file" style="display: none;"/>'
+                'beforeend', '<input id="template-import-execute" type="file" style="display: none;"/>'
             );
             const uploadInput = document.getElementById('template-import-execute');
             if (uploadInput) {

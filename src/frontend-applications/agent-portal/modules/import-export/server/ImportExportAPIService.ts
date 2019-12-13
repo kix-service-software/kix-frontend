@@ -18,6 +18,9 @@ import { LoggingService } from "../../../../../server/services/LoggingService";
 import { ImportExportTemplateFactory } from "./ImportExportTemplateFactory";
 import { Error } from "../../../../../server/model/Error";
 import { CreateImportExportTemplateRunOptions } from "../model/CreateImportExportTemplateRunOptions";
+import { ImportExportTemplateRunProperty } from "../model/ImportExportTemplateRunProperty";
+import { ImportExportTemplateRunTypes } from "../model/ImportExportTemplateRunTypes";
+import { ImportExportTemplateRunPostResult } from "../model/ImportExportTemplateRunPostResult";
 
 export class ImportExportAPIService extends KIXObjectAPIService {
 
@@ -63,16 +66,22 @@ export class ImportExportAPIService extends KIXObjectAPIService {
     public async createObject(
         token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<number> {
-        let id;
+    ): Promise<number | string> {
+        let result;
 
         if (objectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN) {
             const templateId = createOptions ?
                 (createOptions as CreateImportExportTemplateRunOptions).templateId : null;
             if (templateId) {
                 const uri = this.buildUri(this.RESOURCE_URI, templateId, 'runs');
-                id = await super.executeUpdateOrCreateRequest(
-                    token, clientRequestId, parameter, uri, KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, 'TaskID', true
+
+                const execType = this.getParameterValue(parameter, ImportExportTemplateRunProperty.TYPE);
+
+                result = await super.executeUpdateOrCreateRequest(
+                    token, clientRequestId, parameter, uri, KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN,
+                    execType === ImportExportTemplateRunTypes.EXPORT ?
+                        ImportExportTemplateRunPostResult.EXPORT_CONTENT : ImportExportTemplateRunPostResult.TASK_ID,
+                    true
                 ).catch((error: Error) => {
                     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                     throw new Error(error.Code, error.Message);
@@ -82,7 +91,7 @@ export class ImportExportAPIService extends KIXObjectAPIService {
             }
         }
 
-        return id;
+        return result;
     }
 
 }

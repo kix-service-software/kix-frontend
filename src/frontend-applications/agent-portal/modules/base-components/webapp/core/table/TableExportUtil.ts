@@ -9,8 +9,7 @@
 
 import { ITable } from "./ITable";
 import { LabelService } from "../LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { DateTimeUtil } from "../DateTimeUtil";
+import { BrowserUtil } from "../BrowserUtil";
 
 export class TableExportUtil {
 
@@ -18,7 +17,8 @@ export class TableExportUtil {
         table: ITable, additionalColumns: string[] = [], useDisplayString?: boolean
     ): Promise<void> {
         const csvString = await this.prepareCSVString(table, additionalColumns, useDisplayString);
-        this.downloadCSVFile(csvString, table.getObjectType());
+        const fileName = `Export${table.getObjectType() ? '_' + table.getObjectType() : ''}`;
+        BrowserUtil.downloadCSVFile(csvString, fileName);
     }
 
     private static async prepareCSVString(
@@ -73,23 +73,6 @@ export class TableExportUtil {
             csvString += values.join(';') + "\n";
         }
         return csvString;
-    }
-
-    private static async downloadCSVFile(csvString: string, objectType: KIXObjectType | string): Promise<void> {
-        const now = DateTimeUtil.getTimestampNumbersOnly(new Date(Date.now()));
-        const fileName = `Export${objectType ? '_' + objectType : ''}_${now}.csv`;
-        if (window.navigator.msSaveOrOpenBlob) {
-            const blob = new Blob([csvString], { type: 'text/csv' });
-            window.navigator.msSaveBlob(blob, fileName);
-        } else {
-            const element = document.createElement('a');
-            element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
-            element.download = fileName;
-            element.style.display = 'none';
-            document.body.appendChild(element);
-            element.click();
-            document.body.removeChild(element);
-        }
     }
 
     private static escapeText(text: string): string {
