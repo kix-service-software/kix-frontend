@@ -100,9 +100,13 @@ export class LoggingService {
 
     private createLogDirectory(serverConfig: IServerConfiguration): string {
         let logFileDir = serverConfig.LOG_FILEDIR || 'logs/';
-        logFileDir = path.join(__dirname, '../../../../', logFileDir.replace(/\/\w+\.log$/, ''));
+        logFileDir = path.join(__dirname, '../../../', logFileDir.replace(/\/\w+\.log$/, ''));
         if (!fs.existsSync(logFileDir)) {
-            fs.mkdirSync(logFileDir);
+            try {
+                fs.mkdirSync(logFileDir);
+            } catch (error) {
+                console.error('Could not create log directory');
+            }
         }
         return logFileDir;
     }
