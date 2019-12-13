@@ -155,6 +155,10 @@ msgstr ""
 msgid "and further"
 msgstr ""
 
+msgid ""
+"An error occured during import start execution. See system log for details."
+msgstr ""
+
 msgid "An error occured during job execution. See system log for details."
 msgstr ""
 
@@ -961,6 +965,9 @@ msgstr ""
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
+msgstr ""
+
+msgid "finished"
 msgstr ""
 
 msgid "First Name"
@@ -2227,6 +2234,12 @@ msgstr ""
 msgid "Import/Export Template"
 msgstr ""
 
+msgid "Import/Export Template Run"
+msgstr ""
+
+msgid "Import/Export Template Runs"
+msgstr ""
+
 msgid "Import/Export Templates"
 msgstr ""
 
@@ -2234,6 +2247,14 @@ msgid "Import Organisations"
 msgstr ""
 
 msgid "Importstate"
+msgstr ""
+
+#, fuzzy
+#| msgid "Search successfully saved."
+msgid "Import successfully started."
+msgstr "Search successfully saved."
+
+msgid "Import will be started"
 msgstr ""
 
 msgid "Imprint"
@@ -2246,6 +2267,9 @@ msgid "Incident State"
 msgstr ""
 
 msgid "Include this code into the <head> area of your webpage."
+msgstr ""
+
+msgid "Incorrectly processed lines"
 msgstr ""
 
 msgid "Information text"
@@ -3103,6 +3127,9 @@ msgstr ""
 msgid "Run"
 msgstr ""
 
+msgid "running"
+msgstr ""
+
 msgid "Saturday"
 msgstr ""
 
@@ -3295,6 +3322,9 @@ msgstr ""
 msgid "Success!"
 msgstr ""
 
+msgid "Successfully processed lines"
+msgstr ""
+
 msgid "Successfully rated."
 msgstr ""
 
@@ -3341,6 +3371,18 @@ msgid "Tags"
 msgstr ""
 
 msgid "Target"
+msgstr ""
+
+msgid "Task End Time"
+msgstr ""
+
+msgid "Task Number"
+msgstr ""
+
+msgid "Task Start Time"
+msgstr ""
+
+msgid "Task State"
 msgstr ""
 
 msgid "Team"

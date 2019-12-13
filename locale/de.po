@@ -157,6 +157,14 @@ msgstr "und"
 msgid "and further"
 msgstr "und weitere"
 
+#, fuzzy
+#| msgid "An error occured during job execution. See system log for details."
+msgid ""
+"An error occured during import start execution. See system log for details."
+msgstr ""
+"Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
+"prüfen Sie den System Log."
+
 msgid "An error occured during job execution. See system log for details."
 msgstr ""
 "Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
@@ -966,6 +974,9 @@ msgid ""
 msgstr ""
 "Die hier gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das "
 "Dropdown Lesezeichen, welches neben dem Neu-Button angezeigt wird."
+
+msgid "finished"
+msgstr ""
 
 msgid "First Name"
 msgstr "Vorname"
@@ -2356,6 +2367,16 @@ msgstr ""
 
 #, fuzzy
 #| msgid "Remove Templates"
+msgid "Import/Export Template Run"
+msgstr "Vorlagen entfernen"
+
+#, fuzzy
+#| msgid "Remove Templates"
+msgid "Import/Export Template Runs"
+msgstr "Vorlagen entfernen"
+
+#, fuzzy
+#| msgid "Remove Templates"
 msgid "Import/Export Templates"
 msgstr "Vorlagen entfernen"
 
@@ -2365,6 +2386,16 @@ msgstr "Kunden importieren"
 #, fuzzy
 #| msgid "Import Data"
 msgid "Importstate"
+msgstr "Daten importieren"
+
+#, fuzzy
+#| msgid "Priority successfully created."
+msgid "Import successfully started."
+msgstr "Priorität wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Import Data"
+msgid "Import will be started"
 msgstr "Daten importieren"
 
 msgid "Imprint"
@@ -2378,6 +2409,9 @@ msgstr "Vorfallstatus"
 
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
+
+msgid "Incorrectly processed lines"
+msgstr ""
 
 msgid "Information text"
 msgstr "Hinweistext"
@@ -3240,6 +3274,11 @@ msgstr "Zeilen mit zu wenigen Werten"
 msgid "Run"
 msgstr "Ausführen"
 
+#, fuzzy
+#| msgid "Warning"
+msgid "running"
+msgstr "Warnung"
+
 msgid "Saturday"
 msgstr "Samstag"
 
@@ -3432,6 +3471,11 @@ msgstr "Übernehmen"
 msgid "Success!"
 msgstr "Erfolgreich!"
 
+#, fuzzy
+#| msgid "Successfully rated."
+msgid "Successfully processed lines"
+msgstr "Bewertung erfolgreich."
+
 msgid "Successfully rated."
 msgstr "Bewertung erfolgreich."
 
@@ -3479,6 +3523,22 @@ msgstr "Schlagworte"
 
 msgid "Target"
 msgstr "Ziel"
+
+msgid "Task End Time"
+msgstr ""
+
+#, fuzzy
+#| msgid "Ticket Number"
+msgid "Task Number"
+msgstr "Ticket Nummer"
+
+msgid "Task Start Time"
+msgstr ""
+
+#, fuzzy
+#| msgid "Lock State"
+msgid "Task State"
+msgstr "Sperrstatus"
 
 msgid "Team"
 msgstr "Team"
@@ -5090,9 +5150,6 @@ msgstr "PLZ"
 
 #~ msgid "Linked Object"
 #~ msgstr "Verknüpftes Objekt"
-
-#~ msgid "Warning"
-#~ msgstr "Warnung"
 
 #~ msgid "Zu ändernde Attribute"
 #~ msgstr "zu ändernde Attribute"
