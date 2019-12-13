@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-11-28 11:02+0000\n"
+"PO-Revision-Date: 2019-12-05 15:02+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -155,6 +155,13 @@ msgstr ""
 msgid "and further"
 msgstr ""
 
+msgid "An error occured during export execution. See system log for details."
+msgstr ""
+
+msgid ""
+"An error occured during import start execution. See system log for details."
+msgstr ""
+
 msgid "An error occured during job execution. See system log for details."
 msgstr ""
 
@@ -188,7 +195,13 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "Assets"
+msgstr ""
+
 msgid "Assets: General Catalog"
+msgstr ""
+
+msgid "Assets: Import/Export"
 msgstr ""
 
 msgid "Assigned agent"
@@ -205,9 +218,6 @@ msgstr ""
 
 msgid "Assigned Organisations"
 msgstr ""
-
-msgid "Assigned Queues"
-msgstr "Assigned Teams"
 
 msgid "Assigned Roles"
 msgstr ""
@@ -729,8 +739,10 @@ msgstr ""
 msgid "Edit Object"
 msgstr ""
 
+#, fuzzy
+#| msgid "Load Job"
 msgid "Edit Objects"
-msgstr ""
+msgstr "Loading Job"
 
 msgid "Edit Organisation"
 msgstr ""
@@ -878,6 +890,12 @@ msgstr ""
 msgid "Explorer"
 msgstr ""
 
+msgid "Export"
+msgstr ""
+
+msgid "Export data"
+msgstr ""
+
 msgid "external"
 msgstr ""
 
@@ -958,6 +976,9 @@ msgid ""
 "menu right besides the New-button"
 msgstr ""
 
+msgid "finished"
+msgstr ""
+
 msgid "First Name"
 msgstr ""
 
@@ -968,6 +989,9 @@ msgid "Follow Up Ticket Lock"
 msgstr ""
 
 msgid "Force"
+msgstr ""
+
+msgid "Format"
 msgstr ""
 
 msgid "Form title"
@@ -1098,7 +1122,9 @@ msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "The job name needs to be unique."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
-msgstr "Jobs are only ran if set \"valid\"."
+msgstr ""
+"Jobs are only automatically ran if set \"valid\". It is possible to manually "
+"run invalid jobs."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
@@ -2211,7 +2237,33 @@ msgstr ""
 msgid "Import Data"
 msgstr ""
 
+msgid "Import/Export"
+msgstr ""
+
+msgid "Import/Export Template"
+msgstr ""
+
+msgid "Import/Export Template Run"
+msgstr ""
+
+msgid "Import/Export Template Runs"
+msgstr ""
+
+msgid "Import/Export Templates"
+msgstr ""
+
 msgid "Import Organisations"
+msgstr ""
+
+msgid "Importstate"
+msgstr ""
+
+#, fuzzy
+#| msgid "Search successfully saved."
+msgid "Import successfully started."
+msgstr "Search successfully saved."
+
+msgid "Import will be started"
 msgstr ""
 
 msgid "Imprint"
@@ -2224,6 +2276,9 @@ msgid "Incident State"
 msgstr ""
 
 msgid "Include this code into the <head> area of your webpage."
+msgstr ""
+
+msgid "Incorrectly processed lines"
 msgstr ""
 
 msgid "Information text"
@@ -2378,9 +2433,6 @@ msgstr "Loading FAQ Articles"
 
 msgid "Load FAQ Category"
 msgstr "Loading FAQ Category"
-
-msgid "Loading"
-msgstr ""
 
 msgid "Load Job"
 msgstr "Loading Job"
@@ -2584,9 +2636,6 @@ msgid "New Search"
 msgstr ""
 
 msgid "New State"
-msgstr ""
-
-msgid "New Template"
 msgstr ""
 
 msgid "New Text Module"
@@ -3012,9 +3061,6 @@ msgstr ""
 msgid "Remove States"
 msgstr ""
 
-msgid "Remove Templates"
-msgstr ""
-
 msgid "Remove translations"
 msgstr ""
 
@@ -3088,6 +3134,9 @@ msgid "Rows with too less values"
 msgstr ""
 
 msgid "Run"
+msgstr ""
+
+msgid "running"
 msgstr ""
 
 msgid "Saturday"
@@ -3282,6 +3331,9 @@ msgstr ""
 msgid "Success!"
 msgstr ""
 
+msgid "Successfully processed lines"
+msgstr ""
+
 msgid "Successfully rated."
 msgstr ""
 
@@ -3330,16 +3382,22 @@ msgstr ""
 msgid "Target"
 msgstr ""
 
+msgid "Task End Time"
+msgstr ""
+
+msgid "Task Number"
+msgstr ""
+
+msgid "Task Start Time"
+msgstr ""
+
+msgid "Task State"
+msgstr ""
+
 msgid "Team"
 msgstr ""
 
-msgid "Template"
-msgstr ""
-
 msgid "Templates"
-msgstr ""
-
-msgid "Templates successfully removed."
 msgstr ""
 
 msgid "Text"
@@ -3445,9 +3503,6 @@ msgid "Ticket: States"
 msgstr ""
 
 msgid "Ticket successfully created."
-msgstr ""
-
-msgid "Ticket: Templates"
 msgstr ""
 
 msgid "Ticket: Text Modules"
@@ -3760,6 +3815,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Assigned Queues"
+#~ msgstr "Assigned Teams"
 
 #~ msgid "Acions"
 #~ msgstr "Actions"

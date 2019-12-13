@@ -1,0 +1,36 @@
+{
+    "name": "kix-module-webform",
+    "extensions": {
+        "kix:modules": {
+            "webform-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "webform-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:router": {
+            "webform-router": {
+                "module": "router.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-webform-dialog-configuration": {
+                "module": "new-webform-dialog-configuration.extension"
+            },
+            "webform-details-configuration": {
+                "module": "webform-details-configuration.extension"
+            },
+            "edit-webform-dialog-configuration": {
+                "module": "edit-webform-dialog-configuration.extension"
+            }
+        },
+        "kix:socket:namespace": {
+            "socket-namespace-registry-webform-module": {
+                "module": "NamespaceRegistry.extension"
+            }
+        }
+    }
+}

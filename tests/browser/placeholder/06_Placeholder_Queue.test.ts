@@ -11,9 +11,19 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { TicketPlaceholderHandler, QueuePlaceholderHandler, QueueLabelProvider } from '../../../src/core/browser/ticket';
-import { LabelService, KIXObjectService, PlaceholderService } from '../../../src/core/browser';
-import { DateTimeUtil, KIXObjectProperty, Ticket, QueueProperty, Queue, TicketProperty, KIXObjectType } from '../../../src/core/model';
+import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
+import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
+import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
+import { PlaceholderService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/PlaceholderService';
+import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
+import { Queue } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Queue';
+import { QueuePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/QueuePlaceholderHandler';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
+import { QueueProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/QueueProperty';
+import { TicketProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/TicketProperty';
+import { QueueLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

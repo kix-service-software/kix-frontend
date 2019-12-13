@@ -9,13 +9,16 @@
 
 /* tslint:disable*/
 import * as chai from 'chai';
-import { HttpService } from '../../src/core/services';
-import { OptionsResponse, RequestMethod } from '../../src/core/api';
-import { SocketResponse } from '../../src/core/common';
 import { HTTPUtil } from '../utils/HTTPUtil';
-import { PermissionCheckRequest, CRUD, ISocketResponse, AuthenticationEvent } from '../../src/core/model';
-import { UIComponentPermission } from '../../src/core/model/UIComponentPermission';
-import { AuthenticationNamespace } from '../../src/socket-namespaces/AuthenticationNamespace';
+import { HttpService } from '../../src/frontend-applications/agent-portal/server/services/HttpService';
+import { OptionsResponse } from '../../src/server/model/rest/OptionsResponse';
+import { RequestMethod } from '../../src/server/model/rest/RequestMethod';
+import { UIComponentPermission } from '../../src/frontend-applications/agent-portal/model/UIComponentPermission';
+import { CRUD } from '../../src/server/model/rest/CRUD';
+import { PermissionCheckRequest } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/PermissionCheckRequest';
+import { AuthenticationEvent } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AuthenticationEvent';
+import { SocketResponse } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/SocketResponse';
+import { AuthenticationNamespace } from '../../src/frontend-applications/agent-portal/server/socket-namespaces/AuthenticationNamespace';
 
 const expect = chai.expect;
 

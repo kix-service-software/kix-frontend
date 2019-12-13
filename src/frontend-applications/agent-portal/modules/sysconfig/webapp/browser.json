@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+        "require ./components/system-admin-sysconfig",
+        "require ./components/edit-sysconfig-dialog",
+        "require ./core"
+    ]
+}

@@ -1,25 +1,26 @@
 // tslint:disable
 import { expect } from 'chai';
 import { Given, Then } from 'cucumber';
-import { ITable, TableFactoryService, TableHeaderHeight } from '../../../src/core/browser/table';
-import { KIXObjectType } from '../../../src/core/model';
-import { FAQArticleTableFactory } from '../../../src/core/browser/faq';
-import { TicketTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketPriorityTableFactory, TicketQueueTableFactory } from '../../../src/core/browser/ticket';
-import { ArticleTableFactory } from '../../../src/core/browser/ticket/table/ArticleTableFactory';
-import { ContactTableFactory } from '../../../src/core/browser/contact';
-import { ConfigItemTableFactory, ConfigItemClassTableFactory } from '../../../src/core/browser/cmdb';
-import { RoleTableFactory, UserTableFactory } from '../../../src/core/browser/user';
-import { OrganisationTableFactory } from '../../../src/core/browser/organisation';
-import { MailAccountTableFactory } from '../../../src/core/browser/mail-account';
-import { FAQCategoryTableFactory } from '../../../src/core/browser/faq/admin';
-import { TranslationPatternTableFactory } from '../../../src/core/browser/i18n/admin/table';
-import { TextModulesTableFactory } from '../../../src/core/browser/text-modules';
-import { MailFilterTableFactory, MailFilterMatchTableFactory, MailFilterSetTableFactory } from '../../../src/core/browser/mail-filter';
-import { NotificationTableFactory } from '../../../src/core/browser/notification';
-import { WebformTableFactory } from '../../../src/core/browser/webform';
-import { GeneralCatalogTableFactory } from '../../../src/core/browser/general-catalog';
-import { JobTableFactory } from '../../../src/core/browser/job';
-import { MacroActionTableFactory } from '../../../src/core/browser/job/table/MacroActionTableFactory';
+import { ITable, TableFactoryService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { FAQArticleTableFactory, FAQCategoryTableFactory } from '../../../src/frontend-applications/agent-portal/modules/faq/webapp/core';
+import { TicketTableFactory, TicketTypeTableFactory, TicketStateTableFactory, TicketPriorityTableFactory, TicketQueueTableFactory } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { ArticleTableFactory } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/table/ArticleTableFactory';
+import { OrganisationTableFactory } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/table/OrganisationTableFactory';
+import { ContactTableFactory } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core';
+import { ConfigItemTableFactory, ConfigItemClassTableFactory } from '../../../src/frontend-applications/agent-portal/modules/cmdb/webapp/core';
+import { RoleTableFactory, UserTableFactory } from '../../../src/frontend-applications/agent-portal/modules/user/webapp/core/admin';
+import { MailAccountTableFactory } from '../../../src/frontend-applications/agent-portal/modules/mail-account/webapp/core';
+import { TranslationPatternTableFactory } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/admin/table';
+import { TextModulesTableFactory } from '../../../src/frontend-applications/agent-portal/modules/textmodule/webapp/core';
+import { MailFilterTableFactory, MailFilterMatchTableFactory, MailFilterSetTableFactory } from '../../../src/frontend-applications/agent-portal/modules/mail-filter/webapp/core';
+import { NotificationTableFactory } from '../../../src/frontend-applications/agent-portal/modules/notification/webapp/core';
+import { WebformTableFactory } from '../../../src/frontend-applications/agent-portal/modules/webform/webapp/core';
+import { GeneralCatalogTableFactory } from '../../../src/frontend-applications/agent-portal/modules/general-catalog/webapp/core';
+import { JobTableFactory } from '../../../src/frontend-applications/agent-portal/modules/job/webapp/core';
+import { MacroActionTableFactory } from '../../../src/frontend-applications/agent-portal/modules/job/webapp/core/table/MacroActionTableFactory';
+import { TableHeaderHeight } from '../../../src/frontend-applications/agent-portal/model/configuration/TableHeaderHeight';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from '../../../src/frontend-applications/agent-portal/modules/import-export/webapp/core';
 
 let table: ITable;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -47,19 +48,21 @@ TableFactoryService.getInstance().registerFactory(new WebformTableFactory());
 TableFactoryService.getInstance().registerFactory(new GeneralCatalogTableFactory());
 TableFactoryService.getInstance().registerFactory(new JobTableFactory());
 TableFactoryService.getInstance().registerFactory(new MacroActionTableFactory());
+TableFactoryService.getInstance().registerFactory(new ImportExportTemplateTableFactory());
+TableFactoryService.getInstance().registerFactory(new ImportExportTemplateRunTableFactory());
 
 const heights = {
     'l': TableHeaderHeight.LARGE,
     's': TableHeaderHeight.SMALL
 };
 
-Given('Tabelle: {string}', async (objectType: KIXObjectType) => {
+Given('Tabelle: {string}', async (objectType: KIXObjectType | string) => {
     table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
     expect(table).exist;
     await table.initialize();
 });
 
-Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType) => {
+Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType | string) => {
     table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
     expect(table).exist;
     await table.initialize();

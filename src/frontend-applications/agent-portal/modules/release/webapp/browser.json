@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "require ./components/help-hints-tricks-widget",
+        "require ./components/release-module",
+        "require ./components/welcome-slider-widget",
+        "require ./core"
+    ]
+}

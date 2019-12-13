@@ -1,0 +1,28 @@
+{
+    "name": "kix-module-textmodule",
+    "extensions": {
+        "kix:modules": {
+            "textmodule-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "textmodule-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "textmodule-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-text-module-dialog-configuration": {
+                "module": "new-text-module-dialog-configuration.extension"
+            },
+            "edit-text-module-dialog-configuration": {
+                "module": "edit-text-module-dialog-configuration.extension"
+            }
+        }
+    }
+}

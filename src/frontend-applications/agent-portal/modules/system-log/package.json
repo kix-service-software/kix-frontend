@@ -1,0 +1,20 @@
+{
+    "name": "kix-module-system-log",
+    "extensions": {
+        "kix:modules": {
+            "system-log-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "system-log-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "system-log-service": {
+                "module": "service.extension"
+            }
+        }
+    }
+}

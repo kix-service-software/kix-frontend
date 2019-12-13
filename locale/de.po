@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-11-28 11:02+0000\n"
+"PO-Revision-Date: 2019-12-05 15:02+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -47,10 +47,8 @@ msgstr "KIX Header zulassen"
 msgid "Access denied"
 msgstr "Zugriff verweigert"
 
-#, fuzzy
-#| msgid "Access denied"
 msgid "Access Level"
-msgstr "Zugriff verweigert"
+msgstr ""
 
 msgid "Accounted time"
 msgstr "Erfasste Zeit"
@@ -159,8 +157,25 @@ msgstr "und"
 msgid "and further"
 msgstr "und weitere"
 
+#, fuzzy
+#| msgid "An error occured during job execution. See system log for details."
+msgid "An error occured during export execution. See system log for details."
+msgstr ""
+"Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
+"prüfen Sie den System Log."
+
+#, fuzzy
+#| msgid "An error occured during job execution. See system log for details."
+msgid ""
+"An error occured during import start execution. See system log for details."
+msgstr ""
+"Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
+"prüfen Sie den System Log."
+
 msgid "An error occured during job execution. See system log for details."
 msgstr ""
+"Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
+"prüfen Sie den System Log."
 
 msgid "An error occurred."
 msgstr "Es ist ein Fehler aufgetreten."
@@ -192,8 +207,14 @@ msgstr "Artikel wurde erfolgreich angelegt."
 msgid "Article Text"
 msgstr "Artikelinhalt"
 
+msgid "Assets"
+msgstr ""
+
 msgid "Assets: General Catalog"
 msgstr "Assets: General Catalog"
+
+msgid "Assets: Import/Export"
+msgstr ""
 
 msgid "Assigned agent"
 msgstr "Zugeordneter Agent"
@@ -209,9 +230,6 @@ msgstr "Zugeordneter Kunde"
 
 msgid "Assigned Organisations"
 msgstr "Zugeordnete Kunden"
-
-msgid "Assigned Queues"
-msgstr "Zugeordnete Teams"
 
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
@@ -882,6 +900,16 @@ msgstr "voraussichtlich benötigte Zeit:"
 msgid "Explorer"
 msgstr "Explorer"
 
+#, fuzzy
+#| msgid "CSV-Export"
+msgid "Export"
+msgstr "CSV-Export"
+
+#, fuzzy
+#| msgid "Import Data"
+msgid "Export data"
+msgstr "Daten importieren"
+
 msgid "external"
 msgstr "extern"
 
@@ -964,6 +992,9 @@ msgstr ""
 "Die hier gespeicherte Suche finden Sie im Kopfmenü der Anwendung über das "
 "Dropdown Lesezeichen, welches neben dem Neu-Button angezeigt wird."
 
+msgid "finished"
+msgstr ""
+
 msgid "First Name"
 msgstr "Vorname"
 
@@ -975,6 +1006,11 @@ msgstr "Tickets werden gesperrt"
 
 msgid "Force"
 msgstr "Erzwingen"
+
+#, fuzzy
+#| msgid "Form title"
+msgid "Format"
+msgstr "Formulartitel"
 
 msgid "Form title"
 msgstr "Formulartitel"
@@ -1117,7 +1153,9 @@ msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "Der Name des Jobs muss eindeutig sein."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
-msgstr "Jobs werden nur ausgeführt, wenn sie \"gültig\" gesetzt sind."
+msgstr ""
+"Jobs werden nur automatisiert ausgeführt, wenn sie \"gültig\" gesetzt sind. "
+"Manuelle Ausführung ist auch für ungültige Jobs möglich."
 
 msgid "Helptext_Admin_MailAccountCreate_AcceptKIXHeader"
 msgstr ""
@@ -1430,9 +1468,9 @@ msgstr ""
 
 msgid "Helptext_Admin_SysConfigEdit_Default_Value"
 msgstr ""
-"Die Konfiguration muss „gültig“ gesetzt sein, damit die Einstellungen im "
-"System wirksam werden. Diese Option ist nur für Konfigurations verfügbar, "
-"die im Backend nicht als \"required\" gekennzeichnet sind."
+"Anzeige des initialen Standardwertes der Konfiguration. Dieser kann nicht "
+"verändert werden. Über denn Button „Auf Standard zurücksetzen“ können Sie "
+"den Standardwert wiederherstellen."
 
 msgid "Helptext_Admin_SysConfigEdit_Description"
 msgstr "Erläutert die Funktionsweise dieser Konfiguration."
@@ -2322,7 +2360,7 @@ msgid "Import"
 msgstr "Import"
 
 msgid "Import {0} {1}. Execute?"
-msgstr "{0} {1} importieren. Ausführen?"
+msgstr "Sie importieren {0} {1}. Ausführen?"
 
 msgid "Important functional elements briefly explained"
 msgstr "Wichtige Funktionselemente kurz erklärt"
@@ -2336,8 +2374,46 @@ msgstr "Kontakte importieren"
 msgid "Import Data"
 msgstr "Daten importieren"
 
+#, fuzzy
+#| msgid "Import"
+msgid "Import/Export"
+msgstr "Import"
+
+msgid "Import/Export Template"
+msgstr ""
+
+#, fuzzy
+#| msgid "Remove Templates"
+msgid "Import/Export Template Run"
+msgstr "Vorlagen entfernen"
+
+#, fuzzy
+#| msgid "Remove Templates"
+msgid "Import/Export Template Runs"
+msgstr "Vorlagen entfernen"
+
+#, fuzzy
+#| msgid "Remove Templates"
+msgid "Import/Export Templates"
+msgstr "Vorlagen entfernen"
+
 msgid "Import Organisations"
 msgstr "Kunden importieren"
+
+#, fuzzy
+#| msgid "Import Data"
+msgid "Importstate"
+msgstr "Daten importieren"
+
+#, fuzzy
+#| msgid "Priority successfully created."
+msgid "Import successfully started."
+msgstr "Priorität wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Import Data"
+msgid "Import will be started"
+msgstr "Daten importieren"
 
 msgid "Imprint"
 msgstr "Impressum"
@@ -2350,6 +2426,9 @@ msgstr "Vorfallstatus"
 
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
+
+msgid "Incorrectly processed lines"
+msgstr ""
 
 msgid "Information text"
 msgstr "Hinweistext"
@@ -2503,9 +2582,6 @@ msgstr "Lade FAQ Artikel"
 
 msgid "Load FAQ Category"
 msgstr "Lade FAQ Kategorie"
-
-msgid "Loading"
-msgstr "Wird geladen"
 
 msgid "Load Job"
 msgstr "Lade Job"
@@ -2710,9 +2786,6 @@ msgstr "Neue Suche"
 
 msgid "New State"
 msgstr "Neuer Status"
-
-msgid "New Template"
-msgstr "Neue Vorlage"
 
 msgid "New Text Module"
 msgstr "Neu"
@@ -3141,9 +3214,6 @@ msgstr "Prioritäten entfernen"
 msgid "Remove States"
 msgstr "Status entfernen"
 
-msgid "Remove Templates"
-msgstr "Vorlagen entfernen"
-
 msgid "Remove translations"
 msgstr "Übersetzungen entfernen"
 
@@ -3220,6 +3290,11 @@ msgstr "Zeilen mit zu wenigen Werten"
 
 msgid "Run"
 msgstr "Ausführen"
+
+#, fuzzy
+#| msgid "Warning"
+msgid "running"
+msgstr "Warnung"
 
 msgid "Saturday"
 msgstr "Samstag"
@@ -3413,6 +3488,11 @@ msgstr "Übernehmen"
 msgid "Success!"
 msgstr "Erfolgreich!"
 
+#, fuzzy
+#| msgid "Successfully rated."
+msgid "Successfully processed lines"
+msgstr "Bewertung erfolgreich."
+
 msgid "Successfully rated."
 msgstr "Bewertung erfolgreich."
 
@@ -3461,17 +3541,27 @@ msgstr "Schlagworte"
 msgid "Target"
 msgstr "Ziel"
 
+msgid "Task End Time"
+msgstr ""
+
+#, fuzzy
+#| msgid "Ticket Number"
+msgid "Task Number"
+msgstr "Ticket Nummer"
+
+msgid "Task Start Time"
+msgstr ""
+
+#, fuzzy
+#| msgid "Lock State"
+msgid "Task State"
+msgstr "Sperrstatus"
+
 msgid "Team"
 msgstr "Team"
 
-msgid "Template"
-msgstr "Vorlage"
-
 msgid "Templates"
 msgstr "Vorlagen"
-
-msgid "Templates successfully removed."
-msgstr "Vorlagen wurden erfolgreich entfernt."
 
 msgid "Text"
 msgstr "Text"
@@ -3581,9 +3671,6 @@ msgstr "Ticket: Status"
 
 msgid "Ticket successfully created."
 msgstr "Ticket wurde erfolgreich angelegt."
-
-msgid "Ticket: Templates"
-msgstr "Ticket: Vorlagen"
 
 msgid "Ticket: Text Modules"
 msgstr "Ticket: Textbausteine"
@@ -3893,6 +3980,24 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Assigned Queues"
+#~ msgstr "Zugeordnete Teams"
+
+#~ msgid "Loading"
+#~ msgstr "Wird geladen"
+
+#~ msgid "New Template"
+#~ msgstr "Neue Vorlage"
+
+#~ msgid "Template"
+#~ msgstr "Vorlage"
+
+#~ msgid "Templates successfully removed."
+#~ msgstr "Vorlagen wurden erfolgreich entfernt."
+
+#~ msgid "Ticket: Templates"
+#~ msgstr "Ticket: Vorlagen"
 
 #~ msgid "Acions"
 #~ msgstr "Aktion"
@@ -5062,9 +5167,6 @@ msgstr "PLZ"
 
 #~ msgid "Linked Object"
 #~ msgstr "Verknüpftes Objekt"
-
-#~ msgid "Warning"
-#~ msgstr "Warnung"
 
 #~ msgid "Zu ändernde Attribute"
 #~ msgstr "zu ändernde Attribute"

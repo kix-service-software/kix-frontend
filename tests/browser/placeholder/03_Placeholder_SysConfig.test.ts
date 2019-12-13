@@ -11,9 +11,10 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { SysConfigOptionType, SysConfigOptionDefinition } from '../../../src/core/model';
-import { SysConfigPlaceholderHandler } from '../../../src/core/browser/sysconfig';
-import { KIXObjectService } from '../../../src/core/browser';
+import { SysConfigPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/webapp/core';
+import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
+import { SysConfigOptionType } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOptionType';
+import { SysConfigOptionDefinition } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOptionDefinition';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

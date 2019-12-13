@@ -1,0 +1,10 @@
+{
+    "name": "kix-module-import",
+    "extensions": {
+        "kix:modules": {
+            "import-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

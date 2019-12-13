@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { TreeNode, TreeUtil, TreeHandler } from '../../../src/core/model';
+import { TreeHandler, TreeNode } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/tree';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

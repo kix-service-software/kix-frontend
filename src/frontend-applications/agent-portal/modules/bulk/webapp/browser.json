@@ -1,0 +1,7 @@
+{
+    "dependencies": [
+        "require ./components/bulk-form",
+        "require ./components/bulk-dialog",
+        "require ./core"
+    ]
+}

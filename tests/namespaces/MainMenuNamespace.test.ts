@@ -9,14 +9,18 @@
 
 /* tslint:disable*/
 import * as chai from 'chai';
-import { UIComponentPermission } from '../../src/core/model/UIComponentPermission';
-import { HttpService } from '../../src/core/services';
-import { OptionsResponse, RequestMethod, ResponseHeader } from '../../src/core/api';
-import { CRUD, MainMenuConfiguration, MenuEntry } from '../../src/core/model';
-import { PluginService } from '../../src/services';
-import { KIXExtensions, IMainMenuExtension } from '../../src/core/extensions';
 import { HTTPUtil } from '../utils/HTTPUtil';
-import { MainMenuNamespace } from '../../src/socket-namespaces/MainMenuNamespace';
+
+import { AgentPortalExtensions } from '../../src/frontend-applications/agent-portal/server/extensions/AgentPortalExtensions';
+import { RequestMethod } from '../../src/server/model/rest/RequestMethod';
+import { HttpService } from '../../src/frontend-applications/agent-portal/server/services/HttpService';
+import { OptionsResponse } from '../../src/server/model/rest/OptionsResponse';
+import { UIComponentPermission } from '../../src/frontend-applications/agent-portal/model/UIComponentPermission';
+import { CRUD } from '../../src/server/model/rest/CRUD';
+import { MenuEntry } from '../../src/frontend-applications/agent-portal/model/MenuEntry';
+import { MainMenuNamespace } from '../../src/frontend-applications/agent-portal/modules/agent-portal/server/MainMenuNamespace';
+import { IMainMenuExtension } from '../../src/frontend-applications/agent-portal/server/extensions/IMainMenuExtension';
+import { PluginService } from '../../src/server/services/PluginService';
 
 const expect = chai.expect;
 describe('MainMenuNamespace', () => {
@@ -39,7 +43,7 @@ describe('MainMenuNamespace', () => {
         originalOptionsMethod = HttpService.getInstance().options;
 
         PluginService.getInstance().getExtensions = async <T>(extensionId: string): Promise<T[]> => {
-            if (extensionId === KIXExtensions.MAIN_MENU) {
+            if (extensionId === AgentPortalExtensions.MAIN_MENU) {
                 return extensions;
             }
         };
