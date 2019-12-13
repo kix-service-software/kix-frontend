@@ -20,6 +20,8 @@ import { TranslationService } from "../../../translation/webapp/core";
 import { BrowserCacheService } from "./CacheService";
 import { DisplayImageDescription } from "./DisplayImageDescription";
 import { ContextFactory } from "./ContextFactory";
+import { EventService } from "./EventService";
+import { ApplicationEvent } from "./ApplicationEvent";
 
 export class DialogService {
 
@@ -187,6 +189,9 @@ export class DialogService {
 
         const descriptors = ContextFactory.getInstance().getContextDescriptors(contextMode, objectType);
         if (descriptors) {
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: ''
+            });
             for (const descriptor of descriptors) {
                 const context = await ContextService.getInstance().getContext(descriptor.contextId);
                 if (context && context.getConfiguration() && context.getConfiguration().dialogs) {
@@ -198,6 +203,9 @@ export class DialogService {
                     ];
                 }
             }
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: false
+            });
         }
         return dialogs;
     }
