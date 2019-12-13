@@ -7,5 +7,10 @@
  * --
  */
 
-export { TemplateExportAction } from './TemplateExportAction';
-export { TemplateImportAction } from './TemplateImportAction';
+export enum ImportExportTemplateRunPostResult {
+
+    TASK_ID = 'TaskID',
+
+    EXPORT_CONTENT = 'ExportContent',
+
+}

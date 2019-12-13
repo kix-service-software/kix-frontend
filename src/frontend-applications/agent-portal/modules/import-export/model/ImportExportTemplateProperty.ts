@@ -21,6 +21,8 @@ export enum ImportExportTemplateProperty {
 
     IMPORT_STATE = 'IMPORT_STATE',
 
-    RUNS = 'Runs'
+    RUNS = 'Runs',
+
+    OBJECT_DATA = 'ObjectData'
 
 }

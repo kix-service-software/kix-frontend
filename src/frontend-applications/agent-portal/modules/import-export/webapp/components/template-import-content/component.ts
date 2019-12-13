@@ -13,6 +13,8 @@ import { TableFactoryService } from '../../../../base-components/webapp/core/tab
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
+import { ImportExportTemplateRunTypes } from '../../../model/ImportExportTemplateRunTypes';
+import { ImportExportTemplateRun } from '../../../model/ImportExportTemplateRun';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -44,7 +46,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (context) {
             context.setObjectList(
-                'RUNS_OF_TEMPLATE_' + this.state.template.ID, this.state.template.Runs ? this.state.template.Runs : []
+                'RUNS_OF_TEMPLATE_' + this.state.template.ID, this.state.template.Runs ?
+                this.state.template.Runs.filter((r) => r.Type === ImportExportTemplateRunTypes.IMPORT)
+                    .map((r, i) => new ImportExportTemplateRun(r, ++i)) : []
             );
             const table = await TableFactoryService.getInstance().createTable(
                 'import-export-template-' + this.state.template.ID + '-runs',

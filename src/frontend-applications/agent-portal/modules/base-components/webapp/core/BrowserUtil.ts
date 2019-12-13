@@ -14,6 +14,7 @@ import { ComponentContent } from "./ComponentContent";
 import { ToastContent } from "./ToastContent";
 import { ConfirmOverlayContent } from "./ConfirmOverlayContent";
 import { RefreshToastSettings } from "./RefreshToastSettings";
+import { DateTimeUtil } from "./DateTimeUtil";
 
 
 export class BrowserUtil {
@@ -188,6 +189,23 @@ export class BrowserUtil {
             .replace(/ü/g, '&uuml;');
 
         return value;
+    }
+
+    public static async downloadCSVFile(csvString: string, filename: string): Promise<void> {
+        const now = DateTimeUtil.getTimestampNumbersOnly(new Date(Date.now()));
+        const fileName = `${filename}_${now}.csv`;
+        if (window.navigator.msSaveOrOpenBlob) {
+            const blob = new Blob([csvString], { type: 'text/csv' });
+            window.navigator.msSaveBlob(blob, fileName);
+        } else {
+            const element = document.createElement('a');
+            element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+            element.download = fileName;
+            element.style.display = 'none';
+            document.body.appendChild(element);
+            element.click();
+            document.body.removeChild(element);
+        }
     }
 
 }

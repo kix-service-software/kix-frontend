@@ -26,7 +26,7 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('assets-import-export-templates-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Assets: Import/Export',
-            ['template-import-action'], null,
+            ['template-import-action', 'template-export-action'], null,
             new TableWidgetConfiguration(
                 null, null, null, KIXObjectType.IMPORT_EXPORT_TEMPLATE,
                 [ImportExportTemplateProperty.NAME, SortOrder.UP], undefined,
@@ -38,7 +38,8 @@ export class ComponentState {
                                 ImportExportTemplateProperty.OBJECT, SearchOperator.EQUALS, FilterDataType.STRING,
                                 FilterType.AND, 'ITSMConfigItem'
                             )
-                        ], undefined, undefined, [ImportExportTemplateProperty.RUNS]
+                        ], undefined, undefined,
+                        [ImportExportTemplateProperty.RUNS, ImportExportTemplateProperty.OBJECT_DATA]
                     ),
                     null, null, [], true, false, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
