@@ -73,7 +73,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
         let requestPromise: Promise<T[]>;
         if (cache) {
-            requestPromise = await BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
+            requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
             if (!requestPromise) {
                 requestPromise = this.createRequestPromise<T>(request);
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);

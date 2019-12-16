@@ -29,8 +29,8 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 
     private constructor() {
         super();
+        super.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null);
     }
-
 
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,

@@ -50,8 +50,8 @@ export class AgentSocketClient extends SocketClient {
             BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
         }
 
-        if (await BrowserCacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
-            return await BrowserCacheService.getInstance().get(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER);
+        if (BrowserCacheService.getInstance().has(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER)) {
+            return BrowserCacheService.getInstance().get(KIXObjectType.CURRENT_USER, KIXObjectType.CURRENT_USER);
         }
 
         if (this.currentUserRequestPromise) {
@@ -76,7 +76,7 @@ export class AgentSocketClient extends SocketClient {
                 AgentEvent.GET_CURRENT_USER_FINISHED, async (result: GetCurrentUserResponse) => {
                     if (result.requestId === requestId) {
                         window.clearTimeout(timeout);
-                        await BrowserCacheService.getInstance().set(
+                        BrowserCacheService.getInstance().set(
                             KIXObjectType.CURRENT_USER, result.currentUser, KIXObjectType.CURRENT_USER
                         );
                         this.currentUserRequestPromise = null;

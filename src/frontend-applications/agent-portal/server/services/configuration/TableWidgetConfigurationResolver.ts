@@ -12,7 +12,6 @@ import { TableConfigurationResolver } from "./TableConfigurationResolver";
 import { IConfigurationResolver } from "./IConfigurationResolver";
 import { TableWidgetConfiguration } from "../../../model/configuration/TableWidgetConfiguration";
 import { TableConfiguration } from "../../../model/configuration/TableConfiguration";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
 
 export class TableWidgetConfigurationResolver implements IConfigurationResolver<TableWidgetConfiguration> {
 

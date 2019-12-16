@@ -135,7 +135,7 @@ export class AuthenticationSocketClient extends SocketClient {
 
     public async checkPermissions(permissions: UIComponentPermission[]): Promise<boolean> {
         const key = JSON.stringify(permissions);
-        let requestPromise = await BrowserCacheService.getInstance().get(key);
+        let requestPromise = BrowserCacheService.getInstance().get(key);
         if (!requestPromise) {
             requestPromise = this.createPermissionRequest(permissions);
             BrowserCacheService.getInstance().set(key, requestPromise, KIXObjectType.ROLE);
