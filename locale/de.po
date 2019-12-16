@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-12-13 14:34+0000\n"
-"Last-Translator: fwichmann <Felix.Wichmann@cape-it.de>\n"
+"PO-Revision-Date: 2019-12-16 08:49+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -164,13 +164,11 @@ msgstr ""
 "Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
 "prüfen Sie den System Log."
 
-#, fuzzy
-#| msgid "An error occured during job execution. See system log for details."
 msgid ""
 "An error occured during import start execution. See system log for details."
 msgstr ""
-"Beim Ausführen des Jobs ist ein Fehler aufgetreten. Für nähere Informationen "
-"prüfen Sie den System Log."
+"Beim Ausführen des Imports ist ein Fehler aufgetreten. Für nähere "
+"Informationen prüfen Sie den System Log."
 
 msgid "An error occured during job execution. See system log for details."
 msgstr ""
@@ -989,7 +987,7 @@ msgstr ""
 "Dropdown Lesezeichen, welches neben dem Neu-Button angezeigt wird."
 
 msgid "finished"
-msgstr ""
+msgstr "fertig"
 
 msgid "First Name"
 msgstr "Vorname"
@@ -1003,10 +1001,8 @@ msgstr "Tickets werden gesperrt"
 msgid "Force"
 msgstr "Erzwingen"
 
-#, fuzzy
-#| msgid "Form title"
 msgid "Format"
-msgstr "Formulartitel"
+msgstr "Format"
 
 msgid "Form title"
 msgstr "Formulartitel"
@@ -2374,40 +2370,28 @@ msgid "Import/Export"
 msgstr "Import/Export"
 
 msgid "Import/Export Template"
-msgstr ""
+msgstr "Import/Export Vorlage"
 
-#, fuzzy
-#| msgid "Remove Templates"
 msgid "Import/Export Template Run"
-msgstr "Vorlagen entfernen"
+msgstr "Import/Export Vorlage starten"
 
-#, fuzzy
-#| msgid "Remove Templates"
 msgid "Import/Export Template Runs"
-msgstr "Vorlagen entfernen"
+msgstr "Import/Export Vorlage wird ausgeführt"
 
-#, fuzzy
-#| msgid "Remove Templates"
 msgid "Import/Export Templates"
-msgstr "Vorlagen entfernen"
+msgstr "Import/Export Vorlagen"
 
 msgid "Import Organisations"
 msgstr "Kunden importieren"
 
-#, fuzzy
-#| msgid "Import Data"
 msgid "Importstate"
-msgstr "Daten importieren"
+msgstr "Importstatus"
 
-#, fuzzy
-#| msgid "Priority successfully created."
 msgid "Import successfully started."
-msgstr "Priorität wurde erfolgreich angelegt."
+msgstr "Import wurde erfolgreich gestartet."
 
-#, fuzzy
-#| msgid "Import Data"
 msgid "Import will be started"
-msgstr "Daten importieren"
+msgstr "Der Import wird gestartet"
 
 msgid "Imprint"
 msgstr "Impressum"
@@ -2422,7 +2406,7 @@ msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
 
 msgid "Incorrectly processed lines"
-msgstr ""
+msgstr "Fehlerhaft bearbeitete Zeilen"
 
 msgid "Information text"
 msgstr "Hinweistext"
@@ -3285,10 +3269,8 @@ msgstr "Zeilen mit zu wenigen Werten"
 msgid "Run"
 msgstr "Ausführen"
 
-#, fuzzy
-#| msgid "Warning"
 msgid "running"
-msgstr "Warnung"
+msgstr "läuft"
 
 msgid "Saturday"
 msgstr "Samstag"
@@ -3482,10 +3464,8 @@ msgstr "Übernehmen"
 msgid "Success!"
 msgstr "Erfolgreich!"
 
-#, fuzzy
-#| msgid "Successfully rated."
 msgid "Successfully processed lines"
-msgstr "Bewertung erfolgreich."
+msgstr "Erfolgreich verarbeitete Zeilen"
 
 msgid "Successfully rated."
 msgstr "Bewertung erfolgreich."
@@ -3536,20 +3516,16 @@ msgid "Target"
 msgstr "Ziel"
 
 msgid "Task End Time"
-msgstr ""
+msgstr "Aufgabe Endzeitpunkt"
 
-#, fuzzy
-#| msgid "Ticket Number"
 msgid "Task Number"
-msgstr "Ticket Nummer"
+msgstr "Aufgabennummer"
 
 msgid "Task Start Time"
-msgstr ""
+msgstr "Aufgabe Startzeitpunkt"
 
-#, fuzzy
-#| msgid "Lock State"
 msgid "Task State"
-msgstr "Sperrstatus"
+msgstr "Aufgabenstatus"
 
 msgid "Team"
 msgstr "Team"
