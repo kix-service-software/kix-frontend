@@ -123,19 +123,28 @@ export class RoutingService {
     ): Promise<void> {
         if (routingConfiguration) {
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
-            ContextService.getInstance().setContext(
+
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: true, hint: ''
+            });
+
+            await ContextService.getInstance().setContext(
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,
                 routingConfiguration.contextMode,
                 objectId, reset, routingConfiguration.history,
                 addHistory
             );
+
+            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
+                loading: false
+            });
         }
     }
 
     public async buildUrl(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<string> {
         let url = '#';
-        const descriptor = await ContextFactory.getInstance().getContextDescriptor(routingConfiguration.contextId);
+        const descriptor = ContextFactory.getInstance().getContextDescriptor(routingConfiguration.contextId);
         if (descriptor) {
             url = descriptor.urlPaths[0];
             if (descriptor.contextMode === ContextMode.DETAILS) {
