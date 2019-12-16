@@ -29,17 +29,17 @@ export class BrowserCacheService {
 
     private keyIndex: Map<string, string[]> = new Map();
 
-    public async has(key: string, cacheKeyPrefix?: string): Promise<boolean> {
+    public has(key: string, cacheKeyPrefix?: string): boolean {
         key = md5(key);
         return this.cache.has(key);
     }
 
-    public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
+    public get(key: string, cacheKeyPrefix?: string): any {
         key = md5(key);
         return this.cache.get(key);
     }
 
-    public async set(key: string, value: any, cacheKeyPrefix?: string): Promise<void> {
+    public set(key: string, value: any, cacheKeyPrefix?: string): void {
         key = md5(key);
         this.cache.set(key, value);
         if (cacheKeyPrefix) {
