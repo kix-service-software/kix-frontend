@@ -32,6 +32,7 @@ import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/Da
 import { Context } from "vm";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { SystemAddress } from "../../../system-address/model/SystemAddress";
+import { TicketParameterUtil } from "./TicketParameterUtil";
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -51,6 +52,10 @@ export class ArticleFormService extends KIXObjectFormService {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.ARTICLE;
+    }
+
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        return await TicketParameterUtil.prepareValue(property, value);
     }
 
     protected async getValue(property: string, value: any, ticket: Ticket): Promise<any> {
