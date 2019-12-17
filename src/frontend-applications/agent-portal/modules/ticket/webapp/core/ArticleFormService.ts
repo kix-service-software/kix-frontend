@@ -252,7 +252,7 @@ export class ArticleFormService extends KIXObjectFormService {
 
         let field = new FormFieldConfiguration(
             'recipient-input',
-            label, property, 'article-email-recipient-input', !!referencedArticle,
+            label, property, 'article-email-recipient-input', !!referencedArticle || property === ArticleProperty.TO,
             property === ArticleProperty.TO
                 ? 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverTo'
                 : 'Translatable#Helptext_Tickets_ArticleCreate_ReceiverCc',
