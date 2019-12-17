@@ -137,7 +137,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
-        const parameter = service.prepareCreateParameter(object);
+        let parameter = [];
+        if (service) {
+            parameter = service.prepareCreateParameter(object);
+        }
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
