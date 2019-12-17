@@ -39,22 +39,23 @@ export class TableConfigurationResolver implements IConfigurationResolver<TableC
                 tableConfig.tableColumns = [];
             }
 
+            const columnConfigs = await ModuleConfigurationService.getInstance()
+                .loadConfigurations<IColumnConfiguration>(token, tableConfig.tableColumnConfigurations);
+
             for (const columnConfigId of tableConfig.tableColumnConfigurations) {
-                const columnConfig = await ModuleConfigurationService.getInstance()
-                    .loadConfiguration<IColumnConfiguration>(token, columnConfigId);
+                const columnConfig = columnConfigs.find((cc) => cc.id === columnConfigId);
 
                 if (columnConfig) {
                     tableConfig.tableColumns.push(columnConfig);
                 } else {
                     tableConfig.tableColumns.push(
                         new DefaultColumnConfiguration(
-                            // tslint:disable-next-line:max-line-length
-                            columnConfigId, 'ERROR', null, null, false, false, true, true, 80, false, false, false, DataType.STRING, true, null, columnConfigId
+                            columnConfigId, 'ERROR', null, null, false, false, true, true, 80,
+                            false, false, false, DataType.STRING, true, null, columnConfigId
                         )
                     );
 
                     LoggingService.getInstance().warning(
-                        // tslint:disable-next-line:max-line-length
                         `Could not resolve table column: ${columnConfigId}, table: ${tableConfig.id}`
                     );
                 }

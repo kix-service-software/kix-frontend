@@ -47,8 +47,8 @@ export class TicketSocketClient extends SocketClient {
 
         const cacheKey = `${ticketId}-${articleId}-${attachmentId}`;
 
-        if (await BrowserCacheService.getInstance().has(cacheKey, 'Ticket-Article-Attachment')) {
-            return await BrowserCacheService.getInstance().get(cacheKey, 'Ticket-Article-Attachment');
+        if (BrowserCacheService.getInstance().has(cacheKey, 'Ticket-Article-Attachment')) {
+            return BrowserCacheService.getInstance().get(cacheKey, 'Ticket-Article-Attachment');
         }
 
         if (this.requestPromises.has(cacheKey)) {

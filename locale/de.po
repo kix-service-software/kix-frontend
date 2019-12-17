@@ -3514,16 +3514,16 @@ msgid "Target"
 msgstr "Ziel"
 
 msgid "Task End Time"
-msgstr "Task Endzeitpunkt"
+msgstr "Aufgabe Endzeitpunkt"
 
 msgid "Task Number"
-msgstr "Task Nummer"
+msgstr "Aufgabennummer"
 
 msgid "Task Start Time"
-msgstr "Task Startzeitpunkt"
+msgstr "Aufgabe Startzeitpunkt"
 
 msgid "Task State"
-msgstr "Task Status"
+msgstr "Aufgabenstatus"
 
 msgid "Team"
 msgstr "Team"

@@ -45,6 +45,7 @@ import { TranslationAPIService } from '../modules/translation/server/Translation
 import { SysConfigAccessLevel } from '../modules/sysconfig/model/SysConfigAccessLevel';
 import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
 import { SystemInfo } from '../model/SystemInfo';
+import { ModuleConfigurationService } from './services/configuration';
 
 export class Server implements IServer {
 
