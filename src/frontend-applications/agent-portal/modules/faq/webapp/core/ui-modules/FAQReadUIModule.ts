@@ -34,6 +34,7 @@ import { UIComponentPermission } from "../../../../../model/UIComponentPermissio
 import { CRUD } from "../../../../../../../server/model/rest/CRUD";
 import { BookmarkService } from "../../../../../modules/base-components/webapp/core/BookmarkService";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { FAQArticleVoteFormService } from "../FAQArticleVoteFormService";
 
 
 
@@ -69,6 +70,7 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
         ServiceRegistry.registerServiceInstance(FAQArticleFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(FAQArticleVoteFormService.getInstance());
 
         SearchService.getInstance().registerSearchDefinition(new FAQArticleSearchDefinition());
 
