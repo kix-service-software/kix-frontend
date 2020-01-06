@@ -12,9 +12,6 @@ import { Ticket } from "../model/Ticket";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 import { Article } from "../model/Article";
 import { TicketHistory } from "../model/TicketHistory";
-import { TicketProperty } from "../model/TicketProperty";
-import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
 import { Link } from "../../links/model/Link";
 
 export class TicketFactory extends ObjectFactory<Ticket> {
@@ -38,62 +35,7 @@ export class TicketFactory extends ObjectFactory<Ticket> {
             ? ticket.History.map((th) => new TicketHistory(th))
             : [];
 
-        await this.initDisplayValues(newTicket, token);
-
         return newTicket;
-    }
-
-    public async initDisplayValues(ticket: Ticket, token: string): Promise<void> {
-        await this.getDisplayValue(
-            ticket, TicketProperty.QUEUE_ID, token, KIXObjectType.QUEUE, ticket.QueueID, 'Name'
-        );
-        await this.getDisplayValue(
-            ticket, TicketProperty.STATE_ID, token, KIXObjectType.TICKET_STATE, ticket.StateID, 'Name'
-        );
-        await this.getDisplayValue(
-            ticket, TicketProperty.TYPE_ID, token, KIXObjectType.TICKET_TYPE, ticket.TypeID, 'Name'
-        );
-        await this.getDisplayValue(
-            ticket, TicketProperty.ORGANISATION_ID, token, KIXObjectType.ORGANISATION, ticket.OrganisationID, 'Name'
-        );
-        await this.getDisplayValue(
-            ticket, TicketProperty.PRIORITY_ID, token, KIXObjectType.TICKET_PRIORITY, ticket.PriorityID, 'Name'
-        );
-
-        await this.getDisplayValue(
-            ticket, TicketProperty.OWNER_ID, token, KIXObjectType.USER, ticket.OwnerID, 'UserFullname'
-        );
-
-        await this.getDisplayValue(
-            ticket, TicketProperty.RESPONSIBLE_ID, token, KIXObjectType.USER, ticket.ResponsibleID, 'UserFullname'
-        );
-
-        await this.getDisplayValue(
-            ticket, KIXObjectProperty.CREATE_BY, token, KIXObjectType.USER, ticket.CreateBy, 'UserFullname'
-        );
-
-        await this.getDisplayValue(
-            ticket, KIXObjectProperty.CHANGE_BY, token, KIXObjectType.USER, ticket.ChangeBy, 'UserFullname'
-        );
-    }
-
-    private async getDisplayValue(
-        ticket: Ticket, property: string, token: string, objectType: KIXObjectType,
-        id: string | number, displayProperty: string
-    ): Promise<void> {
-        const service = KIXObjectServiceRegistry.getServiceInstance(objectType);
-        if (service) {
-            await service.loadObjects(token, '', objectType, [id], null, null)
-                .then((objects) => {
-                    if (objects && objects.length) {
-                        if (objects[0][displayProperty]) {
-                            const value = objects[0][displayProperty];
-                            ticket.displayValues.push([property, value]);
-                        }
-                    }
-                })
-                .catch(() => null);
-        }
     }
 
 }
