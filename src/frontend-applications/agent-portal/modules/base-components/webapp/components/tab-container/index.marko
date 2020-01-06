@@ -1,0 +1,70 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.tab-container>
+    <widget
+        instanceId="tab-widget"
+        minimizable=state.minimizable
+        contentActions=state.contentActions
+        title=state.activeTabTitle>
+        <@headerContent>
+            <if(state.prepared)>
+                <ul.tab-list class={
+                    "show-object": state.tabWidgets
+                }>
+                    <for|tab| of=state.tabWidgets>
+                        <li
+                            title=component.getTitle(tab)
+                            class={
+                                                        active: component.isActiveTab(tab.instanceId)
+                                                    }
+                            on-click("tabClicked", tab, false)>
+                            <if(component.getIcon(tab))>
+                                <icon icon=component.getIcon(tab) showUnknown=false/>
+                            </if>
+                            <span>${component.getTitle(tab)}</span>
+                        </li>
+                    </for>
+                </ul>
+            </if>
+        </@headerContent>
+        <@content>
+            <div.tab-sidebar-grid class={
+                "has-sidebar": state.hasSidebars,
+                "show-sidebar": state.showSidebar,
+                "show-object": state.activeTab
+            }>
+                <div.tab-content>
+                    <if(state.activeTab)>
+                        <${component.getWidgetTemplate()} ...{
+                            instanceId: state.activeTab.instanceId
+                        }/>
+                        <if(state.showSidebar)>
+                            <div.dialog-sidebar-shield>
+                                <div.sidebar-close-bar on-click("hideSidebarIfNeeded") title=state.translations["Translatable#Close Sidebars"]>
+                                    <span.kix-icon-triangle-right>
+                                        <span.path1/>
+                                        <span.path2/>
+                                    </span>
+                                </div>
+                            </div>
+                        </if>
+                    </if>
+                </div>
+                <if(state.hasSidebars)>
+                    <if(state.showSidebar)>
+                        <sidebar contextType=state.contextType/>
+                    </if>
+                    <div.site-menu-wrapper>
+                        <sidebar-menu contextType=state.contextType/>
+                    </div>
+                </if>
+            </div>
+        </@content>
+    </widget>
+</div>

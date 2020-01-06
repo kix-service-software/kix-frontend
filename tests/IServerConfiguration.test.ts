@@ -8,9 +8,9 @@
  */
 
 import * as chai from 'chai';
+import { IServerConfiguration } from '../src/server/model/IServerConfiguration';
+import { ConfigurationService } from '../src/server/services/ConfigurationService';
 
-import { ConfigurationService } from '../src/core/services';
-import { IServerConfiguration } from '../src/core/common';
 
 const expect = chai.expect;
 

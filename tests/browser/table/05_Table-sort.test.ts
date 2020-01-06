@@ -11,9 +11,12 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, IRowObject, ITableContentProvider, RowObject, DefaultColumnConfiguration, TableValue, TableEvent, TableEventData } from '../../../src/core/browser/table';
-import { SortOrder, DataType, KIXObjectType } from '../../../src/core/model';
-import { EventService, IEventSubscriber } from '../../../src/core/browser/event';
+import { ITable, Table, DefaultColumnConfiguration, TableEventData, TableEvent, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { DataType } from '../../../src/frontend-applications/agent-portal/model/DataType';
+import { SortOrder } from '../../../src/frontend-applications/agent-portal/model/SortOrder';
+import { IEventSubscriber } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IEventSubscriber';
+import { EventService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/EventService';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -27,9 +30,9 @@ describe('Table Sort Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 10, false));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+                new DefaultColumnConfiguration(null, null, null, '0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null, '1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null, '2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
             ]);
             await table.initialize();
         });
@@ -105,9 +108,9 @@ describe('Table Sort Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 10, false, true));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+                new DefaultColumnConfiguration(null, null, null, '0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null, '1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null, '2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
             ]);
 
             subscriber = {
@@ -167,9 +170,9 @@ describe('Table Sort Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(1500, 10, false));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
-                new DefaultColumnConfiguration('2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
+                new DefaultColumnConfiguration(null, null, null, '0', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null, '1', true, true, false, false, 100, false, false, false, DataType.NUMBER),
+                new DefaultColumnConfiguration(null, null, null, '2', true, true, false, false, 100, false, false, false, DataType.NUMBER)
             ]);
             await table.initialize();
         });
@@ -205,7 +208,7 @@ class TestTableContentProvider implements ITableContentProvider {
         });
     }
 
-    public getObjectType(): KIXObjectType {
+    public getObjectType(): KIXObjectType | string {
         return KIXObjectType.ANY;
     }
 

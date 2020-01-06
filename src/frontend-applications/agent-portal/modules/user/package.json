@@ -1,0 +1,53 @@
+{
+    "name": "kix-module-user",
+    "extensions": {
+        "kix:socket:namespace": {
+            "socket-namespace-registry-user-module": {
+                "module": "NamespaceRegistry.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-user-role-dialog-configuration": {
+                "module": "new-user-role-dialog-configuration.extension"
+            },
+            "new-user-dialog-configuration": {
+                "module": "new-user-dialog-configuration.extension"
+            },
+            "edit-user-dialog-configuration": {
+                "module": "edit-user-dialog-configuration.extension"
+            },
+            "edit-user-role-dialog-configuration": {
+                "module": "edit-user-role-dialog-configuration.extension"
+            },
+            "user-role-details-configuration": {
+                "module": "user-role-details-configuration.extension"
+            },
+            "user-details-configuration": {
+                "module": "user-details-configuration.extension"
+            },
+            "personal-settings-dialog-configuration": {
+                "module": "personal-settings-dialog-configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "user-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "user-admin": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "user-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:personal:settings": {
+            "personal-settings": {
+                "module": "personal-settings.extension"
+            }
+        }
+    }
+}

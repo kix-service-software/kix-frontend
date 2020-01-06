@@ -1,0 +1,61 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.linkable-objects-dialog>
+    <if(state.loading)>
+        <loading-spinner/>
+    </if>
+    <else>
+        <div.linkable-objects-selection title=state.translations["Translatable#Link to"]>
+            <div.linkable-objects-selection-label>
+                <span>
+                    <translation-string pattern="Translatable#Link to"/>
+                </span>
+            </div>
+            <form-list loadNodes=state.loadNodes on-nodesChanged("linkableObjectChanged")/>
+        </div>
+        <div.linkable-objects-form on-keydown("keyPressed")>
+            <widget
+                instanceId="link-object-dialog-form-widget"
+                title=state.translations["Translatable#Search"]
+                key="link-object-form-widget">
+                <@content>
+                    <if(state.formId)>
+                        <main-form formId=state.formId key="link-object-form-widget-form"/>
+                        <linkable-objects-search-button formId=state.formId on-executeSearch("executeSearch")/>
+                    </if>
+                </@content>
+            </widget>
+        </div>
+        <div.linkable-objects-result>
+            <div.result-table-head>
+                <span>
+                    <translation-string pattern="Translatable#Hit List ({0})" placeholders=[state.resultCount]/>
+                </span>
+                <filter filterCount=state.filterCount on-filter("filter")/>
+            </div>
+            <if(state.table)>
+                <standard-table-NEW table=state.table key=state.tableId/>
+            </if>
+        </div>
+        <div.linkable-objects-submit>
+            <div.linkable-objects-link-type-selection>
+                <div.linkable-objects-selection-label>
+                    <span>
+                        <translation-string pattern="Translatable#Link Type"/>
+                    </span>
+                </div>
+                <form-list treeId=state.linkTypeTreeId on-nodesChanged("linkTypeChanged") placeholder="Translatable#Link Type"/>
+            </div>
+            <button.submit-button disabled=!state.canSubmit on-click("submitClicked")>
+                <span.kix-icon-check/>
+                <translation-string pattern="Translatable#Submit"/>
+            </button>
+        </div>
+    </else>
+</div>

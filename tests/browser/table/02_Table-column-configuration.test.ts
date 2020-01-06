@@ -11,8 +11,8 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Table, ITable, IColumnConfiguration, DefaultColumnConfiguration, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/core/browser/table';
-import { KIXObjectType } from '../../../src/core/model';
+import { ITable, Table, DefaultColumnConfiguration, IColumnConfiguration, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -28,15 +28,15 @@ describe('Table Column Configuration Tests', () => {
         });
 
         it('DefaultColumnConfguration should have right defaults.', async () => {
-            const config = new DefaultColumnConfiguration('1');
+            const config = new DefaultColumnConfiguration(null, null, null, '1');
             expect(config.showIcon).is.true;
             expect(config.showText).is.true;
         });
 
         it('Should initialize a table with the correct amount of columns.', async () => {
             const columnConfiguration: IColumnConfiguration[] = [
-                new DefaultColumnConfiguration('A'), new DefaultColumnConfiguration('B'), new DefaultColumnConfiguration('C'),
-                new DefaultColumnConfiguration('D'), new DefaultColumnConfiguration('E'), new DefaultColumnConfiguration('F')
+                new DefaultColumnConfiguration(null, null, null, 'A'), new DefaultColumnConfiguration(null, null, null, 'B'), new DefaultColumnConfiguration(null, null, null, 'C'),
+                new DefaultColumnConfiguration(null, null, null, 'D'), new DefaultColumnConfiguration(null, null, null, 'E'), new DefaultColumnConfiguration(null, null, null, 'F')
             ];
 
             table.setColumnConfiguration(columnConfiguration);
@@ -68,7 +68,7 @@ class TestTableContentProvider implements ITableContentProvider {
 
     public async initialize(): Promise<void> { }
 
-    public getObjectType(): KIXObjectType {
+    public getObjectType(): KIXObjectType | string {
         return KIXObjectType.ANY;
     }
 

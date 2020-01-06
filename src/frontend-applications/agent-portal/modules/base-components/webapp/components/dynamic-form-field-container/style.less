@@ -1,0 +1,83 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@dynamic-value-gap: @margin-small;
+@dynamic-value-columns: 15rem 15rem minmax(10rem, auto) 1rem;
+@dynamic-value-columns-no-operation: 15rem minmax(15rem, auto) 1rem;
+
+.dynamic-form-field-value {
+    display: grid;
+    grid-template-columns: @dynamic-value-columns;
+    align-items: center;
+    grid-column-gap: @dynamic-value-gap;
+    margin-bottom: @margin-small;
+
+    &.no-operation {
+        grid-template-columns: @dynamic-value-columns-no-operation;
+    }
+
+    .value {
+
+        >.dynamic-form-date-input.between,
+        >.dynamic-form-date-time-input {
+            grid-gap: @margin-small/2 @margin-small;
+
+            >div {
+                align-self: center;
+                justify-self: center;
+            }
+        }
+
+        >.dynamic-form-date-input.between {
+            display: grid;
+            grid-template-columns: 1fr max-content 1fr;
+
+        }
+
+        >.dynamic-form-date-time-input {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            &.between {
+                grid-template-columns: 1fr 1fr max-content 1fr 1fr;
+            }
+        }
+
+        @media only screen and(max-width: 1600px) {
+            >.dynamic-form-date-input.between {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media only screen and (min-width: 1401px) and (max-width: 1600px) {
+
+            >.dynamic-form-date-time-input.between {
+                grid-template-columns: 1fr 1fr;
+
+                >div {
+                    grid-column: 1 / span 2;
+                }
+            }
+        }
+
+        @media only screen and (max-width: 1400px) {
+
+            >.dynamic-form-date-time-input,
+            >.dynamic-form-date-time-input.between {
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+    }
+
+    >.remove-value {
+        cursor: pointer;
+    }
+}

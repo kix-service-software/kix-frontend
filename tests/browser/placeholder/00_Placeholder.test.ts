@@ -11,8 +11,9 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { PlaceholderService, IPlaceholderHandler } from '../../../src/core/browser/placeholder';
-import { KIXObject } from '../../../src/core/model';
+import { PlaceholderService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/PlaceholderService';
+import { IPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IPlaceholderHandler';
+import { KIXObject } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObject';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

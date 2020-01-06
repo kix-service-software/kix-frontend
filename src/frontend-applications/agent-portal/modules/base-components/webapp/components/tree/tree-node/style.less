@@ -1,0 +1,155 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+@tree-icon-size: .875rem;
+@tree-node-size: @tree-icon-size;
+@tree-column-gap: .375rem;
+
+.tree-list {
+    overflow: hidden;
+
+    .tree-node {
+        display: grid;
+        grid-template-columns: @tree-node-size auto;
+        grid-column-gap: @tree-column-gap;
+        cursor: pointer;
+        line-height: @tree-node-size;
+
+        >.tree-icon {
+            padding-top: .25rem;
+
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                background-color: @secondary-2;
+                color: @secondary-0;
+                font-size: @tree-icon-size;
+                width: @tree-node-size;
+                height: @tree-node-size;
+                display: inline-block;
+                box-sizing: border-box;
+                border-radius: @border-radius;
+            }
+        }
+
+        >.node-value {
+            .font-size-small();
+            color: @secondary-7;
+            display: grid;
+            grid-auto-columns: max-content;
+            grid-auto-flow: column;
+            grid-gap: @tree-column-gap;
+            align-items: center;
+            height: 1.5rem;
+
+            [class^="kix-icon-"],
+            [class*=" kix-icon-"] {
+                font-size: @tree-node-size;
+            }
+
+            margin-bottom: .5rem;
+
+            .node-title {
+                .shorten-text;
+            }
+        }
+
+        &:hover {
+            >.tree-icon {
+
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    color: @primary-0;
+                }
+            }
+
+            >.node-value {
+                color: @primary-0;
+            }
+        }
+
+        &:hover:not(.active):not(.show-as-invalid) {
+            >.node-value {
+                background: @secondary-5;
+                font-weight: bold;
+            }
+        }
+
+        &.active {
+            >.tree-icon {
+
+                [class^="kix-icon-"],
+                [class*=" kix-icon-"] {
+                    background-color: @primary-0;
+                    color: @secondary-6;
+                }
+            }
+
+            >.node-value {
+                color: @primary-0;
+                font-weight: bold;
+            }
+        }
+
+        &.show-as-invalid {
+            &.not-clickable {
+                cursor: initial;
+            }
+
+            >.node-value {
+                color: @secondary-1
+            }
+        }
+
+        /* sub tree */
+        >.tree-list {
+            margin-left: -@tree-node-size;
+            grid-column: 2;
+
+            .tree-node {
+                >.tree-icon {
+
+                    [class^="kix-icon-"],
+                    [class*=" kix-icon-"] {
+                        background-color: @secondary-3;
+                        color: @secondary-1;
+                    }
+                }
+
+                &:hover {
+                    >.tree-icon {
+
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            color: @primary-2;
+                        }
+                    }
+
+                    >.node-value {
+                        color: @primary-2;
+                    }
+                }
+
+                &.active {
+                    >.tree-icon {
+
+                        [class^="kix-icon-"],
+                        [class*=" kix-icon-"] {
+                            background-color: @primary-2;
+                            color: @secondary-6;
+                        }
+                    }
+
+                    >.node-value {
+                        color: @primary-2;
+                    }
+                }
+            }
+        }
+    }
+}

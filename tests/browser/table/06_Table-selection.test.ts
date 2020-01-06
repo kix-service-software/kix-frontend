@@ -11,9 +11,10 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
+import { ITable, Table, DefaultColumnConfiguration, SelectionState, ITableContentProvider, IRowObject, TableValue, RowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { KIXObject } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObject';
 
-import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, SelectionState, TableValue } from '../../../src/core/browser/table';
-import { KIXObjectType, KIXObject } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -25,7 +26,7 @@ describe('Table Selection Tests', () => {
         table = new Table('test');
         table.setContentProvider(new TestTableContentProvider(50, 3));
         table.setColumnConfiguration([
-            new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+            new DefaultColumnConfiguration(null, null, null,'0'), new DefaultColumnConfiguration(null, null, null,'1'), new DefaultColumnConfiguration(null, null, null,'2')
         ]);
         await table.initialize();
     });
@@ -337,7 +338,7 @@ class TestTableContentProvider implements ITableContentProvider {
 
     public async initialize(): Promise<void> { }
 
-    public getObjectType(): KIXObjectType {
+    public getObjectType(): KIXObjectType | string {
         return KIXObjectType.ANY;
     }
 
@@ -369,7 +370,7 @@ class TestTableContentProvider implements ITableContentProvider {
 class TestTableObject extends KIXObject {
 
     public ObjectId: string | number;
-    public KIXObjectType: KIXObjectType = KIXObjectType.ANY;
+    public KIXObjectType: KIXObjectType | string = KIXObjectType.ANY;
 
     public constructor(object?: KIXObject) {
         super(object);

@@ -1,0 +1,30 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.table-container
+    on-scroll("onScroll")
+    style=("height:" + state.tableHeight)
+    key=(state.table ? state.table.getTableId() + "table-container" : "no-table")>
+    <if(state.table)>
+        <table.standard-table-NEW>
+            <thead>
+                <table-head-row table=state.table/>
+            </thead>
+            <if(state.rows)>
+                <table-body
+                    rows=state.rows
+                    columnLength=state.columns.length
+                    tableConfig=state.table.getTableConfiguration()
+                    key=(state.table.getTableId() + "table-body")/>
+            </if>
+        </table>
+    </if>
+    <else>
+        <loading-spinner/>
+    </else>
+</div>

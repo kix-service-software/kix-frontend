@@ -11,9 +11,9 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
+import { ITable, Table, DefaultColumnConfiguration, ITableContentProvider, IRowObject, TableValue, RowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 
-import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, TableValue } from '../../../src/core/browser/table';
-import { KIXObjectType } from '../../../src/core/model';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -25,7 +25,7 @@ describe('Table Toggle Tests', () => {
         table = new Table('test');
         table.setContentProvider(new TestTableContentProvider(10, 3));
         table.setColumnConfiguration([
-            new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+            new DefaultColumnConfiguration(null, null, null, '0'), new DefaultColumnConfiguration(null, null, null, '1'), new DefaultColumnConfiguration(null, null, null, '2')
         ]);
         await table.initialize();
     });
@@ -68,7 +68,7 @@ class TestTableContentProvider implements ITableContentProvider {
 
     public async initialize(): Promise<void> { }
 
-    public getObjectType(): KIXObjectType {
+    public getObjectType(): KIXObjectType | string {
         return KIXObjectType.ANY;
     }
 

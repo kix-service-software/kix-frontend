@@ -1,10 +1,11 @@
 #%RAML 1.0
-title: KIX 18 - Frontend
+title: KIX - Frontend Server
 
 documentation:
-  - title: Intruduction
-    content: !include descriptions/intruduction.md
+  - title: Agent Portal
+    content: !include descriptions/agent-portal.md
+  - title: Modularization / Plugins
+    content: !include descriptions/plugins.md
 
-/extensions: !include extensions/index.raml
-/socket namespaces: !include socket-namespaces/index.raml
-/components: !include components/index.raml
+  - title: Extension Points
+    content: !include extensions/description.md

@@ -11,8 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-
-import { ITable, Row, Column, Table, IRow, IColumn, RowObject, DefaultColumnConfiguration, TableConfiguration } from '../../../src/core/browser/table';
+import { ITable, Table, RowObject, IRow, Row, DefaultColumnConfiguration, Column, IColumn } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -322,10 +321,10 @@ describe('Table Tests', () => {
 
         it('Column configuration should have 4 entries.', () => {
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2'),
-                new DefaultColumnConfiguration('3')
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2'),
+                new DefaultColumnConfiguration(null, null, null, '3')
             ]);
             expect(table['columnConfiguration']).exist;
             expect(table['columnConfiguration']).is.an('array');
@@ -339,10 +338,10 @@ describe('Table Tests', () => {
         before(() => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2'),
-                new DefaultColumnConfiguration('3')
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2'),
+                new DefaultColumnConfiguration(null, null, null, '3')
             ])
         });
 
@@ -370,9 +369,9 @@ describe('Table Tests', () => {
         before(() => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'),
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null, '0'),
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2')
             ]);
             table.initialize();
         });
@@ -393,11 +392,11 @@ describe('Table Tests', () => {
         before(() => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'),
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2'),
-                new DefaultColumnConfiguration('3'),
-                new DefaultColumnConfiguration('4')
+                new DefaultColumnConfiguration(null, null, null, '0'),
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2'),
+                new DefaultColumnConfiguration(null, null, null, '3'),
+                new DefaultColumnConfiguration(null, null, null, '4')
             ]);
             table.initialize();
         });
@@ -427,9 +426,9 @@ describe('Table Tests', () => {
         beforeEach(() => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2'),
-                new DefaultColumnConfiguration('3'),
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2'),
+                new DefaultColumnConfiguration(null, null, null, '3'),
             ]);
         });
 
@@ -442,8 +441,8 @@ describe('Table Tests', () => {
         });
 
         it('Should return a list with 5 columns (addColumn before initialization).', async () => {
-            const column1 = new DefaultColumnConfiguration('4');
-            const column2 = new DefaultColumnConfiguration('5');
+            const column1 = new DefaultColumnConfiguration(null, null, null, '4');
+            const column2 = new DefaultColumnConfiguration(null, null, null, '5');
 
             table.addColumns([column1, column2]);
             await table.initialize();
@@ -460,8 +459,8 @@ describe('Table Tests', () => {
         });
 
         it('Should return a list with 5 columns (addColumn after initialization).', async () => {
-            const column1 = new DefaultColumnConfiguration('4');
-            const column2 = new DefaultColumnConfiguration('5');
+            const column1 = new DefaultColumnConfiguration(null, null, null, '4');
+            const column2 = new DefaultColumnConfiguration(null, null, null, '5');
 
             await table.initialize();
             table.addColumns([column1, column2]);
@@ -484,14 +483,14 @@ describe('Table Tests', () => {
         before(async () => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'),
-                new DefaultColumnConfiguration('1')
+                new DefaultColumnConfiguration(null, null, null, '0'),
+                new DefaultColumnConfiguration(null, null, null, '1')
             ]);
             await table.initialize();
         });
 
         it('Should add the column only one time.', () => {
-            const column = new DefaultColumnConfiguration('2');
+            const column = new DefaultColumnConfiguration(null, null, null, '2');
             table.addColumns([column, column]);
 
             const columns = table.getColumns();
@@ -514,17 +513,17 @@ describe('Table Tests', () => {
         before(async () => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'),
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2'),
-                new DefaultColumnConfiguration('3'),
+                new DefaultColumnConfiguration(null, null, null, '0'),
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2'),
+                new DefaultColumnConfiguration(null, null, null, '3'),
             ]);
             await table.initialize();
         });
 
         it('Should return a list of columns without the replaced columns.', () => {
-            const newColumn1 = new Column(table, new DefaultColumnConfiguration('4'));
-            const newColumn2 = new Column(table, new DefaultColumnConfiguration('5'));
+            const newColumn1 = new Column(table, new DefaultColumnConfiguration(null, null, null, '4'));
+            const newColumn2 = new Column(table, new DefaultColumnConfiguration(null, null, null, '5'));
             const replacedColumns = table.replaceColumns([
                 [columnId1, newColumn1],
                 [columnId2, newColumn2]
@@ -558,15 +557,15 @@ describe('Table Tests', () => {
         before(async () => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'),
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2'),
-                new DefaultColumnConfiguration('3'),
+                new DefaultColumnConfiguration(null, null, null, '0'),
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2'),
+                new DefaultColumnConfiguration(null, null, null, '3'),
             ]);
             await table.initialize();
         });
         it('Should return columns (replace with existing column should remove exiting column and replace old with new column).', () => {
-            const newColumn = new Column(table, new DefaultColumnConfiguration('4'));
+            const newColumn = new Column(table, new DefaultColumnConfiguration(null, null, null, '4'));
             const existingColumn = table.getColumn('2');
             const replacedColumns = table.replaceColumns([
                 [columnId1, newColumn],
@@ -599,14 +598,14 @@ describe('Table Tests', () => {
         before(async () => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'),
-                new DefaultColumnConfiguration('1')
+                new DefaultColumnConfiguration(null, null, null, '0'),
+                new DefaultColumnConfiguration(null, null, null, '1')
             ]);
             await table.initialize();
         });
 
         it('No replace should be done.', () => {
-            const newColumn = new Column(table, new DefaultColumnConfiguration('2'));
+            const newColumn = new Column(table, new DefaultColumnConfiguration(null, null, null, '2'));
             const notExistingColumnId = 'does-not-exists';
             const replacedColumns = table.replaceColumns([
                 [notExistingColumnId, newColumn]
@@ -632,8 +631,8 @@ describe('Table Tests', () => {
         before(async () => {
             table = new Table('test');
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'),
-                new DefaultColumnConfiguration('1')
+                new DefaultColumnConfiguration(null, null, null, '0'),
+                new DefaultColumnConfiguration(null, null, null, '1')
             ]);
             await table.initialize();
         });

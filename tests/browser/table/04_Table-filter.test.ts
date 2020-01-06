@@ -11,11 +11,12 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-
-import { TableFilterCriteria, KIXObjectType } from '../../../src/core/model';
-import { SearchOperator, TableValue } from '../../../src/core/browser';
-import { ITable, Table, RowObject, IRowObject, ITableContentProvider, DefaultColumnConfiguration, TableEvent, TableEventData } from '../../../src/core/browser/table';
-import { EventService, IEventSubscriber } from '../../../src/core/browser/event';
+import { ITable, Table, DefaultColumnConfiguration, RowObject, TableValue, TableEventData, TableEvent, ITableContentProvider, IRowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { TableFilterCriteria } from '../../../src/frontend-applications/agent-portal/model/TableFilterCriteria';
+import { SearchOperator } from '../../../src/frontend-applications/agent-portal/modules/search/model/SearchOperator';
+import { IEventSubscriber } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IEventSubscriber';
+import { EventService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/EventService';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -29,7 +30,7 @@ describe('Table Filter Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 10, false));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null, '0'), new DefaultColumnConfiguration(null, null, null, '1'), new DefaultColumnConfiguration(null, null, null, '2')
             ]);
             await table.initialize();
         });
@@ -106,7 +107,7 @@ describe('Table Filter Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 5));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null, '0'), new DefaultColumnConfiguration(null, null, null, '1'), new DefaultColumnConfiguration(null, null, null, '2')
             ]);
             await table.initialize();
         });
@@ -195,7 +196,7 @@ describe('Table Filter Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 5));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null, '0'), new DefaultColumnConfiguration(null, null, null, '1'), new DefaultColumnConfiguration(null, null, null, '2')
             ]);
             await table.initialize();
         });
@@ -253,7 +254,7 @@ describe('Table Filter Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(50, 5));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null, '0'), new DefaultColumnConfiguration(null, null, null, '1'), new DefaultColumnConfiguration(null, null, null, '2')
             ]);
             await table.initialize();
         });
@@ -334,7 +335,7 @@ describe('Table Filter Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(5, 5));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('0'), new DefaultColumnConfiguration('1'), new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null, '0'), new DefaultColumnConfiguration(null, null, null, '1'), new DefaultColumnConfiguration(null, null, null, '2')
             ]);
             await table.initialize();
 
@@ -370,7 +371,7 @@ class TestTableContentProvider implements ITableContentProvider {
 
     public async initialize(): Promise<void> { }
 
-    public getObjectType(): KIXObjectType {
+    public getObjectType(): KIXObjectType | string {
         return KIXObjectType.ANY;
     }
 

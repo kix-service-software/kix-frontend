@@ -1,0 +1,31 @@
+{
+    "name": "kix-module-system-address",
+    "extensions": {
+        "kix:admin-module": {
+            "system-address-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "system-address-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "system-address-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "edit-system-address-dialog-configuration": {
+                "module": "edit-system-address-dialog-configuration.extension"
+            },
+            "new-system-address-dialog-configuration": {
+                "module": "new-system-address-dialog-configuration.extension"
+            },
+            "system-address-details-configuration": {
+                "module": "system-address-details-configuration.extension"
+            }
+        }
+    }
+}

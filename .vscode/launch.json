@@ -12,16 +12,37 @@
                 "LASSO_TIMEOUT": "200000"
             },
             "name": "KIX",
-            "program": "${workspaceFolder}/src/index.ts",
+            "program": "${workspaceFolder}/src/server/index.ts",
             "request": "launch",
             "sourceMaps": true,
             "stopOnEntry": false,
             "type": "node",
             "outFiles": [
-                "${workspaceFolder}/dist/*.js"
+                "${workspaceFolder}/dist/server/*.js"
             ],
             "console": "integratedTerminal",
             "preLaunchTask": "gulp"
+        },
+        {
+            "args": [],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "NODE_ENV": "development",
+                "http_proxy": "",
+                "https_proxy": "",
+                "NODE_TLS_REJECT_UNAUTHORIZED": "0",
+                "LASSO_TIMEOUT": "200000"
+            },
+            "name": "KIX quick start",
+            "program": "${workspaceFolder}/src/server/index.ts",
+            "request": "launch",
+            "sourceMaps": true,
+            "stopOnEntry": false,
+            "type": "node",
+            "outFiles": [
+                "${workspaceFolder}/dist/server/*.js"
+            ],
+            "console": "integratedTerminal"
         },
         {
             "type": "node",
@@ -36,10 +57,8 @@
                 "ts:ts-node/register",
                 "--require",
                 "source-map-support/register",
-                "tests/**/*.test.ts",
-                "tests/api/**/*.test.ts",
-                "tests/browser/**/*.test.ts",
-                "tests/*.test.ts"
+                "'tests/**/*.test.ts'",
+                "'src/**/*.test.ts'"
             ],
             "env": {
                 "NODE_ENV": "test",

@@ -11,8 +11,8 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Table, ITable, ITableContentProvider, IRowObject, RowObject, ICell, DefaultColumnConfiguration, TableValue } from '../../../src/core/browser/table';
-import { KIXObjectType } from '../../../src/core/model';
+import { ITable, Table, ITableContentProvider, IRowObject, DefaultColumnConfiguration, ICell, TableValue, RowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -123,8 +123,8 @@ describe('Table Content Tests', () => {
             table = new Table('test');
             table.setContentProvider(new TestTableContentProvider(1, 2, true));
             table.setColumnConfiguration([
-                new DefaultColumnConfiguration('1'),
-                new DefaultColumnConfiguration('2')
+                new DefaultColumnConfiguration(null, null, null, '1'),
+                new DefaultColumnConfiguration(null, null, null, '2')
             ])
             await table.initialize();
         });
@@ -154,7 +154,7 @@ class TestTableContentProvider implements ITableContentProvider {
 
     public async initialize(): Promise<void> { }
 
-    public getObjectType(): KIXObjectType {
+    public getObjectType(): KIXObjectType | string {
         return KIXObjectType.ANY;
     }
 

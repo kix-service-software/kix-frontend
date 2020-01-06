@@ -1,0 +1,44 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<div.key-value-pair class={
+    "show-object": state.propertyDisplayText !== null || !state.hasText
+}>
+    <if(input.propertyValue)>
+        <div.key>
+            <${input.propertyValue}/>
+        </div>
+    </if>
+    <else>
+        <div.key title=state.propertyName>
+            <span.property-name>${state.propertyName}</span>
+        </div>
+    </else>
+    <div.info>
+        <if(input.info && state.propertyDisplayText)>
+            <${input.info}/>
+        </if>
+    </div>
+    <div.value title=(!input.noValueTitle ? state.propertyDisplayText : "") class=component.getValueClasses()>
+        <if(input.value)>
+            <${input.value}/>
+        </if>
+        <else-if(state.propertyDisplayText)>
+            <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
+                <@content>
+                    <span>
+                        <if(state.hasText)>${state.propertyDisplayText}</if>
+                    </span>
+                </@content>
+            </link-target>
+            <if(state.propertyIcon)>
+                <icon icon=state.propertyIcon/>
+            </if>
+        </else-if>
+    </div>
+</div>

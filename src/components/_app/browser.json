@@ -1,8 +1,0 @@
-{
-    "dependencies": [
-        "require ../../core/browser",
-        "require ../../core/model",
-        "require ../_login",
-        "require ../_base-template"
-    ]
-}

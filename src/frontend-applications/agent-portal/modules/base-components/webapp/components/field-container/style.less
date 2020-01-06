@@ -1,0 +1,51 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.sub-field-container {
+
+    &:not(:last-child) {
+        margin-bottom: @margin-small;
+    }
+
+    >.form-field {
+        >.field-label {
+            font-weight: normal;
+        }
+    }
+}
+
+.minimize-icon-container {
+    align-self: center;
+    margin: .375rem 0 0 .25rem;
+    color: @secondary-0;
+
+    [class^="kix-icon-"],
+    [class*=" kix-icon-"] {
+        cursor: pointer;
+        .icon-font-size-normal();
+
+        >.no-links {
+            color: @secondary-3;
+        }
+    }
+}
+
+.field-drop-zone {
+    height: 1rem;
+    background-color: @secondary-3;
+    border: 1px dashed @secondary-2;
+    border-radius: @border-radius;
+    transition: height 0.175s, background-color 0.175s;
+    margin-bottom: @margin-small;
+
+    &.drag-over {
+        height: 3rem;
+        background-color: darken(@secondary-3, 10%);
+    }
+}

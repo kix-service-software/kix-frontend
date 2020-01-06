@@ -1,0 +1,25 @@
+{
+    "name": "kix-module-admin",
+    "extensions": {
+        "kix:socket:namespace": {
+            "socket-namespace-registry-admin-module": {
+                "module": "NamespaceRegistry.extension"
+            }
+        },
+        "kix:modules": {
+            "admin-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:menu:main": {
+            "admin-menu-main": {
+                "module": "menu.extension"
+            }
+        },
+        "kix:configuration": {
+            "admin-configuration": {
+                "module": "configuration.extension"
+            }
+        }
+    }
+}

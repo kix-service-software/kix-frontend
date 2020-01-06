@@ -1,0 +1,6 @@
+{
+    "dependencies": [
+        "./style.less",
+        "../../../../static/thirdparty/socket.io.js"
+    ]
+}

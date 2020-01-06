@@ -11,14 +11,16 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-
-import { InMemoryCache } from '../../src/core/cache';
+import { InMemoryCache } from '../../src/frontend-applications/agent-portal/server/services/cache';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
 
 describe('Cache / InMemoryCache', () => {
 
+    before(async () => {
+        require('../TestSetup');
+    });
 
     describe('set cache values', () => {
 

@@ -11,9 +11,14 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ContextFactory } from '../../src/core/browser/context/ContextFactory';
-import { ContextDescriptor, ContextConfiguration, KIXObjectType, ContextType, ContextMode, Context } from '../../src/core/model';
-import { ContextSocketClient } from '../../src/core/browser/context/ContextSocketClient';
+import { Context } from '../../src/frontend-applications/agent-portal/model/Context';
+import { ContextDescriptor } from '../../src/frontend-applications/agent-portal/model/ContextDescriptor';
+import { KIXObjectType } from '../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { ContextType } from '../../src/frontend-applications/agent-portal/model/ContextType';
+import { ContextMode } from '../../src/frontend-applications/agent-portal/model/ContextMode';
+import { ContextSocketClient } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextSocketClient';
+import { ContextConfiguration } from '../../src/frontend-applications/agent-portal/model/configuration/ContextConfiguration';
+import { ContextFactory } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextFactory';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -33,7 +38,7 @@ describe('ContextFactory', () => {
     );
 
     ContextSocketClient.loadContextConfiguration = async (contextId): Promise<ContextConfiguration> => {
-        return new ContextConfiguration(contextId);
+        return new ContextConfiguration(null, null, null, contextId);
     }
 
     before(() => {

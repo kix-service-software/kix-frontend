@@ -1,0 +1,31 @@
+{
+    "name": "kix-module-mail-filter",
+    "extensions": {
+        "kix:admin-module": {
+            "mail-filter-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "mail-filter-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:modules": {
+            "mail-filter-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "new-mail-filter-dialog-configuration": {
+                "module": "new-mail-filter-dialog-configuration.extension"
+            },
+            "mail-filter-details-configuration": {
+                "module": "mail-filter-details-configuration.extension"
+            },
+            "edit-mail-filter-dialog-configuration.extension": {
+                "module": "edit-mail-filter-dialog-configuration.extension"
+            }
+        }
+    }
+}

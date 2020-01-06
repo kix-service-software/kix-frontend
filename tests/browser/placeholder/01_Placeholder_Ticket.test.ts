@@ -11,10 +11,12 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { Ticket, TicketProperty } from '../../../src/core/model/kix/ticket';
-import { TicketPlaceholderHandler, TicketLabelProvider } from '../../../src/core/browser/ticket';
-import { LabelService } from '../../../src/core/browser';
-import { DateTimeUtil, KIXObjectProperty } from '../../../src/core/model';
+import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
+import { TicketPlaceholderHandler, TicketLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
+import { TicketProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/TicketProperty';
+import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
