@@ -1,0 +1,5 @@
+{
+    "dependencies": [
+        "require ./faq-visibility-input"
+    ]
+}

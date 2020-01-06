@@ -50,7 +50,6 @@
           </div>
 
           <div class="chapter">
-            <h2 id="resources"><a href="#resources">API</a></h2>
             {% for resource in resources %}
               <div class="panel panel-default resource">
                 <div class="panel-heading">
@@ -79,7 +78,7 @@
           <div id="sidebar" class="hidden-print affix" role="complementary">
             <ul class="nav nav-pills nav-stacked">
               {% for resource in resources %}
-                <li><a class="nav-resource" href="#{{ resource.uniqueId}}">{% if resource.displayName %}{{ resource.displayName }}{% else %}{{ resource.relativeUri }}{% endif %}</a></li>
+                <li><a href="#{{ resource.uniqueId}}">{% if resource.displayName %}{{ resource.displayName }}{% else %}{{ resource.relativeUri }}{% endif %}</a></li>
               {% endfor %}
             </ul>
           </div>

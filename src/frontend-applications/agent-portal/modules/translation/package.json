@@ -1,0 +1,31 @@
+{
+    "name": "kix-module-translation",
+    "extensions": {
+        "kix:modules": {
+            "translation-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "translation-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "translation-service": {
+                "module": "service.extension"
+            }
+        },
+        "kix:configuration": {
+            "i18n-new-translation": {
+                "module": "new-translation-dialog-configuration.extension"
+            },
+            "i18n-edit-translation": {
+                "module": "edit-translation-dialog-configuration.extension"
+            },
+            "i18n-translation-details-configuration": {
+                "module": "i18n-translation-details.extension"
+            }
+        }
+    }
+}

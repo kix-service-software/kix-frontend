@@ -11,9 +11,16 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ArticlePlaceholderHandler, ArticleLabelProvider, TicketPlaceholderHandler } from '../../../src/core/browser/ticket';
-import { LabelService, ContextService } from '../../../src/core/browser';
-import { DateTimeUtil, Article, ArticleProperty, KIXObjectProperty, Ticket, ContextDescriptor, Context } from '../../../src/core/model';
+import { Article } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Article';
+import { ArticlePlaceholderHandler, ArticleLabelProvider, TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
+import { ArticleProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/ArticleProperty';
+import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
+import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
+import { ContextService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextService';
+import { ContextDescriptor } from '../../../src/frontend-applications/agent-portal/model/ContextDescriptor';
+import { Context } from '../../../src/frontend-applications/agent-portal/model/Context';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

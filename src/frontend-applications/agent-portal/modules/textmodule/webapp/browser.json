@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "require ./components/edit-text-module-dialog",
+        "require ./components/new-text-module-dialog",
+        "require ./components/ticket-admin-text-modules",
+        "require ./core"
+    ]
+}

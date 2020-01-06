@@ -1,0 +1,20 @@
+{
+    "name": "kix-module-import-export",
+    "extensions": {
+        "kix:modules": {
+            "import-export-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "import-export-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "import-export-service": {
+                "module": "service.extension"
+            }
+        }
+    }
+}

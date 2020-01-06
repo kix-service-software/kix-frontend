@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-bulk",
+    "extensions": {
+        "kix:modules": {
+            "bulk-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:configuration": {
+            "bulk-dialog-configuration": {
+                "module": "configuration.extension"
+            }
+        }
+    }
+}

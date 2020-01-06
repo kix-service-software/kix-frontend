@@ -1,0 +1,8 @@
+{
+    "dependencies": [
+        "require ./edit-faq-article-dialog",
+        "require ./new-faq-article-dialog",
+        "require ./search-faq-article-dialog",
+        "./inputs"
+    ]
+}

@@ -9,16 +9,19 @@
 
 /* tslint:disable*/
 import * as chai from 'chai';
-import { UIComponent } from '../../src/core/model/UIComponent';
-import { UIComponentPermission } from '../../src/core/model/UIComponentPermission';
-import { HttpService } from '../../src/core/services';
-import { OptionsResponse, RequestMethod, ResponseHeader } from '../../src/core/api';
-import { CRUD, LoadKIXModulesResponse } from '../../src/core/model';
-import { PluginService } from '../../src/services';
-import { KIXExtensions, IKIXModuleExtension } from '../../src/core/extensions';
-import { KIXModuleNamespace } from '../../src/socket-namespaces/KIXModuleNamespace';
-import { SocketResponse } from '../../src/core/common';
 import { HTTPUtil } from '../utils/HTTPUtil';
+import { SocketResponse } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/SocketResponse';
+import { LoadKIXModulesResponse } from '../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LoadKIXModulesResponse';
+import { PluginService } from '../../src/server/services/PluginService';
+import { HttpService } from '../../src/frontend-applications/agent-portal/server/services/HttpService';
+import { OptionsResponse } from '../../src/server/model/rest/OptionsResponse';
+import { RequestMethod } from '../../src/server/model/rest/RequestMethod';
+import { IKIXModuleExtension } from '../../src/frontend-applications/agent-portal/model/IKIXModuleExtension';
+import { UIComponent } from '../../src/frontend-applications/agent-portal/model/UIComponent';
+import { UIComponentPermission } from '../../src/frontend-applications/agent-portal/model/UIComponentPermission';
+import { CRUD } from '../../src/server/model/rest/CRUD';
+import { AgentPortalExtensions } from '../../src/frontend-applications/agent-portal/server/extensions/AgentPortalExtensions';
+import { KIXModuleNamespace } from '../../src/frontend-applications/agent-portal/server/socket-namespaces/KIXModuleNamespace';
 
 const expect = chai.expect;
 describe('KIXModuleNamespace', () => {
@@ -35,7 +38,7 @@ describe('KIXModuleNamespace', () => {
         before(async () => {
             originalExtensionMethod = PluginService.getInstance().getExtensions;
             PluginService.getInstance().getExtensions = async <T>(extensionId: string): Promise<T[]> => {
-                if (extensionId === KIXExtensions.MODULES) {
+                if (extensionId === AgentPortalExtensions.MODULES) {
                     return extensions;
                 }
             };
@@ -107,11 +110,15 @@ describe('KIXModuleNamespace', () => {
 
 class TestExtension1 implements IKIXModuleExtension {
 
+    public applications: string[] = [];
+
     public tags: Array<[string, string]>;
 
     public id = 'TestExtension1';
 
     public external: boolean = false;
+
+    public webDependencies: string[] = [];
 
     public initComponents: UIComponent[] = [
         new UIComponent('tickets-module', 'ticket-component', [
@@ -142,11 +149,15 @@ class TestExtension1 implements IKIXModuleExtension {
 
 class TestExtension2 implements IKIXModuleExtension {
 
+    public applications: string[] = [];
+
     public tags: Array<[string, string]>;
 
     public id = 'TestExtension2';
 
     public external: boolean = false;
+
+    public webDependencies: string[] = [];
 
     public initComponents: UIComponent[] = [
         new UIComponent('organisations-module', 'organisations-component', [

@@ -1,0 +1,10 @@
+{
+    "name": "kix-agent-portal-authentication-login",
+    "extensions": {
+        "kix:agent-portal:marko-application": {
+            "agent-portal-authentication-login": {
+                "module": "application.extension"
+            }
+        }
+    }
+}

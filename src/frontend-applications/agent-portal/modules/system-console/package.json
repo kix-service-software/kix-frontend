@@ -1,0 +1,20 @@
+{
+    "name": "kix-module-console",
+    "extensions": {
+        "kix:modules": {
+            "system-console-admin-module": {
+                "module": "kix-module.extension"
+            }
+        },
+        "kix:admin-module": {
+            "system-console-admin": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:services": {
+            "system-console-service": {
+                "module": "service.extension"
+            }
+        }
+    }
+}
