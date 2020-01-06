@@ -17,8 +17,6 @@ export enum DynamicFieldProperty {
 
     INTERNAL_FIELD = "InternalField",
 
-    COMMENT = 'Comment',
-
     LABEL = "Label",
 
     NAME = "Name",

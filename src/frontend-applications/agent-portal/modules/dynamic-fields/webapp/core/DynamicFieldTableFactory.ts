@@ -47,7 +47,6 @@ export class DynamicFieldTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(DynamicFieldProperty.FIELD_TYPE),
             this.getDefaultColumnConfiguration(DynamicFieldProperty.OBJECT_TYPE),
             this.getDefaultColumnConfiguration(DynamicFieldProperty.INTERNAL_FIELD),
-            this.getDefaultColumnConfiguration(DynamicFieldProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
