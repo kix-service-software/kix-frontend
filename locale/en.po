@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2019-12-16 16:22+0000\n"
+"PO-Revision-Date: 2020-01-06 10:42+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -473,10 +473,8 @@ msgstr "Asset successfully created."
 msgid "Config Item Version Compare"
 msgstr "Asset Version Compare"
 
-#, fuzzy
-#| msgid "Config Item Information"
 msgid "Configuration"
-msgstr "Asset Information"
+msgstr ""
 
 msgid "Confirm New Password"
 msgstr ""
@@ -691,10 +689,8 @@ msgstr ""
 msgid "Dynamic Fields"
 msgstr ""
 
-#, fuzzy
-#| msgid "Config Item successfully created."
 msgid "Dynamic field successfully created."
-msgstr "Asset successfully created."
+msgstr ""
 
 msgid "Edit"
 msgstr ""
@@ -975,10 +971,8 @@ msgstr ""
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr ""
 
-#, fuzzy
-#| msgid "Queue Information"
 msgid "Field Information"
-msgstr "Team Information"
+msgstr ""
 
 msgid "Field Type"
 msgstr ""
@@ -1069,42 +1063,23 @@ msgstr ""
 msgid "Helping FAQ Contributions"
 msgstr "Helpfull FAQ articles"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Comment"
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
 msgstr ""
-"Insert additional information (only displayed within the admin module)."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Validity"
 msgid "Helptext_Admin_DynamicFieldCreate_FieldType"
-msgstr "The email filter can only be used within the system if set “valid”."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Validity"
 msgid "Helptext_Admin_DynamicFieldCreate_Label"
-msgstr "The email filter can only be used within the system if set “valid”."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgid "Helptext_Admin_DynamicFieldCreate_Name"
 msgstr ""
-"Insert a syntactically correct email address here. Example: “support@example-"
-"kg.com” To connect answers to this email address with already existing "
-"tickets, this address needs to match with a mail account, configured in KIX."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Type."
 msgid "Helptext_Admin_DynamicFieldCreate_ObjectType"
 msgstr ""
-"IMAP/=Messages are only copied to KIX – the originals stay at the server; "
-"POP/=Messages are downloaded from the server; /S=Connection is SSL "
-"encrypted; /TLS=Connection is TLS encrpyted"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Validity"
 msgid "Helptext_Admin_DynamicFieldCreate_Validity"
-msgstr "The email filter can only be used within the system if set “valid”."
+msgstr ""
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgstr ""
