@@ -1,0 +1,52 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.kix-json-editor {
+    >div {
+        >h3 {
+            display: none;
+        }
+    }
+
+    .je-indented-panel {
+        .row {
+            margin-bottom: @margin-small;
+
+            .form-control {
+                >label {
+                    font-weight: bold;
+                }
+
+                >input {
+                    .input-style();
+                }
+
+                >p {
+                    font-style: italic;
+                }
+            }
+
+            .json-editor-btntype-add {
+                min-width: unset;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+                margin: 0.5rem;
+                color: @tertiary-5;
+            }
+
+            .json-editor-btntype-delete {
+                min-width: unset;
+                padding-left: 0.5rem;
+                padding-right: 0.5rem;
+                margin: 0.5rem;
+                color: @tertiary-0;
+            }
+        }
+    }
+}
