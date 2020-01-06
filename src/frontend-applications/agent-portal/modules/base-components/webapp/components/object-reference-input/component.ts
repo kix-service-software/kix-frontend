@@ -99,15 +99,16 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
                 }
                 SortUtil.sortObjects(nodes, 'label', DataType.STRING);
-
-                const additionalNodes = this.state.field.options.find(
-                    (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
-                );
-                if (additionalNodes) {
-                    nodes = [...additionalNodes.value, ...nodes];
-                }
             }
         }
+
+        const additionalNodes = this.state.field.options.find(
+            (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
+        );
+        if (additionalNodes) {
+            nodes = [...additionalNodes.value, ...nodes];
+        }
+
         await this.setCurrentNode(nodes);
         return nodes;
     }
@@ -119,27 +120,29 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const objectIds: any[] = Array.isArray(defaultValue.value)
                 ? defaultValue.value : [defaultValue.value];
 
-            const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
-            if (objectOption) {
-                const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
-                if (treeHandler) {
-                    const selectedNodes = [];
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            if (treeHandler) {
+                const selectedNodes = [];
 
-                    if (!this.autocomplete) {
-                        if (!nodes) {
-                            nodes = treeHandler.getTree();
-                        }
-                        if (nodes && !!nodes.length) {
-                            objectIds.forEach((oid) => {
-                                const node = this.findNode(oid, nodes);
-                                if (node) {
-                                    node.selected = true;
-                                    selectedNodes.push(node);
-                                }
-                            });
-                            this.nodesChanged(selectedNodes);
-                        }
-                    } else {
+                if (!this.autocomplete) {
+                    if (!nodes) {
+                        nodes = treeHandler.getTree();
+                    }
+                    if (nodes && !!nodes.length) {
+                        objectIds.forEach((oid) => {
+                            const node = this.findNode(oid, nodes);
+                            if (node) {
+                                node.selected = true;
+                                selectedNodes.push(node);
+                            }
+                        });
+                        this.nodesChanged(selectedNodes);
+                    }
+                } else {
+                    const objectOption = this.state.field.options.find(
+                        (o) => o.option === ObjectReferenceOptions.OBJECT
+                    );
+                    if (objectOption) {
                         const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
                         if (objects && !!objects.length) {
                             for (const object of objects) {
