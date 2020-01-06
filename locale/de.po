@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-12-16 16:22+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2020-01-06 10:42+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -48,7 +48,7 @@ msgid "Access denied"
 msgstr "Zugriff verweigert"
 
 msgid "Access Level"
-msgstr "Access Level"
+msgstr ""
 
 msgid "Accounted time"
 msgstr "Erfasste Zeit"
@@ -485,10 +485,8 @@ msgstr "Asset wurde erfolgreich angelegt."
 msgid "Config Item Version Compare"
 msgstr "Asset-Versionsvergleich"
 
-#, fuzzy
-#| msgid "Import configurations"
 msgid "Configuration"
-msgstr "Konfigurationen importieren"
+msgstr "Konfiguration"
 
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
@@ -562,10 +560,8 @@ msgstr "Erstellt am"
 msgid "Created by"
 msgstr "Erstellt von"
 
-#, fuzzy
-#| msgid "Create Filter"
 msgid "Create Dynamic Field"
-msgstr "Filter wird angelegt"
+msgstr "Dynamisches Feld wird angelegt"
 
 msgid "Create FAQ Article"
 msgstr "FAQ Artikel wird angelegt"
@@ -700,15 +696,13 @@ msgid "Download"
 msgstr "Download"
 
 msgid "Dynamic Field"
-msgstr ""
+msgstr "Dynamisches Feld"
 
 msgid "Dynamic Fields"
-msgstr ""
+msgstr "Dynamische Felder"
 
-#, fuzzy
-#| msgid "Ticket successfully created."
 msgid "Dynamic field successfully created."
-msgstr "Ticket wurde erfolgreich angelegt."
+msgstr "Dynamisches Feld wurde erfolgreich angelegt."
 
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -740,10 +734,8 @@ msgstr "Kontakt bearbeiten"
 msgid "Edit Core Data"
 msgstr "Stammdaten bearbeiten"
 
-#, fuzzy
-#| msgid "Edit Email Filter"
 msgid "Edit Dynamic Field"
-msgstr "E-Mail Filter bearbeiten"
+msgstr "Dynamisches Feld bearbeiten"
 
 msgid "edited"
 msgstr "bearbeitet"
@@ -977,7 +969,7 @@ msgid "Fax"
 msgstr "Fax"
 
 msgid "Feedback"
-msgstr "Feedback"
+msgstr ""
 
 msgid "Fetching Mail Account"
 msgstr "E-Mail-Konto abrufen"
@@ -991,15 +983,11 @@ msgstr "Feld"
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
-#, fuzzy
-#| msgid "Email Information"
 msgid "Field Information"
-msgstr "E-Mail Informationen"
+msgstr "Feld Informationen"
 
-#, fuzzy
-#| msgid "Field"
 msgid "Field Type"
-msgstr "Feld"
+msgstr "Feldtyp"
 
 msgid "Filter"
 msgstr "Filter"
@@ -1090,47 +1078,23 @@ msgstr "Hilfe, Tipps und Tricks"
 msgid "Helping FAQ Contributions"
 msgstr "Helfende FAQ-Einträge"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Comment"
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
 msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Validity"
 msgid "Helptext_Admin_DynamicFieldCreate_FieldType"
 msgstr ""
-"Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Validity"
 msgid "Helptext_Admin_DynamicFieldCreate_Label"
 msgstr ""
-"Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_SystemAddressCreate_Name"
 msgid "Helptext_Admin_DynamicFieldCreate_Name"
 msgstr ""
-"Geben Sie eine syntaktisch korrekte E-Mail-Adresse ein. Beispiel: "
-"„support@muster-kg.com“ Diese muss zu einem in KIX konfigurierten Konto "
-"passen, wenn Antworten an diese Adresse im KIX an Tickets ankommen sollen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailAccountCreate_Type."
 msgid "Helptext_Admin_DynamicFieldCreate_ObjectType"
 msgstr ""
-"IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die Nachrichten "
-"liegen weiterhin auf dem Server; POP/=Die Nachrichten werden vom Server "
-"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /"
-"TLS=Verbindung wird direkt über TLS verschlüsselt"
 
-#, fuzzy
-#| msgid "Helptext_Admin_MailFilterCreate_Validity"
 msgid "Helptext_Admin_DynamicFieldCreate_Validity"
 msgstr ""
-"Der E-Mail-Filter kann nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgstr ""
@@ -2499,10 +2463,8 @@ msgstr "Filterwert eingeben"
 msgid "internal"
 msgstr "intern"
 
-#, fuzzy
-#| msgid "internal"
 msgid "Internal Field"
-msgstr "intern"
+msgstr "Internes Feld"
 
 msgid "Internationalisation"
 msgstr "Internationalisierung"
@@ -2804,10 +2766,8 @@ msgstr "Neues Asset"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
-#, fuzzy
-#| msgid "New Email Filter"
 msgid "New Dynamic Field"
-msgstr "Neuer E-Mail Filter"
+msgstr "Neues Dynamisches Feld"
 
 msgid "New Email Filter"
 msgstr "Neuer E-Mail Filter"
@@ -2818,10 +2778,8 @@ msgstr "Neue FAQ"
 msgid "New FAQ Category"
 msgstr "Neue FAQ Kategorie"
 
-#, fuzzy
-#| msgid "New Filter"
 msgid "New Field"
-msgstr "Neuer Filter"
+msgstr "Neues Feld"
 
 msgid "New Filter"
 msgstr "Neuer Filter"
@@ -3015,10 +2973,8 @@ msgstr "Objekt ID"
 msgid "Objects"
 msgstr "Objekte"
 
-#, fuzzy
-#| msgid "Object"
 msgid "Object Type"
-msgstr "Objekt"
+msgstr "Objekttyp"
 
 msgid "Observer"
 msgstr "Beobachter"
@@ -3597,7 +3553,7 @@ msgid "System Addresses"
 msgstr "Systemadressen"
 
 msgid "System: Dynamic Fields"
-msgstr ""
+msgstr "System: Dynamische Felder"
 
 msgid "System: Logs"
 msgstr "System: Logs"
@@ -3870,8 +3826,6 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
 
-#, fuzzy
-#| msgid "Update Email Filter"
 msgid "Update Dynamic Field"
 msgstr "Aktualisierung wird durchgeführt"
 
