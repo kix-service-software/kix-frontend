@@ -16,6 +16,9 @@ import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
 import {
     DynamicFormOperationsType
 } from "../../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { PermissionType } from "../../../model/PermissionType";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
 
 export class PermissionManager extends AbstractDynamicFormManager {
 
@@ -36,7 +39,10 @@ export class PermissionManager extends AbstractDynamicFormManager {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        return [["1", "Resource"], ["2", "Property Value"]];
+        const types = [];
+        const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(KIXObjectType.PERMISSION_TYPE);
+        permissionTypes.forEach((t) => types.push([t.ID.toString(), t.Name]));
+        return types;
     }
 
     public async getPropertiesPlaceholder(): Promise<string> {
