@@ -148,7 +148,7 @@ export class DynamicFormFieldValue {
         // FIXME: Its not needed to check unique here, because getProperties() should return only available properties.
         // The manager should make the decision
         const unique = this.manager.uniqueProperties;
-        const nodes = [];
+        const nodes: TreeNode[] = [];
         if (properties) {
             for (const p of properties) {
                 if (
@@ -166,7 +166,7 @@ export class DynamicFormFieldValue {
         }
         this.propertyTreeHandler.setTree(nodes);
         if (this.value.property) {
-            const propNode = nodes.find((n) => n.id === this.value.property);
+            const propNode = nodes.find((n) => n.id.toString() === this.value.property);
             if (propNode) {
                 this.propertyTreeHandler.setSelection([propNode], true, true, true);
             }
