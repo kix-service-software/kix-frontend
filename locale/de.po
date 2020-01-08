@@ -629,6 +629,11 @@ msgstr "Aktueller Verwendungsstatus"
 msgid "Current incident state"
 msgstr "Aktueller Vorfallstatus"
 
+#, fuzzy
+#| msgid "Current incident state"
+msgid "Current Incident state"
+msgstr "Aktueller Vorfallstatus"
+
 msgid "Current Password"
 msgstr "Aktuelles Passwort"
 
@@ -667,6 +672,11 @@ msgstr "Verknüpfung löschen"
 
 msgid "Delete Search"
 msgstr "Suche löschen"
+
+#, fuzzy
+#| msgid "Deployment State"
+msgid "Deployment state"
+msgstr "Verwendungsstatus"
 
 msgid "Deployment State"
 msgstr "Verwendungsstatus"

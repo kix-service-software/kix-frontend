@@ -617,6 +617,9 @@ msgstr ""
 msgid "Current incident state"
 msgstr ""
 
+msgid "Current Incident state"
+msgstr ""
+
 msgid "Current Password"
 msgstr ""
 
@@ -654,6 +657,9 @@ msgid "Delete Link"
 msgstr ""
 
 msgid "Delete Search"
+msgstr ""
+
+msgid "Deployment state"
 msgstr ""
 
 msgid "Deployment State"
