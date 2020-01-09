@@ -292,16 +292,12 @@ export class UIModule implements IUIModule {
                     type: "integer",
                     required: false
                 },
-                YearsPeriod: {
-                    title: "Years Period",
-                    description: "",
-                    type: "integer",
-                    required: false
-                },
                 DateRestrictions: {
                     title: "Date Restriction",
                     type: "string",
+                    default: "none",
                     enum: [
+                        "none",
                         "DisableFutureDates",
                         "DisablePastDates"
                     ]
@@ -371,16 +367,12 @@ export class UIModule implements IUIModule {
                     type: "integer",
                     required: false
                 },
-                YearsPeriod: {
-                    title: "Years Period",
-                    description: "",
-                    type: "integer",
-                    required: false
-                },
                 DateRestrictions: {
                     title: "Date Restriction",
                     type: "string",
+                    default: "none",
                     enum: [
+                        "none",
                         "DisableFutureDates",
                         "DisablePastDates"
                     ]
