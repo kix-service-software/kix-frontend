@@ -269,9 +269,8 @@ export class UIModule implements IUIModule {
                 },
                 DefaultValue: {
                     title: "Default Value",
-                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
-                    type: "string",
-                    format: "date",
+                    description: "This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time \"00:00:00\", hence enter 86400 in order to initialize the field with \"tomorrows\" date.",
+                    type: "integer",
                     required: false
                 },
                 Link: {
@@ -344,9 +343,8 @@ export class UIModule implements IUIModule {
                 },
                 DefaultValue: {
                     title: "Default Value",
-                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
-                    type: "string",
-                    format: "datetime-local",
+                    description: "This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with \"now+1h\" or enter 86400 if the field should be initialized with \"now+24h\".",
+                    type: "integer",
                     required: false
                 },
                 Link: {
