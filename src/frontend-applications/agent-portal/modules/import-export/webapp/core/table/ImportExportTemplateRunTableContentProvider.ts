@@ -32,6 +32,6 @@ export class ImportExportTemplateRunTableContentProvider extends TableContentPro
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList('RUNS_OF_TEMPLATE_' + this.objectIds[0]) : [];
         }
-        return await this.getRowObjects(objects);
+        return await this.getRowObjects(objects, new Map());
     }
 }

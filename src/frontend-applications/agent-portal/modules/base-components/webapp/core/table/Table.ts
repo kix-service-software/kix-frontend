@@ -361,11 +361,6 @@ export class Table implements ITable {
         if (column) {
             column.setSortOrder(sortOrder);
 
-            const rows = this.getRows(true);
-            const cellPromises: Array<Promise<string>> = [];
-            rows.forEach((r) => cellPromises.push(r.getCell(columnId).getDisplayValue()));
-            await Promise.all(cellPromises);
-
             if (this.filteredRows) {
                 this.filteredRows = TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType

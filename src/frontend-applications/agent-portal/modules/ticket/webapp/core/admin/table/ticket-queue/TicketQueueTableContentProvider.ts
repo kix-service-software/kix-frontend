@@ -25,38 +25,14 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
         super(KIXObjectType.QUEUE, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<Queue>>> {
-
-        const queues = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE, null, this.loadingOptions
-        );
-
-        const rowObjects = [];
-        queues.forEach((fc) => {
-            rowObjects.push(this.createRowObject(fc));
-        });
-
-        return rowObjects;
+    protected hasChildRows(rowObject: RowObject<Queue>): boolean {
+        return rowObject && rowObject.getObject().SubQueues && rowObject.getObject().SubQueues.length !== 0;
     }
 
-
-    private createRowObject(queue: Queue): RowObject {
-        const values: TableValue[] = [];
-
-        for (const property in queue) {
-            if (queue.hasOwnProperty(property)) {
-                values.push(new TableValue(property, queue[property]));
-            }
-        }
-
-        const rowObject = new RowObject<Queue>(values, queue);
-
-        if (queue.SubQueues && Array.isArray(queue.SubQueues) && queue.SubQueues.length) {
-            queue.SubQueues.forEach((sq) => {
-                rowObject.addChild(this.createRowObject(sq));
-            });
-        }
-
-        return rowObject;
+    protected async addChildRows(
+        rowObject: RowObject<Queue>, propertyMap: Map<string, Map<any, TableValue>>
+    ): Promise<void> {
+        const rows = await this.getRowObjects(rowObject.getObject().SubQueues, propertyMap);
+        rows.forEach((r) => rowObject.addChild(r));
     }
 }

@@ -35,6 +35,8 @@ export class TicketFactory extends ObjectFactory<Ticket> {
             ? ticket.History.map((th) => new TicketHistory(th))
             : [];
 
+        newTicket.History.sort((a, b) => b.HistoryID - a.HistoryID);
+
         return newTicket;
     }
 

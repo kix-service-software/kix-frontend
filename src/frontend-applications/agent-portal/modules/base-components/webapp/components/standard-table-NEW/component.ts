@@ -30,6 +30,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             if (this.state.table && this.isTableChanged(input.table)) {
                 this.state.table.destroy();
             }
+            this.state.table = input.table;
             this.init(input.table);
         }
     }
@@ -39,25 +40,25 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private async init(table: ITable): Promise<void> {
-        this.state.table = null;
+        this.state.prepared = false;
+        this.eventSubscriberId = table.getTableId();
 
-        this.state.table = table;
+        await table.initialize();
 
-        this.eventSubscriberId = this.state.table.getTableId();
+        setTimeout(() => {
+            this.state.prepared = true;
+            setTimeout(async () => {
 
-        setTimeout(async () => {
-            await this.state.table.initialize();
-            this.state.rows = this.state.table.getRows();
-            this.state.columns = this.state.table.getColumns();
-            this.setTableHeight();
+                this.setTableHeight();
 
-            EventService.getInstance().publish(
-                TableEvent.TABLE_INITIALIZED,
-                new TableEventData(this.state.table.getTableId())
-            );
-            EventService.getInstance().publish(
-                TableEvent.TABLE_READY, new TableEventData(this.state.table.getTableId())
-            );
+                EventService.getInstance().publish(
+                    TableEvent.TABLE_INITIALIZED,
+                    new TableEventData(this.state.table.getTableId())
+                );
+                EventService.getInstance().publish(
+                    TableEvent.TABLE_READY, new TableEventData(this.state.table.getTableId())
+                );
+            }, 50);
         }, 20);
     }
 
@@ -86,9 +87,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public async eventPublished(data: TableEventData, eventId: string, subscriberId?: string): Promise<void> {
         if (this.state.table && data && data.tableId === this.state.table.getTableId()) {
             if (eventId === TableEvent.REFRESH) {
-                this.state.columns = this.state.table.getColumns();
-                this.state.rows = this.state.table.getRows();
-
                 await this.provideContextContent();
                 this.setTableHeight();
 
@@ -99,9 +97,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
 
             if (eventId === TableEvent.RERENDER_TABLE) {
-                this.state.columns = this.state.table.getColumns();
-                this.state.rows = this.state.table.getRows();
-
                 this.setTableHeight();
             }
 
@@ -110,7 +105,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
 
             if (eventId === TableEvent.SORTED || eventId === TableEvent.TABLE_FILTERED) {
-                this.state.rows = this.state.table.getRows();
                 const container = (this as any).getEl(this.state.table.getTableId() + "table-container");
                 if (container) {
                     container.scrollTop = 0;
@@ -126,17 +120,15 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     EventService.getInstance().publish(TableEvent.REFRESH, this.state.table.getTableId());
                     let element: any = document.getElementById(row.getRowId());
                     if (element) {
-                        if (element) {
-                            let top = 0;
-                            if (element.offsetParent) {
-                                do {
-                                    top += element.offsetTop;
-                                    element = element.offsetParent;
-                                } while (element !== null);
-                            }
-
-                            window.scroll(0, top);
+                        let top = 0;
+                        if (element.offsetParent) {
+                            do {
+                                top += element.offsetTop;
+                                element = element.offsetParent;
+                            } while (element !== null);
                         }
+
+                        window.scroll(0, top);
                     }
                 }
             }

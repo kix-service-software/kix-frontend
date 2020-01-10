@@ -30,31 +30,34 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
     }
 
     public async loadData(): Promise<Array<IRowObject<ConfigItemClassDefinition>>> {
-        let rowObjects = [];
+        const rowObjects = [];
 
         const isCurrentText = await TranslationService.translate('Translatable#(Current definition)');
 
         const context = await ContextService.getInstance().getContext(ConfigItemClassDetailsContext.CONTEXT_ID);
         const configItemClass = await context.getObject<ConfigItemClass>();
         if (configItemClass && configItemClass.Definitions && !!configItemClass.Definitions.length) {
-            rowObjects = configItemClass.Definitions.map((d) => {
+
+            for (const d of configItemClass.Definitions) {
                 const values: TableValue[] = [];
 
-                for (const property in d) {
-                    if (d.hasOwnProperty(property)) {
-                        values.push(new TableValue(property, d[property]));
+                const columns = this.table.getTableConfiguration().tableColumns;
+                for (const column of columns) {
+                    if (column.property === ConfigItemClassDefinitionProperty.CURRENT) {
+                        values.push(
+                            new TableValue(
+                                ConfigItemClassDefinitionProperty.CURRENT, d.isCurrentDefinition,
+                                d.isCurrentDefinition ? isCurrentText : ''
+                            )
+                        );
+                    } else {
+                        const tableValue = await this.getTableValue(d, column.property, column);
+                        values.push(tableValue);
                     }
                 }
 
-                values.push(
-                    new TableValue(
-                        ConfigItemClassDefinitionProperty.CURRENT, d.isCurrentDefinition,
-                        d.isCurrentDefinition ? isCurrentText : ''
-                    )
-                );
-
-                return new RowObject<ConfigItemClassDefinition>(values, d);
-            });
+                rowObjects.push(new RowObject<ConfigItemClassDefinition>(values, d));
+            }
         }
 
         return rowObjects;

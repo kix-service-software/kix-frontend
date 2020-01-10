@@ -25,10 +25,6 @@ export interface ICell {
 
     getRow(): IRow;
 
-    getDisplayValue(): Promise<string>;
-
-    getDisplayIcons(): Promise<Array<string | ObjectIcon>>;
-
     getColumnConfiguration(): IColumnConfiguration;
 
 }

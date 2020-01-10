@@ -12,7 +12,7 @@ import { ConfigItemHistory } from "../../../model/ConfigItemHistory";
 import { ITable, IRowObject, TableValue, RowObject } from "../../../../base-components/webapp/core/table";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
+import { ContextService } from "../../../../base-components/webapp/core/ContextService";
 import { ConfigItem } from "../../../model/ConfigItem";
 
 export class ConfigItemHistoryContentProvider extends TableContentProvider<ConfigItemHistory> {
@@ -27,27 +27,26 @@ export class ConfigItemHistoryContentProvider extends TableContentProvider<Confi
     }
 
     public async loadData(): Promise<Array<IRowObject<ConfigItemHistory>>> {
-        let rowObjects = [];
+        const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             const configItem = await context.getObject<ConfigItem>();
             if (configItem) {
-                rowObjects = configItem.History
-                    .sort((a, b) => b.HistoryEntryID - a.HistoryEntryID)
-                    .map((ch) => {
-                        const values: TableValue[] = [];
+                for (const ch of configItem.History) {
+                    const values: TableValue[] = [];
 
-                        for (const property in ch) {
-                            if (ch.hasOwnProperty(property)) {
-                                values.push(new TableValue(property, ch[property]));
-                            }
-                        }
+                    const columns = this.table.getTableConfiguration().tableColumns;
+                    for (const column of columns) {
+                        const tableValue = await this.getTableValue(ch, column.property, column);
+                        values.push(tableValue);
+                    }
 
-                        return new RowObject<ConfigItemHistory>(values, ch);
-                    });
+                    rowObjects.push(new RowObject<ConfigItemHistory>(values, ch));
+                }
             }
         }
 
         return rowObjects;
     }
+
 }

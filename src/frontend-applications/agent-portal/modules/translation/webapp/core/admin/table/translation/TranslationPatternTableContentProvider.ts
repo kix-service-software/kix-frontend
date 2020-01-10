@@ -34,21 +34,22 @@ export class TranslationPatternTableContentProvider extends TableContentProvider
             );
         }
 
-        const rowObjects = objects.map((t) => {
+        const rowObjects = [];
+        for (const t of objects) {
             const values: TableValue[] = [];
 
-            for (const property in t) {
-                if (t.hasOwnProperty(property)) {
-                    if (property === TranslationPatternProperty.VALUE) {
-                        values.push(new TableValue(property, t[property], t[property]));
-                    } else {
-                        values.push(new TableValue(property, t[property]));
-                    }
+            const columns = this.table.getTableConfiguration().tableColumns;
+            for (const column of columns) {
+                if (column.property === TranslationPatternProperty.VALUE) {
+                    const tableValue = await this.getTableValue(t, column.property, column);
+                    values.push(tableValue);
+                } else {
+                    values.push(new TableValue(column.property, t[column.property], t[column.property]));
                 }
             }
 
-            return new RowObject<TranslationPattern>(values, t);
-        });
+            rowObjects.push(new RowObject<TranslationPattern>(values, t));
+        }
 
         return rowObjects;
     }

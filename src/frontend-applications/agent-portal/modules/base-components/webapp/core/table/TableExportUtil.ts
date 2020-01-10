@@ -49,7 +49,7 @@ export class TableExportUtil {
                 const cell = row.getCell(cId);
                 if (cell) {
                     if (useDisplayString) {
-                        displayValue = await cell.getDisplayValue();
+                        displayValue = cell.getValue().displayValue;
                     } else {
                         const value = await LabelService.getInstance().getExportPropertyValue(
                             cId, objectType, cell.getValue().objectValue
