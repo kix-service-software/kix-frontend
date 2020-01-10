@@ -13,9 +13,8 @@ export class ComponentState {
 
     public constructor(
         public table: ITable = null,
-        public rows: IRow[] = null,
-        public columns: IColumn[] = [],
-        public tableHeight: string = 'unset'
+        public tableHeight: string = 'unset',
+        public prepared: boolean = false
     ) { }
 
 }

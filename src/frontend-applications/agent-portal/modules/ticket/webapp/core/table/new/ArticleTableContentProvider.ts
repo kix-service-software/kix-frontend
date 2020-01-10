@@ -28,27 +28,32 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
     }
 
     public async loadData(): Promise<Array<IRowObject<Article>>> {
-        let rowObjects = [];
+        const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             const ticket = await context.getObject<Ticket>();
             if (ticket) {
-                rowObjects = ticket.Articles
-                    .sort((a, b) => b.ArticleID - a.ArticleID)
-                    .map((a, i) => {
-                        const values: TableValue[] = [];
+                ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID);
 
-                        for (const property in a) {
-                            if (a.hasOwnProperty(property)) {
-                                values.push(new TableValue(property, a[property]));
-                            }
+                for (let i = 0; i < ticket.Articles.length; i++) {
+                    const a = ticket.Articles[i];
+                    const values: TableValue[] = [];
+
+                    const columns = this.table.getTableConfiguration().tableColumns;
+                    for (const column of columns) {
+                        if (column.property === ArticleProperty.NUMBER) {
+                            const count = ticket.Articles.length - i;
+                            values.push(new TableValue(ArticleProperty.NUMBER, count, count.toString()));
+                        } else if (column.property === ArticleProperty.ARTICLE_INFORMATION) {
+                            values.push(new TableValue(ArticleProperty.ARTICLE_INFORMATION, null));
+                        } else {
+                            const tableValue = await this.getTableValue(a, column.property, column);
+                            values.push(tableValue);
                         }
+                    }
 
-                        const count = ticket.Articles.length - i;
-                        values.push(new TableValue(ArticleProperty.NUMBER, count, count.toString()));
-                        values.push(new TableValue(ArticleProperty.ARTICLE_INFORMATION, null));
-                        return new RowObject<Article>(values, a);
-                    });
+                    rowObjects.push(new RowObject<Article>(values, a));
+                }
             }
         }
 

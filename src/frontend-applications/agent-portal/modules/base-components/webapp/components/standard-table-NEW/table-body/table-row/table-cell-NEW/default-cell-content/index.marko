@@ -15,16 +15,18 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         height: input.height
     }
     title=state.displayText>
-    <if(component.showIcons && state.icons)>
-        <span>
-            <for|icon| of=state.icons>
-                <icon icon=icon showUnknown=true/>
-            </for>
-        </span>
-    </if>
-    <if(component.showText)>
-        <span.text.cell-display-text class={
-            "show-object": state.displayText !== null
-        }>${state.displayText}</span>
+    <if(state.cell)>
+        <if(component.showIcons && state.cell.getValue() && state.cell.getValue().displayIcons)>
+            <span>
+                <for|icon| of=state.cell.getValue().displayIcons>
+                    <icon icon=icon showUnknown=true/>
+                </for>
+            </span>
+        </if>
+        <if(component.showText && state.cell.getValue())>
+            <span.text.cell-display-text class={
+                "show-object": state.cell.getValue().displayValue !== null
+            }>${state.cell.getValue().displayValue}</span>
+        </if>
     </if>
 </div>

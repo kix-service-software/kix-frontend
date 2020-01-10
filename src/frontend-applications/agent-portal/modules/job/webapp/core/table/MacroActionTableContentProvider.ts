@@ -41,7 +41,10 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
 
                     for (const property in o) {
                         if (o.hasOwnProperty(property)) {
-                            const value = await this.getTableValue(o, property);
+                            const column = this.table.getTableConfiguration().tableColumns.find(
+                                (c) => c.property === property
+                            );
+                            const value = await this.getTableValue(o, property, column);
                             values.push(value);
                         }
                     }

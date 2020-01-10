@@ -26,35 +26,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.update();
     }
 
-    private async update(): Promise<void> {
+    private update(): void {
         if (this.state.cell) {
             const config = this.state.cell.getColumnConfiguration();
             if (config) {
                 this.showIcons = config.showIcon;
                 this.showText = config.showText;
-            }
-            this.loadDisplayValues();
-        }
-    }
-
-    private async loadDisplayValues(): Promise<void> {
-        if (this.state.cell) {
-            if (this.showIcons) {
-                if (this.state.cell.getValue().displayIcons) {
-                    this.state.icons = this.state.cell.getValue().displayIcons;
-                } else {
-                    this.state.cell.getDisplayIcons().then((icons) => {
-                        this.state.icons = icons;
-                    });
-                }
-            }
-
-            if (this.state.cell.getValue().displayValue) {
-                this.state.displayText = this.state.cell.getValue().displayValue;
-            } else {
-                this.state.cell.getDisplayValue().then((text) => {
-                    this.state.displayText = text;
-                });
             }
         }
     }

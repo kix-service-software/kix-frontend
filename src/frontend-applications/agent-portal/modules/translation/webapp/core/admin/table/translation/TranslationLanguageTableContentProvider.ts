@@ -31,25 +31,27 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
     }
 
     public async loadData(): Promise<Array<IRowObject<TranslationLanguage>>> {
-        let rowObjects = [];
+        const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             const translation = await context.getObject<TranslationPattern>();
             if (translation && translation.Languages && !!translation.Languages.length) {
-                rowObjects = SortUtil.sortObjects(
+                const languages = SortUtil.sortObjects(
                     translation.Languages, TranslationLanguageProperty.LANGUAGE,
                     DataType.STRING, SortOrder.DOWN
-                ).map((l) => {
+                );
+
+                for (const l of languages) {
                     const values: TableValue[] = [];
 
-                    for (const property in l) {
-                        if (l.hasOwnProperty(property)) {
-                            values.push(new TableValue(property, l[property]));
-                        }
+                    const columns = this.table.getTableConfiguration().tableColumns;
+                    for (const column of columns) {
+                        const tableValue = await this.getTableValue(l, column.property, column);
+                        values.push(tableValue);
                     }
 
-                    return new RowObject<TranslationLanguage>(values, l);
-                });
+                    rowObjects.push(new RowObject<TranslationLanguage>(values, l));
+                }
             }
         }
 
