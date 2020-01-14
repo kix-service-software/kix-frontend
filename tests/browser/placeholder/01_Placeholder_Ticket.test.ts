@@ -144,19 +144,9 @@ describe('Placeholder replacement for ticket', () => {
             expect(text).equal(`${TicketProperty.TYPE}_Name`);
         });
 
-        it('Should replace ticket sla ID placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SLA_ID}>`, ticket);
-            expect(text).equal(ticket.SLAID.toString());
-        });
-
         it('Should replace ticket sla placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SLA}>`, ticket);
             expect(text).equal(`${TicketProperty.SLA}_Name`);
-        });
-
-        it('Should replace ticket service ID placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SERVICE_ID}>`, ticket);
-            expect(text).equal(ticket.ServiceID.toString());
         });
 
         it('Should replace ticket service placeholder', async () => {
@@ -461,8 +451,6 @@ class someTestFunctions {
         ticket.ContactID = '1';
         ticket.OwnerID = 1;
         ticket.TypeID = 1;
-        ticket.SLAID = 1;
-        ticket.ServiceID = 1;
         ticket.ResponsibleID = 1;
         ticket.Age = 123456789;
         ticket.Created = '2019-05-30 08:45:30';

@@ -26,6 +26,8 @@ import { ContextDescriptor } from "../../../../model/ContextDescriptor";
 import { ContextService } from "../../../base-components/webapp/core/ContextService";
 import { DynamicFieldFormService } from "./DynamicFieldFormService";
 import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
+import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
+import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
 
 export class UIModule implements IUIModule {
 
@@ -64,6 +66,8 @@ export class UIModule implements IUIModule {
             false, 'edit-dynamic-field-dialog', ['dynamicfields'], EditDynamicFieldDialogContext
         );
         await ContextService.getInstance().registerContext(editDynamicFieldContext);
+
+        FormValidationService.getInstance().registerValidator(new DynamicFieldTextValidator());
 
         this.registerSchemas();
     }
@@ -215,16 +219,6 @@ export class UIModule implements IUIModule {
                             }
                         }
                     }
-                },
-                Cols: {
-                    title: 'Columns',
-                    description: '',
-                    type: "integer"
-                },
-                Rows: {
-                    title: 'Rows',
-                    description: '',
-                    type: "integer"
                 }
             }
         };

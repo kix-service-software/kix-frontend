@@ -31,6 +31,8 @@ export enum KIXObjectProperty {
 
     COMMENT = 'Comment',
 
-    DISPLAY_VALUES = 'displayValues'
+    DISPLAY_VALUES = 'displayValues',
+
+    DYNAMIC_FIELDS = 'DynamicFields'
 
 }

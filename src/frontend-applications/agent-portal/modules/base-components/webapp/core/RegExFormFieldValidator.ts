@@ -13,15 +13,18 @@ import { ValidationResult } from "./ValidationResult";
 import { ValidationSeverity } from "./ValidationSeverity";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { TranslationService } from "../../../translation/webapp/core";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class RegExFormFieldValidator implements IFormFieldValidator {
 
     public validatorId: string = 'RegExValidator';
 
     public isValidatorFor(formField: FormFieldConfiguration, formId: string): boolean {
-        return formField.regEx !== null
+        const hasRegex = formField.regEx !== null
             && typeof formField.regEx !== 'undefined'
             && typeof formField.regEx === 'string';
+
+        return hasRegex;
     }
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {

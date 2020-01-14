@@ -232,7 +232,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                 case TicketProperty.ARTICLE_CREATE_TIME:
                 case TicketProperty.ARTICLE_FLAG:
                 case TicketProperty.ATTACHMENT_NAME:
-                case TicketProperty.DYNAMIC_FIELD:
+                case KIXObjectProperty.DYNAMIC_FIELDS:
                 case TicketProperty.LAST_CHANGE_TIME:
                 case TicketProperty.LINK:
                 case TicketProperty.LINKED_AS:

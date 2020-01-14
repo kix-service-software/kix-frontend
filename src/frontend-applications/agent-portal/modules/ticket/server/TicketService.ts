@@ -142,7 +142,8 @@ export class TicketAPIService extends KIXObjectAPIService {
                 this.getParameterValue(parameter, TicketProperty.OWNER_ID),
                 this.getParameterValue(parameter, TicketProperty.RESPONSIBLE_ID),
                 this.getParameterValue(parameter, TicketProperty.PENDING_TIME),
-                [createArticle]
+                [createArticle],
+                this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS)
             );
 
             const response = await this.sendCreateRequest<CreateTicketResponse, CreateTicketRequest>(
@@ -210,7 +211,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.getParameterValue(parameter, TicketProperty.SLA_ID),
             this.getParameterValue(parameter, TicketProperty.OWNER_ID),
             this.getParameterValue(parameter, TicketProperty.RESPONSIBLE_ID),
-            this.getParameterValue(parameter, TicketProperty.PENDING_TIME)
+            this.getParameterValue(parameter, TicketProperty.PENDING_TIME),
+            this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS)
         );
 
         const response = await this.sendUpdateRequest<UpdateTicketResponse, UpdateTicketRequest>(

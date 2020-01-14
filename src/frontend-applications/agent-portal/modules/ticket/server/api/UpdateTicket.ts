@@ -9,13 +9,14 @@
 
 import { RequestObject } from "../../../../../../server/model/rest/RequestObject";
 import { TicketProperty } from "../../model/TicketProperty";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class UpdateTicket extends RequestObject {
 
     public constructor(
         title: string, contactId: string, organisationId: string, stateId: number, priorityId: number, queueId: number,
         lockId: number, typeId: number, serviceId: number, slaId: number, ownerId: number, responsibleId: number,
-        pendingTime: number
+        pendingTime: number, dynamicFields: []
     ) {
         super();
 
@@ -32,6 +33,7 @@ export class UpdateTicket extends RequestObject {
         this.applyProperty(TicketProperty.OWNER_ID, ownerId);
         this.applyProperty(TicketProperty.RESPONSIBLE_ID, responsibleId);
         this.applyProperty(TicketProperty.PENDING_TIME, pendingTime);
+        this.applyProperty(KIXObjectProperty.DYNAMIC_FIELDS, dynamicFields);
     }
 
 }
