@@ -92,17 +92,15 @@ export class ArticleFormService extends KIXObjectFormService {
                 const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
                 if (dialogContext) {
                     const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
-                    let channels = [1, 2];
                     if (isForwardDialog) {
-                        channels = [2];
+                        const channels = [2];
+                        const option = f.options.find((o) => o.option === 'CHANNELS');
+                        if (option) {
+                            option.value = channels;
+                        } else {
+                            f.options.push(new FormFieldOption('CHANNELS', channels));
+                        }
                     }
-                    const option = f.options.find((o) => o.option === 'CHANNELS');
-                    if (option) {
-                        option.value = channels;
-                    } else {
-                        f.options.push(new FormFieldOption('CHANNELS', channels));
-                    }
-
                 }
             }
 
