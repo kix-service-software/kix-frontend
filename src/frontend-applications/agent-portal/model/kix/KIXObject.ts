@@ -10,6 +10,7 @@
 import { KIXObjectType } from "./KIXObjectType";
 import { ConfiguredPermissions } from "../ConfiguredPermissions";
 import { Link } from "../../modules/links/model/Link";
+import { DynamicFieldValue } from "../../modules/dynamic-fields/model/DynamicFieldValue";
 
 export abstract class KIXObject<T = any> {
 
@@ -37,6 +38,8 @@ export abstract class KIXObject<T = any> {
 
     public Comment: string;
 
+    public DynamicFields: DynamicFieldValue[];
+
     public constructor(object?: KIXObject) {
         this.displayValues = [];
         if (object) {
@@ -48,6 +51,9 @@ export abstract class KIXObject<T = any> {
             this.ChangeTime = object.ChangeTime;
             this.ValidID = object.ValidID;
             this.Comment = object.Comment;
+            this.DynamicFields = object.DynamicFields
+                ? object.DynamicFields.map((df) => new DynamicFieldValue(df))
+                : [];
         }
     }
 

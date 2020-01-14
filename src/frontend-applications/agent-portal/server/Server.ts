@@ -45,7 +45,6 @@ import { TranslationAPIService } from '../modules/translation/server/Translation
 import { SysConfigAccessLevel } from '../modules/sysconfig/model/SysConfigAccessLevel';
 import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
 import { SystemInfo } from '../model/SystemInfo';
-import { ModuleConfigurationService } from './services/configuration';
 
 export class Server implements IServer {
 
@@ -210,15 +209,16 @@ export class Server implements IServer {
 
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;
-                const definition = new SysConfigOptionDefinition();
-                definition.AccessLevel = SysConfigAccessLevel.INTERNAL;
-                definition.Name = c.id;
-                definition.Description = name;
-                definition.Default = JSON.stringify(c);
-                definition.Context = serverConfig.NOTIFICATION_CLIENT_ID;
-                definition.ContextMetadata = c.type;
-                definition.Type = 'String';
-                definition.IsRequired = 0;
+                const definition: any = {
+                    AccessLevel: SysConfigAccessLevel.INTERNAL,
+                    Name: c.id,
+                    Description: name,
+                    Default: JSON.stringify(c),
+                    Context: serverConfig.NOTIFICATION_CLIENT_ID,
+                    ContextMetadata: c.type,
+                    Type: 'String',
+                    IsRequired: 0
+                };
                 return definition;
             });
 

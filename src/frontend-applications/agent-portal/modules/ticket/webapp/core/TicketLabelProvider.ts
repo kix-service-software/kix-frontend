@@ -355,16 +355,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                         TicketProperty.TYPE_ID, ticket.TypeID, translatable
                     );
                     break;
-                case TicketProperty.SERVICE:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.SERVICE_ID, ticket.ServiceID, translatable
-                    );
-                    break;
-                case TicketProperty.SLA:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.SLA_ID, ticket.SLAID, translatable
-                    );
-                    break;
                 // TODO: still necessary?
                 case 'UserID':
                     if (displayValue) {

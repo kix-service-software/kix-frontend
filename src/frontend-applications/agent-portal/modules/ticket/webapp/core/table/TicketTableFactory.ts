@@ -117,7 +117,7 @@ export class TicketTableFactory extends TableFactory {
             tableConfiguration = new TableConfiguration(
                 null, null, null, KIXObjectType.TICKET, null, null, tableColumns, [], true);
             defaultToggle = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns || !tableConfiguration.tableColumns.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

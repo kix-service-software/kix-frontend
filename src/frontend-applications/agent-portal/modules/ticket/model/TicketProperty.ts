@@ -127,8 +127,6 @@ export enum TicketProperty {
 
     ATTACHMENT_NAME = 'AttachmentName',
 
-    DYNAMIC_FIELD = 'DynamicField',
-
     TICKET_FLAG = 'TicketFlag',
 
     ARTICLE_FLAG = 'ArticleFlag',

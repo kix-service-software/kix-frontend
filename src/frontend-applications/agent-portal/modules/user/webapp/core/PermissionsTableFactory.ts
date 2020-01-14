@@ -77,7 +77,7 @@ export class PermissionsTableFactory extends TableFactory {
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns || !tableConfiguration.tableColumns.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

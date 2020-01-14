@@ -13,5 +13,7 @@ export { DynamicFieldService } from './DynamicFieldService';
 export { DynamicFieldTableContentProvider } from './DynamicFieldTableContentProvider';
 export { DynamicFieldTableFactory } from './DynamicFieldTableFactory';
 export { DynamicFieldFormService } from './DynamicFieldFormService';
+export { DynamicFormFieldOption } from './DynamicFormFieldOption';
+export { DynamicFieldTextValidator } from './DynamicFieldTextValidator';
 
 export { UIModule as DynamicFieldsUIModule } from './DynamicFieldsUIModule';

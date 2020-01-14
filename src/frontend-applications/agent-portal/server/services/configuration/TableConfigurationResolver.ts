@@ -11,11 +11,7 @@
 import { IConfigurationResolver } from "./IConfigurationResolver";
 import { TableConfiguration } from "../../../model/configuration/TableConfiguration";
 import { IColumnConfiguration } from "../../../model/configuration/IColumnConfiguration";
-import { ModuleConfigurationService } from "./ModuleConfigurationService";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
-import { DefaultColumnConfiguration } from "./DefaultColumnConfiguration";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { DataType } from "../../../model/DataType";
+import { ResolverUtil } from "./ResolverUtil";
 
 export class TableConfigurationResolver implements IConfigurationResolver<TableConfiguration> {
 
@@ -39,27 +35,9 @@ export class TableConfigurationResolver implements IConfigurationResolver<TableC
                 tableConfig.tableColumns = [];
             }
 
-            const columnConfigs = await ModuleConfigurationService.getInstance()
-                .loadConfigurations<IColumnConfiguration>(token, tableConfig.tableColumnConfigurations);
-
-            for (const columnConfigId of tableConfig.tableColumnConfigurations) {
-                const columnConfig = columnConfigs.find((cc) => cc.id === columnConfigId);
-
-                if (columnConfig) {
-                    tableConfig.tableColumns.push(columnConfig);
-                } else {
-                    tableConfig.tableColumns.push(
-                        new DefaultColumnConfiguration(
-                            columnConfigId, 'ERROR', null, null, false, false, true, true, 80,
-                            false, false, false, DataType.STRING, true, null, columnConfigId
-                        )
-                    );
-
-                    LoggingService.getInstance().warning(
-                        `Could not resolve table column: ${columnConfigId}, table: ${tableConfig.id}`
-                    );
-                }
-            }
+            tableConfig.tableColumns = await ResolverUtil.loadConfigurations<IColumnConfiguration>(
+                token, tableConfig.tableColumnConfigurations, tableConfig.tableColumns
+            );
         }
     }
 

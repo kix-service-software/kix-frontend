@@ -93,7 +93,6 @@ class Component extends FormInputComponent<JSON, ComponentState> {
                     this.editor = new JSONEditor(element, {
                         schema: this.schema,
                         disable_edit_json: true,
-                        disable_collapse: true,
                         disable_properties: true,
                         array_controls_top: true,
                         disable_array_delete_last_row: true,
