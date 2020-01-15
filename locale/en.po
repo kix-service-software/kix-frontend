@@ -149,6 +149,12 @@ msgstr ""
 msgid "All tickets"
 msgstr ""
 
+msgid "A maximum of {0} values can be selected."
+msgstr ""
+
+msgid "A maximum of 1 value can be selected. (SingleSelect)"
+msgstr ""
+
 msgid "and"
 msgstr ""
 
@@ -230,6 +236,9 @@ msgstr ""
 
 msgid "Assign Team / Queue"
 msgstr "Assign Team"
+
+msgid "At least {0} values must be selected"
+msgstr ""
 
 msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgstr ""
