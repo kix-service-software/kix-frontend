@@ -12,8 +12,9 @@ import { ActionFactory } from "../../../../modules/base-components/webapp/core/A
 import { SwitchColumnOrderAction } from "./table/actions";
 import { PrintAction } from "../../../../modules/base-components/webapp/core/PrintAction";
 import { TableCSSHandlerRegistry } from "./table";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { InvalidObjectCSSHandler } from "./table/InvalidObjectCSSHandler";
+import { FormValidationService } from "./FormValidationService";
+import { ObjectReferenceCountValidator } from "./ObjectReferenceCountValidator";
 
 export class UIModule implements IUIModule {
 
@@ -30,6 +31,8 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('print-action', PrintAction);
 
         TableCSSHandlerRegistry.getInstance().registerCommonCSSHandler(new InvalidObjectCSSHandler());
+
+        FormValidationService.getInstance().registerValidator(new ObjectReferenceCountValidator());
     }
 
 }

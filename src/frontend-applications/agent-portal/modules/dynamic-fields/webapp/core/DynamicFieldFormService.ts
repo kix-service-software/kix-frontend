@@ -7,15 +7,15 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { DynamicField } from "../../model/DynamicField";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { DynamicField } from '../../model/DynamicField';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 
@@ -63,7 +63,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                     }
                 }
 
-                if (dynamicField && f.property === 'Config' && dynamicField.FieldType === 'Dropdown') {
+                if (dynamicField && f.property === 'Config' && dynamicField.FieldType === 'Multiselect') {
                     const oldPossibleValues = value.PossibleValues;
                     const possibleValueArray = [];
                     Object.keys(oldPossibleValues).forEach((key) => {
@@ -73,8 +73,8 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         possibleValueArray.push(newPossibleValues);
                     });
                     value.PossibleValues = possibleValueArray;
-                    value.PossibleNone = value.PossibleNone === '1' ? true : false;
-                    value.TranslatableValues = value.TranslatableValues === '1' ? true : false;
+                    value.PossibleNone = value.PossibleNone === '1';
+                    value.TranslatableValues = value.TranslatableValues === '1';
                 }
 
                 formFieldValue = dynamicField && formContext === FormContext.EDIT
@@ -95,11 +95,11 @@ export class DynamicFieldFormService extends KIXObjectFormService {
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
 
-        const fieldTypeParameter = parameter.find((p) => p[0] === "FieldType");
-        const configParameter = parameter.find((p) => p[0] === "Config");
+        const fieldTypeParameter = parameter.find((p) => p[0] === 'FieldType');
+        const configParameter = parameter.find((p) => p[0] === 'Config');
 
         if (configParameter) {
-            if (fieldTypeParameter[1] === "Dropdown") {
+            if (fieldTypeParameter[1] === 'Multiselect') {
                 configParameter[1].PossibleNone = configParameter[1].PossibleNone ? 1 : 0;
                 configParameter[1].TranslatableValues = configParameter[1].TranslatableValues ? 1 : 0;
                 const possibleValue = configParameter[1].PossibleValues;

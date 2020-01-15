@@ -88,7 +88,7 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
                         new TreeNode('Text', 'Text', 'kix-icon-filetype-text'),
                         new TreeNode('TextArea', 'Text Area', 'kix-icon-filetype-text'),
-                        new TreeNode('Dropdown', 'Selection', 'kix-icon-menue'),
+                        new TreeNode('Multiselect', 'Selection', 'kix-icon-menue'),
                         new TreeNode('Date', 'Date', 'kix-icon-calendar'),
                         new TreeNode('DateTime', 'Date Time', 'kix-icon-calendar')
                     ])

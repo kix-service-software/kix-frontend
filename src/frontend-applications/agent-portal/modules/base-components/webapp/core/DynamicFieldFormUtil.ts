@@ -28,6 +28,9 @@ import { InputFieldTypes } from "./InputFieldTypes";
 import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
 import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
 import { DateTimeUtil } from "./DateTimeUtil";
+import { ObjectReferenceOptions } from "./ObjectReferenceOptions";
+import { TreeNode } from "./tree";
+import { TranslationService } from "../../../translation/webapp/core";
 
 export class DynamicFieldFormUtil {
 
@@ -64,35 +67,35 @@ export class DynamicFieldFormUtil {
                 ],
                 null, null, [DynamicFieldProperty.CONFIG]
             );
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            const fields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
             );
-            if (dynamicFields && dynamicFields.length && dynamicFields[0].ValidID === 1 && dynamicFields[0].Config) {
-                const config = dynamicFields[0].Config;
+            if (fields && fields.length && fields[0].ValidID === 1) {
+                const config = fields[0].Config;
                 field.countDefault = Number(config.CountDefault);
                 field.countMax = Number(config.CountMax);
                 field.countMin = Number(config.CountMin);
 
                 if (!field.label || field.label === '') {
-                    field.label = dynamicFields[0].Label;
+                    field.label = fields[0].Label;
                 }
 
                 field.defaultValue = config.DefaultValue
                     ? new FormFieldValue(config.DefaultValue, true)
                     : null;
 
-                if (dynamicFields[0].FieldType === 'Text') {
+                if (fields[0].FieldType === 'Text') {
                     field.inputComponent = null;
-                } else if (dynamicFields[0].FieldType === 'TextArea') {
+                } else if (fields[0].FieldType === 'TextArea') {
                     field.inputComponent = 'text-area-input';
-                } else if (dynamicFields[0].FieldType === 'Date' || dynamicFields[0].FieldType === 'DateTime') {
+                } else if (fields[0].FieldType === 'Date' || fields[0].FieldType === 'DateTime') {
 
                     const date = new Date();
                     let type = InputFieldTypes.DATE_TIME;
 
                     const offset = config.DefaultValue ? Number(config.DefaultValue) : 0;
 
-                    if (dynamicFields[0].FieldType === 'Date') {
+                    if (fields[0].FieldType === 'Date') {
                         type = InputFieldTypes.DATE;
                         date.setDate(date.getDate() + offset);
                         date.setHours(0, 0, 0, 0);
@@ -104,26 +107,41 @@ export class DynamicFieldFormUtil {
                         new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, type),
                     );
 
-                    const yearsInPast = Number(config.YearsInPast);
-                    if (yearsInPast && yearsInPast > 0) {
-                        const pastDate = new Date();
-                        pastDate.setFullYear(pastDate.getFullYear() - yearsInPast);
-                        field.options.push(
-                            new FormFieldOption(FormFieldOptions.MIN_DATE, DateTimeUtil.getKIXDateString(pastDate)),
-                        );
-                    }
-
-                    const yearsInFuture = Number(config.YearsInFuture);
-                    if (yearsInFuture && yearsInFuture > 0) {
-                        const futureDate = new Date();
-                        futureDate.setFullYear(futureDate.getFullYear() + yearsInFuture);
-                        field.options.push(
-                            new FormFieldOption(FormFieldOptions.MAX_DATE, DateTimeUtil.getKIXDateString(futureDate)),
-                        );
-                    }
-
                     field.defaultValue = new FormFieldValue(date);
                     field.inputComponent = 'date-time-input';
+                } else if (fields[0].FieldType === 'Multiselect') {
+
+                    field.inputComponent = 'object-reference-input';
+                    const nodes: TreeNode[] = [];
+
+                    if (fields[0].Config.PossibleValues) {
+                        const translatable = Number(fields[0].Config.TranslatableValues);
+                        for (const pv in fields[0].Config.PossibleValues) {
+                            if (fields[0].Config.PossibleValues[pv]) {
+                                const value = fields[0].Config.PossibleValues[pv];
+                                const label = translatable
+                                    ? await TranslationService.translate(value)
+                                    : value;
+                                const node = new TreeNode(pv, label);
+                                nodes.push(node);
+                            }
+                        }
+                    }
+
+                    field.options.push(new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, nodes));
+                    field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field.countMin));
+                    field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field.countMax));
+
+                    const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
+                    field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
+
+                    if (!Boolean(Number(fields[0].Config.PossibleNone))) {
+                        field.required = true;
+                    }
+
+                    field.countDefault = 1;
+                    field.countMax = 1;
+                    field.countMin = 1;
                 }
 
                 success = true;
@@ -133,14 +151,15 @@ export class DynamicFieldFormUtil {
         return success;
     }
 
-    public static handleDynamicFieldValues(
+    public static async handleDynamicFieldValues(
         formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService
-    ): void {
+    ): Promise<void> {
         if (object && object.DynamicFields && object.DynamicFields.length) {
             const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
             for (const field of fields) {
                 let values = [];
                 const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                let isMultiselect = false;
                 if (fieldNameOption) {
                     const dfValue: DynamicFieldValue = object.DynamicFields.find(
                         (df) => df.Name === fieldNameOption.value
@@ -148,30 +167,49 @@ export class DynamicFieldFormUtil {
                     if (dfValue) {
                         values = dfValue.Value;
                     }
-                }
 
-                for (let i = 0; i < values.length; i++) {
-                    if (i === 0) {
-                        field.defaultValue = new FormFieldValue(values[i], true);
-                    } else {
-                        const newField = formService.getNewFormField(field);
-                        newField.defaultValue = new FormFieldValue(values[i], true);
-                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                        formFields.splice(index + i, 0, newField);
+                    const dynamicField = await this.loadDynamicField(fieldNameOption.value);
+                    if (dynamicField) {
+                        isMultiselect = dynamicField.FieldType === 'Multiselect';
                     }
                 }
 
-                if (field.countMin > 0 && values.length < field.countMin) {
-                    const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
-                        ? field.countDefault
-                        : field.countMin;
-                    const count = values.length === 0 ? countDefault : field.countMin - values.length;
+                if (isMultiselect) {
+                    field.defaultValue = new FormFieldValue(values);
+                } else {
+                    for (let i = 0; i < values.length; i++) {
+                        if (i === 0) {
+                            field.defaultValue = new FormFieldValue(values[i], true);
+                        } else {
+                            const newField = formService.getNewFormField(field);
+                            newField.defaultValue = new FormFieldValue(values[i], true);
+                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                            formFields.splice(index + i, 0, newField);
+                        }
+                    }
+                    for (let i = 0; i < values.length; i++) {
+                        if (i === 0) {
+                            field.defaultValue = new FormFieldValue(values[i], true);
+                        } else {
+                            const newField = formService.getNewFormField(field);
+                            newField.defaultValue = new FormFieldValue(values[i], true);
+                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                            formFields.splice(index, 0, newField);
+                        }
+                    }
 
-                    for (let i = 1; i < count; i++) {
-                        const newField = formService.getNewFormField(field);
-                        newField.defaultValue = new FormFieldValue(null, false);
-                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                        formFields.splice(index, 0, newField);
+                    if (field.countMin > 0 && values.length < field.countMin) {
+                        const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
+                            ? field.countDefault
+                            : field.countMin;
+                        const count = values.length === 0 ? countDefault : field.countMin - values.length;
+
+                        for (let i = 1; i < count; i++) {
+                            const newField = formService.getNewFormField(field);
+                            newField.defaultValue = new FormFieldValue(null, false);
+                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                            formFields.splice(index, 0, newField);
+                        }
                     }
                 }
             }
@@ -189,23 +227,11 @@ export class DynamicFieldFormUtil {
 
         const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (fieldNameOption) {
-
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, fieldNameOption.value
-                    )
-                ]
-            );
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
-
             let setValue = value.value;
 
-            if (dynamicFields && dynamicFields.length) {
-                const fieldType = dynamicFields[0].FieldType;
+            const dynamicField = await this.loadDynamicField(fieldNameOption.value);
+            if (dynamicField) {
+                const fieldType = dynamicField.FieldType;
                 if (fieldType === 'Date' || fieldType === 'DateTime') {
                     setValue = DateTimeUtil.getKIXDateTimeString(setValue);
                 }
@@ -220,7 +246,9 @@ export class DynamicFieldFormUtil {
                 dfParameter[1].push(dfValue);
             }
 
-            if (!dfValue.Value.some((v) => v === setValue)) {
+            if (Array.isArray(setValue)) {
+                dfValue.Value = setValue;
+            } else if (!dfValue.Value.some((v) => v === setValue)) {
                 dfValue.Value.push(setValue);
             }
         }
@@ -228,4 +256,19 @@ export class DynamicFieldFormUtil {
         return parameter;
     }
 
+    private static async loadDynamicField(name: string): Promise<DynamicField> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, name
+                )
+            ], null, null, [DynamicFieldProperty.CONFIG]
+        );
+        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+        );
+
+        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+    }
 }

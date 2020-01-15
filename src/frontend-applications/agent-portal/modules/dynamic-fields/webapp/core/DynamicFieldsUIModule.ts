@@ -459,6 +459,6 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema('Dropdown', schema);
+        DynamicFieldService.getInstance().registerConfigSchema('Multiselect', schema);
     }
 }
