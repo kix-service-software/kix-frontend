@@ -78,32 +78,42 @@ export class DateTimeUtil {
     }
 
     public static getKIXDateString(date: Date): string {
-        const year = date.getFullYear();
-        const month = DateTimeUtil.padZero(date.getMonth() + 1);
-        const day = DateTimeUtil.padZero(date.getDate());
-        const kixDateString = `${year}-${month}-${day}`;
+        let kixDateString;
+        if (date) {
+            const year = date.getFullYear();
+            const month = DateTimeUtil.padZero(date.getMonth() + 1);
+            const day = DateTimeUtil.padZero(date.getDate());
+            kixDateString = `${year}-${month}-${day}`;
+        }
         return kixDateString;
     }
 
     public static getKIXTimeString(date: Date, short: boolean = true): string {
-        const hours = DateTimeUtil.padZero(date.getHours());
-        const minutes = DateTimeUtil.padZero(date.getMinutes());
-        const seconds = DateTimeUtil.padZero(date.getSeconds());
-        let kixTimeString = `${hours}:${minutes}`;
-        if (!short) {
-            kixTimeString += `:${seconds}`;
+        let kixTimeString;
+        if (date) {
+            const hours = DateTimeUtil.padZero(date.getHours());
+            const minutes = DateTimeUtil.padZero(date.getMinutes());
+            const seconds = DateTimeUtil.padZero(date.getSeconds());
+            kixTimeString = `${hours}:${minutes}`;
+            if (!short) {
+                kixTimeString += `:${seconds}`;
+            }
         }
         return kixTimeString;
     }
 
     public static getTimestampNumbersOnly(date: Date, withSeconds?: boolean): string {
-        const year = date.getFullYear();
-        const month = DateTimeUtil.padZero(date.getMonth() + 1);
-        const day = DateTimeUtil.padZero(date.getDate());
-        const hours = DateTimeUtil.padZero(date.getHours());
-        const minutes = DateTimeUtil.padZero(date.getMinutes());
-        const seconds = DateTimeUtil.padZero(date.getSeconds());
-        return `${year}${month}${day}${hours}${minutes}${withSeconds ? seconds : ''}`;
+        if (date) {
+            const year = date.getFullYear();
+            const month = DateTimeUtil.padZero(date.getMonth() + 1);
+            const day = DateTimeUtil.padZero(date.getDate());
+            const hours = DateTimeUtil.padZero(date.getHours());
+            const minutes = DateTimeUtil.padZero(date.getMinutes());
+            const seconds = DateTimeUtil.padZero(date.getSeconds());
+            return `${year}${month}${day}${hours}${minutes}${withSeconds ? seconds : ''}`;
+        }
+
+        return null;
     }
 
     public static sameDay(d1: Date, d2: Date): boolean {
