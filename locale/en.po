@@ -3503,6 +3503,16 @@ msgid "The search only includes current versions."
 msgstr ""
 
 msgid ""
+"The value for the field is in the future! The date needs to be in the past!"
+msgstr ""
+
+msgid "The year can be a maximum of {0} years in the future"
+msgstr ""
+
+msgid "The year can be a maximum of {0} years in the past"
+msgstr ""
+
+msgid ""
 "This is the administration panel. Please select a module from the explorer."
 msgstr ""
 
