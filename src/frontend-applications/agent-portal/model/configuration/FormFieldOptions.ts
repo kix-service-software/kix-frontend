@@ -17,6 +17,10 @@ export enum FormFieldOptions {
 
     INVALID_CLICKABLE = 'INVALID_CLICKABLE',
 
-    IS_JSON = 'isJSON'
+    IS_JSON = 'isJSON',
+
+    MIN_DATE = 'MIN_DATE',
+
+    MAX_DATE = 'MAX_DATE'
 
 }

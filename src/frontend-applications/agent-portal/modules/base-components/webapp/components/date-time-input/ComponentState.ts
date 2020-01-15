@@ -16,7 +16,9 @@ export class ComponentState extends FormInputComponentState<string> {
         public placeholder: string = null,
         public inputType: string = 'date',
         public dateValue: string = null,
-        public timeValue: string = null
+        public timeValue: string = null,
+        public minDate: string = null,
+        public maxDate: string = null
     ) {
         super();
     }

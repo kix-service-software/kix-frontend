@@ -28,6 +28,7 @@ import { DynamicFieldFormService } from "./DynamicFieldFormService";
 import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
 import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
 import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
+import { DynamicFieldDateTimeValidator } from "./DynamicFieldDateTimeValidator";
 
 export class UIModule implements IUIModule {
 
@@ -68,6 +69,7 @@ export class UIModule implements IUIModule {
         await ContextService.getInstance().registerContext(editDynamicFieldContext);
 
         FormValidationService.getInstance().registerValidator(new DynamicFieldTextValidator());
+        FormValidationService.getInstance().registerValidator(new DynamicFieldDateTimeValidator());
 
         this.registerSchemas();
     }
@@ -263,7 +265,7 @@ export class UIModule implements IUIModule {
                 },
                 DefaultValue: {
                     title: "Default Value",
-                    description: "This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time \"00:00:00\", hence enter 86400 in order to initialize the field with \"tomorrows\" date.",
+                    description: "This value defines the offset (in days) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time \"00:00:00\", hence enter 1 in order to initialize the field with \"tomorrows\" date.",
                     type: "integer",
                     required: false
                 },
@@ -285,7 +287,7 @@ export class UIModule implements IUIModule {
                     type: "integer",
                     required: false
                 },
-                DateRestrictions: {
+                DateRestriction: {
                     title: "Date Restriction",
                     type: "string",
                     default: "none",
@@ -359,7 +361,7 @@ export class UIModule implements IUIModule {
                     type: "integer",
                     required: false
                 },
-                DateRestrictions: {
+                DateRestriction: {
                     title: "Date Restriction",
                     type: "string",
                     default: "none",

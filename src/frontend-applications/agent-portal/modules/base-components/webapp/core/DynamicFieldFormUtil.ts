@@ -24,6 +24,10 @@ import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/Dyna
 import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
+import { InputFieldTypes } from "./InputFieldTypes";
+import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
+import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
+import { DateTimeUtil } from "./DateTimeUtil";
 
 export class DynamicFieldFormUtil {
 
@@ -63,7 +67,7 @@ export class DynamicFieldFormUtil {
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
             );
-            if (dynamicFields && dynamicFields.length && dynamicFields[0].ValidID === 1) {
+            if (dynamicFields && dynamicFields.length && dynamicFields[0].ValidID === 1 && dynamicFields[0].Config) {
                 const config = dynamicFields[0].Config;
                 field.countDefault = Number(config.CountDefault);
                 field.countMax = Number(config.CountMax);
@@ -81,6 +85,45 @@ export class DynamicFieldFormUtil {
                     field.inputComponent = null;
                 } else if (dynamicFields[0].FieldType === 'TextArea') {
                     field.inputComponent = 'text-area-input';
+                } else if (dynamicFields[0].FieldType === 'Date' || dynamicFields[0].FieldType === 'DateTime') {
+
+                    const date = new Date();
+                    let type = InputFieldTypes.DATE_TIME;
+
+                    const offset = config.DefaultValue ? Number(config.DefaultValue) : 0;
+
+                    if (dynamicFields[0].FieldType === 'Date') {
+                        type = InputFieldTypes.DATE;
+                        date.setDate(date.getDate() + offset);
+                        date.setHours(0, 0, 0, 0);
+                    } else {
+                        date.setSeconds(date.getSeconds() + offset);
+                    }
+
+                    field.options.push(
+                        new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, type),
+                    );
+
+                    const yearsInPast = Number(config.YearsInPast);
+                    if (yearsInPast && yearsInPast > 0) {
+                        const pastDate = new Date();
+                        pastDate.setFullYear(pastDate.getFullYear() - yearsInPast);
+                        field.options.push(
+                            new FormFieldOption(FormFieldOptions.MIN_DATE, DateTimeUtil.getKIXDateString(pastDate)),
+                        );
+                    }
+
+                    const yearsInFuture = Number(config.YearsInFuture);
+                    if (yearsInFuture && yearsInFuture > 0) {
+                        const futureDate = new Date();
+                        futureDate.setFullYear(futureDate.getFullYear() + yearsInFuture);
+                        field.options.push(
+                            new FormFieldOption(FormFieldOptions.MAX_DATE, DateTimeUtil.getKIXDateString(futureDate)),
+                        );
+                    }
+
+                    field.defaultValue = new FormFieldValue(date);
+                    field.inputComponent = 'date-time-input';
                 }
 
                 success = true;
@@ -146,6 +189,28 @@ export class DynamicFieldFormUtil {
 
         const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (fieldNameOption) {
+
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, fieldNameOption.value
+                    )
+                ]
+            );
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+            );
+
+            let setValue = value.value;
+
+            if (dynamicFields && dynamicFields.length) {
+                const fieldType = dynamicFields[0].FieldType;
+                if (fieldType === 'Date' || fieldType === 'DateTime') {
+                    setValue = DateTimeUtil.getKIXDateTimeString(setValue);
+                }
+            }
+
             let dfValue = dfParameter[1].find((p) => p.Name === fieldNameOption.value);
             if (!dfValue) {
                 dfValue = {
@@ -155,8 +220,8 @@ export class DynamicFieldFormUtil {
                 dfParameter[1].push(dfValue);
             }
 
-            if (!dfValue.Value.some((v) => v === value.value)) {
-                dfValue.Value.push(value.value);
+            if (!dfValue.Value.some((v) => v === setValue)) {
+                dfValue.Value.push(setValue);
             }
         }
 
