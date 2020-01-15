@@ -24,8 +24,6 @@ declare var JSONEditor: any;
 class Component extends FormInputComponent<JSON, ComponentState> {
 
     private schema: JSON = null;
-    private type: string;
-
     private editor: any;
 
     public onCreate(): void {
