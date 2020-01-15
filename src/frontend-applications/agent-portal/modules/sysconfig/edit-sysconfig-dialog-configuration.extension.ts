@@ -86,9 +86,10 @@ export class Extension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                'object-reference-input', false, 'Translatable#Helptext_Admin_SysConfigEdit_Validity', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-            ]
+                'object-reference-input', true, 'Translatable#Helptext_Admin_SysConfigEdit_Validity',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ]
             )
         );
         configurations.push(
@@ -134,7 +135,7 @@ export class Extension implements IConfigurationExtension {
                 [
                     'sysconfig-edit-form-page'
                 ],
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, false, FormContext.EDIT
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, true, FormContext.EDIT
             )
         );
 
