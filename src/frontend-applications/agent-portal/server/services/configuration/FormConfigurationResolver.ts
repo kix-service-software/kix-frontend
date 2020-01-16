@@ -45,7 +45,7 @@ export class FormConfigurationResolver {
     private static async resolveFieldChildrenConfig(
         token: string, config: FormFieldConfiguration, ancenstorIds: string[]
     ): Promise<void> {
-        if (config && config.fieldConfigurationIds) {
+        if (config && (config.fieldConfigurationIds || config.children)) {
             ancenstorIds.unshift(`field: ${config.id}`);
 
             config.children = await ResolverUtil.loadConfigurations<FormFieldConfiguration>(
@@ -53,10 +53,9 @@ export class FormConfigurationResolver {
             );
 
             for (const fieldConfig of config.children) {
-                if (fieldConfig.fieldConfigurationIds) {
+                if (fieldConfig.fieldConfigurationIds || fieldConfig.children) {
                     await this.resolveFieldChildrenConfig(token, fieldConfig, [...ancenstorIds]);
                 }
-                config.children.push(fieldConfig);
             }
         }
     }

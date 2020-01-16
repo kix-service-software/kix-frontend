@@ -20,13 +20,16 @@ export class ResolverUtil {
         if (!configurations) {
             configurations = [];
         }
+        if (!ids) {
+            ids = [];
+        }
 
         let newConfigurations: T[] = [];
 
         const idsToLoad = ids.filter((cid) => !configurations.some((c) => c.id === cid));
-        const loadedConfigurations = await ModuleConfigurationService.getInstance().loadConfigurations<T>(
+        const loadedConfigurations = idsToLoad ? await ModuleConfigurationService.getInstance().loadConfigurations<T>(
             token, idsToLoad
-        );
+        ) : [];
 
         for (const configId of ids) {
             let configuration = configurations.find((c) => c.id === configId);

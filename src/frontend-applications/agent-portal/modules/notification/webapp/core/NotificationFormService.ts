@@ -23,8 +23,8 @@ import { ArticleProperty } from "../../../ticket/model/ArticleProperty";
 import { NotificationService } from ".";
 import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
 import { NotificationMessage } from "../../model/NotificationMessage";
-import { KIXObject } from "../../../../model/kix/KIXObject";
 import { Notification } from "../../model/Notification";
+import { TicketProperty } from "../../../ticket/model/TicketProperty";
 
 export class NotificationFormService extends KIXObjectFormService {
 
@@ -180,5 +180,58 @@ export class NotificationFormService extends KIXObjectFormService {
         if (bodyValue) {
             formFieldValues.set(fields[1].instanceId, bodyValue);
         }
+    }
+
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
+            case NotificationProperty.DATA_SEND_ONCE_A_DAY:
+            case NotificationProperty.DATA_SEND_DESPITE_OOO:
+            case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+            case NotificationProperty.DATA_CREATE_ARTICLE:
+                value = Number(value);
+                break;
+            case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                value = Array.isArray(value) ? value.join(',') : value;
+                break;
+            case NotificationProperty.DATA_FILTER:
+                if (value) {
+                    for (const v of value) {
+                        switch (v[0]) {
+                            case TicketProperty.TYPE_ID:
+                            case TicketProperty.STATE_ID:
+                            case TicketProperty.PRIORITY_ID:
+                            case TicketProperty.QUEUE_ID:
+                            case TicketProperty.LOCK_ID:
+                            case TicketProperty.ORGANISATION_ID:
+                            case TicketProperty.CONTACT_ID:
+                            case TicketProperty.OWNER_ID:
+                            case TicketProperty.RESPONSIBLE_ID:
+                                v[0] = 'Ticket::' + v[0];
+                                break;
+                            case ArticleProperty.SENDER_TYPE_ID:
+                            case ArticleProperty.CHANNEL_ID:
+                            case ArticleProperty.TO:
+                            case ArticleProperty.CC:
+                            case ArticleProperty.FROM:
+                            case ArticleProperty.SUBJECT:
+                            case ArticleProperty.BODY:
+                                v[0] = 'Article::' + v[0];
+                                break;
+                            default:
+                        }
+                    }
+                }
+                break;
+            default:
+
+        }
+        return [[property, value]];
+    }
+
+    public async preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>> {
+        return [
+            ['Transports', ['Email']]
+        ];
     }
 }
