@@ -14,6 +14,7 @@ import { ValidationSeverity } from "./ValidationSeverity";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { TranslationService } from "../../../translation/webapp/core";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class RegExFormFieldValidator implements IFormFieldValidator {
 
@@ -42,6 +43,14 @@ export class RegExFormFieldValidator implements IFormFieldValidator {
                 return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }
         }
+        return new ValidationResult(ValidationSeverity.OK, '');
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return false;
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
         return new ValidationResult(ValidationSeverity.OK, '');
     }
 }

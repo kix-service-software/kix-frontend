@@ -41,25 +41,14 @@ export class DynamicFieldTextValidator implements IFormFieldValidator {
             const nameOption = formField.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
 
             if (nameOption) {
-                const regexList = await this.getRegexList(nameOption.value);
-
-                for (const regexEntry of regexList) {
-                    const regex = new RegExp(regexEntry.RegEx);
-                    if (!regex.test(fieldValue)) {
-                        const fieldLabel = await TranslationService.translate(formField.label);
-                        const errorMessage = await TranslationService.translate(regexEntry.RegExError);
-                        const errorString = await TranslationService.translate(
-                            "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                        );
-                        return new ValidationResult(ValidationSeverity.ERROR, errorString);
-                    }
-                }
+                const regexList = await this.loadRegExList(nameOption.value);
+                return this.evaluateRegexList(regexList, fieldValue, formField.label);
             }
         }
         return new ValidationResult(ValidationSeverity.OK, '');
     }
 
-    private async getRegexList(name: string): Promise<any[]> {
+    private async loadRegExList(name: string): Promise<any[]> {
         const loadingOptions = new KIXObjectLoadingOptions(
             [
                 new FilterCriteria(
@@ -74,6 +63,30 @@ export class DynamicFieldTextValidator implements IFormFieldValidator {
 
         const dynamicField = fields && fields.length ? fields[0] : null;
 
+        return this.getRegexList(dynamicField);
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return dynamicField && dynamicField.Config && dynamicField.Config.RegExList &&
+            (dynamicField.FieldType === 'Text' || dynamicField.FieldType === 'TextArea');
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        const regexList = this.getRegexList(dynamicField);
+        if (value && Array.isArray(value)) {
+            for (const v of value) {
+                const result = await this.evaluateRegexList(regexList, v, dynamicField.Label);
+                if (result.severity === ValidationSeverity.ERROR) {
+                    return result;
+                }
+            }
+        } else {
+            return this.evaluateRegexList(regexList, value, dynamicField.Label);
+        }
+        return new ValidationResult(ValidationSeverity.OK, '');
+    }
+
+    private getRegexList(dynamicField: DynamicField): any[] {
         if (dynamicField && (dynamicField.FieldType === 'Text' || dynamicField.FieldType === 'TextArea')) {
             if (dynamicField.Config.RegExList && dynamicField.Config.RegExList.length) {
                 return dynamicField.Config.RegExList;
@@ -81,5 +94,21 @@ export class DynamicFieldTextValidator implements IFormFieldValidator {
         }
 
         return [];
+    }
+
+    private async evaluateRegexList(regexList: any[], value: any, label: string): Promise<ValidationResult> {
+        for (const regexEntry of regexList) {
+            const regex = new RegExp(regexEntry.RegEx);
+            if (!regex.test(value)) {
+                const fieldLabel = await TranslationService.translate(label);
+                const errorMessage = await TranslationService.translate(regexEntry.RegExError);
+                const errorString = await TranslationService.translate(
+                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+                );
+                return new ValidationResult(ValidationSeverity.ERROR, errorString);
+            }
+        }
+
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 }

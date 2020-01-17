@@ -36,7 +36,8 @@ import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { IKIXObjectService } from "./IKIXObjectService";
 import { Error } from "../../../../../../server/model/Error";
-
+import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -285,6 +286,28 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
                 break;
             default:
+                const dFRegEx = new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)');
+                if (property.match(dFRegEx)) {
+                    const dfName = property.replace(dFRegEx, '$1');
+                    if (dfName) {
+                        nodes = await this.getNodesForDF(dfName);
+                    }
+                }
+        }
+        return nodes;
+    }
+
+    private async getNodesForDF(name: string): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        const field = await this.loadDynamicField(name);
+        if (field && field.FieldType === 'Multiselect' && field.Config && field.Config.PossibleValues) {
+            for (const pv in field.Config.PossibleValues) {
+                if (field.Config.PossibleValues[pv]) {
+                    const value = field.Config.PossibleValues[pv];
+                    const node = new TreeNode(pv, value);
+                    nodes.push(node);
+                }
+            }
         }
         return nodes;
     }
@@ -401,6 +424,22 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
 
         return nodes;
+    }
+
+    private async loadDynamicField(name: string): Promise<DynamicField> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [
+                new FilterCriteria(
+                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, name
+                )
+            ], null, null, [DynamicFieldProperty.CONFIG]
+        );
+        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
+        );
+
+        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
     }
 
 }

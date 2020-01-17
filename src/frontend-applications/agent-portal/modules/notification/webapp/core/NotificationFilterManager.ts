@@ -28,6 +28,7 @@ import { KIXObjectService } from "../../../../modules/base-components/webapp/cor
 import { Organisation } from "../../../customer/model/Organisation";
 import { Contact } from "../../../customer/model/Contact";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
+import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
 
 export class NotificationFilterManager extends AbstractDynamicFormManager {
 
@@ -151,7 +152,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
         return typeof value.property !== 'undefined' && value.property !== null;
     }
 
-    public isMultiselect(property: string): boolean {
+    public async isMultiselect(property: string): Promise<boolean> {
         switch (property) {
             case TicketProperty.TYPE_ID:
             case TicketProperty.STATE_ID:
@@ -189,11 +190,12 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
         return tree;
     }
 
-    public async validate(): Promise<void> {
+    public async validate(): Promise<ValidationResult[]> {
         const validator = new NotificationFilterValidator();
         for (const v of this.values) {
             v.valid = await validator.validateValue(v.property, v.value);
         }
+        return [];
     }
 
 }

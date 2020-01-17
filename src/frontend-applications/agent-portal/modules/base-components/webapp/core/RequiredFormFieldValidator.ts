@@ -13,6 +13,7 @@ import { FormService } from "./FormService";
 import { ValidationSeverity } from "./ValidationSeverity";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { TranslationService } from "../../../translation/webapp/core";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class RequiredFormFieldValidator implements IFormFieldValidator {
 
@@ -42,6 +43,14 @@ export class RequiredFormFieldValidator implements IFormFieldValidator {
             );
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return false;
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 
 }
