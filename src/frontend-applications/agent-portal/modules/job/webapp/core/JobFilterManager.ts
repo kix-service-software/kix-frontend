@@ -149,7 +149,7 @@ export class JobFilterManager extends AbstractDynamicFormManager {
         return typeof value.property !== 'undefined' && value.property !== null;
     }
 
-    public isMultiselect(property: string): boolean {
+    public async isMultiselect(property: string): Promise<boolean> {
         switch (property) {
             case TicketProperty.TYPE_ID:
             case TicketProperty.STATE_ID:

@@ -97,7 +97,7 @@ export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
         return await SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
-    public isMultiselect(property: string): boolean {
+    public async isMultiselect(property: string): Promise<boolean> {
         return true;
     }
 

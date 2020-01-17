@@ -42,72 +42,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
 
             if (nameOption) {
                 const dynamicField = await this.getDynamicField(nameOption.value);
-
-                if (dynamicField) {
-                    if (dynamicField.Config.DateRestriction) {
-                        const restricition = dynamicField.Config.DateRestriction;
-                        const currentTime = new Date();
-
-                        if (dynamicField.FieldType === 'Date') {
-                            currentTime.setHours(0, 0, 0, 0);
-                        }
-
-                        if (restricition === 'DisableFutureDates' && fieldValue > currentTime) {
-                            const fieldLabel = await TranslationService.translate(formField.label);
-                            const errorMessage = await TranslationService.translate(
-                                // tslint:disable-next-line:max-line-length
-                                'Translatable#The value for the field is in the future! The date needs to be in the past!'
-                            );
-                            const errorString = await TranslationService.translate(
-                                "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                            );
-                            return new ValidationResult(ValidationSeverity.ERROR, errorString);
-                        } else if (restricition === 'DisablePastDates' && fieldValue < currentTime) {
-                            const fieldLabel = await TranslationService.translate(formField.label);
-                            const errorMessage = await TranslationService.translate(
-                                // tslint:disable-next-line:max-line-length
-                                'The value for the field is in the past! The date needs to be in the future!'
-                            );
-                            const errorString = await TranslationService.translate(
-                                "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                            );
-                            return new ValidationResult(ValidationSeverity.ERROR, errorString);
-                        }
-
-                        const currentYear = currentTime.getFullYear();
-                        const selectedYear = fieldValue.getFullYear();
-
-                        const yearsInPast = Number(dynamicField.Config.YearsInPast);
-                        if (yearsInPast && yearsInPast > 0) {
-                            if ((currentYear - yearsInPast) > selectedYear) {
-                                const fieldLabel = await TranslationService.translate(formField.label);
-                                const errorMessage = await TranslationService.translate(
-                                    // tslint:disable-next-line:max-line-length
-                                    'Translatable#The year can be a maximum of {0} years in the past', [yearsInPast]
-                                );
-                                const errorString = await TranslationService.translate(
-                                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                                );
-                                return new ValidationResult(ValidationSeverity.ERROR, errorString);
-                            }
-                        }
-
-                        const yearsInFuture = Number(dynamicField.Config.YearsInFuture);
-                        if (yearsInFuture && yearsInFuture > 0) {
-                            if ((currentYear + yearsInFuture) < selectedYear) {
-                                const fieldLabel = await TranslationService.translate(formField.label);
-                                const errorMessage = await TranslationService.translate(
-                                    // tslint:disable-next-line:max-line-length
-                                    'Translatable#The year can be a maximum of {0} years in the future', [yearsInPast]
-                                );
-                                const errorString = await TranslationService.translate(
-                                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                                );
-                                return new ValidationResult(ValidationSeverity.ERROR, errorString);
-                            }
-                        }
-                    }
-                }
+                return await this.checkDynamicField(dynamicField, fieldValue, formField.label);
             }
         }
         return new ValidationResult(ValidationSeverity.OK, '');
@@ -131,5 +66,87 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
         return dynamicField && (dynamicField.FieldType === 'Date' || dynamicField.FieldType === 'DateTime')
             ? dynamicField
             : null;
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return dynamicField.FieldType === 'Date' || dynamicField.FieldType === 'DateTime';
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        return await this.checkDynamicField(dynamicField, value, dynamicField.Label);
+    }
+
+    private async checkDynamicField(dynamicField: DynamicField, value: Date, label: string): Promise<ValidationResult> {
+        if (dynamicField && value) {
+            if (typeof value === 'string') {
+                value = new Date(value);
+            }
+
+            if (dynamicField.Config.DateRestriction) {
+                const restricition = dynamicField.Config.DateRestriction;
+                const currentTime = new Date();
+
+                if (dynamicField.FieldType === 'Date') {
+                    currentTime.setHours(0, 0, 0, 0);
+                }
+
+                if (restricition === 'DisableFutureDates' && value > currentTime) {
+                    const fieldLabel = await TranslationService.translate(label);
+                    const errorMessage = await TranslationService.translate(
+                        // tslint:disable-next-line:max-line-length
+                        'Translatable#The value for the field is in the future! The date needs to be in the past!'
+                    );
+                    const errorString = await TranslationService.translate(
+                        "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+                    );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                } else if (restricition === 'DisablePastDates' && value < currentTime) {
+                    const fieldLabel = await TranslationService.translate(label);
+                    const errorMessage = await TranslationService.translate(
+                        // tslint:disable-next-line:max-line-length
+                        'The value for the field is in the past! The date needs to be in the future!'
+                    );
+                    const errorString = await TranslationService.translate(
+                        "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+                    );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                }
+
+                const currentYear = currentTime.getFullYear();
+                const selectedYear = value.getFullYear();
+
+                const yearsInPast = Number(dynamicField.Config.YearsInPast);
+                if (yearsInPast && yearsInPast > 0) {
+                    if ((currentYear - yearsInPast) > selectedYear) {
+                        const fieldLabel = await TranslationService.translate(label);
+                        const errorMessage = await TranslationService.translate(
+                            // tslint:disable-next-line:max-line-length
+                            'Translatable#The year can be a maximum of {0} years in the past', [yearsInPast]
+                        );
+                        const errorString = await TranslationService.translate(
+                            "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+                        );
+                        return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                    }
+                }
+
+                const yearsInFuture = Number(dynamicField.Config.YearsInFuture);
+                if (yearsInFuture && yearsInFuture > 0) {
+                    if ((currentYear + yearsInFuture) < selectedYear) {
+                        const fieldLabel = await TranslationService.translate(label);
+                        const errorMessage = await TranslationService.translate(
+                            // tslint:disable-next-line:max-line-length
+                            'Translatable#The year can be a maximum of {0} years in the future', [yearsInPast]
+                        );
+                        const errorString = await TranslationService.translate(
+                            "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+                        );
+                        return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                    }
+                }
+            }
+        }
+
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 }

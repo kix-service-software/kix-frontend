@@ -15,6 +15,7 @@ import { IFormFieldValidator } from "./IFormFieldValidator";
 import { ValidationResult } from "./ValidationResult";
 import addrparser = require('address-rfc2822');
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class FormValidationService {
 
@@ -58,6 +59,16 @@ export class FormValidationService {
                 const validationResult = await v.validate(formField, formId);
                 result.push(validationResult);
             }
+        }
+        return result;
+    }
+
+    public async validateDynamicFieldValue(dynamicField: DynamicField, value: any): Promise<ValidationResult[]> {
+        const result = [];
+        const validators = this.formFieldValidators.filter((ffv) => ffv.isValidatorForDF(dynamicField));
+        for (const v of validators) {
+            const validationResult = await v.validateDF(dynamicField, value);
+            result.push(validationResult);
         }
         return result;
     }

@@ -14,6 +14,7 @@ import { ValidationResult } from '../../../base-components/webapp/core/Validatio
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { ObjectReferenceOptions } from './ObjectReferenceOptions';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 
 export class ObjectReferenceCountValidator implements IFormFieldValidator {
 
@@ -39,40 +40,60 @@ export class ObjectReferenceCountValidator implements IFormFieldValidator {
             const countMin = formField.options.find((o) => o.option === ObjectReferenceOptions.COUNT_MIN);
             const countMax = formField.options.find((o) => o.option === ObjectReferenceOptions.COUNT_MAX);
 
-            if (countMin && countMin.value > 0 && fieldValue.length < countMin.value) {
-                const fieldLabel = await TranslationService.translate(formField.label);
-                const errorMessage = await TranslationService.translate(
-                    'Translatable#At least {0} values must be selected', [countMin.value]
-                );
-                const errorString = await TranslationService.translate(
-                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                );
-                return new ValidationResult(ValidationSeverity.ERROR, errorString);
-            }
-
-            if (countMax && countMax.value > 1 && fieldValue.length > countMax.value) {
-                const fieldLabel = await TranslationService.translate(formField.label);
-                const errorMessage = await TranslationService.translate(
-                    'Translatable#A maximum of {0} values can be selected.', [countMax.value]
-                );
-                const errorString = await TranslationService.translate(
-                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                );
-                return new ValidationResult(ValidationSeverity.ERROR, errorString);
-            }
-
-            if ((!countMax || countMax.value === 0 || countMax.value === 1) && fieldValue.length > 1) {
-                const fieldLabel = await TranslationService.translate(formField.label);
-                const errorMessage = await TranslationService.translate(
-                    'Translatable#A maximum of 1 value can be selected. (SingleSelect)', [countMax.value]
-                );
-                const errorString = await TranslationService.translate(
-                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
-                );
-                return new ValidationResult(ValidationSeverity.ERROR, errorString);
-            }
-
+            return await this.checkCountValues(fieldValue.length, countMin.value, countMax.value, formField.label);
         }
+        return new ValidationResult(ValidationSeverity.OK, '');
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return dynamicField && dynamicField.Config && (dynamicField.Config.CountMax || dynamicField.Config.CountMin);
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        if (value && Array.isArray(value)) {
+            const countMin = Number(dynamicField.Config.CountMin);
+            const countMax = Number(dynamicField.Config.CountMax);
+            return await this.checkCountValues(value.length, countMin, countMax, dynamicField.Label);
+        }
+        return new ValidationResult(ValidationSeverity.OK, '');
+    }
+
+    private async checkCountValues(
+        valueCount: number, countMin: number, countMax: number, label: string
+    ): Promise<ValidationResult> {
+        if (countMin && countMin > 0 && valueCount < countMin) {
+            const fieldLabel = await TranslationService.translate(label);
+            const errorMessage = await TranslationService.translate(
+                'Translatable#At least {0} values must be selected', [countMin]
+            );
+            const errorString = await TranslationService.translate(
+                "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+            );
+            return new ValidationResult(ValidationSeverity.ERROR, errorString);
+        }
+
+        if (countMax && countMax > 1 && valueCount > countMax) {
+            const fieldLabel = await TranslationService.translate(label);
+            const errorMessage = await TranslationService.translate(
+                'Translatable#A maximum of {0} values can be selected.', [countMax]
+            );
+            const errorString = await TranslationService.translate(
+                "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+            );
+            return new ValidationResult(ValidationSeverity.ERROR, errorString);
+        }
+
+        if ((!countMax || countMax === 0 || countMax === 1) && valueCount > 1) {
+            const fieldLabel = await TranslationService.translate(label);
+            const errorMessage = await TranslationService.translate(
+                'Translatable#A maximum of 1 value can be selected. (SingleSelect)', [countMax]
+            );
+            const errorString = await TranslationService.translate(
+                "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+            );
+            return new ValidationResult(ValidationSeverity.ERROR, errorString);
+        }
+
         return new ValidationResult(ValidationSeverity.OK, '');
     }
 }

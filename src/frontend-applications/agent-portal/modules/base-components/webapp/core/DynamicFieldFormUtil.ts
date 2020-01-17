@@ -31,6 +31,8 @@ import { DateTimeUtil } from "./DateTimeUtil";
 import { ObjectReferenceOptions } from "./ObjectReferenceOptions";
 import { TreeNode } from "./tree";
 import { TranslationService } from "../../../translation/webapp/core";
+import { FormValidationService } from "./FormValidationService";
+import { ValidationResult } from "./ValidationResult";
 
 export class DynamicFieldFormUtil {
 
@@ -270,5 +272,15 @@ export class DynamicFieldFormUtil {
         );
 
         return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+    }
+
+    public static async validateDFValue(dfName: string, value: any): Promise<ValidationResult[]> {
+        let result = [];
+        const dynamicField = await this.loadDynamicField(dfName);
+        if (dynamicField) {
+            const dfResult = await FormValidationService.getInstance().validateDynamicFieldValue(dynamicField, value);
+            result = [...result, ...dfResult];
+        }
+        return result;
     }
 }

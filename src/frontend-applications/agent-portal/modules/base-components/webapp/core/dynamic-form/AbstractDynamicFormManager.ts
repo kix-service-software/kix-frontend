@@ -13,6 +13,7 @@ import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
 import { InputFieldTypes } from "../InputFieldTypes";
 import { TreeNode } from "../tree";
 import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
+import { ValidationResult } from "../ValidationResult";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -157,11 +158,11 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return true;
     }
 
-    public isMultiselect(property: string): boolean {
+    public async isMultiselect(property: string): Promise<boolean> {
         return false;
     }
 
-    public validate(): Promise<void> {
+    public validate(): Promise<ValidationResult[]> {
         return;
     }
 

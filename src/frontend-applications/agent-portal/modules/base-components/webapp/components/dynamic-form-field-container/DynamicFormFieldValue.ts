@@ -218,7 +218,7 @@ export class DynamicFormFieldValue {
 
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
-            this.isMultiselect = this.manager.isMultiselect(property);
+            this.isMultiselect = await this.manager.isMultiselect(property);
 
             this.valueTreeHandler.setMultiSelect(this.isMultiselect);
             if (this.isAutocomplete) {
@@ -355,7 +355,8 @@ export class DynamicFormFieldValue {
     public getValue(): ObjectPropertyValue {
         const currentValue = { ...this.value };
         if (this.isDate) {
-            const date = new Date(currentValue.value);
+            const date = new Date(this.date);
+            date.setHours(0, 0, 0, 0);
             currentValue.value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
             if (this.isBetween && currentValue.value) {
                 const endDate = new Date(this.betweenEndDate);

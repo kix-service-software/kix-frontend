@@ -186,7 +186,7 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
         return await SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
-    public isMultiselect(property: string): boolean {
+    public async isMultiselect(property: string): Promise<boolean> {
         return property !== TicketProperty.LOCK_ID;
     }
 

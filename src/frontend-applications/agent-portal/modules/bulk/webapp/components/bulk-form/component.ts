@@ -26,6 +26,11 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { BulkDialogContext } from '../../core';
+import { ValidationResult } from '../../../../base-components/webapp/core/ValidationResult';
+import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
+import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../base-components/webapp/core/OverlayType';
+import { ValidationSeverity } from '../../../../base-components/webapp/core/ValidationSeverity';
 
 class Component {
 
@@ -147,18 +152,38 @@ class Component {
         this.cancelBulkProcess = false;
         const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
 
-        const objects = this.state.bulkManager.objects;
-        const editableValues = this.state.bulkManager.getEditableValues();
+        const validationResult = await this.state.bulkManager.validate();
+        if (validationResult.some((r) => r.severity === ValidationSeverity.ERROR)) {
+            this.showValidationError(validationResult.filter((r) => r.severity === ValidationSeverity.ERROR));
+        } else {
 
-        const title = await TranslationService.translate('Translatable#Execute now?');
-        const question = await TranslationService.translate(
-            'Translatable#You will edit {0} attributes for {1} {2}. Execute now?',
-            [editableValues.length, objects.length, objectName]
+            const objects = this.state.bulkManager.objects;
+            const editableValues = this.state.bulkManager.getEditableValues();
+
+            const title = await TranslationService.translate('Translatable#Execute now?');
+            const question = await TranslationService.translate(
+                'Translatable#You will edit {0} attributes for {1} {2}. Execute now?',
+                [editableValues.length, objects.length, objectName]
+            );
+            BrowserUtil.openConfirmOverlay(
+                title,
+                question,
+                this.runBulkManager.bind(this)
+            );
+        }
+    }
+
+    protected showValidationError(result: ValidationResult[]): void {
+        const errorMessages = result.map((r) => r.message);
+        const content = new ComponentContent('list-with-title',
+            {
+                title: 'Translatable#Error on form validation:',
+                list: errorMessages
+            }
         );
-        BrowserUtil.openConfirmOverlay(
-            title,
-            question,
-            this.runBulkManager.bind(this)
+
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
         );
     }
 
