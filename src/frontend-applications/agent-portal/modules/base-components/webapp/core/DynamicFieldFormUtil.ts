@@ -189,16 +189,6 @@ export class DynamicFieldFormUtil {
                             formFields.splice(index + i, 0, newField);
                         }
                     }
-                    for (let i = 0; i < values.length; i++) {
-                        if (i === 0) {
-                            field.defaultValue = new FormFieldValue(values[i], true);
-                        } else {
-                            const newField = formService.getNewFormField(field);
-                            newField.defaultValue = new FormFieldValue(values[i], true);
-                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                            formFields.splice(index, 0, newField);
-                        }
-                    }
 
                     if (field.countMin > 0 && values.length < field.countMin) {
                         const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
