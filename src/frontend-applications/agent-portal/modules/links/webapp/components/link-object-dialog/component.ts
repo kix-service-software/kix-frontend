@@ -201,7 +201,7 @@ class LinkDialogComponent {
                 `link-object-dialog-${objectType}`, objectType, tableConfiguration, null,
                 LinkObjectDialogContext.CONTEXT_ID, true, null, true
             );
-            table.addColumns([
+            await table.addColumns([
                 TableFactoryService.getInstance().getDefaultColumnConfiguration(objectType, 'LinkedAs')
             ]);
 

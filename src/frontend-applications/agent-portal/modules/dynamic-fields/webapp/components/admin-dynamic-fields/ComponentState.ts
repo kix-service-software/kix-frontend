@@ -8,12 +8,11 @@
  */
 
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration, TableHeaderHeight, TableRowHeight } from "../../../../base-components/webapp/core/table";
+import { TableHeaderHeight, TableRowHeight } from "../../../../base-components/webapp/core/table";
 import { IdService } from "../../../../../model/IdService";
 import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
 import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { DynamicFieldProperty } from "../../../model/DynamicFieldProperty";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 
 export class ComponentState {
 

@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { TableConfiguration, ITable, TableEvent, TableEventData } from '../../../core/table';
+import { ITable, TableEvent, TableEventData } from '../../../core/table';
 import { EventService } from '../../../core/EventService';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
 
@@ -59,7 +59,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onDestroy(): void {
-        // nothing
+        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
+        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
+        EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this);
     }
 
     public getFullColumnLength(): number {

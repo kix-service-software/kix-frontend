@@ -27,7 +27,7 @@ import { FilterType } from '../../../../../model/FilterType';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { DefaultColumnConfiguration } from '../../../../../server/services/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';

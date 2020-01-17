@@ -23,7 +23,7 @@ import { ContextMode } from "../../../../../../../model/ContextMode";
 import { IColumnConfiguration } from "../../../../../../../model/configuration/IColumnConfiguration";
 import {
     DefaultColumnConfiguration
-} from "../../../../../../../server/services/configuration/DefaultColumnConfiguration";
+} from "../../../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../../../model/DataType";
 
 export class TicketQueueTableFactory extends TableFactory {

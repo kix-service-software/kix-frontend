@@ -8,7 +8,7 @@
  */
 
 import {
-    TableConfiguration, ITable, Table, TableHeaderHeight, TableRowHeight, DefaultColumnConfiguration
+    ITable, Table, TableHeaderHeight, TableRowHeight
 } from "../../../base-components/webapp/core/table";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { TableFactory } from "../../../base-components/webapp/core/table/TableFactory";
@@ -18,6 +18,8 @@ import { IColumnConfiguration } from "../../../../model/configuration/IColumnCon
 import { DynamicFieldTableContentProvider } from "./DynamicFieldTableContentProvider";
 import { DialogRoutingConfiguration } from "../../../../model/configuration/DialogRoutingConfiguration";
 import { ContextMode } from "../../../../model/ContextMode";
+import { TableConfiguration } from "../../../../model/configuration/TableConfiguration";
+import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 
 export class DynamicFieldTableFactory extends TableFactory {
 

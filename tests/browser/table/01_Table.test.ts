@@ -11,7 +11,8 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, RowObject, IRow, Row, DefaultColumnConfiguration, Column, IColumn } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { ITable, Table, RowObject, IRow, Row, Column, IColumn } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { DefaultColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -444,7 +445,7 @@ describe('Table Tests', () => {
             const column1 = new DefaultColumnConfiguration(null, null, null, '4');
             const column2 = new DefaultColumnConfiguration(null, null, null, '5');
 
-            table.addColumns([column1, column2]);
+            await table.addColumns([column1, column2]);
             await table.initialize();
 
             const columns = table.getColumns();
@@ -463,7 +464,7 @@ describe('Table Tests', () => {
             const column2 = new DefaultColumnConfiguration(null, null, null, '5');
 
             await table.initialize();
-            table.addColumns([column1, column2]);
+            await table.addColumns([column1, column2]);
 
             const columns = table.getColumns();
             expect(columns).exist;
@@ -489,9 +490,9 @@ describe('Table Tests', () => {
             await table.initialize();
         });
 
-        it('Should add the column only one time.', () => {
+        it('Should add the column only one time.', async () => {
             const column = new DefaultColumnConfiguration(null, null, null, '2');
-            table.addColumns([column, column]);
+            await table.addColumns([column, column]);
 
             const columns = table.getColumns();
             expect(columns).exist;
@@ -502,159 +503,6 @@ describe('Table Tests', () => {
 
             const addedColumns = columns.filter((c) => c.getColumnId() === column.property);
             expect(addedColumns.length).equals(1);
-        });
-    });
-
-    describe('Replace two columns.', () => {
-        let table: ITable;
-        let columnId1 = '1';
-        let columnId2 = '2';
-
-        before(async () => {
-            table = new Table('test');
-            table.setColumnConfiguration([
-                new DefaultColumnConfiguration(null, null, null, '0'),
-                new DefaultColumnConfiguration(null, null, null, '1'),
-                new DefaultColumnConfiguration(null, null, null, '2'),
-                new DefaultColumnConfiguration(null, null, null, '3'),
-            ]);
-            await table.initialize();
-        });
-
-        it('Should return a list of columns without the replaced columns.', () => {
-            const newColumn1 = new Column(table, new DefaultColumnConfiguration(null, null, null, '4'));
-            const newColumn2 = new Column(table, new DefaultColumnConfiguration(null, null, null, '5'));
-            const replacedColumns = table.replaceColumns([
-                [columnId1, newColumn1],
-                [columnId2, newColumn2]
-            ]);
-
-            expect(replacedColumns).exist;
-            expect(replacedColumns).is.an('array');
-            expect(replacedColumns.length).equals(2);
-
-            expect(replacedColumns.some((r) => r.getColumnId() === columnId1)).true;
-            expect(replacedColumns.some((r) => r.getColumnId() === columnId2)).true;
-
-            const columns = table.getColumns();
-            expect(columns).exist;
-            expect(columns).is.an('array');
-            expect(columns.length).equals(4);
-
-            expect(columns.some((c) => c.getColumnId() === columnId1)).false;
-            expect(columns.some((c) => c.getColumnId() === columnId2)).false;
-
-            expect(columns.some((c) => c.getColumnId() === newColumn1.getColumnId())).true;
-            expect(columns.some((c) => c.getColumnId() === newColumn2.getColumnId())).true;
-        });
-    });
-
-    describe('Replace two columns but one with already exiting column.', () => {
-        let table: ITable;
-        let columnId1 = '0';
-        let columnId2 = '1';
-
-        before(async () => {
-            table = new Table('test');
-            table.setColumnConfiguration([
-                new DefaultColumnConfiguration(null, null, null, '0'),
-                new DefaultColumnConfiguration(null, null, null, '1'),
-                new DefaultColumnConfiguration(null, null, null, '2'),
-                new DefaultColumnConfiguration(null, null, null, '3'),
-            ]);
-            await table.initialize();
-        });
-        it('Should return columns (replace with existing column should remove exiting column and replace old with new column).', () => {
-            const newColumn = new Column(table, new DefaultColumnConfiguration(null, null, null, '4'));
-            const existingColumn = table.getColumn('2');
-            const replacedColumns = table.replaceColumns([
-                [columnId1, newColumn],
-                [columnId2, existingColumn]
-            ]);
-
-            expect(replacedColumns).exist;
-            expect(replacedColumns).is.an('array');
-            expect(replacedColumns.length).equals(2);
-
-            expect(replacedColumns.some((r) => r.getColumnId() === columnId1)).true;
-            expect(replacedColumns.some((r) => r.getColumnId() === columnId2)).true;
-
-            const columns = table.getColumns();
-            expect(columns).exist;
-            expect(columns).is.an('array');
-            expect(columns.length).equals(3);
-
-            expect(columns.some((c) => c.getColumnId() === columnId1)).false;
-            expect(columns.some((c) => c.getColumnId() === columnId2)).false;
-
-            expect(columns.some((c) => c.getColumnId() === newColumn.getColumnId())).true;
-            expect(columns.some((c) => c.getColumnId() === existingColumn.getColumnId())).true;
-        });
-    });
-
-    describe('Replace not exiting column.', () => {
-        let table: ITable;
-
-        before(async () => {
-            table = new Table('test');
-            table.setColumnConfiguration([
-                new DefaultColumnConfiguration(null, null, null, '0'),
-                new DefaultColumnConfiguration(null, null, null, '1')
-            ]);
-            await table.initialize();
-        });
-
-        it('No replace should be done.', () => {
-            const newColumn = new Column(table, new DefaultColumnConfiguration(null, null, null, '2'));
-            const notExistingColumnId = 'does-not-exists';
-            const replacedColumns = table.replaceColumns([
-                [notExistingColumnId, newColumn]
-            ]);
-
-            expect(replacedColumns).exist;
-            expect(replacedColumns).is.an('array');
-            expect(replacedColumns).is.empty;
-
-            const columns = table.getColumns();
-            expect(columns).exist;
-            expect(columns).is.an('array');
-            expect(columns.length).equals(2);
-
-            expect(columns.some((c) => c.getColumnId() === notExistingColumnId)).false;
-            expect(columns.some((c) => c.getColumnId() === newColumn.getColumnId())).false;
-        });
-    });
-
-    describe('Replace not exiting column with column which already exist.', () => {
-        let table: ITable;
-
-        before(async () => {
-            table = new Table('test');
-            table.setColumnConfiguration([
-                new DefaultColumnConfiguration(null, null, null, '0'),
-                new DefaultColumnConfiguration(null, null, null, '1')
-            ]);
-            await table.initialize();
-        });
-
-        it('No replace should be done and existing column should not be deleted.', () => {
-            const notExistingColumnId = 'does-not-exists';
-            const existingColumn = table.getColumn('1');
-            const replacedColumns = table.replaceColumns([
-                [notExistingColumnId, existingColumn]
-            ]);
-
-            expect(replacedColumns).exist;
-            expect(replacedColumns).is.an('array');
-            expect(replacedColumns).is.empty;
-
-            const columns = table.getColumns();
-            expect(columns).exist;
-            expect(columns).is.an('array');
-            expect(columns.length).equals(2);
-
-            expect(columns.some((c) => c.getColumnId() === notExistingColumnId)).is.false;
-            expect(columns.some((c) => c.getColumnId() === existingColumn.getColumnId())).true;
         });
     });
 

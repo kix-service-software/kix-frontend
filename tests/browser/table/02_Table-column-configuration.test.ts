@@ -11,8 +11,10 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, DefaultColumnConfiguration, IColumnConfiguration, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { ITable, Table, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { DefaultColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
+import { IColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/IColumnConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

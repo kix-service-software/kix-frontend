@@ -34,9 +34,10 @@ import { KIXObjectType } from "../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../model/configuration/TableConfiguration";
 import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
 import { SortOrder } from "../../model/SortOrder";
-import { DefaultColumnConfiguration } from "../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../model/DataType";
 import { ToggleOptions } from "../base-components/webapp/core/table";
+import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
 
 export class DashboardModuleFactoryExtension implements IConfigurationExtension {
 

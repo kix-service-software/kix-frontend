@@ -11,12 +11,13 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, DefaultColumnConfiguration, TableEventData, TableEvent, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { ITable, Table, TableEventData, TableEvent, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { DataType } from '../../../src/frontend-applications/agent-portal/model/DataType';
 import { SortOrder } from '../../../src/frontend-applications/agent-portal/model/SortOrder';
 import { IEventSubscriber } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/EventService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
+import { DefaultColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

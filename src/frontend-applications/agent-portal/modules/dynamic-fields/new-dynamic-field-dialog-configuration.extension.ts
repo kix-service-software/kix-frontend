@@ -28,6 +28,7 @@ import { ObjectReferenceOptions } from '../base-components/webapp/core/ObjectRef
 import { TreeNode } from '../base-components/webapp/core/tree';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { DynamicFieldType } from './model/DynamicFieldType';
 
 export class Extension implements IConfigurationExtension {
 
@@ -86,11 +87,11 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_DynamicFieldCreate_FieldType',
                 [
                     new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
-                        new TreeNode('Text', 'Text', 'kix-icon-filetype-text'),
-                        new TreeNode('TextArea', 'Text Area', 'kix-icon-filetype-text'),
-                        new TreeNode('Multiselect', 'Selection', 'kix-icon-menue'),
-                        new TreeNode('Date', 'Date', 'kix-icon-calendar'),
-                        new TreeNode('DateTime', 'Date Time', 'kix-icon-calendar')
+                        new TreeNode(DynamicFieldType.TEXT, 'Text', 'kix-icon-filetype-text'),
+                        new TreeNode(DynamicFieldType.TEXT_AREA, 'Text Area', 'kix-icon-filetype-text'),
+                        new TreeNode(DynamicFieldType.SELECTION, 'Selection', 'kix-icon-menue'),
+                        new TreeNode(DynamicFieldType.DATE, 'Date', 'kix-icon-calendar'),
+                        new TreeNode(DynamicFieldType.DATE_TIME, 'Date Time', 'kix-icon-calendar')
                     ])
                 ]
             )

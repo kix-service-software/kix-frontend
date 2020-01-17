@@ -18,7 +18,7 @@ import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
 import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { DefaultColumnConfiguration } from "../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 import { OrganisationProperty } from "./model/OrganisationProperty";
 import { DataType } from "../../model/DataType";
 import { TableConfiguration } from "../../model/configuration/TableConfiguration";

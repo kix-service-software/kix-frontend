@@ -16,6 +16,8 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { DynamicFieldType } from '../../model/DynamicFieldType';
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 
@@ -63,7 +65,10 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                     }
                 }
 
-                if (dynamicField && f.property === 'Config' && dynamicField.FieldType === 'Multiselect') {
+                if (
+                    dynamicField && f.property === DynamicFieldProperty.CONFIG &&
+                    dynamicField.FieldType === DynamicFieldType.SELECTION
+                ) {
                     const oldPossibleValues = value.PossibleValues;
                     const possibleValueArray = [];
                     Object.keys(oldPossibleValues).forEach((key) => {
@@ -73,8 +78,8 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         possibleValueArray.push(newPossibleValues);
                     });
                     value.PossibleValues = possibleValueArray;
-                    value.PossibleNone = value.PossibleNone === '1';
-                    value.TranslatableValues = value.TranslatableValues === '1';
+                    value.PossibleNone = Boolean(value.PossibleNone === '1');
+                    value.TranslatableValues = Boolean(value.TranslatableValues === '1');
                 }
 
                 formFieldValue = dynamicField && formContext === FormContext.EDIT
@@ -95,11 +100,11 @@ export class DynamicFieldFormService extends KIXObjectFormService {
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
 
-        const fieldTypeParameter = parameter.find((p) => p[0] === 'FieldType');
-        const configParameter = parameter.find((p) => p[0] === 'Config');
+        const fieldTypeParameter = parameter.find((p) => p[0] === DynamicFieldProperty.FIELD_TYPE);
+        const configParameter = parameter.find((p) => p[0] === DynamicFieldProperty.CONFIG);
 
         if (configParameter) {
-            if (fieldTypeParameter[1] === 'Multiselect') {
+            if (fieldTypeParameter[1] === DynamicFieldType.SELECTION) {
                 configParameter[1].PossibleNone = configParameter[1].PossibleNone ? 1 : 0;
                 configParameter[1].TranslatableValues = configParameter[1].TranslatableValues ? 1 : 0;
                 const possibleValue = configParameter[1].PossibleValues;

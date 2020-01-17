@@ -11,7 +11,6 @@ import { TicketProperty } from "../../../model/TicketProperty";
 import { Ticket } from "../../../model/Ticket";
 import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TicketLabelProvider } from "..";
 import { FilterCriteria } from "../../../../../model/FilterCriteria";
 import { TicketStateProperty } from "../../../model/TicketStateProperty";
 import { SearchOperator } from "../../../../search/model/SearchOperator";
@@ -21,7 +20,7 @@ import { KIXObjectService } from "../../../../../modules/base-components/webapp/
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { SysConfigService } from "../../../../sysconfig/webapp/core";
-import { LabelProvider } from "../../../../../modules/base-components/webapp/core/LabelProvider";
+import { ILabelProvider } from "../../../../base-components/webapp/core/ILabelProvider";
 
 export class TicketChartFactory {
 
@@ -69,7 +68,7 @@ export class TicketChartFactory {
         return data;
     }
 
-    private async initMap(property: TicketProperty, labelProvider: LabelProvider): Promise<Map<string, number>> {
+    private async initMap(property: TicketProperty, labelProvider: ILabelProvider<any>): Promise<Map<string, number>> {
         const map = new Map<string, number>();
         let objectType: KIXObjectType;
         let filter = [];

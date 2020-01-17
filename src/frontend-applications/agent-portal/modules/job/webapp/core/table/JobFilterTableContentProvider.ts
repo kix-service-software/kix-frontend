@@ -18,8 +18,8 @@ import { Job } from "../../../model/Job";
 import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
 import { TicketProperty } from "../../../../ticket/model/TicketProperty";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { LabelProvider } from "../../../../../modules/base-components/webapp/core/LabelProvider";
 import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { ILabelProvider } from "../../../../base-components/webapp/core/ILabelProvider";
 
 export class JobFilterTableContentProvider extends TableContentProvider<any> {
 
@@ -77,7 +77,7 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
     }
 
     private async getValue(
-        property: string, value: string[] | number[], labelProvider: LabelProvider
+        property: string, value: string[] | number[], labelProvider: ILabelProvider<any>
     ): Promise<[string[], Array<string | ObjectIcon>]> {
         const displayValues: string[] = [];
         const displayIcons: Array<string | ObjectIcon> = [];

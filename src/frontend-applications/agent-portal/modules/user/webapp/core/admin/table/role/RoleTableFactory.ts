@@ -16,7 +16,7 @@ import { TableConfiguration } from "../../../../../../../model/configuration/Tab
 import { ITable, Table } from "../../../../../../base-components/webapp/core/table";
 import {
     DefaultColumnConfiguration
-} from "../../../../../../../server/services/configuration/DefaultColumnConfiguration";
+} from "../../../../../../../model/configuration/DefaultColumnConfiguration";
 import { RoleProperty } from "../../../../../model/RoleProperty";
 import { DataType } from "../../../../../../../model/DataType";
 import { TableHeaderHeight } from "../../../../../../../model/configuration/TableHeaderHeight";

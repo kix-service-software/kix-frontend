@@ -9,6 +9,7 @@
 
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 
 export interface ILabelProvider<T> {
 
@@ -51,5 +52,7 @@ export interface ILabelProvider<T> {
     getIcons(object: T, property: string, value?: string | number): Promise<Array<string | ObjectIcon>>;
 
     canShow(property: string, object: T): boolean;
+
+    getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string]>;
 
 }
