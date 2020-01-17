@@ -29,14 +29,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.state.column = input.column;
-        this.state.isSorted = this.state.column.getSortOrder() ? true : false;
+        this.state.isSorted = Boolean(this.state.column.getSortOrder());
         this.state.sortOrderDown = this.isSortOrderDown();
         this.setSize();
     }
 
     public onInput(input: any): void {
         this.state.column = input.column;
-        this.state.isSorted = this.state.column.getSortOrder() ? true : false;
+        this.state.isSorted = Boolean(this.state.column.getSortOrder());
         this.setIconAndTitle();
         this.setSize();
 

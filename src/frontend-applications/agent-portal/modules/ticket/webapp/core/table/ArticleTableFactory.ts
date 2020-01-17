@@ -14,7 +14,7 @@ import { TableEvent, ITable, Table, ToggleOptions } from "../../../../base-compo
 import { ArticleTableToggleSubscriber } from "./ArticleTableToggleSubscriber";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ArticleTableContentProvider } from ".";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { ArticleProperty } from "../../../model/ArticleProperty";
 import { DataType } from "../../../../../model/DataType";
 import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";

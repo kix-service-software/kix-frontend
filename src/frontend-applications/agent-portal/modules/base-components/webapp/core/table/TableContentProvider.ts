@@ -18,9 +18,9 @@ import { ContextService } from "../ContextService";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectService } from "../KIXObjectService";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
+import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
 import { LabelService } from "../LabelService";
-import { IColumnConfiguration } from "./IColumnConfiguration";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -34,8 +34,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         protected objectIds: Array<number | string>,
         protected loadingOptions: KIXObjectLoadingOptions,
         protected contextId?: string
-    ) {
-    }
+    ) { }
 
     public async initialize(): Promise<void> {
         if (!this.initialized) {
@@ -43,23 +42,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 const context = await ContextService.getInstance().getContext(this.contextId);
                 if (context) {
                     context.registerListener(this.table.getTableId() + '-content-provider', {
-                        explorerBarToggled: () => {
-                            return;
-                        },
-                        filteredObjectListChanged: () => {
-                            return;
-                        },
+                        explorerBarToggled: () => { return; },
+                        filteredObjectListChanged: () => { return; },
                         objectChanged: this.objectChanged.bind(this),
                         objectListChanged: this.objectListChanged.bind(this),
-                        sidebarToggled: () => {
-                            return;
-                        },
-                        scrollInformationChanged: () => {
-                            return;
-                        },
-                        additionalInformationChanged: () => {
-                            return;
-                        }
+                        sidebarToggled: () => { return; },
+                        scrollInformationChanged: () => { return; },
+                        additionalInformationChanged: () => { return; }
                     });
                     this.initialized = true;
                 }
@@ -147,7 +136,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                         ) {
                             const value = propertyMap.get(property).get(o[property]);
                             values.push(value);
-                        } else {
+                        } else if (!property.match(/^DynamicFields?\..+/)) {
                             const tableValue = await this.getTableValue(o, property, column);
                             values.push(tableValue);
                         }
@@ -189,7 +178,22 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     protected async addSpecificValues(values: TableValue[], object: any): Promise<void> {
-        return;
+        if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
+            for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
+                let dfValue: [string[], string];
+
+                const labelProvider = LabelService.getInstance().getLabelProvider(object);
+                if (labelProvider) {
+                    dfValue = await labelProvider.getDFDisplayValues(dfv);
+                }
+
+                values.push(new TableValue(
+                    `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfv.Name}`,
+                    dfValue && dfValue[0] ? dfValue[0] : dfv.Value,
+                    dfValue && dfValue[1] ? dfValue[1] : dfv.DisplayValue.toString()
+                ));
+            }
+        }
     }
 
     protected hasChildRows(rowObject: RowObject): boolean {

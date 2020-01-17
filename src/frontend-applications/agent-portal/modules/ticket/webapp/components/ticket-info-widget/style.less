@@ -12,14 +12,17 @@
     grid-template-columns: auto max-content;
     grid-auto-flow: column;
     grid-gap: @margin-small;
+
     .ci-list-wrapper {
         div:first-child {
             font-weight: bold;
         }
+
         .ci-list-container {
             border: 1px solid @secondary-2;
             border-radius: @border-radius;
             padding: @margin-small 0 @margin-small @margin-small;
+
             .ci-list-content {
                 border: unset;
                 height: 10em;
@@ -28,39 +31,67 @@
             }
         }
     }
+
     .information-list {
         display: grid;
         grid-auto-columns: 1fr;
         grid-auto-flow: column;
         grid-column-gap: @margin-small;
-        grid-template-rows: repeat(5, 1.25rem);
+        grid-template-rows: repeat(5, minmax(1.25rem, max-content));
+
         div {
+            &.dynamic-field-label-list {
+                .key-value-pair {
+                    .value {
+                        grid-template-columns: auto;
+
+                        .label-list {
+                            border: unset;
+                            padding: 0;
+                            margin: 0;
+
+                            .label-item-container {
+                                margin: 0 @margin-small @margin-small 0;
+                                float: left;
+                            }
+                        }
+                    }
+                }
+            }
+
             .key-value-pair {
                 grid-template-columns: 2fr minmax(1rem, auto) 5fr;
                 grid-column-gap: @margin-small;
                 line-height: 1.5rem;
+
                 .key {
                     font-weight: bold;
                 }
+
                 &::after {
                     clear: none;
                 }
+
                 &::before,
                 &::after {
                     display: none;
                 }
             }
         }
+
         @media only screen and (max-width: 1920px) {
-            grid-template-rows: repeat(7, 1.25rem);
+            grid-template-rows: repeat(7, minmax(1.25rem, max-content));
+
             div {
                 .key-value-pair {
                     grid-template-columns: 2.3fr minmax(1rem, auto) 5fr;
                 }
             }
         }
+
         @media only screen and (max-width: 1200px) {
-            grid-template-rows: repeat(14, 1.25rem);
+            grid-template-rows: repeat(14, minmax(1.25rem, max-content));
+
             div {
                 .key-value-pair {
                     grid-template-columns: 1.2fr minmax(1rem, auto) 5fr;

@@ -15,7 +15,6 @@ import { TreeNode } from "../../../base-components/webapp/core/tree";
 import { FilterCriteria } from "../../../../model/FilterCriteria";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { FilterType } from "../../../../model/FilterType";
-import { IColumnConfiguration, DefaultColumnConfiguration } from "../../../base-components/webapp/core/table";
 import { DataType } from "../../../../model/DataType";
 import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../model/UIComponentPermission";
@@ -23,6 +22,8 @@ import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
 import { IDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form/IDynamicFormManager";
 import { SearchOperator } from "../../model/SearchOperator";
+import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
+import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
 
 export abstract class SearchDefinition {
 

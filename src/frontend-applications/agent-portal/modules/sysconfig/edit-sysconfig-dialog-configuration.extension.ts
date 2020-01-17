@@ -27,6 +27,7 @@ import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
 export class Extension implements IConfigurationExtension {
 
@@ -97,7 +98,7 @@ export class Extension implements IConfigurationExtension {
                 'sysconfig-edit-form-field-value',
                 'Translatable#Value', SysConfigOptionDefinitionProperty.VALUE, 'text-area-input', false,
                 'Translatable#Helptext_Admin_SysConfigEdit_Value', [
-                new FormFieldOption('isJSON', true)]
+                new FormFieldOption(FormFieldOptions.IS_JSON, true)]
             )
         );
         configurations.push(

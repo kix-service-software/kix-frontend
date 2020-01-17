@@ -10,10 +10,10 @@
 import { ICell } from "./ICell";
 import { IRow } from "./IRow";
 import { LabelService } from "../LabelService";
-import { IColumnConfiguration } from "./IColumnConfiguration";
 import { TableValue } from "./TableValue";
 import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
 import { FilterUtil } from "../FilterUtil";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 
 export class Cell implements ICell {
 

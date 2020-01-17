@@ -26,6 +26,7 @@ import { ContextDescriptor } from "../../../../model/ContextDescriptor";
 import { ContextService } from "../../../base-components/webapp/core/ContextService";
 import { DynamicFieldFormService } from "./DynamicFieldFormService";
 import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
+import { DynamicFieldType } from "../../model/DynamicFieldType";
 import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
 import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
 import { DynamicFieldDateTimeValidator } from "./DynamicFieldDateTimeValidator";
@@ -153,7 +154,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema('Text', schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.TEXT, schema);
     }
 
     private registerSchemaForTextArea(): void {
@@ -225,7 +226,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema('TextArea', schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.TEXT_AREA, schema);
     }
 
     private registerSchemaForDate(): void {
@@ -299,7 +300,7 @@ export class UIModule implements IUIModule {
                 },
             }
         };
-        DynamicFieldService.getInstance().registerConfigSchema('Date', schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.DATE, schema);
     }
 
     private registerSchemaForDateTime(): void {
@@ -373,7 +374,7 @@ export class UIModule implements IUIModule {
                 },
             }
         };
-        DynamicFieldService.getInstance().registerConfigSchema('DateTime', schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.DATE_TIME, schema);
     }
 
     private registerSchemaForSelection(): void {
@@ -459,6 +460,6 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema('Multiselect', schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.SELECTION, schema);
     }
 }

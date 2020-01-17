@@ -12,7 +12,7 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ITable, Table, ToggleOptions } from "../../../../base-components/webapp/core/table";
 import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
 import { DataType } from "../../../../../model/DataType";
 import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";

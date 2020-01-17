@@ -7,20 +7,15 @@
  * --
  */
 
-export enum FormFieldOptions {
+export enum DynamicFieldType {
 
-    INPUT_FIELD_TYPE = 'INPUT_FIELD_TYPE',
+    TEXT = 'Text',
 
-    AUTO_COMPLETE = 'Autocomplete',
+    TEXT_AREA = 'TextArea',
 
-    SHOW_INVALID = 'SHOW_INVALID',
+    SELECTION = 'Multiselect',
 
-    INVALID_CLICKABLE = 'INVALID_CLICKABLE',
+    DATE = 'Date',
 
-    IS_JSON = 'IsJSON',
-
-    MIN_DATE = 'MIN_DATE',
-
-    MAX_DATE = 'MAX_DATE'
-
+    DATE_TIME = 'DateTime'
 }

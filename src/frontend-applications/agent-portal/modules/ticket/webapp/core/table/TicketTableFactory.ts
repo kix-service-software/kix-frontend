@@ -12,12 +12,12 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ITable, Table, ToggleOptions } from "../../../../base-components/webapp/core/table";
 import { TicketTableContentProvider } from ".";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
 import { TicketProperty } from "../../../model/TicketProperty";
 import { DataType } from "../../../../../model/DataType";
 import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
 import { TicketDetailsContext } from "..";
 import { ContextMode } from "../../../../../model/ContextMode";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 
 export class TicketTableFactory extends TableFactory {
 

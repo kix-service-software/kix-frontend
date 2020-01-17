@@ -107,7 +107,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     objects.map((o) => o.ObjectId), null, true, null, true, false, true
                 );
                 if (table) {
-                    table.addColumns([
+                    await table.addColumns([
                         TableFactoryService.getInstance().getDefaultColumnConfiguration(lot[1], 'LinkedAs')
                     ]);
 

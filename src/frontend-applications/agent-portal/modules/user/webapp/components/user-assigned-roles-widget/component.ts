@@ -14,7 +14,7 @@ import { UserDetailsContext } from '../../core/admin';
 import { User } from '../../../model/User';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
-import { DefaultColumnConfiguration } from '../../../../../server/services/configuration/DefaultColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { RoleProperty } from '../../../model/RoleProperty';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';

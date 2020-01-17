@@ -11,9 +11,9 @@ import { IRow } from "./IRow";
 import { IColumn } from "./IColumn";
 import { ITableContentProvider } from "./ITableContentProvider";
 import { IRowObject } from "./IRowObject";
-import { IColumnConfiguration } from "./IColumnConfiguration";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 import { SelectionState } from "./SelectionState";
-import { TableConfiguration } from "./TableConfiguration";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ValueState } from "./ValueState";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
@@ -55,9 +55,7 @@ export interface ITable {
 
     removeColumns(columnIds: string[]): IColumn[] | IColumnConfiguration[];
 
-    addColumns(columns: IColumnConfiguration[]): void;
-
-    replaceColumns(replaceColumns: Array<[string, IColumn]>): IColumn[];
+    addColumns(columns: IColumnConfiguration[]): Promise<void>;
 
     setFilter(filterValue?: string, criteria?: TableFilterCriteria[]): void;
 

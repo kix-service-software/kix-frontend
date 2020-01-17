@@ -7,7 +7,7 @@
  * --
  */
 
-import { IColumnConfiguration } from "./IColumnConfiguration";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 import { ITable } from "./ITable";
 import { SortOrder } from "../../../../../model/SortOrder";
 import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";

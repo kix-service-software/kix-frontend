@@ -9,8 +9,8 @@
 
 import { ITableFactory } from "./ITableFactory";
 import { ITable } from ".";
-import { TableConfiguration } from "./TableConfiguration";
-import { IColumnConfiguration } from "./IColumnConfiguration";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 import { ContextService } from "../ContextService";
 import { ContextType } from "../../../../../model/ContextType";
 import { Context } from "../../../../../model/Context";

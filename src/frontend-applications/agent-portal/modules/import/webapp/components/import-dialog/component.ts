@@ -38,7 +38,7 @@ import { TableHeaderHeight } from "../../../../../model/configuration/TableHeade
 import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
 import { SortOrder } from "../../../../../model/SortOrder";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../model/DataType";
 import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
 import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
@@ -505,7 +505,7 @@ class Component {
                 const newColumnConfigs = await this.getColumnConfig();
                 this.state.table.removeColumns(this.state.table.getColumns().map((c) => c.getColumnId()));
                 if (!!newColumnConfigs.length) {
-                    this.state.table.addColumns(newColumnConfigs);
+                    await this.state.table.addColumns(newColumnConfigs);
                 }
             }
         } else {

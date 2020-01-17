@@ -17,7 +17,7 @@ import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoa
 import { UserProperty } from "../../../../../model/UserProperty";
 import {
     DefaultColumnConfiguration
-} from "../../../../../../../server/services/configuration/DefaultColumnConfiguration";
+} from "../../../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../../../model/DataType";
 import { KIXObjectProperty } from "../../../../../../../model/kix/KIXObjectProperty";
 import { TableHeaderHeight } from "../../../../../../../model/configuration/TableHeaderHeight";
