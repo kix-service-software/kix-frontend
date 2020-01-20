@@ -13,6 +13,10 @@ import { ConfigurationService } from '../../../../server/services/ConfigurationS
 import { AuthenticationService } from '../services/AuthenticationService';
 
 import path = require('path');
+import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';
+import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { SysConfigKey } from '../../modules/sysconfig/model/SysConfigKey';
 
 export class ApplicationRouter extends KIXRouter {
 
@@ -36,20 +40,18 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     public async getDefaultModule(req: Request, res: Response, next: () => void): Promise<void> {
-        const moduleId = ConfigurationService.getInstance().getServerConfiguration().DEFAULT_MODULE_ID;
-        await this.handleRoute(moduleId, null, req, res);
+        await this.handleRoute(req, res);
     }
 
     public async getModule(req: Request, res: Response, next: () => void): Promise<void> {
         const moduleId = req.params.moduleId;
-        const objectId = req.params.objectId;
 
         if (moduleId === 'socket.io') {
             next();
             return;
         }
 
-        await this.handleRoute(moduleId, objectId, req, res);
+        await this.handleRoute(req, res);
     }
 
 
@@ -84,14 +86,23 @@ export class ApplicationRouter extends KIXRouter {
         );
     }
 
-    private async handleRoute(moduleId: string, objectId: string, req: Request, res: Response): Promise<void> {
+    private async handleRoute(req: Request, res: Response): Promise<void> {
         if (this.update) {
             res.redirect('/static/html/update-info/index.html');
         } else {
             this.setFrontendSocketUrl(res);
             this.clearRequireCache('../applications/_app');
-            const template = require('../../modules/agent-portal/webapp/application');
-            res.marko(template);
+            const token: string = req.cookies.token;
+            const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                token, '', KIXObjectType.SYS_CONFIG_OPTION,
+                [
+                    SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG
+                ], null, null
+            );
+
+            const templatePath = path.join('..', '..', 'modules', 'agent-portal', 'webapp', 'application');
+            const template = require(templatePath);
+            res.marko(template, { socketTimeout: options && options.length ? options[0].Value : 30000 });
         }
     }
 

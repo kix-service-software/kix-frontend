@@ -22,6 +22,7 @@ import { IUIModule } from '../../../../../model/IUIModule';
 import { TranslationService } from '../../../../translation/webapp/core';
 import { ClientNotificationSocketClient } from '../../../../notification/webapp/core/ClientNotificationSocketClient';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
 
 class Component {
 
@@ -31,6 +32,12 @@ class Component {
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.contextListernerId = IdService.generateDateBasedId('base-template-');
+    }
+
+    public onInput(input: any): void {
+        if (input && input.socketTimeout) {
+            ClientStorageService.setSocketTimeout(input.socketTimeout);
+        }
     }
 
     public async onMount(): Promise<void> {

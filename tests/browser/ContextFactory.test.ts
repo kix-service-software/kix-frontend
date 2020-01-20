@@ -37,7 +37,7 @@ describe('ContextFactory', () => {
         'testContextB', [KIXObjectType.QUEUE], ContextType.DIALOG, ContextMode.CREATE, false, '', null, TestContext
     );
 
-    ContextSocketClient.loadContextConfiguration = async (contextId): Promise<ContextConfiguration> => {
+    ContextSocketClient.getInstance().loadContextConfiguration = async (contextId): Promise<ContextConfiguration> => {
         return new ContextConfiguration(null, null, null, contextId);
     }
 

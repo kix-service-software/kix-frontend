@@ -11,14 +11,20 @@ import md5 = require('md5');
 
 export class ClientStorageService {
 
-    private static INSTANCE: ClientStorageService = null;
+    public static setSocketTimeout(timeout: number): void {
+        if (!isNaN(timeout)) {
+            this.setOption('SocketTimeout', timeout.toString());
+        }
+    }
 
-    public static getInstance(): ClientStorageService {
-        if (!ClientStorageService.INSTANCE) {
-            ClientStorageService.INSTANCE = new ClientStorageService();
+    public static getSocketTimeout(): number {
+        let timeout = 30000;
+        const option = this.getOption('SocketTimeout');
+        if (option) {
+            timeout = Number(option);
         }
 
-        return ClientStorageService.INSTANCE;
+        return timeout;
     }
 
     public static getFrontendSocketUrl(): string {
@@ -47,7 +53,9 @@ export class ClientStorageService {
     }
 
     public static destroyToken(): void {
-        document.cookie = "token=; expires=" + new Date();
+        if (typeof document !== 'undefined') {
+            document.cookie = "token=; expires=" + new Date();
+        }
     }
 
     public static getCookie(name: string): string {
@@ -85,11 +93,15 @@ export class ClientStorageService {
     }
 
     public static deleteState(id: string): void {
-        window.localStorage.removeItem(id);
+        if (typeof window !== 'undefined') {
+            window.localStorage.removeItem(id);
+        }
     }
 
     public static setOption(key: string, value: string): void {
-        window.localStorage.setItem(key, value);
+        if (typeof window !== 'undefined') {
+            window.localStorage.setItem(key, value);
+        }
     }
 
     public static getOption(key: string): string {

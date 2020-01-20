@@ -52,10 +52,11 @@ export class MainMenuSocketClient extends SocketClient {
     }
 
     public async loadMenuEntries(): Promise<MainMenuEntriesResponse> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<MainMenuEntriesResponse>((resolve, reject) => {
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + MainMenuEvent.LOAD_MENU_ENTRIES);
-            }, 30000);
+            }, socketTimeout);
 
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();

@@ -37,8 +37,9 @@ export class WebformSocketClient extends SocketClient {
         this.socket = this.createSocket('webform', true);
     }
 
-    public loadWebforms(): Promise<Webform[]> {
-        return new Promise((resolve, reject) => {
+    public async loadWebforms(): Promise<Webform[]> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<Webform[]>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request: ISocketRequest = {
@@ -49,7 +50,7 @@ export class WebformSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + WebformEvent.LOAD_WEBFORMS);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(WebformEvent.LOAD_WEBFORMS_FINISHED, async (result: LoadWebformsResponse) => {
                 if (requestId === result.requestId) {
@@ -75,8 +76,9 @@ export class WebformSocketClient extends SocketClient {
         });
     }
 
-    public createUpdateWebform(webform: Webform, formId?: number): Promise<number> {
-        return new Promise((resolve, reject) => {
+    public async createUpdateWebform(webform: Webform, formId?: number): Promise<number> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<number>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request = new SaveWebformRequest(
@@ -85,7 +87,7 @@ export class WebformSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + WebformEvent.SAVE_WEBFORM);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(WebformEvent.WEBFORM_SAVED, async (result: CreateObjectResponse) => {
                 if (requestId === result.requestId) {

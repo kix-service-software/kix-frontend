@@ -41,8 +41,6 @@ export interface IServerConfiguration {
 
     BACKEND_API_TOKEN: string;
 
-    SOCKET_TIMEOUT: number;
-
     UPDATE_TRANSLATIONS: boolean;
 
     USE_IN_MEMORY_CACHE: boolean;
