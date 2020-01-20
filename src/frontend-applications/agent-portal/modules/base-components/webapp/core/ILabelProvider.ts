@@ -37,7 +37,7 @@ export interface ILabelProvider<T> {
 
     getPropertyValueDisplayText(property: string, value: string | number, translatable?: boolean): Promise<string>;
 
-    getObjectTooltip(object: T, translatable?: boolean): string;
+    getObjectTooltip(object: T, translatable?: boolean): Promise<string>;
 
     getPropertyIcon(property: string): Promise<string | ObjectIcon>;
 

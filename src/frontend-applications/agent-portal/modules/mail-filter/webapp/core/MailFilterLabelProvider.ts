@@ -140,7 +140,10 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
         return new ObjectIcon('MailFilter', object.ID);
     }
 
-    public getObjectTooltip(object: MailFilter): string {
+    public async getObjectTooltip(object: MailFilter, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(object.Name);
+        }
         return object.Name;
     }
 

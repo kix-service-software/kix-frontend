@@ -202,7 +202,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getObjectTooltip(object: T, translatable?: boolean): string {
+    public async getObjectTooltip(object: T, translatable?: boolean): Promise<string> {
         return '';
     }
 

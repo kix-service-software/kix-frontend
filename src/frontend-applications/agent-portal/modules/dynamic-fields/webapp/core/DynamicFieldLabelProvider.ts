@@ -75,8 +75,9 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getObjectText(dynamicField: DynamicField, id?: boolean, title?: boolean): Promise<string> {
-        return dynamicField.Name;
+    public async getObjectText(
+        dynamicField: DynamicField, id?: boolean, title?: boolean, translatable: boolean = true): Promise<string> {
+        return translatable ? await TranslationService.translate(dynamicField.Name) : dynamicField.Name;
     }
 
     public getObjectIcon(dynamicField?: DynamicField): string | ObjectIcon {
@@ -92,7 +93,10 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
         return plural ? 'Dynamic Fields' : 'Dynamic Field';
     }
 
-    public getObjectTooltip(dynamicField: DynamicField): string {
+    public async getObjectTooltip(dynamicField: DynamicField, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(dynamicField.Name);
+        }
         return dynamicField.Name;
     }
 

@@ -44,7 +44,7 @@ export class JobFilterTableFactory extends TableFactory {
         const tableColumns = [
             new DefaultColumnConfiguration(null, null, null,
                 JobFilterTableProperty.FIELD, true, false, true, false, 200, true, true,
-                false, DataType.STRING, true, null, 'Translatable#Field', false
+                false, DataType.STRING, true, null, 'Translatable#Attribute', false
             ),
             new DefaultColumnConfiguration(null, null, null,
                 JobFilterTableProperty.VALUE, true, false, true, false, 500, true, true,

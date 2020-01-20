@@ -79,7 +79,7 @@ export class Extension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'job-new-form-field-comment',
                 'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
-                'Translatable#Helptext_Admin_JobCCreateEdit_Comment', null, null, null,
+                'Translatable#Helptext_Admin_JobCreateEdit_Comment', null, null, null,
                 null, null, null, null, null, 250
             )
         );
@@ -136,7 +136,7 @@ export class Extension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'job-new-form-field-times',
                 'Translatable#Time', JobProperty.EXEC_PLAN_WEEKDAYS_TIMES, 'default-select-input', false,
-                'Translatable#Helptext_Admin_JobCCreateEdit_Time',
+                'Translatable#Helptext_Admin_JobCreateEdit_Time',
                 [
                     new FormFieldOption(DefaultSelectInputFormOption.NODES, this.getTimes()),
                     new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)

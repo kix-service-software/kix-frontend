@@ -107,7 +107,7 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
         throw new Error('Method not implemented.');
     }
 
-    public getObjectTooltip(object: TicketHistory): string {
+    public async getObjectTooltip(object: TicketHistory): Promise<string> {
         throw new Error('Method not implemented.');
     }
 

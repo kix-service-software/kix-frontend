@@ -19,6 +19,7 @@ import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { Notification } from '../../../model/Notification';
+import { TranslationService } from '../../../../translation/webapp/core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -81,14 +82,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private prepareMessageGroups(): void {
+    private async prepareMessageGroups(): Promise<void> {
         this.state.messageGroups = [];
         if (this.state.notification && this.state.notification.Message) {
+            const languages = await TranslationService.getInstance().getLanguages();
+            const languageHash: { [x: string]: string; } = {};
+            languages.forEach((a) => languageHash[a[0]] = a[1]);
             for (const lang in this.state.notification.Message) {
                 if (lang) {
                     const message = this.state.notification.Message[lang];
                     if (message) {
-                        this.state.messageGroups.push([lang, message]);
+                        this.state.messageGroups.push([languageHash[lang], message]);
                     }
                 }
             }

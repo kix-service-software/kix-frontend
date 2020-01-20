@@ -88,7 +88,10 @@ export class TextModuleLabelProvider extends LabelProvider<TextModule> {
         return plural ? 'Text Modules' : 'Text Module';
     }
 
-    public getObjectTooltip(textModule: TextModule): string {
+    public async getObjectTooltip(textModule: TextModule, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(textModule.Name);
+        }
         return textModule.Name;
     }
 

@@ -138,7 +138,7 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
         return new ObjectIcon('SysConfig', object.Name);
     }
 
-    public getObjectTooltip(object: SysConfigOptionDefinition): string {
+    public async getObjectTooltip(object: SysConfigOptionDefinition): Promise<string> {
         return '';
     }
 
