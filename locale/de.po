@@ -256,6 +256,11 @@ msgstr ""
 msgid "Attachments"
 msgstr "Anhänge"
 
+#, fuzzy
+#| msgid "Attributes"
+msgid "Attribute"
+msgstr "Attribute"
+
 msgid "Attributes"
 msgstr "Attribute"
 
@@ -1170,17 +1175,6 @@ msgstr ""
 "Die General Catalog Klasse kann nur verwendet werden, wenn sie „gültig“ "
 "gesetzt ist."
 
-msgid "Helptext_Admin_JobCCreateEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-#, fuzzy
-msgid "Helptext_Admin_JobCCreateEdit_Time"
-msgstr ""
-"Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
-"Mehrfachauswahl möglich."
-
 msgid "Helptext_Admin_JobCreateEdit_Actions"
 msgstr ""
 "Wählen Sie eine Aktion aus der Liste, anschließend werden die dafür nötigen "
@@ -1193,6 +1187,13 @@ msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
 "Hier können Sie die Aktion temporär deaktivieren: So lange dieser Haken "
 "gesetzt ist, wird die betreffende Aktion nicht durchgeführt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_JobCCreateEdit_Comment"
+msgid "Helptext_Admin_JobCreateEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_JobCreateEdit_Days"
 msgstr ""
@@ -1214,6 +1215,12 @@ msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "Der Name des Jobs muss eindeutig sein."
+
+#, fuzzy
+msgid "Helptext_Admin_JobCreateEdit_Time"
+msgstr ""
+"Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
+"Mehrfachauswahl möglich."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
 msgstr ""
@@ -2551,14 +2558,16 @@ msgstr "Großansicht"
 msgid "Last changed time"
 msgstr "zuletzt geändert am"
 
+#, fuzzy
+#| msgid "Last changed time"
+msgid "Last executed at"
+msgstr "zuletzt geändert am"
+
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
 
 msgid "Last Name"
 msgstr "Nachname"
-
-msgid "Last Run"
-msgstr "Letzte Ausführung"
 
 msgid "Legend"
 msgstr "Legende"
@@ -3984,6 +3993,11 @@ msgstr "Bewertungen"
 msgid "Wait until"
 msgstr "Warten bis"
 
+#, fuzzy
+#| msgid "running"
+msgid "Warning"
+msgstr "läuft"
+
 msgid "Watch"
 msgstr "Beobachten"
 
@@ -4055,6 +4069,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Last Run"
+#~ msgstr "Letzte Ausführung"
 
 #~ msgid "Assigned Queues"
 #~ msgstr "Zugeordnete Teams"

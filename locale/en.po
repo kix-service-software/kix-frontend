@@ -246,6 +246,9 @@ msgstr ""
 msgid "Attachments"
 msgstr ""
 
+msgid "Attribute"
+msgstr ""
+
 msgid "Attributes"
 msgstr ""
 
@@ -1144,13 +1147,6 @@ msgid "Helptext_Admin_GeneralCatalogCreate_Validity"
 msgstr ""
 "The General Catalog class can only be used within the system if set “valid”."
 
-msgid "Helptext_Admin_JobCCreateEdit_Comment"
-msgstr ""
-"Insert additional information (only displayed within the admin module)."
-
-msgid "Helptext_Admin_JobCCreateEdit_Time"
-msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
-
 msgid "Helptext_Admin_JobCreateEdit_Actions"
 msgstr ""
 "Choose an action from the list, then the required form fields will be "
@@ -1162,6 +1158,12 @@ msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
 "Here you can temporarily deactivate this action: As long as this checkbox is "
 "set, this action will not be run."
+
+#, fuzzy
+#| msgid "Helptext_Admin_JobCCreateEdit_Comment"
+msgid "Helptext_Admin_JobCreateEdit_Comment"
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_JobCreateEdit_Days"
 msgstr "Choose the day(s) the job is supposed to run. Multiselect possible."
@@ -1180,6 +1182,11 @@ msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "The job name needs to be unique."
+
+#, fuzzy
+#| msgid "Helptext_Admin_JobCCreateEdit_Time"
+msgid "Helptext_Admin_JobCreateEdit_Time"
+msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
 msgstr ""
@@ -2411,13 +2418,13 @@ msgstr ""
 msgid "Last changed time"
 msgstr ""
 
+msgid "Last executed at"
+msgstr ""
+
 msgid "Last Login"
 msgstr ""
 
 msgid "Last Name"
-msgstr ""
-
-msgid "Last Run"
 msgstr ""
 
 msgid "Legend"
@@ -3832,6 +3839,9 @@ msgid "Votes"
 msgstr ""
 
 msgid "Wait until"
+msgstr ""
+
+msgid "Warning"
 msgstr ""
 
 msgid "Watch"
