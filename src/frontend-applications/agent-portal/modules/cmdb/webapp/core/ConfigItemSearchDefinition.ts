@@ -143,7 +143,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return newCriteria;
     }
 
-    public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
+    public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         let criteria = [];
         switch (property) {
             case ConfigItemProperty.NAME:
@@ -167,9 +167,8 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 ));
                 break;
             default:
-                criteria = [
-                    ...criteria, ...super.prepareSearchFormValue(property, value)
-                ];
+                const preparedCriteria = await super.prepareSearchFormValue(property, value);
+                criteria = [...criteria, ...preparedCriteria];
         }
         return criteria;
     }

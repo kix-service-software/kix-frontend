@@ -74,7 +74,7 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
     private async createRowObject(definition: SysConfigOptionDefinition): Promise<RowObject> {
         const values: TableValue[] = [];
 
-        const columns = this.table.getTableConfiguration().tableColumns;
+        const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
             const tableValue = await this.getTableValue(definition, column.property, column);
             values.push(tableValue);

@@ -41,7 +41,7 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
             for (const d of configItemClass.Definitions) {
                 const values: TableValue[] = [];
 
-                const columns = this.table.getTableConfiguration().tableColumns;
+                const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                 for (const column of columns) {
                     if (column.property === ConfigItemClassDefinitionProperty.CURRENT) {
                         values.push(

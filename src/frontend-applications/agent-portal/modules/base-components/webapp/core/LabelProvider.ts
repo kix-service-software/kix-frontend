@@ -257,7 +257,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 switch (dynamicFields[0].FieldType) {
                     case DynamicFieldType.DATE:
                     case DynamicFieldType.DATE_TIME:
-                        values = await this.getDFDateDateTimeFieldValues(dynamicFields[0], fieldValue);
+                        values = await this.getDFDateDateTimeFieldValues(
+                            dynamicFields[0], fieldValue, dynamicFields[0].FieldType
+                        );
                         break;
                     case DynamicFieldType.SELECTION:
                         values = await this.getDFSelectionFieldValues(dynamicFields[0], fieldValue);
@@ -270,17 +272,29 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return [values, values.join(separator)];
     }
 
-    private async getDFDateDateTimeFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
+    private async getDFDateDateTimeFieldValues(
+        field: DynamicField, fieldValue: DynamicFieldValue, type: string | DynamicFieldType
+    ): Promise<string[]> {
         let values;
 
         if (Array.isArray(fieldValue.Value)) {
             const valuesPromises = [];
             for (const v of fieldValue.Value) {
-                valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
+                if (type === DynamicFieldType.DATE) {
+                    valuesPromises.push(DateTimeUtil.getLocalDateString(v));
+                } else {
+                    valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
+                }
             }
             values = await Promise.all<string>(valuesPromises);
         } else {
-            values = [await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue)];
+            let v: string;
+            if (type === DynamicFieldType.DATE) {
+                v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue);
+            } else {
+                v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue);
+            }
+            values = [v];
         }
 
         return values;

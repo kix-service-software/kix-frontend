@@ -39,7 +39,7 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
                     const a = ticket.Articles[i];
                     const values: TableValue[] = [];
 
-                    const columns = this.table.getTableConfiguration().tableColumns;
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
                         if (column.property === ArticleProperty.NUMBER) {
                             const count = ticket.Articles.length - i;

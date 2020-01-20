@@ -35,7 +35,7 @@ export class TicketHistoryContentProvider extends TableContentProvider<TicketHis
                 for (const th of ticket.History) {
                     const values: TableValue[] = [];
 
-                    const columns = this.table.getTableConfiguration().tableColumns;
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
                         const tableValue = await this.getTableValue(th, column.property, column);
                         values.push(tableValue);

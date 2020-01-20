@@ -124,10 +124,10 @@ export class SearchService {
                     if (value.value && value.value !== '') {
                         const formField = await formInstance.getFormField(formFieldInstanceId);
                         if (formField) {
-                            criteria = [
-                                ...criteria,
-                                ...searchDefinition.prepareSearchFormValue(formField.property, value.value)
-                            ];
+                            const preparedCriteria = await searchDefinition.prepareSearchFormValue(
+                                formField.property, value.value
+                            );
+                            criteria = [...criteria, ...preparedCriteria];
                         }
                     }
 

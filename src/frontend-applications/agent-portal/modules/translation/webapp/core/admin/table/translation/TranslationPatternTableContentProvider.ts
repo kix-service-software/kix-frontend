@@ -38,7 +38,7 @@ export class TranslationPatternTableContentProvider extends TableContentProvider
         for (const t of objects) {
             const values: TableValue[] = [];
 
-            const columns = this.table.getTableConfiguration().tableColumns;
+            const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
             for (const column of columns) {
                 if (column.property === TranslationPatternProperty.VALUE) {
                     const tableValue = await this.getTableValue(t, column.property, column);
