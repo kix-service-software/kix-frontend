@@ -55,6 +55,8 @@ export class TicketSocketClient extends SocketClient {
             return await this.requestPromises.get(cacheKey);
         }
 
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+
         const requestPromise = new Promise<Attachment>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
@@ -62,7 +64,7 @@ export class TicketSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ATTACHMENT);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(TicketEvent.ARTICLE_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
                 if (requestId === result.requestId) {
@@ -87,15 +89,16 @@ export class TicketSocketClient extends SocketClient {
         return await requestPromise;
     }
 
-    public loadArticleZipAttachment(ticketId: number, articleId: number): Promise<Attachment> {
-        return new Promise((resolve, reject) => {
+    public async loadArticleZipAttachment(ticketId: number, articleId: number): Promise<Attachment> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<Attachment>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request = new LoadArticleZipAttachmentRequest(token, requestId, ticketId, articleId);
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT);
-            }, 300000);
+            }, socketTimeout);
 
             this.socket.on(TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
                 if (requestId === result.requestId) {
@@ -116,8 +119,9 @@ export class TicketSocketClient extends SocketClient {
         });
     }
 
-    public setArticleSeenFlag(ticketId, articleId): Promise<void> {
-        return new Promise((resolve, reject) => {
+    public async setArticleSeenFlag(ticketId, articleId): Promise<void> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
             const request = new SetArticleSeenFlagRequest(
@@ -126,7 +130,7 @@ export class TicketSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.REMOVE_ARTICLE_SEEN_FLAG);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, (result: ISocketResponse) => {
                 if (result.requestId === requestId) {

@@ -46,15 +46,17 @@ export class KIXModulesSocketClient extends SocketClient {
         this.socket = this.createSocket('kixmodules', true);
     }
 
-    public loadModules(): Promise<IKIXModuleExtension[]> {
-        return new Promise((resolve, reject) => {
+    public async loadModules(): Promise<IKIXModuleExtension[]> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+
+        return new Promise<IKIXModuleExtension[]>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request = new LoadKIXModulesRequest(token, requestId, ClientStorageService.getClientRequestId());
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + KIXModulesEvent.LOAD_MODULES);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(KIXModulesEvent.LOAD_MODULES_FINISHED, (result: LoadKIXModulesResponse) => {
                 if (requestId === result.requestId) {
@@ -75,9 +77,10 @@ export class KIXModulesSocketClient extends SocketClient {
         });
     }
 
-    public loadFormConfigurations(
+    public async loadFormConfigurations(
     ): Promise<Array<[FormContext, KIXObjectType | string, string]>> {
-        return new Promise((resolve, reject) => {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<Array<[FormContext, KIXObjectType | string, string]>>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request = new LoadFormConfigurationsRequest(
@@ -86,7 +89,7 @@ export class KIXModulesSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + KIXModulesEvent.LOAD_FORM_CONFIGURATIONS);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATIONS_FINISHED,
                 (result: LoadFormConfigurationsResponse) => {
@@ -109,8 +112,9 @@ export class KIXModulesSocketClient extends SocketClient {
         });
     }
 
-    public loadFormConfiguration(formId: string): Promise<FormConfiguration> {
-        return new Promise((resolve, reject) => {
+    public async loadFormConfiguration(formId: string): Promise<FormConfiguration> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<FormConfiguration>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request = new LoadFormConfigurationRequest(
@@ -119,7 +123,7 @@ export class KIXModulesSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + KIXModulesEvent.LOAD_FORM_CONFIGURATION);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(KIXModulesEvent.LOAD_FORM_CONFIGURATION_FINISHED,
                 (result: LoadFormConfigurationResponse) => {
@@ -145,13 +149,14 @@ export class KIXModulesSocketClient extends SocketClient {
 
 
     public async loadReleaseConfig(): Promise<ReleaseInfo> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<ReleaseInfo>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + KIXModulesEvent.LOAD_MODULES);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, (result: LoadReleaseInfoResponse) => {
                 if (requestId === result.requestId) {
@@ -178,13 +183,14 @@ export class KIXModulesSocketClient extends SocketClient {
     }
 
     public async loadObjectDefinitions(): Promise<ObjectDefinition[]> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<ObjectDefinition[]>((resolve, reject) => {
             const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + KIXModulesEvent.LOAD_OBJECT_DEFINITIONS);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(
                 KIXModulesEvent.LOAD_OBJECT_DEFINITIONS_FINISHED,

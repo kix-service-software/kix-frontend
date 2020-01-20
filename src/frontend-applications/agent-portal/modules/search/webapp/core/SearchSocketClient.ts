@@ -37,8 +37,9 @@ export class SearchSocketClient extends SocketClient {
         this.socket = this.createSocket('search', true);
     }
 
-    public saveSearch(search: SearchCache, existingName: string): Promise<void> {
-        return new Promise((resolve, reject) => {
+    public async saveSearch(search: SearchCache, existingName: string): Promise<void> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
 
@@ -48,7 +49,7 @@ export class SearchSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + SearchEvent.SAVE_SEARCH);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(SearchEvent.SAVE_SEARCH_FINISHED, (result: ISocketResponse) => {
                 if (result.requestId === requestId) {
@@ -69,14 +70,15 @@ export class SearchSocketClient extends SocketClient {
         });
     }
 
-    public loadSearch(): Promise<SearchCache[]> {
+    public async loadSearch(): Promise<SearchCache[]> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<SearchCache[]>((resolve, reject) => {
 
             const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + SearchEvent.LOAD_SEARCH);
-            }, 30000);
+            }, socketTimeout);
 
             const requestId = IdService.generateDateBasedId('search-');
 
@@ -107,13 +109,14 @@ export class SearchSocketClient extends SocketClient {
     }
 
     public async deleteSearch(name: string): Promise<void> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
 
             const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + SearchEvent.DELETE_SEARCH);
-            }, 30000);
+            }, socketTimeout);
 
             const requestId = IdService.generateDateBasedId('search-');
 

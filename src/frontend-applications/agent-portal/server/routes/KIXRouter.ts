@@ -11,7 +11,6 @@ import { Request, Response, Router } from 'express';
 import { IRouter } from './IRouter';
 import { IServerConfiguration } from '../../../../server/model/IServerConfiguration';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
-import { ProfilingService } from '../../../../server/services/ProfilingService';
 
 export abstract class KIXRouter implements IRouter {
 
@@ -38,22 +37,6 @@ export abstract class KIXRouter implements IRouter {
 
     protected abstract initialize(): void;
 
-    protected async prepareMarkoTemplate(res: Response, contextId: string, objectId: string): Promise<void> {
-
-        // start profiling
-        const profileTaskId = ProfilingService.getInstance().start(
-            'KIXRouter',
-            contextId + (objectId ? '/' + objectId : ''),
-        );
-
-        this.setFrontendSocketUrl(res);
-
-        res.marko(this.appTemplate);
-
-        // stop profiling
-        ProfilingService.getInstance().stop(profileTaskId, this.appTemplate);
-    }
-
     protected getServerUrl(): string {
         return this.serverConfig.FRONTEND_URL;
     }
@@ -68,8 +51,6 @@ export abstract class KIXRouter implements IRouter {
     }
 
     protected setFrontendSocketUrl(res: Response): void {
-        const socketTimeout = ConfigurationService.getInstance().getServerConfiguration().SOCKET_TIMEOUT;
         res.cookie('frontendSocketUrl', this.getServerUrl());
-        res.cookie('socketTimeout', socketTimeout);
     }
 }

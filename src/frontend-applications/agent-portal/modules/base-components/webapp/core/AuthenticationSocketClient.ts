@@ -40,14 +40,15 @@ export class AuthenticationSocketClient extends SocketClient {
         this.authenticationSocket = this.createSocket('authentication', false);
     }
 
-    public login(
+    public async login(
         userName: string, password: string, redirectUrl: string, fakeLogin?: boolean
     ): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<boolean>((resolve, reject) => {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AuthenticationEvent.LOGIN);
-            }, 30000);
+            }, socketTimeout);
 
             const requestId = IdService.generateDateBasedId();
 
@@ -76,11 +77,12 @@ export class AuthenticationSocketClient extends SocketClient {
         });
     }
 
-    public logout(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+    public async logout(): Promise<boolean> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<boolean>((resolve, reject) => {
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AuthenticationEvent.LOGOUT);
-            }, 30000);
+            }, socketTimeout);
 
             const requestId = IdService.generateDateBasedId();
 
@@ -101,14 +103,15 @@ export class AuthenticationSocketClient extends SocketClient {
         });
     }
 
-    public validateToken(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
+    public async validateToken(): Promise<boolean> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<boolean>((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AuthenticationEvent.VALIDATE_TOKEN);
-            }, 30000);
+            }, socketTimeout);
 
             this.authenticationSocket.on(AuthenticationEvent.AUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {

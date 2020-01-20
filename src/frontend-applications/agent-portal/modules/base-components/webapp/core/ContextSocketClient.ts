@@ -34,7 +34,8 @@ export class ContextSocketClient extends SocketClient {
         this.socket = this.createSocket('context', true);
     }
 
-    public static loadContextConfiguration(contextId: string): Promise<ContextConfiguration> {
+    public async loadContextConfiguration(contextId: string): Promise<ContextConfiguration> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<ContextConfiguration>((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
@@ -42,9 +43,9 @@ export class ContextSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + ContextEvent.LOAD_CONTEXT_CONFIGURATION);
-            }, 30000);
+            }, socketTimeout);
 
-            this.getInstance().socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOADED,
+            this.socket.on(ContextEvent.CONTEXT_CONFIGURATION_LOADED,
                 (result: LoadContextConfigurationResponse<ContextConfiguration>) => {
                     if (result.requestId === requestId) {
                         window.clearTimeout(timeout);
@@ -53,13 +54,13 @@ export class ContextSocketClient extends SocketClient {
                 }
             );
 
-            this.getInstance().socket.emit(
+            this.socket.emit(
                 ContextEvent.LOAD_CONTEXT_CONFIGURATION, new LoadContextConfigurationRequest(
                     token, requestId, ClientStorageService.getClientRequestId(), contextId
                 )
             );
 
-            this.getInstance().socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
                     window.clearTimeout(timeout);
                     console.error(error.error);

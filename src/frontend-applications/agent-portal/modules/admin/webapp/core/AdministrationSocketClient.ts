@@ -41,13 +41,14 @@ export class AdministrationSocketClient extends SocketClient {
             return this.categories;
         }
 
-        return new Promise<AdminModuleCategory[]>((resolve, reject) => {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
 
+        return new Promise<AdminModuleCategory[]>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AdministrationEvent.LOAD_ADMIN_CATEGORIES);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(
                 AdministrationEvent.ADMIN_CATEGORIES_LOADED,

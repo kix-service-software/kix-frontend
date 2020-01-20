@@ -45,6 +45,7 @@ import { TranslationAPIService } from '../modules/translation/server/Translation
 import { SysConfigAccessLevel } from '../modules/sysconfig/model/SysConfigAccessLevel';
 import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
 import { SystemInfo } from '../model/SystemInfo';
+import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
 
 export class Server implements IServer {
 
@@ -221,6 +222,18 @@ export class Server implements IServer {
                 };
                 return definition;
             });
+
+            const browserTimeoutConfig: any = {
+                AccessLevel: SysConfigAccessLevel.INTERNAL,
+                Name: SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG,
+                Description: 'Timeout (in ms) configuration for socket requests.',
+                Default: '30000',
+                Context: serverConfig.NOTIFICATION_CLIENT_ID,
+                ContextMetadata: 'agent-portal-configuration',
+                Type: 'String',
+                IsRequired: 0
+            };
+            sysconfigOptionDefinitions.push(browserTimeoutConfig);
 
             return sysconfigOptionDefinitions;
         }
