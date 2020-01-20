@@ -78,7 +78,10 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
         return 'kix-icon-ci';
     }
 
-    public getObjectTooltip(ciClass: ConfigItemClass): string {
+    public async getObjectTooltip(ciClass: ConfigItemClass, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(ciClass.Name);
+        }
         return ciClass.Name;
     }
 

@@ -92,7 +92,10 @@ export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
         return 'kix-icon-faq';
     }
 
-    public getObjectTooltip(history: FAQHistory): string {
+    public async getObjectTooltip(history: FAQHistory, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(history.Name);
+        }
         return history.Name;
     }
 

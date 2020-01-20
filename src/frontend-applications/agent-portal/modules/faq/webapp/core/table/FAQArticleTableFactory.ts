@@ -111,7 +111,7 @@ export class FAQArticleTableFactory extends TableFactory {
             case FAQArticleProperty.VOTES:
                 return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false,
-                    null, null, null, null, true
+                    null, null, null, true, true
                 );
             case FAQArticleProperty.CATEGORY_ID:
                 return new DefaultColumnConfiguration(null, null, null,

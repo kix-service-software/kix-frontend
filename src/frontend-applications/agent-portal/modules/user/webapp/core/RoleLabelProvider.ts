@@ -87,7 +87,10 @@ export class RoleLabelProvider extends LabelProvider<Role> {
         return plural ? 'Roles' : 'Role';
     }
 
-    public getObjectTooltip(role: Role): string {
+    public async getObjectTooltip(role: Role, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(role.Name);
+        }
         return role.Name;
     }
 

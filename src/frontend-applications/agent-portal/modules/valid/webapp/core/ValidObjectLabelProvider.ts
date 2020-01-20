@@ -10,6 +10,7 @@
 import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
 import { ValidObject } from "../../model/ValidObject";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { TranslationService } from "../../../translation/webapp/core";
 
 export class ValidObjectLabelProvider extends LabelProvider<ValidObject> {
 
@@ -19,8 +20,9 @@ export class ValidObjectLabelProvider extends LabelProvider<ValidObject> {
         return validObject instanceof ValidObject;
     }
 
-    public async getObjectText(validObject: ValidObject, id?: boolean, title?: boolean): Promise<string> {
-        return validObject.Name;
+    public async getObjectText(
+        validObject: ValidObject, id?: boolean, title?: boolean, translatable: boolean = true): Promise<string> {
+        return translatable ? await TranslationService.translate(validObject.Name) : validObject.Name;
     }
 
 }

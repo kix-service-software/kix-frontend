@@ -145,7 +145,10 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         return new ObjectIcon('MailAccount', object.ID);
     }
 
-    public getObjectTooltip(object: MailAccount): string {
+    public async getObjectTooltip(object: MailAccount, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(object.Host);
+        }
         return object.Host;
     }
 

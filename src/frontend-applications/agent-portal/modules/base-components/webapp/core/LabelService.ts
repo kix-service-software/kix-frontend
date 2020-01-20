@@ -75,7 +75,7 @@ export class LabelService {
         return objectType;
     }
 
-    public getTooltip<T extends KIXObject>(object: T, translatable: boolean = true): string {
+    public async getTooltip<T extends KIXObject>(object: T, translatable: boolean = true): Promise<string> {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
             return labelProvider.getObjectTooltip(object, translatable);

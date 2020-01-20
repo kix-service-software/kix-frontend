@@ -19,6 +19,7 @@ import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { GeneralCatalogItem } from "../../../../general-catalog/model/GeneralCatalogItem";
+import { TranslationService } from "../../../../translation/webapp/core";
 
 export class ConfigItemChartFactory {
 
@@ -65,16 +66,19 @@ export class ConfigItemChartFactory {
         ]);
 
         const result: [string[], ChartDataSets[]] = [[], []];
+        const labelWarning = await TranslationService.translate('Translatable#Warning');
+        const labelIncident = await TranslationService.translate('Translatable#Incident state');
+
 
         if (property === ConfigItemProperty.CUR_INCI_STATE_ID) {
             result[1] = [
                 {
-                    label: 'Warning',
+                    label: labelWarning,
                     data: [],
                     backgroundColor: "#ffed00"
                 },
                 {
-                    label: 'Incident',
+                    label: labelIncident,
                     data: [],
                     backgroundColor: "#e31e24"
                 }

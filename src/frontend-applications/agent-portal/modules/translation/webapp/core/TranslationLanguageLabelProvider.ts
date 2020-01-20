@@ -85,7 +85,12 @@ export class TranslationLanguageLabelProvider extends LabelProvider<TranslationL
         return displayValue;
     }
 
-    public getObjectTooltip(language: TranslationLanguage): string {
+    public async getObjectTooltip(language: TranslationLanguage, translatable: boolean = false): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                language.ObjectId.toString()
+            );
+        }
         return language.ObjectId.toString();
     }
 

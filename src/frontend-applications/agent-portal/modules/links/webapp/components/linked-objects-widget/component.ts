@@ -130,21 +130,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private initTableSubscriber(): void {
         this.tableSubscriber = {
             eventSubscriberId: 'linked-objects-widget',
-            eventPublished: (data: TableEventData, eventId: string) => {
+            eventPublished: async (data: TableEventData, eventId: string) => {
                 const group = data && this.state.linkedObjectGroups ? this.state.linkedObjectGroups.find(
                     (g) => g[1].getTableId() === data.tableId
                 ) : null;
                 if (group) {
                     if (eventId === TableEvent.TABLE_READY) {
-                        const values = group[3].map((ld) => {
-                            const name = ld.linkTypeDescription.asSource
-                                ? ld.linkTypeDescription.linkType.SourceName
-                                : ld.linkTypeDescription.linkType.TargetName;
-
-                            const value: [any, [string, any]] = [ld.linkableObject, ['LinkedAs', name]];
-                            return value;
-                        });
+                        const values: any[] = [];
+                        for (let index = 0; index < group[3].length; index++) {
+                            const linkArray = group[3][index];
+                            let name = linkArray.linkTypeDescription.asSource
+                                ? linkArray.linkTypeDescription.linkType.SourceName
+                                : linkArray.linkTypeDescription.linkType.TargetName;
+                            name = await TranslationService.translate(name);
+                            const value: [any, [string, any]] = [linkArray.linkableObject, ['LinkedAs', name]];
+                            values.push(value);
+                        }
                         if (!!values.length) {
+
                             group[1].setRowObjectValues(values);
                         }
                     }

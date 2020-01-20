@@ -480,7 +480,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         return 'kix-icon-ticket';
     }
 
-    public getObjectTooltip(ticket: Ticket, translatable: boolean = true): string {
+    public async getObjectTooltip(ticket: Ticket, translatable: boolean = false): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(ticket.Title);
+        }
         return ticket.Title;
     }
 

@@ -166,7 +166,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
         return plural ? 'Permissions' : 'Permission';
     }
 
-    public getObjectTooltip(object: Permission): string {
+    public async getObjectTooltip(object: Permission): Promise<string> {
         return object.ID.toString();
     }
 
