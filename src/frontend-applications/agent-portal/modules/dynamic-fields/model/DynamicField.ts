@@ -9,6 +9,7 @@
 
 import { KIXObject } from "../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { DynamicFieldType } from "./DynamicFieldType";
 
 export class DynamicField extends KIXObject {
 
@@ -20,7 +21,7 @@ export class DynamicField extends KIXObject {
 
     public DisplayGroupID: number;
 
-    public FieldType: string;
+    public FieldType: string | DynamicFieldType;
 
     public InternalField: number;
 

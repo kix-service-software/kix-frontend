@@ -85,6 +85,14 @@ export class Table implements ITable {
     public async initialize(): Promise<void> {
         if (!this.initialized) {
             this.initialized = true;
+
+            this.columns = [];
+            if (this.columnConfiguration) {
+                for (const c of this.columnConfiguration) {
+                    await this.createColumn(c);
+                }
+            }
+
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
                 await this.loadRowData();
@@ -93,12 +101,11 @@ export class Table implements ITable {
                     : this.contentProvider.getObjectType();
             }
 
-            this.columns = [];
-            if (this.columnConfiguration) {
-                for (const c of this.columnConfiguration) {
-                    await this.createColumn(c);
-                }
-            }
+            this.rows.forEach((r) => {
+                this.columns.forEach((c) => {
+                    r.addCell(new TableValue(c.getColumnId(), null));
+                });
+            });
 
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder);
@@ -148,11 +155,6 @@ export class Table implements ITable {
 
         if (canCreate) {
             column = new Column(this, columnConfiguration);
-
-            this.rows.forEach((r) => {
-                r.addCell(new TableValue(column.getColumnId(), null));
-            });
-
             this.columns.push(column);
         }
 

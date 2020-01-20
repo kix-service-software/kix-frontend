@@ -53,7 +53,7 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
                     const basedOnDefinitionString
                         = `${translatedVersion} ${v.Definition.Version} (${translatedCreated} ${createTime})`;
 
-                    const columns = this.table.getTableConfiguration().tableColumns;
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
                         if (column.property === VersionProperty.COUNT_NUMBER) {
                             values.push(

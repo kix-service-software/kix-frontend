@@ -35,7 +35,7 @@ export class ConfigItemHistoryContentProvider extends TableContentProvider<Confi
                 for (const ch of configItem.History) {
                     const values: TableValue[] = [];
 
-                    const columns = this.table.getTableConfiguration().tableColumns;
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
                         const tableValue = await this.getTableValue(ch, column.property, column);
                         values.push(tableValue);

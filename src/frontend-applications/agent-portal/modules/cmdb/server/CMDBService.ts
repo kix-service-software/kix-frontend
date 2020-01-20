@@ -307,8 +307,4 @@ export class CMDBAPIService extends KIXObjectAPIService {
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
     }
-
-    protected prepareAPISearch(criteria: FilterCriteria[]): FilterCriteria[] {
-        return [];
-    }
 }

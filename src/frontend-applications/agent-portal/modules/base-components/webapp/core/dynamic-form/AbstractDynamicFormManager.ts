@@ -14,6 +14,15 @@ import { InputFieldTypes } from "../InputFieldTypes";
 import { TreeNode } from "../tree";
 import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
 import { ValidationResult } from "../ValidationResult";
+import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../../model/FilterCriteria";
+import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
+import { SearchOperator } from "../../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../../model/FilterDataType";
+import { FilterType } from "../../../../../model/FilterType";
+import { KIXObjectService } from "../KIXObjectService";
+import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -97,10 +106,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return this.values;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes | string> {
-        return;
-    }
-
     public async getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string> {
         return;
     }
@@ -158,10 +163,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return true;
     }
 
-    public async isMultiselect(property: string): Promise<boolean> {
-        return false;
-    }
-
     public validate(): Promise<ValidationResult[]> {
         return;
     }
@@ -181,6 +182,66 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             addEmpty = true;
         }
         return addEmpty;
+    }
+
+    protected async loadDynamicField(property: string): Promise<DynamicField> {
+        let dynamicField: DynamicField;
+        const name = this.getDynamicFieldName(property);
+        if (name) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, name
+                    )
+                ], null, null, [DynamicFieldProperty.CONFIG]
+            );
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+            );
+
+            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+        }
+        return dynamicField;
+    }
+
+    protected getDynamicFieldName(property: string): string {
+        let dfName: string;
+        const dFRegEx = new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)');
+        if (property.match(dFRegEx)) {
+            dfName = property.replace(dFRegEx, '$1');
+        }
+        return dfName;
+    }
+
+    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+        return await this.getInputTypeForDF(property);
+    }
+
+    public async isMultiselect(property: string): Promise<boolean> {
+        let isMultiSelect = false;
+        const field = await this.loadDynamicField(property);
+        if (field && field.FieldType === 'Multiselect' && field.Config && Number(field.Config.CountMax) > 1) {
+            isMultiSelect = true;
+        }
+        return isMultiSelect;
+    }
+
+    protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
+        let inputFieldType = InputFieldTypes.TEXT;
+        const field = await this.loadDynamicField(property);
+        if (field) {
+            if (field.FieldType === 'TextArea') {
+                inputFieldType = InputFieldTypes.TEXT_AREA;
+            } else if (field.FieldType === 'Date') {
+                inputFieldType = InputFieldTypes.DATE;
+            } else if (field.FieldType === 'DateTime') {
+                inputFieldType = InputFieldTypes.DATE_TIME;
+            } else if (field.FieldType === 'Multiselect') {
+                inputFieldType = InputFieldTypes.DROPDOWN;
+            }
+        }
+        return inputFieldType;
     }
 
 }

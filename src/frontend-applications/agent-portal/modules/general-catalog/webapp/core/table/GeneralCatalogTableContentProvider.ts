@@ -59,7 +59,7 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
 
         for (const property in definition) {
             if (definition.hasOwnProperty(property)) {
-                const column = this.table.getTableConfiguration().tableColumns.find(
+                const column = this.table.getColumns().map((c) => c.getColumnConfiguration()).find(
                     (c) => c.property === property
                 );
                 const tableValue = await this.getTableValue(definition, property, column);

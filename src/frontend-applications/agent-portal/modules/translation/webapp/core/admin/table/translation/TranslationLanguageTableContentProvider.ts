@@ -44,7 +44,7 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
                 for (const l of languages) {
                     const values: TableValue[] = [];
 
-                    const columns = this.table.getTableConfiguration().tableColumns;
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
                         const tableValue = await this.getTableValue(l, column.property, column);
                         values.push(tableValue);

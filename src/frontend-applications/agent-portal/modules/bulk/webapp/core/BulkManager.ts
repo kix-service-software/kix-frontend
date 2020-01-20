@@ -14,7 +14,6 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { PropertyOperator } from "../../../../modules/base-components/webapp/core/PropertyOperator";
 import { PropertyOperatorUtil } from "../../../../modules/base-components/webapp/core/PropertyOperatorUtil";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
@@ -26,12 +25,9 @@ import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldFormUtil } from "../../../base-components/webapp/core/DynamicFieldFormUtil";
-import { ValidService } from "../../../valid/webapp/core";
 import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
-import { OverlayService } from "../../../base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../base-components/webapp/core/OverlayType";
-import { ComponentContent } from "../../../base-components/webapp/core/ComponentContent";
+import { InputFieldTypes } from "../../../base-components/webapp/core/InputFieldTypes";
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -220,7 +216,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         return dynamicField;
     }
 
-    private getDynamicFieldName(property: string): string {
+    public getDynamicFieldName(property: string): string {
         let dfName: string;
         const dFRegEx = new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)');
         if (property.match(dFRegEx)) {

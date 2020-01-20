@@ -24,6 +24,10 @@ import { IDynamicFormManager } from "../../../base-components/webapp/core/dynami
 import { SearchOperator } from "../../model/SearchOperator";
 import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
+import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export abstract class SearchDefinition {
 
@@ -63,17 +67,44 @@ export abstract class SearchDefinition {
     }
 
     public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        return criteria.filter((c) => {
+        const filteredCriteria = criteria.filter((c) => {
             if (Array.isArray(c.value)) {
                 return c.value.length > 0;
             } else {
                 return c.value !== null && c.value !== undefined && c.value !== '';
             }
         });
+
+        for (const c of filteredCriteria) {
+            const field = await this.loadDynamicField(c.property);
+            if (field) {
+                if (field.FieldType === 'Date') {
+                    c.type = FilterDataType.DATE;
+                } else if (field.FieldType === 'DateTime') {
+                    c.type = FilterDataType.DATETIME;
+                }
+            }
+        }
+
+        return filteredCriteria;
     }
 
-    public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
+    public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         const operator = Array.isArray(value) ? SearchOperator.IN : SearchOperator.EQUALS;
+
+        const field = await this.loadDynamicField(property);
+        if (field) {
+            if (field.FieldType === 'Date') {
+                return [new FilterCriteria(
+                    property, operator, FilterDataType.DATE, FilterType.AND, value
+                )];
+            } else if (field.FieldType === 'DateTime') {
+                return [new FilterCriteria(
+                    property, operator, FilterDataType.DATETIME, FilterType.AND, value
+                )];
+            }
+        }
+
         return [new FilterCriteria(property, operator, FilterDataType.STRING, FilterType.AND, value)];
     }
 
@@ -133,5 +164,35 @@ export abstract class SearchDefinition {
         const filterDataType = operator === SearchOperator.BETWEEN ? FilterDataType.DATETIME : FilterDataType.STRING;
 
         return new FilterCriteria(property, operator as SearchOperator, filterDataType, FilterType.AND, value);
+    }
+
+    protected async loadDynamicField(property: string): Promise<DynamicField> {
+        let dynamicField: DynamicField;
+        const name = this.getDynamicFieldName(property);
+        if (name) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, name
+                    )
+                ], null, null, [DynamicFieldProperty.CONFIG]
+            );
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+            );
+
+            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+        }
+        return dynamicField;
+    }
+
+    protected getDynamicFieldName(property: string): string {
+        let dfName: string;
+        const dFRegEx = new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)');
+        if (property.match(dFRegEx)) {
+            dfName = property.replace(dFRegEx, '$1');
+        }
+        return dfName;
     }
 }

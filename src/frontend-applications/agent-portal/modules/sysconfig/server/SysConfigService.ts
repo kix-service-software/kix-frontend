@@ -140,8 +140,4 @@ export class SysConfigService extends KIXObjectAPIService {
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
 
-    protected prepareAPISearch(criteria: FilterCriteria[]): FilterCriteria[] {
-        return [];
-    }
-
 }

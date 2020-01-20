@@ -64,7 +64,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return criteria;
     }
 
-    public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
+    public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         let criteria = [];
         switch (property) {
             case FAQArticleProperty.NUMBER:
@@ -81,12 +81,16 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
             case FAQArticleProperty.FIELD_2:
             case FAQArticleProperty.FIELD_3:
             case FAQArticleProperty.FIELD_6:
-                criteria = [...criteria, ...super.prepareSearchFormValue(property, value)];
+                const preparedCriteria = await super.prepareSearchFormValue(property, value);
+                criteria = [...criteria, ...preparedCriteria];
+
                 const encodedValue = BrowserUtil.encodeHTMLString(value);
-                criteria = [...criteria, ...super.prepareSearchFormValue(property, encodedValue)];
+                const preparedEncodedCriteria = await super.prepareSearchFormValue(property, encodedValue);
+                criteria = [...criteria, ...preparedEncodedCriteria];
                 break;
             default:
-                criteria = [...criteria, ...super.prepareSearchFormValue(property, value)];
+                const prepCriteria = await super.prepareSearchFormValue(property, value);
+                criteria = [...criteria, ...prepCriteria];
         }
         return criteria;
     }

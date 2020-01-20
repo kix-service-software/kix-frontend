@@ -360,6 +360,7 @@ export class DynamicFormFieldValue {
             currentValue.value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
             if (this.isBetween && currentValue.value) {
                 const endDate = new Date(this.betweenEndDate);
+                endDate.setHours(0, 0, 0, 0);
                 currentValue.value = isNaN(endDate.getTime())
                     ? null
                     : [currentValue.value, DateTimeUtil.getKIXDateTimeString(endDate)];

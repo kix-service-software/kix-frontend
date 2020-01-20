@@ -49,7 +49,7 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
             for (const p of permissions) {
                 const values: TableValue[] = [];
 
-                const columns = this.table.getTableConfiguration().tableColumns;
+                const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                 for (const column of columns) {
                     const tableValue = await this.getTableValue(p, column.property, column);
                     values.push(tableValue);

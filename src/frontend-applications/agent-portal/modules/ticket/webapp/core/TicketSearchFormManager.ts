@@ -8,9 +8,6 @@
  */
 
 import { TicketService } from "./TicketService";
-import {
-    AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SearchProperty } from "../../../search/model/SearchProperty";
 import { TicketProperty } from "../../model/TicketProperty";
@@ -24,16 +21,16 @@ import { SearchDefinition, SearchOperatorUtil } from "../../../search/webapp/cor
 import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
 import { TreeNode } from "../../../base-components/webapp/core/tree";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { FilterDataType } from "../../../../model/FilterDataType";
+import { SearchFormManager } from "../../../base-components/webapp/core/SearchFormManager";
 
-export class TicketSearchFormManager extends AbstractDynamicFormManager {
+export class TicketSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
     protected readPermissions: Map<string, boolean> = new Map();
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
+        let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [TicketProperty.TICKET_NUMBER, null],
             [TicketProperty.TITLE, null],
@@ -85,6 +82,9 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
             );
             p[1] = label;
         }
+
+        const superProperties = await super.getProperties();
+        properties = [...properties, ...superProperties];
 
         return properties;
     }
@@ -139,22 +139,25 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
                 operations = [SearchOperator.CONTAINS];
                 break;
             default:
-                operations = [];
+                operations = await super.getOperations(property);
         }
 
         return operations;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+    public async getInputType(property: string): Promise<InputFieldTypes> {
+        let inputType;
         if (this.isDropDown(property)) {
-            return InputFieldTypes.DROPDOWN;
+            inputType = InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
-            return InputFieldTypes.DATE_TIME;
+            inputType = InputFieldTypes.DATE_TIME;
         } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
-            return InputFieldTypes.OBJECT_REFERENCE;
+            inputType = InputFieldTypes.OBJECT_REFERENCE;
+        } else {
+            inputType = super.getInputType(property);
         }
 
-        return InputFieldTypes.TEXT;
+        return inputType;
     }
 
     private isDropDown(property: string): boolean {
@@ -187,7 +190,7 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        return property !== TicketProperty.LOCK_ID;
+        return property !== TicketProperty.LOCK_ID || super.isMultiselect(property);
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
@@ -229,14 +232,6 @@ export class TicketSearchFormManager extends AbstractDynamicFormManager {
         }
 
         return tree;
-    }
-
-    public getFilterDataType(property: string): FilterDataType {
-        if (this.isDateTime(property)) {
-            return FilterDataType.DATETIME;
-        }
-
-        return FilterDataType.STRING;
     }
 
 }

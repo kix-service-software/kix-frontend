@@ -102,15 +102,15 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             objects = [];
         }
 
-        const props = this.table.getTableConfiguration().tableColumns.map((c) => c.property);
+        const props = this.table.getColumns().map((c) => c.getColumnConfiguration().property);
         const propertyMap: Map<string, Map<any, TableValue>> = new Map();
         for (const p of props) {
-            const column = this.table.getTableConfiguration().tableColumns.find((c) => c.property === p);
+            const column = this.table.getColumns().find((c) => c.getColumnConfiguration().property === p);
             const valueMap: Map<any, TableValue> = new Map();
             propertyMap.set(p, valueMap);
             for (const o of objects) {
                 if (!valueMap.has(o[p])) {
-                    const vm = await this.getTableValue(o, p, column);
+                    const vm = await this.getTableValue(o, p, column.getColumnConfiguration());
                     valueMap.set(o[p], vm);
                 }
             }
@@ -126,7 +126,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 rowObjectPromises.push(new Promise<RowObject<T>>(async (resolve, reject) => {
                     const values: TableValue[] = [];
 
-                    const columns = this.table.getTableConfiguration().tableColumns;
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
                         const property = column.property;
 
