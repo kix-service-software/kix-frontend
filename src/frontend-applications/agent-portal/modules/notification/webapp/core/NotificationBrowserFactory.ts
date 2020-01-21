@@ -12,6 +12,7 @@ import { KIXObjectFactory } from "../../../../modules/base-components/webapp/cor
 import { NotificationProperty } from "../../model/NotificationProperty";
 import { ArticleProperty } from "../../../ticket/model/ArticleProperty";
 import { Notification } from "../../model/Notification";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
 
@@ -74,6 +75,9 @@ export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
                         default:
                             let property = key.replace('Ticket::', '');
                             property = property.replace('Article::', '');
+                            property = property.replace(
+                                /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                            );
                             if (filterProperties.some((p) => p[0] === property)) {
                                 let newValue;
                                 if (this.isStringProperty(property)) {

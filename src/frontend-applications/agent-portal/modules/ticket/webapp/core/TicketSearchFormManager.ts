@@ -13,9 +13,6 @@ import { SearchProperty } from "../../../search/model/SearchProperty";
 import { TicketProperty } from "../../model/TicketProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { SearchDefinition, SearchOperatorUtil } from "../../../search/webapp/core";
 import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
@@ -26,8 +23,6 @@ import { SearchFormManager } from "../../../base-components/webapp/core/SearchFo
 export class TicketSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
-
-    protected readPermissions: Map<string, boolean> = new Map();
 
     public async getProperties(): Promise<Array<[string, string]>> {
         let properties: Array<[string, string]> = [
@@ -87,17 +82,6 @@ export class TicketSearchFormManager extends SearchFormManager {
         properties = [...properties, ...superProperties];
 
         return properties;
-    }
-
-    protected async checkReadPermissions(resource: string): Promise<boolean> {
-        if (!this.readPermissions.has(resource)) {
-            const permission = await AuthenticationSocketClient.getInstance().checkPermissions(
-                [new UIComponentPermission(resource, [CRUD.READ])]
-            );
-            this.readPermissions.set(resource, permission);
-        }
-
-        return this.readPermissions.get(resource);
     }
 
     public async getOperations(property: string): Promise<any[]> {

@@ -348,7 +348,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     ): Promise<void> {
 
         const nonDynamicFieldCriteria = criteria.filter(
-            (c) => !c.property.match(new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)'))
+            (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
 
         const filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token);
@@ -360,7 +360,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
         const dynamicFieldCriteria = criteria.filter(
-            (c) => c.property.match(new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)'))
+            (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
         dynamicFieldCriteria.forEach(
             (c) => c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_')

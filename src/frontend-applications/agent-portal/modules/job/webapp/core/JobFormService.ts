@@ -327,6 +327,14 @@ export class JobFormService extends KIXObjectFormService {
                                     }
                                     break;
                                 default:
+                                    if (
+                                        newValutProperty.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
+                                    ) {
+                                        newValutProperty = newValutProperty.replace(
+                                            new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`),
+                                            'Ticket::DynamicField_$1'
+                                        );
+                                    }
                             }
 
                             newValue[newValutProperty] = value[valueProperty];

@@ -29,7 +29,7 @@ import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
     public kixObjectType: KIXObjectType | string;
-    protected dFRegEx = new RegExp('DynamicFields?\.(.+)');
+    protected dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
 
     public isLabelProviderFor(object: T): boolean {
         throw new Error("Method not implemented.");
@@ -77,7 +77,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             default:
                 if (property.match(this.dFRegEx)) {
                     const dfName = property.replace(this.dFRegEx, '$1');
-                    const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                    const dynamicFields = dfName ? await KIXObjectService.loadObjects<DynamicField>(
                         KIXObjectType.DYNAMIC_FIELD, null,
                         new KIXObjectLoadingOptions(
                             [
@@ -87,7 +87,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                                 )
                             ]
                         ), null, true
-                    ).catch(() => [] as DynamicField[]);
+                    ).catch(() => [] as DynamicField[]) : [];
                     if (dynamicFields.length) {
                         displayValue = dynamicFields[0].Label;
                     } else {
@@ -165,7 +165,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
+        property: string, value: string | number | any, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
@@ -191,6 +191,23 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
+                if (property.match(this.dFRegEx) && value) {
+                    const dfName = property.replace(this.dFRegEx, '$1');
+                    if (dfName) {
+                        const preparedValue = await this.getDFDisplayValues(
+                            new DynamicFieldValue({
+                                Name: dfName,
+                                Value: value
+                            } as DynamicFieldValue)
+                        );
+                        if (preparedValue && preparedValue[1]) {
+                            displayValue = preparedValue[1];
+                        } else {
+                            displayValue = value.toString();
+                        }
+                    }
+                    translatable = false;
+                }
         }
 
         if (displayValue) {
@@ -238,31 +255,22 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         let values = [];
         let separator = '';
 
-        if (fieldValue && fieldValue.Name) {
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null,
-                new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, fieldValue.Name
-                        )
-                    ], null, 1, [DynamicFieldProperty.CONFIG]
-                ), null, true
-            ).catch(() => [] as DynamicField[]);
+        if (fieldValue) {
+            const dynamicField = await this.loadDynamicField(
+                fieldValue.ID ? Number(fieldValue.ID) : null,
+                fieldValue.Name ? fieldValue.Name : null
+            );
 
-            if (dynamicFields.length) {
-                separator = dynamicFields[0].Config && dynamicFields[0].Config.ItemSeparator ?
-                    dynamicFields[0].Config.ItemSeparator : ', ';
-                switch (dynamicFields[0].FieldType) {
+            if (dynamicField) {
+                separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
+                    dynamicField.Config.ItemSeparator : ', ';
+                switch (dynamicField.FieldType) {
                     case DynamicFieldType.DATE:
                     case DynamicFieldType.DATE_TIME:
-                        values = await this.getDFDateDateTimeFieldValues(
-                            dynamicFields[0], fieldValue, dynamicFields[0].FieldType
-                        );
+                        values = await this.getDFDateDateTimeFieldValues(dynamicField, fieldValue);
                         break;
                     case DynamicFieldType.SELECTION:
-                        values = await this.getDFSelectionFieldValues(dynamicFields[0], fieldValue);
+                        values = await this.getDFSelectionFieldValues(dynamicField, fieldValue);
                         break;
                     default:
                         values = Array.isArray(fieldValue.Value) ? fieldValue.Value : [fieldValue.Value];
@@ -272,15 +280,34 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return [values, values.join(separator)];
     }
 
-    private async getDFDateDateTimeFieldValues(
-        field: DynamicField, fieldValue: DynamicFieldValue, type: string | DynamicFieldType
-    ): Promise<string[]> {
+    private async loadDynamicField(id?: number, name?: string): Promise<DynamicField> {
+        let dynamicField: DynamicField;
+        if (id || name) {
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
+                new KIXObjectLoadingOptions(
+                    !id ? [
+                        new FilterCriteria(
+                            DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ] : null,
+                    null, 1, [DynamicFieldProperty.CONFIG]
+                ), null, true
+            ).catch(() => [] as DynamicField[]);
+
+            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+        }
+        return dynamicField;
+    }
+
+    private async getDFDateDateTimeFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
         let values;
 
         if (Array.isArray(fieldValue.Value)) {
             const valuesPromises = [];
             for (const v of fieldValue.Value) {
-                if (type === DynamicFieldType.DATE) {
+                if (field.FieldType === DynamicFieldType.DATE) {
                     valuesPromises.push(DateTimeUtil.getLocalDateString(v));
                 } else {
                     valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
@@ -289,7 +316,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             values = await Promise.all<string>(valuesPromises);
         } else {
             let v: string;
-            if (type === DynamicFieldType.DATE) {
+            if (field.FieldType === DynamicFieldType.DATE) {
                 v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue);
             } else {
                 v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue);

@@ -286,7 +286,7 @@ export class DynamicFormFieldValue {
                         this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
                     }
                 } else {
-                    const date = new Date(this.value.value);
+                    const date = new Date(Array.isArray(this.value.value) ? this.value.value[0] : this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                     }
@@ -304,12 +304,14 @@ export class DynamicFormFieldValue {
                         this.betweenEndTime = DateTimeUtil.getKIXTimeString(endDate);
                     }
                 } else {
-                    const date = new Date(this.value.value);
+                    const date = new Date(Array.isArray(this.value.value) ? this.value.value[0] : this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                         this.time = DateTimeUtil.getKIXTimeString(date);
                     }
                 }
+            } else {
+                this.value.value = Array.isArray(this.value.value) ? this.value.value[0] : this.value.value;
             }
         }
 

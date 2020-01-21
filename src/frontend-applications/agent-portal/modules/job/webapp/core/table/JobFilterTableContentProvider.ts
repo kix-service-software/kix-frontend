@@ -20,6 +20,7 @@ import { TicketProperty } from "../../../../ticket/model/TicketProperty";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
 import { ILabelProvider } from "../../../../base-components/webapp/core/ILabelProvider";
+import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
 
 export class JobFilterTableContentProvider extends TableContentProvider<any> {
 
@@ -49,17 +50,24 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
                             displayKey, job.Filter[filter], ticketLabelProvider
                         );
                         displayKey = await ticketLabelProvider.getPropertyText(displayKey);
+                    } else if (displayKey.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))) {
+                        displayValuesAndIcons = await this.getDFValues(
+                            displayKey, job.Filter[filter], ticketLabelProvider
+                        );
+                        displayKey = await ticketLabelProvider.getPropertyText(displayKey);
                     } else {
                         displayValuesAndIcons = await this.getValue(
                             displayKey, job.Filter[filter], articleLabelProvider
                         );
                         displayKey = await articleLabelProvider.getPropertyText(displayKey);
                     }
+                    const displayString = displayValuesAndIcons[2] ? displayValuesAndIcons[2] :
+                        Array.isArray(displayValuesAndIcons[0]) ? displayValuesAndIcons[0].join(', ') : '';
                     const values: TableValue[] = [
                         new TableValue(JobFilterTableProperty.FIELD, filter, displayKey),
                         new TableValue(
                             JobFilterTableProperty.VALUE, displayValuesAndIcons[0],
-                            displayValuesAndIcons[0].join(', '), null, displayValuesAndIcons[1]
+                            displayString, null, displayValuesAndIcons[1]
                         )
                     ];
                     rowObjects.push(new RowObject<any>(values));
@@ -110,5 +118,24 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
             }
         }
         return [displayValues, displayIcons];
+    }
+
+    private async getDFValues(
+        key: string, value: any, labelProvider: ILabelProvider<any>
+    ): Promise<[string[], Array<string | ObjectIcon>, string]> {
+        const dfName = key.replace(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`), '$1');
+        let displayValues: string[] = [];
+        let displayString: string = '';
+        if (dfName) {
+            const preparedValue = await labelProvider.getDFDisplayValues(
+                new DynamicFieldValue({
+                    Name: dfName,
+                    Value: value
+                } as DynamicFieldValue)
+            );
+            displayValues = preparedValue ? preparedValue[0] : Array.isArray(value) ? value : [value];
+            displayString = preparedValue ? preparedValue[1] : '';
+        }
+        return [displayValues, null, displayString];
     }
 }
