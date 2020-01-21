@@ -138,6 +138,10 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                     formFields.splice(index, 0, newField);
                 }
             }
+
+            if (field.countMin === 0 && field.countDefault === 0) {
+                field.empty = true;
+            }
         }
     }
 
@@ -174,7 +178,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             f.id,
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
             [], null, (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
-            f.maxLength, f.regEx, f.regExErrorMessage, f.countDefault === 0, f.asStructure, f.readonly,
+            f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
             f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
         );
         const children: FormFieldConfiguration[] = [];

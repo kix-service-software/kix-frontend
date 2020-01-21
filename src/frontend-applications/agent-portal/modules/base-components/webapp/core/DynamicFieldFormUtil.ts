@@ -156,53 +156,55 @@ export class DynamicFieldFormUtil {
     public static async handleDynamicFieldValues(
         formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService
     ): Promise<void> {
-        if (object && object.DynamicFields && object.DynamicFields.length) {
-            const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
-            for (const field of fields) {
-                let values = [];
-                const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-                let isMultiselect = false;
-                if (fieldNameOption) {
+        const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
+        for (const field of fields) {
+            let values = [];
+            const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+            let isMultiselect = false;
+            if (fieldNameOption) {
+                if (object && object.DynamicFields && object.DynamicFields.length) {
                     const dfValue: DynamicFieldValue = object.DynamicFields.find(
                         (df) => df.Name === fieldNameOption.value
                     );
                     if (dfValue) {
                         values = dfValue.Value;
                     }
+                }
 
-                    const dynamicField = await this.loadDynamicField(fieldNameOption.value);
-                    if (dynamicField) {
-                        isMultiselect = dynamicField.FieldType === 'Multiselect';
+                const dynamicField = await this.loadDynamicField(fieldNameOption.value);
+                if (dynamicField) {
+                    isMultiselect = dynamicField.FieldType === 'Multiselect';
+                }
+            }
+
+            if (isMultiselect) {
+                field.defaultValue = new FormFieldValue(values);
+            } else {
+                for (let i = 0; i < values.length; i++) {
+                    if (i === 0) {
+                        field.defaultValue = new FormFieldValue(values[i], true);
+                    } else {
+                        const newField = formService.getNewFormField(field);
+                        newField.defaultValue = new FormFieldValue(values[i], true);
+                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                        formFields.splice(index + i, 0, newField);
                     }
                 }
 
-                if (isMultiselect) {
-                    field.defaultValue = new FormFieldValue(values);
-                } else {
-                    for (let i = 0; i < values.length; i++) {
-                        if (i === 0) {
-                            field.defaultValue = new FormFieldValue(values[i], true);
-                        } else {
-                            const newField = formService.getNewFormField(field);
-                            newField.defaultValue = new FormFieldValue(values[i], true);
-                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                            formFields.splice(index + i, 0, newField);
-                        }
-                    }
+                if (field.countMin > 0 && values.length < field.countMin) {
+                    const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
+                        ? field.countDefault
+                        : field.countMin;
+                    const count = values.length === 0 ? countDefault : field.countMin - values.length;
 
-                    if (field.countMin > 0 && values.length < field.countMin) {
-                        const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
-                            ? field.countDefault
-                            : field.countMin;
-                        const count = values.length === 0 ? countDefault : field.countMin - values.length;
-
-                        for (let i = 1; i < count; i++) {
-                            const newField = formService.getNewFormField(field);
-                            newField.defaultValue = new FormFieldValue(null, false);
-                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                            formFields.splice(index, 0, newField);
-                        }
+                    for (let i = 1; i < count; i++) {
+                        const newField = formService.getNewFormField(field);
+                        newField.defaultValue = new FormFieldValue(null, false);
+                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                        formFields.splice(index, 0, newField);
                     }
+                } else if (field.countMin === 0 && !values.length) {
+                    field.empty = true;
                 }
             }
         }
