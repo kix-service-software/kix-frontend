@@ -26,6 +26,8 @@ import { ContextDescriptor } from "../../../../model/ContextDescriptor";
 import { ContextService } from "../../../base-components/webapp/core/ContextService";
 import { DynamicFieldFormService } from "./DynamicFieldFormService";
 import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
+import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
+import { DynamicFieldValuePlaceholderHandler } from "./DynamcFieldValuePlaceholderHandler";
 import { DynamicFieldType } from "../../model/DynamicFieldType";
 import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
 import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
@@ -44,6 +46,8 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldFormService.getInstance());
+
+        PlaceholderService.getInstance().registerPlaceholderHandler(new DynamicFieldValuePlaceholderHandler());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.DYNAMIC_FIELD, DynamicFieldBrowserFactory.getInstance()

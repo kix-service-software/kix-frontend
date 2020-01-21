@@ -12,8 +12,9 @@ export class DynamicFieldValue {
     public ID: string;
     public Name: string;
     public Label: string;
-    public Value: any;
-    public DisplayValue: string | string[];
+    public Value: string[];
+    public PreparedValue: string[];
+    public DisplayValue: string;
 
     public constructor(value: DynamicFieldValue) {
         if (value) {
@@ -21,6 +22,7 @@ export class DynamicFieldValue {
             this.Name = value.Name;
             this.Label = value.Label;
             this.Value = value.Value;
+            this.PreparedValue = value.PreparedValue;
             this.DisplayValue = value.DisplayValue;
         }
     }
