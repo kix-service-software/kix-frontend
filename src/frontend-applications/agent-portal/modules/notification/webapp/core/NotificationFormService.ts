@@ -25,6 +25,7 @@ import { FormFieldOption } from "../../../../model/configuration/FormFieldOption
 import { NotificationMessage } from "../../model/NotificationMessage";
 import { Notification } from "../../model/Notification";
 import { TicketProperty } from "../../../ticket/model/TicketProperty";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class NotificationFormService extends KIXObjectFormService {
 
@@ -195,7 +196,7 @@ export class NotificationFormService extends KIXObjectFormService {
                 value = Array.isArray(value) ? value.join(',') : value;
                 break;
             case NotificationProperty.DATA_FILTER:
-                if (value) {
+                if (Array.isArray(value)) {
                     for (const v of value) {
                         switch (v[0]) {
                             case TicketProperty.TYPE_ID:
@@ -219,6 +220,12 @@ export class NotificationFormService extends KIXObjectFormService {
                                 v[0] = 'Article::' + v[0];
                                 break;
                             default:
+                                if (v[0].match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))) {
+                                    v[0] = v[0].replace(
+                                        new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`),
+                                        'Ticket::DynamicField_$1'
+                                    );
+                                }
                         }
                     }
                 }

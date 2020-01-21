@@ -33,6 +33,7 @@ import { TreeNode } from "./tree";
 import { TranslationService } from "../../../translation/webapp/core";
 import { FormValidationService } from "./FormValidationService";
 import { ValidationResult } from "./ValidationResult";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 
 export class DynamicFieldFormUtil {
 
@@ -86,18 +87,20 @@ export class DynamicFieldFormUtil {
                     ? new FormFieldValue(config.DefaultValue, true)
                     : null;
 
-                if (fields[0].FieldType === 'Text') {
+                if (fields[0].FieldType === DynamicFieldType.TEXT) {
                     field.inputComponent = null;
-                } else if (fields[0].FieldType === 'TextArea') {
+                } else if (fields[0].FieldType === DynamicFieldType.TEXT_AREA) {
                     field.inputComponent = 'text-area-input';
-                } else if (fields[0].FieldType === 'Date' || fields[0].FieldType === 'DateTime') {
+                } else if (
+                    fields[0].FieldType === DynamicFieldType.DATE || fields[0].FieldType === DynamicFieldType.DATE_TIME
+                ) {
 
                     const date = new Date();
                     let type = InputFieldTypes.DATE_TIME;
 
                     const offset = config.DefaultValue ? Number(config.DefaultValue) : 0;
 
-                    if (fields[0].FieldType === 'Date') {
+                    if (fields[0].FieldType === DynamicFieldType.DATE) {
                         type = InputFieldTypes.DATE;
                         date.setDate(date.getDate() + offset);
                         date.setHours(0, 0, 0, 0);
@@ -111,7 +114,7 @@ export class DynamicFieldFormUtil {
 
                     field.defaultValue = new FormFieldValue(date);
                     field.inputComponent = 'date-time-input';
-                } else if (fields[0].FieldType === 'Multiselect') {
+                } else if (fields[0].FieldType === DynamicFieldType.SELECTION) {
 
                     field.inputComponent = 'object-reference-input';
                     const nodes: TreeNode[] = [];
@@ -173,7 +176,7 @@ export class DynamicFieldFormUtil {
 
                 const dynamicField = await this.loadDynamicField(fieldNameOption.value);
                 if (dynamicField) {
-                    isMultiselect = dynamicField.FieldType === 'Multiselect';
+                    isMultiselect = dynamicField.FieldType === DynamicFieldType.SELECTION;
                 }
             }
 

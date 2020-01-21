@@ -150,8 +150,8 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
                     objectType = await this.state.manager.getObjectReferenceObjectType(value[0]);
                 }
 
-                objectType = this.isRequiredProperty ? KIXObjectType.ARTICLE : objectType;
                 const isRequired = this.isRequiredProperty(value[0]);
+                objectType = isRequired ? KIXObjectType.ARTICLE : objectType;
                 this.state.manager.setValue(
                     new ObjectPropertyValue(
                         value[0], null, value[1], isRequired, true, objectType, null, null, value[0]

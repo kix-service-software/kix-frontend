@@ -20,6 +20,7 @@ import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SearchDefinition } from "../../../search/webapp/core";
 import { InputFieldTypes } from "./InputFieldTypes";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 
 export class SearchFormManager extends AbstractDynamicFormManager {
     public objectType: string;
@@ -36,7 +37,8 @@ export class SearchFormManager extends AbstractDynamicFormManager {
                     DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                     FilterDataType.STRING, FilterType.AND,
                     [
-                        'Text', 'TextArea', 'Date', 'DateTime', 'Multiselect'
+                        DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
+                        DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION
                     ]
                 ),
                 new FilterCriteria(
@@ -62,11 +64,11 @@ export class SearchFormManager extends AbstractDynamicFormManager {
         let operations: SearchOperator[] = [];
         const field = await this.loadDynamicField(property);
         if (field) {
-            if (field.FieldType === 'Text' || field.FieldType === 'TextArea') {
+            if (field.FieldType === DynamicFieldType.TEXT || field.FieldType === DynamicFieldType.TEXT_AREA) {
                 operations = SearchDefinition.getStringOperators();
-            } else if (field.FieldType === 'Multiselect') {
+            } else if (field.FieldType === DynamicFieldType.SELECTION) {
                 operations = [SearchOperator.IN];
-            } else if (field.FieldType === 'Date' || field.FieldType === 'DateTime') {
+            } else if (field.FieldType === DynamicFieldType.DATE || field.FieldType === DynamicFieldType.DATE_TIME) {
                 operations = SearchDefinition.getDateTimeOperators();
             }
         }
@@ -77,11 +79,11 @@ export class SearchFormManager extends AbstractDynamicFormManager {
         let inputType = InputFieldTypes.TEXT;
         const field = await this.loadDynamicField(property);
         if (field) {
-            if (field.FieldType === 'Multiselect') {
+            if (field.FieldType === DynamicFieldType.SELECTION) {
                 inputType = InputFieldTypes.DROPDOWN;
-            } else if (field.FieldType === 'Date') {
+            } else if (field.FieldType === DynamicFieldType.DATE) {
                 inputType = InputFieldTypes.DATE;
-            } else if (field.FieldType === 'DateTime') {
+            } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
                 inputType = InputFieldTypes.DATE_TIME;
             }
         }

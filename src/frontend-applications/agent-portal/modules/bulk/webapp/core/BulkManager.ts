@@ -28,6 +28,7 @@ import { DynamicFieldFormUtil } from "../../../base-components/webapp/core/Dynam
 import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
 import { InputFieldTypes } from "../../../base-components/webapp/core/InputFieldTypes";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -57,7 +58,8 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
                     DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                     FilterDataType.STRING, FilterType.AND,
                     [
-                        'Text', 'TextArea', 'Date', 'DateTime', 'Multiselect'
+                        DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
+                        DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION
                     ]
                 ),
                 new FilterCriteria(
@@ -103,7 +105,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         const parameter: Array<[string, any]> = [];
 
         const values = this.getEditableValues().filter(
-            (v) => !v.property.match(new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)'))
+            (v) => !v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
 
         for (const v of values) {
@@ -118,7 +120,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
         const dfObjectValues = [];
         const dynamicFieldValues = this.values.filter(
-            (v) => v.property.match(new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)'))
+            (v) => v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
         for (const dfValue of dynamicFieldValues) {
             const dfName = this.getDynamicFieldName(dfValue.property);
@@ -160,7 +162,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
         const field = await this.loadDynamicField(property);
-        if (field && field.FieldType === 'Multiselect' && field.Config && field.Config.CountMax > 1) {
+        if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.CountMax > 1) {
             isMultiSelect = true;
         }
         return isMultiSelect;
@@ -170,13 +172,13 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         let inputFieldType = InputFieldTypes.TEXT;
         const field = await this.loadDynamicField(property);
         if (field) {
-            if (field.FieldType === 'TextArea') {
+            if (field.FieldType === DynamicFieldType.TEXT_AREA) {
                 inputFieldType = InputFieldTypes.TEXT_AREA;
-            } else if (field.FieldType === 'Date') {
+            } else if (field.FieldType === DynamicFieldType.DATE) {
                 inputFieldType = InputFieldTypes.DATE;
-            } else if (field.FieldType === 'DateTime') {
+            } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
                 inputFieldType = InputFieldTypes.DATE_TIME;
-            } else if (field.FieldType === 'Multiselect') {
+            } else if (field.FieldType === DynamicFieldType.SELECTION) {
                 inputFieldType = InputFieldTypes.DROPDOWN;
             }
         }
@@ -218,7 +220,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public getDynamicFieldName(property: string): string {
         let dfName: string;
-        const dFRegEx = new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)');
+        const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
         if (property.match(dFRegEx)) {
             dfName = property.replace(dFRegEx, '$1');
         }

@@ -78,7 +78,7 @@ class Component {
     private async initWidget(ticket: Ticket): Promise<void> {
         this.state.ticket = ticket;
 
-        let properties;
+        let properties = [];
 
         const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration ?
             this.state.widgetConfiguration.configuration : null;

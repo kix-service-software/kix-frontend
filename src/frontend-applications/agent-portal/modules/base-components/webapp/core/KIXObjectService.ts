@@ -38,6 +38,7 @@ import { IKIXObjectService } from "./IKIXObjectService";
 import { Error } from "../../../../../../server/model/Error";
 import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -286,7 +287,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
                 break;
             default:
-                const dFRegEx = new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)');
+                const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
                 if (property.match(dFRegEx)) {
                     const dfName = property.replace(dFRegEx, '$1');
                     if (dfName) {
@@ -300,7 +301,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     private async getNodesForDF(name: string): Promise<TreeNode[]> {
         const nodes: TreeNode[] = [];
         const field = await this.loadDynamicField(name);
-        if (field && field.FieldType === 'Multiselect' && field.Config && field.Config.PossibleValues) {
+        if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.PossibleValues) {
             for (const pv in field.Config.PossibleValues) {
                 if (field.Config.PossibleValues[pv]) {
                     const value = field.Config.PossibleValues[pv];

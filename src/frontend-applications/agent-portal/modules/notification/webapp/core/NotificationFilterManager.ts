@@ -28,7 +28,18 @@ import { KIXObjectService } from "../../../../modules/base-components/webapp/cor
 import { Organisation } from "../../../customer/model/Organisation";
 import { Contact } from "../../../customer/model/Contact";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../model/FilterCriteria";
+import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
+import { SearchOperator } from "../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../model/FilterDataType";
+import { FilterType } from "../../../../model/FilterType";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { TranslationService } from "../../../translation/webapp/core";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
+import { SortUtil } from "../../../../model/SortUtil";
 
 export class NotificationFilterManager extends AbstractDynamicFormManager {
 
@@ -39,7 +50,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties = [];
+        const fixedProperties = [];
 
         const ticketProperties = [
             TicketProperty.TYPE_ID, TicketProperty.STATE_ID, TicketProperty.PRIORITY_ID,
@@ -67,15 +78,47 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
 
         for (const ticketProperty of ticketProperties) {
             const label = await LabelService.getInstance().getPropertyText(ticketProperty, KIXObjectType.TICKET);
-            properties.push([ticketProperty, label]);
+            fixedProperties.push([ticketProperty, label]);
         }
 
         for (const articleProperty of articleProperties) {
             const label = await LabelService.getInstance().getPropertyText(articleProperty, KIXObjectType.ARTICLE);
-            properties.push([articleProperty, label]);
+            fixedProperties.push([articleProperty, label]);
         }
 
-        return properties;
+        const dynamicPoperties = [];
+        if (await this.checkReadPermissions('system/dynamicfields')) {
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, null,
+                new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, 'Ticket'
+                        ),
+                        new FilterCriteria(
+                            DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
+                            FilterDataType.STRING, FilterType.AND,
+                            [
+                                DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
+                                DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION
+                            ]
+                        )
+                    ]
+                ), null, true
+            ).catch(() => [] as DynamicField[]);
+            if (dynamicFields && dynamicFields.length) {
+                for (const df of dynamicFields) {
+                    const label = await TranslationService.translate(df.Label);
+                    dynamicPoperties.push([`${KIXObjectProperty.DYNAMIC_FIELDS}.${df.Name}`, label]);
+                }
+            }
+        }
+
+        return [
+            ...fixedProperties.sort((a1, a2) => SortUtil.compareString(a1[1], a2[1])),
+            ...dynamicPoperties.sort((a1, a2) => SortUtil.compareString(a1[1], a2[1]))
+        ];
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
@@ -96,7 +139,8 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.CONTACT_ID:
                 return InputFieldTypes.OBJECT_REFERENCE;
             default:
-                return InputFieldTypes.TEXT;
+                const inputType = super.getInputType(property);
+                return inputType ? inputType : InputFieldTypes.TEXT;
         }
     }
 
@@ -124,6 +168,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             case ArticleProperty.SENDER_TYPE_ID:
             case TicketProperty.QUEUE_ID:
                 nodes = await TicketService.getInstance().getTreeNodes(property, true, false);
+                break;
             case ArticleProperty.CHANNEL_ID:
                 nodes = await TicketService.getInstance().getTreeNodes(property, false);
                 break;
@@ -138,12 +183,13 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.CONTACT_ID:
                 if (Array.isArray(objectIds) && !!objectIds.length) {
                     const contacts = await KIXObjectService.loadObjects<Contact>(
-                        KIXObjectType.ORGANISATION, objectIds
+                        KIXObjectType.CONTACT, objectIds
                     );
                     nodes = await KIXObjectService.prepareTree(contacts);
                 }
                 break;
             default:
+                nodes = await TicketService.getInstance().getTreeNodes(property);
         }
         return nodes;
     }
@@ -153,23 +199,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        switch (property) {
-            case TicketProperty.TYPE_ID:
-            case TicketProperty.STATE_ID:
-            case TicketProperty.PRIORITY_ID:
-            case TicketProperty.QUEUE_ID:
-            case TicketProperty.SERVICE:
-            case TicketProperty.SLA:
-            case TicketProperty.ORGANISATION_ID:
-            case TicketProperty.CONTACT_ID:
-            case TicketProperty.OWNER_ID:
-            case TicketProperty.RESPONSIBLE_ID:
-            case ArticleProperty.SENDER_TYPE_ID:
-            case ArticleProperty.CHANNEL_ID:
-                return true;
-            default:
-                return false;
-        }
+        return true;
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {

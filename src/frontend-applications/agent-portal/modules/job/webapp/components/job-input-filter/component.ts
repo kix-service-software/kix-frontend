@@ -165,8 +165,8 @@ class Component extends FormInputComponent<{}, ComponentState> {
                         }
                     }
 
-                    objectType = this.isRequiredProperty ? KIXObjectType.ARTICLE : objectType;
                     const isRequired = this.isRequiredProperty(newProperty);
+                    objectType = isRequired ? KIXObjectType.ARTICLE : objectType;
                     this.state.manager.setValue(
                         new ObjectPropertyValue(
                             newProperty, null, this.state.defaultValue.value[newProperty],

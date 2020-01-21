@@ -138,7 +138,7 @@ export class TreeUtil {
     public static findNode(tree: TreeNode[], nodeId: string | number): TreeNode {
         if (tree) {
             for (const node of tree) {
-                if (node.id === nodeId) {
+                if (node.id.toString() === nodeId.toString()) {
                     return node;
                 } else {
                     const foundChild = TreeUtil.findNode(node.children, nodeId);

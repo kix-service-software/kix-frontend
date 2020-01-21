@@ -189,7 +189,7 @@ export abstract class SearchDefinition {
 
     protected getDynamicFieldName(property: string): string {
         let dfName: string;
-        const dFRegEx = new RegExp(KIXObjectProperty.DYNAMIC_FIELDS + '?\.(.+)');
+        const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
         if (property.match(dFRegEx)) {
             dfName = property.replace(dFRegEx, '$1');
         }
