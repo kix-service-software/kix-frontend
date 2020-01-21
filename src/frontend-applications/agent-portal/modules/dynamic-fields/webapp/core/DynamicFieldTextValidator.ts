@@ -98,10 +98,10 @@ export class DynamicFieldTextValidator implements IFormFieldValidator {
 
     private async evaluateRegexList(regexList: any[], value: any, label: string): Promise<ValidationResult> {
         for (const regexEntry of regexList) {
-            const regex = new RegExp(regexEntry.RegEx);
+            const regex = new RegExp(regexEntry.Value);
             if (!regex.test(value)) {
                 const fieldLabel = await TranslationService.translate(label);
-                const errorMessage = await TranslationService.translate(regexEntry.RegExError);
+                const errorMessage = await TranslationService.translate(regexEntry.ErrorMessage);
                 const errorString = await TranslationService.translate(
                     "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
                 );
