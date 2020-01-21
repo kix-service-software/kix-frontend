@@ -140,12 +140,12 @@ export class UIModule implements IUIModule {
                     items: {
                         type: "object",
                         properties: {
-                            RegEx: {
+                            Value: {
                                 title: "RegEx",
                                 type: "string"
                             },
-                            RegExError: {
-                                title: "RegExError",
+                            ErrorMessage: {
+                                title: "RegExErrorMessage",
                                 type: "string"
                             }
                         }
@@ -212,12 +212,12 @@ export class UIModule implements IUIModule {
                     items: {
                         type: "object",
                         properties: {
-                            RegEx: {
+                            Value: {
                                 title: "RegEx",
                                 type: "string"
                             },
-                            RegExError: {
-                                title: "RegExError",
+                            ErrorMessage: {
+                                title: "RegExErrorMessage",
                                 type: "string"
                             }
                         }
