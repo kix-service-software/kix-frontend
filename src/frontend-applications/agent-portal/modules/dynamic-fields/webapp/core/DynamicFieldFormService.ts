@@ -7,17 +7,17 @@
  * --
  */
 
-import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
-import { DynamicField } from '../../model/DynamicField';
-import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
-import { FormContext } from '../../../../model/configuration/FormContext';
-import { LabelService } from '../../../base-components/webapp/core/LabelService';
-import { ObjectIcon } from '../../../icon/model/ObjectIcon';
-import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
-import { DynamicFieldType } from '../../model/DynamicFieldType';
+import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
+import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
+import { DynamicField } from "../../model/DynamicField";
+import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { FormContext } from "../../../../model/configuration/FormContext";
+import { LabelService } from "../../../base-components/webapp/core/LabelService";
+import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 

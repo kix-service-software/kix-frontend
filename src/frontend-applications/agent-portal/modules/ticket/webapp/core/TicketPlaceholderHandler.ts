@@ -33,6 +33,7 @@ import {
 import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
 import { FormContext } from "../../../../model/configuration/FormContext";
 import { OrganisationPlaceholderHandler, ContactPlaceholderHandler } from "../../../customer/webapp/core";
+import { DynamicFieldValuePlaceholderHandler } from "../../../dynamic-fields/webapp/core";
 
 export class TicketPlaceholderHandler implements IPlaceholderHandler {
 
@@ -184,7 +185,9 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
 
     private async getTicketValue(attribute: string, ticket?: Ticket, language?: string, optionsString?: string) {
         let result = '';
-        if (this.isKnownProperty(attribute)) {
+        if (PlaceholderService.getInstance().isDynamicFieldAttribute(attribute)) {
+            result = await DynamicFieldValuePlaceholderHandler.prototype.replaceDFValue(ticket, optionsString);
+        } else if (this.isKnownProperty(attribute)) {
             const ticketLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
             switch (attribute) {
                 case TicketProperty.STATE_ID:
