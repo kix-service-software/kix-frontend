@@ -61,38 +61,28 @@ export class DynamicFieldFormUtil {
         const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (nameOption) {
             const name = nameOption.value;
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.AND, name
-                    )
-                ],
-                null, null, [DynamicFieldProperty.CONFIG]
-            );
-            const fields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
-            if (fields && fields.length && fields[0].ValidID === 1) {
-                const config = fields[0].Config;
+            const dynamicField = await this.loadDynamicField(name);
+            if (dynamicField && dynamicField.ValidID === 1) {
+                const config = dynamicField.Config;
                 field.countDefault = Number(config.CountDefault);
                 field.countMax = Number(config.CountMax);
                 field.countMin = Number(config.CountMin);
 
                 if (!field.label || field.label === '') {
-                    field.label = fields[0].Label;
+                    field.label = dynamicField.Label;
                 }
 
                 field.defaultValue = config.DefaultValue
                     ? new FormFieldValue(config.DefaultValue, true)
                     : null;
 
-                if (fields[0].FieldType === DynamicFieldType.TEXT) {
+                if (dynamicField.FieldType === DynamicFieldType.TEXT) {
                     field.inputComponent = null;
-                } else if (fields[0].FieldType === DynamicFieldType.TEXT_AREA) {
+                } else if (dynamicField.FieldType === DynamicFieldType.TEXT_AREA) {
                     field.inputComponent = 'text-area-input';
                 } else if (
-                    fields[0].FieldType === DynamicFieldType.DATE || fields[0].FieldType === DynamicFieldType.DATE_TIME
+                    dynamicField.FieldType === DynamicFieldType.DATE ||
+                    dynamicField.FieldType === DynamicFieldType.DATE_TIME
                 ) {
 
                     const date = new Date();
@@ -100,7 +90,7 @@ export class DynamicFieldFormUtil {
 
                     const offset = config.DefaultValue ? Number(config.DefaultValue) : 0;
 
-                    if (fields[0].FieldType === DynamicFieldType.DATE) {
+                    if (dynamicField.FieldType === DynamicFieldType.DATE) {
                         type = InputFieldTypes.DATE;
                         date.setDate(date.getDate() + offset);
                         date.setHours(0, 0, 0, 0);
@@ -114,16 +104,16 @@ export class DynamicFieldFormUtil {
 
                     field.defaultValue = new FormFieldValue(date);
                     field.inputComponent = 'date-time-input';
-                } else if (fields[0].FieldType === DynamicFieldType.SELECTION) {
+                } else if (dynamicField.FieldType === DynamicFieldType.SELECTION) {
 
                     field.inputComponent = 'object-reference-input';
                     const nodes: TreeNode[] = [];
 
-                    if (fields[0].Config.PossibleValues) {
-                        const translatable = Number(fields[0].Config.TranslatableValues);
-                        for (const pv in fields[0].Config.PossibleValues) {
-                            if (fields[0].Config.PossibleValues[pv]) {
-                                const value = fields[0].Config.PossibleValues[pv];
+                    if (dynamicField.Config.PossibleValues) {
+                        const translatable = Number(dynamicField.Config.TranslatableValues);
+                        for (const pv in dynamicField.Config.PossibleValues) {
+                            if (dynamicField.Config.PossibleValues[pv]) {
+                                const value = dynamicField.Config.PossibleValues[pv];
                                 const label = translatable
                                     ? await TranslationService.translate(value)
                                     : value;
@@ -140,7 +130,7 @@ export class DynamicFieldFormUtil {
                     const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
 
-                    if (!Boolean(Number(fields[0].Config.PossibleNone))) {
+                    if (!Boolean(Number(dynamicField.Config.PossibleNone))) {
                         field.required = true;
                     }
 
