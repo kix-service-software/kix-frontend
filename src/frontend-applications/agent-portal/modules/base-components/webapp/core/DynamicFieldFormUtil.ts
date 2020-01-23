@@ -140,7 +140,7 @@ export class DynamicFieldFormUtil {
                     const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
 
-                    if (!Boolean(Number(fields[0].Config.PossibleNone))) {
+                    if (field.countMin > 0) {
                         field.required = true;
                     }
 
