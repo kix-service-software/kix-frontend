@@ -104,6 +104,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
 
         if (configParameter) {
             if (fieldTypeParameter[1] === DynamicFieldType.SELECTION) {
+                configParameter[1] = { ...configParameter[1] };
                 configParameter[1].TranslatableValues = configParameter[1].TranslatableValues ? 1 : 0;
                 const possibleValue = configParameter[1].PossibleValues;
                 const possibleValueHash = {};
