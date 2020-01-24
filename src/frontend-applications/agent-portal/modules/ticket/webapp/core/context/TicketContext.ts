@@ -48,10 +48,8 @@ export class TicketContext extends Context {
     }
 
     private async loadTickets(): Promise<void> {
-        const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
-
         const stateTypeFilterCriteria = new FilterCriteria(
-            TicketProperty.STATE_TYPE, SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
+            TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(

@@ -48,13 +48,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-        const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes(
-            serverConfig.BACKEND_API_TOKEN
-        );
-
         const stateTypeFilterCriteria = new FilterCriteria(
-            'StateType', SearchOperator.IN, FilterDataType.STRING, FilterType.AND, stateTypes
+            TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
         );
 
         const chartConfig1 = new ChartComponentConfiguration(

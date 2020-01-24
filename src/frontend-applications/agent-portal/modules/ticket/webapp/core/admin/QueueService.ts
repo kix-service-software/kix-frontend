@@ -161,8 +161,6 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getQueuesHierarchy(): Promise<Queue[]> {
-        const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
-
         const loadingOptions = new KIXObjectLoadingOptions(
             [
                 new FilterCriteria(
@@ -172,7 +170,7 @@ export class QueueService extends KIXObjectService<Queue> {
             null, null,
             [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
             [QueueProperty.SUB_QUEUES],
-            [["TicketStats.StateType", stateTypes.join(',')]]
+            [["TicketStats.StateType", 'Open']]
         );
 
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);
