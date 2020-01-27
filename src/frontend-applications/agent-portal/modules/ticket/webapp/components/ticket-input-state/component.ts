@@ -66,7 +66,9 @@ class Component extends FormInputComponent<number, ComponentState> {
             }
             if (defaultStateValue) {
                 const currentNode = nodes.find((n) => n.id === defaultStateValue);
-                currentNode.selected = true;
+                if (currentNode) {
+                    currentNode.selected = true;
+                }
                 await this.showPendingTime(currentNode);
                 this.setValue(currentNode);
             }
