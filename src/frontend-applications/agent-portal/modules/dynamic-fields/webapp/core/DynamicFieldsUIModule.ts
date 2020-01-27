@@ -428,13 +428,6 @@ export class UIModule implements IUIModule {
                     type: "string",
                     required: false
                 },
-                PossibleNone: {
-                    title: 'Possible None',
-                    description: '',
-                    type: "boolean",
-                    format: "checkbox",
-                    required: false
-                },
                 TranslatableValues: {
                     title: 'Translatable Values',
                     description: '',

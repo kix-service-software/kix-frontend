@@ -87,10 +87,11 @@ class FieldContainerComponent {
             propertyFields = this.filterDynamicFields(field, propertyFields);
         }
 
+        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         if (propertyFields.length === 1) {
             this.setFieldsEmpty(field, true);
+            formInstance.provideFormFieldValue(field.instanceId, null);
         } else {
-            const formInstance = await FormService.getInstance().getFormInstance(this.formId);
             formInstance.removeFormField(field);
         }
         (this as any).setStateDirty('fields');

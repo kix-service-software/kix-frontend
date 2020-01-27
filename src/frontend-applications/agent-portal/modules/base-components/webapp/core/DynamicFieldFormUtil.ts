@@ -130,7 +130,7 @@ export class DynamicFieldFormUtil {
                     const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
                     field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
 
-                    if (!Boolean(Number(dynamicField.Config.PossibleNone))) {
+                    if (field.countMin > 0) {
                         field.required = true;
                     }
 
@@ -214,12 +214,12 @@ export class DynamicFieldFormUtil {
 
         const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (fieldNameOption) {
-            let setValue = value.value;
+            let setValue = field.empty ? null : value.value;
 
             const dynamicField = await this.loadDynamicField(fieldNameOption.value);
             if (dynamicField) {
                 const fieldType = dynamicField.FieldType;
-                if (fieldType === 'Date' || fieldType === 'DateTime') {
+                if (setValue && (fieldType === 'Date' || fieldType === 'DateTime')) {
                     setValue = DateTimeUtil.getKIXDateTimeString(setValue);
                 }
             }
@@ -235,7 +235,7 @@ export class DynamicFieldFormUtil {
 
             if (Array.isArray(setValue)) {
                 dfValue.Value = setValue;
-            } else if (!dfValue.Value.some((v) => v === setValue)) {
+            } else if (setValue && !dfValue.Value.some((v) => v === setValue)) {
                 dfValue.Value.push(setValue);
             }
         }
