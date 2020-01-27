@@ -9,6 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <if(state.field)>
     <span.date-time-input>
         <input.input-style
+            key=("date-" + state.inputId)
             class={
                         invalid: state.invalid
                     }
@@ -24,6 +25,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             on-blur("focusLost")/>
         <if(state.inputType === "DATE_TIME")>
             <input.input-style
+                key=("time-" + state.inputId)
                 class={
                                 invalid: state.invalid
                             }
