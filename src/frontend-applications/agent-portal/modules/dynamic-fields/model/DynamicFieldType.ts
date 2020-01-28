@@ -17,5 +17,8 @@ export enum DynamicFieldType {
 
     DATE = 'Date',
 
-    DATE_TIME = 'DateTime'
+    DATE_TIME = 'DateTime',
+
+    CHECK_LIST = 'CheckList'
+
 }
