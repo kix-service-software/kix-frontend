@@ -38,6 +38,16 @@ export class MailAccountFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.MAIL_ACCOUNT;
     }
 
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case MailAccountProperty.TRUSTED:
+                value = Number(value);
+                break;
+            default:
+        }
+        return [[property, value]];
+    }
+
     protected async postPrepareForm(
         form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
     ): Promise<void> {
