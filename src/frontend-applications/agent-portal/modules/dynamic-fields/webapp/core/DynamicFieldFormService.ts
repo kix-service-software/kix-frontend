@@ -48,8 +48,9 @@ export class DynamicFieldFormService extends KIXObjectFormService {
             if (dynamicField || f.defaultValue) {
                 let value = await this.getValue(
                     f.property,
-                    dynamicField && formContext === FormContext.EDIT ? dynamicField[f.property] :
-                        f.defaultValue ? f.defaultValue.value : null,
+                    dynamicField && formContext === FormContext.EDIT
+                        ? dynamicField[f.property]
+                        : f.defaultValue ? f.defaultValue.value : null,
                     dynamicField,
                     f
                 );
@@ -65,20 +66,21 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                     }
                 }
 
-                if (
-                    dynamicField && f.property === DynamicFieldProperty.CONFIG &&
-                    dynamicField.FieldType === DynamicFieldType.SELECTION
-                ) {
-                    const oldPossibleValues = value.PossibleValues;
-                    const possibleValueArray = [];
-                    Object.keys(oldPossibleValues).forEach((key) => {
-                        const newPossibleValues = {};
-                        newPossibleValues['Key'] = key;
-                        newPossibleValues['Value'] = oldPossibleValues[key];
-                        possibleValueArray.push(newPossibleValues);
-                    });
-                    value.PossibleValues = possibleValueArray;
-                    value.TranslatableValues = Boolean(value.TranslatableValues === '1');
+                if (dynamicField && f.property === DynamicFieldProperty.CONFIG) {
+                    if (dynamicField.FieldType === DynamicFieldType.SELECTION) {
+                        const oldPossibleValues = value.PossibleValues;
+                        const possibleValueArray = [];
+                        Object.keys(oldPossibleValues).forEach((key) => {
+                            const newPossibleValues = {};
+                            newPossibleValues['Key'] = key;
+                            newPossibleValues['Value'] = oldPossibleValues[key];
+                            possibleValueArray.push(newPossibleValues);
+                        });
+                        value.PossibleValues = possibleValueArray;
+                        value.TranslatableValues = Boolean(value.TranslatableValues === '1');
+                    } else if (dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
+                        value.DefaultValue = JSON.parse(value.DefaultValue);
+                    }
                 }
 
                 formFieldValue = dynamicField && formContext === FormContext.EDIT
@@ -103,13 +105,15 @@ export class DynamicFieldFormService extends KIXObjectFormService {
         const configParameter = parameter.find((p) => p[0] === DynamicFieldProperty.CONFIG);
 
         if (configParameter) {
+            configParameter[1] = { ...configParameter[1] };
             if (fieldTypeParameter[1] === DynamicFieldType.SELECTION) {
-                configParameter[1] = { ...configParameter[1] };
                 configParameter[1].TranslatableValues = configParameter[1].TranslatableValues ? 1 : 0;
                 const possibleValue = configParameter[1].PossibleValues;
                 const possibleValueHash = {};
                 possibleValue.forEach((p) => possibleValueHash[p.Key] = p.Value);
                 configParameter[1].PossibleValues = possibleValueHash;
+            } else if (fieldTypeParameter[1] === DynamicFieldType.CHECK_LIST) {
+                configParameter[1].DefaultValue = JSON.stringify(configParameter[1].DefaultValue);
             }
         }
 

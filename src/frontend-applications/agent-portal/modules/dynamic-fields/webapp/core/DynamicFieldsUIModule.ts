@@ -86,6 +86,7 @@ export class UIModule implements IUIModule {
         this.registerSchemaForDate();
         this.registerSchemaForDateTime();
         this.registerSchemaForSelection();
+        this.registerSchemaForCheckList();
     }
 
     // tslint:disable:max-line-length
@@ -458,5 +459,62 @@ export class UIModule implements IUIModule {
         };
 
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.SELECTION, schema);
+    }
+
+    private registerSchemaForCheckList(): void {
+        const schema = {
+            $schema: "http://json-schema.org/draft-03/schema#",
+            type: "object",
+            definitions: {
+                CheckListItem: {
+                    title: "Checklist Item",
+                    description: "",
+                    type: "array",
+                    required: false,
+                    items: {
+                        type: "object",
+                        properties: {
+                            id: {
+                                title: "Id",
+                                type: "string"
+                            },
+                            title: {
+                                title: "Title",
+                                type: "string"
+                            },
+                            description: {
+                                title: "Description",
+                                type: "string"
+                            },
+                            input: {
+                                title: "Input",
+                                type: "string",
+                                default: "ChecklistState",
+                                enum: [
+                                    "Text",
+                                    "ChecklistState"
+                                ]
+                            },
+                            value: {
+                                title: "Value",
+                                type: "string"
+                            },
+                            sub: {
+                                title: "Sub",
+                                $ref: "#/definitions/CheckListItem"
+                            }
+                        }
+                    }
+                }
+            },
+            properties: {
+                DefaultValue: {
+                    title: "Default Value",
+                    $ref: "#/definitions/CheckListItem"
+                }
+            }
+        };
+
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.CHECK_LIST, schema);
     }
 }
