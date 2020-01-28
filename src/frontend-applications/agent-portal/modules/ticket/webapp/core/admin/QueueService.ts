@@ -69,16 +69,6 @@ export class QueueService extends KIXObjectService<Queue> {
         return objects;
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        switch (property) {
-            case QueueProperty.FOLLOW_UP_LOCK:
-                value = Number(value);
-                break;
-            default:
-        }
-        return [[property, value]];
-    }
-
     public async prepareObjectTree(
         queues: Queue[], showInvalid?: boolean, invalidClickable: boolean = false,
         filterIds?: number[], includeTicketStats: boolean = false

@@ -36,21 +36,6 @@ export class RoleService extends KIXObjectService<Role> {
         return parameter;
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        if (value) {
-            if (property === RoleProperty.USER_IDS || property === RoleProperty.PERMISSIONS) {
-                if (Array.isArray(value) && !!value.length) {
-                    parameter.push([property, value]);
-                }
-            } else {
-                parameter.push([property, value]);
-            }
-        }
-
-        return parameter;
-    }
-
     public getLinkObjectName(): string {
         return 'Role';
     }
