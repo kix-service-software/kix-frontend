@@ -173,7 +173,9 @@ export class DynamicFieldFormUtil {
                         values = dfValue.Value;
                     }
                 }
-
+                if (values.length === 0 && field.defaultValue) {
+                    values.push(field.defaultValue.value);
+                }
                 const dynamicField = await this.loadDynamicField(fieldNameOption.value);
                 if (dynamicField) {
                     isMultiselect = dynamicField.FieldType === DynamicFieldType.SELECTION;
