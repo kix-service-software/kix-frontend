@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-01-28 09:14+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2020-01-30 15:14+0000\n"
+"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -152,10 +152,10 @@ msgid "All tickets"
 msgstr "Alle Tickets"
 
 msgid "A maximum of {0} values can be selected."
-msgstr ""
+msgstr "Es können maximal {0} Werte ausgewählt werden."
 
 msgid "A maximum of 1 value can be selected. (SingleSelect)"
-msgstr ""
+msgstr "Es kann maximal ein Wert ausgewählt werden."
 
 msgid "and"
 msgstr "und"
@@ -246,7 +246,7 @@ msgid "Assign Team / Queue"
 msgstr "Zuordnung zu Team"
 
 msgid "At least {0} values must be selected"
-msgstr ""
+msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
 msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgstr ""
@@ -643,8 +643,6 @@ msgstr "Aktueller Verwendungsstatus"
 msgid "Current incident state"
 msgstr "Aktueller Vorfallstatus"
 
-#, fuzzy
-#| msgid "Current incident state"
 msgid "Current Incident state"
 msgstr "Aktueller Vorfallstatus"
 
@@ -1142,7 +1140,7 @@ msgstr ""
 "der Kategorie angezeigt wird."
 
 msgid "Helptext_Admin_FAQCategoryCreate_Name"
-msgstr ""
+msgstr "Geben Sie einen Namen für diese Kategorie ein."
 
 msgid "Helptext_Admin_FAQCategoryCreate_ParentCategory"
 msgstr ""
@@ -2514,7 +2512,7 @@ msgid "Invalid date for pending date."
 msgstr "Ungültiges Datum bei 'Warten bis'"
 
 msgid "is to large (max {0})."
-msgstr ""
+msgstr "ist zu lang (max {0})."
 
 msgid "Job"
 msgstr "Job"
@@ -2558,10 +2556,8 @@ msgstr "Großansicht"
 msgid "Last changed time"
 msgstr "zuletzt geändert am"
 
-#, fuzzy
-#| msgid "Last changed time"
 msgid "Last executed at"
-msgstr "zuletzt geändert am"
+msgstr "zuletzt ausgeführt am"
 
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
@@ -3671,12 +3667,15 @@ msgstr "Es werden nur aktuelle Versionen durchsucht."
 msgid ""
 "The value for the field is in the future! The date needs to be in the past!"
 msgstr ""
+"Der Wert des Feldes liegt in der Zukunft! Das Datum muss in der "
+"Vergangenheit liegen!"
 
 msgid "The year can be a maximum of {0} years in the future"
-msgstr ""
+msgstr "Das eingegebene Jahr darf nur maximal {0} Jahre in der Zukunft liegen."
 
 msgid "The year can be a maximum of {0} years in the past"
 msgstr ""
+"Das eingegebene Jahr darf nur maximal {0} Jahre in der Vergangenheit liegen."
 
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
@@ -3993,10 +3992,8 @@ msgstr "Bewertungen"
 msgid "Wait until"
 msgstr "Warten bis"
 
-#, fuzzy
-#| msgid "running"
 msgid "Warning"
-msgstr "läuft"
+msgstr "Warnung"
 
 msgid "Watch"
 msgstr "Beobachten"
