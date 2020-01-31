@@ -168,7 +168,4 @@ export enum TicketProperty {
     RESPONSIBLE = 'Responsible',
     UNTIL_TIME = 'UntilTime',
 
-    // search property
-    FULLTEXT = 'Fulltext'
-
 }
