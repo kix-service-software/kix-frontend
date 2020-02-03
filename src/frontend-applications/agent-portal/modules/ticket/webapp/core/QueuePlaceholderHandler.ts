@@ -8,25 +8,15 @@
  */
 
 import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
-
 import { Ticket } from "../../model/Ticket";
-
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
-
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-
 import { QueueProperty } from "../../model/QueueProperty";
-
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-
 import { Queue } from "../../model/Queue";
-
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class QueuePlaceholderHandler implements IPlaceholderHandler {

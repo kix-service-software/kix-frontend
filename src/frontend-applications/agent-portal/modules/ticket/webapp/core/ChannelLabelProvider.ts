@@ -109,7 +109,12 @@ export class ChannelLabelProvider extends LabelProvider<Channel> {
         return channelLabel;
     }
 
-    public getObjectTooltip(channel: Channel): string {
+    public async getObjectTooltip(channel: Channel, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                channel.ObjectId.toString()
+            );
+        }
         return channel.ObjectId.toString();
     }
 

@@ -46,23 +46,24 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
         );
 
         const rowObjects = [];
-        sysConfigOptions.forEach((fc) => {
-            rowObjects.push(this.createRowObject(fc));
-        });
+        for (const fc of sysConfigOptions) {
+            const row = await this.createRowObject(fc);
+            rowObjects.push(row);
+        }
 
         return rowObjects;
     }
 
-    private createRowObject(definition: GeneralCatalogItem): RowObject {
+    private async createRowObject(definition: GeneralCatalogItem): Promise<RowObject> {
         const values: TableValue[] = [];
 
         for (const property in definition) {
             if (definition.hasOwnProperty(property)) {
-                if (property === GeneralCatalogItemProperty.NAME) {
-                    values.push(new TableValue(property, definition[property], definition[property]));
-                } else {
-                    values.push(new TableValue(property, definition[property]));
-                }
+                const column = this.table.getColumns().map((c) => c.getColumnConfiguration()).find(
+                    (c) => c.property === property
+                );
+                const tableValue = await this.getTableValue(definition, property, column);
+                values.push(tableValue);
             }
         }
 

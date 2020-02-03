@@ -22,7 +22,7 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { ConfigItemClassAttributeUtil } from ".";
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
 import { AttributeDefinition } from "../../model/AttributeDefinition";
-import { DefaultColumnConfiguration } from "../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../model/DataType";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { ConfigItem } from "../../model/ConfigItem";
@@ -143,7 +143,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         return newCriteria;
     }
 
-    public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
+    public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         let criteria = [];
         switch (property) {
             case ConfigItemProperty.NAME:
@@ -167,9 +167,8 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 ));
                 break;
             default:
-                criteria = [
-                    ...criteria, ...super.prepareSearchFormValue(property, value)
-                ];
+                const preparedCriteria = await super.prepareSearchFormValue(property, value);
+                criteria = [...criteria, ...preparedCriteria];
         }
         return criteria;
     }

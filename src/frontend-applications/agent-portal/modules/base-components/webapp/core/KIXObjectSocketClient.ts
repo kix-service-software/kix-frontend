@@ -38,15 +38,10 @@ export class KIXObjectSocketClient extends SocketClient {
 
     private static INSTANCE: KIXObjectSocketClient;
 
-    private static TIMEOUT: number;
-
     public static getInstance(): KIXObjectSocketClient {
         if (!KIXObjectSocketClient.INSTANCE) {
             KIXObjectSocketClient.INSTANCE = new KIXObjectSocketClient();
         }
-
-        const socketTimeout = ClientStorageService.getCookie('socketTimeout');
-        KIXObjectSocketClient.TIMEOUT = Number(socketTimeout);
 
         return KIXObjectSocketClient.INSTANCE;
     }
@@ -59,7 +54,7 @@ export class KIXObjectSocketClient extends SocketClient {
     public async loadObjects<T extends KIXObject>(
         kixObjectType: KIXObjectType | string, objectIds: Array<string | number> = null,
         loadingOptions: KIXObjectLoadingOptions = null, objectLoadingOptions: KIXObjectSpecificLoadingOptions = null,
-        cache: boolean = true
+        cache: boolean = true, timeout?: number
     ): Promise<T[]> {
         const token = ClientStorageService.getToken();
         const requestId = IdService.generateDateBasedId();
@@ -75,21 +70,22 @@ export class KIXObjectSocketClient extends SocketClient {
         if (cache) {
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
             if (!requestPromise) {
-                requestPromise = this.createRequestPromise<T>(request);
+                requestPromise = this.createRequestPromise<T>(request, timeout);
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
             }
             return requestPromise;
         }
 
-        requestPromise = this.createRequestPromise<T>(request);
+        requestPromise = this.createRequestPromise<T>(request, timeout);
         return requestPromise;
     }
 
-    private createRequestPromise<T extends KIXObject>(request: LoadObjectsRequest): Promise<T[]> {
+    private createRequestPromise<T extends KIXObject>(request: LoadObjectsRequest, timeout?: number): Promise<T[]> {
         return new Promise<T[]>(async (resolve, reject) => {
             this.sendRequest<LoadObjectsResponse<T>>(
                 request,
-                KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR
+                KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR,
+                timeout
             ).then(async (response) => {
                 const objects = [];
                 for (const object of response.objects) {
@@ -173,16 +169,20 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     private async sendRequest<T extends ISocketResponse>(
-        requestObject: ISocketObjectRequest, event: string, finishEvent: string, errorEvent: any
+        requestObject: ISocketObjectRequest, event: string, finishEvent: string, errorEvent: any,
+        defaultTimeout?: number
     ): Promise<T> {
+
+        const socketTimeout = defaultTimeout ? defaultTimeout : ClientStorageService.getSocketTimeout();
+
         return new Promise<T>((resolve, reject) => {
             const timeout = window.setTimeout(() => {
-                const timeoutInSeconds = KIXObjectSocketClient.TIMEOUT / 1000;
+                const timeoutInSeconds = socketTimeout / 1000;
                 // tslint:disable-next-line:max-line-length
                 const error = `Zeitüberschreitung der Anfrage (Event: ${event} - ${requestObject.objectType}) (Timeout: ${timeoutInSeconds} Sekunden)`;
                 console.error(error);
                 reject(new Error('TIMEOUT', error));
-            }, KIXObjectSocketClient.TIMEOUT);
+            }, socketTimeout);
 
             this.socket.on(finishEvent, (result: T) => {
                 if (result.requestId === requestObject.requestId) {

@@ -17,7 +17,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.state.showToggle = typeof input.showToggle !== 'undefined' ? input.showToggle : true;
+        this.state.showToggle = typeof input.showToggle !== 'undefined' ? input.showToggle : false;
         if (this.state.showToggle) {
             this.state.toggled = typeof input.toggle !== 'undefined' ? input.toggle : false;
         } else {

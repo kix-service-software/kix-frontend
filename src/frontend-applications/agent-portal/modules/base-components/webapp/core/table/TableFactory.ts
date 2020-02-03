@@ -8,10 +8,10 @@
  */
 
 import { ITableFactory } from "./ITableFactory";
-import { IColumnConfiguration } from "./IColumnConfiguration";
-import { TableConfiguration } from "./TableConfiguration";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ITable } from "./ITable";
-import { DefaultColumnConfiguration } from "./DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { IColumn } from "./IColumn";
 import { IRow } from "./IRow";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";

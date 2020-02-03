@@ -105,15 +105,20 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
         return faqCategory instanceof FAQCategory;
     }
 
-    public async getObjectText(faqCategory: FAQCategory, id: boolean = true, title: boolean = true): Promise<string> {
-        return faqCategory.Name;
+    public async getObjectText(
+        faqCategory: FAQCategory, id: boolean = true, title: boolean = true, translatable: boolean = true
+    ): Promise<string> {
+        return translatable ? await TranslationService.translate(faqCategory.Name) : faqCategory.Name;
     }
 
     public getObjectIcon(faqCategory: FAQCategory): string | ObjectIcon {
         return faqCategory ? new ObjectIcon('FAQCategory', faqCategory.ID) : null;
     }
 
-    public getObjectTooltip(faqCategory: FAQCategory): string {
+    public async getObjectTooltip(faqCategory: FAQCategory, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(faqCategory.Name);
+        }
         return faqCategory.Name;
     }
 

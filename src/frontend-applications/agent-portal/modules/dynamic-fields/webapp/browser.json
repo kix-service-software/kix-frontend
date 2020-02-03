@@ -1,0 +1,10 @@
+{
+    "dependencies": [
+        "require ./core",
+        "require ./components/admin-dynamic-fields",
+        "require ./components/new-dynamic-field-dialog",
+        "require ./components/dynamic-form-config-input",
+        "require ./components/edit-dynamic-field-dialog",
+        "./static/jsoneditor.min.js"
+    ]
+}

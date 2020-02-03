@@ -107,4 +107,8 @@ export class PlaceholderService {
     public translatePlaceholder(placeholder): boolean {
         return Boolean(placeholder.match(/TR_KIX_/));
     }
+
+    public isDynamicFieldAttribute(attributeString: string): boolean {
+        return attributeString && Boolean(attributeString.match(/^DynamicField$/));
+    }
 }

@@ -78,10 +78,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         TableFactoryService.getInstance().destroyTable('i18n-languages');
     }
 
-    private prepareTitle(): void {
-        const title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
+    private async prepareTitle(): Promise<void> {
+        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
         const count = this.state.table ? this.state.table.getRows(true).length : 0;
+        title = await TranslationService.translate(title);
         this.state.title = `${title} (${count})`;
+
     }
 
     private async prepareTable(): Promise<void> {

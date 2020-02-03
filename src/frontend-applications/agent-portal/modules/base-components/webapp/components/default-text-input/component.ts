@@ -68,7 +68,7 @@ class Component extends FormInputComponent<string, ComponentState> {
             return 'new-password';
         }
 
-        return 'nope';
+        return 'off';
     }
 
     public async focusLost(event: any): Promise<void> {

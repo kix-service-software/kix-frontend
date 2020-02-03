@@ -69,16 +69,6 @@ export class QueueService extends KIXObjectService<Queue> {
         return objects;
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        switch (property) {
-            case QueueProperty.FOLLOW_UP_LOCK:
-                value = Number(value);
-                break;
-            default:
-        }
-        return [[property, value]];
-    }
-
     public async prepareObjectTree(
         queues: Queue[], showInvalid?: boolean, invalidClickable: boolean = false,
         filterIds?: number[], includeTicketStats: boolean = false
@@ -161,8 +151,6 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getQueuesHierarchy(): Promise<Queue[]> {
-        const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();
-
         const loadingOptions = new KIXObjectLoadingOptions(
             [
                 new FilterCriteria(
@@ -172,7 +160,7 @@ export class QueueService extends KIXObjectService<Queue> {
             null, null,
             [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
             [QueueProperty.SUB_QUEUES],
-            [["TicketStats.StateType", stateTypes.join(',')]]
+            [["TicketStats.StateType", 'Open']]
         );
 
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);

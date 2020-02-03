@@ -210,7 +210,7 @@ export class ContextService {
     }
 
     public async getContextConfiguration(contextId: string): Promise<ContextConfiguration> {
-        const configuration = await ContextSocketClient.loadContextConfiguration(contextId);
+        const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(contextId);
         return configuration;
     }
 

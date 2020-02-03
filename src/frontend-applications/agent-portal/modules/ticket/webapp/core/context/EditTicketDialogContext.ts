@@ -19,6 +19,7 @@ import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Ticket } from "../../../model/Ticket";
+import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 
 export class EditTicketDialogContext extends Context implements IFormInstanceListener {
 
@@ -54,7 +55,7 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
             const ticketId = this.getObjectId();
             if (ticketId) {
                 const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, [TicketProperty.LINK], [TicketProperty.LINK]
+                    null, null, null, [TicketProperty.LINK, KIXObjectProperty.DYNAMIC_FIELDS], [TicketProperty.LINK]
                 );
                 const objects = await KIXObjectService.loadObjects<Ticket>(
                     KIXObjectType.TICKET, [ticketId], loadingOptions

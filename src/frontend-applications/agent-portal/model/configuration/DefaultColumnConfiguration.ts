@@ -7,16 +7,16 @@
  * --
  */
 
-import { IColumnConfiguration } from "../../../model/configuration/IColumnConfiguration";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
-import { DataType } from "../../../model/DataType";
+import { IColumnConfiguration } from "./IColumnConfiguration";
+import { ConfigurationType } from "./ConfigurationType";
+import { DataType } from "../DataType";
 
 export class DefaultColumnConfiguration implements IColumnConfiguration {
 
     public constructor(
         public id: string,
         public name: string,
-        public type: string | ConfigurationType,
+        public type: string | ConfigurationType = ConfigurationType.TableColumn,
         public property: string,
         public showText: boolean = true,
         public showIcon: boolean = true,

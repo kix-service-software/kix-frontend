@@ -104,7 +104,10 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
         return 'kix-icon-link';
     }
 
-    public getObjectTooltip(linkObject: LinkObject): string {
+    public async getObjectTooltip(linkObject: LinkObject, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(linkObject.title);
+        }
         return linkObject.title;
     }
 

@@ -228,7 +228,7 @@ class Component implements ISearchFormListener {
 
         const searchDefinition = SearchService.getInstance().getSearchDefinition(this.objectType);
         const columns = await searchDefinition.getTableColumnConfiguration(parameter);
-        this.state.table.addColumns(columns);
+        await this.state.table.addColumns(columns);
     }
 
     public submit(): void {

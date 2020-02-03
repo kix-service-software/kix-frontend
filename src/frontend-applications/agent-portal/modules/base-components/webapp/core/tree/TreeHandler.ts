@@ -162,7 +162,6 @@ export class TreeHandler {
         TreeUtil.linkTreeNodes(tree, filterValue);
         this.navigationHandler.setTree(tree);
 
-        const preselectedNodes = [];
         this.selectedNodes.forEach((n) => {
             const node = TreeUtil.findNode(tree, n.id);
             if (node) {

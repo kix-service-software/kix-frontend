@@ -15,8 +15,6 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextType } from "../../../../model/ContextType";
 import { Context } from "../../../../model/Context";
-import { EventService } from "./EventService";
-import { ApplicationEvent } from "./ApplicationEvent";
 
 export class ContextFactory {
 
@@ -54,7 +52,9 @@ export class ContextFactory {
         if (!context) {
             context = await this.createContextInstance(contextId, objectType, contextMode, objectId);
         } else if (reset) {
-            const configuration = await ContextSocketClient.loadContextConfiguration(context.getDescriptor().contextId);
+            const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
+                context.getDescriptor().contextId
+            );
             context.setConfiguration(configuration);
             context.reset();
         }
@@ -139,7 +139,9 @@ export class ContextFactory {
 
             let context: Context;
             if (descriptor) {
-                const configuration = await ContextSocketClient.loadContextConfiguration(descriptor.contextId).catch(
+                const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
+                    descriptor.contextId
+                ).catch(
                     (error) => { reject(error); }
                 );
                 if (configuration) {

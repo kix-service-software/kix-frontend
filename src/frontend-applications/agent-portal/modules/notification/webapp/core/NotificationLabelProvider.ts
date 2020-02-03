@@ -342,7 +342,12 @@ export class NotificationLabelProvider extends LabelProvider {
         }
         return values;
     }
-    public getObjectTooltip(notification: Notification): string {
+    public async getObjectTooltip(notification: Notification, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                notification.VisibleForAgentTooltip ? notification.VisibleForAgentTooltip : ''
+            );
+        }
         return notification.VisibleForAgentTooltip ? notification.VisibleForAgentTooltip : '';
     }
 }

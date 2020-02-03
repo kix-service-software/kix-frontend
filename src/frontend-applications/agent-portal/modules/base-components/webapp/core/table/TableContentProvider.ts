@@ -18,7 +18,9 @@ import { ContextService } from "../ContextService";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectService } from "../KIXObjectService";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
+import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
+import { LabelService } from "../LabelService";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -86,6 +88,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public async loadData(): Promise<Array<IRowObject<T>>> {
         let objects = [];
+
         if (this.contextId && !this.objectIds) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList(this.objectType) : [];
@@ -94,25 +97,58 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                 this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
             );
         }
-        return await this.getRowObjects(objects);
+
+        if (!objects) {
+            objects = [];
+        }
+
+        const props = this.table.getColumns().map((c) => c.getColumnConfiguration().property);
+        const propertyMap: Map<string, Map<any, TableValue>> = new Map();
+        for (const p of props) {
+            const column = this.table.getColumns().find((c) => c.getColumnConfiguration().property === p);
+            const valueMap: Map<any, TableValue> = new Map();
+            propertyMap.set(p, valueMap);
+            for (const o of objects) {
+                if (!valueMap.has(o[p])) {
+                    const vm = await this.getTableValue(o, p, column.getColumnConfiguration());
+                    valueMap.set(o[p], vm);
+                }
+            }
+        }
+
+        return await this.getRowObjects(objects, propertyMap);
     }
 
-    protected async getRowObjects(objects: T[]): Promise<RowObject[]> {
+    protected async getRowObjects(objects: T[], propertyMap: Map<string, Map<any, TableValue>>): Promise<RowObject[]> {
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
         if (objects) {
             for (const o of objects) {
                 rowObjectPromises.push(new Promise<RowObject<T>>(async (resolve, reject) => {
                     const values: TableValue[] = [];
 
-                    for (const property in o) {
-                        if (o.hasOwnProperty(property)) {
-                            const value = await this.getTableValue(o, property);
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+                    for (const column of columns) {
+                        const property = column.property;
+
+                        if (o.hasOwnProperty(property)
+                            && propertyMap.has(property)
+                            && propertyMap.get(property).has(o[property])
+                        ) {
+                            const value = propertyMap.get(property).get(o[property]);
                             values.push(value);
+                        } else if (!property.match(/^DynamicFields?\..+/)) {
+                            const tableValue = await this.getTableValue(o, property, column);
+                            values.push(tableValue);
                         }
                     }
                     await this.addSpecificValues(values, o);
+                    const rowObject = new RowObject<T>(values, o);
 
-                    resolve(new RowObject<T>(values, o));
+                    if (this.hasChildRows(rowObject)) {
+                        await this.addChildRows(rowObject, propertyMap);
+                    }
+
+                    resolve(rowObject);
                 }));
             }
         }
@@ -121,21 +157,50 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return rowObjects;
     }
 
-    protected async getTableValue(object: any, property: string): Promise<TableValue> {
-        let displayValue = null;
-        if (object[KIXObjectProperty.DISPLAY_VALUES]) {
-            const kixObject = object as KIXObject;
-            const value = kixObject.displayValues.find((dv) => dv[0] === property);
-            if (value) {
-                const text = await TranslationService.translate(value[1]);
-                displayValue = text;
-            }
+    protected async getTableValue(object: any, property: string, column: IColumnConfiguration): Promise<TableValue> {
+        const showText = column ? column.showText : true;
+        const showIcons = column ? column.showIcon : true;
+        const translatable = column ? column.translatable : true;
 
+        let displayValue = object[property];
+        if (showText) {
+            displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+                object, property, object[property], translatable
+            );
         }
-        return new TableValue(property, object[property], displayValue);
+
+        let icons = [];
+        if (showIcons) {
+            icons = await LabelService.getInstance().getPropertyValueDisplayIcons(object, property);
+        }
+
+        return new TableValue(property, object[property], displayValue, undefined, icons);
     }
 
     protected async addSpecificValues(values: TableValue[], object: any): Promise<void> {
+        if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
+            for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
+                let dfValue: [string[], string];
+
+                const labelProvider = LabelService.getInstance().getLabelProvider(object);
+                if (labelProvider) {
+                    dfValue = await labelProvider.getDFDisplayValues(dfv);
+                }
+
+                values.push(new TableValue(
+                    `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfv.Name}`,
+                    dfValue && dfValue[0] ? dfValue[0] : dfv.Value,
+                    dfValue && dfValue[1] ? dfValue[1] : dfv.DisplayValue.toString()
+                ));
+            }
+        }
+    }
+
+    protected hasChildRows(rowObject: RowObject): boolean {
+        return false;
+    }
+
+    protected async addChildRows(rowObject: RowObject, propertyMap: Map<string, Map<any, TableValue>>): Promise<void> {
         return;
     }
 }

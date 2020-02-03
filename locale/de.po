@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2019-12-16 16:22+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2020-01-20 09:14+0000\n"
+"Last-Translator: jrobel <Julia.Robel@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -48,7 +48,7 @@ msgid "Access denied"
 msgstr "Zugriff verweigert"
 
 msgid "Access Level"
-msgstr "Access Level"
+msgstr ""
 
 msgid "Accounted time"
 msgstr "Erfasste Zeit"
@@ -151,6 +151,12 @@ msgstr "Alle Objekte"
 msgid "All tickets"
 msgstr "Alle Tickets"
 
+msgid "A maximum of {0} values can be selected."
+msgstr ""
+
+msgid "A maximum of 1 value can be selected. (SingleSelect)"
+msgstr ""
+
 msgid "and"
 msgstr "und"
 
@@ -239,6 +245,9 @@ msgstr "Verknüpfung zuordnen"
 msgid "Assign Team / Queue"
 msgstr "Zuordnung zu Team"
 
+msgid "At least {0} values must be selected"
+msgstr ""
+
 msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
@@ -246,6 +255,11 @@ msgstr ""
 
 msgid "Attachments"
 msgstr "Anhänge"
+
+#, fuzzy
+#| msgid "Attributes"
+msgid "Attribute"
+msgstr "Attribute"
 
 msgid "Attributes"
 msgstr "Attribute"
@@ -485,6 +499,9 @@ msgstr "Asset wurde erfolgreich angelegt."
 msgid "Config Item Version Compare"
 msgstr "Asset-Versionsvergleich"
 
+msgid "Configuration"
+msgstr "Konfiguration"
+
 msgid "Confirm New Password"
 msgstr "Neues Passwort bestätigen"
 
@@ -557,6 +574,9 @@ msgstr "Erstellt am"
 msgid "Created by"
 msgstr "Erstellt von"
 
+msgid "Create Dynamic Field"
+msgstr "Dynamisches Feld wird angelegt"
+
 msgid "Create FAQ Article"
 msgstr "FAQ Artikel wird angelegt"
 
@@ -623,6 +643,11 @@ msgstr "Aktueller Verwendungsstatus"
 msgid "Current incident state"
 msgstr "Aktueller Vorfallstatus"
 
+#, fuzzy
+#| msgid "Current incident state"
+msgid "Current Incident state"
+msgstr "Aktueller Vorfallstatus"
+
 msgid "Current Password"
 msgstr "Aktuelles Passwort"
 
@@ -662,6 +687,11 @@ msgstr "Verknüpfung löschen"
 msgid "Delete Search"
 msgstr "Suche löschen"
 
+#, fuzzy
+#| msgid "Deployment State"
+msgid "Deployment state"
+msgstr "Verwendungsstatus"
+
 msgid "Deployment State"
 msgstr "Verwendungsstatus"
 
@@ -688,6 +718,15 @@ msgstr "\" (Doppeltes Hochkomma)"
 
 msgid "Download"
 msgstr "Download"
+
+msgid "Dynamic Field"
+msgstr "Dynamisches Feld"
+
+msgid "Dynamic Fields"
+msgstr "Dynamische Felder"
+
+msgid "Dynamic field successfully created."
+msgstr "Dynamisches Feld wurde erfolgreich angelegt."
 
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -718,6 +757,9 @@ msgstr "Kontakt bearbeiten"
 
 msgid "Edit Core Data"
 msgstr "Stammdaten bearbeiten"
+
+msgid "Edit Dynamic Field"
+msgstr "Dynamisches Feld bearbeiten"
 
 msgid "edited"
 msgstr "bearbeitet"
@@ -951,7 +993,7 @@ msgid "Fax"
 msgstr "Fax"
 
 msgid "Feedback"
-msgstr "Feedback"
+msgstr ""
 
 msgid "Fetching Mail Account"
 msgstr "E-Mail-Konto abrufen"
@@ -964,6 +1006,12 @@ msgstr "Feld"
 
 msgid "Field '{0}' has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
+
+msgid "Field Information"
+msgstr "Feld Informationen"
+
+msgid "Field Type"
+msgstr "Feldtyp"
 
 msgid "Filter"
 msgstr "Filter"
@@ -1054,6 +1102,35 @@ msgstr "Hilfe, Tipps und Tricks"
 msgid "Helping FAQ Contributions"
 msgstr "Helfende FAQ-Einträge"
 
+msgid "Helptext_Admin_DynamicFieldCreate_Config"
+msgstr ""
+"Nachdem Sie einen Feldtyp gewählt haben, werden die entsprechenden "
+"Konfigurationsmöglichkeiten geladen. Darüber können Sie festlegen, wie sich "
+"das dynamische Feld verhält und wie es dargestellt wird."
+
+msgid "Helptext_Admin_DynamicFieldCreate_FieldType"
+msgstr "Wählen Sie aus, welche Art von dynamischen Feld Sie anlegen wollen."
+
+msgid "Helptext_Admin_DynamicFieldCreate_Label"
+msgstr ""
+"Das Label wird als Beschriftung des Feldes dort angezeigt, wo das dynamische "
+"Feld in der Oberfläche verwendet wird."
+
+msgid "Helptext_Admin_DynamicFieldCreate_Name"
+msgstr ""
+"Der Name des dynamischen Feldes dient als interner Bezeichner und wird nur "
+"im Admin Bereich angezeigt."
+
+msgid "Helptext_Admin_DynamicFieldCreate_ObjectType"
+msgstr ""
+"Wählen Sie aus, in welchem Objekt-Kontext Sie das dynamische Feld verwenden "
+"wollen (z.B. für Tickets)."
+
+msgid "Helptext_Admin_DynamicFieldCreate_Validity"
+msgstr ""
+"Das dynamische Feld muss \"gültig\" gesetzt sein, damit es im System "
+"verwendet werden kann."
+
 msgid "Helptext_Admin_FAQCategoryCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -1098,16 +1175,6 @@ msgstr ""
 "Die General Catalog Klasse kann nur verwendet werden, wenn sie „gültig“ "
 "gesetzt ist."
 
-msgid "Helptext_Admin_JobCCreateEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_JobCCreateEdit_Time"
-msgstr ""
-"Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
-"Mehrfachauswahl möglich."
-
 msgid "Helptext_Admin_JobCreateEdit_Actions"
 msgstr ""
 "Wählen Sie eine Aktion aus der Liste, anschließend werden die dafür nötigen "
@@ -1120,6 +1187,13 @@ msgid "Helptext_Admin_JobCreateEdit_ActionSkip"
 msgstr ""
 "Hier können Sie die Aktion temporär deaktivieren: So lange dieser Haken "
 "gesetzt ist, wird die betreffende Aktion nicht durchgeführt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_JobCCreateEdit_Comment"
+msgid "Helptext_Admin_JobCreateEdit_Comment"
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Admin_JobCreateEdit_Days"
 msgstr ""
@@ -1141,6 +1215,12 @@ msgstr ""
 
 msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "Der Name des Jobs muss eindeutig sein."
+
+#, fuzzy
+msgid "Helptext_Admin_JobCreateEdit_Time"
+msgstr ""
+"Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
+"Mehrfachauswahl möglich."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
 msgstr ""
@@ -2421,6 +2501,9 @@ msgstr "Filterwert eingeben"
 msgid "internal"
 msgstr "intern"
 
+msgid "Internal Field"
+msgstr "Internes Feld"
+
 msgid "Internationalisation"
 msgstr "Internationalisierung"
 
@@ -2458,7 +2541,7 @@ msgid "Knowledge Database: FAQ Categories"
 msgstr "Wissensdatenbank: FAQ Kategorien"
 
 msgid "Label"
-msgstr "Beschriftung"
+msgstr "Label"
 
 msgid "Lanes"
 msgstr "Lanes"
@@ -2475,14 +2558,16 @@ msgstr "Großansicht"
 msgid "Last changed time"
 msgstr "zuletzt geändert am"
 
+#, fuzzy
+#| msgid "Last changed time"
+msgid "Last executed at"
+msgstr "zuletzt geändert am"
+
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
 
 msgid "Last Name"
 msgstr "Nachname"
-
-msgid "Last Run"
-msgstr "Letzte Ausführung"
 
 msgid "Legend"
 msgstr "Legende"
@@ -2721,6 +2806,9 @@ msgstr "Neues Asset"
 msgid "New Contact"
 msgstr "Neuer Kontakt"
 
+msgid "New Dynamic Field"
+msgstr "Neues Dynamisches Feld"
+
 msgid "New Email Filter"
 msgstr "Neuer E-Mail Filter"
 
@@ -2729,6 +2817,9 @@ msgstr "Neue FAQ"
 
 msgid "New FAQ Category"
 msgstr "Neue FAQ Kategorie"
+
+msgid "New Field"
+msgstr "Neues Feld"
 
 msgid "New Filter"
 msgstr "Neuer Filter"
@@ -2804,6 +2895,9 @@ msgstr "Nächste"
 
 msgid "Next Image"
 msgstr "Nächstes Bild"
+
+msgid "no"
+msgstr "nein"
 
 msgid "No"
 msgstr "Nein"
@@ -2918,6 +3012,9 @@ msgstr "Objekt ID"
 
 msgid "Objects"
 msgstr "Objekte"
+
+msgid "Object Type"
+msgstr "Objekttyp"
 
 msgid "Observer"
 msgstr "Beobachter"
@@ -3495,6 +3592,9 @@ msgstr "Systemadresse"
 msgid "System Addresses"
 msgstr "Systemadressen"
 
+msgid "System: Dynamic Fields"
+msgstr "System: Dynamische Felder"
+
 msgid "System: Logs"
 msgstr "System: Logs"
 
@@ -3514,16 +3614,16 @@ msgid "Target"
 msgstr "Ziel"
 
 msgid "Task End Time"
-msgstr "Aufgabe Endzeitpunkt"
+msgstr "Task Endzeitpunkt"
 
 msgid "Task Number"
-msgstr "Aufgabennummer"
+msgstr "Task Nummer"
 
 msgid "Task Start Time"
-msgstr "Aufgabe Startzeitpunkt"
+msgstr "Task Startzeitpunkt"
 
 msgid "Task State"
-msgstr "Aufgabenstatus"
+msgstr "Task Status"
 
 msgid "Team"
 msgstr "Team"
@@ -3567,6 +3667,16 @@ msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
+
+msgid ""
+"The value for the field is in the future! The date needs to be in the past!"
+msgstr ""
+
+msgid "The year can be a maximum of {0} years in the future"
+msgstr ""
+
+msgid "The year can be a maximum of {0} years in the past"
+msgstr ""
 
 msgid ""
 "This is the administration panel. Please select a module from the explorer."
@@ -3766,6 +3876,9 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Contact"
 msgstr "Aktualisierung wird durchgeführt"
 
+msgid "Update Dynamic Field"
+msgstr "Aktualisierung wird durchgeführt"
+
 msgid "Update Email Account"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -3880,6 +3993,11 @@ msgstr "Bewertungen"
 msgid "Wait until"
 msgstr "Warten bis"
 
+#, fuzzy
+#| msgid "running"
+msgid "Warning"
+msgstr "läuft"
+
 msgid "Watch"
 msgstr "Beobachten"
 
@@ -3916,6 +4034,9 @@ msgstr "Willkommen bei KIX 18"
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
 
+msgid "yes"
+msgstr "ja"
+
 msgid "Yes"
 msgstr "Ja"
 
@@ -3948,6 +4069,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Last Run"
+#~ msgstr "Letzte Ausführung"
 
 #~ msgid "Assigned Queues"
 #~ msgstr "Zugeordnete Teams"
@@ -5183,12 +5307,6 @@ msgstr "PLZ"
 
 #~ msgid "IP over DHCP"
 #~ msgstr "IP via DHCP"
-
-#~ msgid "yes"
-#~ msgstr "ja"
-
-#~ msgid "no"
-#~ msgstr "nein"
 
 #~ msgid "Please enter a valid IPv4 address in form 123.123.123.123."
 #~ msgstr ""

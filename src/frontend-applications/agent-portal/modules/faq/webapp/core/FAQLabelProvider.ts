@@ -224,7 +224,10 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         return 'kix-icon-faq';
     }
 
-    public getObjectTooltip(faqArticle: FAQArticle): string {
+    public async getObjectTooltip(faqArticle: FAQArticle, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(faqArticle.Title);
+        }
         return faqArticle.Title;
     }
 

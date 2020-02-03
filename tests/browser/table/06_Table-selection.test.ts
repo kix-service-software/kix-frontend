@@ -11,9 +11,10 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, DefaultColumnConfiguration, SelectionState, ITableContentProvider, IRowObject, TableValue, RowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { ITable, Table, SelectionState, ITableContentProvider, IRowObject, TableValue, RowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { KIXObject } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObject';
+import { DefaultColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
 
 
 chai.use(chaiAsPromised);
@@ -26,7 +27,7 @@ describe('Table Selection Tests', () => {
         table = new Table('test');
         table.setContentProvider(new TestTableContentProvider(50, 3));
         table.setColumnConfiguration([
-            new DefaultColumnConfiguration(null, null, null,'0'), new DefaultColumnConfiguration(null, null, null,'1'), new DefaultColumnConfiguration(null, null, null,'2')
+            new DefaultColumnConfiguration(null, null, null, '0'), new DefaultColumnConfiguration(null, null, null, '1'), new DefaultColumnConfiguration(null, null, null, '2')
         ]);
         await table.initialize();
     });

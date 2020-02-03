@@ -16,6 +16,8 @@ import { KIXObjectFormService } from '../../../../../modules/base-components/web
 import { ServiceType } from '../../../../../modules/base-components/webapp/core/ServiceType';
 import { FormInstance } from '../../../../../modules/base-components/webapp/core/FormInstance';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
 
 class FieldContainerComponent {
 
@@ -66,7 +68,12 @@ class FieldContainerComponent {
     }
 
     public canRemove(field: FormFieldConfiguration): boolean {
-        const propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
+        let propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
+
+        if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+            propertyFields = this.filterDynamicFields(field, propertyFields);
+        }
+
         if (propertyFields.length === 1 && field.empty) {
             return false;
         }
@@ -74,25 +81,56 @@ class FieldContainerComponent {
     }
 
     public async removeField(field: FormFieldConfiguration): Promise<void> {
-        const propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
+        let propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
+
+        if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+            propertyFields = this.filterDynamicFields(field, propertyFields);
+        }
+
+        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         if (propertyFields.length === 1) {
             this.setFieldsEmpty(field, true);
+            formInstance.provideFormFieldValue(field.instanceId, null);
         } else {
-            const formInstance = await FormService.getInstance().getFormInstance(this.formId);
             formInstance.removeFormField(field);
         }
         (this as any).setStateDirty('fields');
     }
 
     public canAdd(field: FormFieldConfiguration): boolean {
-        const propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
-        const index = propertyFields.findIndex((f) => f.instanceId === field.instanceId);
+        let propertyFields = this.state.fields.filter((ff) => ff.property === field.property);
+
+        if (field.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+            propertyFields = this.filterDynamicFields(field, propertyFields);
+        }
+
         if (propertyFields.length === 1 && field.empty) {
             return true;
         }
+
+        const index = propertyFields.findIndex((f) => f.instanceId === field.instanceId);
+
         return field.countMax !== null
             && field.countMax > propertyFields.length
             && index !== -1 && index === propertyFields.length - 1;
+    }
+
+    private filterDynamicFields(
+        field: FormFieldConfiguration, fields: FormFieldConfiguration[]
+    ): FormFieldConfiguration[] {
+        const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+        if (nameOption) {
+            const dfName = nameOption.value;
+            return fields.filter((pf) => {
+                const pfNameOption = pf.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                if (pfNameOption) {
+                    return pfNameOption.value === dfName;
+                }
+                return false;
+            });
+        }
+
+        return [];
     }
 
     public async addField(field: FormFieldConfiguration): Promise<void> {

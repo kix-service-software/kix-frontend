@@ -22,7 +22,7 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
     ];
 
     public async initAction(): Promise<void> {
-        this.text = 'Edit';
+        this.text = 'Translatable#Edit';
         this.icon = "kix-icon-edit";
     }
 

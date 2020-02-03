@@ -69,18 +69,26 @@ class Component {
     private async addStateData(version: Version): Promise<PreparedData[]> {
         const preparedDataArray: PreparedData[] = [];
 
-        const curInciStateHash = new PreparedData();
-        curInciStateHash.Key = version.CurInciState;
-        curInciStateHash.Label = "Translatable#Current incident state";
-        curInciStateHash.DisplayValue = version.CurInciState;
+        const inciStateHash = new PreparedData();
+        inciStateHash.Key = version.InciState;
+        inciStateHash.Label = version.isCurrentVersion
+            ? "Translatable#Current Incident state"
+            : "Translatable#Incident state";
+        inciStateHash.DisplayValue = version.isCurrentVersion
+            ? version.CurInciState
+            : version.InciState;
+        preparedDataArray.push(inciStateHash);
 
-        const curDeplStateHash = new PreparedData();
-        curDeplStateHash.Key = version.CurDeplState;
-        curDeplStateHash.Label = "Translatable#Current deployment state";
-        curDeplStateHash.DisplayValue = version.CurDeplState;
+        const deplStateHash = new PreparedData();
+        deplStateHash.Key = version.DeplState;
+        deplStateHash.Label = version.isCurrentVersion
+            ? "Translatable#Current deployment state"
+            : "Translatable#Deployment state";
+        deplStateHash.DisplayValue = version.isCurrentVersion
+            ? version.CurDeplState
+            : version.DeplState;
 
-        preparedDataArray.push(curInciStateHash);
-        preparedDataArray.push(curDeplStateHash);
+        preparedDataArray.push(deplStateHash);
 
         return preparedDataArray;
     }

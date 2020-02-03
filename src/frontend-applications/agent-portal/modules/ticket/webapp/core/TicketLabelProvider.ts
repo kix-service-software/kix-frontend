@@ -355,16 +355,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                         TicketProperty.TYPE_ID, ticket.TypeID, translatable
                     );
                     break;
-                case TicketProperty.SERVICE:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.SERVICE_ID, ticket.ServiceID, translatable
-                    );
-                    break;
-                case TicketProperty.SLA:
-                    displayValue = await this.getPropertyValueDisplayText(
-                        TicketProperty.SLA_ID, ticket.SLAID, translatable
-                    );
-                    break;
                 // TODO: still necessary?
                 case 'UserID':
                     if (displayValue) {
@@ -406,7 +396,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     }
                     break;
                 default:
-                    displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                    displayValue = await super.getDisplayText(ticket, property, defaultValue, translatable);
             }
         }
 
@@ -490,7 +480,10 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         return 'kix-icon-ticket';
     }
 
-    public getObjectTooltip(ticket: Ticket, translatable: boolean = true): string {
+    public async getObjectTooltip(ticket: Ticket, translatable: boolean = false): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(ticket.Title);
+        }
         return ticket.Title;
     }
 

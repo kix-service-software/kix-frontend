@@ -23,6 +23,7 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
+import { TicketProperty } from "./model/TicketProperty";
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -34,10 +35,47 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const configurations = [];
         const ticketInfoLane = new WidgetConfiguration(
             'ticket-details-info-widget', 'Info Widget', ConfigurationType.Widget,
-            'ticket-info-widget', 'Translatable#Ticket Information',
-            [], null, null, false, true, null, false
+            'ticket-info-widget', 'Translatable#Ticket Information', [],
+            new ConfigurationDefinition(
+                'ticket-details-object-information-config', ConfigurationType.ObjectInformation
+            ), null, false, true, null, false
         );
         configurations.push(ticketInfoLane);
+
+        const organisationRouting = new RoutingConfiguration(
+            'organisation-details', KIXObjectType.ORGANISATION,
+            ContextMode.DETAILS, 'ID', false
+        );
+
+        const contactRouting = new RoutingConfiguration(
+            'contact-details', KIXObjectType.CONTACT,
+            ContextMode.DETAILS, 'ID', false
+        );
+
+        const infoConfig = new ObjectInformationWidgetConfiguration(
+            'ticket-details-object-information-config', 'Ticket Info', ConfigurationType.ObjectInformation,
+            KIXObjectType.TICKET,
+            [
+                TicketProperty.ORGANISATION_ID,
+                TicketProperty.CONTACT_ID,
+                TicketProperty.CREATED,
+                TicketProperty.AGE,
+                TicketProperty.LOCK_ID,
+                TicketProperty.TYPE_ID,
+                TicketProperty.QUEUE_ID,
+                TicketProperty.PRIORITY_ID,
+                TicketProperty.RESPONSIBLE_ID,
+                TicketProperty.OWNER_ID,
+                TicketProperty.TIME_UNITS,
+                TicketProperty.STATE_ID,
+                TicketProperty.PENDING_TIME
+            ], false,
+            [
+                [TicketProperty.ORGANISATION_ID, organisationRouting],
+                [TicketProperty.CONTACT_ID, contactRouting]
+            ]
+        );
+        configurations.push(infoConfig);
 
         const tabSettings = new TabWidgetConfiguration(
             'ticket-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
@@ -77,17 +115,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
         configurations.push(linkedObjectsWidget);
 
-
-        const organisationRouting = new RoutingConfiguration(
-            'organisation-details', KIXObjectType.ORGANISATION,
-            ContextMode.DETAILS, 'ID'
-        );
-
-        const contactRouting = new RoutingConfiguration(
-            'contact-details', KIXObjectType.CONTACT,
-            ContextMode.DETAILS, 'ID'
-        );
-
         // Sidebars
         const organisationObjectInformation = new ObjectInformationWidgetConfiguration(
             'ticket-details-organisation-information-settings', 'Organisation Information Settings',
@@ -118,7 +145,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             null, false, false, 'kix-icon-man-house', false
         );
         configurations.push(organisationInfoSidebar);
-
 
         const contactObjectInformation = new ObjectInformationWidgetConfiguration(
             'ticket-details-contact-information-settings', 'Contact Information Settings',

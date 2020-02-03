@@ -8,7 +8,6 @@
  */
 
 import { IColumn } from "./IColumn";
-import { IColumnConfiguration } from "./IColumnConfiguration";
 import { ITable } from "./ITable";
 import { TableEvent } from "./TableEvent";
 import { TableEventData } from "./TableEventData";
@@ -20,6 +19,7 @@ import { SortOrder } from "../../../../../model/SortOrder";
 import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
 import { EventService } from "../EventService";
 import { SearchOperator } from "../../../../search/model/SearchOperator";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 
 export class Column<T extends KIXObject = any> implements IColumn<T> {
 

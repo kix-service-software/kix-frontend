@@ -6,10 +6,10 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.field)>
     <span.date-time-input>
         <input.input-style
+            key=("date-" + state.inputId)
             class={
                         invalid: state.invalid
                     }
@@ -19,10 +19,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             required=input.required
             readonly=state.field.readonly
             disabled=state.field.readonly
+            min=state.minDate
+            max=state.maxDate
             on-change("dateChanged")
             on-blur("focusLost")/>
         <if(state.inputType === "DATE_TIME")>
             <input.input-style
+                key=("time-" + state.inputId)
                 class={
                                 invalid: state.invalid
                             }

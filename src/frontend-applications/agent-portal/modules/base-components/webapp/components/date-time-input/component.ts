@@ -25,12 +25,18 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         this.state.currentValue = typeof input.currentValue !== 'undefined' ?
             input.currentValue : this.state.currentValue;
         if (this.state.field && this.state.field.options) {
-            const option = this.state.field.options.find(
+            const typeOption = this.state.field.options.find(
                 (o) => o.option === FormFieldOptions.INPUT_FIELD_TYPE
             );
-            if (option) {
-                this.state.inputType = option.value.toString();
+            if (typeOption) {
+                this.state.inputType = typeOption.value.toString();
             }
+
+            const minDateOption = this.state.field.options.find((o) => o.option === FormFieldOptions.MIN_DATE);
+            this.state.minDate = minDateOption ? minDateOption.value : null;
+
+            const maxDateOption = this.state.field.options.find((o) => o.option === FormFieldOptions.MAX_DATE);
+            this.state.maxDate = maxDateOption ? maxDateOption.value : null;
         }
         this.update();
     }
@@ -73,9 +79,16 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
     }
 
     private setValue(): void {
-        this.state.currentValue = this.state.dateValue ? new Date(
+        const date = this.state.dateValue ? new Date(
             this.state.dateValue + (this.state.timeValue ? ` ${this.state.timeValue}` : '')
         ) : null;
+
+        if (date && this.state.inputType !== 'DATE_TIME') {
+            date.setHours(0, 0, 0, 0);
+        }
+
+        this.state.currentValue = date;
+
         (this as any).emit('valueChanged', this.state.currentValue);
         super.provideValue(this.state.currentValue);
     }

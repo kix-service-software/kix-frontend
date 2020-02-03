@@ -21,6 +21,10 @@ export enum ObjectReferenceOptions {
 
     ADDITIONAL_NODES = 'ADDITIONAL_NODES',
 
-    FREETEXT = 'FREETEXT'
+    FREETEXT = 'FREETEXT',
+
+    COUNT_MIN = 'COUNT_MIN',
+
+    COUNT_MAX = 'COUNT_MAX'
 
 }

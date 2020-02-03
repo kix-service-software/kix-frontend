@@ -243,7 +243,10 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
         return null;
     }
 
-    public getObjectTooltip(article: Article): string {
+    public async getObjectTooltip(article: Article, translatable: boolean = false): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(article.Subject);
+        }
         return article.Subject;
     }
 

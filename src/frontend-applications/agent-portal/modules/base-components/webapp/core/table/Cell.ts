@@ -10,11 +10,10 @@
 import { ICell } from "./ICell";
 import { IRow } from "./IRow";
 import { LabelService } from "../LabelService";
-import { IColumnConfiguration } from "./IColumnConfiguration";
 import { TableValue } from "./TableValue";
 import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
 import { FilterUtil } from "../FilterUtil";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 
 export class Cell implements ICell {
 
@@ -88,13 +87,12 @@ export class Cell implements ICell {
         return matchTextFilter && matchCriteria;
     }
 
-    private async matchDisplayValue(filterValue: string): Promise<boolean> {
+    private matchDisplayValue(filterValue: string): boolean {
         if (!filterValue || filterValue === '') {
             return true;
         }
 
-        const displayValue = await this.getDisplayValue();
-        return FilterUtil.stringContains(displayValue, filterValue);
+        return FilterUtil.stringContains(this.tableValue.displayValue, filterValue);
     }
 
     private async matchCriteria(criteria: TableFilterCriteria[]): Promise<boolean> {
@@ -109,13 +107,12 @@ export class Cell implements ICell {
             return false;
         }
 
-        const displayValue = await this.getDisplayValue();
         let match = false;
 
         const matchPromises = [];
         filterCriteria.forEach(
             (c) => matchPromises.push(FilterUtil.checkTableFilterCriteria(
-                c, c.useDisplayValue ? displayValue : this.tableValue.objectValue
+                c, c.useDisplayValue ? this.tableValue.displayValue : this.tableValue.objectValue
             ))
         );
 
@@ -123,17 +120,6 @@ export class Cell implements ICell {
         match = result.every((r) => r);
 
         return match;
-    }
-
-    public async getDisplayIcons(): Promise<Array<string | ObjectIcon>> {
-        let icons;
-        const rowObject = this.getRow().getRowObject().getObject();
-        if (rowObject) {
-            icons = await LabelService.getInstance().getPropertyValueDisplayIcons(
-                rowObject, this.tableValue.property
-            );
-        }
-        return icons;
     }
 
     public getColumnConfiguration(): IColumnConfiguration {

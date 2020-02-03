@@ -8,6 +8,7 @@
  */
 
 import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
+import { IdService } from "../../../../../model/IdService";
 
 export class ComponentState extends FormInputComponentState<string> {
 
@@ -16,7 +17,10 @@ export class ComponentState extends FormInputComponentState<string> {
         public placeholder: string = null,
         public inputType: string = 'date',
         public dateValue: string = null,
-        public timeValue: string = null
+        public timeValue: string = null,
+        public minDate: string = null,
+        public maxDate: string = null,
+        public inputId: string = IdService.generateDateBasedId('date-time-input-')
     ) {
         super();
     }

@@ -16,7 +16,7 @@ import { KIXObject } from "../../../../model/kix/KIXObject";
 export class FilterUtil {
 
     public static prepareFilterValue(value: string): string {
-        return value ? value.toLocaleLowerCase().toLocaleString().replace(/\u200E/g, "") : '';
+        return value ? value.toString().toLocaleLowerCase().toLocaleString().replace(/\u200E/g, "") : '';
     }
 
     public static stringContains(displayValue: string, filterValue: string): boolean {
