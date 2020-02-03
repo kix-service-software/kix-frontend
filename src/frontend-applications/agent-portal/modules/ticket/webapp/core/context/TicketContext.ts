@@ -19,6 +19,7 @@ import { ApplicationEvent } from "../../../../../modules/base-components/webapp/
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { SysConfigService } from "../../../../sysconfig/webapp/core";
+import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 
 
 export class TicketContext extends Context {
@@ -53,7 +54,7 @@ export class TicketContext extends Context {
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            [stateTypeFilterCriteria], null, 1000, ['Watchers']
+            [stateTypeFilterCriteria], null, 1000, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
         );
 
         if (this.queueId) {

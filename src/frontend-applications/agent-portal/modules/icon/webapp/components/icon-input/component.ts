@@ -115,6 +115,7 @@ class Component extends FormInputComponent<any, ComponentState> {
                 null,
                 content,
                 error,
+                null,
                 true
             );
         } else {

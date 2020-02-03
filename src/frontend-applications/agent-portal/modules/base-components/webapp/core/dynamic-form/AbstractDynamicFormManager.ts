@@ -17,16 +17,9 @@ import { AuthenticationSocketClient } from "../AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../../server/model/rest/CRUD";
 import { ValidationResult } from "../ValidationResult";
-import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterType } from "../../../../../model/FilterType";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { KIXObjectService } from "../KIXObjectService";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldType } from "../../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -190,36 +183,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return addEmpty;
     }
 
-    protected async loadDynamicField(property: string): Promise<DynamicField> {
-        let dynamicField: DynamicField;
-        const name = this.getDynamicFieldName(property);
-        if (name) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, name
-                    )
-                ], null, null, [DynamicFieldProperty.CONFIG]
-            );
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
-            ).catch(() => [] as DynamicField[]);
-
-            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
-        }
-        return dynamicField;
-    }
-
-    protected getDynamicFieldName(property: string): string {
-        let dfName: string;
-        const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
-        if (property.match(dFRegEx)) {
-            dfName = property.replace(dFRegEx, '$1');
-        }
-        return dfName;
-    }
-
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
         if (property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))) {
             return await this.getInputTypeForDF(property);
@@ -229,7 +192,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
-        const field = await this.loadDynamicField(property);
+        const field = await DynamicFieldService.loadDynamicField(property);
         if (
             field && field.FieldType === DynamicFieldType.SELECTION && field.Config && Number(field.Config.CountMax) > 1
         ) {
@@ -240,7 +203,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
         let inputFieldType = InputFieldTypes.TEXT;
-        const field = await this.loadDynamicField(property);
+        const field = await DynamicFieldService.loadDynamicField(property);
         if (field) {
             if (field.FieldType === DynamicFieldType.TEXT_AREA) {
                 inputFieldType = InputFieldTypes.TEXT_AREA;

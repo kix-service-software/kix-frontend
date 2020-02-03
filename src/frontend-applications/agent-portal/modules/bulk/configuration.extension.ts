@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { BulkDialogContext } from "./webapp/core";
+import { BulkDialogContext } from "./webapp/core/BulkDialogContext";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";

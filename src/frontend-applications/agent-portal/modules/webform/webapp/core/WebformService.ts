@@ -67,7 +67,7 @@ export class WebformService extends KIXObjectService<Webform> {
                     }
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
                 return null;
             });
@@ -87,7 +87,7 @@ export class WebformService extends KIXObjectService<Webform> {
                     }
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
                 return null;
             });

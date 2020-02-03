@@ -21,7 +21,7 @@ import { ContextHistory } from "./ContextHistory";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { AdditionalContextInformation } from "./AdditionalContextInformation";
 import { FormService } from "./FormService";
-import { TableFactoryService } from "./table";
+import { TableFactoryService } from "./table/TableFactoryService";
 import { ContextHistoryEntry } from "./ContextHistoryEntry";
 import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
 import { ContextSocketClient } from "./ContextSocketClient";

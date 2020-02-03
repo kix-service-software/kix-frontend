@@ -16,17 +16,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div.information-list>
                     <for|property| of=state.properties>
                         <div>
-                            <if(state.dynamicFieldLabels && state.dynamicFieldLabels[property])>
-                                <div.dynamic-field-label-list>
-                                    <object-property-label>
-                                        <@propertyValue>
-                                            <translation-string pattern=state.dynamicFieldLabels[property].Name/>
-                                        </@propertyValue>
-                                        <@value>
-                                            <label-list labels=state.dynamicFieldLabels[property].Labels removeLabels=false/>
-                                        </@value>
-                                    </object-property-label>
-                                </div>
+                            <if(component.getDynamicFieldName(property))>
+                                <dynamic-field-object-property
+                                    name=component.getDynamicFieldName(property)
+                                    object=state.ticket
+                                    labelProvider=state.labelProvider
+                                    property=property/>
                             </if>
                             <else>
                                 <object-property-label

@@ -34,7 +34,7 @@ import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { SortUtil } from "../../../../model/SortUtil";
 

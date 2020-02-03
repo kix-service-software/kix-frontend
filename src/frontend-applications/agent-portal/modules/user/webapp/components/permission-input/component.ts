@@ -11,7 +11,7 @@ import { ComponentState } from "./ComponentState";
 import { CheckboxOption } from "./CheckboxOption";
 import { AbstractMarkoComponent } from "../../../../base-components/webapp/core/AbstractMarkoComponent";
 import { PermissionFormData } from "../../../../base-components/webapp/core/PermissionFormData";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { PermissionProperty } from "../../../model/PermissionProperty";
 import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
 import { PermissionType } from "../../../model/PermissionType";

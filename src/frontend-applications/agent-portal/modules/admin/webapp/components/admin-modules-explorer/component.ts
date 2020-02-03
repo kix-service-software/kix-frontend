@@ -10,7 +10,8 @@
 import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { AdminContext, AdministrationSocketClient } from "../../core";
+import { AdministrationSocketClient } from "../../core/AdministrationSocketClient";
+import { AdminContext } from "../../core/AdminContext";
 import { AdminModule } from "../../../model/AdminModule";
 import { TreeNode } from "../../../../base-components/webapp/core/tree";
 import { AdminModuleCategory } from "../../../model/AdminModuleCategory";

@@ -10,13 +10,6 @@
 import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { IKIXObjectFormService } from "../../../base-components/webapp/core/IKIXObjectFormService";
@@ -30,10 +23,13 @@ import { FormFieldOption } from "../../../../model/configuration/FormFieldOption
 import { DateTimeUtil } from "./DateTimeUtil";
 import { ObjectReferenceOptions } from "./ObjectReferenceOptions";
 import { TreeNode } from "./tree";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { FormValidationService } from "./FormValidationService";
 import { ValidationResult } from "./ValidationResult";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { CheckListInputType } from "../../../dynamic-fields/webapp/core/CheckListInputType";
+import { CheckListItem } from "../../../dynamic-fields/webapp/core/CheckListItem";
+import { DynamicFieldService } from "../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class DynamicFieldFormUtil {
 
@@ -61,7 +57,7 @@ export class DynamicFieldFormUtil {
         const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (nameOption) {
             const name = nameOption.value;
-            const dynamicField = await this.loadDynamicField(name);
+            const dynamicField = await DynamicFieldService.loadDynamicField(name);
             if (dynamicField && dynamicField.ValidID === 1) {
                 const config = dynamicField.Config;
                 field.countDefault = Number(config.CountDefault);
@@ -137,6 +133,14 @@ export class DynamicFieldFormUtil {
                     field.countDefault = 1;
                     field.countMax = 1;
                     field.countMin = 1;
+                } else if (dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
+                    field.inputComponent = 'dynamic-field-checklist-input';
+                    field.defaultValue = new FormFieldValue(
+                        config.DefaultValue ? JSON.parse(config.DefaultValue) : null
+                    );
+                    field.countDefault = 1;
+                    field.countMax = 1;
+                    field.countMin = 1;
                 }
 
                 success = true;
@@ -151,44 +155,43 @@ export class DynamicFieldFormUtil {
     ): Promise<void> {
         const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
         for (const field of fields) {
-            let values = [];
+            let dfValue;
             const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-            let isMultiselect = false;
+            let dynamicField: DynamicField;
             if (fieldNameOption) {
                 if (object && object.DynamicFields && object.DynamicFields.length) {
-                    const dfValue: DynamicFieldValue = object.DynamicFields.find(
+                    const objectDFValue: DynamicFieldValue = object.DynamicFields.find(
                         (df) => df.Name === fieldNameOption.value
                     );
-                    if (dfValue) {
-                        values = dfValue.Value;
+                    if (objectDFValue) {
+                        dfValue = objectDFValue.Value;
                     }
                 }
 
-                const dynamicField = await this.loadDynamicField(fieldNameOption.value);
-                if (dynamicField) {
-                    isMultiselect = dynamicField.FieldType === DynamicFieldType.SELECTION;
-                }
+                dynamicField = await DynamicFieldService.loadDynamicField(fieldNameOption.value);
             }
 
-            if (isMultiselect) {
-                field.defaultValue = new FormFieldValue(values);
-            } else {
-                for (let i = 0; i < values.length; i++) {
+            if (dynamicField.FieldType === DynamicFieldType.SELECTION) {
+                field.defaultValue = new FormFieldValue(dfValue);
+            } else if (dynamicField.FieldType === DynamicFieldType.CHECK_LIST && dfValue && dfValue[0]) {
+                field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
+            } else if (dfValue && Array.isArray(dfValue)) {
+                for (let i = 0; i < dfValue.length; i++) {
                     if (i === 0) {
-                        field.defaultValue = new FormFieldValue(values[i], true);
+                        field.defaultValue = new FormFieldValue(dfValue[i], true);
                     } else {
                         const newField = formService.getNewFormField(field);
-                        newField.defaultValue = new FormFieldValue(values[i], true);
+                        newField.defaultValue = new FormFieldValue(dfValue[i], true);
                         const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                         formFields.splice(index + i, 0, newField);
                     }
                 }
 
-                if (field.countMin > 0 && values.length < field.countMin) {
+                if (field.countMin > 0 && dfValue.length < field.countMin) {
                     const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
                         ? field.countDefault
                         : field.countMin;
-                    const count = values.length === 0 ? countDefault : field.countMin - values.length;
+                    const count = dfValue.length === 0 ? countDefault : field.countMin - dfValue.length;
 
                     for (let i = 1; i < count; i++) {
                         const newField = formService.getNewFormField(field);
@@ -196,7 +199,7 @@ export class DynamicFieldFormUtil {
                         const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                         formFields.splice(index, 0, newField);
                     }
-                } else if (field.countMin === 0 && !values.length) {
+                } else if (field.countMin === 0 && !dfValue.length) {
                     field.empty = true;
                 }
             }
@@ -215,12 +218,16 @@ export class DynamicFieldFormUtil {
         const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (fieldNameOption) {
             let setValue = field.empty ? null : value.value;
+            let notArray = false;
 
-            const dynamicField = await this.loadDynamicField(fieldNameOption.value);
+            const dynamicField = await DynamicFieldService.loadDynamicField(fieldNameOption.value);
             if (dynamicField) {
                 const fieldType = dynamicField.FieldType;
-                if (setValue && (fieldType === 'Date' || fieldType === 'DateTime')) {
+                if (setValue && fieldType === DynamicFieldType.DATE || fieldType === DynamicFieldType.DATE_TIME) {
                     setValue = DateTimeUtil.getKIXDateTimeString(setValue);
+                } else if (setValue && fieldType === DynamicFieldType.CHECK_LIST) {
+                    setValue = JSON.stringify(setValue);
+                    notArray = true;
                 }
             }
 
@@ -233,7 +240,7 @@ export class DynamicFieldFormUtil {
                 dfParameter[1].push(dfValue);
             }
 
-            if (Array.isArray(setValue)) {
+            if (notArray || Array.isArray(setValue)) {
                 dfValue.Value = setValue;
             } else if (setValue && !dfValue.Value.some((v) => v === setValue)) {
                 dfValue.Value.push(setValue);
@@ -243,29 +250,39 @@ export class DynamicFieldFormUtil {
         return parameter;
     }
 
-    private static async loadDynamicField(name: string): Promise<DynamicField> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, name
-                )
-            ], null, null, [DynamicFieldProperty.CONFIG]
-        );
-        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-        );
-
-        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
-    }
-
     public static async validateDFValue(dfName: string, value: any): Promise<ValidationResult[]> {
         let result = [];
-        const dynamicField = await this.loadDynamicField(dfName);
+        const dynamicField = await DynamicFieldService.loadDynamicField(dfName);
         if (dynamicField) {
             const dfResult = await FormValidationService.getInstance().validateDynamicFieldValue(dynamicField, value);
             result = [...result, ...dfResult];
         }
         return result;
     }
+
+    public static countValues(checklist: CheckListItem[]): [number, number] {
+        const value: [number, number] = [0, 0];
+        for (const item of checklist) {
+            if (item.input === CheckListInputType.ChecklistState) {
+                value[1]++;
+
+                if (!item.value) {
+                    item.value = '-';
+                }
+
+                if (item.value === 'OK' || item.value === 'NOK' || item.value === 'n.a.') {
+                    value[0]++;
+                }
+            }
+
+            if (item.sub && item.sub.length) {
+                const subCount = this.countValues(item.sub);
+                value[0] = value[0] + subCount[0];
+                value[1] = value[1] + subCount[1];
+            }
+        }
+
+        return value;
+    }
+
 }

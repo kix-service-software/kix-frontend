@@ -1,5 +1,9 @@
 {
     "taglibImports": [
         "../../base-components/marko.json"
+    ],
+    "tags-dir": [
+        "./components",
+        "./components/dynamic-field-checklist-input"
     ]
 }

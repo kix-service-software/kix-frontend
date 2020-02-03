@@ -9,7 +9,7 @@
 
 import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 

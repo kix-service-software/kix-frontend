@@ -51,6 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 'article-attachment-widget',
                 new ComponentContent('ticket-article-attachment-list', data, this.article),
                 'Anlagen',
+                null,
                 false,
                 [
                     event.target.getBoundingClientRect().left,

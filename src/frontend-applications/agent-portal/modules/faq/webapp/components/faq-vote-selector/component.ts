@@ -75,7 +75,7 @@ export class Component {
                     OverlayService.getInstance().openOverlay(OverlayType.SUCCESS_TOAST, null, content, '');
                 }).catch((error) => {
                     OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+                        OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', null, true
                     );
                 });
 

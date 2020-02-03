@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SearchService } from "..";
+import { SearchService } from "../SearchService";
 import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
 import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
 import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
@@ -30,7 +30,7 @@ export class SaveSearchAction extends AbstractAction {
             const content = new ComponentContent('save-search-template-overlay', null);
             OverlayService.getInstance().openOverlay(
                 OverlayType.CONTENT_OVERLAY, 'save-search-template', content, 'Translatable#Save Search',
-                false, null, null, true, null, false
+                null, false, null, null, true, null, false
             );
         }
     }

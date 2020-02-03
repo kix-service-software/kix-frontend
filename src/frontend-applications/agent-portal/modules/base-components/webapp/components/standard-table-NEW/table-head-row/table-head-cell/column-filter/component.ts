@@ -87,7 +87,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 }
             }
             OverlayService.getInstance().openOverlay(
-                OverlayType.TABLE_COLUMN_FILTER, null, content, '', false,
+                OverlayType.TABLE_COLUMN_FILTER, null, content, '', null, false,
                 position, this.eventSubscriberId
             );
         }

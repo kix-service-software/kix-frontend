@@ -19,7 +19,7 @@ import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { Notification } from '../../../model/Notification';
-import { TranslationService } from '../../../../translation/webapp/core';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

@@ -13,6 +13,11 @@ import { DynamicField } from "../../model/DynamicField";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
+import { FilterCriteria } from "../../../../model/FilterCriteria";
+import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
+import { SearchOperator } from "../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../model/FilterDataType";
+import { FilterType } from "../../../../model/FilterType";
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
@@ -54,6 +59,30 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
     public getConfigSchema(id: string): any {
         return this.schema.get(id);
+    }
+
+    public static async loadDynamicField(name: string): Promise<DynamicField> {
+        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null,
+            new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, name
+                    )
+                ], null, 1, [DynamicFieldProperty.CONFIG]
+            ), null, true
+        ).catch(() => [] as DynamicField[]);
+
+        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+    }
+
+    public static getDynamicFieldName(property: string): string {
+        let name: string;
+        if (property.match(/^DynamicFields?\..+/)) {
+            name = property.replace(/^DynamicFields?\.(.+)/, '$1');
+        }
+        return name;
     }
 
 }

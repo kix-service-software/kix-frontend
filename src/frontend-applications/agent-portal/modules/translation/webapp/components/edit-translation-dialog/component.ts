@@ -11,7 +11,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
-import { TranslationService } from '../../core';
+import { TranslationService } from '../../core/TranslationService';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -88,7 +88,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
         );
     }
 

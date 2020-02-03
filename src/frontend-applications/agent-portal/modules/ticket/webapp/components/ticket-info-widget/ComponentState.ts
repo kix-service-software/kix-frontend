@@ -23,8 +23,7 @@ export class ComponentState extends WidgetComponentState {
         public organisation = null,
         public contact = null,
         public prepared: boolean = false,
-        public properties: string[] = [],
-        public dynamicFieldLabels: {} = {}
+        public properties: string[] = []
     ) {
         super();
     }

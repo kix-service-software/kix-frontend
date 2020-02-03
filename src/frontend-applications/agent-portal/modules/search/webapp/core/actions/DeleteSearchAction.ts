@@ -8,8 +8,8 @@
  */
 
 import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SearchService } from "..";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { SearchService } from "../SearchService";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
 import { ConfirmOverlayContent } from "../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
 import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
@@ -42,7 +42,7 @@ export class DeleteSearchAction extends AbstractAction {
             );
 
             OverlayService.getInstance().openOverlay(
-                OverlayType.CONFIRM, null, content, 'Translatable#Delete Search', false
+                OverlayType.CONFIRM, null, content, 'Translatable#Delete Search', null, false
             );
         }
     }

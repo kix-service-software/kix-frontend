@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { CompareConfigItemVersionDialogContext } from "./webapp/core";
+import { CompareConfigItemVersionDialogContext } from "./webapp/core/context/CompareConfigItemVersionDialogContext";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";

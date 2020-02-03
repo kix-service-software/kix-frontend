@@ -41,6 +41,7 @@ export class FAQArticleVoteAction extends AbstractAction {
                 'faq-vote-action-overlay',
                 new ComponentContent('faq-vote-selector', { faqArticle }),
                 'Translatable#FAQ rating',
+                null,
                 false,
                 [
                     event.target.getBoundingClientRect().left,

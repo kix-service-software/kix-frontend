@@ -53,6 +53,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
                 null,
                 content,
                 'Translatable#Remove Priorities',
+                null,
                 false
             );
         }

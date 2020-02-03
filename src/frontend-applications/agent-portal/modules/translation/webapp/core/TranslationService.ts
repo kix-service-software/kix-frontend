@@ -17,7 +17,7 @@ import { TranslationPatternProperty } from "../../model/TranslationPatternProper
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { Translation } from "../../model/Translation";
 import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 

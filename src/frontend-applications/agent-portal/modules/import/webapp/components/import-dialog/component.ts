@@ -18,7 +18,7 @@ import { WidgetType } from "../../../../../model/configuration/WidgetType";
 import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
 import { ContextType } from "../../../../../model/ContextType";
 import { ImportService, ImportPropertyOperator } from "../../core";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
 import {
     TableEvent, TableFactoryService, TableEventData, ValueState
@@ -54,7 +54,7 @@ class Component {
     private state: ComponentState;
     private importConfigs: Map<string, ImportConfigValue[]> = new Map();
     private context: Context;
-    private objectType: KIXObjectType;
+    private objectType: KIXObjectType | string;
     private tableSubscriber: IEventSubscriber;
     private formListenerId: string;
     private csvObjects: any[];
@@ -443,7 +443,7 @@ class Component {
                             title: title + ':',
                             list: lineErrors.map((i) => `${rowLabel} ${i}.`)
                         }
-                    ), 'Translatable#Error!', true
+                    ), 'Translatable#Error!', null, true
                 );
             }
         } else {
@@ -489,7 +489,7 @@ class Component {
                         list: unknownProperties,
                         doNotTranslateList: true
                     }
-                ), 'Translatable#Error!', true
+                ), 'Translatable#Error!', null, true
             );
         }
         return ok;
@@ -541,7 +541,7 @@ class Component {
                         list: missingProperties,
                         doNotTranslateList: true
                     }
-                ), 'Translatable#Error!', true
+                ), 'Translatable#Error!', null, true
             );
         }
         return !!!missingProperties.length;

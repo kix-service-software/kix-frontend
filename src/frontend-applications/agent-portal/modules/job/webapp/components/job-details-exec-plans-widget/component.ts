@@ -19,7 +19,7 @@ import { ExecPlanTypes } from '../../../model/ExecPlanTypes';
 import { ExecPlan } from '../../../model/ExecPlan';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { TranslationService } from '../../../../translation/webapp/core';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

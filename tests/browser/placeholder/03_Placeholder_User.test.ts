@@ -20,7 +20,7 @@ import { UserProperty } from '../../../src/frontend-applications/agent-portal/mo
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
-import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { UserPreference } from '../../../src/frontend-applications/agent-portal/modules/user/model/UserPreference';

@@ -54,6 +54,7 @@ export class TicketTypeTableDeleteAction extends AbstractAction<ITable> {
                 null,
                 content,
                 'Translatable#Remove Types',
+                null,
                 false
             );
         }

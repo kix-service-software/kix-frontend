@@ -11,7 +11,7 @@ import { ObjectUpdatedEventData } from "../../../../model/ObjectUpdatedEventData
 import { ContextService } from "./ContextService";
 import { ContextType } from "../../../../model/ContextType";
 import { Context } from "vm";
-import { AgentSocketClient } from "../../../user/webapp/core";
+import { AgentSocketClient } from "../../../user/webapp/core/AgentSocketClient";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { BrowserUtil } from "./BrowserUtil";
 import { ContextMode } from "../../../../model/ContextMode";

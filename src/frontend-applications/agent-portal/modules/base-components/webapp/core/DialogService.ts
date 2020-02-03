@@ -16,7 +16,7 @@ import { ContextMode } from "../../../../model/ContextMode";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { ContextType } from "../../../../model/ContextType";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { BrowserCacheService } from "./CacheService";
 import { DisplayImageDescription } from "./DisplayImageDescription";
 import { ContextFactory } from "./ContextFactory";

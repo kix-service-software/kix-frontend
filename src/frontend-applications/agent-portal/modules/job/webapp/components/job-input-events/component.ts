@@ -9,7 +9,7 @@
 
 import { ComponentState } from "./ComponentState";
 import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { TreeNode } from "../../../../base-components/webapp/core/tree";
 import { JobService } from "../../core";
 import { JobProperty } from "../../../model/JobProperty";

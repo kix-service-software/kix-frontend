@@ -9,11 +9,9 @@
 
 export { DynamicFieldBrowserFactory } from './DynamicFieldBrowserFactory';
 export { DynamicFieldLabelProvider } from './DynamicFieldLabelProvider';
-export { DynamicFieldService } from './DynamicFieldService';
 export { DynamicFieldTableContentProvider } from './DynamicFieldTableContentProvider';
 export { DynamicFieldTableFactory } from './DynamicFieldTableFactory';
 export { DynamicFieldFormService } from './DynamicFieldFormService';
-export { DynamicFieldValuePlaceholderHandler } from './DynamcFieldValuePlaceholderHandler';
 export { DynamicFormFieldOption } from './DynamicFormFieldOption';
 export { DynamicFieldTextValidator } from './DynamicFieldTextValidator';
 

@@ -13,7 +13,7 @@ import { ToastContent } from './ToastContent';
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
-import { TranslationService } from '../../../translation/webapp/core';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export abstract class AbstractAction<T = any> implements IAction<T> {
 

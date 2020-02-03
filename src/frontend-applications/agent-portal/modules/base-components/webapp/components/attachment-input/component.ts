@@ -162,6 +162,7 @@ class Component extends FormInputComponent<any, ComponentState> {
                 null,
                 content,
                 'Translatable#Error!',
+                null,
                 true
             );
         }

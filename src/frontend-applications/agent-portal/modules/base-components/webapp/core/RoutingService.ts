@@ -10,7 +10,7 @@
 import { ComponentRouter } from "../../../../model/ComponentRouter";
 import { IRoutingServiceListener } from "./IRoutingServiceListener";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
 import { KIXModulesSocketClient } from "./KIXModulesSocketClient";
 import { ContextService } from "./ContextService";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";

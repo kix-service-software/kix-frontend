@@ -14,27 +14,35 @@ import { IdService } from '../../../../../model/IdService';
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 class Component {
 
     private state: ComponentState;
-    private listenerId: string = null;
+    private listenerId: string;
+    private isHintOverlay: boolean;
+    private content: StringContent<any> | ComponentContent<any>;
+    private instanceId: string;
+    private title: string;
+    private large: boolean;
+    private icon: string | ObjectIcon;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.isHintOverlay = input.isHint || false;
-        this.state.large = typeof input.large !== 'undefined' ? input.large : false;
-        if (this.state.isHintOverlay) {
-            this.state.content = new StringContent(input.content);
+        this.isHintOverlay = input.isHint || false;
+        this.large = typeof input.large !== 'undefined' ? input.large : false;
+        if (this.isHintOverlay) {
+            this.content = new StringContent(input.content);
         } else {
-            this.state.content = new ComponentContent(input.content, input.data);
+            this.content = new ComponentContent(input.content, input.data);
         }
 
-        this.state.instanceId = input.instanceId;
-        this.state.title = input.title;
+        this.instanceId = input.instanceId;
+        this.title = input.title;
+        this.icon = input.icon;
     }
 
     public onMount(): void {
@@ -49,24 +57,25 @@ class Component {
     public showOverlay(event: any) {
         if (!this.state.show) {
             OverlayService.getInstance().openOverlay(
-                this.state.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
-                this.state.instanceId,
-                this.state.content,
-                this.state.title,
+                this.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
+                this.instanceId,
+                this.content,
+                this.title,
+                this.icon,
                 false,
                 [
                     event.target.getBoundingClientRect().left + BrowserUtil.getBrowserFontsize(),
                     event.target.getBoundingClientRect().top
                 ],
                 this.listenerId,
-                this.state.large
+                this.large
             );
         }
     }
 
     public getOverlayClasses(): string {
         let classes = 'kix-icon-icircle';
-        if (this.state.isHintOverlay) {
+        if (this.isHintOverlay) {
             classes = 'kix-icon-question hint-icon';
         }
         return classes;

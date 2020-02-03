@@ -32,8 +32,11 @@ import {
 } from "../../../../modules/base-components/webapp/core/AdditionalContextInformation";
 import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
 import { FormContext } from "../../../../model/configuration/FormContext";
-import { OrganisationPlaceholderHandler, ContactPlaceholderHandler } from "../../../customer/webapp/core";
-import { DynamicFieldValuePlaceholderHandler } from "../../../dynamic-fields/webapp/core";
+import { OrganisationPlaceholderHandler } from "../../../customer/webapp/core/OrganisationPlaceholderHandler";
+import { ContactPlaceholderHandler } from "../../../customer/webapp/core/ContactPlaceholderHandler";
+import {
+    DynamicFieldValuePlaceholderHandler
+} from "../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler";
 
 export class TicketPlaceholderHandler implements IPlaceholderHandler {
 

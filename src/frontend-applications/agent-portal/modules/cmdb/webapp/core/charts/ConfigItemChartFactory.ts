@@ -19,7 +19,7 @@ import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { GeneralCatalogItem } from "../../../../general-catalog/model/GeneralCatalogItem";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 
 export class ConfigItemChartFactory {
 

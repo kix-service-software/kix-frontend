@@ -10,7 +10,7 @@
 import { IUIModule } from "../../../../model/IUIModule";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import {
-    TicketPlaceholderHandler, TicketService, TicketTypeService, TicketStateService,
+    TicketService, TicketTypeService, TicketStateService,
     TicketPriorityService, QueueService, TicketFormService, ArticleFormService, PendingTimeValidator,
     EmailRecipientValidator, TicketSearchDefinition, TicketHistoryLabelProvider, TicketTypeLabelProvider,
     TicketPriorityLabelProvider, TicketStateLabelProvider, TicketStateTypeLabelProvider, QueueLabelProvider,
@@ -20,6 +20,7 @@ import {
     FollowUpTypeBrowserFactory, ArticleZipAttachmentDownloadAction, TicketSearchAction, ShowUserTicketsAction,
     TicketWatchAction, TicketLockAction, TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext
 } from ".";
+import { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
 import { SearchService } from "../../../search/webapp/core";

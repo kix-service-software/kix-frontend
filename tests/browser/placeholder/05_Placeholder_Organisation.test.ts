@@ -20,7 +20,7 @@ import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/mo
 import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
-import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;

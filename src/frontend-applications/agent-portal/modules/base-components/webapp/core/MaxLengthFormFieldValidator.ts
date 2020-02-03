@@ -12,7 +12,7 @@ import { ValidationResult } from "./ValidationResult";
 import { FormService } from "./FormService";
 import { ValidationSeverity } from "./ValidationSeverity";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class MaxLengthFormFieldValidator implements IFormFieldValidator {

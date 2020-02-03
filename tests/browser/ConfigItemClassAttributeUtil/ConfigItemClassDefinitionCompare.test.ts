@@ -12,8 +12,8 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
-import { ConfigItemClassAttributeUtil } from '../../../src/frontend-applications/agent-portal/modules/cmdb/webapp/core';
-import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core';
+import { ConfigItemClassAttributeUtil } from '../../../src/frontend-applications/agent-portal/modules/cmdb/webapp/core/ConfigItemClassAttributeUtil';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 import { ConfigItemClass } from '../../../src/frontend-applications/agent-portal/modules/cmdb/model/ConfigItemClass';
 import { AttributeDefinition } from '../../../src/frontend-applications/agent-portal/modules/cmdb/model/AttributeDefinition';
 import { ConfigItemClassDefinition } from '../../../src/frontend-applications/agent-portal/modules/cmdb/model/ConfigItemClassDefinition';

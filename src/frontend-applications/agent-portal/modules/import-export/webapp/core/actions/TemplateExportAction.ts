@@ -72,7 +72,7 @@ export class TemplateExportAction extends AbstractAction {
                     'Translatable#An error occured during export execution. See system log for details.'
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
             });
 

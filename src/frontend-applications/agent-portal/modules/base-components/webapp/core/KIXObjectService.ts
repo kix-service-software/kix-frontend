@@ -73,7 +73,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                         }
                     );
                     OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, content, '', true
+                        OverlayType.WARNING, null, content, '', null, true
                     );
                 }
                 return [];
@@ -124,7 +124,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     }
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
                 return null;
             } else {
@@ -186,7 +186,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                         }
                     );
                     OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                        OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                     );
                     return null;
                 } else {
@@ -252,7 +252,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 }
             );
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
             );
         }
         return failIds;
