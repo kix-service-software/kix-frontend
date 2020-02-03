@@ -32,6 +32,9 @@ import { DynamicFieldType } from "../../model/DynamicFieldType";
 import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
 import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
 import { DynamicFieldDateTimeValidator } from "./DynamicFieldDateTimeValidator";
+import { ConfigItemClassService, CMDBService } from "../../../cmdb/webapp/core";
+import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
+import { ConfigItemClass } from "../../../cmdb/model/ConfigItemClass";
 
 export class UIModule implements IUIModule {
 
@@ -79,7 +82,7 @@ export class UIModule implements IUIModule {
         this.registerSchemas();
     }
 
-
+    // tslint:disable:max-line-length
     private registerSchemas(): void {
         this.registerSchemaForText();
         this.registerSchemaForTextArea();
@@ -87,9 +90,9 @@ export class UIModule implements IUIModule {
         this.registerSchemaForDateTime();
         this.registerSchemaForSelection();
         this.registerSchemaForCheckList();
+        DynamicFieldService.getInstance().registerConfigSchemaHandler(DynamicFieldType.CI_REFERENCE, this.getSchemaForCIReference.bind(this));
     }
 
-    // tslint:disable:max-line-length
     private registerSchemaForText(): void {
         const schema = {
             $schema: "http://json-schema.org/draft-03/schema#",
@@ -516,5 +519,81 @@ export class UIModule implements IUIModule {
         };
 
         DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.CHECK_LIST, schema);
+    }
+
+    private async getSchemaForCIReference(): Promise<any> {
+
+        const states = await CMDBService.getInstance().getDeploymentStates();
+        const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS
+        );
+
+        const schema = {
+            $schema: "http://json-schema.org/draft-03/schema#",
+            type: "object",
+            properties: {
+                CountMin: {
+                    title: "Count Min",
+                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
+                    type: "integer",
+                    required: true
+                },
+                CountMax: {
+                    title: "Count Max",
+                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
+                    type: "integer",
+                    required: true
+                },
+                CountDefault: {
+                    title: "Count Default",
+                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
+                    type: "integer",
+                    required: true
+                },
+                ItemSeparator: {
+                    title: "Item Separator",
+                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
+                    type: "string",
+                    required: false
+                },
+                DefaultValue: {
+                    title: "Default Value",
+                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
+                    type: "string",
+                    required: false
+                },
+                DeploymentStates: {
+                    type: "array",
+                    format: "select",
+                    uniqueItems: true,
+                    description: "This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.",
+                    items: {
+                        enumSource: [{
+                            source: states.map((s) => {
+                                return { value: s.ItemID, title: s.Name };
+                            }),
+                            title: "{{item.title}}",
+                            value: "{{item.value}}"
+                        }]
+                    }
+                },
+                ITSMConfigItemClasses: {
+                    type: "array",
+                    format: "select",
+                    uniqueItems: true,
+                    description: "This configuration defines which Asset Classes are subject to this selection. Please enter Classes.",
+                    items: {
+                        enumSource: [{
+                            source: classes.map((s) => {
+                                return { value: s.ID, title: s.Name };
+                            }),
+                            title: "{{item.title}}",
+                            value: "{{item.value}}"
+                        }]
+                    }
+                }
+            }
+        };
+        return schema;
     }
 }

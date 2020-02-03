@@ -92,7 +92,8 @@ export class Extension implements IConfigurationExtension {
                         new TreeNode(DynamicFieldType.SELECTION, 'Selection', 'kix-icon-menue'),
                         new TreeNode(DynamicFieldType.DATE, 'Date', 'kix-icon-calendar'),
                         new TreeNode(DynamicFieldType.DATE_TIME, 'Date Time', 'kix-icon-calendar'),
-                        new TreeNode(DynamicFieldType.CHECK_LIST, 'Checklist', 'kix-icon-checklist')
+                        new TreeNode(DynamicFieldType.CHECK_LIST, 'Checklist', 'kix-icon-checklist'),
+                        new TreeNode(DynamicFieldType.CI_REFERENCE, 'Asset Reference', 'kix-icon-ci')
                     ])
                 ]
             )

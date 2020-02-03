@@ -211,4 +211,24 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         }
     }
 
+    public static async searchConfigItems(searchValue: string, limit?: number) {
+        const filter = [
+            new FilterCriteria(
+                ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, searchValue
+            )
+        ];
+
+        const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit, [ConfigItemProperty.CURRENT_VERSION]);
+
+        const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+            KIXObjectType.CONFIG_ITEM, null, loadingOptions
+        );
+        return configItems;
+    }
+
 }

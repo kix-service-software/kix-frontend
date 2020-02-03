@@ -24,7 +24,8 @@ import { IDynamicFormManager } from "../../../base-components/webapp/core/dynami
 import { SearchOperator } from "../../model/SearchOperator";
 import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
-import { DynamicFieldService } from "../../../dynamic-fields/webapp/core/DynamicFieldService";
+import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 
 export abstract class SearchDefinition {
 
@@ -73,11 +74,11 @@ export abstract class SearchDefinition {
         });
 
         for (const c of filteredCriteria) {
-            const field = await DynamicFieldService.loadDynamicField(c.property);
+            const field = await KIXObjectService.loadDynamicField(c.property);
             if (field) {
-                if (field.FieldType === 'Date') {
+                if (field.FieldType === DynamicFieldType.DATE) {
                     c.type = FilterDataType.DATE;
-                } else if (field.FieldType === 'DateTime') {
+                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
                     c.type = FilterDataType.DATETIME;
                 }
             }
@@ -89,16 +90,19 @@ export abstract class SearchDefinition {
     public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         const operator = Array.isArray(value) ? SearchOperator.IN : SearchOperator.EQUALS;
 
-        const field = await DynamicFieldService.loadDynamicField(property);
-        if (field) {
-            if (field.FieldType === 'Date') {
-                return [new FilterCriteria(
-                    property, operator, FilterDataType.DATE, FilterType.AND, value
-                )];
-            } else if (field.FieldType === 'DateTime') {
-                return [new FilterCriteria(
-                    property, operator, FilterDataType.DATETIME, FilterType.AND, value
-                )];
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field) {
+                if (field.FieldType === DynamicFieldType.DATE) {
+                    return [new FilterCriteria(
+                        property, operator, FilterDataType.DATE, FilterType.AND, value
+                    )];
+                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                    return [new FilterCriteria(
+                        property, operator, FilterDataType.DATETIME, FilterType.AND, value
+                    )];
+                }
             }
         }
 

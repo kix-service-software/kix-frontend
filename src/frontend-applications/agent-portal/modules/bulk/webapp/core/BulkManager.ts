@@ -124,7 +124,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
             (v) => v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
         for (const dfValue of dynamicFieldValues) {
-            const dfName = DynamicFieldService.getDynamicFieldName(dfValue.property);
+            const dfName = KIXObjectService.getDynamicFieldName(dfValue.property);
             let value = dfObjectValues.find((v) => v.Name === dfName);
             if (!value) {
                 value = {
@@ -162,7 +162,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
-        const field = await DynamicFieldService.loadDynamicField(property);
+        const field = await KIXObjectService.loadDynamicField(property);
         if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.CountMax > 1) {
             isMultiSelect = true;
         }
@@ -171,7 +171,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
         let inputFieldType = InputFieldTypes.TEXT;
-        const field = await DynamicFieldService.loadDynamicField(property);
+        const field = await KIXObjectService.loadDynamicField(property);
         if (field) {
             if (field.FieldType === DynamicFieldType.TEXT_AREA) {
                 inputFieldType = InputFieldTypes.TEXT_AREA;
@@ -187,11 +187,11 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     }
 
     public async validate(): Promise<ValidationResult[]> {
-        const dfValues = this.values.filter((v) => DynamicFieldService.getDynamicFieldName(v.property));
+        const dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
         let validationResult: ValidationResult[] = [];
         for (const v of dfValues) {
             const result = await DynamicFieldFormUtil.validateDFValue(
-                DynamicFieldService.getDynamicFieldName(v.property), v.value
+                KIXObjectService.getDynamicFieldName(v.property), v.value
             );
             v.valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);
             validationResult = [...validationResult, ...result];

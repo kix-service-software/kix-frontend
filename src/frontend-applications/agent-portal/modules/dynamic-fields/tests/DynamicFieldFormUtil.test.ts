@@ -22,7 +22,8 @@ import { FormFieldOption } from '../../../model/configuration/FormFieldOption';
 import { ObjectReferenceOptions } from '../../base-components/webapp/core/ObjectReferenceOptions';
 import { DynamicFormFieldOption } from '../webapp/core/DynamicFormFieldOption';
 import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
-import { DynamicFieldService } from '../webapp/core/DynamicFieldService';
+import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
+import { DynamicFieldType } from '../model/DynamicFieldType';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -39,7 +40,7 @@ describe('DynamicFieldFormUtil', () => {
         };
 
         before(async () => {
-            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 df = new DynamicField();
                 df.FieldType = 'Text';
@@ -87,7 +88,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'Text') {
                     df = new DynamicField();
@@ -148,7 +149,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'TextArea') {
                     df = new DynamicField();
@@ -210,11 +211,11 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'Date') {
                     df = new DynamicField();
-                    df.FieldType = 'Date';
+                    df.FieldType = DynamicFieldType.DATE;
                     df.Name = 'Date';
                     df.Label = 'Date';
                     df.Config = dfConfig;
@@ -300,11 +301,11 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'DateTime') {
                     df = new DynamicField();
-                    df.FieldType = 'DateTime';
+                    df.FieldType = DynamicFieldType.DATE_TIME;
                     df.Name = 'DateTime';
                     df.Label = 'DateTime';
                     df.Config = dfConfig;
@@ -380,7 +381,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'Multiselect') {
                     df = new DynamicField();
@@ -466,7 +467,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+            KIXObjectService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'CheckList') {
                     df = new DynamicField();

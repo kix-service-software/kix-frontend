@@ -19,6 +19,8 @@ export enum DynamicFieldType {
 
     DATE_TIME = 'DateTime',
 
-    CHECK_LIST = 'CheckList'
+    CHECK_LIST = 'CheckList',
+
+    CI_REFERENCE = 'ITSMConfigItemReference'
 
 }

@@ -19,6 +19,8 @@ import { InputFieldTypes } from "../../../../modules/base-components/webapp/core
 import { TreeNode } from "../../../base-components/webapp/core/tree";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { SearchFormManager } from "../../../base-components/webapp/core/SearchFormManager";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { CMDBService } from "../../../cmdb/webapp/core";
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -138,10 +140,16 @@ export class TicketSearchFormManager extends SearchFormManager {
         } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
             inputType = InputFieldTypes.OBJECT_REFERENCE;
         } else {
-            inputType = super.getInputType(property);
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+                if (dynamicField.FieldType === DynamicFieldType.CI_REFERENCE) {
+                    inputType = InputFieldTypes.OBJECT_REFERENCE;
+                }
+            }
         }
 
-        return inputType;
+        return inputType || super.getInputType(property);
     }
 
     private isDropDown(property: string): boolean {
@@ -201,7 +209,7 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        let tree = [];
+        let tree: TreeNode[];
 
         switch (property) {
             case TicketProperty.CONTACT_ID:
@@ -213,6 +221,21 @@ export class TicketSearchFormManager extends SearchFormManager {
                 tree = await KIXObjectService.prepareTree(organisations);
                 break;
             default:
+        }
+
+        if (!tree && CMDBService) {
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+                if (dynamicField.FieldType === DynamicFieldType.CI_REFERENCE) {
+                    const configItems = await CMDBService.searchConfigItems(searchValue, limit);
+                    tree = configItems.map(
+                        (ci) => new TreeNode(
+                            ci.ConfigItemID, ci.Name, 'kix-icon-ci'
+                        )
+                    );
+                }
+            }
         }
 
         return tree;

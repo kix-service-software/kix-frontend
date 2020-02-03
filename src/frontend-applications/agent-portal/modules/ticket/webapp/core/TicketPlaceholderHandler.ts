@@ -188,7 +188,9 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
 
     private async getTicketValue(attribute: string, ticket?: Ticket, language?: string, optionsString?: string) {
         let result = '';
-        if (PlaceholderService.getInstance().isDynamicFieldAttribute(attribute)) {
+        if (
+            PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) && DynamicFieldValuePlaceholderHandler
+        ) {
             result = await DynamicFieldValuePlaceholderHandler.prototype.replaceDFValue(ticket, optionsString);
         } else if (this.isKnownProperty(attribute)) {
             const ticketLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);

@@ -9,21 +9,17 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { DynamicField } from '../../../model/DynamicField';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../../../../model/FilterCriteria';
-import { DynamicFieldProperty } from '../../../model/DynamicFieldProperty';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../../model/FilterDataType';
-import { FilterType } from '../../../../../model/FilterType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ILabelProvider } from '../../../../base-components/webapp/core/ILabelProvider';
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { DynamicFieldType } from '../../../model/DynamicFieldType';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
-import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
+import { RoutingService } from '../../../../base-components/webapp/core/RoutingService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -48,7 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async update(): Promise<void> {
         if (this.name && this.object) {
-            this.state.field = await this.loadDynamicField(this.name);
+            this.state.field = await KIXObjectService.loadDynamicField(this.name);
             this.createDynamicFieldInfos();
         }
     }
@@ -67,7 +63,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                         : dfValue;
                     if (Array.isArray(value[0]) && value[0].length > 1) {
                         this.state.labels = value[0].map(
-                            (v) => new Label(null, this.state.field.Name, null, v, null, v)
+                            (v, i) => new Label(null, value[2][i], null, v, null, v)
                         );
                     }
                 }
@@ -81,20 +77,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async loadDynamicField(name: string): Promise<DynamicField> {
-        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null,
-            new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.AND, name
-                    )
-                ], null, 1, [DynamicFieldProperty.CONFIG]
-            ), null, true
-        ).catch(() => [] as DynamicField[]);
+    public labelClicked(label: Label): void {
+        if (label && label.id && this.state.field.FieldType === DynamicFieldType.CI_REFERENCE) {
+            const routingConfig = new RoutingConfiguration(
+                'config-item-details', KIXObjectType.CONFIG_ITEM, ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
+            );
 
-        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+            RoutingService.getInstance().routeToContext(routingConfig, label.id);
+        }
     }
 
 }

@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ICell } from '../../../../base-components/webapp/core/table';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { DynamicFieldService } from '../../core/DynamicFieldService';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -24,7 +24,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (cell) {
             const kixObject: KIXObject = cell.getRow().getRowObject().getObject();
             const property = cell.getColumnConfiguration().property;
-            const dfName = DynamicFieldService.getDynamicFieldName(property);
+            const dfName = KIXObjectService.getDynamicFieldName(property);
             if (dfName && kixObject.DynamicFields && Array.isArray(kixObject.DynamicFields)) {
                 const dfValue = kixObject.DynamicFields.find((df) => df.Name === dfName);
                 if (dfValue && dfValue.Value && Array.isArray(dfValue.Value) && dfValue.Value.length) {

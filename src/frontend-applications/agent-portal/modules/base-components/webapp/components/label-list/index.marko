@@ -6,9 +6,12 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.label-list>
     <for|label| of=state.labels>
-        <label-item label=label removeLabels=state.removeLabels on-removeLabel("removeLabel", label)/>
+        <label-item
+            label=label
+            removeLabels=state.removeLabels
+            on-removeLabel("removeLabel", label)
+            on-labelClicked("labelClicked", label)/>
     </for>
 </div>
