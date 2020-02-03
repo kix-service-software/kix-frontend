@@ -14,7 +14,7 @@ import chaiAsPromised = require('chai-as-promised');
 import { KIXObject } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObject';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { DynamicFieldValue } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldValue';
-import { DynamicFieldValuePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/webapp/core';
+import { DynamicFieldValuePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { DynamicField } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicField';
 import { DynamicFieldProperty } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldProperty';

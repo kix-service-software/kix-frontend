@@ -12,7 +12,8 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
-import { TicketPlaceholderHandler, TicketLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TicketLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketLabelProvider';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { TicketProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/TicketProperty';
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';

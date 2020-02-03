@@ -8,7 +8,9 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { EditConfigItemClassDialogContext } from "./webapp/core";
+import {
+    EditConfigItemClassDialogContext
+} from "./webapp/core/admin/context/ci-class/EditConfigItemClassDialogContext";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";

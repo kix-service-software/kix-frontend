@@ -50,7 +50,7 @@ export class Component {
                 KIXObjectType.TICKET, textValue
             ).catch((error) => {
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, new StringContent(error), 'Translatable#Ticket search error!', true
+                    OverlayType.WARNING, null, new StringContent(error), 'Translatable#Ticket search error!', null, true
                 );
             });
 

@@ -21,6 +21,7 @@ import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
 import { LabelService } from "../LabelService";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
+import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -136,7 +137,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                         ) {
                             const value = propertyMap.get(property).get(o[property]);
                             values.push(value);
-                        } else if (!property.match(/^DynamicFields?\..+/)) {
+                        } else if (!DynamicFieldService.getDynamicFieldName(property)) {
                             const tableValue = await this.getTableValue(o, property, column);
                             values.push(tableValue);
                         }

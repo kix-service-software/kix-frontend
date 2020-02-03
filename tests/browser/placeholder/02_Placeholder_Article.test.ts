@@ -12,7 +12,9 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Article } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Article';
-import { ArticlePlaceholderHandler, ArticleLabelProvider, TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { ArticleLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/ArticleLabelProvider';
+import { ArticlePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/ArticlePlaceholderHandler';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { ArticleProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/ArticleProperty';
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';

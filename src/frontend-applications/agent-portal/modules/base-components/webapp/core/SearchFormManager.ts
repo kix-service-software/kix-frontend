@@ -18,9 +18,10 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { KIXObjectService } from "./KIXObjectService";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchDefinition } from "../../../search/webapp/core";
+import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
 import { InputFieldTypes } from "./InputFieldTypes";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldService } from "../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class SearchFormManager extends AbstractDynamicFormManager {
     public objectType: string;
@@ -62,7 +63,7 @@ export class SearchFormManager extends AbstractDynamicFormManager {
 
     public async getOperations(property: string): Promise<any[]> {
         let operations: SearchOperator[] = [];
-        const field = await this.loadDynamicField(property);
+        const field = await DynamicFieldService.loadDynamicField(property);
         if (field) {
             if (field.FieldType === DynamicFieldType.TEXT || field.FieldType === DynamicFieldType.TEXT_AREA) {
                 operations = SearchDefinition.getStringOperators();
@@ -77,7 +78,7 @@ export class SearchFormManager extends AbstractDynamicFormManager {
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
         let inputType = InputFieldTypes.TEXT;
-        const field = await this.loadDynamicField(property);
+        const field = await DynamicFieldService.loadDynamicField(property);
         if (field) {
             if (field.FieldType === DynamicFieldType.SELECTION) {
                 inputType = InputFieldTypes.DROPDOWN;

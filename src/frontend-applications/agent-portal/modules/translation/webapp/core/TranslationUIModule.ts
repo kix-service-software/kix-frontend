@@ -12,7 +12,7 @@ import { IUIModule } from "../../../../model/IUIModule";
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import {
     TranslationPatternLabelProvider, TranslationLanguageLabelProvider, TranslationBrowserFactory,
-    TranslationPatternBrowserFactory, TranslationService
+    TranslationPatternBrowserFactory
 } from ".";
 import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
@@ -27,6 +27,7 @@ import { TranslationCreateAction, TranslationEditAction } from "./admin/actions"
 import { NewTranslationDialogContext, EditTranslationDialogContext, TranslationDetailsContext } from "./admin/context";
 import { TranslationFormService } from "./admin/TranslationFormService";
 import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from "./admin/table";
+import { TranslationService } from "./TranslationService";
 
 export class UIModule implements IUIModule {
 

@@ -1,5 +1,6 @@
 {
     "taglibImports": [
-        "../../base-components/marko.json"
+        "../../base-components/marko.json",
+        "../../dynamic-fields/webapp/marko.json"
     ]
 }

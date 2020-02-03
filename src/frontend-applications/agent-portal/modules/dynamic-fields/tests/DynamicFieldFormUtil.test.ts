@@ -10,7 +10,6 @@
 // tslint:disable
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
 import { DynamicField } from '../model/DynamicField';
 import { FormConfiguration } from '../../../model/configuration/FormConfiguration';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
@@ -20,8 +19,10 @@ import { FormGroupConfiguration } from '../../../model/configuration/FormGroupCo
 import { FormFieldConfiguration } from '../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { FormFieldOption } from '../../../model/configuration/FormFieldOption';
-import { DynamicFormFieldOption } from '../webapp/core';
 import { ObjectReferenceOptions } from '../../base-components/webapp/core/ObjectReferenceOptions';
+import { DynamicFormFieldOption } from '../webapp/core/DynamicFormFieldOption';
+import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
+import { DynamicFieldService } from '../webapp/core/DynamicFieldService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -38,7 +39,7 @@ describe('DynamicFieldFormUtil', () => {
         };
 
         before(async () => {
-            (DynamicFieldFormUtil as any).loadDynamicField = async (name: string): Promise<DynamicField> => {
+            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 df = new DynamicField();
                 df.FieldType = 'Text';
@@ -86,7 +87,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            (DynamicFieldFormUtil as any).loadDynamicField = async (name: string): Promise<DynamicField> => {
+            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'Text') {
                     df = new DynamicField();
@@ -147,7 +148,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            (DynamicFieldFormUtil as any).loadDynamicField = async (name: string): Promise<DynamicField> => {
+            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'TextArea') {
                     df = new DynamicField();
@@ -209,7 +210,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            (DynamicFieldFormUtil as any).loadDynamicField = async (name: string): Promise<DynamicField> => {
+            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'Date') {
                     df = new DynamicField();
@@ -299,7 +300,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            (DynamicFieldFormUtil as any).loadDynamicField = async (name: string): Promise<DynamicField> => {
+            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'DateTime') {
                     df = new DynamicField();
@@ -379,7 +380,7 @@ describe('DynamicFieldFormUtil', () => {
         );
 
         before(async () => {
-            (DynamicFieldFormUtil as any).loadDynamicField = async (name: string): Promise<DynamicField> => {
+            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
                 let df: DynamicField;
                 if (name === 'Multiselect') {
                     df = new DynamicField();
@@ -449,6 +450,47 @@ describe('DynamicFieldFormUtil', () => {
             const option = form.pages[0].groups[0].formFields[0].options.find((o) => o.option === ObjectReferenceOptions.MULTISELECT);
             expect(option).exist;
             expect(option.value).true;
+        });
+
+    });
+
+    describe('Add dynamic field of type Checklist to form', () => {
+
+        let form: FormConfiguration;
+        const dfConfig = {};
+        const field = new FormFieldConfiguration(
+            'test-field', null, KIXObjectProperty.DYNAMIC_FIELDS, null, true, null,
+            [
+                new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'CheckList')
+            ]
+        );
+
+        before(async () => {
+            DynamicFieldService.loadDynamicField = async (name: string): Promise<DynamicField> => {
+                let df: DynamicField;
+                if (name === 'CheckList') {
+                    df = new DynamicField();
+                    df.FieldType = 'CheckList';
+                    df.Name = 'CheckList';
+                    df.Label = 'CheckList';
+                    df.Config = dfConfig;
+                    df.ValidID = 1;
+                }
+                return df;
+            };
+
+            form = createForm([field]);
+            await DynamicFieldFormUtil.configureDynamicFields(form);
+        });
+
+        it('the form should contain the field', () => {
+            expect(form.pages[0].groups[0].formFields).exist;
+            expect(form.pages[0].groups[0].formFields.length).equals(1);
+            expect(form.pages[0].groups[0].formFields[0].id).equals('test-field');
+        });
+
+        it('the input component should be dynamic-field-checklist-input', () => {
+            expect(form.pages[0].groups[0].formFields[0].inputComponent).equals('dynamic-field-checklist-input');
         });
 
     });

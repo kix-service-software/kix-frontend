@@ -27,7 +27,7 @@ import { ContextService } from "../../../base-components/webapp/core/ContextServ
 import { DynamicFieldFormService } from "./DynamicFieldFormService";
 import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
 import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
-import { DynamicFieldValuePlaceholderHandler } from "./DynamcFieldValuePlaceholderHandler";
+import { DynamicFieldValuePlaceholderHandler } from "./DynamicFieldValuePlaceholderHandler";
 import { DynamicFieldType } from "../../model/DynamicFieldType";
 import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
 import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";

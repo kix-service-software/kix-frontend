@@ -10,7 +10,7 @@
 import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
 import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
 import { Job } from "../../../model/Job";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
 import { ConfirmOverlayContent } from "../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
 import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
@@ -45,7 +45,9 @@ export class JobExecuteAction extends AbstractAction {
                     new ConfirmOverlayContent(question, this.executeJob.bind(this))
                 );
 
-                OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, 'Translatable#Run', false);
+                OverlayService.getInstance().openOverlay(
+                    OverlayType.CONFIRM, null, content, 'Translatable#Run', null, false
+                );
             }
         }
     }
@@ -76,7 +78,7 @@ export class JobExecuteAction extends AbstractAction {
                         );
 
                         OverlayService.getInstance().openOverlay(
-                            OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                            OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                         );
                     });
 

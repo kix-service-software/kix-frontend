@@ -11,7 +11,7 @@ import { FormInputComponent } from "../../../../../modules/base-components/webap
 import { ComponentState } from "./ComponentState";
 import { TreeNode, TreeService } from "../../../../base-components/webapp/core/tree";
 import { IdService } from "../../../../../model/IdService";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
 import { ServiceRegistry } from "../../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { JobFormService, JobService } from "../../core";

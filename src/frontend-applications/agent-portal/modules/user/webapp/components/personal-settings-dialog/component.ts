@@ -138,7 +138,7 @@ class Component {
 
         const toastTitle = await TranslationService.translate('Translatable#Validation error');
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, toastTitle, true
+            OverlayType.WARNING, null, content, toastTitle, null, true
         );
     }
 }

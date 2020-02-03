@@ -13,7 +13,7 @@ import { ValidationSeverity } from "./ValidationSeverity";
 import { FormService } from "./FormService";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class JSONFormFieldValidator implements IFormFieldValidator {

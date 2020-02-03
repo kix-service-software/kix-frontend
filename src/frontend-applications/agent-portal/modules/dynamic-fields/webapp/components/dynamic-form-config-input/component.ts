@@ -16,7 +16,7 @@ import { IdService } from "../../../../../model/IdService";
 import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
 import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
 import { DynamicFieldProperty } from "../../../model/DynamicFieldProperty";
-import { DynamicFieldService } from "../../core";
+import { DynamicFieldService } from "../../core/DynamicFieldService";
 import { FormContext } from "../../../../../model/configuration/FormContext";
 
 declare var JSONEditor: any;

@@ -11,7 +11,7 @@ import { LabelProvider } from "../../../../modules/base-components/webapp/core/L
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { Job } from "../../model/Job";
 import { JobProperty } from "../../model/JobProperty";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { Macro } from "../../model/Macro";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";

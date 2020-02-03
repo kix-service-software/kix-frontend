@@ -99,13 +99,13 @@ class Component {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
         );
     }
 
     public showError(error: any): void {
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', null, true
         );
     }
 

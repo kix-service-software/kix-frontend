@@ -34,6 +34,7 @@ import { FilterCriteria } from "../../../../../model/FilterCriteria";
 import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
 import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
+import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class Table implements ITable {
 
@@ -144,11 +145,9 @@ export class Table implements ITable {
         let column;
 
         let canCreate: boolean = false;
-        if (columnConfiguration && columnConfiguration.property.match(/^DynamicFields?\..+/)) {
-            const dfName = columnConfiguration.property.replace(/^DynamicFields?\.(.+)/, '$1');
-            if (dfName) {
-                canCreate = await this.checkDF(dfName);
-            }
+        const dfName = DynamicFieldService.getDynamicFieldName(columnConfiguration.property);
+        if (columnConfiguration && dfName) {
+            canCreate = await this.checkDF(dfName);
         } else {
             canCreate = true;
         }

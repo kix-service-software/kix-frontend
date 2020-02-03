@@ -28,7 +28,7 @@ import { KIXObjectService } from "../../../../modules/base-components/webapp/cor
 import { MacroActionType } from "../../model/MacroActionType";
 import { MacroActionTypeOption } from "../../model/MacroActionTypeOption";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { TicketProperty } from "../../../ticket/model/TicketProperty";
 

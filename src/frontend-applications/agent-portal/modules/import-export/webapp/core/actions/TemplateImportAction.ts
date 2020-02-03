@@ -109,7 +109,7 @@ export class TemplateImportAction extends AbstractAction {
                 'Translatable#An error occured during import start execution. See system log for details.'
             );
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
             );
         });
 
@@ -124,7 +124,7 @@ export class TemplateImportAction extends AbstractAction {
             null,
             new StringContent(errorMessages[0]),
             'Translatable#Error!',
-            true
+            null, true
         );
     }
 }

@@ -54,6 +54,7 @@ export class TicketStateTableDeleteAction extends AbstractAction<ITable> {
                 null,
                 content,
                 'Translatable#Remove States',
+                null,
                 false
             );
         }

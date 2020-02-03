@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { ConfigItemDetailsContext } from "./webapp/core";
+import { ConfigItemDetailsContext } from "./webapp/core/context/ConfigItemDetailsContext";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";

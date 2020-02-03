@@ -60,6 +60,7 @@ export class TranslationTableDeleteAction extends AbstractAction<ITable> {
                 null,
                 content,
                 'Translatable#Remove translations',
+                null,
                 false
             );
         }

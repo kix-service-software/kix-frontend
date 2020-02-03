@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { TranslationPatternLabelProvider, TranslationService } from '../../core';
+import { TranslationPatternLabelProvider } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TranslationDetailsContext } from '../../core/admin/context';
 import { TranslationPattern } from '../../../model/TranslationPattern';
@@ -24,6 +24,7 @@ import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyF
 import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
 import { TranslationLanguageProperty } from '../../../model/TranslationLanguageProperty';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { TranslationService } from '../../core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

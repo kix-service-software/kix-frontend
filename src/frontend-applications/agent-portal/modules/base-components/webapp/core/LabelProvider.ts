@@ -10,7 +10,7 @@
 import { ILabelProvider } from "./ILabelProvider";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { KIXObjectService } from "./KIXObjectService";
 import { ValidObject } from "../../../valid/model/ValidObject";
 import { User } from "../../../user/model/User";
@@ -25,6 +25,7 @@ import { FilterType } from "../../../../model/FilterType";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -272,6 +273,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     case DynamicFieldType.SELECTION:
                         values = await this.getDFSelectionFieldValues(dynamicField, fieldValue);
                         break;
+                    case DynamicFieldType.CHECK_LIST:
+                        values = this.getDFChecklistFieldValues(dynamicField, fieldValue);
+                        break;
                     default:
                         values = Array.isArray(fieldValue.Value) ? fieldValue.Value : [fieldValue.Value];
                 }
@@ -330,21 +334,36 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     private async getDFSelectionFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
         let values;
 
-        if (field.Config && field.Config.PossibleValues) {
+        if (Array.isArray(fieldValue.Value)) {
             const valuesPromises = [];
-            const translate = Boolean(field.Config.TranslatableValues);
             for (const v of fieldValue.Value) {
-                if (field.Config.PossibleValues[v]) {
-                    if (translate) {
-                        valuesPromises.push(TranslationService.translate(field.Config.PossibleValues[v]));
-                    } else {
-                        valuesPromises.push(field.Config.PossibleValues[v]);
-                    }
+                if (field.FieldType === DynamicFieldType.DATE) {
+                    valuesPromises.push(DateTimeUtil.getLocalDateString(v));
+                } else {
+                    valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
                 }
             }
             values = await Promise.all<string>(valuesPromises);
+        } else {
+            let v: string;
+            if (field.FieldType === DynamicFieldType.DATE) {
+                v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue);
+            } else {
+                v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue);
+            }
+            values = [v];
         }
 
+        return values;
+    }
+
+    private getDFChecklistFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): string[] {
+        const values = [];
+        for (const v of fieldValue.Value) {
+            const checklist = JSON.parse(v);
+            const counts = DynamicFieldFormUtil.countValues(checklist);
+            values.push(`${counts[0]}/${counts[1]}`);
+        }
         return values;
     }
 

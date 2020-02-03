@@ -7,30 +7,23 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { IdService } from "../../../../../model/IdService";
-import { TicketLabelProvider, TicketDetailsContext, TicketService } from "../../core";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { Ticket } from "../../../model/Ticket";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SysConfigUtil } from "../../../../../modules/base-components/webapp/core/SysConfigUtil";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
-import { Context } from "vm";
+import { ComponentState } from './ComponentState';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { IdService } from '../../../../../model/IdService';
+import { TicketLabelProvider, TicketDetailsContext, TicketService } from '../../core';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { Ticket } from '../../../model/Ticket';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SysConfigUtil } from '../../../../../modules/base-components/webapp/core/SysConfigUtil';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { Context } from 'vm';
 import {
     ObjectInformationWidgetConfiguration
-} from "../../../../../model/configuration/ObjectInformationWidgetConfiguration";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { Label } from "../../../../base-components/webapp/core/Label";
+} from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { DynamicFieldService } from '../../../../dynamic-fields/webapp/core/DynamicFieldService';
 
 class Component {
 
@@ -171,42 +164,22 @@ class Component {
     private async prepareDynamicFields(properties: string[]): Promise<string[]> {
         const validProperties = [];
         for (const p of properties) {
-            if (p.match(/^DynamicFields?\..+/)) {
-                const dfName = p.replace(/^DynamicFields?\.(.+)/, '$1');
-                if (dfName) {
-                    const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                        KIXObjectType.DYNAMIC_FIELD, null,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                                    FilterType.AND, dfName
-                                )
-                            ], null, 1, [DynamicFieldProperty.CONFIG]
-                        ), null, true
-                    ).catch(() => [] as DynamicField[]);
-                    if (dynamicFields.length && dynamicFields[0] && dynamicFields[0].ValidID === 1) {
-                        validProperties.push(p);
-                    }
-                    const dfValue = this.state.ticket.DynamicFields ?
-                        this.state.ticket.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
-                    if (dfValue) {
-                        const value = await this.state.labelProvider.getDFDisplayValues(dfValue);
-                        if (Array.isArray(value[0]) && value[0].length > 1) {
-                            this.state.dynamicFieldLabels[p] = {
-                                Name: dfValue.Label,
-                                Labels: value[0].map(
-                                    (v) => new Label(null, p, null, v, null, v)
-                                )
-                            };
-                        }
-                    }
+            const dfName = DynamicFieldService.getDynamicFieldName(p);
+            if (dfName) {
+                const dynamicField = await DynamicFieldService.loadDynamicField(dfName);
+
+                if (dynamicField && dynamicField.ValidID === 1) {
+                    validProperties.push(p);
                 }
             } else {
                 validProperties.push(p);
             }
         }
         return validProperties;
+    }
+
+    public getDynamicFieldName(property: string): string {
+        return DynamicFieldService.getDynamicFieldName(property);
     }
 
 }

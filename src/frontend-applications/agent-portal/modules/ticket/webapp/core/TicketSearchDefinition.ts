@@ -7,7 +7,8 @@
  * --
  */
 
-import { SearchDefinition, SearchResultCategory } from "../../../search/webapp/core";
+import { SearchResultCategory } from "../../../search/webapp/core/SearchResultCategory";
+import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { TicketSearchFormManager } from "./TicketSearchFormManager";
 import { FilterCriteria } from "../../../../model/FilterCriteria";

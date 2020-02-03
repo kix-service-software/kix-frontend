@@ -12,7 +12,7 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { Context } from "vm";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { DialogService } from "./DialogService";
 import { ContextService } from "./ContextService";
 import { ContextMode } from "../../../../model/ContextMode";
@@ -160,7 +160,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
         );
     }
 

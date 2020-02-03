@@ -24,10 +24,7 @@ import { IDynamicFormManager } from "../../../base-components/webapp/core/dynami
 import { SearchOperator } from "../../model/SearchOperator";
 import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { DynamicFieldService } from "../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export abstract class SearchDefinition {
 
@@ -76,7 +73,7 @@ export abstract class SearchDefinition {
         });
 
         for (const c of filteredCriteria) {
-            const field = await this.loadDynamicField(c.property);
+            const field = await DynamicFieldService.loadDynamicField(c.property);
             if (field) {
                 if (field.FieldType === 'Date') {
                     c.type = FilterDataType.DATE;
@@ -92,7 +89,7 @@ export abstract class SearchDefinition {
     public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         const operator = Array.isArray(value) ? SearchOperator.IN : SearchOperator.EQUALS;
 
-        const field = await this.loadDynamicField(property);
+        const field = await DynamicFieldService.loadDynamicField(property);
         if (field) {
             if (field.FieldType === 'Date') {
                 return [new FilterCriteria(
@@ -166,33 +163,4 @@ export abstract class SearchDefinition {
         return new FilterCriteria(property, operator as SearchOperator, filterDataType, FilterType.AND, value);
     }
 
-    protected async loadDynamicField(property: string): Promise<DynamicField> {
-        let dynamicField: DynamicField;
-        const name = this.getDynamicFieldName(property);
-        if (name) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, name
-                    )
-                ], null, null, [DynamicFieldProperty.CONFIG]
-            );
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
-
-            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
-        }
-        return dynamicField;
-    }
-
-    protected getDynamicFieldName(property: string): string {
-        let dfName: string;
-        const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
-        if (property.match(dFRegEx)) {
-            dfName = property.replace(dFRegEx, '$1');
-        }
-        return dfName;
-    }
 }

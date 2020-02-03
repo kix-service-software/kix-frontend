@@ -11,5 +11,4 @@ export { TranslationPatternLabelProvider } from './TranslationPatternLabelProvid
 export { TranslationPatternBrowserFactory } from './TranslationPatternBrowserFactory';
 export { TranslationLanguageLabelProvider } from './TranslationLanguageLabelProvider';
 export { TranslationBrowserFactory } from './TranslationBrowserFactory';
-export { TranslationService } from './TranslationService';
 export { UIModule as TranslationUIModule } from './TranslationUIModule';

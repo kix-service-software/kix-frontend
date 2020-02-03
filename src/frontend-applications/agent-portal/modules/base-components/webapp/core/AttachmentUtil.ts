@@ -12,7 +12,7 @@ import { KIXObjectService } from "./KIXObjectService";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 
 export class AttachmentUtil {

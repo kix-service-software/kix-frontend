@@ -12,8 +12,7 @@ import { FormService } from "./FormService";
 import { ValidationResult } from "./ValidationResult";
 import { ValidationSeverity } from "./ValidationSeverity";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { TranslationService } from "../../../translation/webapp/core";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class RegExFormFieldValidator implements IFormFieldValidator {

@@ -19,7 +19,7 @@ import {
 } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { IUIModule } from '../../../../../model/IUIModule';
-import { TranslationService } from '../../../../translation/webapp/core';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ClientNotificationSocketClient } from '../../../../notification/webapp/core/ClientNotificationSocketClient';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';

@@ -8,7 +8,8 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { CMDBContext, ConfigItemChartWidgetConfiguration } from "./webapp/core";
+import { CMDBContext } from "./webapp/core/context/CMDBContext";
+import { ConfigItemChartWidgetConfiguration } from "./webapp/core/charts/ConfigItemChartWidgetConfiguration";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";
