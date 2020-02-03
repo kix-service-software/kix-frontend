@@ -137,7 +137,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                         ) {
                             const value = propertyMap.get(property).get(o[property]);
                             values.push(value);
-                        } else if (!DynamicFieldService.getDynamicFieldName(property)) {
+                        } else if (!KIXObjectService.getDynamicFieldName(property)) {
                             const tableValue = await this.getTableValue(o, property, column);
                             values.push(tableValue);
                         }
@@ -181,7 +181,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     protected async addSpecificValues(values: TableValue[], object: any): Promise<void> {
         if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
             for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
-                let dfValue: [string[], string];
+                let dfValue: [string[], string, string[]];
 
                 const labelProvider = LabelService.getInstance().getLabelProvider(object);
                 if (labelProvider) {

@@ -15,6 +15,8 @@ export class DynamicFieldValue {
     public Value: string[];
     public PreparedValue: string[];
     public DisplayValue: string;
+    public DisplayValueHTML: string;
+    public DisplayValueShort: string;
 
     public constructor(value: DynamicFieldValue) {
         if (value) {
@@ -24,6 +26,8 @@ export class DynamicFieldValue {
             this.Value = value.Value;
             this.PreparedValue = value.PreparedValue;
             this.DisplayValue = value.DisplayValue;
+            this.DisplayValueHTML = value.DisplayValueHTML;
+            this.DisplayValueShort = value.DisplayValueShort;
         }
     }
 

@@ -22,7 +22,7 @@ class LabelListComponent {
     public onInput(input: ComponentState): void {
         this.state.removeLabels = typeof input.removeLabels !== 'undefined' ? input.removeLabels : true;
         if (input.labels) {
-            this.state.labels = input.labels.sort(
+            input.labels.sort(
                 (a, b) => {
                     if (a.object && b.object) {
                         return SortUtil.compareString(a.object.KIXObjectType, b.object.KIXObjectType);
@@ -30,11 +30,17 @@ class LabelListComponent {
                     return 0;
                 }
             );
+
+            this.state.labels = input.labels;
         }
     }
 
     public removeLabel(label: Label): void {
         (this as any).emit('removeLabel', label);
+    }
+
+    public labelClicked(label: Label): void {
+        (this as any).emit('labelClicked', label);
     }
 }
 

@@ -22,6 +22,7 @@ import { FilterType } from "../../../../model/FilterType";
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
     private schema: Map<string, any> = new Map();
+    private schemaHandler: Map<string, () => Promise<void>> = new Map();
 
     private static INSTANCE: DynamicFieldService = null;
 
@@ -57,8 +58,19 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         this.schema.set(id, schema);
     }
 
-    public getConfigSchema(id: string): any {
-        return this.schema.get(id);
+    public registerConfigSchemaHandler(id: string, handler: () => Promise<any>): void {
+        this.schemaHandler.set(id, handler);
+    }
+
+    public async getConfigSchema(id: string): Promise<any> {
+        let schema = this.schema.get(id);
+        if (!schema) {
+            const handler = this.schemaHandler.get(id);
+            if (handler) {
+                schema = await handler();
+            }
+        }
+        return schema;
     }
 
     public static async loadDynamicField(name: string): Promise<DynamicField> {

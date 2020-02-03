@@ -48,8 +48,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
     protected objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
-    protected enableSearchQuery: boolean = false;
-
     private static INSTANCE: CMDBAPIService;
 
     public static getInstance(): CMDBAPIService {
@@ -306,5 +304,9 @@ export class CMDBAPIService extends KIXObjectAPIService {
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
         throw new Error('', "Method not implemented.");
+    }
+
+    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return [];
     }
 }

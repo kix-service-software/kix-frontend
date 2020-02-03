@@ -145,7 +145,7 @@ export class Table implements ITable {
         let column;
 
         let canCreate: boolean = false;
-        const dfName = DynamicFieldService.getDynamicFieldName(columnConfiguration.property);
+        const dfName = KIXObjectService.getDynamicFieldName(columnConfiguration.property);
         if (columnConfiguration && dfName) {
             canCreate = await this.checkDF(dfName);
         } else {

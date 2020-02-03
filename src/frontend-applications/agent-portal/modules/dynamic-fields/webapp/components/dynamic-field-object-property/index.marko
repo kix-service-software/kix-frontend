@@ -29,7 +29,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <dynamic-field-checklist-progress checklist=state.checklist/>
                 </if>
                 <else>
-                    <label-list labels=state.labels removeLabels=false/>
+                    <label-list labels=state.labels removeLabels=false on-labelClicked("labelClicked")/>
                 </else>
             </@value>
         </object-property-label>

@@ -23,7 +23,6 @@ import {
     ObjectInformationWidgetConfiguration
 } from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { DynamicFieldService } from '../../../../dynamic-fields/webapp/core/DynamicFieldService';
 
 class Component {
 
@@ -164,9 +163,9 @@ class Component {
     private async prepareDynamicFields(properties: string[]): Promise<string[]> {
         const validProperties = [];
         for (const p of properties) {
-            const dfName = DynamicFieldService.getDynamicFieldName(p);
+            const dfName = KIXObjectService.getDynamicFieldName(p);
             if (dfName) {
-                const dynamicField = await DynamicFieldService.loadDynamicField(dfName);
+                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
 
                 if (dynamicField && dynamicField.ValidID === 1) {
                     validProperties.push(p);
@@ -179,7 +178,7 @@ class Component {
     }
 
     public getDynamicFieldName(property: string): string {
-        return DynamicFieldService.getDynamicFieldName(property);
+        return KIXObjectService.getDynamicFieldName(property);
     }
 
 }

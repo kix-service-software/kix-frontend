@@ -95,7 +95,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.NUMBER:
                 const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK], null, null, true
                 ).catch((error): SysConfigOption[] => []);
                 displayValue = hookConfig && hookConfig.length ? hookConfig[0].Value : 'CI#';
                 break;

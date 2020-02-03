@@ -24,6 +24,7 @@ import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
+import { DynamicFieldType } from "../../model/DynamicFieldType";
 
 export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
 
@@ -63,13 +64,16 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
 
         const dynamicField = fields && fields.length ? fields[0] : null;
 
-        return dynamicField && (dynamicField.FieldType === 'Date' || dynamicField.FieldType === 'DateTime')
+        return dynamicField &&
+            (dynamicField.FieldType === DynamicFieldType.DATE ||
+                dynamicField.FieldType === DynamicFieldType.DATE_TIME)
             ? dynamicField
             : null;
     }
 
     public isValidatorForDF(dynamicField: DynamicField): boolean {
-        return dynamicField.FieldType === 'Date' || dynamicField.FieldType === 'DateTime';
+        return dynamicField.FieldType === DynamicFieldType.DATE ||
+            dynamicField.FieldType === DynamicFieldType.DATE_TIME;
     }
 
     public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
@@ -86,7 +90,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
                 const restricition = dynamicField.Config.DateRestriction;
                 const currentTime = new Date();
 
-                if (dynamicField.FieldType === 'Date') {
+                if (dynamicField.FieldType === DynamicFieldType.DATE) {
                     currentTime.setHours(0, 0, 0, 0);
                 }
 

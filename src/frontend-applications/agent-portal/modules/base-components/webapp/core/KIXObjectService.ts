@@ -39,6 +39,7 @@ import { Error } from "../../../../../../server/model/Error";
 import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { ConfigItem } from "../../../cmdb/model/ConfigItem";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -287,27 +288,37 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
                 break;
             default:
-                const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
-                if (property.match(dFRegEx)) {
-                    const dfName = property.replace(dFRegEx, '$1');
-                    if (dfName) {
-                        nodes = await this.getNodesForDF(dfName);
-                    }
+                const dfName = KIXObjectService.getDynamicFieldName(property);
+                if (dfName) {
+                    nodes = await this.getNodesForDF(dfName, filterIds);
                 }
         }
         return nodes;
     }
 
-    private async getNodesForDF(name: string): Promise<TreeNode[]> {
-        const nodes: TreeNode[] = [];
-        const field = await this.loadDynamicField(name);
-        if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.PossibleValues) {
-            for (const pv in field.Config.PossibleValues) {
-                if (field.Config.PossibleValues[pv]) {
-                    const value = field.Config.PossibleValues[pv];
-                    const node = new TreeNode(pv, value);
-                    nodes.push(node);
+    private async getNodesForDF(name: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+        const field = await KIXObjectService.loadDynamicField(name);
+        if (field) {
+            if (field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.PossibleValues) {
+                for (const pv in field.Config.PossibleValues) {
+                    if (field.Config.PossibleValues[pv]) {
+                        const value = field.Config.PossibleValues[pv];
+                        const node = new TreeNode(pv, value);
+                        nodes.push(node);
+                    }
                 }
+            } else if (field.FieldType === DynamicFieldType.CI_REFERENCE && objectIds) {
+                const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                    KIXObjectType.CONFIG_ITEM, objectIds
+                );
+
+                nodes = configItems.map(
+                    (ci) => new TreeNode(
+                        ci.ConfigItemID, ci.Name, 'kix-icon-ci'
+                    )
+                );
+
             }
         }
         return nodes;
@@ -427,20 +438,31 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
 
-    private async loadDynamicField(name: string): Promise<DynamicField> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
+    public static async loadDynamicField(name: string, id?: number): Promise<DynamicField> {
+        let dynamicFields: DynamicField[];
+        if (name || id) {
+            const filter = id ? null : [
                 new FilterCriteria(
-                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, name
+                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, name
                 )
-            ], null, null, [DynamicFieldProperty.CONFIG]
-        );
-        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
-        );
-
+            ];
+            dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
+                new KIXObjectLoadingOptions(
+                    filter, null, null, [DynamicFieldProperty.CONFIG]
+                ), null, true
+            ).catch(() => [] as DynamicField[]);
+        }
         return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+    }
+
+    public static getDynamicFieldName(property: string): string {
+        let name: string;
+        if (property.match(/^DynamicFields?\..+/)) {
+            name = property.replace(/^DynamicFields?\.(.+)/, '$1');
+        }
+        return name;
     }
 
 }

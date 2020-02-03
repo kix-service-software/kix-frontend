@@ -26,6 +26,9 @@ import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
+import { ConfigItem } from "../../../cmdb/model/ConfigItem";
+import { LabelService } from "./LabelService";
+import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -252,14 +255,14 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return true;
     }
 
-    public async getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string]> {
+    public async getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string, string[]]> {
         let values = [];
         let separator = '';
 
         if (fieldValue) {
-            const dynamicField = await this.loadDynamicField(
-                fieldValue.ID ? Number(fieldValue.ID) : null,
-                fieldValue.Name ? fieldValue.Name : null
+            const dynamicField = await KIXObjectService.loadDynamicField(
+                fieldValue.Name ? fieldValue.Name : null,
+                fieldValue.ID ? Number(fieldValue.ID) : null
             );
 
             if (dynamicField) {
@@ -273,6 +276,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     case DynamicFieldType.SELECTION:
                         values = await this.getDFSelectionFieldValues(dynamicField, fieldValue);
                         break;
+                    case DynamicFieldType.CI_REFERENCE:
+                        values = await this.getCIReferenceFieldValues(dynamicField, fieldValue);
+                        break;
                     case DynamicFieldType.CHECK_LIST:
                         values = this.getDFChecklistFieldValues(dynamicField, fieldValue);
                         break;
@@ -281,28 +287,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 }
             }
         }
-        return [values, values.join(separator)];
-    }
-
-    private async loadDynamicField(id?: number, name?: string): Promise<DynamicField> {
-        let dynamicField: DynamicField;
-        if (id || name) {
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
-                new KIXObjectLoadingOptions(
-                    !id ? [
-                        new FilterCriteria(
-                            DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, name
-                        )
-                    ] : null,
-                    null, 1, [DynamicFieldProperty.CONFIG]
-                ), null, true
-            ).catch(() => [] as DynamicField[]);
-
-            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
-        }
-        return dynamicField;
+        return [values, values.join(separator), fieldValue.Value];
     }
 
     private async getDFDateDateTimeFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
@@ -333,8 +318,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
 
     private async getDFSelectionFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
         let values;
-
-        if (Array.isArray(fieldValue.Value)) {
+        if (field.Config && field.Config.PossibleValues) {
             const valuesPromises = [];
             for (const v of fieldValue.Value) {
                 if (field.FieldType === DynamicFieldType.DATE) {
@@ -354,15 +338,35 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             values = [v];
         }
 
-        return values;
+        return values || [];
+    }
+
+    private async getCIReferenceFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
+        let values = fieldValue.PreparedValue;
+
+        if (!values && Array.isArray(fieldValue.Value)) {
+            const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                KIXObjectType.CONFIG_ITEM, fieldValue.Value,
+                new KIXObjectLoadingOptions(
+                    null, null, null, [ConfigItemProperty.CURRENT_VERSION]
+                ), null, true
+            ).catch(() => [] as ConfigItem[]);
+
+            const valuePromises = [];
+            configItems.forEach((ci) => valuePromises.push(LabelService.getInstance().getText(ci)));
+            values = await Promise.all<string>(valuePromises);
+        }
+        return values || [];
     }
 
     private getDFChecklistFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): string[] {
-        const values = [];
-        for (const v of fieldValue.Value) {
-            const checklist = JSON.parse(v);
-            const counts = DynamicFieldFormUtil.countValues(checklist);
-            values.push(`${counts[0]}/${counts[1]}`);
+        const values = fieldValue.DisplayValueShort ? fieldValue.DisplayValueShort.split(', ') : null;
+        if (!values || !!values.length) {
+            for (const v of fieldValue.Value) {
+                const checklist = JSON.parse(v);
+                const counts = DynamicFieldFormUtil.countValues(checklist);
+                values.push(`${counts[0]}/${counts[1]}`);
+            }
         }
         return values;
     }

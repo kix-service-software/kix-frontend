@@ -17,9 +17,8 @@ import { AuthenticationSocketClient } from "../AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../../server/model/rest/CRUD";
 import { ValidationResult } from "../ValidationResult";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldType } from "../../../../dynamic-fields/model/DynamicFieldType";
-import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
+import { KIXObjectService } from "../KIXObjectService";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -184,15 +183,16 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
-        if (property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))) {
-            return await this.getInputTypeForDF(property);
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            return await this.getInputTypeForDF(dfName);
         }
         return;
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
-        const field = await DynamicFieldService.loadDynamicField(property);
+        const field = await KIXObjectService.loadDynamicField(property);
         if (
             field && field.FieldType === DynamicFieldType.SELECTION && field.Config && Number(field.Config.CountMax) > 1
         ) {
@@ -203,7 +203,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
         let inputFieldType = InputFieldTypes.TEXT;
-        const field = await DynamicFieldService.loadDynamicField(property);
+        const field = await KIXObjectService.loadDynamicField(property);
         if (field) {
             if (field.FieldType === DynamicFieldType.TEXT_AREA) {
                 inputFieldType = InputFieldTypes.TEXT_AREA;
@@ -213,6 +213,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                 inputFieldType = InputFieldTypes.DATE_TIME;
             } else if (field.FieldType === DynamicFieldType.SELECTION) {
                 inputFieldType = InputFieldTypes.DROPDOWN;
+            } else if (field.FieldType === DynamicFieldType.CI_REFERENCE) {
+                inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
             }
         }
         return inputFieldType;

@@ -109,7 +109,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.NUMBER:
                 const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK], null, null, true
                 ).catch((error): SysConfigOption[] => []);
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Value;

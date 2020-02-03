@@ -9,16 +9,8 @@
 
 import { IPlaceholderHandler } from "../../../base-components/webapp/core/IPlaceholderHandler";
 import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { KIXObject } from "../../../../model/kix/KIXObject";
-import { DynamicField } from "../../model/DynamicField";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
 import { DynamicFieldType } from "../../model/DynamicFieldType";
 import { DynamicFieldValue } from "../../model/DynamicFieldValue";
 
@@ -59,9 +51,9 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
                     dfName = dfName.replace(/(.+?)_.+/, '$1');
                 }
 
-                const dfValue = object.DynamicFields.find((dfv) => dfv.Name === dfName);
+                const dfValue = dfName ? object.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
                 if (dfValue) {
-                    result = await this.getDFDisplayValue(dfName, dfValue, dfValueOptions);
+                    result = await this.getDFDisplayValue(dfValue, dfValueOptions);
                 }
             }
         }
@@ -69,31 +61,37 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     }
 
 
-    private async getDFDisplayValue(
-        dfName: string, dfValue: DynamicFieldValue, dfOptions: string = ''
-    ): Promise<string> {
+    private async getDFDisplayValue(dfValue: DynamicFieldValue, dfOptions: string = ''): Promise<string> {
         let result = '';
-        if (dfOptions && dfOptions === 'Key') {
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null,
-                new KIXObjectLoadingOptions([
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, dfName
-                    )
-                ], null, 1, [DynamicFieldProperty.CONFIG]
-                ), null, true
-            ).catch(() => [] as DynamicField[]);
-
-            if (dynamicFields && dynamicFields[0] && dynamicFields[0].FieldType === DynamicFieldType.SELECTION) {
-                const separator = dynamicFields[0].Config && dynamicFields[0].Config.ItemSeparator ?
-                    dynamicFields[0].Config.ItemSeparator : ', ';
-                result = Array.isArray(dfValue.Value) ? dfValue.Value.join(separator) : [dfValue.Value].join(separator);
-            } else {
-                result = dfValue.DisplayValue;
-            }
-        } else if (dfOptions === '' || dfOptions === 'Value') {
+        if (dfOptions && dfOptions.match(/^Key$/i)) {
+            result = await this.handleKey(dfValue);
+        } else if (dfOptions && dfOptions.match(/^HTML$/i)) {
+            result = dfValue.DisplayValueHTML;
+        } else if (dfOptions && dfOptions.match(/^Short$/i)) {
+            result = dfValue.DisplayValueShort;
+        } else if (dfOptions === '' || dfOptions.match(/^Value$/i)) {
             result = dfValue.DisplayValue;
         }
         return result;
     }
+
+    private async handleKey(dfValue: DynamicFieldValue): Promise<string> {
+        const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
+        let result: string = '';
+        if (
+            dynamicField &&
+            (
+                dynamicField.FieldType === DynamicFieldType.SELECTION ||
+                dynamicField.FieldType === DynamicFieldType.CI_REFERENCE
+            )
+        ) {
+            const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
+                dynamicField.Config.ItemSeparator : ', ';
+            result = Array.isArray(dfValue.Value) ? dfValue.Value.join(separator) : [dfValue.Value].join(separator);
+        } else {
+            result = dfValue.DisplayValue;
+        }
+        return result;
+    }
+
 }
