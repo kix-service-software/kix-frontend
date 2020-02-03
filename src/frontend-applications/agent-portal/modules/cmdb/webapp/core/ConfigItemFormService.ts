@@ -72,6 +72,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
             formFields.splice(0, formFields.length);
             fields.forEach((f) => formFields.push(f));
         } else {
+            this.handleCountValues(formFields);
             for (const f of formFields) {
                 let formFieldValue: FormFieldValue;
                 if (f.defaultValue) {

@@ -12,7 +12,7 @@ import { TableFactory } from "../../../../base-components/webapp/core/table/Tabl
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ITable, Table, ToggleOptions } from "../../../../base-components/webapp/core/table";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { MacroActionProperty } from "../../../model/MacroActionProperty";
 import { DataType } from "../../../../../model/DataType";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";

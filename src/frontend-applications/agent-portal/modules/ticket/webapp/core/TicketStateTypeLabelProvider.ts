@@ -64,8 +64,10 @@ export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType>
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getObjectText(ticketStateType: TicketStateType, id?: boolean, title?: boolean): Promise<string> {
-        return ticketStateType.Name;
+    public async getObjectText(
+        ticketStateType: TicketStateType, id?: boolean, title?: boolean, translatable: boolean = true
+    ): Promise<string> {
+        return translatable ? await TranslationService.translate(ticketStateType.Name) : ticketStateType.Name;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -77,7 +79,10 @@ export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType>
         return plural ? 'States' : 'State';
     }
 
-    public getObjectTooltip(ticketStateType: TicketStateType): string {
+    public async getObjectTooltip(ticketStateType: TicketStateType, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(ticketStateType.Name);
+        }
         return ticketStateType.Name;
     }
 

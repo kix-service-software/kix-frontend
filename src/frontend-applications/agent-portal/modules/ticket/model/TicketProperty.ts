@@ -127,8 +127,6 @@ export enum TicketProperty {
 
     ATTACHMENT_NAME = 'AttachmentName',
 
-    DYNAMIC_FIELD = 'DynamicField',
-
     TICKET_FLAG = 'TicketFlag',
 
     ARTICLE_FLAG = 'ArticleFlag',
@@ -169,8 +167,5 @@ export enum TicketProperty {
     SERVICE = 'Service',
     RESPONSIBLE = 'Responsible',
     UNTIL_TIME = 'UntilTime',
-
-    // search property
-    FULLTEXT = 'Fulltext'
 
 }

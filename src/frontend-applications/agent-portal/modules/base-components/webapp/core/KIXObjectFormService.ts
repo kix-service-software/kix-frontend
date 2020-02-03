@@ -25,6 +25,9 @@ import { UIComponentPermission } from "../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { FormService } from "./FormService";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
+import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
 
 export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
@@ -54,24 +57,20 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         return formFieldValues;
     }
 
-    public async initOptions(form: FormConfiguration): Promise<void> {
-        let kixObject: KIXObject;
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (context && form.formContext && form.formContext === FormContext.EDIT) {
-            kixObject = await context.getObject();
-        }
-
-        for (const p of form.pages) {
-            for (const g of p.groups) {
-                await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
-            }
-        }
+    protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
+        await DynamicFieldFormUtil.configureDynamicFields(form);
     }
 
     protected async prepareFormFieldValues(
         formFields: FormFieldConfiguration[], kixObject: KIXObject, formFieldValues: Map<string, FormFieldValue<any>>,
         formContext: FormContext
     ): Promise<void> {
+        if (formContext === FormContext.NEW) {
+            this.handleCountValues(formFields);
+        } else if (formContext === FormContext.EDIT) {
+            await DynamicFieldFormUtil.handleDynamicFieldValues(formFields, kixObject, this);
+        }
+
         for (const f of formFields) {
             let formFieldValue: FormFieldValue;
             if (kixObject || f.defaultValue) {
@@ -82,6 +81,10 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                     kixObject,
                     f
                 );
+
+                if (f.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                    value = f.defaultValue ? f.defaultValue.value : null;
+                }
 
                 if (f.property === 'ICON') {
                     if (kixObject && formContext === FormContext.EDIT) {
@@ -108,6 +111,60 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         }
     }
 
+    protected async getValue(
+        property: string, value: any, object: KIXObject, formField: FormFieldConfiguration
+    ): Promise<any> {
+        return property === KIXObjectProperty.DYNAMIC_FIELDS ? formField.defaultValue.value : value;
+    }
+
+    protected handleCountValues(formFields: FormFieldConfiguration[]): void {
+        const fields = [...formFields];
+        for (const field of fields) {
+            if (field.countMin > 0) {
+                field.empty = false;
+
+                for (let i = 1; i < field.countMin; i++) {
+                    const newField = this.getNewFormField(field);
+                    const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                    formFields.splice(index, 0, newField);
+                }
+            }
+
+            if (field.countDefault > 1 && field.countDefault > field.countMin && field.countDefault <= field.countMax) {
+                const c = field.countMin === 0 ? 1 : field.countMin;
+                for (let i = c; i < field.countDefault; i++) {
+                    const newField = this.getNewFormField(field);
+                    const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                    formFields.splice(index, 0, newField);
+                }
+            }
+
+            if (field.countMin === 0 && field.countDefault === 0) {
+                field.empty = true;
+            }
+        }
+    }
+
+    protected async postPrepareForm(
+        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+    ): Promise<void> {
+        return;
+    }
+
+    public async initOptions(form: FormConfiguration): Promise<void> {
+        let kixObject: KIXObject;
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        if (context && form.formContext && form.formContext === FormContext.EDIT) {
+            kixObject = await context.getObject();
+        }
+
+        for (const p of form.pages) {
+            for (const g of p.groups) {
+                await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
+            }
+        }
+    }
+
     protected async prepareFormFieldOptions(
         formFields: FormFieldConfiguration[], kixObject: KIXObject, formContext: FormContext
     ) {
@@ -121,7 +178,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             f.id,
             f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
             [], null, (parent ? parent.instanceId : f.parentInstanceId), f.countDefault, f.countMax, f.countMin,
-            f.maxLength, f.regEx, f.regExErrorMessage, f.countDefault === 0, f.asStructure, f.readonly,
+            f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
             f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
         );
         const children: FormFieldConfiguration[] = [];
@@ -142,12 +199,6 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         return newField;
     }
 
-    protected async getValue(
-        property: string, value: any, object: KIXObject, formField: FormFieldConfiguration
-    ): Promise<any> {
-        return value;
-    }
-
     protected replaceInlineContent(value: string, inlineContent: InlineContent[]): string {
         let newString = value;
         for (const contentItem of inlineContent) {
@@ -160,16 +211,6 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             }
         }
         return newString;
-    }
-
-    protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
-        return;
-    }
-
-    protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
-    ): Promise<void> {
-        return;
     }
 
     public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
@@ -218,17 +259,21 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             const value = formValues.get(formFieldInstanceId);
 
             if (value && typeof value.value !== 'undefined' && property) {
-                let preparedValue;
-                if (forUpdate) {
-                    preparedValue = await this.prepareUpdateValue(property, value.value);
+                if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                    parameter = await DynamicFieldFormUtil.handleDynamicField(field, value, parameter);
                 } else {
-                    preparedValue = await this.prepareCreateValue(property, value.value);
-                    if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
-                        preparedValue[1] = null;
+                    let preparedValue;
+                    if (forUpdate) {
+                        preparedValue = await this.prepareUpdateValue(property, value.value);
+                    } else {
+                        preparedValue = await this.prepareCreateValue(property, value.value);
+                        if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
+                            preparedValue[1] = null;
+                        }
                     }
-                }
-                if (preparedValue) {
-                    preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
+                    if (preparedValue) {
+                        preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
+                    }
                 }
             }
 

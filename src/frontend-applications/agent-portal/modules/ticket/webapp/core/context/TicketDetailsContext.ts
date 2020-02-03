@@ -18,6 +18,8 @@ import { TicketContext } from ".";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
 import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
+import { TicketProperty } from "../../../model/TicketProperty";
+import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 
 export class TicketDetailsContext extends Context {
 
@@ -80,8 +82,11 @@ export class TicketDetailsContext extends Context {
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
-            ['TimeUnits', 'DynamicFields', 'Links', 'Flags', 'History', 'Watchers', 'Articles', 'Attachments'],
-            ['Links']
+            [
+                KIXObjectProperty.DYNAMIC_FIELDS, KIXObjectProperty.LINKS,
+                TicketProperty.TIME_UNITS, TicketProperty.HISTORY, TicketProperty.WATCHERS, TicketProperty.ARTICLES,
+                'Flags', 'Attachments'],
+            [KIXObjectProperty.LINKS]
         );
 
         const ticketId = Number(this.objectId);

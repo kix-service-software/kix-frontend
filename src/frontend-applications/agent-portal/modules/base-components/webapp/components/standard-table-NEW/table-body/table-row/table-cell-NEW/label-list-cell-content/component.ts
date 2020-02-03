@@ -30,13 +30,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private async setLabels(cell: ICell): Promise<void> {
+    private setLabels(cell: ICell): void {
         let values = [];
         let icons: Array<string | ObjectIcon> = [];
         const value = cell.getValue();
         if (Array.isArray(value.objectValue)) {
             if (typeof value.objectValue[0] === 'object') {
-                const stringValue = await cell.getDisplayValue();
+                const stringValue = cell.getValue().displayValue;
                 values = stringValue.split(',').map((v) => v.trim());
             } else {
                 values = value.objectValue;

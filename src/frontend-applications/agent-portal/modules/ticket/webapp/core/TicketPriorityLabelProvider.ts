@@ -73,8 +73,10 @@ export class TicketPriorityLabelProvider extends LabelProvider<TicketPriority> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getObjectText(ticketPriority: TicketPriority, id?: boolean, title?: boolean): Promise<string> {
-        return ticketPriority.Name;
+    public async getObjectText(
+        ticketPriority: TicketPriority, id?: boolean, title?: boolean, translatable: boolean = true): Promise<string> {
+        return translatable ? await TranslationService.translate(ticketPriority.Name) : ticketPriority.Name;
+
     }
 
     public getObjectIcon(ticketPriority?: TicketPriority): string | ObjectIcon {
@@ -90,7 +92,10 @@ export class TicketPriorityLabelProvider extends LabelProvider<TicketPriority> {
         return plural ? 'Priorities' : 'Priority';
     }
 
-    public getObjectTooltip(ticketPriority: TicketPriority): string {
+    public async getObjectTooltip(ticketPriority: TicketPriority, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(ticketPriority.Name);
+        }
         return ticketPriority.Name;
     }
 

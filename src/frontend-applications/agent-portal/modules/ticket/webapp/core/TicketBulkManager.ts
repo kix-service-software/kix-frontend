@@ -25,7 +25,6 @@ import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { TicketService } from ".";
-import { ObjectDefinitionUtil } from "../../../../modules/base-components/webapp/core/ObjectDefinitionUtil";
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { BulkManager } from "../../../bulk/webapp/core";
 
@@ -64,12 +63,14 @@ export class TicketBulkManager extends BulkManager {
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
+        let inputFieldType = InputFieldTypes.TEXT;
         const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
         const ticketDefinition = objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
             switch (property) {
                 case TicketProperty.CONTACT_ID:
-                    return InputFieldTypes.OBJECT_REFERENCE;
+                    inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                    break;
                 case TicketProperty.QUEUE_ID:
                 case TicketProperty.STATE_ID:
                 case TicketProperty.TYPE_ID:
@@ -80,20 +81,22 @@ export class TicketBulkManager extends BulkManager {
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.LOCK_ID:
                 case TicketProperty.ORGANISATION_ID:
-                    return InputFieldTypes.DROPDOWN;
+                    inputFieldType = InputFieldTypes.DROPDOWN;
+                    break;
                 case TicketProperty.PENDING_TIME:
-                    return InputFieldTypes.DATE_TIME;
+                    inputFieldType = InputFieldTypes.DATE_TIME;
+                    break;
                 default:
-                    return ObjectDefinitionUtil.getAttributeFieldType(ticketDefinition, property);
+                    inputFieldType = await super.getInputType(property);
             }
         }
 
-        return InputFieldTypes.TEXT;
+        return inputFieldType;
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-        const properties: Array<[string, string]> = [
+        let properties: Array<[string, string]> = [
             [TicketProperty.CONTACT_ID, await labelProvider.getPropertyText(TicketProperty.CONTACT_ID)],
             [TicketProperty.ORGANISATION_ID, await labelProvider.getPropertyText(TicketProperty.ORGANISATION_ID)],
             [TicketProperty.LOCK_ID, await labelProvider.getPropertyText(TicketProperty.LOCK_ID)],
@@ -101,13 +104,14 @@ export class TicketBulkManager extends BulkManager {
             [TicketProperty.PRIORITY_ID, await labelProvider.getPropertyText(TicketProperty.PRIORITY_ID)],
             [TicketProperty.QUEUE_ID, await labelProvider.getPropertyText(TicketProperty.QUEUE_ID)],
             [TicketProperty.RESPONSIBLE_ID, await labelProvider.getPropertyText(TicketProperty.RESPONSIBLE_ID)],
-            // [TicketProperty.SERVICE_ID, await labelProvider.getPropertyText(TicketProperty.SERVICE_ID)],
-            // [TicketProperty.SLA_ID, await labelProvider.getPropertyText(TicketProperty.SLA_ID)],
             [TicketProperty.STATE_ID, await labelProvider.getPropertyText(TicketProperty.STATE_ID)],
             [TicketProperty.PENDING_TIME, await labelProvider.getPropertyText(TicketProperty.PENDING_TIME)],
             [TicketProperty.TITLE, await labelProvider.getPropertyText(TicketProperty.TITLE)],
             [TicketProperty.TYPE_ID, await labelProvider.getPropertyText(TicketProperty.TYPE_ID)],
         ];
+
+        const superProperties = await super.getProperties();
+        properties = [...properties, ...superProperties];
 
         properties.sort((a1, a2) => SortUtil.compareString(a1[1], a2[1]));
         return properties;
@@ -184,11 +188,6 @@ export class TicketBulkManager extends BulkManager {
                     property, false, false, undefined, loadingOptions
                 );
                 break;
-            case TicketProperty.QUEUE_ID:
-                nodes = await TicketService.getInstance().getTreeNodes(
-                    property, true, false
-                );
-
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property);
         }

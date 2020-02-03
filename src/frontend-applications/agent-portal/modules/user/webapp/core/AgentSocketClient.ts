@@ -65,12 +65,13 @@ export class AgentSocketClient extends SocketClient {
             ClientStorageService.getClientRequestId()
         );
 
+        const socketTimeout = ClientStorageService.getSocketTimeout();
 
         this.currentUserRequestPromise = new Promise<User>((resolve, reject) => {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AgentEvent.GET_CURRENT_USER);
-            }, 30000);
+            }, socketTimeout);
 
             this.agentSocket.on(
                 AgentEvent.GET_CURRENT_USER_FINISHED, async (result: GetCurrentUserResponse) => {
@@ -98,6 +99,7 @@ export class AgentSocketClient extends SocketClient {
     }
 
     public async getPersonalSettings(): Promise<PersonalSetting[]> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<PersonalSetting[]>((resolve, reject) => {
 
             const token = ClientStorageService.getToken();
@@ -105,7 +107,7 @@ export class AgentSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AgentEvent.GET_PERSONAL_SETTINGS);
-            }, 30000);
+            }, socketTimeout);
 
             this.agentSocket.on(
                 AgentEvent.GET_PERSONAL_SETTINGS_FINISHED, (response: PersonalSettingsResponse) => {
@@ -143,11 +145,13 @@ export class AgentSocketClient extends SocketClient {
             parameter
         );
 
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+
         return new Promise((resolve, reject) => {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + AgentEvent.SET_PREFERENCES);
-            }, 30000);
+            }, socketTimeout);
 
             this.agentSocket.on(
                 AgentEvent.SET_PREFERENCES_FINISHED, async (result: SetPreferencesResponse) => {

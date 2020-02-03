@@ -16,6 +16,7 @@ import { ValidationSeverity } from "../../../../modules/base-components/webapp/c
 import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
 import { AgentService } from ".";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class UserPasswordValidator implements IFormFieldValidator {
 
@@ -81,6 +82,14 @@ export class UserPasswordValidator implements IFormFieldValidator {
 
     private async  checkCurrentPassword(currentPassword: string): Promise<boolean> {
         return await AgentService.getInstance().checkPassword(currentPassword);
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return false;
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 
 }

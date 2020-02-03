@@ -72,8 +72,9 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getObjectText(ticketType: TicketType, id?: boolean, title?: boolean): Promise<string> {
-        return ticketType.Name;
+    public async getObjectText(ticketType: TicketType, id?: boolean, title?: boolean, translatable: boolean = true
+    ): Promise<string> {
+        return translatable ? await TranslationService.translate(ticketType.Name) : ticketType.Name;
     }
 
     public getObjectIcon(ticketType?: TicketType): string | ObjectIcon {
@@ -89,7 +90,10 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
         return plural ? 'Types' : 'Type';
     }
 
-    public getObjectTooltip(ticketType: TicketType): string {
+    public async getObjectTooltip(ticketType: TicketType, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(ticketType.Name);
+        }
         return ticketType.Name;
     }
 

@@ -22,7 +22,7 @@ export class TicketQueueEditAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
-        this.text = 'Edit';
+        this.text = 'Translatable#Edit';
         this.icon = "kix-icon-edit";
     }
 

@@ -12,6 +12,7 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
 import { InputFieldTypes } from "../InputFieldTypes";
 import { TreeNode } from "../tree";
+import { ValidationResult } from "../ValidationResult";
 
 export interface IDynamicFormManager {
 
@@ -63,11 +64,11 @@ export interface IDynamicFormManager {
 
     clearValueOnPropertyChange(property: string): Promise<boolean>;
 
-    isMultiselect(property: string): boolean;
+    isMultiselect(property: string): Promise<boolean>;
 
     searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]>;
 
-    validate(): Promise<void>;
+    validate(): Promise<ValidationResult[]>;
 
     shouldAddEmptyField(): Promise<boolean>;
 }

@@ -7,8 +7,9 @@
  * --
  */
 
-import { ITable, TableConfiguration } from ".";
-import { IColumnConfiguration } from "./IColumnConfiguration";
+import { ITable } from ".";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { IColumn } from "./IColumn";
 import { IRow } from "./IRow";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";

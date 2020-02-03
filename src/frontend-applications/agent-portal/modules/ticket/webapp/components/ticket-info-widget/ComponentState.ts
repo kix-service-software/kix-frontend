@@ -16,15 +16,15 @@ export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public ticket: Ticket = null,
-        public isPending: boolean = false,
-        public isAccountTimeEnabled: boolean = false,
         public labelProvider: ILabelProvider<Ticket> = null,
         public actions: AbstractAction[] = [],
         public organisationProperties: string[] = null,
         public contactProperties: string[] = null,
         public organisation = null,
         public contact = null,
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public properties: string[] = [],
+        public dynamicFieldLabels: {} = {}
     ) {
         super();
     }

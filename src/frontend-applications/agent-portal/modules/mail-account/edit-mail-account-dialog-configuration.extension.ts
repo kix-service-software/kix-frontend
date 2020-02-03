@@ -35,7 +35,6 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 
 export class Extension implements IConfigurationExtension {
@@ -83,11 +82,12 @@ export class Extension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'mail-account-edit-form-field-password',
-                'Translatable#Password', MailAccountProperty.PASSWORD, null, true,
+                'Translatable#Password', MailAccountProperty.PASSWORD, null, false,
                 'Translatable#Helptext_Admin_MailAccountCreate_Password',
                 [
                     new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ]
+                ], null, null, null, null, null, null, null, null, null, null, null, null, null,
+                'Translatable#not modified'
             )
         );
         configurations.push(

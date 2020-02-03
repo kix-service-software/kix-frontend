@@ -27,6 +27,7 @@ import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
 export class Extension implements IConfigurationExtension {
 
@@ -86,9 +87,10 @@ export class Extension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-valid',
                 'Translatable#Validity', KIXObjectProperty.VALID_ID,
-                'object-reference-input', false, 'Translatable#Helptext_Admin_SysConfigEdit_Validity', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
-            ]
+                'object-reference-input', true, 'Translatable#Helptext_Admin_SysConfigEdit_Validity',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT)
+                ]
             )
         );
         configurations.push(
@@ -96,7 +98,7 @@ export class Extension implements IConfigurationExtension {
                 'sysconfig-edit-form-field-value',
                 'Translatable#Value', SysConfigOptionDefinitionProperty.VALUE, 'text-area-input', false,
                 'Translatable#Helptext_Admin_SysConfigEdit_Value', [
-                new FormFieldOption('isJSON', true)]
+                new FormFieldOption(FormFieldOptions.IS_JSON, true)]
             )
         );
         configurations.push(
@@ -134,7 +136,7 @@ export class Extension implements IConfigurationExtension {
                 [
                     'sysconfig-edit-form-page'
                 ],
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, false, FormContext.EDIT
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, true, FormContext.EDIT
             )
         );
 

@@ -8,10 +8,10 @@
  */
 
 import { IRow } from "./IRow";
-import { IColumnConfiguration } from "./IColumnConfiguration";
 import { TableValue } from "./TableValue";
 import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
 import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 
 export interface ICell {
 
@@ -24,10 +24,6 @@ export interface ICell {
     filter(filterValue?: string, criteria?: TableFilterCriteria[]): Promise<boolean>;
 
     getRow(): IRow;
-
-    getDisplayValue(): Promise<string>;
-
-    getDisplayIcons(): Promise<Array<string | ObjectIcon>>;
 
     getColumnConfiguration(): IColumnConfiguration;
 

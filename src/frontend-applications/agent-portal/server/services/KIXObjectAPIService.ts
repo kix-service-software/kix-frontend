@@ -30,6 +30,7 @@ import { ObjectIcon } from "../../modules/icon/model/ObjectIcon";
 import { CreateLinkDescription } from "../../modules/links/server/api/CreateLinkDescription";
 import { CreateLink } from "../../modules/links/server/api/CreateLink";
 import { CreateLinkRequest } from "../../modules/links/server/api/CreateLinkRequest";
+import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -343,46 +344,48 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected async buildFilter(
-        filter: FilterCriteria[], objectProperty: string, query: any, token?: string
+        criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
     ): Promise<void> {
-        let objectFilter = {};
 
-        const filterCriteria = this.prepareAPIFilter(filter);
-        let hasAPIFilter = false;
+        const nonDynamicFieldCriteria = criteria.filter(
+            (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
+        );
+
+        const filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token);
         if (filterCriteria && filterCriteria.length) {
-            hasAPIFilter = true;
-            objectFilter = this.prepareObjectFilter(filterCriteria, objectFilter);
-        }
-
-        const searchCriteria = this.prepareAPISearch(filter);
-        let hasAPISearch = false;
-        if (searchCriteria && searchCriteria.length) {
-            hasAPISearch = true;
-            objectFilter = this.prepareObjectFilter(filterCriteria, objectFilter);
-        }
-
-        if (hasAPIFilter) {
             const apiFilter = {};
-            apiFilter[objectProperty] = objectFilter;
+            apiFilter[objectProperty] = this.prepareObjectFilter(filterCriteria);
             query.filter = JSON.stringify(apiFilter);
         }
 
-        if (hasAPISearch) {
+        let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
+        const dynamicFieldCriteria = criteria.filter(
+            (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
+        );
+        dynamicFieldCriteria.forEach(
+            (c) => c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_')
+        );
+
+        searchCriteria = [...searchCriteria, ...dynamicFieldCriteria];
+
+        if (searchCriteria && searchCriteria.length) {
             const apiSearch = {};
-            apiSearch[objectProperty] = objectFilter;
+            apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
             query.search = JSON.stringify(apiSearch);
         }
     }
 
-    protected prepareAPIFilter(criteria: FilterCriteria[]): FilterCriteria[] {
+    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria;
     }
 
-    protected prepareAPISearch(criteria: FilterCriteria[]): FilterCriteria[] {
+    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria;
     }
 
-    private prepareObjectFilter(filterCriteria: FilterCriteria[], objectFilter: any): any {
+    private prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
+        let objectFilter = {};
+
         const andFilter = filterCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
         });

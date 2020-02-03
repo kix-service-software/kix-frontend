@@ -26,7 +26,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (input.column) {
             this.column = input.column;
-            const componentId = (this.column as IColumn).getColumnConfiguration().componentId;
+            const componentId = this.column.getColumnConfiguration().componentId;
             this.state.showDefaultCell = !componentId || componentId === '';
         }
 

@@ -37,6 +37,16 @@ export class QueueFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.QUEUE;
     }
 
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case QueueProperty.FOLLOW_UP_LOCK:
+                value = Number(value);
+                break;
+            default:
+        }
+        return [[property, value]];
+    }
+
     protected async postPrepareForm(
         form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
     ): Promise<void> {

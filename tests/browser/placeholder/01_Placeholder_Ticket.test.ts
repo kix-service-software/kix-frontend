@@ -17,6 +17,7 @@ import { LabelService } from '../../../src/frontend-applications/agent-portal/mo
 import { TicketProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/TicketProperty';
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
+import { DynamicFieldValue } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldValue';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -144,19 +145,9 @@ describe('Placeholder replacement for ticket', () => {
             expect(text).equal(`${TicketProperty.TYPE}_Name`);
         });
 
-        it('Should replace ticket sla ID placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SLA_ID}>`, ticket);
-            expect(text).equal(ticket.SLAID.toString());
-        });
-
         it('Should replace ticket sla placeholder', async () => {
             const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SLA}>`, ticket);
             expect(text).equal(`${TicketProperty.SLA}_Name`);
-        });
-
-        it('Should replace ticket service ID placeholder', async () => {
-            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_${TicketProperty.SERVICE_ID}>`, ticket);
-            expect(text).equal(ticket.ServiceID.toString());
         });
 
         it('Should replace ticket service placeholder', async () => {
@@ -395,7 +386,15 @@ describe('Placeholder replacement for ticket', () => {
     });
 
     describe('Replace dynamic field ticket attribute placeholder', async () => {
+        it('Should replace text placeholder with value string', async () => {
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_DynamicField_${ticket.DynamicFields[0].Name}>`, ticket);
+            expect(text).equal(ticket.DynamicFields[0].DisplayValue);
+        });
 
+        it('Should replace selection placeholder with value string', async () => {
+            const text = await ticketPlaceholderHandler.replace(`<KIX_TICKET_DynamicField_${ticket.DynamicFields[1].Name}>`, ticket);
+            expect(text).equal(ticket.DynamicFields[1].DisplayValue);
+        });
     });
 
     describe('Replace unknown or emtpy ticket attribute placeholder with empty string', async () => {
@@ -461,8 +460,6 @@ class someTestFunctions {
         ticket.ContactID = '1';
         ticket.OwnerID = 1;
         ticket.TypeID = 1;
-        ticket.SLAID = 1;
-        ticket.ServiceID = 1;
         ticket.ResponsibleID = 1;
         ticket.Age = 123456789;
         ticket.Created = '2019-05-30 08:45:30';
@@ -486,6 +483,21 @@ class someTestFunctions {
         ticket.UpdateTimeDestinationDate = '2019-06-13 10:00:00';
         ticket.SolutionTimeDestinationTime = 1560499200;
         ticket.SolutionTimeDestinationDate = '2019-06-14 10:00:00';
+
+        ticket.DynamicFields = [
+            new DynamicFieldValue(
+                {
+                    ID: '1', Name: 'TicketTextDF', Label: 'Ticket Text DF',
+                    Value: ['Test Text', 'Test Text 2'], DisplayValue: 'Test Text, Test Text 2'
+                } as DynamicFieldValue
+            ),
+            new DynamicFieldValue(
+                {
+                    ID: '1', Name: 'TicketSelectionDF', Label: 'Ticket Selection DF',
+                    Value: ['1', '3', '5'], DisplayValue: 'One, Three, Five'
+                } as DynamicFieldValue
+            ),
+        ]
 
         return ticket;
     }

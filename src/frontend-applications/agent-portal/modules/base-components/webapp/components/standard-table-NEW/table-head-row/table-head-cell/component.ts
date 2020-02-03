@@ -29,14 +29,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public onCreate(input: any): void {
         this.state = new ComponentState();
         this.state.column = input.column;
-        this.state.isSorted = this.state.column.getSortOrder() ? true : false;
+        this.state.isSorted = Boolean(this.state.column.getSortOrder());
         this.state.sortOrderDown = this.isSortOrderDown();
         this.setSize();
     }
 
     public onInput(input: any): void {
         this.state.column = input.column;
-        this.state.isSorted = this.state.column.getSortOrder() ? true : false;
+        this.state.isSorted = Boolean(this.state.column.getSortOrder());
         this.setIconAndTitle();
         this.setSize();
 
@@ -51,8 +51,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         document.addEventListener('mousemove', this.mousemove.bind(this));
         document.addEventListener('mouseup', this.mouseup.bind(this));
-
-        this.state.loading = false;
     }
 
     public onDestroy(): void {
@@ -62,6 +60,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     private async setIconAndTitle(): Promise<void> {
+        this.state.loading = true;
         if (this.state.column) {
             const table = this.state.column.getTable();
             const objectType = table ? table.getObjectType() : null;
@@ -82,6 +81,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 );
             }
         }
+        setTimeout(() => this.state.loading = false, 10);
     }
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {

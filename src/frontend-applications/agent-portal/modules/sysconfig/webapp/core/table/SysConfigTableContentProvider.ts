@@ -59,30 +59,25 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
         );
 
         const rowObjects = [];
-        sysConfigDefinitions
-            .filter((scd) => scd.Name !== AdminContext.CONTEXT_ID && scd.Name !== 'admin-dashboard-category-explorer')
-            .forEach((scd) => {
-                rowObjects.push(this.createRowObject(scd));
-            });
+        const definitions = sysConfigDefinitions.filter(
+            (scd) => scd.Name !== AdminContext.CONTEXT_ID && scd.Name !== 'admin-dashboard-category-explorer'
+        );
+
+        for (const scd of definitions) {
+            const rowObject = await this.createRowObject(scd);
+            rowObjects.push(rowObject);
+        }
 
         return rowObjects;
     }
 
-    private createRowObject(definition: SysConfigOptionDefinition): RowObject {
+    private async createRowObject(definition: SysConfigOptionDefinition): Promise<RowObject> {
         const values: TableValue[] = [];
 
-        for (const property in definition) {
-            if (definition.hasOwnProperty(property)) {
-                if (
-                    property === SysConfigOptionDefinitionProperty.NAME ||
-                    property === SysConfigOptionDefinitionProperty.CONTEXT ||
-                    property === SysConfigOptionDefinitionProperty.CONTEXT_METADATA
-                ) {
-                    values.push(new TableValue(property, definition[property], definition[property]));
-                } else {
-                    values.push(new TableValue(property, definition[property]));
-                }
-            }
+        const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+        for (const column of columns) {
+            const tableValue = await this.getTableValue(definition, column.property, column);
+            values.push(tableValue);
         }
 
         const rowObject = new RowObject<SysConfigOptionDefinition>(values, definition);

@@ -35,14 +35,15 @@ export class NotesSocketClient extends SocketClient {
         this.socket = this.createSocket('notes', true);
     }
 
-    public loadNotes(): Promise<any> {
+    public async loadNotes(): Promise<any> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<string>((resolve, reject) => {
 
             const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + NotesEvent.LOAD_NOTES);
-            }, 30000);
+            }, socketTimeout);
 
             const requestId = IdService.generateDateBasedId('notes-');
 
@@ -71,8 +72,9 @@ export class NotesSocketClient extends SocketClient {
         });
     }
 
-    public saveNotes(contextId: string, notes: string): Promise<void> {
-        return new Promise((resolve, reject) => {
+    public async saveNotes(contextId: string, notes: string): Promise<void> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
             const token = ClientStorageService.getToken();
 
@@ -82,7 +84,7 @@ export class NotesSocketClient extends SocketClient {
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + NotesEvent.SAVE_NOTES);
-            }, 30000);
+            }, socketTimeout);
 
             this.socket.on(NotesEvent.SAVE_NOTES_FINISHED, (result: ISocketResponse) => {
                 if (result.requestId === requestId) {

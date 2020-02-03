@@ -45,15 +45,14 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (
-            (
-                eventId === TableEvent.ROW_SELECTION_CHANGED
+        if (data && data.tableId === this.table.getTableId()) {
+            if (eventId === TableEvent.ROW_SELECTION_CHANGED
                 || eventId === TableEvent.REFRESH
                 || eventId === TableEvent.ROW_TOGGLED
-            )
-            && data && data.tableId === this.table.getTableId()
-        ) {
-            this.setCheckState();
+            ) {
+                this.state.columns = this.table.getColumns();
+                this.setCheckState();
+            }
         }
     }
 

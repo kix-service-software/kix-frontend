@@ -34,7 +34,7 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
             object = await context.getObject();
         }
 
-        let rowObjects = [];
+        const rowObjects = [];
         if (object && object.ConfiguredPermissions) {
             let permissions = [];
 
@@ -46,17 +46,17 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
                     : object.ConfiguredPermissions.Assigned;
             }
 
-            rowObjects = permissions.map((p) => {
+            for (const p of permissions) {
                 const values: TableValue[] = [];
 
-                for (const property in p) {
-                    if (p.hasOwnProperty(property)) {
-                        values.push(new TableValue(property, p[property]));
-                    }
+                const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+                for (const column of columns) {
+                    const tableValue = await this.getTableValue(p, column.property, column);
+                    values.push(tableValue);
                 }
 
-                return new RowObject<Permission>(values, p);
-            });
+                rowObjects.push(new RowObject<Permission>(values, p));
+            }
         }
 
         return rowObjects;

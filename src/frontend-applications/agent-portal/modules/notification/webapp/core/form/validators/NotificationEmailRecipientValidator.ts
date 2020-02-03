@@ -19,6 +19,7 @@ import { TranslationService } from "../../../../../../modules/translation/webapp
 import { KIXObjectService } from "../../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { SystemAddress } from "../../../../../system-address/model/SystemAddress";
 import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
+import { DynamicField } from "../../../../../dynamic-fields/model/DynamicField";
 
 export class NotificationEmailRecipientValidator implements IFormFieldValidator {
 
@@ -77,6 +78,14 @@ export class NotificationEmailRecipientValidator implements IFormFieldValidator 
         }
 
         return false;
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return false;
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 
 }

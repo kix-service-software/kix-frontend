@@ -22,10 +22,7 @@ import { LabelService } from "../../../../modules/base-components/webapp/core/La
 import { ArticleProperty } from "../../model/ArticleProperty";
 import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { TicketParameterUtil } from "./TicketParameterUtil";
-import { CreateTicketArticleOptions } from "../../model/CreateTicketArticleOptions";
-import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
-import { Queue } from "../../model/Queue";
-import { Channel } from "../../model/Channel";
+import { ArticleFormService } from "./ArticleFormService";
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -172,46 +169,9 @@ export class TicketFormService extends KIXObjectFormService {
         return await TicketParameterUtil.getPredefinedParameter(forUpdate);
     }
 
-    public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
-    ): Promise<Array<[string, any]>> {
-        await this.addQueueSignature(parameter, createOptions);
+    public async postPrepareValues(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+        await ArticleFormService.prototype.addQueueSignature(parameter);
         return parameter;
     }
 
-    private async addQueueSignature(
-        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
-    ): Promise<void> {
-        const articleBodyParam = parameter.find((p) => p[0] === ArticleProperty.BODY);
-        const channelParam = parameter.find((p) => p[0] === ArticleProperty.CHANNEL_ID);
-        if (articleBodyParam && channelParam && channelParam[1]) {
-            const channels = await KIXObjectService.loadObjects<Channel>(
-                KIXObjectType.CHANNEL, [channelParam[1]], null, null, true
-            ).catch(() => []);
-            if (channels && channels[0] && channels[0].Name === 'email') {
-                let queueId;
-                if (createOptions && createOptions.ticketId) {
-                    const tickets = await KIXObjectService.loadObjects<Ticket>(
-                        KIXObjectType.TICKET, [createOptions.ticketId], null, null, true
-                    ).catch(() => [] as Ticket[]);
-                    queueId = tickets && !!tickets.length ? tickets[0].QueueID : null;
-                } else {
-                    const queueParam = parameter.find((p) => p[0] === TicketProperty.QUEUE_ID);
-                    queueId = queueParam ? queueParam[1] : null;
-                }
-                if (queueId) {
-                    const queues = await KIXObjectService.loadObjects<Queue>(
-                        KIXObjectType.QUEUE, [queueId], null, null, true
-                    );
-                    const queue = queues && !!queues.length ? queues[0] : null;
-                    if (queue && queue.Signature) {
-                        const preparedSignature = await PlaceholderService.getInstance().replacePlaceholders(
-                            queue.Signature
-                        );
-                        articleBodyParam[1] += `\n\n${preparedSignature}`;
-                    }
-                }
-            }
-        }
-    }
 }

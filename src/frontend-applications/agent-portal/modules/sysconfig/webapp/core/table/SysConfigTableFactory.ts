@@ -12,7 +12,7 @@ import { TableFactory } from "../../../../base-components/webapp/core/table/Tabl
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ITable, Table } from "../../../../base-components/webapp/core/table";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { SysConfigOptionDefinitionProperty } from "../../../model/SysConfigOptionDefinitionProperty";
 import { DataType } from "../../../../../model/DataType";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
@@ -62,7 +62,7 @@ export class SysConfigTableFactory extends TableFactory {
             ),
             new DefaultColumnConfiguration(null, null, null,
                 SysConfigOptionDefinitionProperty.ACCESS_LEVEL, true, false, true, false, 100, true, true, true,
-                DataType.STRING, true, null, null, false
+                DataType.STRING, true, null, null, true
             ),
             new DefaultColumnConfiguration(null, null, null,
                 KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true

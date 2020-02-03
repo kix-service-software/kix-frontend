@@ -52,7 +52,7 @@ export class JobLabelProvider extends LabelProvider {
                 displayValue = 'Translatable#Number of Actions';
                 break;
             case JobProperty.LAST_EXEC_TIME:
-                displayValue = 'Translatable#Last Run';
+                displayValue = 'Translatable#Last executed at';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, false, translatable);

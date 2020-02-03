@@ -33,6 +33,9 @@ import { Context } from "vm";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { SystemAddress } from "../../../system-address/model/SystemAddress";
 import { TicketParameterUtil } from "./TicketParameterUtil";
+import { CreateTicketArticleOptions } from "../../model/CreateTicketArticleOptions";
+import { TicketProperty } from "../../model/TicketProperty";
+import { Queue } from "../../model/Queue";
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -92,17 +95,15 @@ export class ArticleFormService extends KIXObjectFormService {
                 const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
                 if (dialogContext) {
                     const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
-                    let channels = [1, 2];
                     if (isForwardDialog) {
-                        channels = [2];
+                        const channels = [2];
+                        const option = f.options.find((o) => o.option === 'CHANNELS');
+                        if (option) {
+                            option.value = channels;
+                        } else {
+                            f.options.push(new FormFieldOption('CHANNELS', channels));
+                        }
                     }
-                    const option = f.options.find((o) => o.option === 'CHANNELS');
-                    if (option) {
-                        option.value = channels;
-                    } else {
-                        f.options.push(new FormFieldOption('CHANNELS', channels));
-                    }
-
                 }
             }
 
@@ -370,5 +371,50 @@ export class ArticleFormService extends KIXObjectFormService {
             }
         }
         return article;
+    }
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
+    ): Promise<Array<[string, any]>> {
+        await this.addQueueSignature(parameter, createOptions);
+        return parameter;
+    }
+
+    public async addQueueSignature(
+        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
+    ): Promise<void> {
+        const articleBodyParam = parameter.find((p) => p[0] === ArticleProperty.BODY);
+        const channelParam = parameter.find((p) => p[0] === ArticleProperty.CHANNEL_ID);
+        if (articleBodyParam && channelParam && channelParam[1]) {
+            const channels = await KIXObjectService.loadObjects<Channel>(
+                KIXObjectType.CHANNEL, [channelParam[1]], null, null, true
+            ).catch(() => []);
+            if (channels && channels[0] && channels[0].Name === 'email') {
+                const queueId = await this.getQueueID(createOptions, parameter);
+                if (queueId) {
+                    const queues = await KIXObjectService.loadObjects<Queue>(
+                        KIXObjectType.QUEUE, [queueId], null, null, true
+                    );
+                    const queue = queues && !!queues.length ? queues[0] : null;
+                    if (queue && queue.Signature) {
+                        articleBodyParam[1] += `\n\n${queue.Signature}`;
+                    }
+                }
+            }
+        }
+    }
+
+    private async getQueueID(
+        createOptions: CreateTicketArticleOptions, parameter: Array<[string, any]>
+    ): Promise<number> {
+        if (createOptions && createOptions.ticketId) {
+            const tickets = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, [createOptions.ticketId], null, null, true
+            ).catch(() => [] as Ticket[]);
+            return tickets && !!tickets.length ? tickets[0].QueueID : null;
+        } else {
+            const queueParam = parameter.find((p) => p[0] === TicketProperty.QUEUE_ID);
+            return queueParam ? queueParam[1] : null;
+        }
     }
 }

@@ -15,7 +15,7 @@ import { SearchService } from "../../core/SearchService";
 import { WidgetService } from "../../../../../modules/base-components/webapp/core/WidgetService";
 import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
 import {
-    TableEvent, TableFactoryService, TableConfiguration, TableHeaderHeight, TableRowHeight, TableEventData, ITable
+    TableEvent, TableFactoryService, TableHeaderHeight, TableRowHeight, TableEventData, ITable
 } from "../../../../base-components/webapp/core/table";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
@@ -26,6 +26,7 @@ import { ActionFactory } from "../../../../../modules/base-components/webapp/cor
 import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
 import { SearchResultCategory } from "../../core/SearchResultCategory";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 
 class Component implements IKIXObjectSearchListener {
 
@@ -137,7 +138,7 @@ class Component implements IKIXObjectSearchListener {
                                 }
                             }
                             const columns = await searchDefinition.getTableColumnConfiguration(parameter);
-                            table.addColumns(columns);
+                            await table.addColumns(columns);
                         }
                         if (eventId === TableEvent.TABLE_READY) {
                             this.state.filterCount = this.state.table.isFiltered()

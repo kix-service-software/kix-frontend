@@ -9,36 +9,61 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { TableConfiguration } from '../../../core/table';
+import { ITable, TableEvent, TableEventData } from '../../../core/table';
+import { EventService } from '../../../core/EventService';
+import { IEventSubscriber } from '../../../core/IEventSubscriber';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
+
+
+    public eventSubscriberId: string = 'table-body';
 
     public columnLength: number = 0;
     public selectionEnabled: boolean;
     public toggleEnabled: boolean;
 
-    private tableConfig: TableConfiguration;
+    private table: ITable;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.state.rows = input.rows;
-        this.columnLength = input.columnLength ? input.columnLength : 0;
-        this.tableConfig = input.tableConfig;
-        this.selectionEnabled = this.tableConfig ? this.tableConfig.enableSelection : null;
-        this.toggleEnabled = this.tableConfig ? this.tableConfig.toggle : null;
+        if (input.table) {
+            const t: ITable = input.table;
+            this.eventSubscriberId = 'table-body-' + t.getTableId();
+            this.columnLength = t.getColumns().length;
+            this.selectionEnabled = t.getTableConfiguration().enableSelection;
+            this.toggleEnabled = t.getTableConfiguration().toggle;
+        }
+        this.table = input.table;
     }
 
     public async onMount(): Promise<void> {
+
+        EventService.getInstance().subscribe(TableEvent.REFRESH, this);
+        EventService.getInstance().subscribe(TableEvent.RERENDER_TABLE, this);
+        EventService.getInstance().subscribe(TableEvent.SORTED, this);
+        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this);
+        EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this);
+
         setTimeout(() => {
             this.state.ready = true;
         }, 100);
     }
 
+    public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
+        if (this.table && data.tableId === this.table.getTableId()) {
+            this.state.rows = this.table.getRows();
+        }
+    }
+
     public onDestroy(): void {
-        // nothing
+        EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
+        EventService.getInstance().unsubscribe(TableEvent.RERENDER_TABLE, this);
+        EventService.getInstance().unsubscribe(TableEvent.SORTED, this);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this);
     }
 
     public getFullColumnLength(): number {
@@ -53,11 +78,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public getEmptyString(): string {
-        return this.tableConfig ? this.tableConfig.emptyResultHint : 'Translatable#No objects available.';
+        return this.table ? this.table.getTableConfiguration().emptyResultHint : 'Translatable#No objects available.';
     }
 
     public getRowHeight(): string {
-        return (this.tableConfig ? this.tableConfig.rowHeight : 1.75) + 'rem';
+        return (this.table ? this.table.getTableConfiguration().rowHeight : 1.75) + 'rem';
     }
 }
 

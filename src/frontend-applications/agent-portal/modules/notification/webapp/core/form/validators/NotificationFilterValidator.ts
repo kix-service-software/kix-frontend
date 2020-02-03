@@ -21,6 +21,7 @@ import { FormFieldValue } from "../../../../../../model/configuration/FormFieldV
 import { LabelService } from "../../../../../../modules/base-components/webapp/core/LabelService";
 import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
 import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
+import { DynamicField } from "../../../../../dynamic-fields/model/DynamicField";
 
 export class NotificationFilterValidator implements IFormFieldValidator {
 
@@ -84,5 +85,13 @@ export class NotificationFilterValidator implements IFormFieldValidator {
         }
 
         return true;
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return false;
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 }

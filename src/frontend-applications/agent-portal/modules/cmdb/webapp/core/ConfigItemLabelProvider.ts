@@ -223,9 +223,13 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         return 'kix-icon-ci';
     }
 
-    public getObjectTooltip(configItem: ConfigItem): string {
-        return configItem.CurrentVersion && configItem.CurrentVersion.Name ?
+    public async getObjectTooltip(configItem: ConfigItem, translatable: boolean = true): Promise<string> {
+        const toolTip = configItem.CurrentVersion && configItem.CurrentVersion.Name ?
             configItem.CurrentVersion.Name : configItem.Number;
+        if (translatable) {
+            return await TranslationService.translate(toolTip);
+        }
+        return toolTip;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

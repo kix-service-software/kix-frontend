@@ -48,6 +48,7 @@ import { CreateWatcherRequest } from "./api/CreateWatcherRequest";
 import { SenderTypeFactory } from "./SenderTypeFactory";
 import { ArticleFactory } from "./ArticleFactory";
 import { LockFactory } from "./LockFactory";
+import { SearchProperty } from "../../search/model/SearchProperty";
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -142,7 +143,8 @@ export class TicketAPIService extends KIXObjectAPIService {
                 this.getParameterValue(parameter, TicketProperty.OWNER_ID),
                 this.getParameterValue(parameter, TicketProperty.RESPONSIBLE_ID),
                 this.getParameterValue(parameter, TicketProperty.PENDING_TIME),
-                [createArticle]
+                [createArticle],
+                this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS)
             );
 
             const response = await this.sendCreateRequest<CreateTicketResponse, CreateTicketRequest>(
@@ -210,7 +212,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.getParameterValue(parameter, TicketProperty.SLA_ID),
             this.getParameterValue(parameter, TicketProperty.OWNER_ID),
             this.getParameterValue(parameter, TicketProperty.RESPONSIBLE_ID),
-            this.getParameterValue(parameter, TicketProperty.PENDING_TIME)
+            this.getParameterValue(parameter, TicketProperty.PENDING_TIME),
+            this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS)
         );
 
         const response = await this.sendUpdateRequest<UpdateTicketResponse, UpdateTicketRequest>(
@@ -376,153 +379,98 @@ export class TicketAPIService extends KIXObjectAPIService {
         return await this.sendDeleteRequest<void>(token, clientRequestId, [uri], this.objectType);
     }
 
-    // Overwrites from KIXObjectService
-    // FIXME: unterschiedliche Behandlung von Filter und Search entfernen, sollte nicht notwendig sein
-    protected async buildFilter(
-        filter: FilterCriteria[], filterProperty: string, query: any, token?: string
-    ): Promise<void> {
-        let objectFilter = {};
-        let objectSearch = {};
-
-        const user = await UserService.getInstance().getUserByToken(token);
-        const fulltextIndex = filter.findIndex((f) => f.property === TicketProperty.FULLTEXT);
-        const fulltext = fulltextIndex !== -1 ? filter.splice(fulltextIndex, 1) : null;
-
-        const andFilter = filter.filter(
-            (f) => f.filterType === FilterType.AND
-                && f.property !== TicketProperty.STATE_TYPE
+    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        let filterCriteria = criteria.filter(
+            (f) => f.property !== TicketProperty.STATE_TYPE
                 && f.property !== TicketProperty.CREATED
                 && f.property !== KIXObjectProperty.CREATE_TIME
                 && f.property !== TicketProperty.CHANGED
                 && f.property !== TicketProperty.CLOSE_TIME
                 && f.property !== TicketProperty.LAST_CHANGE_TIME
                 && f.property !== KIXObjectProperty.CHANGE_TIME
-        ).map((f) => {
-            this.setUserID(f, user);
-            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
-        });
-        const andSearch = filter.filter(
-            (f) => f.filterType === FilterType.AND
-                && f.operator !== SearchOperator.NOT_EQUALS
-                && f.property !== KIXObjectProperty.CREATE_BY
-                && f.property !== KIXObjectProperty.CHANGE_BY
+                && f.property !== SearchProperty.FULLTEXT
+        );
 
-        ).map((f) => {
-            this.setUserID(f, user);
-            if (f.property === TicketProperty.CREATED) {
-                f.property = KIXObjectProperty.CREATE_TIME;
-            }
-            if (f.property === TicketProperty.CHANGED) {
-                f.property = KIXObjectProperty.CHANGE_TIME;
-            }
-            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
-        });
-
-        if (andFilter && andFilter.length) {
-            objectFilter = {
-                AND: andFilter
-            };
-        }
-        if (andSearch && andSearch.length) {
-            objectSearch = {
-                AND: andSearch
-            };
-        }
-
-        const orFilter = filter.filter(
-            (f) => f.filterType === FilterType.OR
-                && f.property !== TicketProperty.STATE_TYPE
-                && f.property !== TicketProperty.CREATED
-                && f.property !== KIXObjectProperty.CREATE_TIME
-                && f.property !== TicketProperty.CHANGED
-                && f.property !== TicketProperty.CLOSE_TIME
-                && f.property !== TicketProperty.LAST_CHANGE_TIME
-                && f.property !== KIXObjectProperty.CHANGE_TIME
-        ).map((f) => {
-            this.setUserID(f, user);
-            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
-        });
-        let orSearch = filter.filter(
-            (f) => f.filterType === FilterType.OR
-                && f.operator !== SearchOperator.NOT_EQUALS
-                && f.property !== KIXObjectProperty.CREATE_BY
-                && f.property !== KIXObjectProperty.CHANGE_BY
-        ).map((f) => {
-            this.setUserID(f, user);
-            if (f.property === TicketProperty.CREATED) {
-                f.property = KIXObjectProperty.CREATE_TIME;
-            }
-            if (f.property === TicketProperty.CHANGED) {
-                f.property = KIXObjectProperty.CHANGE_TIME;
-            }
-            return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };
-        });
-
+        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
 
         if (fulltext) {
-            const fulltextSearch = this.getFulltextSearch(fulltext[0]);
-            orSearch = [...orSearch, ...fulltextSearch];
+            const fulltextSearch = this.getFulltextSearch(fulltext);
+            filterCriteria = [...filterCriteria, ...fulltextSearch];
         }
 
-        if (orFilter && orFilter.length) {
-            objectFilter = {
-                ...objectFilter,
-                OR: orFilter
-            };
-        }
-        if (orSearch && orSearch.length) {
-            objectSearch = {
-                ...objectSearch,
-                OR: orSearch
-            };
+        await this.setUserID(filterCriteria, token);
+
+        return filterCriteria;
+    }
+
+    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const searchCriteria = criteria.filter(
+            (f) => f.operator !== SearchOperator.NOT_EQUALS
+                && f.property !== KIXObjectProperty.CREATE_BY
+                && f.property !== KIXObjectProperty.CHANGE_BY
+                && f.property !== SearchProperty.FULLTEXT
+        );
+
+        await this.setUserID(searchCriteria, token);
+
+        const createdCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
+        if (createdCriteria) {
+            createdCriteria.property = KIXObjectProperty.CREATE_TIME;
         }
 
-        if ((andFilter && !!andFilter.length) || (orFilter && !!orFilter.length)) {
-            const apiFilter = {};
-            apiFilter[filterProperty] = objectFilter;
-            query.filter = JSON.stringify(apiFilter);
+        const changedCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
+        if (changedCriteria) {
+            changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
         }
-        if ((andSearch && !!andSearch.length) || (orSearch && !!orSearch.length)) {
-            const search = {};
-            search[filterProperty] = objectSearch;
-            query.search = JSON.stringify(search);
+
+        return searchCriteria;
+    }
+
+    private async setUserID(criteria: FilterCriteria[], token: string): Promise<void> {
+        const user = await UserService.getInstance().getUserByToken(token);
+        const ownerCriteria = criteria.find(
+            (c) => c.property === TicketProperty.OWNER_ID && c.value === KIXObjectType.CURRENT_USER
+        );
+
+        if (ownerCriteria) {
+            ownerCriteria.value = user.UserID;
+        }
+
+        const responsibleCriteria = criteria.find(
+            (c) => c.property === TicketProperty.RESPONSIBLE_ID && c.value === KIXObjectType.CURRENT_USER
+        );
+
+        if (responsibleCriteria) {
+            responsibleCriteria.value = user.UserID;
         }
     }
 
-    private setUserID(filter: FilterCriteria, user: User): void {
-        if (filter.property === TicketProperty.OWNER_ID || filter.property === TicketProperty.RESPONSIBLE_ID) {
-            if (filter.value === KIXObjectType.CURRENT_USER) {
-                filter.value = user.UserID;
-            }
-        }
-    }
-
-    private getFulltextSearch(fulltextFilter: FilterCriteria): any[] {
+    private getFulltextSearch(fulltextFilter: FilterCriteria): FilterCriteria[] {
         return [
-            {
-                Field: TicketProperty.TICKET_NUMBER, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.TITLE, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.BODY, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.FROM, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.TO, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.CC, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            }
+            new FilterCriteria(
+                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.TITLE, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.BODY, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.FROM, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.TO, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.CC, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            )
         ];
     }
 }

@@ -59,11 +59,6 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.DEFAULT_MODULE_ID).to.not.be.empty;
     });
 
-    it('Should contain SOCKET_TIMEOUT as type of number.', () => {
-        expect(serverConfiguration.SOCKET_TIMEOUT).to.not.be.undefined;
-        expect(serverConfiguration.SOCKET_TIMEOUT).to.be.an('number');
-    });
-
     it('Should contain FORCE_SSL as type of boolean.', () => {
         expect(serverConfiguration.USE_SSL).to.not.be.undefined;
         expect(serverConfiguration.USE_SSL).to.be.an('boolean');

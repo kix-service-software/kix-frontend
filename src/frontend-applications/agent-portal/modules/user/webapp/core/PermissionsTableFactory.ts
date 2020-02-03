@@ -15,7 +15,7 @@ import { PermissionsTableContentProvider } from "./PermissionsTableContentProvid
 import { TableHeaderHeight } from "../../../../model/configuration/TableHeaderHeight";
 import { TableRowHeight } from "../../../../model/configuration/TableRowHeight";
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../model/DataType";
 import { PermissionProperty } from "../../model/PermissionProperty";
 
@@ -77,7 +77,7 @@ export class PermissionsTableFactory extends TableFactory {
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
             defaultRouting = true;
-        } else if (!tableConfiguration.tableColumns) {
+        } else if (!tableConfiguration.tableColumns || !tableConfiguration.tableColumns.length) {
             tableConfiguration.tableColumns = tableColumns;
         }
 

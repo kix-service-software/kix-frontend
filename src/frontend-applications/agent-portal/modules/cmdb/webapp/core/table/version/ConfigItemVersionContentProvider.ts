@@ -39,32 +39,38 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
                 const translatedCreated = await TranslationService.translate('Translatable#created');
                 const translatedVersion = await TranslationService.translate('Translatable#Version');
 
-                const sortedVersions = configItem.Versions.sort((a, b) => b.VersionID - a.VersionID);
+                configItem.Versions.sort((a, b) => b.VersionID - a.VersionID);
 
-                for (let i = 0; i < sortedVersions.length; i++) {
+                for (let i = 0; i < configItem.Versions.length; i++) {
                     const values: TableValue[] = [];
-                    const v = sortedVersions[i];
-
-                    for (const property in v) {
-                        if (v.hasOwnProperty(property)) {
-                            values.push(new TableValue(property, v[property]));
-                        }
-                    }
+                    const v = configItem.Versions[i];
 
                     const versionNumber = (configItem.Versions.length - i);
                     const createTime = await DateTimeUtil.getLocalDateTimeString(v.Definition.CreateTime);
                     const currentVersion = v.isCurrentVersion ? '(' + translatedCurrentVersion + ')' : '';
                     const currentVersionString = `${versionNumber} ${currentVersion}`;
+
                     const basedOnDefinitionString
                         = `${translatedVersion} ${v.Definition.Version} (${translatedCreated} ${createTime})`;
-                    values.push(new TableValue(VersionProperty.COUNT_NUMBER, versionNumber, currentVersionString));
-                    values.push(new TableValue(
-                        VersionProperty.BASED_ON_CLASS_VERSION, v.Definition.Version, basedOnDefinitionString
-                    ));
+
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+                    for (const column of columns) {
+                        if (column.property === VersionProperty.COUNT_NUMBER) {
+                            values.push(
+                                new TableValue(VersionProperty.COUNT_NUMBER, versionNumber, currentVersionString)
+                            );
+                        } else if (column.property === VersionProperty.BASED_ON_CLASS_VERSION) {
+                            values.push(new TableValue(
+                                VersionProperty.BASED_ON_CLASS_VERSION, v.Definition.Version, basedOnDefinitionString
+                            ));
+                        } else {
+                            const tableValue = await this.getTableValue(v, column.property, column);
+                            values.push(tableValue);
+                        }
+                    }
 
                     const newRowObject = new RowObject<Version>(values, v);
                     rowObjects.push(newRowObject);
-
                 }
             }
         }

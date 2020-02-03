@@ -22,15 +22,22 @@ import { Context } from "vm";
 import {
     ObjectInformationWidgetConfiguration
 } from "../../../../../model/configuration/ObjectInformationWidgetConfiguration";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { TicketProperty } from "../../../model/TicketProperty";
+import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../../model/FilterCriteria";
+import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
+import { SearchOperator } from "../../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../../model/FilterDataType";
+import { FilterType } from "../../../../../model/FilterType";
+import { Label } from "../../../../base-components/webapp/core/Label";
 
 class Component {
 
     private state: ComponentState;
     private contextListernerId: string;
 
-    public organisationRoutingConfiguration: RoutingConfiguration;
-    public contactRoutingConfiguration: RoutingConfiguration;
+    private routingConfigurations: Array<[string, RoutingConfiguration]>;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -48,6 +55,8 @@ class Component {
             TicketDetailsContext.CONTEXT_ID
         );
 
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
         context.registerListener(this.contextListernerId, {
             sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
             explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
@@ -61,7 +70,6 @@ class Component {
             },
             additionalInformationChanged: () => { return; }
         });
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         await this.initWidget(await context.getObject<Ticket>());
         this.state.prepared = true;
@@ -69,17 +77,42 @@ class Component {
 
     private async initWidget(ticket: Ticket): Promise<void> {
         this.state.ticket = ticket;
+
+        let properties = [];
+
+        const settings: ObjectInformationWidgetConfiguration = this.state.widgetConfiguration ?
+            this.state.widgetConfiguration.configuration : null;
+        if (settings) {
+            properties = settings.properties;
+            this.routingConfigurations = settings.routingConfigurations;
+        }
+
         if (this.state.ticket) {
-            this.state.isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
-            this.state.isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
+            const isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
+            const isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
+
+            if (!isPending) {
+                properties = properties.filter((p) => p !== TicketProperty.PENDING_TIME);
+            }
+            if (!isAccountTimeEnabled) {
+                properties = properties.filter((p) => p !== TicketProperty.TIME_UNITS);
+            }
 
             const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
                 TicketDetailsContext.CONTEXT_ID
             );
 
-            this.initOrganisation(context);
-            this.initContact(context);
+            if (properties.some((p) => p === TicketProperty.ORGANISATION_ID)) {
+                this.initOrganisation(context);
+            }
+            if (properties.some((p) => p === TicketProperty.CONTACT_ID)) {
+                this.initContact(context);
+            }
         }
+
+        properties = await this.prepareDynamicFields(properties);
+
+        this.state.properties = properties;
 
         this.setActions();
     }
@@ -109,8 +142,6 @@ class Component {
                 const settings = config.configuration as ObjectInformationWidgetConfiguration;
                 this.state.contactProperties = settings.properties;
             }
-
-            this.contactRoutingConfiguration = await this.getContactRoutingConfiguration();
         }
     }
 
@@ -127,25 +158,55 @@ class Component {
                 const settings = config.configuration as ObjectInformationWidgetConfiguration;
                 this.state.organisationProperties = settings.properties;
             }
-
-            this.organisationRoutingConfiguration = await this.getOrganisationRoutingConfiguration();
         }
     }
 
-    private async getContactRoutingConfiguration(): Promise<RoutingConfiguration> {
-        // FIXME: ask correct service for object routing configuration
-        return new RoutingConfiguration(
-            'contact-details', KIXObjectType.CONTACT,
-            ContextMode.DETAILS, 'ID', false
-        );
+    public getRoutingConfiguration(property: string): RoutingConfiguration {
+        if (this.routingConfigurations && !!this.routingConfigurations.length) {
+            const config = this.routingConfigurations.find((rc) => rc[0] === property);
+            return config ? config[1] : undefined;
+        }
     }
 
-    private async getOrganisationRoutingConfiguration(): Promise<RoutingConfiguration> {
-        // FIXME: ask correct service for object routing configuration
-        return new RoutingConfiguration(
-            'organisation-details', KIXObjectType.ORGANISATION,
-            ContextMode.DETAILS, 'ID', false
-        );
+    private async prepareDynamicFields(properties: string[]): Promise<string[]> {
+        const validProperties = [];
+        for (const p of properties) {
+            if (p.match(/^DynamicFields?\..+/)) {
+                const dfName = p.replace(/^DynamicFields?\.(.+)/, '$1');
+                if (dfName) {
+                    const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                        KIXObjectType.DYNAMIC_FIELD, null,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                                    FilterType.AND, dfName
+                                )
+                            ], null, 1, [DynamicFieldProperty.CONFIG]
+                        ), null, true
+                    ).catch(() => [] as DynamicField[]);
+                    if (dynamicFields.length && dynamicFields[0] && dynamicFields[0].ValidID === 1) {
+                        validProperties.push(p);
+                    }
+                    const dfValue = this.state.ticket.DynamicFields ?
+                        this.state.ticket.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
+                    if (dfValue) {
+                        const value = await this.state.labelProvider.getDFDisplayValues(dfValue);
+                        if (Array.isArray(value[0]) && value[0].length > 1) {
+                            this.state.dynamicFieldLabels[p] = {
+                                Name: dfValue.Label,
+                                Labels: value[0].map(
+                                    (v) => new Label(null, p, null, v, null, v)
+                                )
+                            };
+                        }
+                    }
+                }
+            } else {
+                validProperties.push(p);
+            }
+        }
+        return validProperties;
     }
 
 }

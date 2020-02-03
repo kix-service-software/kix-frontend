@@ -14,6 +14,7 @@ import { FormService } from "./FormService";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
 import { TranslationService } from "../../../translation/webapp/core";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 
 export class JSONFormFieldValidator implements IFormFieldValidator {
 
@@ -52,5 +53,13 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
             }
         }
         return true;
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return false;
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 }

@@ -23,9 +23,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.update();
     }
 
-    private async update(): Promise<void> {
+    private update(): void {
         if (this.state.cell) {
-            const value = await this.state.cell.getDisplayValue();
+            const value = this.state.cell.getValue().displayValue;
             this.state.text = value;
         }
     }

@@ -148,7 +148,7 @@ export class DynamicFormFieldValue {
         // FIXME: Its not needed to check unique here, because getProperties() should return only available properties.
         // The manager should make the decision
         const unique = this.manager.uniqueProperties;
-        const nodes = [];
+        const nodes: TreeNode[] = [];
         if (properties) {
             for (const p of properties) {
                 if (
@@ -166,7 +166,7 @@ export class DynamicFormFieldValue {
         }
         this.propertyTreeHandler.setTree(nodes);
         if (this.value.property) {
-            const propNode = nodes.find((n) => n.id === this.value.property);
+            const propNode = nodes.find((n) => n.id.toString() === this.value.property);
             if (propNode) {
                 this.propertyTreeHandler.setSelection([propNode], true, true, true);
             }
@@ -218,7 +218,7 @@ export class DynamicFormFieldValue {
 
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
-            this.isMultiselect = this.manager.isMultiselect(property);
+            this.isMultiselect = await this.manager.isMultiselect(property);
 
             this.valueTreeHandler.setMultiSelect(this.isMultiselect);
             if (this.isAutocomplete) {
@@ -286,7 +286,7 @@ export class DynamicFormFieldValue {
                         this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
                     }
                 } else {
-                    const date = new Date(this.value.value);
+                    const date = new Date(Array.isArray(this.value.value) ? this.value.value[0] : this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                     }
@@ -304,12 +304,14 @@ export class DynamicFormFieldValue {
                         this.betweenEndTime = DateTimeUtil.getKIXTimeString(endDate);
                     }
                 } else {
-                    const date = new Date(this.value.value);
+                    const date = new Date(Array.isArray(this.value.value) ? this.value.value[0] : this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                         this.time = DateTimeUtil.getKIXTimeString(date);
                     }
                 }
+            } else {
+                this.value.value = Array.isArray(this.value.value) ? this.value.value[0] : this.value.value;
             }
         }
 
@@ -355,10 +357,12 @@ export class DynamicFormFieldValue {
     public getValue(): ObjectPropertyValue {
         const currentValue = { ...this.value };
         if (this.isDate) {
-            const date = new Date(currentValue.value);
+            const date = new Date(this.date);
+            date.setHours(0, 0, 0, 0);
             currentValue.value = isNaN(date.getTime()) ? null : DateTimeUtil.getKIXDateTimeString(date);
             if (this.isBetween && currentValue.value) {
                 const endDate = new Date(this.betweenEndDate);
+                endDate.setHours(0, 0, 0, 0);
                 currentValue.value = isNaN(endDate.getTime())
                     ? null
                     : [currentValue.value, DateTimeUtil.getKIXDateTimeString(endDate)];

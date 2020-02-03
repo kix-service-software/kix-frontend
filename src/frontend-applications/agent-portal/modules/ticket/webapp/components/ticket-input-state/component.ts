@@ -47,6 +47,9 @@ class Component extends FormInputComponent<number, ComponentState> {
 
     public async load(): Promise<TreeNode[]> {
         const nodes = await TicketService.getInstance().getTreeNodes(TicketProperty.STATE_ID);
+        for (const n of nodes) {
+            n.tooltip = await TranslationService.translate(n.tooltip);
+        }
         await this.setCurrentNode(nodes);
         return nodes;
     }
@@ -63,7 +66,9 @@ class Component extends FormInputComponent<number, ComponentState> {
             }
             if (defaultStateValue) {
                 const currentNode = nodes.find((n) => n.id === defaultStateValue);
-                currentNode.selected = true;
+                if (currentNode) {
+                    currentNode.selected = true;
+                }
                 await this.showPendingTime(currentNode);
                 this.setValue(currentNode);
             }

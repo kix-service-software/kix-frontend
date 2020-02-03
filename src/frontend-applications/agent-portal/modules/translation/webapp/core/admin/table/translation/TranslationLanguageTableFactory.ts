@@ -14,7 +14,7 @@ import { ITable, Table } from "../../../../../../base-components/webapp/core/tab
 import { TranslationLanguageTableContentProvider } from ".";
 import {
     DefaultColumnConfiguration
-} from "../../../../../../../server/services/configuration/DefaultColumnConfiguration";
+} from "../../../../../../../model/configuration/DefaultColumnConfiguration";
 import { TranslationLanguageProperty } from "../../../../../model/TranslationLanguageProperty";
 import { TableHeaderHeight } from "../../../../../../../model/configuration/TableHeaderHeight";
 import { TableRowHeight } from "../../../../../../../model/configuration/TableRowHeight";

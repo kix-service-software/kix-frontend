@@ -16,7 +16,7 @@ import { EventService } from "../../../../../modules/base-components/webapp/core
 import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
 import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../model/DataType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";

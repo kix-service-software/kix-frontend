@@ -11,7 +11,6 @@ import { KIXObjectService } from "../../../../modules/base-components/webapp/cor
 import { Contact } from "../../model/Contact";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContactProperty } from "../../model/ContactProperty";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
 import { TreeNode } from "../../../base-components/webapp/core/tree";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
@@ -44,21 +43,6 @@ export class ContactService extends KIXObjectService<Contact> {
 
     public getLinkObjectName(): string {
         return "Person";
-    }
-
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        if (value) {
-            if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-                if (typeof value === 'object') {
-                    value = value[OrganisationProperty.ID];
-                }
-                parameter.push([ContactProperty.ORGANISATION_IDS, [value]]);
-            }
-            parameter.push([property, value]);
-        }
-
-        return parameter;
     }
 
     public determineDependendObjects(contacts: Contact[], targetObjectType: KIXObjectType): string[] | number[] {

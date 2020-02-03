@@ -128,20 +128,22 @@ export class Article extends KIXObject<Article> {
 
     public isUnread(): boolean {
         if (this.Flags) {
-            return !this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'seen' && af.Value === "1");
+            return !this.Flags.some(
+                (af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'seen' && af.Value === "1"
+            );
         }
         return false;
     }
 
     public isUnsent(): boolean {
         if (this.Flags) {
-            return this.Flags.some((af) => af.Name.toLocaleLowerCase() === 'notsenterror');
+            return this.Flags.some((af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'notsenterror');
         }
         return false;
     }
 
     public getUnsentError(): string {
-        const flag = this.Flags.find((af) => af.Name.toLocaleLowerCase() === 'notsenterror');
+        const flag = this.Flags.find((af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'notsenterror');
         if (flag) {
             return flag.Value;
         }

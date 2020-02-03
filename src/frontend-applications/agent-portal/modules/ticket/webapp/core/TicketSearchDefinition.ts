@@ -18,6 +18,7 @@ import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -27,11 +28,17 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, null, ['Watchers', 'Links'], ['Links']);
+        return new KIXObjectLoadingOptions(
+            criteria, null, null,
+            [TicketProperty.WATCHERS, KIXObjectProperty.LINKS, KIXObjectProperty.DYNAMIC_FIELDS],
+            [KIXObjectProperty.LINKS]
+        );
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, null, null, ['Watchers']);
+        return new KIXObjectLoadingOptions(
+            null, null, null, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
+        );
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
@@ -74,7 +81,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         return criteria;
     }
 
-    public prepareSearchFormValue(property: string, value: any): FilterCriteria[] {
+    public async prepareSearchFormValue(property: string, value: any): Promise<FilterCriteria[]> {
         let criteria = [];
         switch (property) {
             case TicketProperty.TICKET_NUMBER:
@@ -88,7 +95,8 @@ export class TicketSearchDefinition extends SearchDefinition {
                 criteria = [...criteria, ...this.getFulltextCriteria(value)];
                 break;
             default:
-                criteria = [...criteria, ...super.prepareSearchFormValue(property, value)];
+                const preparedCriteria = await super.prepareSearchFormValue(property, value);
+                criteria = [...criteria, ...preparedCriteria];
         }
 
         return criteria;
@@ -98,7 +106,7 @@ export class TicketSearchDefinition extends SearchDefinition {
         const criteria: FilterCriteria[] = [];
         if (value) {
             criteria.push(new FilterCriteria(
-                TicketProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                SearchProperty.FULLTEXT, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
             ));
         }
         return criteria;

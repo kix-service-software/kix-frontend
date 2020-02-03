@@ -13,6 +13,7 @@ import { TicketProperty } from "../../../../model/TicketProperty";
 import { ValidationResult } from "../../../../../../modules/base-components/webapp/core/ValidationResult";
 import { FormService } from "../../../../../../modules/base-components/webapp/core/FormService";
 import { ValidationSeverity } from "../../../../../../modules/base-components/webapp/core/ValidationSeverity";
+import { DynamicField } from "../../../../../dynamic-fields/model/DynamicField";
 
 export class PendingTimeValidator implements IFormFieldValidator {
 
@@ -49,6 +50,14 @@ export class PendingTimeValidator implements IFormFieldValidator {
 
     private hasValidDate(date: Date): boolean {
         return date && !isNaN(date.getTime());
+    }
+
+    public isValidatorForDF(dynamicField: DynamicField): boolean {
+        return false;
+    }
+
+    public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
+        return new ValidationResult(ValidationSeverity.OK, '');
     }
 
 }

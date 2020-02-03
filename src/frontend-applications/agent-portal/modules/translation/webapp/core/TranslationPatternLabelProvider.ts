@@ -126,7 +126,12 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
         return displayValue;
     }
 
-    public getObjectTooltip(translation: TranslationPattern): string {
+    public async getObjectTooltip(translation: TranslationPattern, translatable: boolean = false): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(
+                translation.ObjectId.toString()
+            );
+        }
         return translation.ObjectId.toString();
     }
 

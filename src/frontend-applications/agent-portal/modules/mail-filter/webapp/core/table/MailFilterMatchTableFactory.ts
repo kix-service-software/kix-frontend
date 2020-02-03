@@ -12,7 +12,7 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { ITable, Table } from "../../../../base-components/webapp/core/table";
 import { MailFilterMatchTableContentProvider } from "./MailFilterMatchTableContentProvider";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../model/DataType";
 import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
 import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";

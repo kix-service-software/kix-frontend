@@ -17,7 +17,7 @@ import { RoutingConfiguration } from "../../../../../model/configuration/Routing
 import { FAQDetailsContext } from "../context/FAQDetailsContext";
 import { ContextMode } from "../../../../../model/ContextMode";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../server/services/configuration/DefaultColumnConfiguration";
+import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../model/DataType";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
@@ -111,7 +111,7 @@ export class FAQArticleTableFactory extends TableFactory {
             case FAQArticleProperty.VOTES:
                 return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.VOTES, true, true, true, false, 120, true, true, true, DataType.STRING, false,
-                    null, null, null, null, true
+                    null, null, null, true, true
                 );
             case FAQArticleProperty.CATEGORY_ID:
                 return new DefaultColumnConfiguration(null, null, null,

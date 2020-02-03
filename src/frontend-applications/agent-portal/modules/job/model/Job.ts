@@ -12,6 +12,7 @@ import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 import { Macro } from "./Macro";
 import { ArticleProperty } from "../../ticket/model/ArticleProperty";
 import { ExecPlan } from "./ExecPlan";
+import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
 
 export class Job extends KIXObject {
 
@@ -57,6 +58,9 @@ export class Job extends KIXObject {
                     if (job.Filter[key]) {
                         let property = key.replace('Ticket::', '');
                         property = property.replace('Article::', '');
+                        property = property.replace(
+                            /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                        );
                         if (this.isStringProperty(property)) {
                             newFilter[property] = Array.isArray(job.Filter[key]) ?
                                 job.Filter[key][0] : job.Filter[key];

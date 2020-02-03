@@ -123,10 +123,6 @@ export class Ticket extends KIXObject<Ticket> {
 
     public TypeID: number;
 
-    public SLAID?: number | string;
-
-    public ServiceID?: number;
-
     public ResponsibleID: number;
 
     public Articles: Article[];
@@ -151,14 +147,6 @@ export class Ticket extends KIXObject<Ticket> {
             this.ContactID = ticket.ContactID;
             this.OwnerID = ticket.OwnerID;
             this.TypeID = ticket.TypeID;
-
-            this.SLAID = String(ticket.SLAID) === ''
-                ? null
-                : (ticket.SLAID !== null ? Number(ticket.SLAID) : null);
-
-            this.ServiceID = String(ticket.ServiceID) === ''
-                ? null
-                : (ticket.ServiceID !== null ? Number(ticket.ServiceID) : null);
 
             this.ResponsibleID = ticket.ResponsibleID;
             this.Age = ticket.Age;

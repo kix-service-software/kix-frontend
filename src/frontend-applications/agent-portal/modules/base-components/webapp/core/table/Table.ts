@@ -14,11 +14,11 @@ import { IColumn } from "./IColumn";
 import { ITableContentProvider } from "./ITableContentProvider";
 import { IRowObject } from "./IRowObject";
 import { IRow } from "./IRow";
-import { IColumnConfiguration } from "./IColumnConfiguration";
+import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 import { TableSortUtil } from "./TableSortUtil";
 import { SelectionState } from "./SelectionState";
 import { TableEvent } from "./TableEvent";
-import { TableConfiguration } from "./TableConfiguration";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { TableValue } from "./TableValue";
 import { ValueState } from "./ValueState";
 import { TableEventData } from "./TableEventData";
@@ -27,6 +27,13 @@ import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
 import { SortOrder } from "../../../../../model/SortOrder";
 import { EventService } from "../EventService";
 import { SearchOperator } from "../../../../search/model/SearchOperator";
+import { KIXObjectService } from "../KIXObjectService";
+import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../../model/FilterCriteria";
+import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
+import { FilterDataType } from "../../../../../model/FilterDataType";
+import { FilterType } from "../../../../../model/FilterType";
 
 export class Table implements ITable {
 
@@ -78,6 +85,14 @@ export class Table implements ITable {
     public async initialize(): Promise<void> {
         if (!this.initialized) {
             this.initialized = true;
+
+            this.columns = [];
+            if (this.columnConfiguration) {
+                for (const c of this.columnConfiguration) {
+                    await this.createColumn(c);
+                }
+            }
+
             if (this.contentProvider) {
                 await this.contentProvider.initialize();
                 await this.loadRowData();
@@ -86,10 +101,11 @@ export class Table implements ITable {
                     : this.contentProvider.getObjectType();
             }
 
-            this.columns = [];
-            if (this.columnConfiguration) {
-                this.columnConfiguration.forEach((c) => this.createColumn(c));
-            }
+            this.rows.forEach((r) => {
+                this.columns.forEach((c) => {
+                    r.addCell(new TableValue(c.getColumnId(), null));
+                });
+            });
 
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder);
@@ -124,15 +140,44 @@ export class Table implements ITable {
         return row;
     }
 
-    private createColumn(columnConfiguration: IColumnConfiguration): IColumn {
-        const column = new Column(this, columnConfiguration);
+    private async createColumn(columnConfiguration: IColumnConfiguration): Promise<IColumn> {
+        let column;
 
-        this.rows.forEach((r) => {
-            r.addCell(new TableValue(column.getColumnId(), null));
-        });
+        let canCreate: boolean = false;
+        if (columnConfiguration && columnConfiguration.property.match(/^DynamicFields?\..+/)) {
+            const dfName = columnConfiguration.property.replace(/^DynamicFields?\.(.+)/, '$1');
+            if (dfName) {
+                canCreate = await this.checkDF(dfName);
+            }
+        } else {
+            canCreate = true;
+        }
 
-        this.columns.push(column);
+        if (canCreate) {
+            column = new Column(this, columnConfiguration);
+            this.columns.push(column);
+        }
+
         return column;
+    }
+
+    private async checkDF(dfName: string): Promise<boolean> {
+        let can = false;
+        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null,
+            new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, dfName
+                    )
+                ], null, 1, [DynamicFieldProperty.CONFIG]
+            ), null, true
+        ).catch(() => [] as DynamicField[]);
+        if (dynamicFields.length && dynamicFields[0] && dynamicFields[0].ValidID === 1) {
+            can = true;
+        }
+        return can;
     }
 
     public getRows(all: boolean = false): IRow[] {
@@ -254,7 +299,7 @@ export class Table implements ITable {
         return removedColumns;
     }
 
-    public addColumns(columnConfigs: IColumnConfiguration[]): void {
+    public async addColumns(columnConfigs: IColumnConfiguration[]): Promise<void> {
         if (!this.initialized) {
             if (!this.columnConfiguration) {
                 this.columnConfiguration = [...columnConfigs];
@@ -262,12 +307,12 @@ export class Table implements ITable {
                 this.columnConfiguration.push(...columnConfigs);
             }
         } else {
-            columnConfigs.forEach((c) => {
+            for (const c of columnConfigs) {
                 if (!this.hasColumn(c.property)) {
-                    this.createColumn(c);
+                    await this.createColumn(c);
                     this.updateRowValues();
                 }
-            });
+            }
             this.reload(true, false);
         }
     }
@@ -278,25 +323,6 @@ export class Table implements ITable {
 
     private hasColumn(id: string): boolean {
         return this.columns.some((kr) => kr.getColumnId() === id);
-    }
-
-    public replaceColumns(replaceColumns: Array<[string, IColumn]>): IColumn[] {
-        let replacedColumns = [];
-        replaceColumns.forEach((r) => {
-            let replaceColumnIndex = this.columns.findIndex((kr) => kr.getColumnId() === r[0]);
-            if (replaceColumnIndex !== -1) {
-                const checkNewColumnIndex = this.columns.findIndex((kr) => kr.getColumnId() === r[1].getColumnId());
-                if (checkNewColumnIndex !== -1) {
-                    this.columns.splice(checkNewColumnIndex, 1);
-                    if (checkNewColumnIndex < replaceColumnIndex) {
-                        replaceColumnIndex = this.columns.findIndex((kr) => kr.getColumnId() === r[0]);
-                    }
-                }
-
-                replacedColumns = [...replacedColumns, ...this.columns.splice(replaceColumnIndex, 1, r[1])];
-            }
-        });
-        return replacedColumns;
     }
 
     public setFilter(filterValue?: string, criteria?: TableFilterCriteria[]): void {
@@ -360,11 +386,6 @@ export class Table implements ITable {
         const column = this.getColumn(columnId);
         if (column) {
             column.setSortOrder(sortOrder);
-
-            const rows = this.getRows(true);
-            const cellPromises: Array<Promise<string>> = [];
-            rows.forEach((r) => cellPromises.push(r.getCell(columnId).getDisplayValue()));
-            await Promise.all(cellPromises);
 
             if (this.filteredRows) {
                 this.filteredRows = TableSortUtil.sort(

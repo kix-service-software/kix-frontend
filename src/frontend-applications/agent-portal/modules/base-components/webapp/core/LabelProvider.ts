@@ -16,10 +16,20 @@ import { ValidObject } from "../../../valid/model/ValidObject";
 import { User } from "../../../user/model/User";
 import { DateTimeUtil } from "./DateTimeUtil";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../model/FilterCriteria";
+import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
+import { SearchOperator } from "../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../model/FilterDataType";
+import { FilterType } from "../../../../model/FilterType";
+import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
+import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
     public kixObjectType: KIXObjectType | string;
+    protected dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
 
     public isLabelProviderFor(object: T): boolean {
         throw new Error("Method not implemented.");
@@ -65,7 +75,27 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 displayValue = 'Translatable#Linked as';
                 break;
             default:
-                displayValue = property;
+                if (property.match(this.dFRegEx)) {
+                    const dfName = property.replace(this.dFRegEx, '$1');
+                    const dynamicFields = dfName ? await KIXObjectService.loadObjects<DynamicField>(
+                        KIXObjectType.DYNAMIC_FIELD, null,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                                    FilterType.AND, dfName
+                                )
+                            ]
+                        ), null, true
+                    ).catch(() => [] as DynamicField[]) : [];
+                    if (dynamicFields.length) {
+                        displayValue = dynamicFields[0].Label;
+                    } else {
+                        displayValue = property;
+                    }
+                } else {
+                    displayValue = property;
+                }
         }
 
         if (displayValue) {
@@ -107,7 +137,27 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     public async getDisplayText(
         object: T, property: string, defaultValue?: string, translatable?: boolean
     ): Promise<string> {
-        return await this.getPropertyValueDisplayText(property, object[property], translatable);
+        let displayValue;
+
+        if (property.match(this.dFRegEx)) {
+            const dfName = property.replace(this.dFRegEx, '$1');
+            let fieldValue: DynamicFieldValue;
+            if (object[KIXObjectProperty.DYNAMIC_FIELDS]) {
+                fieldValue = object[KIXObjectProperty.DYNAMIC_FIELDS].find((dfv) => dfv.Name === dfName);
+                if (fieldValue) {
+                    const preparedValue = await this.getDFDisplayValues(fieldValue);
+                    if (preparedValue && preparedValue[1]) {
+                        displayValue = preparedValue[1];
+                    } else {
+                        displayValue = fieldValue.DisplayValue.toString();
+                    }
+                }
+            }
+        } else {
+            displayValue = await this.getPropertyValueDisplayText(property, object[property], translatable);
+        }
+
+        return displayValue;
     }
 
     public getObjectAdditionalText(object: T, translatable?: boolean): string {
@@ -115,7 +165,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public async getPropertyValueDisplayText(
-        property: string, value: string | number, translatable: boolean = true
+        property: string, value: string | number | any, translatable: boolean = true
     ): Promise<string> {
         let displayValue = value;
         switch (property) {
@@ -141,6 +191,23 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
+                if (property.match(this.dFRegEx) && value) {
+                    const dfName = property.replace(this.dFRegEx, '$1');
+                    if (dfName) {
+                        const preparedValue = await this.getDFDisplayValues(
+                            new DynamicFieldValue({
+                                Name: dfName,
+                                Value: value
+                            } as DynamicFieldValue)
+                        );
+                        if (preparedValue && preparedValue[1]) {
+                            displayValue = preparedValue[1];
+                        } else {
+                            displayValue = value.toString();
+                        }
+                    }
+                    translatable = false;
+                }
         }
 
         if (displayValue) {
@@ -152,7 +219,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public getObjectTooltip(object: T, translatable?: boolean): string {
+    public async getObjectTooltip(object: T, translatable?: boolean): Promise<string> {
         return '';
     }
 
@@ -182,6 +249,103 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
 
     public canShow(property: string, object: T): boolean {
         return true;
+    }
+
+    public async getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string]> {
+        let values = [];
+        let separator = '';
+
+        if (fieldValue) {
+            const dynamicField = await this.loadDynamicField(
+                fieldValue.ID ? Number(fieldValue.ID) : null,
+                fieldValue.Name ? fieldValue.Name : null
+            );
+
+            if (dynamicField) {
+                separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
+                    dynamicField.Config.ItemSeparator : ', ';
+                switch (dynamicField.FieldType) {
+                    case DynamicFieldType.DATE:
+                    case DynamicFieldType.DATE_TIME:
+                        values = await this.getDFDateDateTimeFieldValues(dynamicField, fieldValue);
+                        break;
+                    case DynamicFieldType.SELECTION:
+                        values = await this.getDFSelectionFieldValues(dynamicField, fieldValue);
+                        break;
+                    default:
+                        values = Array.isArray(fieldValue.Value) ? fieldValue.Value : [fieldValue.Value];
+                }
+            }
+        }
+        return [values, values.join(separator)];
+    }
+
+    private async loadDynamicField(id?: number, name?: string): Promise<DynamicField> {
+        let dynamicField: DynamicField;
+        if (id || name) {
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
+                new KIXObjectLoadingOptions(
+                    !id ? [
+                        new FilterCriteria(
+                            DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ] : null,
+                    null, 1, [DynamicFieldProperty.CONFIG]
+                ), null, true
+            ).catch(() => [] as DynamicField[]);
+
+            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+        }
+        return dynamicField;
+    }
+
+    private async getDFDateDateTimeFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
+        let values;
+
+        if (Array.isArray(fieldValue.Value)) {
+            const valuesPromises = [];
+            for (const v of fieldValue.Value) {
+                if (field.FieldType === DynamicFieldType.DATE) {
+                    valuesPromises.push(DateTimeUtil.getLocalDateString(v));
+                } else {
+                    valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
+                }
+            }
+            values = await Promise.all<string>(valuesPromises);
+        } else {
+            let v: string;
+            if (field.FieldType === DynamicFieldType.DATE) {
+                v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue);
+            } else {
+                v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue);
+            }
+            values = [v];
+        }
+
+        return values;
+    }
+
+    private async getDFSelectionFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
+        let values;
+
+        if (field.Config && field.Config.PossibleValues) {
+            const valuesPromises = [];
+            const translate = Boolean(field.Config.TranslatableValues);
+            for (const v of fieldValue.Value) {
+                if (field.Config.PossibleValues[v]) {
+                    if (translate) {
+                        valuesPromises.push(TranslationService.translate(field.Config.PossibleValues[v]));
+                    } else {
+                        valuesPromises.push(field.Config.PossibleValues[v]);
+                    }
+                }
+            }
+            values = await Promise.all<string>(valuesPromises);
+        }
+
+        return values;
     }
 
 }

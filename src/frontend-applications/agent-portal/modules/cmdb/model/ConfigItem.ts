@@ -90,6 +90,8 @@ export class ConfigItem extends KIXObject<ConfigItem> {
             this.Images = configItem.Images ? configItem.Images.map((i) => new ConfigItemImage(i)) : [];
             this.History = configItem.History ? configItem.History.map((h) => new ConfigItemHistory(h)) : [];
 
+            this.History.sort((a, b) => b.HistoryEntryID - a.HistoryEntryID);
+
             this.Versions = configItem.Versions ? configItem.Versions.map((v) => new Version(v)) : [];
 
             if (this.CurrentVersion) {

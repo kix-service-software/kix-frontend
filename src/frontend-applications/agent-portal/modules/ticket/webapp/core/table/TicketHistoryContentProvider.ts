@@ -9,10 +9,10 @@
 
 import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
 import { TicketHistory } from "../../../model/TicketHistory";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../base-components/webapp/core/table";
+import { ITable, IRowObject, RowObject, TableValue } from "../../../../base-components/webapp/core/table";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
+import { ContextService } from "../../../../base-components/webapp/core/ContextService";
 import { Ticket } from "../../../model/Ticket";
 
 export class TicketHistoryContentProvider extends TableContentProvider<TicketHistory> {
@@ -27,27 +27,26 @@ export class TicketHistoryContentProvider extends TableContentProvider<TicketHis
     }
 
     public async loadData(): Promise<Array<IRowObject<TicketHistory>>> {
-        let rowObjects = [];
+        const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             const ticket = await context.getObject<Ticket>();
             if (ticket) {
-                rowObjects = ticket.History
-                    .sort((a, b) => b.HistoryID - a.HistoryID)
-                    .map((th) => {
-                        const values: TableValue[] = [];
+                for (const th of ticket.History) {
+                    const values: TableValue[] = [];
 
-                        for (const property in th) {
-                            if (th.hasOwnProperty(property)) {
-                                values.push(new TableValue(property, th[property]));
-                            }
-                        }
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+                    for (const column of columns) {
+                        const tableValue = await this.getTableValue(th, column.property, column);
+                        values.push(tableValue);
+                    }
 
-                        return new RowObject<TicketHistory>(values, th);
-                    });
+                    rowObjects.push(new RowObject<TicketHistory>(values, th));
+                }
             }
         }
 
         return rowObjects;
     }
+
 }

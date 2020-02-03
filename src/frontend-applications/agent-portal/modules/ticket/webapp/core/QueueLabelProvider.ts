@@ -182,8 +182,10 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
         return [];
     }
 
-    public async getObjectText(queue: Queue, id?: boolean, title?: boolean): Promise<string> {
-        return id && title ? queue.Fullname.replace(/::/g, '/') : queue.Name;
+    public async getObjectText(
+        queue: Queue, id?: boolean, title?: boolean, translatable: boolean = true): Promise<string> {
+        const returnValue = id && title ? queue.Fullname.replace(/::/g, '/') : queue.Name;
+        return translatable ? await TranslationService.translate(returnValue) : returnValue;
     }
 
     public getObjectAdditionalText(queue: Queue): string {
@@ -203,7 +205,10 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
         return plural ? 'Queues' : 'Queue';
     }
 
-    public getObjectTooltip(queue: Queue): string {
+    public async getObjectTooltip(queue: Queue, translatable: boolean = true): Promise<string> {
+        if (translatable) {
+            return await TranslationService.translate(queue.Name);
+        }
         return queue.Name;
     }
 
