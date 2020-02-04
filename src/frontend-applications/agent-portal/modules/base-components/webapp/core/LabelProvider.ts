@@ -195,23 +195,21 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
-                if (property.match(this.dFRegEx) && value) {
-                    const dfName = property.replace(this.dFRegEx, '$1');
-                    if (dfName) {
-                        const preparedValue = await this.getDFDisplayValues(
-                            new DynamicFieldValue({
-                                Name: dfName,
-                                Value: value
-                            } as DynamicFieldValue)
-                        );
-                        if (preparedValue && preparedValue[1]) {
-                            displayValue = preparedValue[1];
-                        } else {
-                            displayValue = value.toString();
-                        }
+                const dfName = KIXObjectService.getDynamicFieldName(property);
+                if (dfName) {
+                    const preparedValue = await this.getDFDisplayValues(
+                        new DynamicFieldValue({
+                            Name: dfName,
+                            Value: value
+                        } as DynamicFieldValue)
+                    );
+                    if (preparedValue && preparedValue[1]) {
+                        displayValue = preparedValue[1];
+                    } else {
+                        displayValue = value.toString();
                     }
-                    translatable = false;
                 }
+                translatable = false;
         }
 
         if (displayValue) {
@@ -340,9 +338,12 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     private async getCIReferenceFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
-        if (!values && Array.isArray(fieldValue.Value)) {
+        if (!values) {
+            if (!Array.isArray(fieldValue.Value)) {
+                values = [fieldValue.Value];
+            }
             const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-                KIXObjectType.CONFIG_ITEM, fieldValue.Value,
+                KIXObjectType.CONFIG_ITEM, values,
                 new KIXObjectLoadingOptions(
                     null, null, null, [ConfigItemProperty.CURRENT_VERSION]
                 ), null, true
