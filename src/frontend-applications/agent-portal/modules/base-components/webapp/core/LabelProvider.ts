@@ -317,28 +317,24 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     private async getDFSelectionFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
-        let values;
-        if (field.Config && field.Config.PossibleValues) {
+        let values = fieldValue.PreparedValue;
+
+        if (!values && field.Config && field.Config.PossibleValues) {
             const valuesPromises = [];
+            const translate = Boolean(field.Config.TranslatableValues);
             for (const v of fieldValue.Value) {
-                if (field.FieldType === DynamicFieldType.DATE) {
-                    valuesPromises.push(DateTimeUtil.getLocalDateString(v));
-                } else {
-                    valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
+                if (field.Config.PossibleValues[v]) {
+                    if (translate) {
+                        valuesPromises.push(TranslationService.translate(field.Config.PossibleValues[v]));
+                    } else {
+                        valuesPromises.push(field.Config.PossibleValues[v]);
+                    }
                 }
             }
             values = await Promise.all<string>(valuesPromises);
-        } else {
-            let v: string;
-            if (field.FieldType === DynamicFieldType.DATE) {
-                v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue);
-            } else {
-                v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue);
-            }
-            values = [v];
         }
 
-        return values || [];
+        return values;
     }
 
     private async getCIReferenceFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
