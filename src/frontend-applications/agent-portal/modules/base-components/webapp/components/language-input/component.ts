@@ -34,6 +34,7 @@ class Component extends FormInputComponent<string, CompontentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
+        this.state.prepared = true;
     }
 
     private async load(): Promise<TreeNode[]> {
