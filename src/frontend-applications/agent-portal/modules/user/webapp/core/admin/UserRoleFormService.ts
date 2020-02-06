@@ -10,6 +10,7 @@
 import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
 import { Role } from "../../../model/Role";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { RoleProperty } from "../../../model/RoleProperty";
 
 
 export class UserRoleFormService extends KIXObjectFormService {
@@ -31,4 +32,20 @@ export class UserRoleFormService extends KIXObjectFormService {
     public isServiceFor(kixObjectType: KIXObjectType | string) {
         return kixObjectType === KIXObjectType.ROLE;
     }
+
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        if (value) {
+            if (property === RoleProperty.USER_IDS || property === RoleProperty.PERMISSIONS) {
+                if (Array.isArray(value) && !!value.length) {
+                    parameter.push([property, value]);
+                }
+            } else {
+                parameter.push([property, value]);
+            }
+        }
+
+        return parameter;
+    }
+
 }

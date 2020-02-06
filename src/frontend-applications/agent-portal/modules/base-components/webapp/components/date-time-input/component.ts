@@ -46,21 +46,6 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
             ? this.state.field.placeholder
             : this.state.field.required ? this.state.field.label : '';
         this.state.placeholder = await TranslationService.translate(placeholderText);
-
-        // Firefox Bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1446722
-        // the clear action of date input did not trigger change event if element was not focused
-        setTimeout(() => {
-            const dateElement = (this as any).getEl('date-' + this.state.inputId);
-            if (dateElement) {
-                dateElement.focus();
-                dateElement.blur();
-            }
-            const timeElement = (this as any).getEl('time-' + this.state.inputId);
-            if (timeElement) {
-                timeElement.focus();
-                timeElement.blur();
-            }
-        }, 50);
     }
 
     public async onMount(): Promise<void> {

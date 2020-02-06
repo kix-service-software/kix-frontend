@@ -45,16 +45,6 @@ export class TextModuleService extends KIXObjectService {
         return 'TextModule';
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        switch (property) {
-            case TextModuleProperty.KEYWORDS:
-                value = value ? value.split(/[,;\s]\s?/) : undefined;
-                break;
-            default:
-        }
-        return [[property, value]];
-    }
-
     public async getAutoFillConfiguration(textMatch: any, placeholder: string): Promise<IAutofillConfiguration> {
         const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
             new UIComponentPermission('system/textmodules', [CRUD.READ])

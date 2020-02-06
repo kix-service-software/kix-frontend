@@ -33,6 +33,23 @@ export class MailFilterFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.MAIL_FILTER;
     }
 
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case MailFilterProperty.STOP_AFTER_MATCH:
+                value = Number(value);
+                break;
+            case MailFilterProperty.MATCH:
+                if (Array.isArray(value)) {
+                    (value as MailFilterMatch[]).forEach((m) => {
+                        m.Not = Number(m.Not);
+                    });
+                }
+                break;
+            default:
+        }
+        return [[property, value]];
+    }
+
     protected async getValue(property: string, value: any, mailFilter: MailFilter): Promise<any> {
         switch (property) {
             case MailFilterProperty.MATCH:

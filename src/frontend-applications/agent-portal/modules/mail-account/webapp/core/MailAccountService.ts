@@ -35,16 +35,6 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
         return 'MailAccount';
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        switch (property) {
-            case MailAccountProperty.TRUSTED:
-                value = Number(value);
-                break;
-            default:
-        }
-        return [[property, value]];
-    }
-
     public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 

@@ -48,6 +48,7 @@ import { CreateWatcherRequest } from "./api/CreateWatcherRequest";
 import { SenderTypeFactory } from "./SenderTypeFactory";
 import { ArticleFactory } from "./ArticleFactory";
 import { LockFactory } from "./LockFactory";
+import { SearchProperty } from "../../search/model/SearchProperty";
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -379,7 +380,7 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const filterCriteria = criteria.filter(
+        let filterCriteria = criteria.filter(
             (f) => f.property !== TicketProperty.STATE_TYPE
                 && f.property !== TicketProperty.CREATED
                 && f.property !== KIXObjectProperty.CREATE_TIME
@@ -387,7 +388,15 @@ export class TicketAPIService extends KIXObjectAPIService {
                 && f.property !== TicketProperty.CLOSE_TIME
                 && f.property !== TicketProperty.LAST_CHANGE_TIME
                 && f.property !== KIXObjectProperty.CHANGE_TIME
+                && f.property !== SearchProperty.FULLTEXT
         );
+
+        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
+
+        if (fulltext) {
+            const fulltextSearch = this.getFulltextSearch(fulltext);
+            filterCriteria = [...filterCriteria, ...fulltextSearch];
+        }
 
         await this.setUserID(filterCriteria, token);
 
@@ -399,6 +408,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             (f) => f.operator !== SearchOperator.NOT_EQUALS
                 && f.property !== KIXObjectProperty.CREATE_BY
                 && f.property !== KIXObjectProperty.CHANGE_BY
+                && f.property !== SearchProperty.FULLTEXT
         );
 
         await this.setUserID(searchCriteria, token);
@@ -435,32 +445,32 @@ export class TicketAPIService extends KIXObjectAPIService {
         }
     }
 
-    private getFulltextSearch(fulltextFilter: FilterCriteria): any[] {
+    private getFulltextSearch(fulltextFilter: FilterCriteria): FilterCriteria[] {
         return [
-            {
-                Field: TicketProperty.TICKET_NUMBER, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.TITLE, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.BODY, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.FROM, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.TO, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            },
-            {
-                Field: TicketProperty.CC, Operator: SearchOperator.CONTAINS,
-                Type: FilterDataType.STRING, Value: fulltextFilter.value
-            }
+            new FilterCriteria(
+                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.TITLE, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.BODY, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.FROM, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.TO, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            ),
+            new FilterCriteria(
+                TicketProperty.CC, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+            )
         ];
     }
 }

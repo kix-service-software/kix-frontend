@@ -251,6 +251,9 @@ export class DynamicFieldFormUtil {
                 }
 
                 dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
+                if (dfValue.length === 0 && field.defaultValue) {
+                    dfValue.push(field.defaultValue.value);
+                }
             }
 
             if (dynamicField) {

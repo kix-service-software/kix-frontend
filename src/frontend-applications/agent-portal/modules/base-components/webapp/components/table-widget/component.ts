@@ -164,7 +164,10 @@ class Component {
         }
 
         if (!this.configuredTitle) {
-            let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+            let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
+            if (!title) {
+                title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+            }
             title = await TranslationService.translate(title);
             const countString = count > 0 ? " (" + count + ")" : "";
             this.state.title = title + countString;
