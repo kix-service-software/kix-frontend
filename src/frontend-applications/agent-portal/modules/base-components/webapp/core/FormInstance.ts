@@ -384,7 +384,7 @@ export class FormInstance implements IFormInstance {
             if (formFieldValue) {
                 formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
                 result = [...result, ...fieldResult];
-                if (field.children && !!field.children.length) {
+                if (!field.empty && field.children && !!field.children.length) {
                     const childrenResult = await this.validateFields(field.children);
                     result = [...result, ...childrenResult];
                 }
