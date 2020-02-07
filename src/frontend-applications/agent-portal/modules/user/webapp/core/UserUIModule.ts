@@ -38,6 +38,7 @@ import { PersonalSettingsDialogContext } from "./PersonalSettingsDialogContext";
 import { UserPasswordValidator } from "./UserPasswordValidator";
 import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
 import { AgentService } from "./AgentService";
+import { PersonalSettingsFormService } from "./PersonalSettingsFormService";
 
 
 export class UIModule implements IUIModule {
@@ -56,6 +57,8 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.registerServiceInstance(RoleService.getInstance());
         ServiceRegistry.registerServiceInstance(UserFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
+
 
         LabelService.getInstance().registerLabelProvider(new UserLabelProvider());
         LabelService.getInstance().registerLabelProvider(new RoleLabelProvider());

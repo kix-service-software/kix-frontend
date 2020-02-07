@@ -56,13 +56,13 @@ export class UserLabelProvider extends LabelProvider<User> {
             case UserProperty.USER_COMMENT:
                 displayValue = 'Translatable#Comment';
                 break;
-            case UserProperty.USER_LANGUAGE:
+            case PersonalSettingsProperty.USER_LANGUAGE:
                 displayValue = 'Translatable#Language';
                 break;
-            case UserProperty.MY_QUEUES:
+            case PersonalSettingsProperty.MY_QUEUES:
                 displayValue = 'Translatable#My Queues';
                 break;
-            case UserProperty.NOTIFICATIONS:
+            case PersonalSettingsProperty.NOTIFICATIONS:
                 displayValue = 'Translatable#Ticket Notifications';
                 break;
             default:
