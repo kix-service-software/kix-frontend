@@ -56,7 +56,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
     protected async prePrepareForm(form: FormConfiguration): Promise<void> {
         if (form) {
             const context = ContextService.getInstance().getActiveContext();
-            if (context.getDescriptor().contextType === ContextType.DIALOG) {
+            if (context.getDescriptor().contextType === ContextType.DIALOG && form.formContext !== FormContext.LINK) {
                 const ciClassId = context.getAdditionalInformation('CI_CLASS_ID');
                 await ConfigItemFormFactory.getInstance().addCIClassAttributesToForm(form, ciClassId);
             }
