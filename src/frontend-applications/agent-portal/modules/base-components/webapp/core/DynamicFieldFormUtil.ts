@@ -254,9 +254,6 @@ export class DynamicFieldFormUtil {
                 }
 
                 dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
-                if (dfValue.length === 0 && field.defaultValue) {
-                    dfValue.push(field.defaultValue.value);
-                }
             }
 
             if (dynamicField) {
@@ -315,7 +312,7 @@ export class DynamicFieldFormUtil {
             const dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
             if (dynamicField) {
                 const fieldType = dynamicField.FieldType;
-                if (setValue && fieldType === DynamicFieldType.DATE || fieldType === DynamicFieldType.DATE_TIME) {
+                if (setValue && (fieldType === DynamicFieldType.DATE || fieldType === DynamicFieldType.DATE_TIME)) {
                     setValue = DateTimeUtil.getKIXDateTimeString(setValue);
                 } else if (setValue && fieldType === DynamicFieldType.CHECK_LIST) {
                     setValue = JSON.stringify(setValue);
