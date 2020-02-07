@@ -11,6 +11,15 @@ import { KIXObjectFormService } from "../../../../modules/base-components/webapp
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { AgentService } from ".";
 import { PersonalSettingsProperty } from "../../model/PersonalSettingsProperty";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../model/FilterCriteria";
+import { NotificationProperty } from "../../../notification/model/NotificationProperty";
+import { SearchOperator } from "../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../model/FilterDataType";
+import { FilterType } from "../../../../model/FilterType";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
+import { Notification } from "../../../notification/model/Notification";
 
 export class PersonalSettingsFormService extends KIXObjectFormService {
 
@@ -39,7 +48,15 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
 
         if (property === PersonalSettingsProperty.MY_QUEUES && value && typeof value === 'string') {
             value = value.split(',').map((v) => Number(v));
-        } else if (property === PersonalSettingsProperty.NOTIFICATIONS && value) {
+        } else if (property === PersonalSettingsProperty.NOTIFICATIONS) {
+            value = await this.handleNotifications(value);
+        }
+
+        return value;
+    }
+
+    public async handleNotifications(value: any): Promise<any> {
+        if (value) {
             try {
                 const notifications = JSON.parse(value);
                 value = [];
@@ -54,5 +71,30 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
         }
 
         return value;
+    }
+
+    public async postPrepareValues(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+
+        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+        if (queuesParameter) {
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
+        }
+
+        const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+        if (notificationParameter) {
+            const transport = 'Email';
+            const notificationPreference = {};
+            if (Array.isArray(notificationParameter[1])) {
+                notificationParameter[1].forEach((e) => {
+                    const eventKey = `Notification-${e}-${transport}`;
+                    notificationPreference[eventKey] = 1;
+                });
+
+            }
+
+            notificationParameter[1] = JSON.stringify(notificationPreference);
+        }
+
+        return parameter;
     }
 }

@@ -53,27 +53,12 @@ export class AgentService extends KIXObjectService<User> {
     }
 
     public async setPreferencesByForm(formId: string): Promise<void> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(KIXObjectType.USER, ServiceType.FORM);
-        const parameter: Array<[string, any]> = await service.prepareFormFields(formId);
-
-        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
-        if (queuesParameter) {
-            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : queuesParameter[1];
-        }
-
-        const notificationIndex = parameter.findIndex((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
-        if (notificationIndex !== -1 && Array.isArray(parameter[notificationIndex][1])) {
-            const transport = 'Email';
-            const notificationValues: Array<[string, number[]]> = parameter[notificationIndex];
-
-            const notificationPreference = {};
-            notificationValues[1].forEach((e) => {
-                const eventKey = `Notification-${e}-${transport}`;
-                notificationPreference[eventKey] = 1;
-            });
-
-            parameter.splice(notificationIndex, 1);
-            parameter.push([PersonalSettingsProperty.NOTIFICATIONS, JSON.stringify(notificationPreference)]);
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
+        );
+        let parameter: Array<[string, any]>;
+        if (service) {
+            parameter = await service.prepareFormFields(formId);
         }
 
         await AgentSocketClient.getInstance().setPreferences(parameter);

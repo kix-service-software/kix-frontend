@@ -89,7 +89,8 @@ export class UserService extends KIXObjectAPIService {
 
             const createParameter = parameter.filter((p) =>
                 p[0] !== PersonalSettingsProperty.USER_LANGUAGE &&
-                p[0] !== PersonalSettingsProperty.MY_QUEUES
+                p[0] !== PersonalSettingsProperty.MY_QUEUES &&
+                p[0] !== PersonalSettingsProperty.NOTIFICATIONS
             );
 
             const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
@@ -146,7 +147,9 @@ export class UserService extends KIXObjectAPIService {
             }
 
             const updateParameter = parameter.filter((p) =>
-                p[0] !== UserProperty.USER_LANGUAGE &&
+                p[0] !== PersonalSettingsProperty.USER_LANGUAGE &&
+                p[0] !== PersonalSettingsProperty.MY_QUEUES &&
+                p[0] !== PersonalSettingsProperty.NOTIFICATIONS &&
                 p[0] !== UserProperty.ROLEIDS &&
                 p[0] !== UserProperty.PREFERENCES
             );
