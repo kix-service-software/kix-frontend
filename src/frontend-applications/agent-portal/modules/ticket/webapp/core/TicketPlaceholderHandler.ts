@@ -304,7 +304,11 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                     typeof oldObject[property] !== 'undefined'
                     && !(fromForm && this.ignoreProperty(property))
                 ) {
-                    newObject[property] = oldObject[property];
+                    if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                        this.setDynamicFields(newObject, oldObject as Ticket);
+                    } else {
+                        newObject[property] = oldObject[property];
+                    }
                 }
             });
         }
@@ -346,5 +350,21 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
             subject = subjectValue && subjectValue.value ? subjectValue.value.toString() : '';
         }
         return subject;
+    }
+
+    private setDynamicFields(newObject: Ticket, oldObject: Ticket): void {
+        if (!newObject.DynamicFields) {
+            newObject.DynamicFields = [];
+        }
+        if (oldObject && Array.isArray(oldObject.DynamicFields) && oldObject.DynamicFields.length) {
+            oldObject.DynamicFields.forEach((dfValue) => {
+                const dfValueIndex = newObject.DynamicFields.findIndex((dfv) => dfv.Name === dfValue.Name);
+                if (dfValueIndex === -1) {
+                    newObject.DynamicFields.push(dfValue);
+                } else {
+                    newObject.DynamicFields[dfValueIndex] = dfValue;
+                }
+            });
+        }
     }
 }

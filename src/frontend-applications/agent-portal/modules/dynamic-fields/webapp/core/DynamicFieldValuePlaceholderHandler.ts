@@ -13,6 +13,9 @@ import { KIXObjectService } from "../../../base-components/webapp/core/KIXObject
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { DynamicFieldType } from "../../model/DynamicFieldType";
 import { DynamicFieldValue } from "../../model/DynamicFieldValue";
+import { DynamicFieldService } from "./DynamicFieldService";
+import { CheckListItem } from "./CheckListItem";
+import { LabelService } from "../../../base-components/webapp/core/LabelService";
 
 export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler {
 
@@ -53,7 +56,7 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
 
                 const dfValue = dfName ? object.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
                 if (dfValue) {
-                    result = await this.getDFDisplayValue(dfValue, dfValueOptions);
+                    result = await this.getDFDisplayValue(object, dfValue, dfValueOptions);
                 }
             }
         }
@@ -61,21 +64,28 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     }
 
 
-    private async getDFDisplayValue(dfValue: DynamicFieldValue, dfOptions: string = ''): Promise<string> {
+    private async getDFDisplayValue(
+        object: KIXObject, dfValue: DynamicFieldValue, dfOptions: string = ''
+    ): Promise<string> {
         let result = '';
+        if (!dfValue.Value) {
+            dfValue.Value = [];
+        } else if (!Array.isArray(dfValue.Value)) {
+            dfValue.Value = [dfValue.Value];
+        }
         if (dfOptions && dfOptions.match(/^Key$/i)) {
-            result = await this.handleKey(dfValue);
+            result = await this.handleKey(object, dfValue);
         } else if (dfOptions && dfOptions.match(/^HTML$/i)) {
-            result = dfValue.DisplayValueHTML;
+            result = await this.handleHTMLValue(object, dfValue);
         } else if (dfOptions && dfOptions.match(/^Short$/i)) {
-            result = dfValue.DisplayValueShort;
+            result = await this.handleShortValue(object, dfValue);
         } else if (dfOptions === '' || dfOptions.match(/^Value$/i)) {
-            result = dfValue.DisplayValue;
+            result = await this.handleValue(object, dfValue);
         }
         return result;
     }
 
-    private async handleKey(dfValue: DynamicFieldValue): Promise<string> {
+    private async handleKey(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
         const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
         let result: string = '';
         if (
@@ -89,9 +99,118 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
                 dynamicField.Config.ItemSeparator : ', ';
             result = Array.isArray(dfValue.Value) ? dfValue.Value.join(separator) : [dfValue.Value].join(separator);
         } else {
-            result = dfValue.DisplayValue;
+            result = await this.handleValue(object, dfValue);
         }
         return result;
+    }
+
+    private async handleValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+        let result: string = dfValue.DisplayValue ? dfValue.DisplayValue : '';
+        if (!result) {
+            const dynamicField = await DynamicFieldService.loadDynamicField(dfValue.Name);
+            if (dynamicField) {
+                const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
+                    dynamicField.Config.ItemSeparator : ', ';
+                if (dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
+                    result = this.getChecklistStringValue(dfValue);
+                } else {
+                    const labelProvider = LabelService.getInstance().getLabelProvider(object);
+                    if (labelProvider) {
+                        const values = await labelProvider.getDFDisplayValues(dfValue);
+                        result = values ? values[1] : Array.isArray(dfValue.Value) ?
+                            dfValue.Value.join(separator) : [dfValue.Value].join(separator);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    private async handleShortValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+        let result: string = dfValue.DisplayValueShort ? dfValue.DisplayValueShort : '';
+        if (!result) {
+            const dynamicField = await DynamicFieldService.loadDynamicField(dfValue.Name);
+            if (dynamicField) {
+                const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
+                    dynamicField.Config.ItemSeparator : ', ';
+                const labelProvider = LabelService.getInstance().getLabelProvider(object);
+                if (labelProvider) {
+                    const values = await labelProvider.getDFDisplayValues(dfValue);
+                    result = values ? values[1] : Array.isArray(dfValue.Value) ?
+                        dfValue.Value.join(separator) : [dfValue.Value].join(separator);
+                }
+            }
+        }
+        return result;
+    }
+
+    private async handleHTMLValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+        let result: string = dfValue.DisplayValueHTML ? dfValue.DisplayValueHTML : '';
+        if (!result) {
+            const dynamicField = await DynamicFieldService.loadDynamicField(dfValue.Name);
+            if (dynamicField && dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
+                result = this.getChecklistHTMLValue(dfValue);
+            } else {
+                result = await this.handleValue(object, dfValue);
+            }
+        }
+        return result;
+    }
+
+    private getChecklistStringValue(dfValue: DynamicFieldValue): string {
+        let result = `${dfValue.Name}</br >`;
+        for (const v of dfValue.Value) {
+            const checklist: CheckListItem[] = JSON.parse(v);
+            const checkListItems = this.getChecklistItems(checklist);
+            if (checkListItems.length) {
+                checkListItems.forEach((cl) => {
+                    result += `- ${cl[0]}: ${cl[1]}<br />`;
+                });
+
+                result += '<br />';
+            }
+        }
+        return result;
+    }
+
+    private getChecklistHTMLValue(dfValue: DynamicFieldValue): string {
+        let result = `<h3>${dfValue.Name}</h3>`;
+        for (const v of dfValue.Value) {
+            const checklist: CheckListItem[] = JSON.parse(v);
+            const checkListItems = this.getChecklistItems(checklist);
+            if (checkListItems.length) {
+                result += '<table style="border:none; width:90%">'
+                    + '<thead><tr>'
+                    + '<th style="padding:10px 15px;">Action</th>'
+                    + '<th style="padding:10px 15px;">State</th>'
+                    + '<tr></thead>'
+                    + '<tbody>';
+
+                checkListItems.forEach((cl) => {
+                    result += '<tr>'
+                        + '<td style="padding:10px 15px;">' + cl[0] + '</td>'
+                        + '<td style="padding:10px 15px;">' + cl[1] + '</td>'
+                        + '</tr>';
+                });
+
+                result += '</tbody></table>';
+            }
+        }
+        return result;
+    }
+
+    private getChecklistItems(checklist: CheckListItem[]): Array<[string, string]> {
+        const list = [];
+        checklist.forEach((cl) => {
+            list.push([cl.title, cl.value]);
+            if (Array.isArray(cl.sub)) {
+                const subList = this.getChecklistItems(cl.sub);
+                if (subList.length) {
+                    list.push(...subList);
+                }
+            }
+        });
+        return list;
     }
 
 }
