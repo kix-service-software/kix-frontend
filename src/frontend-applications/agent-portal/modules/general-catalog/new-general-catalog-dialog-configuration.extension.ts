@@ -87,7 +87,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(ObjectReferenceOptions.FREETEXT, true)
             ], null, null,
-                null, null, null, null, 100
+                null, null, null, null, null, 100
             )
         );
         configurations.push(
@@ -95,7 +95,7 @@ export class Extension implements IConfigurationExtension {
                 'general-catalog-new-form-field-name',
                 'Translatable#Name', GeneralCatalogItemProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_GeneralCatalogCreate_Name', null, null, null,
-                null, null, null, null, 100
+                null, null, null, null, null, 100
             )
         );
         configurations.push(
