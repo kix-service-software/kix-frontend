@@ -73,16 +73,18 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         return schema;
     }
 
-    public static async loadDynamicField(name: string): Promise<DynamicField> {
+    public static async loadDynamicField(name: string, id?: number): Promise<DynamicField> {
         const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null,
+            KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
             new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.AND, name
-                    )
-                ], null, 1, [DynamicFieldProperty.CONFIG]
+                id ? null :
+                    [
+                        new FilterCriteria(
+                            DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                            FilterType.AND, name
+                        )
+                    ],
+                null, null, [DynamicFieldProperty.CONFIG]
             ), null, true
         ).catch(() => [] as DynamicField[]);
 

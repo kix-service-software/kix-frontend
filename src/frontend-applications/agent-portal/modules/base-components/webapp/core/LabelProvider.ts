@@ -26,9 +26,9 @@ import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
+import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
 import { ConfigItem } from "../../../cmdb/model/ConfigItem";
 import { LabelService } from "./LabelService";
-import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -269,26 +269,28 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 switch (dynamicField.FieldType) {
                     case DynamicFieldType.DATE:
                     case DynamicFieldType.DATE_TIME:
-                        values = await this.getDFDateDateTimeFieldValues(dynamicField, fieldValue);
+                        values = await LabelProvider.getDFDateDateTimeFieldValues(dynamicField, fieldValue);
                         break;
                     case DynamicFieldType.SELECTION:
-                        values = await this.getDFSelectionFieldValues(dynamicField, fieldValue);
+                        values = await LabelProvider.getDFSelectionFieldValues(dynamicField, fieldValue);
                         break;
                     case DynamicFieldType.CI_REFERENCE:
-                        values = await this.getCIReferenceFieldValues(dynamicField, fieldValue);
+                        values = await LabelProvider.getDFCIReferenceFieldValues(dynamicField, fieldValue);
                         break;
                     case DynamicFieldType.CHECK_LIST:
-                        values = this.getDFChecklistFieldValues(dynamicField, fieldValue);
+                        values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
                         break;
                     default:
                         values = Array.isArray(fieldValue.Value) ? fieldValue.Value : [fieldValue.Value];
                 }
             }
         }
+
         return [values, values.join(separator), fieldValue.Value];
     }
-
-    private async getDFDateDateTimeFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
+    public static async getDFDateDateTimeFieldValues(
+        field: DynamicField, fieldValue: DynamicFieldValue
+    ): Promise<string[]> {
         let values;
 
         if (Array.isArray(fieldValue.Value)) {
@@ -314,7 +316,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return values;
     }
 
-    private async getDFSelectionFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
+    public static async getDFSelectionFieldValues(
+        field: DynamicField, fieldValue: DynamicFieldValue
+    ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
         if (!values && field.Config && field.Config.PossibleValues) {
@@ -335,7 +339,21 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return values;
     }
 
-    private async getCIReferenceFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): Promise<string[]> {
+    public static getDFChecklistFieldShortValues(field: DynamicField, fieldValue: DynamicFieldValue): string[] {
+        const values = fieldValue.DisplayValueShort ? fieldValue.DisplayValueShort.split(', ') : [];
+        if (!values || !values.length) {
+            for (const v of fieldValue.Value) {
+                const checklist = JSON.parse(v);
+                const counts = DynamicFieldFormUtil.countValues(checklist);
+                values.push(`${counts[0]}/${counts[1]}`);
+            }
+        }
+        return values;
+    }
+
+    public static async getDFCIReferenceFieldValues(
+        field: DynamicField, fieldValue: DynamicFieldValue
+    ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
         if (!values) {
@@ -354,18 +372,6 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             values = await Promise.all<string>(valuePromises);
         }
         return values || [];
-    }
-
-    private getDFChecklistFieldValues(field: DynamicField, fieldValue: DynamicFieldValue): string[] {
-        const values = fieldValue.DisplayValueShort ? fieldValue.DisplayValueShort.split(', ') : null;
-        if (!values || !!values.length) {
-            for (const v of fieldValue.Value) {
-                const checklist = JSON.parse(v);
-                const counts = DynamicFieldFormUtil.countValues(checklist);
-                values.push(`${counts[0]}/${counts[1]}`);
-            }
-        }
-        return values;
     }
 
 }
