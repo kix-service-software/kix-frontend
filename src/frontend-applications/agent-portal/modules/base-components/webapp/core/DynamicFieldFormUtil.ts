@@ -247,6 +247,9 @@ export class DynamicFieldFormUtil {
                     );
                     if (objectDFValue) {
                         dfValue = objectDFValue.Value;
+                        if (Array.isArray(dfValue) && dfValue.length === 0 && field.defaultValue) {
+                            dfValue.push(field.defaultValue.value);
+                        }
                     }
                 }
 
