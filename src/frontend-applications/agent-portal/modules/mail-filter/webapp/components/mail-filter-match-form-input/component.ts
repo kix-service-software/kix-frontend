@@ -47,12 +47,12 @@ class Component extends FormInputComponent<any[], ComponentState> {
                     if (this.state.matchManager.hasDefinedValues()) {
                         const values = this.state.matchManager.getEditableValues();
                         values.forEach((v) => {
-                            if (v.property && v.value && v.value[0]) {
+                            if (v.property && v.value && (v.value as MailFilterMatch).Value) {
                                 matchValues.push(
                                     new MailFilterMatch(
                                         v.property,
-                                        v.value[0],
-                                        v.value[1]
+                                        (v.value as MailFilterMatch).Value,
+                                        (v.value as MailFilterMatch).Not
                                     )
                                 );
                             }
@@ -75,7 +75,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
             this.state.defaultValue.value.forEach((match: MailFilterMatch) => {
                 matchManager.setValue(
                     new ObjectPropertyValue(
-                        match.Key, null, [match.Value, match.Not], false, true, null, null, null, match.Key
+                        match.Key, null, match, false, true, null, null, null, match.Key
                     )
                 );
             });
