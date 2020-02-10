@@ -15,13 +15,13 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { AgentService } from '../../../../../user/webapp/core';
 import { ShowUserTicketsAction } from '../../../../../ticket/webapp/core';
-import { RoutingService } from '../../../../../base-components/webapp/core/RoutingService';
-import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
-import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { ContextMode } from '../../../../../../model/ContextMode';
 import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
+import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../model/ContextMode';
+import { RoutingService } from '../../../../../base-components/webapp/core/RoutingService';
 
 class Component {
 
@@ -34,7 +34,7 @@ class Component {
     public async onMount(): Promise<void> {
         const permissions = [new UIComponentPermission('tickets', [CRUD.READ])];
         if (await AuthenticationSocketClient.getInstance().checkPermissions(permissions)) {
-            this.state.showKanban = true;
+            this.state.show = true;
             this.initActions();
         }
 
@@ -109,6 +109,14 @@ class Component {
             showTicketsAction.run();
         }
     }
+
+    public showCalendar(): void {
+        const routingCOnfiguration = new RoutingConfiguration(
+            'calendar', KIXObjectType.ANY, ContextMode.DASHBOARD, null
+        );
+        RoutingService.getInstance().routeToContext(routingCOnfiguration, null);
+    }
+
 
     public showKanban(): void {
         const routingCOnfiguration = new RoutingConfiguration('kanban', KIXObjectType.ANY, ContextMode.DASHBOARD, null);

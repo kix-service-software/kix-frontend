@@ -7,14 +7,13 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
-
-export class ComponentState {
+export class CalendarConfiguration {
 
     public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public show: boolean = false,
-        public ownedTicketsCount: number = 0
+        public startDateProperty: string,
+        public endDateProperty: string,
+        public properties: string[] = [],
+        public defaultView: string = 'month'
     ) { }
 
 }

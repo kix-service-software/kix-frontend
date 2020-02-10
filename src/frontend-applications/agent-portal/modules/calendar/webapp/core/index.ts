@@ -7,14 +7,5 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
-
-export class ComponentState {
-
-    public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public show: boolean = false,
-        public ownedTicketsCount: number = 0
-    ) { }
-
-}
+export { CalendarContext } from './CalendarContext';
+export { UIModule as CalendarUIModule } from './CalendarUIModule';

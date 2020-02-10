@@ -1,0 +1,71 @@
+/**
+ * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.calendar-container {
+
+    .tui-full-calendar-time-schedule,
+    .tui-full-calendar-popup-top-line,
+    .tui-full-calendar-weekday-schedule {
+        background-color: @tertiary-7  !important;
+    }
+
+    .tui-full-calendar-dayname-name,
+    .tui-full-calendar-month-dayname-item {
+        font-size: 1.25rem !important;
+    }
+
+    .widget-header {
+        display: none;
+    }
+
+    .calendar-header {
+        padding: 1rem;
+        display: grid;
+        display: grid;
+        grid-auto-flow: column;
+        background-color: shade(@tertiary-7, 25%);
+        color: #fff;
+        align-items: center;
+
+        .calendar-date {
+            font-size: 2rem;
+            margin-left: 1rem;
+        }
+
+        .calendar-controls {
+            display: grid;
+            grid-auto-flow: column;
+            grid-column-gap: @margin-small;
+            align-items: center;
+            justify-self: end;
+            margin-right: 1rem;
+            font-size: 1.5rem;
+
+            >span {
+                font-size: 2.5rem;
+                color: @secondary-6;
+            }
+
+            &:hover {
+                cursor: pointer;
+            }
+
+            .calendar-button {
+                &.switch {
+                    margin-left: 2rem;
+                    margin-left: 2rem;
+                    display: grid;
+                    grid-auto-flow: column;
+                    align-items: center;
+                    grid-column-gap: 0.5rem;
+                }
+            }
+        }
+    }
+}

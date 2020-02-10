@@ -7,14 +7,10 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
+export interface IInitialDataExtension {
 
-export class ComponentState {
+    name: string;
 
-    public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public show: boolean = false,
-        public ownedTicketsCount: number = 0
-    ) { }
+    createData(): Promise<void>;
 
 }
