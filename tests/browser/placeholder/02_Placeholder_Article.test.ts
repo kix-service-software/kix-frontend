@@ -23,6 +23,7 @@ import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/
 import { ContextService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextService';
 import { ContextDescriptor } from '../../../src/frontend-applications/agent-portal/model/ContextDescriptor';
 import { Context } from '../../../src/frontend-applications/agent-portal/model/Context';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -37,9 +38,11 @@ describe('Placeholder replacement for article', () => {
         const articleLabelProvider = new ArticleLabelProvider();
         articleLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(articleLabelProvider);
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
+        (TranslationService.getInstance() as any).translations = null;
         LabelService.getInstance()['labelProviders'] = [];
     });
 

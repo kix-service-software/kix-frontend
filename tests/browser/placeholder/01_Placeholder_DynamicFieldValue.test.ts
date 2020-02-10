@@ -19,6 +19,7 @@ import { KIXObjectService } from '../../../src/frontend-applications/agent-porta
 import { DynamicField } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicField';
 import { DynamicFieldProperty } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldProperty';
 import { DynamicFieldType } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldType';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -32,6 +33,9 @@ describe('Placeholder replacement for dynamic field values', () => {
     let sepatator: string = '###';
     before(() => {
         object = someTestFunctions.prepareObject();
+
+        (TranslationService.getInstance() as any).translations = {};
+
         testDFValues = someTestFunctions.getDynamicFieldValues();
 
         orgFuntion = KIXObjectService.loadDynamicField;
@@ -61,6 +65,7 @@ describe('Placeholder replacement for dynamic field values', () => {
 
     after(() => {
         KIXObjectService.loadDynamicField = orgFuntion;
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace dynamic field placeholders', async () => {

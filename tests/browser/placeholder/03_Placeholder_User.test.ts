@@ -24,6 +24,7 @@ import { TicketPlaceholderHandler } from '../../../src/frontend-applications/age
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { UserPreference } from '../../../src/frontend-applications/agent-portal/modules/user/model/UserPreference';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -44,10 +45,12 @@ describe('Placeholder replacement for user', () => {
         AgentService.getInstance().getCurrentUser = async () => {
             return user;
         }
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
         AgentService.getInstance().getCurrentUser = orgFunction;
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace simple current user attribute placeholder.', async () => {
