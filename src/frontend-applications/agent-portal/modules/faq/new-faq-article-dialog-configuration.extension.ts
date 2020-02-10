@@ -103,6 +103,14 @@ export class Extension implements IConfigurationExtension {
         );
         configurations.push(
             new FormFieldConfiguration(
+                'faq-article-new-form-field-customer-visible',
+                'Translatable#Show in Customer Portal',
+                FAQArticleProperty.CUSTOMER_VISIBLE, 'checkbox-input', false,
+                'Translatable#Helptext_FAQ_ArticleCreate_CustomerVisible'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
                 'faq-article-new-form-field-language',
                 'Translatable#Language', FAQArticleProperty.LANGUAGE, 'language-input', true,
                 'Translatable#Helptext_FAQ_ArticleCreate_Language',
@@ -176,6 +184,7 @@ export class Extension implements IConfigurationExtension {
                 [
                     'faq-article-new-form-field-title',
                     'faq-article-new-form-field-category',
+                    'faq-article-new-form-field-customer-visible',
                     'faq-article-new-form-field-language',
                     'faq-article-new-form-field-tags',
                     'faq-article-new-form-field-attachments',

@@ -19,6 +19,7 @@ import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 
@@ -28,11 +29,15 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, null, ['Links', 'Votes'], ['Links']);
+        return new KIXObjectLoadingOptions(
+            criteria, null, null, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
+        );
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, null, null, ['Links', 'Votes'], ['Links']);
+        return new KIXObjectLoadingOptions(
+            null, null, null, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
+        );
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {

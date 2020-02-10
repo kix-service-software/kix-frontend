@@ -35,21 +35,11 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
             const nameOption = formField.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
 
             if (nameOption) {
-                const dynamicField = await this.getDynamicField(nameOption.value);
+                const dynamicField = await KIXObjectService.loadDynamicField(nameOption.value);
                 return await this.checkDynamicField(dynamicField, fieldValue, formField.label);
             }
         }
         return new ValidationResult(ValidationSeverity.OK, '');
-    }
-
-    private async getDynamicField(name: string): Promise<DynamicField> {
-        const dynamicField = await KIXObjectService.loadDynamicField(name);
-
-        return dynamicField &&
-            (dynamicField.FieldType === DynamicFieldType.DATE ||
-                dynamicField.FieldType === DynamicFieldType.DATE_TIME)
-            ? dynamicField
-            : null;
     }
 
     public isValidatorForDF(dynamicField: DynamicField): boolean {

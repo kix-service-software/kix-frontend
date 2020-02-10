@@ -28,6 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject(["Translatable#Submit"]);
         if (this.treeHandler) {
             this.treeHandler.registerSelectionListener('dropdown-button-bar', () => this.setCheckState());
+            this.setCheckState();
         }
     }
 

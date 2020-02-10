@@ -56,9 +56,6 @@ class Extension implements IKIXModuleExtension {
             'search-faq-article-dialog', '/kix-module-faq$0/webapp/components/dialogs/search-faq-article-dialog', []
         ),
         new UIComponent(
-            'faq-visibility-input', '/kix-module-faq$0/webapp/components/dialogs/inputs/faq-visibility-input', []
-        ),
-        new UIComponent(
             'faq-article-info-widget', '/kix-module-faq$0/webapp/components/widgets/faq-article-info-widget', []
         ),
         new UIComponent(

@@ -50,7 +50,7 @@ export class FilterUtil {
                 return Number(value) >= criteria.value;
             case SearchOperator.IN:
                 return (criteria.value as any[]).some((v) => {
-                    if (v) {
+                    if (typeof v !== 'undefined') {
                         if (v instanceof KIXObject) {
                             if (Array.isArray(value)) {
                                 return value.some((sv) => sv.equals(v));
@@ -59,7 +59,7 @@ export class FilterUtil {
                         if (typeof value === 'number') {
                             return value === v;
                         } else {
-                            return value ? value.toString().indexOf(v.toString()) !== -1 : false;
+                            return value && v !== null ? value.toString().indexOf(v.toString()) !== -1 : false;
                         }
                     }
                 });

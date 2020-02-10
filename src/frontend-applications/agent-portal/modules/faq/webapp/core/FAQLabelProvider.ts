@@ -40,6 +40,9 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.VOTES:
                 displayValue = value.toString();
                 break;
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -67,6 +70,9 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.CATEGORY_ID:
                 displayValue = 'Translatable#Category';
+                break;
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                displayValue = 'Translatable#Show in Customer Portal';
                 break;
             case FAQArticleProperty.CHANGED:
                 displayValue = 'Translatable#Changed at';
@@ -120,9 +126,6 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.VALID_ID:
                 displayValue = 'Translatable#Validity';
-                break;
-            case FAQArticleProperty.VISIBILITY:
-                displayValue = 'Translatable#Visibility';
                 break;
             case FAQArticleProperty.VOTES:
                 displayValue = 'Translatable#Rating';
@@ -224,6 +227,13 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         return 'kix-icon-faq';
     }
 
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        if (property === FAQArticleProperty.CUSTOMER_VISIBLE) {
+            return 'kix-icon-men';
+        }
+        return;
+    }
+
     public async getObjectTooltip(faqArticle: FAQArticle, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(faqArticle.Title);
@@ -236,7 +246,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     }
 
     public async getIcons(
-        faqArticle: FAQArticle, property: string, value?: any
+        faqArticle: FAQArticle, property: string, value?: any, forTable: boolean = false
     ): Promise<Array<string | ObjectIcon>> {
         const icons = [];
 
@@ -261,8 +271,12 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                     }
                 }
                 break;
-            case FAQArticleProperty.VISIBILITY:
-                icons.push(new ObjectIcon(FAQArticleProperty.VISIBILITY, value));
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                if (Boolean(value)) {
+                    icons.push('kix-icon-check');
+                } else if (!forTable) {
+                    icons.push('kix-icon-close');
+                }
                 break;
             default:
         }

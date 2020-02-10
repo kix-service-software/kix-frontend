@@ -20,7 +20,7 @@ import { LoggingService } from "../../../../../server/services/LoggingService";
 import { FAQArticleProperty } from "../model/FAQArticleProperty";
 import { FAQCategoryFactory } from "./FAQCategoryFactory";
 import { Error } from "../../../../../server/model/Error";
-import { FAQVisibility } from "../model/FAQVisibility";
+import { FilterCriteria } from "../../../model/FilterCriteria";
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -49,7 +49,6 @@ export class FAQService extends KIXObjectAPIService {
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
             || type === KIXObjectType.FAQ_VOTE
-            || type === KIXObjectType.FAQ_VISIBILITY
             || type === KIXObjectType.FAQ_KEYWORD;
     }
 
@@ -73,9 +72,6 @@ export class FAQService extends KIXObjectAPIService {
                 objects = await this.loadAttachment(
                     token, loadingOptions, (objectLoadingOptions as FAQArticleAttachmentLoadingOptions)
                 );
-                break;
-            case KIXObjectType.FAQ_VISIBILITY:
-                objects = await this.getFAQVisibilities();
                 break;
             case KIXObjectType.FAQ_KEYWORD:
                 const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
@@ -117,14 +113,6 @@ export class FAQService extends KIXObjectAPIService {
                 const error = 'No update option for object type ' + objectType;
                 throw error;
         }
-    }
-
-    public async getFAQVisibilities(): Promise<FAQVisibility[]> {
-        return [
-            new FAQVisibility("internal", "Translatable#internal"),
-            new FAQVisibility("external", "Translatable#external"),
-            new FAQVisibility("public", "Translatable#public")
-        ];
     }
 
     private async updateAttachments(
@@ -264,5 +252,12 @@ export class FAQService extends KIXObjectAPIService {
             throw error;
         }
     }
+
+    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return criteria.filter(
+            (f) => f.property !== FAQArticleProperty.CUSTOMER_VISIBLE
+        );
+    }
+
 
 }

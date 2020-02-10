@@ -24,7 +24,7 @@ export class FAQArticle extends KIXObject<FAQArticle> {
     public ID: number;
     public Title: string;
     public CategoryID: number;
-    public Visibility: string;
+    public CustomerVisible: number;
     public Language: string;
     public ContentType: string;
     public Number: string;
@@ -56,7 +56,7 @@ export class FAQArticle extends KIXObject<FAQArticle> {
             this.ObjectId = faqArticle.ID;
             this.Title = faqArticle.Title;
             this.CategoryID = faqArticle.CategoryID;
-            this.Visibility = faqArticle.Visibility;
+            this.CustomerVisible = Number(faqArticle.CustomerVisible);
             this.Language = faqArticle.Language;
             this.ContentType = faqArticle.ContentType;
             this.Number = faqArticle.Number;
