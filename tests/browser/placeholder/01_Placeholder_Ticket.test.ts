@@ -19,6 +19,7 @@ import { TicketProperty } from '../../../src/frontend-applications/agent-portal/
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
 import { DynamicFieldValue } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldValue';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -33,10 +34,12 @@ describe('Placeholder replacement for ticket', () => {
         const ticketLabelProvider = new TicketLabelProvider();
         ticketLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(ticketLabelProvider);
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
         LabelService.getInstance()['labelProviders'] = [];
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace simple ticket attribute placeholder', async () => {

@@ -18,6 +18,8 @@ import { SearchOperator } from "../../../search/model/SearchOperator";
 import { Translation } from "../../model/Translation";
 import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
 import { AgentService } from "../../../user/webapp/core/AgentService";
+import { EventService } from "../../../base-components/webapp/core/EventService";
+import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -29,6 +31,42 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         }
 
         return TranslationService.INSTANCE;
+    }
+
+    private translations: any = null;
+
+    private userLanguage: string = null;
+
+    private constructor() {
+        super();
+        this.init();
+    }
+
+    private async init(): Promise<void> {
+        this.userLanguage = await TranslationService.getUserLanguage();
+        EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEYS_DELETED, {
+            eventSubscriberId: 'TranslationService',
+            eventPublished: this.cacheChanged.bind(this)
+        });
+
+        EventService.getInstance().subscribe(ApplicationEvent.CACHE_CLEARED, {
+            eventSubscriberId: 'TranslationService',
+            eventPublished: this.cacheChanged.bind(this)
+        });
+    }
+
+    private async cacheChanged(data: string[], eventId: string): Promise<void> {
+        if (eventId === ApplicationEvent.CACHE_KEYS_DELETED) {
+            if (data.some((d) => d === KIXObjectType.TRANSLATION)) {
+                this.translations = null;
+            }
+            if (data.some((d) => d === KIXObjectType.CURRENT_USER)) {
+                this.userLanguage = await TranslationService.getUserLanguage();
+            }
+        } else if (eventId === ApplicationEvent.CACHE_CLEARED) {
+            this.translations = null;
+            this.userLanguage = await TranslationService.getUserLanguage();
+        }
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string) {
@@ -108,11 +146,20 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
             if (!getOnlyPattern) {
 
-                const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-                const translation = translations.find((t) => t.Pattern === translationValue);
+                if (!this.getInstance().translations) {
+                    const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
+                    if (translations && translations.length) {
+                        this.getInstance().translations = {};
+                        translations.forEach(
+                            (t) => this.getInstance().translations[t.ObjectId] = t
+                        );
+                    }
+                }
+
+                const translation = this.getInstance().translations[translationValue];
 
                 if (translation) {
-                    language = language ? language : await this.getUserLanguage();
+                    language = language ? language : this.getInstance().userLanguage;
                     if (language) {
                         const translationLanguageValue = translation.Languages[language];
                         if (translationLanguageValue) {

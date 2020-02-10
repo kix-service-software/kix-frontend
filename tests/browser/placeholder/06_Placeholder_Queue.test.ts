@@ -24,6 +24,7 @@ import { TicketPlaceholderHandler } from '../../../src/frontend-applications/age
 import { QueueProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/QueueProperty';
 import { TicketProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/TicketProperty';
 import { QueueLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -54,10 +55,13 @@ describe('Placeholder replacement for queue', () => {
             }
             return objects as any[];
         }
+
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
         KIXObjectService.loadObjects = orgLoadFuntion;
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace simple queue attribute placeholder.', async () => {

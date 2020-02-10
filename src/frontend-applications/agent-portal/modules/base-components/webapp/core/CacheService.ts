@@ -11,6 +11,8 @@ import md5 = require('md5');
 import { ClientStorageService } from './ClientStorageService';
 import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class BrowserCacheService {
 
@@ -81,6 +83,7 @@ export class BrowserCacheService {
                 this.keyIndex.delete(prefix);
             }
         }
+        EventService.getInstance().publish(ApplicationEvent.CACHE_KEYS_DELETED, prefixes);
     }
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
@@ -215,6 +218,7 @@ export class BrowserCacheService {
         }
 
         this.keyIndex = new Map();
+        EventService.getInstance().publish(ApplicationEvent.CACHE_CLEARED);
     }
 
 }

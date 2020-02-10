@@ -21,6 +21,7 @@ import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -35,7 +36,10 @@ describe('Placeholder replacement for organisation', () => {
         const organisationLabelProvider = new OrganisationLabelProvider();
         organisationLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(organisationLabelProvider);
+        (TranslationService.getInstance() as any).translations = {};
     });
+
+    after(() => (TranslationService.getInstance() as any).translations = null);
 
     describe('Replace simple organisation attribute placeholder.', async () => {
 

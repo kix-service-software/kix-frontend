@@ -15,6 +15,7 @@ import { SysConfigPlaceholderHandler } from '../../../src/frontend-applications/
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { SysConfigOptionType } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOptionType';
 import { SysConfigOptionDefinition } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOptionDefinition';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -28,10 +29,12 @@ describe('Placeholder replacement for SysConfig', () => {
         KIXObjectService.loadObjects = async (objectType, objectIds: string[]) => {
             return someTestFunctions.getSysConfigDefinitions(objectIds) as any[];
         }
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
         KIXObjectService.loadObjects = orgLoadFuntion;
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace SysConfig placeholder.', async () => {
