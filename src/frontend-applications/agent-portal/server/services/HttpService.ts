@@ -99,7 +99,7 @@ export class HttpService {
         };
 
         const response = this.executeRequest<T>(resource, token, clientRequestId, options, undefined, logError);
-        await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        await CacheService.getInstance().deleteKeys(cacheKeyPrefix).catch(() => null);
         return response;
     }
 
