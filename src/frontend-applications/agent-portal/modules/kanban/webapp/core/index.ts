@@ -7,14 +7,5 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
-
-export class ComponentState {
-
-    public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public showKanban: boolean = false,
-        public ownedTicketsCount: number = 0
-    ) { }
-
-}
+export { KanbanContext } from './KanbanContext';
+export { UIModule as KanbanUIModule } from './KanbanUIModule';

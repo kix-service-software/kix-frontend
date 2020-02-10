@@ -7,14 +7,8 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
+export enum KanbanEvent {
 
-export class ComponentState {
-
-    public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public showKanban: boolean = false,
-        public ownedTicketsCount: number = 0
-    ) { }
+    TICKET_CHANGED = 'TICKET_CHANGED'
 
 }

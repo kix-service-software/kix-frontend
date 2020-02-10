@@ -1,0 +1,39 @@
+<!--
+Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.ticket && state.prepared)>
+    <div.kix-kanban-item>
+        <div class="kanban-item-title" title=state.title>
+            <link-target routingConfiguration=state.routingConfiguration objectId=state.ticket.TicketID>
+                <@content>${state.title}</@content>
+            </link-target>
+        </div>
+        <div class="kanban-item-sub-title" title=state.organisation>${state.organisation}</div>
+        <div class="kanban-item-description" title=state.ticketNumber>
+            <icon icon=state.icon/>${state.ticketNumber}
+        </div>
+        <div class="extra content">
+            <if(state.expanded)>
+                <div class="kanban-item-details">
+                    <for|property| of=state.properties>
+                        <object-property-label object=state.ticket property=property labelProvider=state.labelProvider/>
+                    </for>
+                </div>
+            </if>
+            <div.kanban-item-details-button on-click("expand")>
+                Details
+                <if(state.expanded)>
+                    <span.kix-icon-nook-up/>
+                </if>
+                <else>
+                    <span.kix-icon-nook-down/>
+                </else>
+            </div>
+        </div>
+    </div>
+</if>

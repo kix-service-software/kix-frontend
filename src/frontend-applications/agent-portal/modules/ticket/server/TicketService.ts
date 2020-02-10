@@ -22,10 +22,8 @@ import { UserService } from "../../user/server/UserService";
 import { Attachment } from "../../../model/kix/Attachment";
 import { Article } from "../model/Article";
 import { FilterCriteria } from "../../../model/FilterCriteria";
-import { FilterType } from "../../../model/FilterType";
 import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
 import { SearchOperator } from "../../search/model/SearchOperator";
-import { User } from "../../user/model/User";
 import { FilterDataType } from "../../../model/FilterDataType";
 import { CreateTicketArticleOptions } from "../model/CreateTicketArticleOptions";
 import { ArticleLoadingOptions } from "../model/ArticleLoadingOptions";
@@ -49,6 +47,7 @@ import { SenderTypeFactory } from "./SenderTypeFactory";
 import { ArticleFactory } from "./ArticleFactory";
 import { LockFactory } from "./LockFactory";
 import { SearchProperty } from "../../search/model/SearchProperty";
+import { FilterType } from "../../../model/FilterType";
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -213,7 +212,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.getParameterValue(parameter, TicketProperty.OWNER_ID),
             this.getParameterValue(parameter, TicketProperty.RESPONSIBLE_ID),
             this.getParameterValue(parameter, TicketProperty.PENDING_TIME),
-            this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS)
+            this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS),
+            this.getParameterValue(parameter, TicketProperty.STATE)
         );
 
         const response = await this.sendUpdateRequest<UpdateTicketResponse, UpdateTicketRequest>(

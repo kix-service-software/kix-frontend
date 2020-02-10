@@ -7,14 +7,15 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
+import { WidgetComponentState } from "../../../../base-components/webapp/core/WidgetComponentState";
+import { KanbanConfiguration } from "../../core/KanbanConfiguration";
 
-export class ComponentState {
+export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public showKanban: boolean = false,
-        public ownedTicketsCount: number = 0
-    ) { }
+        public prepared: boolean = false,
+    ) {
+        super();
+    }
 
 }
