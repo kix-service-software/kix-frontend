@@ -25,6 +25,8 @@ export enum AgentPortalExtensions {
 
     SERVICES = 'kix:services',
 
-    MARKO_APPLICATION = 'kix:agent-portal:marko-application'
+    MARKO_APPLICATION = 'kix:agent-portal:marko-application',
+
+    INITIAL_DATA = 'kix:initial-data'
 
 }

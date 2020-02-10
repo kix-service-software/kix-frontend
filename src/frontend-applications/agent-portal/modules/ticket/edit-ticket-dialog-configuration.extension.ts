@@ -36,8 +36,8 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
 
@@ -317,6 +317,20 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                     'ticket-edit-form-field-responsible',
                     'ticket-edit-form-field-priority',
                     'ticket-edit-form-field-state'
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'ticket-edit-form-field-planbegin', null, KIXObjectProperty.DYNAMIC_FIELDS, null, false, null,
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'PlanBegin')
+                        ]
+                    ),
+                    new FormFieldConfiguration(
+                        'ticket-edit-form-field-planend', null, KIXObjectProperty.DYNAMIC_FIELDS, null, false, null,
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'PlanEnd')
+                        ]
+                    )
                 ]
             )
         );

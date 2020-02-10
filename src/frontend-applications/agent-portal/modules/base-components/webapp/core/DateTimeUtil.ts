@@ -166,4 +166,17 @@ export class DateTimeUtil {
         return (value < 10 ? '0' + value : value).toString();
     }
 
+    public static getWeek(date: Date) {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = ((date as any) - (firstDayOfYear as any)) / 86400000;
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+
+    public static async getMonthName(date: Date, language?: string): Promise<string> {
+        if (!language) {
+            language = await TranslationService.getUserLanguage();
+        }
+        return date.toLocaleString(language, { month: 'long' });
+    }
+
 }

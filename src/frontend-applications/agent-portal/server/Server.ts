@@ -46,6 +46,7 @@ import { SysConfigAccessLevel } from '../modules/sysconfig/model/SysConfigAccess
 import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
 import { SystemInfo } from '../model/SystemInfo';
 import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
+import { IInitialDataExtension } from '../model/IInitialDataExtension';
 
 export class Server implements IServer {
 
@@ -69,9 +70,18 @@ export class Server implements IServer {
         const serviceExtensions = await PluginService.getInstance().getExtensions<IServiceExtension>(
             AgentPortalExtensions.SERVICES
         );
+
         LoggingService.getInstance().info(`Initialize ${serviceExtensions.length} service extensions`);
         for (const extension of serviceExtensions) {
             await extension.initServices();
+        }
+
+        const initialDataExtensions = await PluginService.getInstance().getExtensions<IInitialDataExtension>(
+            AgentPortalExtensions.INITIAL_DATA
+        );
+        LoggingService.getInstance().info(`Create initial data (${initialDataExtensions.length} extensions)`);
+        for (const extension of initialDataExtensions) {
+            await extension.createData();
         }
 
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();

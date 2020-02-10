@@ -7,14 +7,12 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
+import { ConfiguredWidget } from "../../../../../model/configuration/ConfiguredWidget";
 
 export class ComponentState {
 
     public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public show: boolean = false,
-        public ownedTicketsCount: number = 0
+        public widgets: ConfiguredWidget[] = []
     ) { }
 
 }
