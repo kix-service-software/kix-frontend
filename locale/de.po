@@ -2012,9 +2012,9 @@ msgstr ""
 "Attribute: *PrimaryOrganisationID – Zahl (vorhanden, wenn Datei aus KIX-"
 "Kontakt-Export stammt) ODER *PrimaryOrganisationNumber - KNR des "
 "zugeordneten Kunden (muss bereits im KIX vorhanden sein); Firstname – "
-"Vorname; Lastname – Nachname; Title – Titel; *Email – E-Mail Adresse; Phone –"
-" Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; City "
-"– Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
+"Vorname; Lastname – Nachname; Title – Titel; *Email – E-Mail Adresse; Phone "
+"– Telefonnummer; Mobile – Handynummer; Fax – Faxnummer; Street - Straße; "
+"City – Stadt; ZIP - PLZ; Country – Land; Comment – Kommentar; *ValidID – "
 "Gültigkeit (1=gültig; 2=ungültig; 3=temporär ungültig) ODER *Validity - "
 "Gültigkeit (valid=gültig; invalid=ungültig; invalid-temporarily=temporär "
 "ungültig) Enthält der Datensatz keine Gültigkeit, wird dieses Attribut über "
@@ -3102,6 +3102,11 @@ msgstr "Pattern"
 msgid "Pattern Information"
 msgstr "Pattern-Informationen"
 
+#, fuzzy
+#| msgid "pending"
+msgid "Pending"
+msgstr "Warten"
+
 msgid "Pending date is not in the future."
 msgstr "\"Warten bis\"-Datum liegt nicht in der Zukunft."
 
@@ -3117,7 +3122,17 @@ msgstr "Berechtigung"
 msgid "Permissions"
 msgstr "Berechtigungen"
 
+#, fuzzy
+#| msgid "Personal Settings"
+msgid "Personal Backlog"
+msgstr "Persönliche Einstellungen"
+
 msgid "Personal Home Dashboard"
+msgstr "Persönliches Home Dashboard"
+
+#, fuzzy
+#| msgid "Personal Home Dashboard"
+msgid "Personal Kanban Board"
 msgstr "Persönliches Home Dashboard"
 
 msgid "Personal Settings"
@@ -3249,6 +3264,9 @@ msgstr "Bewertung"
 
 msgid "Read"
 msgstr "Lesen"
+
+msgid "Recently Closed"
+msgstr ""
 
 msgid "Recipient: Bcc"
 msgstr "Empfänger: Bcc"
@@ -3623,6 +3641,9 @@ msgstr "Task Status"
 
 msgid "Team"
 msgstr "Team"
+
+msgid "Team Backlog"
+msgstr ""
 
 msgid "Templates"
 msgstr "Vorlagen"
@@ -4030,6 +4051,9 @@ msgstr "Willkommen bei KIX 18"
 
 msgid "Wildcard Search"
 msgstr "Wildcard-Suche"
+
+msgid "Work in Progress"
+msgstr ""
 
 msgid "yes"
 msgstr "ja"
@@ -5247,9 +5271,6 @@ msgstr "PLZ"
 
 #~ msgid "open"
 #~ msgstr "offen"
-
-#~ msgid "pending"
-#~ msgstr "Warten"
 
 #~ msgid "Release Informationen"
 #~ msgstr "Release Informationen"

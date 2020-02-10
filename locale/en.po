@@ -2963,6 +2963,9 @@ msgstr ""
 msgid "Pattern Information"
 msgstr ""
 
+msgid "Pending"
+msgstr ""
+
 msgid "Pending date is not in the future."
 msgstr ""
 
@@ -2978,7 +2981,15 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
+#, fuzzy
+#| msgid "Personal Settings"
+msgid "Personal Backlog"
+msgstr "Preferences"
+
 msgid "Personal Home Dashboard"
+msgstr ""
+
+msgid "Personal Kanban Board"
 msgstr ""
 
 msgid "Personal Settings"
@@ -3105,6 +3116,9 @@ msgid "Rating"
 msgstr ""
 
 msgid "Read"
+msgstr ""
+
+msgid "Recently Closed"
 msgstr ""
 
 msgid "Recipient: Bcc"
@@ -3477,6 +3491,9 @@ msgid "Task State"
 msgstr ""
 
 msgid "Team"
+msgstr ""
+
+msgid "Team Backlog"
 msgstr ""
 
 msgid "Templates"
@@ -3877,6 +3894,9 @@ msgid "Welcome to KIX 18"
 msgstr ""
 
 msgid "Wildcard Search"
+msgstr ""
+
+msgid "Work in Progress"
 msgstr ""
 
 msgid "yes"
