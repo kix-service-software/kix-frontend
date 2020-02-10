@@ -658,6 +658,9 @@ msgstr "Kunden"
 msgid "Customer Dashboard"
 msgstr "Kunden Dashboard"
 
+msgid "CW"
+msgstr ""
+
 msgid "Data has been updated."
 msgstr "Daten wurden aktualisiert."
 
@@ -2744,6 +2747,9 @@ msgstr "Geändert"
 msgid "Monday"
 msgstr "Montag"
 
+msgid "Month"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr "Meine gesperrten Tickets"
 
@@ -3801,6 +3807,11 @@ msgstr "An"
 msgid "to Article"
 msgstr "zum Artikel"
 
+#, fuzzy
+#| msgid "(today)"
+msgid "Today"
+msgstr "(heute)"
+
 msgid "ToDo / Processing required"
 msgstr "ToDo / Bearbeitung erforderlich"
 
@@ -4043,6 +4054,9 @@ msgstr "Webformular wurde erfolgreich angelegt."
 
 msgid "Wednesday"
 msgstr "Mittwoch"
+
+msgid "Week"
+msgstr ""
 
 msgid "Weekday(s)"
 msgstr "Wochentag(e)"
@@ -5236,9 +5250,6 @@ msgstr "PLZ"
 
 #~ msgid "Impress"
 #~ msgstr "Impressum"
-
-#~ msgid "(today)"
-#~ msgstr "(heute)"
 
 #~ msgid "1 very low"
 #~ msgstr "1 sehr niedrig"

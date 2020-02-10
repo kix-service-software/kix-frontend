@@ -644,6 +644,9 @@ msgstr ""
 msgid "Customer Dashboard"
 msgstr ""
 
+msgid "CW"
+msgstr ""
+
 msgid "Data has been updated."
 msgstr ""
 
@@ -2606,6 +2609,9 @@ msgstr ""
 msgid "Monday"
 msgstr ""
 
+msgid "Month"
+msgstr ""
+
 msgid "My locked tickets"
 msgstr ""
 
@@ -3644,6 +3650,9 @@ msgstr ""
 msgid "to Article"
 msgstr ""
 
+msgid "Today"
+msgstr ""
+
 msgid "ToDo / Processing required"
 msgstr ""
 
@@ -3885,6 +3894,9 @@ msgid "Webform successfully created."
 msgstr ""
 
 msgid "Wednesday"
+msgstr ""
+
+msgid "Week"
 msgstr ""
 
 msgid "Weekday(s)"
