@@ -120,27 +120,30 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
     protected handleCountValues(formFields: FormFieldConfiguration[]): void {
         const fields = [...formFields];
         for (const field of fields) {
-            if (field.countMin > 0) {
-                field.empty = false;
+            if (!field.asStructure) {
+                if (field.countMin > 0) {
+                    field.empty = false;
 
-                for (let i = 1; i < field.countMin; i++) {
-                    const newField = this.getNewFormField(field);
-                    const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                    formFields.splice(index, 0, newField);
+                    for (let i = 1; i < field.countMin; i++) {
+                        const newField = this.getNewFormField(field);
+                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                        formFields.splice(index, 0, newField);
+                    }
                 }
-            }
 
-            if (field.countDefault > 1 && field.countDefault > field.countMin && field.countDefault <= field.countMax) {
-                const c = field.countMin === 0 ? 1 : field.countMin;
-                for (let i = c; i < field.countDefault; i++) {
-                    const newField = this.getNewFormField(field);
-                    const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                    formFields.splice(index, 0, newField);
+                const countDefault = field.countDefault;
+                if (countDefault > 1 && countDefault > field.countMin && countDefault <= field.countMax) {
+                    const c = field.countMin === 0 ? 1 : field.countMin;
+                    for (let i = c; i < countDefault; i++) {
+                        const newField = this.getNewFormField(field);
+                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                        formFields.splice(index, 0, newField);
+                    }
                 }
-            }
 
-            if (field.countMin === 0 && field.countDefault === 0) {
-                field.empty = true;
+                if (field.countMin === 0 && countDefault === 0) {
+                    field.empty = true;
+                }
             }
         }
     }
