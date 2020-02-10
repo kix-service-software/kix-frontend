@@ -2079,6 +2079,11 @@ msgid "Helptext_FAQ_ArticleCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen zu dem FAQ-Artikel hinterlegen."
 
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleCreate_Cause"
+msgid "Helptext_FAQ_ArticleCreate_CustomerVisible"
+msgstr "Beschreiben Sie die Ursache hinter dem Phänomen so genau wie möglich."
+
 msgid "Helptext_FAQ_ArticleCreate_Language"
 msgstr "Geben sie die Sprache an, in der der FAQ-Artikel verfasst ist."
 
@@ -2495,9 +2500,6 @@ msgstr "Die eingegebene E-Mail-Adresse darf keine Systemadresse sein ({0})."
 
 msgid "insert filter value"
 msgstr "Filterwert eingeben"
-
-msgid "internal"
-msgstr "intern"
 
 msgid "Internal Field"
 msgstr "Internes Feld"
@@ -3190,9 +3192,6 @@ msgstr "Prioritäten-Informationen"
 msgid "Priority successfully created."
 msgstr "Priorität wurde erfolgreich angelegt."
 
-msgid "public"
-msgstr "öffentlich"
-
 msgid "Queue"
 msgstr "Team"
 
@@ -3479,6 +3478,11 @@ msgstr "Alle anzeigen"
 
 msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
+
+#, fuzzy
+#| msgid "Visible in customer portal"
+msgid "Show in Customer Portal"
+msgstr "Sichtbar in Kundenportal"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -4001,9 +4005,6 @@ msgstr "Wert wurde erfolgreich angelegt."
 msgid "Version"
 msgstr "Version"
 
-msgid "Visibility"
-msgstr "Sichtbarkeit"
-
 msgid "Visible in customer portal"
 msgstr "Sichtbar in Kundenportal"
 
@@ -4090,6 +4091,15 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "internal"
+#~ msgstr "intern"
+
+#~ msgid "public"
+#~ msgstr "öffentlich"
+
+#~ msgid "Visibility"
+#~ msgstr "Sichtbarkeit"
 
 #~ msgid "Last Run"
 #~ msgstr "Letzte Ausführung"
