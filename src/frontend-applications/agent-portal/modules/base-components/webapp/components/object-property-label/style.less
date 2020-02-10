@@ -40,6 +40,7 @@
     .value {
         display: grid;
         grid-template-columns: minmax(1rem, min-content) max-content;
+        grid-column-gap: @margin-small;
 
         >a,
         >span:not(.icon) {
@@ -54,7 +55,6 @@
             [class^="kix-icon-"],
             [class*=" kix-icon-"],
             .svg-icon {
-                margin-left: @margin-small;
                 font-size: @key-value-icon-size;
             }
         }

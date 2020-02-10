@@ -15,7 +15,6 @@ import { TreeNode } from "../../../base-components/webapp/core/tree";
 import { FilterCriteria } from "../../../../model/FilterCriteria";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { FilterType } from "../../../../model/FilterType";
-import { DataType } from "../../../../model/DataType";
 import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../server/model/rest/CRUD";
@@ -26,6 +25,7 @@ import { DefaultColumnConfiguration } from "../../../../model/configuration/Defa
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { TableFactoryService } from "../../../base-components/webapp/core/table";
 
 export abstract class SearchDefinition {
 
@@ -114,17 +114,14 @@ export abstract class SearchDefinition {
     public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
         const columns: IColumnConfiguration[] = [];
         for (const p of searchParameter) {
-            let text = p[1];
-            if (!text) {
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-                if (labelProvider) {
-                    text = await labelProvider.getPropertyText(p[0]);
-                }
+            const tableFactory = TableFactoryService.getInstance().getTableFactory(this.objectType);
+            if (tableFactory) {
+                columns.push(tableFactory.getDefaultColumnConfiguration(p[0]));
+            } else {
+                columns.push(new DefaultColumnConfiguration(null, null, null,
+                    p[0], true, false, true, false, 150, true, true)
+                );
             }
-
-            columns.push(new DefaultColumnConfiguration(null, null, null,
-                p[0], true, false, true, false, 150, true, true, false, DataType.STRING, true)
-            );
         }
         return columns;
     }

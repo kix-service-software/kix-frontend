@@ -31,9 +31,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <else-if(state.propertyDisplayText)>
             <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
                 <@content>
-                    <span>
-                        <if(state.hasText)>${state.propertyDisplayText}</if>
-                    </span>
+                    <if(state.hasText)>
+                        <span>${state.propertyDisplayText}</span>
+                    </if>
                 </@content>
             </link-target>
             <if(state.propertyIcon)>

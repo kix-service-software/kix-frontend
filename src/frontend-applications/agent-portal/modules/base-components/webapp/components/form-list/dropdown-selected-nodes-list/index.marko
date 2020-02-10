@@ -19,7 +19,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <icon icon=node.secondaryIcon showUnknown=true/>
             </if>
             <if(input.canRemoveNode)>
-                <span.kix-icon-close tabindex="0" on-click("removeNode", node) on-focus("stopFocus")/>
+                <span.kix-icon-close.selected-node-remove tabindex="0" on-click("removeNode", node) on-focus("stopFocus")/>
             </if>
         </div>
     </for>

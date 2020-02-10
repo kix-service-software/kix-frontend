@@ -60,7 +60,6 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
             || type === KIXObjectType.FAQ_VOTE
-            || type === KIXObjectType.FAQ_VISIBILITY
             || type === KIXObjectType.FAQ_KEYWORD;
     }
 
@@ -121,9 +120,6 @@ export class FAQService extends KIXObjectService {
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
-            case FAQArticleProperty.VISIBILITY:
-                nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.VISIBILITY);
-                break;
             case FAQArticleProperty.APPROVED:
                 nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.APPROVED);
                 break;
@@ -143,6 +139,12 @@ export class FAQService extends KIXObjectService {
                 break;
             case FAQArticleProperty.CHANGED_BY:
                 nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, invalidClickable, filterIds);
+                break;
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                nodes = [
+                    new TreeNode(0, 'Translatable#No', 'kix-icon-close'),
+                    new TreeNode(1, 'Translatable#Yes', 'kix-icon-check')
+                ];
                 break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);

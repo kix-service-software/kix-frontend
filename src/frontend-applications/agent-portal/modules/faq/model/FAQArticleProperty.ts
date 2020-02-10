@@ -15,7 +15,7 @@ export enum FAQArticleProperty {
 
     CATEGORY_ID = 'CategoryID',
 
-    VISIBILITY = 'Visibility',
+    CUSTOMER_VISIBLE = 'CustomerVisible',
 
     LANGUAGE = 'Language',
 

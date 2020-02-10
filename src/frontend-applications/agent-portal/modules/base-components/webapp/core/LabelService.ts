@@ -132,11 +132,11 @@ export class LabelService {
     }
 
     public async getPropertyValueDisplayIcons<T extends KIXObject>(
-        object: T, property: string
+        object: T, property: string, forTable?: boolean
     ): Promise<Array<string | ObjectIcon>> {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
-            return await labelProvider.getIcons(object, property);
+            return await labelProvider.getIcons(object, property, null, forTable);
         }
         return null;
     }

@@ -87,6 +87,8 @@ export class FAQArticleFormService extends KIXObjectFormService {
         } else if (property === FAQArticleProperty.KEYWORDS) {
             const keywords = value ? value.toString().split(' ') : [];
             parameter.push([property, keywords]);
+        } else if (property === FAQArticleProperty.CUSTOMER_VISIBLE) {
+            parameter.push([property, Number(value)]);
         } else {
             parameter.push([property, value]);
         }

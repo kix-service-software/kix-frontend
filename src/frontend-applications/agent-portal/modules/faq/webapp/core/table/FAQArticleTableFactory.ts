@@ -65,6 +65,7 @@ export class FAQArticleTableFactory extends TableFactory {
                 this.getDefaultColumnConfiguration(FAQArticleProperty.NUMBER),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.TITLE),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.LANGUAGE),
+                this.getDefaultColumnConfiguration(FAQArticleProperty.CUSTOMER_VISIBLE),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.VOTES),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.CATEGORY_ID),
                 this.getDefaultColumnConfiguration(FAQArticleProperty.CHANGED),
@@ -92,7 +93,6 @@ export class FAQArticleTableFactory extends TableFactory {
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         switch (property) {
             case FAQArticleProperty.NUMBER:
@@ -107,6 +107,10 @@ export class FAQArticleTableFactory extends TableFactory {
             case FAQArticleProperty.LANGUAGE:
                 return new DefaultColumnConfiguration(null, null, null,
                     FAQArticleProperty.LANGUAGE, true, false, true, false, 125, true, true, true
+                );
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                return new DefaultColumnConfiguration(null, null, null,
+                    FAQArticleProperty.CUSTOMER_VISIBLE, false, true, false, true, 75, true, true, true
                 );
             case FAQArticleProperty.VOTES:
                 return new DefaultColumnConfiguration(null, null, null,

@@ -36,6 +36,7 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
             [SearchProperty.FULLTEXT, null],
             [FAQArticleProperty.NUMBER, null],
             [FAQArticleProperty.TITLE, null],
+            [FAQArticleProperty.CUSTOMER_VISIBLE, null],
             [FAQArticleProperty.FIELD_1, null],
             [FAQArticleProperty.FIELD_2, null],
             [FAQArticleProperty.FIELD_3, null],
@@ -119,7 +120,8 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
             || property === FAQArticleProperty.LANGUAGE
             || property === FAQArticleProperty.KEYWORDS
             || property === FAQArticleProperty.CREATED_BY
-            || property === FAQArticleProperty.CHANGED_BY;
+            || property === FAQArticleProperty.CHANGED_BY
+            || property === FAQArticleProperty.CUSTOMER_VISIBLE;
     }
 
     private isDateTime(property: string): boolean {

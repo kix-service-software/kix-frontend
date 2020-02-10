@@ -172,7 +172,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
         let icons = [];
         if (showIcons) {
-            icons = await LabelService.getInstance().getPropertyValueDisplayIcons(object, property);
+            icons = await LabelService.getInstance().getPropertyValueDisplayIcons(object, property, true);
         }
 
         return new TableValue(property, object[property], displayValue, undefined, icons);
