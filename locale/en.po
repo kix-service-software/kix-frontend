@@ -1958,6 +1958,12 @@ msgstr ""
 msgid "Helptext_FAQ_ArticleCreate_Comment"
 msgstr "Insert additional information for the FAQ article."
 
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleCreate_Cause"
+msgid "Helptext_FAQ_ArticleCreate_CustomerVisible"
+msgstr ""
+"Describe the cause behind the occurring phenomenon as exactly as possible."
+
 msgid "Helptext_FAQ_ArticleCreate_Language"
 msgstr "Insert the FAQ article language."
 
@@ -2355,9 +2361,6 @@ msgid "Inserted email address must not be a system address ({0})."
 msgstr ""
 
 msgid "insert filter value"
-msgstr ""
-
-msgid "internal"
 msgstr ""
 
 msgid "Internal Field"
@@ -3046,9 +3049,6 @@ msgstr ""
 msgid "Priority successfully created."
 msgstr ""
 
-msgid "public"
-msgstr ""
-
 msgid "Queue"
 msgstr "Team"
 
@@ -3329,6 +3329,9 @@ msgid "Show all"
 msgstr ""
 
 msgid "Show in agent preferences"
+msgstr ""
+
+msgid "Show in Customer Portal"
 msgstr ""
 
 msgid "Show title in form"
@@ -3843,9 +3846,6 @@ msgid "Value successfully created."
 msgstr ""
 
 msgid "Version"
-msgstr ""
-
-msgid "Visibility"
 msgstr ""
 
 msgid "Visible in customer portal"
