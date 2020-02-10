@@ -156,7 +156,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
                     }
                 }
 
-                const translation = this.getInstance().translations 
+                const translation = this.getInstance().translations
                     ? this.getInstance().translations[translationValue]
                     : null;
 
