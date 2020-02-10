@@ -41,6 +41,8 @@ export enum ConfigurationType {
 
     LinkedObjects = 'LinkedObjects',
 
-    MainMenu = 'MainMenu'
+    MainMenu = 'MainMenu',
+
+    Kanban = 'Kanban'
 
 }

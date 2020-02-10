@@ -15,6 +15,13 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { AgentService } from '../../../../../user/webapp/core';
 import { ShowUserTicketsAction } from '../../../../../ticket/webapp/core';
+import { RoutingService } from '../../../../../base-components/webapp/core/RoutingService';
+import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../model/ContextMode';
+import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 
 class Component {
 
@@ -25,7 +32,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.initActions();
+        const permissions = [new UIComponentPermission('tickets', [CRUD.READ])];
+        if (await AuthenticationSocketClient.getInstance().checkPermissions(permissions)) {
+            this.state.showKanban = true;
+            this.initActions();
+        }
 
         EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, {
             eventSubscriberId: 'app-toolbar-subscriber',
@@ -37,6 +48,7 @@ class Component {
 
     private async initActions(): Promise<void> {
         const user = await AgentService.getInstance().getCurrentUser(false);
+        this.state.ownedTicketsCount = user.Tickets.Owned.length;
 
         const myTicketsNewArticles = await TranslationService.translate('Translatable#My tickets with new articles');
         const myTickets = await TranslationService.translate('Translatable#My Tickets');
@@ -96,6 +108,11 @@ class Component {
             showTicketsAction.setText(action.title);
             showTicketsAction.run();
         }
+    }
+
+    public showKanban(): void {
+        const routingCOnfiguration = new RoutingConfiguration('kanban', KIXObjectType.ANY, ContextMode.DASHBOARD, null);
+        RoutingService.getInstance().routeToContext(routingCOnfiguration, null);
     }
 
 }

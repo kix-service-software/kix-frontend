@@ -21,6 +21,7 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
 import { InputFieldTypes } from "./InputFieldTypes";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldService } from "../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class SearchFormManager extends AbstractDynamicFormManager {
     public objectType: string;

@@ -1,0 +1,15 @@
+{
+    "name": "kanban",
+    "extensions": {
+        "kix:configuration": {
+            "kanban-configuration": {
+                "module": "configuration.extension"
+            }
+        },
+        "kix:modules": {
+            "kanban": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

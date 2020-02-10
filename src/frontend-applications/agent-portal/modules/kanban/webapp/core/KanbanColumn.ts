@@ -7,14 +7,11 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 
-export class ComponentState {
-
+export class KanbanColumn {
     public constructor(
-        public toolbarGroups: ToolbarAction[][] = [],
-        public showKanban: boolean = false,
-        public ownedTicketsCount: number = 0
+        public id: string,
+        public dropState: string
     ) { }
-
 }
