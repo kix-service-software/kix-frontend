@@ -36,7 +36,9 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
 
             if (nameOption) {
                 const dynamicField = await KIXObjectService.loadDynamicField(nameOption.value);
-                return await this.checkDynamicField(dynamicField, fieldValue, formField.label);
+                if (this.isValidatorForDF(dynamicField)) {
+                    return await this.checkDynamicField(dynamicField, fieldValue, formField.label);
+                }
             }
         }
         return new ValidationResult(ValidationSeverity.OK, '');
