@@ -459,10 +459,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static getDynamicFieldName(property: string): string {
         let name: string;
-        if (property.match(/^DynamicFields?\..+/)) {
+        if (KIXObjectService.isDynamicFieldProperty(property)) {
             name = property.replace(/^DynamicFields?\.(.+)/, '$1');
         }
         return name;
+    }
+
+    public static isDynamicFieldProperty(property: string): boolean {
+        return Boolean(property.match(/^DynamicFields?\..+/));
     }
 
 }

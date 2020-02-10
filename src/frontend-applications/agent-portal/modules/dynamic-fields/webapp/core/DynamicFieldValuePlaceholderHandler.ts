@@ -13,7 +13,6 @@ import { KIXObjectService } from "../../../base-components/webapp/core/KIXObject
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { DynamicFieldType } from "../../model/DynamicFieldType";
 import { DynamicFieldValue } from "../../model/DynamicFieldValue";
-import { DynamicFieldService } from "./DynamicFieldService";
 import { CheckListItem } from "./CheckListItem";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
 
@@ -107,7 +106,7 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     private async handleValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
         let result: string = dfValue.DisplayValue ? dfValue.DisplayValue : '';
         if (!result) {
-            const dynamicField = await DynamicFieldService.loadDynamicField(dfValue.Name);
+            const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
             if (dynamicField) {
                 const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
                     dynamicField.Config.ItemSeparator : ', ';
@@ -129,7 +128,7 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     private async handleShortValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
         let result: string = dfValue.DisplayValueShort ? dfValue.DisplayValueShort : '';
         if (!result) {
-            const dynamicField = await DynamicFieldService.loadDynamicField(dfValue.Name);
+            const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
             if (dynamicField) {
                 const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
                     dynamicField.Config.ItemSeparator : ', ';
@@ -147,7 +146,7 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     private async handleHTMLValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
         let result: string = dfValue.DisplayValueHTML ? dfValue.DisplayValueHTML : '';
         if (!result) {
-            const dynamicField = await DynamicFieldService.loadDynamicField(dfValue.Name);
+            const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
             if (dynamicField && dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
                 result = this.getChecklistHTMLValue(dfValue);
             } else {

@@ -17,13 +17,6 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFormFieldOption } from "./DynamicFormFieldOption";
 import { DynamicField } from "../../model/DynamicField";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
 import { DynamicFieldType } from "../../model/DynamicFieldType";
 
 export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
@@ -50,19 +43,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
     }
 
     private async getDynamicField(name: string): Promise<DynamicField> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, name
-                )
-            ], null, null, [DynamicFieldProperty.CONFIG]
-        );
-        const fields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-        );
-
-        const dynamicField = fields && fields.length ? fields[0] : null;
+        const dynamicField = await KIXObjectService.loadDynamicField(name);
 
         return dynamicField &&
             (dynamicField.FieldType === DynamicFieldType.DATE ||

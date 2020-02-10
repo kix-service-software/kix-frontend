@@ -74,12 +74,14 @@ export abstract class SearchDefinition {
         });
 
         for (const c of filteredCriteria) {
-            const field = await KIXObjectService.loadDynamicField(c.property);
-            if (field) {
-                if (field.FieldType === DynamicFieldType.DATE) {
-                    c.type = FilterDataType.DATE;
-                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
-                    c.type = FilterDataType.DATETIME;
+            if (KIXObjectService.isDynamicFieldProperty(c.property)) {
+                const field = await KIXObjectService.loadDynamicField(c.property);
+                if (field) {
+                    if (field.FieldType === DynamicFieldType.DATE) {
+                        c.type = FilterDataType.DATE;
+                    } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                        c.type = FilterDataType.DATETIME;
+                    }
                 }
             }
         }

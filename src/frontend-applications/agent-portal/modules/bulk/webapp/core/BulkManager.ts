@@ -162,28 +162,14 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
-        const field = await KIXObjectService.loadDynamicField(property);
-        if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.CountMax > 1) {
-            isMultiSelect = true;
-        }
-        return isMultiSelect;
-    }
-
-    protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
-        let inputFieldType = InputFieldTypes.TEXT;
-        const field = await KIXObjectService.loadDynamicField(property);
-        if (field) {
-            if (field.FieldType === DynamicFieldType.TEXT_AREA) {
-                inputFieldType = InputFieldTypes.TEXT_AREA;
-            } else if (field.FieldType === DynamicFieldType.DATE) {
-                inputFieldType = InputFieldTypes.DATE;
-            } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
-                inputFieldType = InputFieldTypes.DATE_TIME;
-            } else if (field.FieldType === DynamicFieldType.SELECTION) {
-                inputFieldType = InputFieldTypes.DROPDOWN;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.CountMax > 1) {
+                isMultiSelect = true;
             }
         }
-        return inputFieldType;
+        return isMultiSelect;
     }
 
     public async validate(): Promise<ValidationResult[]> {
