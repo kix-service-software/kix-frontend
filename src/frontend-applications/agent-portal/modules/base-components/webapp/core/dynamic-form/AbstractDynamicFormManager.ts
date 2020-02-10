@@ -185,36 +185,43 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
-            return await this.getInputTypeForDF(dfName);
+            return await this.getInputTypeForDF(property);
         }
         return;
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
-        const field = await KIXObjectService.loadDynamicField(property);
-        if (
-            field && field.FieldType === DynamicFieldType.SELECTION && field.Config && Number(field.Config.CountMax) > 1
-        ) {
-            isMultiSelect = true;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (
+                field && field.FieldType === DynamicFieldType.SELECTION &&
+                field.Config && Number(field.Config.CountMax) > 1
+            ) {
+                isMultiSelect = true;
+            }
         }
         return isMultiSelect;
     }
 
     protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
         let inputFieldType = InputFieldTypes.TEXT;
-        const field = await KIXObjectService.loadDynamicField(property);
-        if (field) {
-            if (field.FieldType === DynamicFieldType.TEXT_AREA) {
-                inputFieldType = InputFieldTypes.TEXT_AREA;
-            } else if (field.FieldType === DynamicFieldType.DATE) {
-                inputFieldType = InputFieldTypes.DATE;
-            } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
-                inputFieldType = InputFieldTypes.DATE_TIME;
-            } else if (field.FieldType === DynamicFieldType.SELECTION) {
-                inputFieldType = InputFieldTypes.DROPDOWN;
-            } else if (field.FieldType === DynamicFieldType.CI_REFERENCE) {
-                inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field) {
+                if (field.FieldType === DynamicFieldType.TEXT_AREA) {
+                    inputFieldType = InputFieldTypes.TEXT_AREA;
+                } else if (field.FieldType === DynamicFieldType.DATE) {
+                    inputFieldType = InputFieldTypes.DATE;
+                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                    inputFieldType = InputFieldTypes.DATE_TIME;
+                } else if (field.FieldType === DynamicFieldType.SELECTION) {
+                    inputFieldType = InputFieldTypes.DROPDOWN;
+                } else if (field.FieldType === DynamicFieldType.CI_REFERENCE) {
+                    inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                }
             }
         }
         return inputFieldType;

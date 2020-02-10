@@ -91,14 +91,17 @@ export class SearchFormManager extends AbstractDynamicFormManager {
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
         let inputType = InputFieldTypes.TEXT;
-        const field = await KIXObjectService.loadDynamicField(property);
-        if (field) {
-            if (field.FieldType === DynamicFieldType.SELECTION) {
-                inputType = InputFieldTypes.DROPDOWN;
-            } else if (field.FieldType === DynamicFieldType.DATE) {
-                inputType = InputFieldTypes.DATE;
-            } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
-                inputType = InputFieldTypes.DATE_TIME;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field) {
+                if (field.FieldType === DynamicFieldType.SELECTION) {
+                    inputType = InputFieldTypes.DROPDOWN;
+                } else if (field.FieldType === DynamicFieldType.DATE) {
+                    inputType = InputFieldTypes.DATE;
+                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                    inputType = InputFieldTypes.DATE_TIME;
+                }
             }
         }
 

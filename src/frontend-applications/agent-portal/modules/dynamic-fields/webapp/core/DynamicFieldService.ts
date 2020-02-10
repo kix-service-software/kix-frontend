@@ -13,11 +13,6 @@ import { DynamicField } from "../../model/DynamicField";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
