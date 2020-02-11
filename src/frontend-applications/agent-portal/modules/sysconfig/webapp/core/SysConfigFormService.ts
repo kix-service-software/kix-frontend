@@ -18,6 +18,7 @@ import { FormFieldConfiguration } from "../../../../model/configuration/FormFiel
 import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 
 export class SysConfigFormService extends KIXObjectFormService {
 
@@ -91,5 +92,19 @@ export class SysConfigFormService extends KIXObjectFormService {
             }
         }
         return formValue;
+    }
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<Array<[string, any]>> {
+
+        const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
+        const value = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.VALUE);
+
+        if (value && defaultParameter && value[1] === defaultParameter[1]) {
+            value[1] = null;
+        }
+
+        return parameter;
     }
 }
