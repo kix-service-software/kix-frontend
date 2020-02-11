@@ -11,8 +11,6 @@ import { KIXObjectService } from "../../../../modules/base-components/webapp/cor
 import { SysConfigOption } from "../../model/SysConfigOption";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SysConfigKey } from "../../model/SysConfigKey";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -44,20 +42,6 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         const stateTypes: string[] = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
 
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
-    }
-
-    protected async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
-    ): Promise<Array<[string, any]>> {
-
-        const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
-        const value = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.VALUE);
-
-        if (value && defaultParameter && value[1] === defaultParameter[1]) {
-            value[1] = null;
-        }
-
-        return parameter;
     }
 
 }

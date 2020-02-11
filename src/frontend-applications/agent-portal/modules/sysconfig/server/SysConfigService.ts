@@ -22,7 +22,6 @@ import { ModuleConfigurationService } from "../../../server/services/configurati
 import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
 import { KIXObjectSpecificDeleteOptions } from "../../../model/KIXObjectSpecificDeleteOptions";
 import { SysConfigKey } from "../model/SysConfigKey";
-import { FilterCriteria } from "../../../model/FilterCriteria";
 
 export class SysConfigService extends KIXObjectAPIService {
 
