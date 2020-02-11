@@ -74,6 +74,7 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent('article-receiver-list', '/kix-module-ticket$0/webapp/components/article-receiver-list', []),
         new UIComponent('channel-input', '/kix-module-ticket$0/webapp/components/channel-input', []),
+        new UIComponent('customer-visible-input', '/kix-module-ticket$0/webapp/components/customer-visible-input', []),
         new UIComponent('edit-ticket-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-dialog', []),
         new UIComponent(
             'edit-ticket-priority-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-priority-dialog', []

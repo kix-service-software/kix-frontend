@@ -35,6 +35,8 @@ export enum OrganisationProperty {
 
     TICKET_STATS = 'TicketStats',
 
+    CONTACTS = 'Contacts',
+
     // UI properties
     VALID = 'Valid'
 

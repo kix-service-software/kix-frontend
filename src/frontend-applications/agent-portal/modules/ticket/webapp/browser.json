@@ -6,6 +6,7 @@
         "require ./components/article-email-recipient-input",
         "require ./components/article-receiver-list",
         "require ./components/channel-input",
+        "require ./components/customer-visible-input",
         "require ./components/edit-ticket-dialog",
         "require ./components/edit-ticket-priority-dialog",
         "require ./components/edit-ticket-queue-dialog",

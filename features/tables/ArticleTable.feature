@@ -37,6 +37,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'ArticleInformation' | 0        | 0          | 0          | 60    | 0        | 0        | 1        | 'STRING'   | 1           | 0          | 'Article'  |
             | 'SenderTypeID'       | 1        | 1          | 1          | 120   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Article'  |
             | 'From'               | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Article'  |
+            | 'CustomerVisible'    | 1        | 1          | 1          | 75    | 1        | 0        | 1        | 'STRING'   | 0           | 1          | 'Article'  |
             | 'ChannelID'          | 1        | 1          | 1          | 75    | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Article'  |
             | 'Subject'            | 1        | 1          | 0          | 500   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Article'  |
             | 'IncomingTime'       | 1        | 1          | 0          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Article'  |
