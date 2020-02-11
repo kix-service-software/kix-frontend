@@ -2122,6 +2122,12 @@ msgstr ""
 "Describe the article concern. If you chose “Email” as channel, this is the "
 "text the recipient(s) will receive."
 
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleCreate_Cause"
+msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
+msgstr ""
+"Describe the cause behind the occurring phenomenon as exactly as possible."
+
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
 msgstr "Briefly summarize the article topic."
 
@@ -2194,6 +2200,13 @@ msgstr ""
 "a new contact. You will automatically be redirected here after saving this "
 "contact. It is also possible to enter a syntactically correct email address "
 "(name@example.com) to create a ticket with an unknown contact."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketCreate_Responsible"
+msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+msgstr ""
+"Choose a person who is responsible for the ticket process. Can be the same "
+"as owner, but not necessarily."
 
 msgid "Helptext_Tickets_TicketCreate_Links"
 msgstr "Link this ticket with an asset, a FAQ article or another ticket."
@@ -3857,9 +3870,6 @@ msgid "Value successfully created."
 msgstr ""
 
 msgid "Version"
-msgstr ""
-
-msgid "Visible in customer portal"
 msgstr ""
 
 msgid "Votes"

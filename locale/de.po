@@ -2247,6 +2247,11 @@ msgstr ""
 "Beschreiben Sie hier das Anliegen des Artikels. Wenn Sie als Kanal „E-Mail“ "
 "gewählt haben, erhält der Empfänger diesen Text."
 
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleCreate_Cause"
+msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
+msgstr "Beschreiben Sie die Ursache hinter dem Phänomen so genau wie möglich."
+
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
 msgstr "Fassen Sie das Thema des Artikels kurz zusammen."
 
@@ -2322,6 +2327,13 @@ msgstr ""
 "Speichern automatisch hierher zurückkehren.  Für unbekannte Kontakte ist die "
 "Eingabe einer syntaktisch korrekten E-Mail-Adresse (name@beispiel.de) "
 "ebenfalls möglich."
+
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketCreate_Responsible"
+msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
+msgstr ""
+"Wählen Sie eine Person aus, die für die Ticketbearbeitung verantwortlich "
+"ist. Diese kann mit dem Bearbeiter identisch sein, muss aber nicht."
 
 msgid "Helptext_Tickets_TicketCreate_Links"
 msgstr ""
@@ -4016,9 +4028,6 @@ msgstr "Wert wurde erfolgreich angelegt."
 msgid "Version"
 msgstr "Version"
 
-msgid "Visible in customer portal"
-msgstr "Sichtbar in Kundenportal"
-
 msgid "Votes"
 msgstr "Bewertungen"
 
@@ -4105,6 +4114,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Visible in customer portal"
+#~ msgstr "Sichtbar in Kundenportal"
 
 #~ msgid "internal"
 #~ msgstr "intern"
