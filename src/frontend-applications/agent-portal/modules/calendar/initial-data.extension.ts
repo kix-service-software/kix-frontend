@@ -70,6 +70,7 @@ class Extension implements IInitialDataExtension {
                 await DynamicFieldAPIService.getInstance().createObject(
                     serverConfig.BACKEND_API_TOKEN, '', KIXObjectType.DYNAMIC_FIELD,
                     [
+                        ...parameter,
                         [DynamicFieldProperty.NAME, 'PlanEnd'],
                         [DynamicFieldProperty.LABEL, 'Plan End']
                     ]
