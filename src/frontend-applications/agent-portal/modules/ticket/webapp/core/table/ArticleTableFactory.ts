@@ -66,6 +66,9 @@ export class ArticleTableFactory extends TableFactory {
             new DefaultColumnConfiguration(
                 null, null, null, ArticleProperty.FROM, true, false, true, false, 300, true, true),
             new DefaultColumnConfiguration(null, null, null,
+                ArticleProperty.CUSTOMER_VISIBLE, false, true, false, true, 75, true, true, true
+            ),
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true, true
             ),
             new DefaultColumnConfiguration(
