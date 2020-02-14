@@ -104,4 +104,10 @@ export class CMDBContext extends Context {
         this.loadConfigItems();
     }
 
+    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            return this.loadConfigItems();
+        }
+    }
+
 }

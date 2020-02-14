@@ -49,7 +49,7 @@ class Component extends AbstractEditDialog {
     }
 
     public async onDestroy(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
+        super.onDestroy();
     }
 
     public async cancel(): Promise<void> {

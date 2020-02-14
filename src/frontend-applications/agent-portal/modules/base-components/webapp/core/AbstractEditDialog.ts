@@ -106,6 +106,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                             } else {
                                 await AbstractEditDialog.prototype.handleDialogSuccess.call(this, succesObjectId);
                             }
+                            EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, this.objectType);
                             resolve();
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);

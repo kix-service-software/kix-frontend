@@ -100,6 +100,14 @@ export class OrganisationContext extends Context {
         this.initContext();
     }
 
+    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+        if (objectType === KIXObjectType.ORGANISATION) {
+            return this.loadOrganisations();
+        } else if (objectType === KIXObjectType.CONTACT) {
+            return this.loadContacts();
+        }
+    }
+
 }
 
 export enum OrganisationAdditionalInformationKeys {
