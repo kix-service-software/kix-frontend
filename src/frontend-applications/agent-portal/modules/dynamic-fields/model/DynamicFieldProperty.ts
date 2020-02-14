@@ -23,6 +23,8 @@ export enum DynamicFieldProperty {
 
     OBJECT_TYPE = "ObjectType",
 
-    CONFIG = "Config"
+    CONFIG = "Config",
+
+    CUSTOMER_VISIBLE = 'CustomerVisible'
 
 }

@@ -140,8 +140,16 @@ export class Extension implements IConfigurationExtension {
                     'dynamic-field-edit-form-field-label',
                     'dynamic-field-edit-form-field-type',
                     'dynamic-field-edit-form-field-object-type',
+                    'dynamic-field-edit-form-field-customer-visible',
                     'dynamic-field-edit-form-field-valid',
                     'dynamic-field-edit-form-field-config',
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'dynamic-field-edit-form-field-customer-visible',
+                        'Translatable#Show in Customer Portal', DynamicFieldProperty.CUSTOMER_VISIBLE,
+                        'checkbox-input', false, 'Translatable#Helptext_Admin_DynamicFieldCreate_CustomerVisible'
+                    )
                 ]
             )
         );

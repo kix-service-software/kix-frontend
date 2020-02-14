@@ -40,6 +40,9 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
             case DynamicFieldProperty.INTERNAL_FIELD:
                 displayValue = 'Translatable#Internal Field';
                 break;
+            case DynamicFieldProperty.CUSTOMER_VISIBLE:
+                displayValue = 'Translatable#Show in Customer Portal';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
@@ -105,6 +108,15 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
             return [new ObjectIcon('DynamicField', dynamicField.ID)];
         } else if (property === DynamicFieldProperty.INTERNAL_FIELD) {
             return dynamicField.InternalField === 1 ? ['kix-icon-check'] : [];
+        } else if (property === DynamicFieldProperty.CUSTOMER_VISIBLE) {
+            return dynamicField.CustomerVisible ? ['kix-icon-check'] : [];
+        }
+        return null;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        if (property === DynamicFieldProperty.CUSTOMER_VISIBLE) {
+            return 'kix-icon-men';
         }
         return null;
     }

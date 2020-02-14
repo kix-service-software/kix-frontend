@@ -33,6 +33,8 @@ export class DynamicField extends KIXObject {
 
     public Config: any;
 
+    public CustomerVisible: boolean;
+
     public constructor(dynamicField?: DynamicField) {
         super(dynamicField);
         if (dynamicField) {
@@ -45,6 +47,7 @@ export class DynamicField extends KIXObject {
             this.Name = dynamicField.Name;
             this.ObjectType = dynamicField.ObjectType;
             this.Config = dynamicField.Config;
+            this.CustomerVisible = Boolean(dynamicField.CustomerVisible);
         }
     }
 
