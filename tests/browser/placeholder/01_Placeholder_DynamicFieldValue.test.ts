@@ -33,6 +33,7 @@ describe('Placeholder replacement for dynamic field values', () => {
     before(() => {
         object = someTestFunctions.prepareObject();
 
+        (TranslationService.getUserLanguage) = async (): Promise<string> => 'en';
         (TranslationService.getInstance() as any).translations = {};
 
         testDFValues = someTestFunctions.getDynamicFieldValues();
