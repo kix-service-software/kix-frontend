@@ -98,12 +98,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -131,12 +125,6 @@ export class UIModule implements IUIModule {
                 DefaultValue: {
                     title: "Default Value",
                     description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
-                    type: "string",
-                    required: false
-                },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
                     type: "string",
                     required: false
                 },
@@ -170,12 +158,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -203,12 +185,6 @@ export class UIModule implements IUIModule {
                 DefaultValue: {
                     title: "Default Value",
                     description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
-                    type: "string",
-                    required: false
-                },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
                     type: "string",
                     required: false
                 },
@@ -242,12 +218,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -276,12 +246,6 @@ export class UIModule implements IUIModule {
                     title: "Default Value",
                     description: "This value defines the offset (in days) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time \"00:00:00\", hence enter 1 in order to initialize the field with \"tomorrows\" date.",
                     type: "integer",
-                    required: false
-                },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
-                    type: "string",
                     required: false
                 },
                 YearsInFuture: {
@@ -316,12 +280,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -350,12 +308,6 @@ export class UIModule implements IUIModule {
                     title: "Default Value",
                     description: "This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with \"now+1h\" or enter 86400 if the field should be initialized with \"now+24h\".",
                     type: "integer",
-                    required: false
-                },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
-                    type: "string",
                     required: false
                 },
                 YearsInFuture: {
@@ -390,12 +342,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -423,12 +369,6 @@ export class UIModule implements IUIModule {
                 DefaultValue: {
                     title: "Default Value",
                     description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only. Use the key of the possible value.",
-                    type: "string",
-                    required: false
-                },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
                     type: "string",
                     required: false
                 },

@@ -49,6 +49,7 @@ export class DynamicFieldTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(DynamicFieldProperty.FIELD_TYPE),
             this.getDefaultColumnConfiguration(DynamicFieldProperty.OBJECT_TYPE),
             this.getDefaultColumnConfiguration(DynamicFieldProperty.INTERNAL_FIELD),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.CUSTOMER_VISIBLE),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
@@ -87,7 +88,11 @@ export class DynamicFieldTableFactory extends TableFactory {
                 break;
             case DynamicFieldProperty.INTERNAL_FIELD:
                 config = new DefaultColumnConfiguration(
-                    null, null, null, property, false, true, true, false, 100, true, true, true);
+                    null, null, null, property, true, false, true, false, 100, true, true, true);
+                break;
+            case DynamicFieldProperty.CUSTOMER_VISIBLE:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, false, true, false, true, 100, true, true, true);
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);
