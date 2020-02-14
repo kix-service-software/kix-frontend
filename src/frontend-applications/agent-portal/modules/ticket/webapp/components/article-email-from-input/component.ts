@@ -122,9 +122,9 @@ class Component extends FormInputComponent<number, ComponentState> {
                 .replace(/ü/g, 'ue').replace(/Ü/g, 'Ue');
 
             const labels = [
-                [`\"<${realName}>\" <${queueMail}>`, `${realName}`],
-                [`<${userName}> \"via\" <${realName}> <${queueMail}>`, `${userName} via ${realName}`],
-                [`<${userName}> <${queueMail}>`, `${userName}`]
+                [`\"${realName}\" <${queueMail}>`, `${realName}`],
+                [`${userName} \"via\" ${realName} <${queueMail}>`, `${userName} via ${realName}`],
+                [`${userName} <${queueMail}>`, `${userName}`]
             ];
 
             const nodes: TreeNode[] = [];
