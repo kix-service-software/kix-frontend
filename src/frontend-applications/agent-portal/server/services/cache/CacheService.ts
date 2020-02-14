@@ -136,6 +136,7 @@ export class CacheService {
                 break;
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
@@ -146,10 +147,13 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
                 break;
             case KIXObjectType.ORGANISATION:
-            case KIXObjectType.CONTACT:
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                break;
+            case KIXObjectType.CONTACT:
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.USER);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:

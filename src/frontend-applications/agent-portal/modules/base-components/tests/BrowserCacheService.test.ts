@@ -368,6 +368,7 @@ describe('BrowserCacheService', () => {
                 expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
             });
 
         });
@@ -378,10 +379,11 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(3);
 
                 expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ROLE)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
             });
 
         });

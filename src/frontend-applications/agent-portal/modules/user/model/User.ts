@@ -11,6 +11,7 @@ import { KIXObject } from "../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 import { UserPreference } from "./UserPreference";
 import { Tickets } from "./Tickets";
+import { Contact } from "../../customer/model/Contact";
 
 export class User extends KIXObject<User> {
 
@@ -20,14 +21,12 @@ export class User extends KIXObject<User> {
 
     public UserID: number;
     public UserLogin: string;
-    public UserTitle: string;
-    public UserFirstname: string;
-    public UserLastname: string;
-    public UserFullname: string;
-    public UserEmail: string;
-    public UserPhone: string;
-    public UserMobile: string;
     public UserComment: string;
+
+    public Contact: Contact;
+
+    public IsAgent: number;
+    public IsCustomer: number;
 
     public Preferences: UserPreference[];
     public RoleIDs: number[];
@@ -39,18 +38,14 @@ export class User extends KIXObject<User> {
             this.UserID = Number(user.UserID);
             this.ObjectId = this.UserID;
             this.UserLogin = user.UserLogin;
-            this.UserTitle = user.UserTitle;
-            this.UserFirstname = user.UserFirstname;
-            this.UserLastname = user.UserLastname;
-            this.UserFullname = user.UserFullname;
             this.Preferences = user.Preferences ? user.Preferences.map((p) => new UserPreference(p)) : [];
             this.Tickets = user.Tickets;
             this.ValidID = user.ValidID;
-            this.UserEmail = user.UserEmail;
-            this.UserPhone = user.UserPhone;
-            this.UserMobile = user.UserMobile;
             this.UserComment = user.UserComment;
             this.RoleIDs = user.RoleIDs ? user.RoleIDs : [];
+            this.IsAgent = user.IsAgent;
+            this.IsCustomer = user.IsCustomer;
+            this.Contact = user.Contact;
 
             if (this.Tickets) {
                 this.Tickets.Owned = this.Tickets.Owned.map((t) => Number(t));
@@ -61,13 +56,5 @@ export class User extends KIXObject<User> {
                 this.Tickets.WatchedAndUnseen = this.Tickets.WatchedAndUnseen.map((t) => Number(t));
             }
         }
-    }
-
-    public equals(user: User): boolean {
-        return user.UserID === this.UserID;
-    }
-
-    public getIdPropertyName(): string {
-        return 'UserID';
     }
 }

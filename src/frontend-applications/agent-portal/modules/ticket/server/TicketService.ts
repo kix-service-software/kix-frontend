@@ -250,7 +250,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         let from = this.getParameterValue(parameter, ArticleProperty.FROM);
         if (!from) {
             const user = await UserService.getInstance().getUserByToken(token);
-            from = user.UserEmail;
+            from = user.Contact ? user.Contact.Email : null;
         }
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);

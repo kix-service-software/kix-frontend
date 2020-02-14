@@ -29,6 +29,7 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
+import { UserProperty } from "../user/model/UserProperty";
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -103,7 +104,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
         const loginColumn = new DefaultColumnConfiguration(
             'organisation-details-assigned-contacts-login', 'Login', ConfigurationType.TableColumn,
-            ContactProperty.LOGIN, true, false, true, true, 200, true, true
+            UserProperty.USER_LOGIN, true, false, true, true, 200, true, true
         );
         configurations.push(loginColumn);
 
@@ -132,7 +133,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
             KIXObjectType.CONTACT,
             new KIXObjectLoadingOptions(
                 null, null, null,
-                [ContactProperty.TICKET_STATS], null
+                [ContactProperty.TICKET_STATS, ContactProperty.USER], null
             ), null, null,
             [
                 'organisation-details-assigned-contacts-firstname',

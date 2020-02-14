@@ -67,7 +67,7 @@ export class UserDetailsContext extends Context {
         const userId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLEIDS]
+            null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLE_IDS, UserProperty.CONTACT]
         );
 
         const timeout = window.setTimeout(() => {

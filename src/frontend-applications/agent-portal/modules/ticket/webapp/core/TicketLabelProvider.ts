@@ -26,6 +26,8 @@ import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -126,7 +128,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.LOCK_ID:
-                if (value) {
+                if (typeof value !== 'undefined') {
                     displayValue = value === 1 ? 'Translatable#Unlocked' : 'Translatable#Locked';
                 }
                 break;
@@ -136,9 +138,13 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case KIXObjectProperty.CHANGE_BY:
                 if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
+                        KIXObjectType.USER, [value],
+                        new KIXObjectLoadingOptions(
+                            null, null, 1, [UserProperty.CONTACT]
+                        ), null, true
                     ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    displayValue = users && users.length ?
+                        users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;
                 }
                 break;
             case TicketProperty.WATCHERS:
@@ -354,15 +360,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.TYPE_ID, ticket.TypeID, translatable
                     );
-                    break;
-                // TODO: still necessary?
-                case 'UserID':
-                    if (displayValue) {
-                        const users = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, [displayValue], null, null, true
-                        ).catch((error) => [] as User[]);
-                        displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                    }
                     break;
                 case TicketProperty.OWNER:
                     displayValue = await this.getPropertyValueDisplayText(

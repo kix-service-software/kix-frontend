@@ -24,6 +24,9 @@ import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 import { TicketProperty } from "./model/TicketProperty";
+import { ContactProperty } from "../customer/model/ContactProperty";
+import { UserProperty } from "../user/model/UserProperty";
+import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -121,17 +124,17 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             ConfigurationType.ObjectInformation,
             KIXObjectType.ORGANISATION,
             [
-                'Number',
-                'Name',
-                'Url',
-                'Street',
-                'Zip',
-                'City',
-                'Country'
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
             ], true,
             [
-                ['Number', organisationRouting],
-                ['Name', organisationRouting]
+                [OrganisationProperty.NUMBER, organisationRouting],
+                [OrganisationProperty.NAME, organisationRouting]
             ]
         );
         configurations.push(organisationObjectInformation);
@@ -151,20 +154,20 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
             [
-                'Title',
-                'Firstname',
-                'Lastname',
-                'Login',
-                'PrimaryOrganisationID',
-                'Phone',
-                'Mobile',
-                'Fax',
-                'Email'
+                UserProperty.USER_LOGIN,
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.FAX,
+                ContactProperty.EMAIL
             ], true,
             [
-                ['Lastname', contactRouting],
-                ['Firstname', contactRouting],
-                ['Login', contactRouting]
+                [ContactProperty.LASTNAME, contactRouting],
+                [ContactProperty.FIRSTNAME, contactRouting],
+                [UserProperty.USER_LOGIN, contactRouting]
             ]
         );
         configurations.push(contactObjectInformation);

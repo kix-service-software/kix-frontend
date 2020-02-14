@@ -25,6 +25,7 @@ import { InputFieldTypes } from "../../../../modules/base-components/webapp/core
 import { TreeNode } from "../../../base-components/webapp/core/tree";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Organisation } from "../../model/Organisation";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class ContactSearchFormManager extends AbstractDynamicFormManager {
 
@@ -38,7 +39,7 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
             [ContactProperty.FIRSTNAME, null],
             [ContactProperty.LASTNAME, null],
             [ContactProperty.EMAIL, null],
-            [ContactProperty.LOGIN, null],
+            [UserProperty.USER_LOGIN, null],
             [ContactProperty.COUNTRY, null],
             [ContactProperty.STREET, null],
             [ContactProperty.ZIP, null],

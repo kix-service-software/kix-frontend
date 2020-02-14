@@ -209,4 +209,19 @@ export class WebformFormService extends KIXObjectFormService {
         return stateId;
     }
 
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        if (value) {
+            if (property === WebformProperty.USER_LOGIN) {
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                value = users && !!users.length ? users[0].UserLogin : value;
+            }
+            parameter.push([property, value]);
+        }
+
+        return parameter;
+    }
+
 }

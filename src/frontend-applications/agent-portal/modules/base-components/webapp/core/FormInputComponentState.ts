@@ -20,7 +20,8 @@ export class FormInputComponentState<T> extends AbstractComponentState {
         public formId: string = null,
         public defaultValue: FormFieldValue<T> = null,
         public invalid: boolean = false,
-        public formContext: FormContext = null
+        public formContext: FormContext = null,
+        public prepared: boolean = false
     ) {
         super();
     }

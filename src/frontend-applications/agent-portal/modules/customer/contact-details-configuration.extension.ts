@@ -29,6 +29,7 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
+import { UserProperty } from "../user/model/UserProperty";
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -45,7 +46,7 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 ContactProperty.TITLE,
                 ContactProperty.FIRSTNAME,
                 ContactProperty.LASTNAME,
-                ContactProperty.LOGIN,
+                UserProperty.USER_LOGIN,
                 ContactProperty.PRIMARY_ORGANISATION_ID,
                 ContactProperty.PHONE,
                 ContactProperty.MOBILE,

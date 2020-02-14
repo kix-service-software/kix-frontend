@@ -38,6 +38,7 @@ import { IKIXObjectService } from "./IKIXObjectService";
 import { Error } from "../../../../../../server/model/Error";
 import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { UserProperty } from "../../../user/model/UserProperty";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 import { ConfigItem } from "../../../cmdb/model/ConfigItem";
 
@@ -120,7 +121,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 // FIXME: Publish event to show an error dialog
                 const content = new ComponentContent('list-with-title',
                     {
-                        title: `Error while creating ${objectType}`,
+                        title: `Translatable#Error on create:`,
                         list: [`${error.Code}: ${error.Message}`]
                     }
                 );
@@ -150,12 +151,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return objectId;
     }
 
-    public static async createObjectByForm(
+    public static createObjectByForm(
         objectType: KIXObjectType | string, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        return await service.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
+        return service.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
     }
 
     public async createObjectByForm(
@@ -182,7 +183,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     // FIXME: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
-                            title: `Fehler beim Aktualisieren (${objectType}):`,
+                            title: `Translatable#Error on update:`,
                             list: [`${error.Code}: ${error.Message}`]
                         }
                     );
@@ -208,18 +209,21 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return updatedObjectId;
     }
 
-    public static async updateObjectByForm(
+    public static updateObjectByForm(
         objectType: KIXObjectType | string, formId: string, objectId: number | string,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        return await service.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
+        return service.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
     }
 
     public async updateObjectByForm(
         objectType: KIXObjectType | string, formId: string, objectId: number | string,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
+        if (!objectId) {
+            throw new Error(null, `Can not update "${objectType}". No objectId given`);
+        }
         const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
         const parameter: Array<[string, any]> = await service.prepareFormFields(formId, true);
 
@@ -279,9 +283,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null, null, null, true
+                    KIXObjectType.USER, null,
+                    new KIXObjectLoadingOptions(
+                        null, null, null, [UserProperty.CONTACT]
+                    ), null, true
                 ).catch((error) => [] as User[]);
-                users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                users.forEach((u) => nodes.push(new TreeNode(
+                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man'
+                )));
                 break;
             case KIXObjectProperty.VALID_ID:
                 const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);

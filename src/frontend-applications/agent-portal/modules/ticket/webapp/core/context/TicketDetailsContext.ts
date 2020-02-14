@@ -14,7 +14,7 @@ import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { TicketContext } from ".";
+import { TicketContext } from "./TicketContext";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
 import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";

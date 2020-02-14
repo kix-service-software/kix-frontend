@@ -32,6 +32,18 @@ export class TextModuleFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.TEXT_MODULE;
     }
 
+    protected async getValue(property: string, value: any, textModule: TextModule): Promise<any> {
+        switch (property) {
+            case TextModuleProperty.KEYWORDS:
+                if (value && Array.isArray(value)) {
+                    value = value.join(',');
+                }
+                break;
+            default:
+        }
+        return value;
+    }
+
     public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
         switch (property) {
             case TextModuleProperty.KEYWORDS:
@@ -41,20 +53,5 @@ export class TextModuleFormService extends KIXObjectFormService {
         }
         return [[property, value]];
     }
-
-    protected async getValue(property: string, value: any, textModule: TextModule): Promise<any> {
-        switch (property) {
-            case TextModuleProperty.KEYWORDS:
-                if (value && Array.isArray(value)) {
-                    value = value.join(',');
-                } else {
-                    value = value;
-                }
-                break;
-            default:
-        }
-        return value;
-    }
-
 
 }

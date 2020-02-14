@@ -48,7 +48,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
                             values.push(value);
                         }
                     }
-                    await this.addSpecificValues(values, o);
+                    await this.prepareSpecificValues(values, o);
 
                     resolve(new RowObject<MacroAction>(values, o));
                 }));

@@ -41,10 +41,15 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             const logData = {};
             for (const key in data as any) {
                 if (key !== 'token') {
-                    if (key.match(/password/i)) {
-                        logData[key] = '*****';
+                    if (key === 'parameter' && Array.isArray(data[key])) {
+                        logData[key] = this.prepareParameterProperty(data[key]);
                     } else {
-                        logData[key] = data[key];
+                        if (key.match(/password/i)) {
+                            logData[key] = '*****';
+                        } else {
+                            // TODO: handle sub-structures (object/array)
+                            logData[key] = data[key];
+                        }
                     }
                 }
             }
@@ -60,5 +65,22 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             });
 
         });
+    }
+
+    private prepareParameterProperty(parameter: Array<[string, any]>): Array<[string, any]> {
+        const newParameter = [];
+        for (const param of parameter) {
+            if (Array.isArray(param)) {
+                let value = param[1];
+                if (param[0].match(/password/i) || param[0].match(/^UserPw$/)) {
+                    value = '*****';
+                }
+                // TODO: handle value sub-structures (object/array)
+                newParameter.push([param[0], value]);
+            } else {
+                newParameter.push(param);
+            }
+        }
+        return newParameter;
     }
 }

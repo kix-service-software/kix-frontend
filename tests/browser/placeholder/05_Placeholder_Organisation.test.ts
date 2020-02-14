@@ -12,7 +12,8 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Organisation } from '../../../src/frontend-applications/agent-portal/modules/customer/model/Organisation';
-import { OrganisationPlaceholderHandler, OrganisationLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core';
+import { OrganisationPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/OrganisationPlaceholderHandler';
+import { OrganisationLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/OrganisationLabelProvider';
 import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { OrganisationProperty } from '../../../src/frontend-applications/agent-portal/modules/customer/model/OrganisationProperty';
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';

@@ -27,7 +27,7 @@ export class JobTableContentProvider extends TableContentProvider<Job> {
         super(KIXObjectType.JOB, table, objectIds, loadingOptions, contextId);
     }
 
-    protected async addSpecificValues(values: TableValue[], job: Job): Promise<void> {
+    protected async prepareSpecificValues(values: TableValue[], job: Job): Promise<void> {
         let execPlans: ExecPlan[] = [];
         if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
             execPlans = job.ExecPlans;

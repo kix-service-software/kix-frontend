@@ -142,7 +142,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                             values.push(tableValue);
                         }
                     }
-                    await this.addSpecificValues(values, o);
+                    await this.prepareSpecificValues(values, o);
                     const rowObject = new RowObject<T>(values, o);
 
                     if (this.hasChildRows(rowObject)) {
@@ -159,16 +159,12 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     protected async getTableValue(object: any, property: string, column: IColumnConfiguration): Promise<TableValue> {
-        const showText = column ? column.showText : true;
         const showIcons = column ? column.showIcon : true;
         const translatable = column ? column.translatable : true;
 
-        let displayValue = object[property];
-        if (showText) {
-            displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
-                object, property, object[property], translatable
-            );
-        }
+        const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+            object, property, object[property], translatable
+        );
 
         let icons = [];
         if (showIcons) {
@@ -178,7 +174,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return new TableValue(property, object[property], displayValue, undefined, icons);
     }
 
-    protected async addSpecificValues(values: TableValue[], object: any): Promise<void> {
+    protected async prepareSpecificValues(values: TableValue[], object: any): Promise<void> {
         if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
             for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
                 let dfValue: [string[], string, string[]];

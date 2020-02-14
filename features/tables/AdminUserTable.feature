@@ -35,11 +35,11 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Examples:
             | column          | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType |
             | 'UserLogin'     | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
-            | 'UserLastname'  | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
-            | 'UserFirstname' | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
-            | 'UserPhone'     | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
-            | 'UserMobile'    | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
-            | 'UserEmail'     | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
+            | 'Lastname'      | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
+            | 'Firstname'     | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
+            | 'Phone'         | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
+            | 'Mobile'        | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
+            | 'Email'         | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
             | 'UserLastLogin' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'User'     |
             | 'ValidID'       | 1        | 1          | 1          | 100   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
             | 'CreateTime'    | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'User'     |

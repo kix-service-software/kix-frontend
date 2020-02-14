@@ -8,7 +8,6 @@
  */
 
 import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Role } from "../../../model/Role";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { RoleProperty } from "../../../model/RoleProperty";
 
@@ -47,5 +46,4 @@ export class UserRoleFormService extends KIXObjectFormService {
 
         return parameter;
     }
-
 }

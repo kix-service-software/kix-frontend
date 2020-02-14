@@ -16,7 +16,6 @@ export { ContactFormService } from './ContactFormService';
 export { ContactLabelProvider } from './ContactLabelProvider';
 export { ContactBrowserFactory } from './ContactBrowserFactory';
 export { ContactSearchDefinition } from './ContactSearchDefinition';
-export { ContactPlaceholderHandler } from './ContactPlaceholderHandler';
 export { ContactDialogUtil } from './ContactDialogUtil';
 
 export { OrganisationService } from './OrganisationService';
@@ -25,7 +24,6 @@ export { OrganisationBrowserFactory } from './OrganisationBrowserFactory';
 export { OrganisationSearchDefinition } from './OrganisationSearchDefinition';
 export { OrganisationFormService } from './OrganisationFormService';
 export { OrganisationImportManager } from './OrganisationImportManager';
-export { OrganisationPlaceholderHandler } from './OrganisationPlaceholderHandler';
 export { OrganisationDialogUtil } from './OrganisationDialogUtil';
 
 export { UIModule as CustomerUIModule } from './CustomerUIModule';

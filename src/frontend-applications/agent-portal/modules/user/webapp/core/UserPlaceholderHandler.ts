@@ -17,6 +17,7 @@ import { UserProperty } from "../../model/UserProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { ContactProperty } from "../../../customer/model/ContactProperty";
 
 export class UserPlaceholderHandler implements IPlaceholderHandler {
 
@@ -48,11 +49,12 @@ export class UserPlaceholderHandler implements IPlaceholderHandler {
                         result = user[attribute].toString();
                         break;
                     case UserProperty.USER_LOGIN:
-                    case UserProperty.USER_FIRSTNAME:
-                    case UserProperty.USER_LASTNAME:
-                    case UserProperty.USER_EMAIL:
+                    case ContactProperty.FIRSTNAME:
+                    case ContactProperty.LASTNAME:
+                    case ContactProperty.EMAIL:
+                    case ContactProperty.COMMENT:
                     case UserProperty.USER_COMMENT:
-                    case UserProperty.USER_TITLE:
+                    case ContactProperty.TITLE:
                         result = await userLabelProvider.getDisplayText(user, attribute, undefined, false);
                         break;
                     case KIXObjectProperty.CREATE_TIME:
@@ -71,7 +73,11 @@ export class UserPlaceholderHandler implements IPlaceholderHandler {
 
     private isKnownProperty(property: string): boolean {
         let knownProperties = Object.keys(UserProperty).map((p) => UserProperty[p]);
-        knownProperties = [...knownProperties, ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p])];
+        knownProperties = [
+            ...knownProperties,
+            ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
+            ...Object.keys(ContactProperty).map((p) => ContactProperty[p])
+        ];
         return knownProperties.some((p) => p === property);
     }
 }

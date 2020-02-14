@@ -98,12 +98,20 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                 const result = await formInstance.validateForm();
                 const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
                 if (validationError) {
-                    AbstractNewDialog.prototype.showValidationError.call(this, result);
+                    if (this.showValidationError) {
+                        this.showValidationError(result);
+                    } else {
+                        AbstractNewDialog.prototype.showValidationError.call(this, result);
+                    }
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
                     KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
                         .then(async (objectId) => {
-                            await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
+                            if (this.handleDialogSuccess) {
+                                await this.handleDialogSuccess(objectId);
+                            } else {
+                                await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
+                            }
                             resolve();
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);

@@ -23,7 +23,7 @@ export class TableConfiguration implements IConfiguration {
     public constructor(
         public id: string,
         public name: string,
-        public type: string | ConfigurationType,
+        public type: string | ConfigurationType = ConfigurationType.Table,
         public objectType?: KIXObjectType | string,
         public loadingOptions?: KIXObjectLoadingOptions,
         public displayLimit?: number,

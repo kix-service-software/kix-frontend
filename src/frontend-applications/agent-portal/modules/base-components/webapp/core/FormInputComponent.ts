@@ -51,6 +51,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         });
         this.state.defaultValue = formInstance.getFormFieldValue<T>(this.state.field.instanceId);
         FormInputComponent.prototype.setInvalidState.call(this);
+        this.state.prepared = true;
     }
 
     public async onDestroy(): Promise<void> {

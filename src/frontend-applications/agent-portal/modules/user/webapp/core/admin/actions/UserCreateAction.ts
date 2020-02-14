@@ -11,8 +11,17 @@ import { AbstractAction } from "../../../../../../modules/base-components/webapp
 import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
 import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
 import { ContextMode } from "../../../../../../model/ContextMode";
+import { NewContactDialogContext } from "../../../../../customer/webapp/core";
+import { UIComponentPermission } from "../../../../../../model/UIComponentPermission";
+import { CRUD } from "../../../../../../../../server/model/rest/CRUD";
 
 export class UserCreateAction extends AbstractAction {
+
+    public permissions = [
+        new UIComponentPermission('contacts', [CRUD.CREATE]),
+        new UIComponentPermission('system/users', [CRUD.CREATE]),
+        new UIComponentPermission('system/users/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#New Agent';
@@ -20,10 +29,15 @@ export class UserCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
+        const context = await ContextService.getInstance().getContext(NewContactDialogContext.CONTEXT_ID);
+        if (context) {
+            context.reset();
+            context.setAdditionalInformation('IS_AGENT_DIALOG', true);
+        }
         ContextService.getInstance().setDialogContext(
             // TODO: Titel aus dem aktiven Admin-Modul ermitteln (Kategorie)
-            null, KIXObjectType.USER, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#User Management'
+            NewContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.CREATE, null, false,
+            'Translatable#User Management', true
         );
     }
 

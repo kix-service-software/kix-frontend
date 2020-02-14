@@ -97,4 +97,15 @@ export class ContactService extends KIXObjectService<Contact> {
             )
         ];
     }
+
+    public async updateObjectByForm(
+        objectType: KIXObjectType | string, formId: string, objectId: number | string,
+        cacheKeyPrefix: string = objectType
+    ): Promise<string | number> {
+        if (objectId) {
+            return super.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
+        } else {
+            return super.createObjectByForm(objectType, formId, null, cacheKeyPrefix);
+        }
+    }
 }

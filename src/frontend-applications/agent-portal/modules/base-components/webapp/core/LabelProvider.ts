@@ -25,6 +25,7 @@ import { FilterType } from "../../../../model/FilterType";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { UserProperty } from "../../../user/model/UserProperty";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
 import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
 import { ConfigItem } from "../../../cmdb/model/ConfigItem";
@@ -183,11 +184,17 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 break;
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
+            case 'CreatedBy':
+            case 'ChangedBy':
                 if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
+                        KIXObjectType.USER, [value],
+                        new KIXObjectLoadingOptions(
+                            null, null, null, [UserProperty.CONTACT]
+                        ), null, true
                     ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    displayValue = users && users.length ?
+                        users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;
                 }
                 break;
             case KIXObjectProperty.CREATE_TIME:

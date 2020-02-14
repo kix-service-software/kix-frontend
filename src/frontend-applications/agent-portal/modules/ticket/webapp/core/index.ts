@@ -35,9 +35,6 @@ export { QueueLabelProvider } from './QueueLabelProvider';
 export { QueueBrowserFactory } from './QueueBrowserFactory';
 export { FollowUpTypeBrowserFactory } from './FollowUpTypeBrowserFactory';
 export { ArticleFormService } from './ArticleFormService';
-export { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
-export { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
-export { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
 export { TicketHistoryBrowserFactory } from './TicketHistoryBrowserFactory';
 export { TicketDialogUtil } from './TicketDialogUtil';
 

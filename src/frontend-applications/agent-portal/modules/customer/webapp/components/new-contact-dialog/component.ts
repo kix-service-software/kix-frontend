@@ -14,19 +14,40 @@ import { RoutingConfiguration } from '../../../../../model/configuration/Routing
 import { ContactDetailsContext } from '../../core';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ContactProperty } from '../../../model/ContactProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { UserDetailsContext } from '../../../../user/webapp/core/admin';
+import { UserProperty } from '../../../../user/model/UserProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { Contact } from '../../../model/Contact';
 
 class Component extends AbstractNewDialog {
 
+    private contactRoutingConfig: RoutingConfiguration;
+    private isAgentDialog: boolean;
+
     public onCreate(): void {
         this.state = new ComponentState();
+        this.contactRoutingConfig = new RoutingConfiguration(
+            ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
+            ContextMode.DETAILS, ContactProperty.ID, true
+        );
+        let routingConfig;
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            this.isAgentDialog = Boolean(dialogContext.getAdditionalInformation('IS_AGENT_DIALOG'));
+            if (this.isAgentDialog) {
+                routingConfig = new RoutingConfiguration(
+                    UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
+                    ContextMode.DETAILS, UserProperty.USER_ID, true
+                );
+            }
+        }
         super.init(
             'Translatable#Create Contact',
             'Translatable#Contact successfully created.',
             KIXObjectType.CONTACT,
-            new RoutingConfiguration(
-                ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
-                ContextMode.DETAILS, ContactProperty.ID, true
-            )
+            routingConfig ? routingConfig : this.contactRoutingConfig
         );
     }
 
@@ -44,6 +65,20 @@ class Component extends AbstractNewDialog {
 
     public async submit(): Promise<void> {
         await super.submit();
+    }
+
+    protected async handleDialogSuccess(objectId: string | number): Promise<void> {
+        if (this.isAgentDialog && objectId) {
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, [objectId], null, null, true
+            ).catch(() => [] as Contact[]);
+            if (contacts && contacts[0] && contacts[0].AssignedUserID) {
+                objectId = contacts[0].AssignedUserID;
+            } else {
+                this.routingConfiguration = this.contactRoutingConfig;
+            }
+        }
+        super.handleDialogSuccess(objectId);
     }
 
 }

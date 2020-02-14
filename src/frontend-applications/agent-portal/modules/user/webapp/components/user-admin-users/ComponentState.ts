@@ -11,8 +11,17 @@ import { IdService } from "../../../../../model/IdService";
 import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
 import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { UserProperty } from "../../../model/UserProperty";
 import { SortOrder } from "../../../../../model/SortOrder";
+import { ContactProperty } from "../../../../customer/model/ContactProperty";
+import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../../model/FilterCriteria";
+import { UserProperty } from "../../../model/UserProperty";
+import { SearchOperator } from "../../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../../model/FilterDataType";
+import { FilterType } from "../../../../../model/FilterType";
+import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
+import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
 
 export class ComponentState {
 
@@ -22,7 +31,20 @@ export class ComponentState {
             'table-widget', 'Translatable#User Management: Agents',
             ['user-admin-user-create-action', 'csv-export-action'], null,
             new TableWidgetConfiguration(
-                null, null, null, KIXObjectType.USER, [UserProperty.USER_LASTNAME, SortOrder.UP]
+                null, null, null, KIXObjectType.USER, [ContactProperty.LASTNAME, SortOrder.UP],
+                null,
+                new TableConfiguration(
+                    null, null, undefined, KIXObjectType.USER,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            )
+                        ], null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
+                    ), undefined, undefined, [], true, false, null, null,
+                    TableHeaderHeight.LARGE, TableRowHeight.LARGE
+                )
             ), false, false,
             'kix-icon-gears'
         )

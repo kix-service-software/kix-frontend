@@ -10,7 +10,7 @@
 import { IUIModule } from "../../../../model/IUIModule";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import {
-    OrganisationPlaceholderHandler, OrganisationService, OrganisationFormService, OrganisationLabelProvider,
+    OrganisationService, OrganisationFormService, OrganisationLabelProvider,
     OrganisationBrowserFactory, OrganisationSearchDefinition, OrganisationDetailsContext, OrganisationSearchContext,
     OrganisationSearchAction
 } from ".";
@@ -26,6 +26,7 @@ import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
+import { OrganisationPlaceholderHandler } from "./OrganisationPlaceholderHandler";
 
 export class UIModule implements IUIModule {
 

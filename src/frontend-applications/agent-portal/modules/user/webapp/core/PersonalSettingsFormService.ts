@@ -9,7 +9,7 @@
 
 import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AgentService } from ".";
+import { AgentService } from "./AgentService";
 import { PersonalSettingsProperty } from "../../model/PersonalSettingsProperty";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { FilterCriteria } from "../../../../model/FilterCriteria";
@@ -68,8 +68,24 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             } catch (e) {
                 console.warn('Could not load/parse notification preference.');
             }
+        } else {
+            const loadingOptions = new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    'Data.' + NotificationProperty.DATA_VISIBLE_FOR_AGENT, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, 1
+                ),
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                    FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            ]);
+            const notifications = await KIXObjectService.loadObjects<Notification>(
+                KIXObjectType.NOTIFICATION, null, loadingOptions, null, true
+            ).catch(() => [] as Notification[]);
+            if (notifications) {
+                value = notifications.map((n) => n.ID);
+            }
         }
-
         return value;
     }
 

@@ -96,11 +96,12 @@ export class WebformLabelProvider extends LabelProvider {
                                     UserProperty.USER_LOGIN, SearchOperator.EQUALS,
                                     FilterDataType.STRING, FilterType.AND, value
                                 )
-                            ]
+                            ], null, null, [UserProperty.CONTACT]
                         ),
                         null, true
                     ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    displayValue = users && users.length ?
+                        users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;
                     translatable = false;
                 }
                 break;

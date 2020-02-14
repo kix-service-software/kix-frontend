@@ -58,9 +58,8 @@ export class OrganisationContext extends Context {
             KIXObjectType.ORGANISATION, null, null, null, false
         ).catch((error) => []);
 
-        window.clearTimeout(timeout);
-
         this.setObjectList(KIXObjectType.ORGANISATION, organisations);
+        super.setFilteredObjectList(KIXObjectType.ORGANISATION, organisations);
 
         const isOrganisationDepending = this.getAdditionalInformation(
             OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
@@ -68,6 +67,8 @@ export class OrganisationContext extends Context {
         if (isOrganisationDepending) {
             await this.loadContacts();
         }
+
+        window.clearTimeout(timeout);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }

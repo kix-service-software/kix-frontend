@@ -24,6 +24,7 @@ import { TableHeaderHeight } from "../../../../../../../model/configuration/Tabl
 import { TableRowHeight } from "../../../../../../../model/configuration/TableRowHeight";
 import { RoutingConfiguration } from "../../../../../../../model/configuration/RoutingConfiguration";
 import { ContextMode } from "../../../../../../../model/ContextMode";
+import { ContactProperty } from "../../../../../../customer/model/ContactProperty";
 
 export class UserTableFactory extends TableFactory {
 
@@ -39,9 +40,7 @@ export class UserTableFactory extends TableFactory {
 
         table.setContentProvider(
             new UserTableContentProvider(
-                table, objectIds,
-                new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]),
-                contextId
+                table, objectIds, tableConfiguration.loadingOptions, contextId
             )
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
@@ -58,23 +57,23 @@ export class UserTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
+                ContactProperty.FIRSTNAME, true, false, true, false, 250, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
+                ContactProperty.LASTNAME, true, false, true, false, 250, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_EMAIL, true, false, true, false, 200, true, true
+                ContactProperty.EMAIL, true, false, true, false, 200, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_PHONE, true, false, true, false, 200, true, true
+                ContactProperty.PHONE, true, false, true, false, 200, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_MOBILE, true, false, true, false, 200, true, true
+                ContactProperty.MOBILE, true, false, true, false, 200, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
-                UserProperty.LAST_LOGIN, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                UserProperty.USER_LAST_LOGIN, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(
                 null, null, null, KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true),
@@ -98,6 +97,12 @@ export class UserTableFactory extends TableFactory {
             defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
+        }
+
+        if (!tableConfiguration.loadingOptions) {
+            tableConfiguration.loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
+            );
         }
 
         if (defaultRouting) {
