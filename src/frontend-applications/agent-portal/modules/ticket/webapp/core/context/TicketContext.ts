@@ -87,9 +87,9 @@ export class TicketContext extends Context {
         this.loadTickets();
     }
 
-    public async reloadObjectList(objectType: KIXObjectType): Promise<void> {
+    public reloadObjectList(objectType: KIXObjectType): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
-            this.loadTickets();
+            return this.loadTickets();
         }
     }
 

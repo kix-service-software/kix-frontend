@@ -93,4 +93,10 @@ export class FAQContext extends Context {
         this.loadFAQArticles();
     }
 
+    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+        if (objectType === KIXObjectType.FAQ_ARTICLE) {
+            return this.loadFAQArticles();
+        }
+    }
+
 }

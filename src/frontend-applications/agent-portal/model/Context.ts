@@ -22,6 +22,8 @@ import { FormService } from "../modules/base-components/webapp/core/FormService"
 import { BreadcrumbInformation } from "./BreadcrumbInformation";
 import { KIXObjectService } from "../modules/base-components/webapp/core/KIXObjectService";
 import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
+import { EventService } from "../modules/base-components/webapp/core/EventService";
+import { ApplicationEvent } from "../modules/base-components/webapp/core/ApplicationEvent";
 
 
 export abstract class Context {
@@ -47,6 +49,17 @@ export abstract class Context {
     ) {
         if (this.configuration) {
             this.setConfiguration(configuration);
+        }
+
+        if (this.descriptor) {
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
+                eventSubscriberId: this.descriptor.contextId + '-update-listener',
+                eventPublished: (objectType: KIXObjectType) => {
+                    if (this.objectLists.has(objectType)) {
+                        this.objectLists.delete(objectType);
+                    }
+                }
+            });
         }
     }
 
@@ -115,6 +128,8 @@ export abstract class Context {
             const values = this.objectLists.values();
             const list = values.next();
             return list.value;
+        } else if (!this.objectLists.has(objectType)) {
+            await this.reloadObjectList(objectType);
         }
         return this.objectLists.get(objectType);
     }
