@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-02-13 17:14+0000\n"
-"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
+"PO-Revision-Date: 2020-02-14 14:14+0000\n"
+"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -44,10 +44,8 @@ msgstr "Akzeptierte Domains"
 msgid "Accept KIX Header"
 msgstr "KIX Header zulassen"
 
-#, fuzzy
-#| msgid "Success!"
 msgid "Access"
-msgstr "Erfolgreich!"
+msgstr "Zugriff"
 
 msgid "Access denied"
 msgstr "Zugriff verweigert"
@@ -121,15 +119,11 @@ msgstr "Agentenzuordnung"
 msgid "Agent Information"
 msgstr "Agenten-Informationen"
 
-#, fuzzy
-#| msgid "Last Login"
 msgid "Agent Login"
-msgstr "Letzte Anmeldung"
+msgstr "Agentenlogin"
 
-#, fuzzy
-#| msgid "Agent Information"
 msgid "Agent Portal"
-msgstr "Agenten-Informationen"
+msgstr "Agentenportal"
 
 msgid "Agent Preferences Tooltip"
 msgstr "Kurzinfo für Agent"
@@ -665,15 +659,11 @@ msgstr "Kunden"
 msgid "Customer Dashboard"
 msgstr "Kunden Dashboard"
 
-#, fuzzy
-#| msgid "Customer"
 msgid "Customer Login"
-msgstr "Kunden"
+msgstr "Kundenlogin"
 
-#, fuzzy
-#| msgid "Show in Customer Portal"
 msgid "Customer Portal"
-msgstr "Im Kundenportal anzeigen"
+msgstr "Kundenportal"
 
 msgid "CW"
 msgstr "KW"
@@ -2677,10 +2667,8 @@ msgstr "Ticket sperren"
 msgid "Logged in"
 msgstr "Angemeldet"
 
-#, fuzzy
-#| msgid "License Information"
 msgid "Login Information"
-msgstr "Lizenz Informationen"
+msgstr "Login-Informationen"
 
 msgid "Login Name"
 msgstr "Nutzername"
