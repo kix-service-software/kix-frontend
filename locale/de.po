@@ -44,6 +44,11 @@ msgstr "Akzeptierte Domains"
 msgid "Accept KIX Header"
 msgstr "KIX Header zulassen"
 
+#, fuzzy
+#| msgid "Success!"
+msgid "Access"
+msgstr "Erfolgreich!"
+
 msgid "Access denied"
 msgstr "Zugriff verweigert"
 
@@ -116,14 +121,21 @@ msgstr "Agentenzuordnung"
 msgid "Agent Information"
 msgstr "Agenten-Informationen"
 
+#, fuzzy
+#| msgid "Last Login"
+msgid "Agent Login"
+msgstr "Letzte Anmeldung"
+
+#, fuzzy
+#| msgid "Agent Information"
+msgid "Agent Portal"
+msgstr "Agenten-Informationen"
+
 msgid "Agent Preferences Tooltip"
 msgstr "Kurzinfo für Agent"
 
 msgid "Agents"
 msgstr "Agenten"
-
-msgid "Agent successfully created."
-msgstr "Agent wurde erfolgreich angelegt."
 
 msgid "All"
 msgstr "Alle"
@@ -545,9 +557,6 @@ msgstr "Konto wird angelegt"
 msgid "Create Address"
 msgstr "Adresse wird angelegt"
 
-msgid "Create Agent"
-msgstr "Agent wird angelegt"
-
 msgid "Create Article"
 msgstr "Artikel anlegen"
 
@@ -656,6 +665,16 @@ msgstr "Kunden"
 msgid "Customer Dashboard"
 msgstr "Kunden Dashboard"
 
+#, fuzzy
+#| msgid "Customer"
+msgid "Customer Login"
+msgstr "Kunden"
+
+#, fuzzy
+#| msgid "Show in Customer Portal"
+msgid "Customer Portal"
+msgstr "Im Kundenportal anzeigen"
+
 msgid "CW"
 msgstr "KW"
 
@@ -736,9 +755,6 @@ msgstr "Konto bearbeiten"
 
 msgid "Edit Address"
 msgstr "Adresse bearbeiten"
-
-msgid "Edit Agent"
-msgstr "Agenten bearbeiten"
 
 msgid "Edit CI Class"
 msgstr "Asset Klasse bearbeiten"
@@ -1100,6 +1116,14 @@ msgid "Helping FAQ Contributions"
 msgstr "Helfende FAQ-Einträge"
 
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
+msgstr ""
+"Nachdem Sie einen Feldtyp gewählt haben, werden die entsprechenden "
+"Konfigurationsmöglichkeiten geladen. Darüber können Sie festlegen, wie sich "
+"das dynamische Feld verhält und wie es dargestellt wird."
+
+#, fuzzy
+#| msgid "Helptext_Admin_DynamicFieldCreate_Config"
+msgid "Helptext_Admin_DynamicFieldCreate_CustomerVisible"
 msgstr ""
 "Nachdem Sie einen Feldtyp gewählt haben, werden die entsprechenden "
 "Konfigurationsmöglichkeiten geladen. Darüber können Sie festlegen, wie sich "
@@ -1695,24 +1719,6 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
-msgstr ""
-"Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
-"erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
-"Einstellungen ändern."
-
-msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
-msgstr ""
-"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
-"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
-"Einstellungen ändern."
-
-msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
-msgstr ""
-"Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
-"erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
-"persönlichen Einstellungen ändern."
-
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -1726,81 +1732,6 @@ msgstr "Es werden nur gültige Agenten angezeigt."
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_Users_UserCreate_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_Users_UserCreate_Email"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_FirstName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_LastName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Login"
-msgstr "Der Nutzername des Agenten muss eineindeutig sein."
-
-msgid "Helptext_Admin_Users_UserCreate_Mobile"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Password"
-msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
-
-msgid "Helptext_Admin_Users_UserCreate_Phone"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Roles"
-msgstr ""
-"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
-"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
-
-msgid "Helptext_Admin_Users_UserCreate_Title"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Valid"
-msgstr ""
-"Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
-"wenn der Agent „gültig“ gesetzt ist."
-
-msgid "Helptext_Admin_Users_UserEdit_Comment"
-msgstr ""
-"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
-"Bereich angezeigt werden."
-
-msgid "Helptext_Admin_Users_UserEdit_Email"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_FirstName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_LastName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Login"
-msgstr "Der Nutzername des Agenten muss eineindeutig sein."
-
-msgid "Helptext_Admin_Users_UserEdit_Mobile"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Password"
-msgstr ""
-"Geben Sie ein neues Passwort für den Agenten ein. Wird kein Passwort "
-"eingeben, bleibt das bisherige Passwort gültig."
-
-msgid "Helptext_Admin_Users_UserEdit_Phone"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Title"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Valid"
-msgstr ""
-"Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
-"wenn der Agent „gültig“ gesetzt ist."
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
@@ -1965,10 +1896,6 @@ msgstr ""
 msgid "Helptext_Customers_ContactCreate_Lastname"
 msgstr ""
 
-msgid "Helptext_Customers_ContactCreate_Login"
-msgstr ""
-"Der Nutzername muss eineindeutig sein und kann nicht bearbeitet werden."
-
 msgid "Helptext_Customers_ContactCreate_Mobile"
 msgstr ""
 
@@ -1978,9 +1905,6 @@ msgstr ""
 "Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im System "
 "registrierten Kontakten vorgeschlagen. Sie können „*“ als Platzhalter "
 "verwenden.  („KNR“ und „Kundenname“ möglich)"
-
-msgid "Helptext_Customers_ContactCreate_Password"
-msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
@@ -2390,6 +2314,54 @@ msgstr ""
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgid "Helptext_Users_UserCreateEdit_Access"
+msgstr ""
+"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
+"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgid "Helptext_Users_UserCreateEdit_Roles"
+msgstr ""
+"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
+"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Login"
+msgid "Helptext_User_UserCreateEdit_Login"
+msgstr "Der Nutzername des Agenten muss eineindeutig sein."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Password"
+msgid "Helptext_User_UserCreateEdit_Password"
+msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
+msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
+msgstr ""
+"Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
+"erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+"Einstellungen ändern."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
+msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
+msgstr ""
+"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
+"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
+"Einstellungen ändern."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
+msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
+msgstr ""
+"Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
+"erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
+"persönlichen Einstellungen ändern."
+
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr "Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren"
 
@@ -2704,6 +2676,11 @@ msgstr "Ticket sperren"
 
 msgid "Logged in"
 msgstr "Angemeldet"
+
+#, fuzzy
+#| msgid "License Information"
+msgid "Login Information"
+msgstr "Lizenz Informationen"
 
 msgid "Login Name"
 msgstr "Nutzername"
@@ -4090,6 +4067,47 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Agent successfully created."
+#~ msgstr "Agent wurde erfolgreich angelegt."
+
+#~ msgid "Create Agent"
+#~ msgstr "Agent wird angelegt"
+
+#~ msgid "Edit Agent"
+#~ msgstr "Agenten bearbeiten"
+
+#~ msgid "Helptext_Admin_Users_UserCreate_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_Users_UserCreate_Valid"
+#~ msgstr ""
+#~ "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
+#~ "wenn der Agent „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Comment"
+#~ msgstr ""
+#~ "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+#~ "Bereich angezeigt werden."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Login"
+#~ msgstr "Der Nutzername des Agenten muss eineindeutig sein."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Password"
+#~ msgstr ""
+#~ "Geben Sie ein neues Passwort für den Agenten ein. Wird kein Passwort "
+#~ "eingeben, bleibt das bisherige Passwort gültig."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Valid"
+#~ msgstr ""
+#~ "Der Agent kann sich mit den hier festgelegten Nutzerdaten nur einloggen, "
+#~ "wenn der Agent „gültig“ gesetzt ist."
+
+#~ msgid "Helptext_Customers_ContactCreate_Login"
+#~ msgstr ""
+#~ "Der Nutzername muss eineindeutig sein und kann nicht bearbeitet werden."
+
 #~ msgid "Visible in customer portal"
 #~ msgstr "Sichtbar in Kundenportal"
 
@@ -5406,9 +5424,6 @@ msgstr "PLZ"
 
 #~ msgid "Product"
 #~ msgstr "Produkt"
-
-#~ msgid "License Information"
-#~ msgstr "Lizenz Informationen"
 
 #~ msgid "License Key"
 #~ msgstr "Lizenzschlüssel"

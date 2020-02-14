@@ -44,6 +44,9 @@ msgstr ""
 msgid "Accept KIX Header"
 msgstr ""
 
+msgid "Access"
+msgstr ""
+
 msgid "Access denied"
 msgstr ""
 
@@ -116,13 +119,16 @@ msgstr ""
 msgid "Agent Information"
 msgstr ""
 
+msgid "Agent Login"
+msgstr ""
+
+msgid "Agent Portal"
+msgstr ""
+
 msgid "Agent Preferences Tooltip"
 msgstr ""
 
 msgid "Agents"
-msgstr ""
-
-msgid "Agent successfully created."
 msgstr ""
 
 msgid "All"
@@ -533,9 +539,6 @@ msgstr ""
 msgid "Create Address"
 msgstr ""
 
-msgid "Create Agent"
-msgstr ""
-
 msgid "Create Article"
 msgstr ""
 
@@ -644,6 +647,12 @@ msgstr ""
 msgid "Customer Dashboard"
 msgstr ""
 
+msgid "Customer Login"
+msgstr ""
+
+msgid "Customer Portal"
+msgstr ""
+
 msgid "CW"
 msgstr ""
 
@@ -723,9 +732,6 @@ msgid "Edit Account"
 msgstr ""
 
 msgid "Edit Address"
-msgstr ""
-
-msgid "Edit Agent"
 msgstr ""
 
 msgid "Edit CI Class"
@@ -1085,6 +1091,14 @@ msgid "Helping FAQ Contributions"
 msgstr "Helpfull FAQ articles"
 
 msgid "Helptext_Admin_DynamicFieldCreate_Config"
+msgstr ""
+"After choosing a dynamic field type, the related configuration options will "
+"be shown. There you can define how the dynamic field is displayed within the "
+"application."
+
+#, fuzzy
+#| msgid "Helptext_Admin_DynamicFieldCreate_Config"
+msgid "Helptext_Admin_DynamicFieldCreate_CustomerVisible"
 msgstr ""
 "After choosing a dynamic field type, the related configuration options will "
 "be shown. There you can define how the dynamic field is displayed within the "
@@ -1625,21 +1639,6 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "The type can only be used within the system if set “valid”."
 
-msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
-msgstr ""
-"Set the default teams, the agent will receive notifications for. An agent "
-"can change this setting in their preferences."
-
-msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
-msgstr ""
-"Set the default notifications for the agent. An agent can change this "
-"setting in their preferences."
-
-msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
-msgstr ""
-"Set the default language for the agent, when they log in KIX the first time. "
-"An agent can change their language settings in their preferences."
-
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
 "Insert additional information (only displayed within the admin module)."
@@ -1652,75 +1651,6 @@ msgstr "Only valid agents are available."
 
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "The role can only be used within the system if set “valid”."
-
-msgid "Helptext_Admin_Users_UserCreate_Comment"
-msgstr ""
-"Insert additional information (only displayed within the admin module)."
-
-msgid "Helptext_Admin_Users_UserCreate_Email"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_FirstName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_LastName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Login"
-msgstr "The login name must be unique."
-
-msgid "Helptext_Admin_Users_UserCreate_Mobile"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Password"
-msgstr "The password can be changed/modified afterwards."
-
-msgid "Helptext_Admin_Users_UserCreate_Phone"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Roles"
-msgstr ""
-"An agent needs at least the role “AgentUser” to successfully login. Only "
-"valid roles are available here."
-
-msgid "Helptext_Admin_Users_UserCreate_Title"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserCreate_Valid"
-msgstr "The agent can only login with the user data set here if set “valid”."
-
-msgid "Helptext_Admin_Users_UserEdit_Comment"
-msgstr ""
-"Insert additional information (only displayed within the admin module)."
-
-msgid "Helptext_Admin_Users_UserEdit_Email"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_FirstName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_LastName"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Login"
-msgstr "The login name must be unique."
-
-msgid "Helptext_Admin_Users_UserEdit_Mobile"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Password"
-msgstr ""
-"Enter a new password for the agent. If you do not enter a new one the "
-"previous password stays valid."
-
-msgid "Helptext_Admin_Users_UserEdit_Phone"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Title"
-msgstr ""
-
-msgid "Helptext_Admin_Users_UserEdit_Valid"
-msgstr "The agent can only login with the user data set here if set “valid”."
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
@@ -1864,9 +1794,6 @@ msgstr ""
 msgid "Helptext_Customers_ContactCreate_Lastname"
 msgstr ""
 
-msgid "Helptext_Customers_ContactCreate_Login"
-msgstr "The login name needs to be unique and cannot be changed afterwards."
-
 msgid "Helptext_Customers_ContactCreate_Mobile"
 msgstr ""
 
@@ -1875,9 +1802,6 @@ msgstr ""
 "Choose an organisation for the contact to be assigned to. Enter at least 3 "
 "characters in order to get a suggestion list of available contacts. You may "
 "use „*“ as wildcard. (CNO and Organisation Name possible)"
-
-msgid "Helptext_Customers_ContactCreate_Password"
-msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Phone"
 msgstr ""
@@ -2270,6 +2194,51 @@ msgstr "The state marks the recent ticket process state."
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Briefly summarzie the ticket topic."
 
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgid "Helptext_Users_UserCreateEdit_Access"
+msgstr ""
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Roles"
+msgid "Helptext_Users_UserCreateEdit_Roles"
+msgstr ""
+"An agent needs at least the role “AgentUser” to successfully login. Only "
+"valid roles are available here."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Login"
+msgid "Helptext_User_UserCreateEdit_Login"
+msgstr "The login name must be unique."
+
+#, fuzzy
+#| msgid "Helptext_Admin_Users_UserCreate_Password"
+msgid "Helptext_User_UserCreateEdit_Password"
+msgstr "The password can be changed/modified afterwards."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
+msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
+msgstr ""
+"Set the default teams, the agent will receive notifications for. An agent "
+"can change this setting in their preferences."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
+msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
+msgstr ""
+"Set the default notifications for the agent. An agent can change this "
+"setting in their preferences."
+
+#, fuzzy
+#| msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
+msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
+msgstr ""
+"Set the default language for the agent, when they log in KIX the first time. "
+"An agent can change their language settings in their preferences."
+
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr ""
 
@@ -2584,6 +2553,11 @@ msgstr ""
 
 msgid "Logged in"
 msgstr ""
+
+#, fuzzy
+#| msgid "Notification Information"
+msgid "Login Information"
+msgstr "Notification Information"
 
 msgid "Login Name"
 msgstr ""
@@ -3958,6 +3932,33 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Admin_Users_UserCreate_Comment"
+#~ msgstr ""
+#~ "Insert additional information (only displayed within the admin module)."
+
+#~ msgid "Helptext_Admin_Users_UserCreate_Valid"
+#~ msgstr ""
+#~ "The agent can only login with the user data set here if set “valid”."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Comment"
+#~ msgstr ""
+#~ "Insert additional information (only displayed within the admin module)."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Login"
+#~ msgstr "The login name must be unique."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Password"
+#~ msgstr ""
+#~ "Enter a new password for the agent. If you do not enter a new one the "
+#~ "previous password stays valid."
+
+#~ msgid "Helptext_Admin_Users_UserEdit_Valid"
+#~ msgstr ""
+#~ "The agent can only login with the user data set here if set “valid”."
+
+#~ msgid "Helptext_Customers_ContactCreate_Login"
+#~ msgstr "The login name needs to be unique and cannot be changed afterwards."
 
 #~ msgid "Assigned Queues"
 #~ msgstr "Assigned Teams"
