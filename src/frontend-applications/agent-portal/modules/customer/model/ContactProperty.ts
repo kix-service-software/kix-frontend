@@ -11,11 +11,13 @@ export enum ContactProperty {
 
     ID = 'ID',
 
+    ASSIGNED_USER_ID = 'AssignedUserID',
+
     FIRSTNAME = 'Firstname',
 
     LASTNAME = 'Lastname',
 
-    LOGIN = 'Login',
+    FULLNAME = 'Fullname',
 
     CITY = 'City',
 
@@ -39,6 +41,8 @@ export enum ContactProperty {
 
     TITLE = 'Title',
 
+    USER = 'User',
+
     ZIP = 'Zip',
 
     TICKET_STATS = 'TicketStats',
@@ -50,8 +54,6 @@ export enum ContactProperty {
     REMINDER_TICKETS_COUNT = 'REMINDER_TICKETS_COUNT',
 
     CREATE_NEW_TICKET = 'CREATE_NEW_TICKET',
-
-    PASSWORD = 'Password',
 
     // UI properties
     VALID = 'Valid',

@@ -12,8 +12,7 @@ import { AbstractComponentState } from "../../../../../modules/base-components/w
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public loading: boolean = false,
-        public formId: string = 'contact-edit-form'
+        public loading: boolean = false
     ) {
         super();
     }

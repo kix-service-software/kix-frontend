@@ -14,5 +14,4 @@ export { SysConfigFormService } from './SysConfigFormService';
 export { SysConfigLabelProvider } from './SysConfigLabelProvider';
 export { SysConfigOptionBrowserFactory } from './SysConfigOptionBrowserFactory';
 export { SysConfigOptionDefinitionBrowserFactory } from './SysConfigOptionDefinitionBrowserFactory';
-export { SysConfigPlaceholderHandler } from './SysConfigPlaceholderHandler';
 export { UIModule as SysConfigUIModule } from './SysConfigUIModule';

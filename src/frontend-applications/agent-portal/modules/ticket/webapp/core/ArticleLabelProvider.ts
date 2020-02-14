@@ -184,15 +184,6 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
             case ArticleProperty.CUSTOMER_VISIBLE:
                 displayValue = Boolean(displayValue) ? 'Translatable#Yes' : 'Translatable#No';
                 break;
-            case ArticleProperty.CREATED_BY:
-            case ArticleProperty.CHANGED_BY:
-                if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                }
-                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }

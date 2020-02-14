@@ -169,10 +169,12 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 }
                 break;
             case FAQArticleProperty.CREATED_BY:
-                displayValue = faqArticle.createdBy ? faqArticle.createdBy.UserFullname : faqArticle.CreatedBy;
+                displayValue = faqArticle.createdBy ? faqArticle.createdBy.Contact ?
+                    faqArticle.createdBy.Contact.Fullname : faqArticle.createdBy.UserLogin : faqArticle.CreatedBy;
                 break;
             case FAQArticleProperty.CHANGED_BY:
-                displayValue = faqArticle.changedBy ? faqArticle.changedBy.UserFullname : faqArticle.ChangedBy;
+                displayValue = faqArticle.changedBy ? faqArticle.createdBy.Contact ?
+                    faqArticle.createdBy.Contact.Fullname : faqArticle.createdBy.UserLogin : faqArticle.ChangedBy;
                 break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(

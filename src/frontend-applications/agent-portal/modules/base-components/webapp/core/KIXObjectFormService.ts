@@ -26,7 +26,6 @@ import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { FormService } from "./FormService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
 
 export abstract class KIXObjectFormService implements IKIXObjectFormService {
@@ -76,8 +75,8 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             if (kixObject || f.defaultValue) {
                 let value = await this.getValue(
                     f.property,
-                    kixObject && formContext === FormContext.EDIT ? kixObject[f.property] :
-                        f.defaultValue ? f.defaultValue.value : null,
+                    kixObject && formContext === FormContext.EDIT && typeof kixObject[f.property] !== 'undefined' ?
+                        kixObject[f.property] : f.defaultValue ? f.defaultValue.value : null,
                     kixObject,
                     f
                 );
@@ -313,5 +312,43 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             }
         }
         return parameter;
+    }
+
+    protected getFormFieldOfForm(form: FormConfiguration, property: string): FormFieldConfiguration {
+        let formField: FormFieldConfiguration;
+        if (Array.isArray(form.pages)) {
+            PAGES:
+            for (const page of form.pages) {
+                if (Array.isArray(page.groups)) {
+                    for (const group of page.groups) {
+                        if (Array.isArray(group.formFields)) {
+                            formField = this.getFormField(group.formFields, property);
+                            if (formField) {
+                                break PAGES;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return formField;
+    }
+
+    private getFormField(fields: FormFieldConfiguration[], property): FormFieldConfiguration {
+        let foundField: FormFieldConfiguration;
+        if (Array.isArray(fields)) {
+            for (const field of fields) {
+                if (field.property === property) {
+                    foundField = field;
+                    break;
+                } else if (Array.isArray(field.children)) {
+                    foundField = this.getFormField(field.children, property);
+                    if (foundField) {
+                        break;
+                    }
+                }
+            }
+        }
+        return foundField;
     }
 }

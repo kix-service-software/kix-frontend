@@ -18,7 +18,6 @@ import { EventService } from "../../../../../modules/base-components/webapp/core
 import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SysConfigService } from "../../../../sysconfig/webapp/core";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 
 

@@ -10,7 +10,7 @@
 import { IUIModule } from "../../../../model/IUIModule";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import {
-    ContactPlaceholderHandler, ContactService, ContactFormService, ContactTableFactory,
+    ContactService, ContactFormService, ContactTableFactory,
     ContactLabelProvider, ContactBrowserFactory, ContactSearchDefinition, ContactDetailsContext,
     ContactSearchContext, ContactSearchAction, ContactCSVExportAction, ContactTableDependingAction
 } from ".";
@@ -25,6 +25,7 @@ import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
+import { ContactPlaceholderHandler } from "./ContactPlaceholderHandler";
 
 export class UIModule implements IUIModule {
 

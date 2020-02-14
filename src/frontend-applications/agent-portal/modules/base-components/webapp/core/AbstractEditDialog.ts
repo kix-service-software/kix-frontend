@@ -74,35 +74,46 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         DialogService.getInstance().closeMainDialog();
     }
 
-    public submit(): Promise<void> {
+    public submit(objectId?: number | string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             setTimeout(async () => {
                 const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
                 const result = await formInstance.validateForm();
                 const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
                 if (validationError) {
-                    AbstractEditDialog.prototype.showValidationError.call(this, result);
+                    if (this.showValidationError) {
+                        this.showValidationError(result);
+                    } else {
+                        AbstractEditDialog.prototype.showValidationError.call(this, result);
+                    }
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
-                    let context;
-                    if (this.contextId) {
-                        context = await ContextService.getInstance().getContext(this.contextId);
-                    } else {
-                        context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                    if (!objectId) {
+                        let context;
+                        if (this.contextId) {
+                            context = await ContextService.getInstance().getContext(this.contextId);
+                        } else {
+                            context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                        }
+                        if (context && context.getObjectId()) {
+                            objectId = context.getObjectId();
+                        }
                     }
-                    if (context && context.getObjectId()) {
-                        KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, context.getObjectId())
-                            .then(async (objectId) => {
-                                await AbstractEditDialog.prototype.handleDialogSuccess.call(this, objectId);
-                                resolve();
-                            }).catch((error: Error) => {
-                                DialogService.getInstance().setMainDialogLoading(false);
-                                BrowserUtil.openErrorOverlay(
-                                    error.Message ? `${error.Code}: ${error.Message}` : error.toString()
-                                );
-                                reject();
-                            });
-                    }
+                    KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, objectId)
+                        .then(async (succesObjectId) => {
+                            if (this.handleDialogSuccess) {
+                                await this.handleDialogSuccess(succesObjectId);
+                            } else {
+                                await AbstractEditDialog.prototype.handleDialogSuccess.call(this, succesObjectId);
+                            }
+                            resolve();
+                        }).catch((error: Error) => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.openErrorOverlay(
+                                error.Message ? `${error.Code}: ${error.Message}` : error.toString()
+                            );
+                            reject();
+                        });
                 }
             }, 300);
         });

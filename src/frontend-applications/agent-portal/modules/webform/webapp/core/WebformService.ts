@@ -121,21 +121,6 @@ export class WebformService extends KIXObjectService<Webform> {
         );
     }
 
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        if (value) {
-            if (property === WebformProperty.USER_LOGIN) {
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                value = users && !!users.length ? users[0].UserLogin : value;
-            }
-            parameter.push([property, value]);
-        }
-
-        return parameter;
-    }
-
     private getParameterValue(parameter: Array<[string, any]>, property: string): any {
         const param = parameter.find((p) => p[0] === property);
         return param && param.length ? param[1] : null;

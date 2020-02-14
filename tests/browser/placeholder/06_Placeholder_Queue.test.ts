@@ -23,7 +23,7 @@ import { QueuePlaceholderHandler } from '../../../src/frontend-applications/agen
 import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 import { QueueProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/QueueProperty';
 import { TicketProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/TicketProperty';
-import { QueueLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { QueueLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/QueueLabelProvider';
 import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);

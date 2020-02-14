@@ -16,6 +16,8 @@ import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/Da
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
 
@@ -58,12 +60,6 @@ export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
         let displayValue = history[property];
 
         switch (property) {
-            case FAQArticleHistoryProperty.CREATED_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [displayValue], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                break;
             case FAQArticleHistoryProperty.CREATED:
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;

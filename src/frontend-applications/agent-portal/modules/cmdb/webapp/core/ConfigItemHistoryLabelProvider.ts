@@ -16,6 +16,8 @@ import { KIXObjectService } from "../../../../modules/base-components/webapp/cor
 import { User } from "../../../user/model/User";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHistory> {
 
@@ -56,15 +58,6 @@ export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHist
         let displayValue = historyEntry[property];
 
         switch (property) {
-            case ConfigItemHistoryProperty.CREATE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [displayValue], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                break;
-            case ConfigItemHistoryProperty.CREATE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             case ConfigItemHistoryProperty.VERSION_ID:
                 displayValue = historyEntry.VersionID
                     ? await TranslationService.translate('Translatable#to Version')

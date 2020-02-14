@@ -148,10 +148,12 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = configItem.CurInciState;
                 break;
             case ConfigItemProperty.CREATE_BY:
-                displayValue = configItem.createdBy ? configItem.createdBy.UserFullname : configItem.CreateBy;
+                displayValue = configItem.createdBy ? configItem.createdBy.Contact ?
+                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.CreateBy;
                 break;
             case ConfigItemProperty.CHANGE_BY:
-                displayValue = configItem.changedBy ? configItem.changedBy.UserFullname : configItem.ChangeBy;
+                displayValue = configItem.changedBy ? configItem.createdBy.Contact ?
+                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.ChangeBy;
                 break;
             case VersionProperty.NAME:
                 displayValue = configItem.CurrentVersion ? configItem.CurrentVersion.Name : property;
@@ -162,9 +164,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.CLASS_ID:
             case ConfigItemProperty.CLASS:
-            case ConfigItemProperty.CHANGE_BY:
             case ConfigItemProperty.CHANGE_TIME:
-            case ConfigItemProperty.CREATE_BY:
             case ConfigItemProperty.CREATE_TIME:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
                 break;

@@ -20,7 +20,6 @@ import {
     FollowUpTypeBrowserFactory, ArticleZipAttachmentDownloadAction, TicketSearchAction, ShowUserTicketsAction,
     TicketWatchAction, TicketLockAction, TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext
 } from ".";
-import { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
 import { SearchService } from "../../../search/webapp/core";
@@ -39,6 +38,7 @@ import { ChannelBrowserFactory } from "./ChannelBrowserFactory";
 import { ArticleLabelProvider } from "./ArticleLabelProvider";
 import { TicketLabelProvider } from "./TicketLabelProvider";
 import { ChannelService } from "./ChannelService";
+import { TicketPlaceholderHandler } from "./TicketPlaceholderHandler";
 
 export class UIModule implements IUIModule {
 

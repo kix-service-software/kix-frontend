@@ -16,7 +16,9 @@ import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpec
 import { ArticleProperty } from "../../model/ArticleProperty";
 import { TicketProperty } from "../../model/TicketProperty";
 import { Attachment } from "../../../../model/kix/Attachment";
-import { TicketSocketClient, QueueService, TicketDetailsContext } from ".";
+import { TicketSocketClient } from "./TicketSocketClient";
+import { QueueService, } from "./admin/QueueService";
+import { TicketDetailsContext } from "./context/TicketDetailsContext";
 import { FilterCriteria } from "../../../../model/FilterCriteria";
 import { SearchProperty } from "../../../search/model/SearchProperty";
 import { SearchOperator } from "../../../search/model/SearchOperator";
@@ -29,13 +31,14 @@ import { TicketPriority } from "../../model/TicketPriority";
 import { TicketState } from "../../model/TicketState";
 import { User } from "../../../user/model/User";
 import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
 import { StateType } from "../../model/StateType";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { Article } from "../../model/Article";
 import { InlineContent } from "../../../../modules/base-components/webapp/core/InlineContent";
 import { Channel } from "../../model/Channel";
 import { ChannelProperty } from "../../model/ChannelProperty";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -161,13 +164,26 @@ export class TicketService extends KIXObjectService<Ticket> {
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
+                if (loadingOptions) {
+                    if (Array.isArray(loadingOptions.includes)) {
+                        loadingOptions.includes.push(UserProperty.CONTACT);
+                    } else {
+                        loadingOptions.includes = [UserProperty.CONTACT];
+                    }
+                } else {
+                    loadingOptions = new KIXObjectLoadingOptions(
+                        null, null, null, [UserProperty.CONTACT]
+                    );
+                }
                 let users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, null, loadingOptions, null, true
                 ).catch((error) => [] as User[]);
                 if (!showInvalid) {
                     users = users.filter((s) => s.ValidID === 1);
                 }
-                users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                users.forEach((u) => nodes.push(new TreeNode(
+                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man'
+                )));
                 break;
             case ArticleProperty.CHANNEL_ID:
                 const channels = await KIXObjectService.loadObjects<Channel>(

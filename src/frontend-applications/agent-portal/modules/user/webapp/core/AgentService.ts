@@ -12,7 +12,6 @@ import { User } from '../../model/User';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { PersonalSetting } from '../../model/PersonalSetting';
-import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../modules/base-components/webapp/core/ServiceType';

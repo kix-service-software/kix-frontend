@@ -170,7 +170,7 @@ export class Table implements ITable {
                         DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
                         FilterType.AND, dfName
                     )
-                ], null, 1, [DynamicFieldProperty.CONFIG]
+                ], null, null, [DynamicFieldProperty.CONFIG]
             ), null, true
         ).catch(() => [] as DynamicField[]);
         if (dynamicFields.length && dynamicFields[0] && dynamicFields[0].ValidID === 1) {

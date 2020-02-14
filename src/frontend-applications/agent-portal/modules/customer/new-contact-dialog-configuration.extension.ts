@@ -20,8 +20,6 @@ import { ContextMode } from "../../model/ContextMode";
 import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
 import { ContactProperty } from "./model/ContactProperty";
 import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../modules/base-components/webapp/core/InputFieldTypes";
 import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
 import { FormValidationService } from "../../modules/base-components/webapp/core/FormValidationService";
 import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
@@ -75,13 +73,6 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         );
         configurations.push(
             new FormFieldConfiguration(
-                'contact-new-form-field-firstname',
-                'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
-                'Translatable#Helptext_Customers_ContactCreate_Firstname'
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
                 'contact-new-form-field-lastname',
                 'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
                 'Translatable#Helptext_Customers_ContactCreate_Lastname'
@@ -89,20 +80,9 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         );
         configurations.push(
             new FormFieldConfiguration(
-                'contact-new-form-field-login',
-                'Translatable#Login Name', ContactProperty.LOGIN, null, true,
-                'Translatable#Helptext_Customers_ContactCreate_Login'
-            )
-        );
-
-        configurations.push(
-            new FormFieldConfiguration(
-                'contact-new-form-field-password',
-                'Translatable#Password', ContactProperty.PASSWORD, null, true,
-                'Translatable#Helptext_Customers_ContactCreate_Password',
-                [
-                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ]
+                'contact-new-form-field-firstname',
+                'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
+                'Translatable#Helptext_Customers_ContactCreate_Firstname'
             )
         );
         configurations.push(
@@ -125,8 +105,6 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                     'contact-new-form-field-title',
                     'contact-new-form-field-firstname',
                     'contact-new-form-field-lastname',
-                    'contact-new-form-field-login',
-                    'contact-new-form-field-password',
                     'contact-new-form-field-organisation'
                 ]
             )

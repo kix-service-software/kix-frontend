@@ -172,14 +172,7 @@ export class HttpService {
             parameter = ' ' + JSON.stringify(options.qs);
         } else if (options.method === 'POST' || options.method === 'PATCH') {
             if (typeof options.body === 'object') {
-                const body = {};
-                for (const param in options.body) {
-                    if (param.match(/password/i)) {
-                        body[param] = '*****';
-                    } else {
-                        body[param] = options.body[param];
-                    }
-                }
+                const body = this.getPreparedBody(options.body);
                 parameter = ' ' + JSON.stringify(body);
             } else {
                 parameter = ' ' + JSON.stringify(options.body);
@@ -215,6 +208,20 @@ export class HttpService {
                     }
                 });
         });
+    }
+
+    private getPreparedBody(body: {}): {} {
+        const newBody = {};
+        for (const param in body) {
+            if (param.match(/password/i) || param.match(/^UserPw$/)) {
+                newBody[param] = '*****';
+            } else if (typeof body[param] === 'object') {
+                newBody[param] = this.getPreparedBody(body[param]);
+            } else {
+                newBody[param] = body[param];
+            }
+        }
+        return newBody;
     }
 
     private buildRequestUrl(resource: string): string {
@@ -258,7 +265,7 @@ export class HttpService {
         const options: any = {
             method: RequestMethod.GET,
             qs: {
-                include: 'Tickets,Preferences,RoleIDs'
+                include: 'Tickets,Preferences,RoleIDs,Contact'
             }
         };
 

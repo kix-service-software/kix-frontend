@@ -65,18 +65,12 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
             case TranslationPatternProperty.AVAILABLE_LANGUAGES:
                 displayValue = translation.AvailableLanguages.map((l) => l).join(', ');
                 break;
-            case TranslationPatternProperty.CREATE_BY:
-            case TranslationPatternProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
             case TranslationPatternProperty.CREATE_TIME:
             case TranslationPatternProperty.CHANGE_TIME:
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;
             default:
+                displayValue = await super.getDisplayText(translation, property, value, translatable);
         }
 
         if (displayValue) {

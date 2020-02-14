@@ -105,7 +105,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
             const queue = queues[0];
 
-            let userName = `${user.UserFirstname} ${user.UserLastname}`;
+            let userName = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
             userName = userName
                 .replace(/ä/g, 'ae').replace(/Ä/g, 'Ae')
                 .replace(/ö/g, 'oe').replace(/Ö/g, 'Oe')

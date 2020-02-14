@@ -2,7 +2,6 @@
     "dependencies": [
         "require ./components/edit-user-dialog",
         "require ./components/edit-user-role-dialog",
-        "require ./components/new-user-dialog",
         "require ./components/new-user-role-dialog",
         "require ./components/user-admin-roles",
         "require ./components/user-admin-users",

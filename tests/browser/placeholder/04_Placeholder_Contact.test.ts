@@ -22,6 +22,8 @@ import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
+import { User } from '../../../src/frontend-applications/agent-portal/modules/user/model/User';
+import { UserProperty } from '../../../src/frontend-applications/agent-portal/modules/user/model/UserProperty';
 import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
@@ -50,8 +52,8 @@ describe('Placeholder replacement for contact', () => {
         });
 
         it('Should replace contact login placeholder', async () => {
-            const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${ContactProperty.LOGIN}>`, contact);
-            expect(text).equal(contact.Login);
+            const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${UserProperty.USER_LOGIN}>`, contact);
+            expect(text).equal(contact.User.UserLogin);
         });
 
         it('Should replace contact firstname placeholder', async () => {
@@ -117,6 +119,11 @@ describe('Placeholder replacement for contact', () => {
         it('Should replace contact comment placeholder', async () => {
             const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${ContactProperty.COMMENT}>`, contact);
             expect(text).equal(contact.Comment);
+        });
+
+        it('Should replace contact user comment placeholder', async () => {
+            const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${UserProperty.USER_COMMENT}>`, contact);
+            expect(text).equal(contact.User.UserComment);
         });
 
         it('Should replace contact create by placeholder', async () => {
@@ -241,15 +248,21 @@ class someTestFunctions {
                 displayValue = `${property}_Name`;
                 break;
             default:
+                if (contact.User && contact.User[property]) {
+                    displayValue = contact.User[property];
+                }
         }
         return typeof displayValue !== 'undefined' && displayValue !== null ? displayValue.toString() : null;
     }
 
     public static prepareUser(): Contact {
         const contact = new Contact();
+        const user = new User();
+
+        user.UserLogin = 'PlaceholderTest';
+        user.UserComment = 'some user comment';
 
         contact.ID = 2;
-        contact.Login = 'PlaceholderTest';
         contact.Firstname = 'Placeholder';
         contact.Lastname = 'Test';
         contact.Email = 'placeholder@test.com';
@@ -269,6 +282,8 @@ class someTestFunctions {
         contact.CreateBy = 1;
         contact.ChangeTime = '2019-06-05 10:45:30';
         contact.ChangeBy = 2;
+
+        contact.User = user;
 
         return contact;
     }

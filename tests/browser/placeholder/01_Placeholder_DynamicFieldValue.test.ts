@@ -17,7 +17,6 @@ import { DynamicFieldValue } from '../../../src/frontend-applications/agent-port
 import { DynamicFieldValuePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { DynamicField } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicField';
-import { DynamicFieldProperty } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldProperty';
 import { DynamicFieldType } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldType';
 import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 

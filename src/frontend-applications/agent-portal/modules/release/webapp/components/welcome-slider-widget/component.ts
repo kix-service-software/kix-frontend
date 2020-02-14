@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const currentUser = await AgentService.getInstance().getCurrentUser();
         if (currentUser && currentUser.UserID !== 1) {
-            this.state.userString = currentUser.UserFullname;
+            this.state.userString = currentUser.Contact ? currentUser.Contact.Fullname : currentUser.UserLogin;
         }
 
         this.prepareSliderList(currentUser.UserID);

@@ -150,7 +150,7 @@ export class UserService extends KIXObjectAPIService {
                 p[0] !== PersonalSettingsProperty.USER_LANGUAGE &&
                 p[0] !== PersonalSettingsProperty.MY_QUEUES &&
                 p[0] !== PersonalSettingsProperty.NOTIFICATIONS &&
-                p[0] !== UserProperty.ROLEIDS &&
+                p[0] !== UserProperty.ROLE_IDS &&
                 p[0] !== UserProperty.PREFERENCES
             );
 
@@ -164,7 +164,7 @@ export class UserService extends KIXObjectAPIService {
                 throw new Error(error.Code, error.Message);
             });
 
-            const roleIds = this.getParameterValue(parameter, UserProperty.ROLEIDS);
+            const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
             await this.updateUserRoles(token, clientRequestId, roleIds, userId);
 
             const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
@@ -206,7 +206,7 @@ export class UserService extends KIXObjectAPIService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleIDs');
+        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleIDs', false);
 
         const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
         const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));

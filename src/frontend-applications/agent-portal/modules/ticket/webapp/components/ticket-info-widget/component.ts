@@ -18,11 +18,11 @@ import { SysConfigUtil } from '../../../../../modules/base-components/webapp/cor
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { Context } from 'vm';
 import {
     ObjectInformationWidgetConfiguration
 } from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 

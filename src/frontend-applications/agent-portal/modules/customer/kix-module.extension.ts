@@ -83,7 +83,8 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'search-organisation-dialog', '/kix-module-customer$0/webapp/components/search-organisation-dialog', []
-        )
+        ),
+        new UIComponent('contact-input-access', '/kix-module-customer$0/webapp/components/contact-input-access', [])
     ];
 
     public webDependencies: string[] = [

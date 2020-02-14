@@ -61,12 +61,6 @@ export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
                     ''
                     : await TranslationService.translate('Translatable#to Article');
                 break;
-            case TicketHistoryProperty.CREATE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [displayValue], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                break;
             case TicketHistoryProperty.CREATE_TIME:
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
                 break;

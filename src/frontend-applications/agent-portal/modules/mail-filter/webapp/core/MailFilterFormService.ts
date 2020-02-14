@@ -33,6 +33,20 @@ export class MailFilterFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.MAIL_FILTER;
     }
 
+    protected async getValue(property: string, value: any, mailFilter: MailFilter): Promise<any> {
+        switch (property) {
+            case MailFilterProperty.MATCH:
+                if (Array.isArray(value)) {
+                    (value as MailFilterMatch[]).forEach((m) => {
+                        m.Not = Boolean(m.Not);
+                    });
+                }
+                break;
+            default:
+        }
+        return value;
+    }
+
     public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
         switch (property) {
             case MailFilterProperty.STOP_AFTER_MATCH:
@@ -48,19 +62,5 @@ export class MailFilterFormService extends KIXObjectFormService {
             default:
         }
         return [[property, value]];
-    }
-
-    protected async getValue(property: string, value: any, mailFilter: MailFilter): Promise<any> {
-        switch (property) {
-            case MailFilterProperty.MATCH:
-                if (Array.isArray(value)) {
-                    (value as MailFilterMatch[]).forEach((m) => {
-                        m.Not = Boolean(m.Not);
-                    });
-                }
-                break;
-            default:
-        }
-        return value;
     }
 }

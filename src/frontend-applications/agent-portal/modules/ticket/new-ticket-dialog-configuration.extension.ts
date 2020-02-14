@@ -38,6 +38,9 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
+import { OrganisationProperty } from "../customer/model/OrganisationProperty";
+import { UserProperty } from "../user/model/UserProperty";
+import { ContactProperty } from "../customer/model/ContactProperty";
 
 
 export class NewTicketDialogModuleExtension implements IConfigurationExtension {
@@ -53,13 +56,13 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             ConfigurationType.ObjectInformation,
             KIXObjectType.ORGANISATION,
             [
-                'Number',
-                'Name',
-                'Url',
-                'Street',
-                'Zip',
-                'City',
-                'Country'
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
             ], true
         );
         configurations.push(organisationInformation);
@@ -79,14 +82,14 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
             [
-                'Login',
-                'Title',
-                'Lastname',
-                'Firstname',
-                'PrimaryOrganisationID',
-                'Phone',
-                'Mobile',
-                'Email'
+                UserProperty.USER_LOGIN,
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.EMAIL
             ], true
         );
         configurations.push(contactInformation);
