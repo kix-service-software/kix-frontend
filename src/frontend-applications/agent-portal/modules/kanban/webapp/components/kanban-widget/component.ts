@@ -28,12 +28,16 @@ import { ContextService } from "../../../../base-components/webapp/core/ContextS
 import { KanbanConfiguration } from "../../core/KanbanConfiguration";
 import { KanbanEvent } from "../../core/KanbanEvent";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
+import { TicketState } from "../../../../ticket/model/TicketState";
+import { TicketStateProperty } from "../../../../ticket/model/TicketStateProperty";
 
 declare const jKanban: any;
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private kanban: any;
+
+    private dragTo: string[];
 
     private boards: any[] = [];
     private kanbanConfig: KanbanConfiguration;
@@ -59,7 +63,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async createKanbanBoard(): Promise<void> {
+        this.dragTo = [];
         this.boards = [];
+
+        for (const col of this.kanbanConfig.columns) {
+            const loadingOptions = new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    TicketStateProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, col.dropState
+                )
+            ]);
+            const states = await KIXObjectService.loadObjects<TicketState>(
+                KIXObjectType.TICKET_STATE, null, loadingOptions
+            );
+
+            if (states && states.length && states[0].ValidID === 1) {
+                this.dragTo.push(col.id);
+            }
+        }
 
         const teamTickets = await this.createTicketBoard(false, 'new', 'team-backlog', 'Translatable#Team Backlog');
         const personalTickets = await this.createTicketBoard(
@@ -124,7 +145,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         const ticketId = el.dataset.ticketid;
-        await KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, ticketId);
+        await KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, ticketId)
+            .catch(() => null);
 
         EventService.getInstance().publish(
             KanbanEvent.TICKET_CHANGED, { ticketId }
@@ -181,7 +203,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createBoard(id: string, title: string, tickets: Ticket[]): Promise<void> {
         const boardTitle = await TranslationService.translate(title);
         const board = {
-            id, title: boardTitle, item: [], class: ''
+            id, title: boardTitle, item: [], class: '', dragTo: this.dragTo
         };
 
         for (const ticket of tickets) {
