@@ -113,6 +113,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.calendar.on('beforeUpdateSchedule', this.scheduleChanged.bind(this));
         this.calendar.on('clickSchedule', this.scheduleClicked.bind(this));
+        this.calendar.on('beforeCreateSchedule', (event) => {
+            const guide = event.guide;
+            guide.clearGuideElement();
+        });
     }
 
     private async createSchedules(tickets: Ticket[]): Promise<any[]> {
