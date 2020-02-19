@@ -328,7 +328,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
-        if (!values && field.Config && field.Config.PossibleValues) {
+        if (!values && field.Config && field.Config.PossibleValues && Array.isArray(fieldValue.Value)) {
             const valuesPromises = [];
             const translate = Boolean(field.Config.TranslatableValues);
             for (const v of fieldValue.Value) {
@@ -348,7 +348,10 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
 
     public static getDFChecklistFieldShortValues(field: DynamicField, fieldValue: DynamicFieldValue): string[] {
         const values = fieldValue.DisplayValueShort ? fieldValue.DisplayValueShort.split(', ') : [];
-        if (!values || !values.length) {
+        if (
+            (!values || !values.length) &&
+            Array.isArray(fieldValue.Value)
+        ) {
             for (const v of fieldValue.Value) {
                 const checklist = JSON.parse(v);
                 const counts = DynamicFieldFormUtil.countValues(checklist);
@@ -363,9 +366,11 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     ): Promise<string[]> {
         let values = fieldValue.PreparedValue;
 
-        if (!values) {
+        if (!values && fieldValue.Value) {
             if (!Array.isArray(fieldValue.Value)) {
                 values = [fieldValue.Value];
+            } else {
+                values = fieldValue.Value;
             }
             const configItems = await KIXObjectService.loadObjects<ConfigItem>(
                 KIXObjectType.CONFIG_ITEM, values,
