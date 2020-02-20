@@ -39,6 +39,7 @@ import { InlineContent } from "../../../../modules/base-components/webapp/core/I
 import { Channel } from "../../model/Channel";
 import { ChannelProperty } from "../../model/ChannelProperty";
 import { UserProperty } from "../../../user/model/UserProperty";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -135,7 +136,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 for (const t of types) {
                     const icons = await labelProvider.getIcons(null, property, t.ID);
-                    nodes.push(new TreeNode(t.ID, t.Name, (icons && icons.length) ? icons[0] : null));
+                    const text = await LabelService.getInstance().getText(t);
+                    nodes.push(new TreeNode(t.ID, text, (icons && icons.length) ? icons[0] : null));
                 }
                 break;
             case TicketProperty.PRIORITY_ID:
@@ -145,7 +147,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 for (const p of priorities) {
                     const icons = await labelProvider.getIcons(null, property, p.ID);
-                    nodes.push(new TreeNode(p.ID, p.Name, (icons && icons.length) ? icons[0] : null));
+                    const text = await LabelService.getInstance().getText(p);
+                    nodes.push(new TreeNode(p.ID, text, (icons && icons.length) ? icons[0] : null));
                 }
                 break;
             case TicketProperty.STATE_ID:
@@ -155,12 +158,15 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 for (const s of states) {
                     const icons = await labelProvider.getIcons(null, property, s.ID);
-                    nodes.push(new TreeNode(s.ID, s.Name, (icons && icons.length) ? icons[0] : null));
+                    const text = await LabelService.getInstance().getText(s);
+                    nodes.push(new TreeNode(s.ID, text, (icons && icons.length) ? icons[0] : null));
                 }
                 break;
             case TicketProperty.LOCK_ID:
-                nodes.push(new TreeNode(1, 'Translatable#Unlocked', 'kix-icon-lock-open'));
-                nodes.push(new TreeNode(2, 'Translatable#Locked', 'kix-icon-lock-close'));
+                const unlocked = await TranslationService.translate('Translatable#Unlocked');
+                const locked = await TranslationService.translate('Translatable#Locked');
+                nodes.push(new TreeNode(1, unlocked, 'kix-icon-lock-open'));
+                nodes.push(new TreeNode(2, locked, 'kix-icon-lock-close'));
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
