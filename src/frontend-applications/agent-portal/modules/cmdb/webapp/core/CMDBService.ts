@@ -150,10 +150,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     KIXObjectType.CONFIG_ITEM_CLASS
                 );
                 classes = showInvalid ? classes : classes.filter((c) => c.ValidID === 1);
-                nodes = classes.map((c) => {
+                nodes = [];
+                for (const c of classes) {
                     const icon = LabelService.getInstance().getObjectIcon(c);
-                    return new TreeNode(c.ID, c.Name, icon);
-                });
+                    const text = await LabelService.getInstance().getText(c);
+                    nodes.push(new TreeNode(c.ID, text, icon));
+                }
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
@@ -170,11 +172,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
                 );
 
-                items.forEach(
-                    (i) => nodes.push(new TreeNode(
-                        i.ItemID, i.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID)
-                    ))
-                );
+                for (const i of items) {
+                    const text = await LabelService.getInstance().getText(i);
+                    nodes.push(new TreeNode(
+                        i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID)
+                    ));
+                }
                 break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);

@@ -12,9 +12,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
             key=("form-list-selected-node-" + component.treeId + "[]")>
             <icon icon=node.icon showUnknown=true/>
-            <span.item-text>
-                <translation-string pattern=node.label/>
-            </span>
+            <span.item-text>${node.label}</span>
             <if(node.secondaryIcon)>
                 <icon icon=node.secondaryIcon showUnknown=true/>
             </if>

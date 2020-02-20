@@ -294,7 +294,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 break;
             case KIXObjectProperty.VALID_ID:
                 const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+                nodes = [];
+                for (const vo of validObjects) {
+                    const text = await LabelService.getInstance().getText(vo);
+                    nodes.push(new TreeNode(Number(vo.ID), text));
+                }
                 break;
             default:
                 const dfName = KIXObjectService.getDynamicFieldName(property);
