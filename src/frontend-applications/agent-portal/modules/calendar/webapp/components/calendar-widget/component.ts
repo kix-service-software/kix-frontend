@@ -28,6 +28,7 @@ import { CalendarConfiguration } from '../../core/CalendarConfiguration';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 
 declare const tui: any;
 
@@ -186,11 +187,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (changes) {
             const parameter = [];
 
+            const today = new Date();
+
             if (schedule.raw.StateType === 'pending reminder' && schedule.calendarId === 'pending') {
                 if (changes.start) {
-                    const pendingDate = DateTimeUtil.getKIXDateTimeString(schedule.start.toDate());
-                    parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
-                    parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
+                    if (today > changes.start.toDate()) {
+                        BrowserUtil.openErrorOverlay('Translatable#Pending date is not in the future.');
+                    } else {
+                        const pendingDate = DateTimeUtil.getKIXDateTimeString(changes.start.toDate());
+                        parameter.push([TicketProperty.STATE_ID, schedule.raw.StateID]);
+                        parameter.push([TicketProperty.PENDING_TIME, pendingDate]);
+                    }
                 } else if (changes.end) {
                     const newStart = schedule.end.toDate();
                     newStart.setHours(changes.end.toDate().getHours() - 1);
