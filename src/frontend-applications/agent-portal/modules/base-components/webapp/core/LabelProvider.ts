@@ -80,26 +80,12 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 displayValue = 'Translatable#Linked as';
                 break;
             default:
-                if (property.match(this.dFRegEx)) {
-                    const dfName = property.replace(this.dFRegEx, '$1');
-                    const dynamicFields = dfName ? await KIXObjectService.loadObjects<DynamicField>(
-                        KIXObjectType.DYNAMIC_FIELD, null,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                                    FilterType.AND, dfName
-                                )
-                            ]
-                        ), null, true
-                    ).catch(() => [] as DynamicField[]) : [];
-                    if (dynamicFields.length) {
-                        displayValue = dynamicFields[0].Label;
-                    } else {
-                        displayValue = property;
+                const dfName = KIXObjectService.getDynamicFieldName(property);
+                if (dfName) {
+                    const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+                    if (dynamicField) {
+                        displayValue = dynamicField.Label;
                     }
-                } else {
-                    displayValue = property;
                 }
         }
 
