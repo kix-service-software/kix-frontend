@@ -33,6 +33,8 @@ import { ISocketObjectRequest } from "./ISocketObjectRequest";
 import { SocketErrorResponse } from "./SocketErrorResponse";
 import { SocketEvent } from "./SocketEvent";
 import { Error } from "../../../../../../server/model/Error";
+import { ApplicationEvent } from "./ApplicationEvent";
+import { EventService } from "./EventService";
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -144,6 +146,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, objectType);
 
         return response.objectId;
     }

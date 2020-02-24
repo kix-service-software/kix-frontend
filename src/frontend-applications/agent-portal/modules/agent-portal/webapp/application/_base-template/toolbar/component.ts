@@ -22,10 +22,13 @@ import { RoutingConfiguration } from '../../../../../../model/configuration/Rout
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../../model/ContextMode';
 import { RoutingService } from '../../../../../base-components/webapp/core/RoutingService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component {
 
     public state: ComponentState;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -38,12 +41,15 @@ class Component {
             this.initActions();
         }
 
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, {
+        this.subscriber = {
             eventSubscriberId: 'app-toolbar-subscriber',
             eventPublished: () => {
                 this.initActions();
             }
-        });
+        };
+
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
     }
 
     private async initActions(): Promise<void> {
