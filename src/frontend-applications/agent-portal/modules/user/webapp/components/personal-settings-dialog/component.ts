@@ -105,11 +105,14 @@ class Component {
                     DialogService.getInstance().setMainDialogLoading(true, loadingHint);
                     await AgentService.getInstance().setPreferencesByForm(this.state.formId)
                         .then(async () => {
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            DialogService.getInstance().submitMainDialog();
-                            EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                            const toast = await TranslationService.translate('Translatable#Changes saved.');
-                            BrowserUtil.openSuccessOverlay(toast);
+                            TranslationService.getInstance().resetTranslations();
+                            setTimeout(async () => {
+                                DialogService.getInstance().setMainDialogLoading(false);
+                                DialogService.getInstance().submitMainDialog();
+                                EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                                const toast = await TranslationService.translate('Translatable#Changes saved.');
+                                BrowserUtil.openSuccessOverlay(toast);
+                            }, 100);
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);
                             BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
