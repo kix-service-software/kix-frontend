@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-02-21 15:16+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2020-02-24 12:46+0000\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -1111,13 +1111,8 @@ msgstr ""
 "Konfigurationsmöglichkeiten geladen. Darüber können Sie festlegen, wie sich "
 "das dynamische Feld verhält und wie es dargestellt wird."
 
-#, fuzzy
-#| msgid "Helptext_Admin_DynamicFieldCreate_Config"
 msgid "Helptext_Admin_DynamicFieldCreate_CustomerVisible"
 msgstr ""
-"Nachdem Sie einen Feldtyp gewählt haben, werden die entsprechenden "
-"Konfigurationsmöglichkeiten geladen. Darüber können Sie festlegen, wie sich "
-"das dynamische Feld verhält und wie es dargestellt wird."
 
 msgid "Helptext_Admin_DynamicFieldCreate_FieldType"
 msgstr "Wählen Sie aus, welche Art von dynamischen Feld Sie anlegen wollen."
@@ -2304,53 +2299,26 @@ msgstr ""
 msgid "Helptext_Tickets_TicketEdit_Title"
 msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgid "Helptext_Users_UserCreateEdit_Access"
 msgstr ""
-"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
-"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Roles"
 msgid "Helptext_Users_UserCreateEdit_Roles"
 msgstr ""
-"Einem Agenten muss mindestens die Rolle „AgentUser“ zugeordnet sein, damit "
-"er sich einloggen kann. Es werden nur gültige Rollen angezeigt."
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Login"
 msgid "Helptext_User_UserCreateEdit_Login"
-msgstr "Der Nutzername des Agenten muss eineindeutig sein."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_UserCreate_Password"
 msgid "Helptext_User_UserCreateEdit_Password"
-msgstr "Das Passwort kann nachträglich angepasst oder verändert werden."
+msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserCreate_Preferences_MyQueues"
 msgid "Helptext_User_UserCreateEdit_Preferences_MyQueues"
 msgstr ""
-"Legen Sie fest, für welche Teams der Agent standardmäßig Benachrichtigungen "
-"erhält. Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
-"Einstellungen ändern."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserCreate_Preferences_Notifications_Hint"
 msgid "Helptext_User_UserCreateEdit_Preferences_Notifications"
 msgstr ""
-"Legen Sie fest, welche Benachrichtigungen der Agent standardmäßig erhält. "
-"Der Agent kann diese Einstellung auch selbst in seinen persönlichen "
-"Einstellungen ändern."
 
-#, fuzzy
-#| msgid "Helptext_Admin_UserCreate_Preferences_UserLanguage"
 msgid "Helptext_User_UserCreateEdit_Preferences_UserLanguage"
 msgstr ""
-"Legen Sie fest, in welcher Sprache der Agent KIX sieht, wenn er sich das "
-"erste Mal anmeldet. Der Agent kann die Sprache auch selbst in seinen "
-"persönlichen Einstellungen ändern."
 
 msgid "Here you will find the KIX 18 manuals for users and administrators"
 msgstr "Hier finden Sie die KIX 18 Handbücher für Anwender und Administratoren"
