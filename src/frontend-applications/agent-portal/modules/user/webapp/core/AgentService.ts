@@ -16,6 +16,8 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../modules/base-components/webapp/core/ServiceType';
 import { IKIXObjectFormService } from '../../../../modules/base-components/webapp/core/IKIXObjectFormService';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -61,6 +63,8 @@ export class AgentService extends KIXObjectService<User> {
         }
 
         await AgentSocketClient.getInstance().setPreferences(parameter);
+
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, KIXObjectType.CURRENT_USER);
     }
 
     public async setPreferences(preferences: Array<[string, any]>): Promise<void> {
