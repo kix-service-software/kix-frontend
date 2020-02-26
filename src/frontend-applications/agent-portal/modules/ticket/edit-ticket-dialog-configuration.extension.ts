@@ -41,6 +41,8 @@ import { UserProperty } from "../user/model/UserProperty";
 import { ContactProperty } from "../customer/model/ContactProperty";
 import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
+import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
 
@@ -107,13 +109,29 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         );
         configurations.push(helpSettings);
 
-        const helpWidget = new WidgetConfiguration(
-            'ticket-edit-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
-            'help-widget', 'Translatable#Text Modules', [],
-            new ConfigurationDefinition('ticket-edit-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-textblocks'
+        const ticketsForAssetsWidget = new WidgetConfiguration(
+            'ticket-edit-dialog-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-edit-object-reference-widget-config', 'Tickets for Assets',
+                'TicketsForAssetsHandler',
+                {
+                    properties: [
+                        'DynamicFields.AffactedAsset'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-ticket'
         );
-        configurations.push(helpWidget);
+        configurations.push(ticketsForAssetsWidget);
 
         const widget = new WidgetConfiguration(
             'ticket-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
@@ -130,7 +148,9 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                         'ticket-edit-dialog-organisation-widget', 'ticket-edit-dialog-organisation-widget'
                     ),
                     new ConfiguredWidget('ticket-edit-dialog-contact-widget', 'ticket-edit-dialog-contact-widget'),
-                    new ConfiguredWidget('ticket-edit-dialog-help-widget', 'ticket-edit-dialog-help-widget')
+                    new ConfiguredWidget(
+                        'ticket-edit-dialog-object-reference-widget', 'ticket-edit-dialog-object-reference-widget'
+                    )
                 ],
                 [], [], [], [], [], [], [],
                 [

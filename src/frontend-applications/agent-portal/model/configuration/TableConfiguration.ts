@@ -49,14 +49,12 @@ export class TableConfiguration implements IConfiguration {
         }
 
         if (displayLimit === null) {
-            if (this.headerHeight === TableHeaderHeight.SMALL) {
+            if (this.headerHeight <= TableHeaderHeight.SMALL) {
                 this.displayLimit = 5;
+            } else if (this.rowHeight <= TableRowHeight.SMALL) {
+                this.displayLimit = 10;
             } else {
-                if (this.rowHeight === TableRowHeight.SMALL) {
-                    this.displayLimit = 10;
-                } else {
-                    this.displayLimit = 25;
-                }
+                this.displayLimit = 25;
             }
         }
 

@@ -22,9 +22,9 @@ export interface ITableFactory {
     isFactoryFor(objectType: KIXObjectType | string): boolean;
 
     createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectids?: Array<number | string>,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
-        objectType?: KIXObjectType | string
+        objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): ITable;
 
     getDefaultColumnConfiguration(property: string): IColumnConfiguration;

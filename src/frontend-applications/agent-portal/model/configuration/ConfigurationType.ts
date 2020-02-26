@@ -37,6 +37,8 @@ export enum ConfigurationType {
 
     ObjectInformation = 'ObjectInformation',
 
+    ObjectReferenceWidget = 'ObjectReferenceWidget',
+
     Slider = 'Slider',
 
     LinkedObjects = 'LinkedObjects',

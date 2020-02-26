@@ -51,6 +51,7 @@
         "require ./overlay/toast",
         "require ./overlay-icon",
         "require ./quick-search",
+        "require ./referenced-objects-widget",
         "require ./rich-text-input",
         "require ./router-outlet",
         "require ./search-form",
