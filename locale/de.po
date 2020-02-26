@@ -2121,12 +2121,6 @@ msgstr ""
 "ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
 "weitere Texteingabe können Sie die Auswahl weiter einschränken."
 
-msgid "Helptext_Textmodules_TicketCreate"
-msgstr ""
-"Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt Doppelpunkt) "
-"ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-Menü. Durch "
-"weitere Texteingabe können Sie die Auswahl weiter einschränken."
-
 msgid "Helptext_Textmodules_TicketEdit"
 msgstr ""
 "Um die in Ihrem System verfügbaren Textbausteine zu nutzen, geben Sie \"::"
@@ -3696,6 +3690,11 @@ msgstr "Ticket-Suche"
 msgid "Ticket search error!"
 msgstr "Fehler bei der Ticketsuche!"
 
+#, fuzzy
+#| msgid "Ticket Details"
+msgid "Tickets for Assets"
+msgstr "Ticket Details"
+
 msgid "Ticket: States"
 msgstr "Ticket: Status"
 
@@ -4022,6 +4021,13 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Helptext_Textmodules_TicketCreate"
+#~ msgstr ""
+#~ "Um die Textbausteine zu nutzen, geben Sie \"::\" (Doppelpunkt "
+#~ "Doppelpunkt) ein. Wählen Sie den gewünschten Textbaustein aus dem Kontext-"
+#~ "Menü. Durch weitere Texteingabe können Sie die Auswahl weiter "
+#~ "einschränken."
 
 #~ msgid "Agent successfully created."
 #~ msgstr "Agent wurde erfolgreich angelegt."
@@ -5035,9 +5041,6 @@ msgstr "PLZ"
 
 #~ msgid "Tag"
 #~ msgstr "Schlagwort"
-
-#~ msgid "Ticket Details"
-#~ msgstr "Ticket Details"
 
 #~ msgid "Basic Data"
 #~ msgstr "Stammdaten"

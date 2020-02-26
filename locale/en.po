@@ -1172,7 +1172,8 @@ msgstr ""
 "set, this action will not be run."
 
 msgid "Helptext_Admin_JobCreateEdit_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Admin_JobCreateEdit_Days"
 msgstr "Choose the day(s) the job is supposed to run. Multiselect possible."
@@ -2001,12 +2002,6 @@ msgstr ""
 "via the bookmarks in the header menu."
 
 msgid "Helptext_Textmodules_ArticleCreate"
-msgstr ""
-"To use the text modules available in your system, enter „::“ (colon colon). "
-"Then choose the text modules you want to use in the context menu. You can "
-"narrow down the key word selection manually by entering more text."
-
-msgid "Helptext_Textmodules_TicketCreate"
 msgstr ""
 "To use the text modules available in your system, enter „::“ (colon colon). "
 "Then choose the text modules you want to use in the context menu. You can "
@@ -3558,6 +3553,9 @@ msgstr ""
 msgid "Ticket search error!"
 msgstr ""
 
+msgid "Tickets for Assets"
+msgstr ""
+
 msgid "Ticket: States"
 msgstr ""
 
@@ -3884,6 +3882,12 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Textmodules_TicketCreate"
+#~ msgstr ""
+#~ "To use the text modules available in your system, enter „::“ (colon "
+#~ "colon). Then choose the text modules you want to use in the context menu. "
+#~ "You can narrow down the key word selection manually by entering more text."
 
 #~ msgid "Helptext_Admin_Users_UserCreate_Comment"
 #~ msgstr ""
