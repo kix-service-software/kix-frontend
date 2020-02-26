@@ -18,14 +18,16 @@ import { RoutingConfiguration } from "../../../../../model/configuration/Routing
 import { TicketDetailsContext } from "..";
 import { ContextMode } from "../../../../../model/ContextMode";
 import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
 
 export class TicketTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
     public createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[],
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
@@ -35,7 +37,7 @@ export class TicketTableFactory extends TableFactory {
         const table = new Table(tableKey, tableConfiguration, contextId);
 
         const contentProvider = new TicketTableContentProvider(
-            table, objectIds, tableConfiguration.loadingOptions, contextId
+            table, objectIds, tableConfiguration.loadingOptions, contextId, objects
         );
 
         table.setContentProvider(contentProvider);

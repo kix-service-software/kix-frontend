@@ -34,7 +34,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         protected table: ITable,
         protected objectIds: Array<number | string>,
         protected loadingOptions: KIXObjectLoadingOptions,
-        protected contextId?: string
+        protected contextId?: string,
+        protected objects?: KIXObject[]
     ) { }
 
     public async initialize(): Promise<void> {
@@ -90,7 +91,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadData(): Promise<Array<IRowObject<T>>> {
         let objects = [];
 
-        if (this.contextId && !this.objectIds) {
+        if (this.objects) {
+            objects = this.objects;
+        } else if (this.contextId && !this.objectIds) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList(this.objectType) : [];
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {

@@ -16,7 +16,6 @@ import { ConfigurationType } from "../../model/configuration/ConfigurationType";
 import { KIXObjectType } from "../../model/kix/KIXObjectType";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { HelpWidgetConfiguration } from "../../model/configuration/HelpWidgetConfiguration";
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
@@ -41,6 +40,8 @@ import { FormContext } from "../../model/configuration/FormContext";
 import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 import { UserProperty } from "../user/model/UserProperty";
 import { ContactProperty } from "../customer/model/ContactProperty";
+import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 
 
 export class NewTicketDialogModuleExtension implements IConfigurationExtension {
@@ -102,19 +103,30 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         );
         configurations.push(contactInfoSidebar);
 
-        const helpSettings = new HelpWidgetConfiguration(
-            'ticket-new-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
-            'Translatable#Helptext_Textmodules_TicketCreate', null
-        );
-        configurations.push(helpSettings);
 
-        const helpWidget = new WidgetConfiguration(
-            'ticket-new-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
-            'help-widget', 'Translatable#Text Modules', [],
-            new ConfigurationDefinition('ticket-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-textblocks'
+        const ticketsForAssetsWidget = new WidgetConfiguration(
+            'ticket-new-dialog-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-details-object-reference-widget-config', 'Tickets for Assets',
+                'TicketsForAssetsHandler',
+                {
+                    properties: [
+                        'DynamicFields.AffactedAsset'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-ticket'
         );
-        configurations.push(helpWidget);
+        configurations.push(ticketsForAssetsWidget);
 
         const dialogWidget = new WidgetConfiguration(
             'ticket-new-dialog-widget', 'New Ticket Dialog', ConfigurationType.Widget,
@@ -132,7 +144,9 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                         'ticket-new-dialog-organisation-widget', 'ticket-new-dialog-organisation-widget'
                     ),
                     new ConfiguredWidget('ticket-new-dialog-contact-widget', 'ticket-new-dialog-contact-widget'),
-                    new ConfiguredWidget('ticket-new-dialog-help-widget', 'ticket-new-dialog-help-widget')
+                    new ConfiguredWidget(
+                        'ticket-new-dialog-object-reference-widget', 'ticket-new-dialog-object-reference-widget'
+                    )
                 ],
                 [], [], [], [], [], [], [],
                 [

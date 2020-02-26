@@ -27,6 +27,8 @@ import { TicketProperty } from "./model/TicketProperty";
 import { ContactProperty } from "../customer/model/ContactProperty";
 import { UserProperty } from "../user/model/UserProperty";
 import { OrganisationProperty } from "../customer/model/OrganisationProperty";
+import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -182,6 +184,30 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
         configurations.push(contactInfoSidebar);
 
+        const ticketsForAssetsWidget = new WidgetConfiguration(
+            'ticket-details-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-details-object-reference-widget-config', 'Tickets for Assets',
+                'TicketsForAssetsHandler',
+                {
+                    properties: [
+                        'DynamicFields.AffactedAsset'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-ticket'
+        );
+        configurations.push(ticketsForAssetsWidget);
+
 
         // Overlays
         const organisationInfoOverlay = new WidgetConfiguration(
@@ -259,6 +285,9 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     new ConfiguredWidget(
                         'ticket-details-contact-info-widget', 'ticket-details-contact-info-widget', null,
                         [new UIComponentPermission('contacts', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-details-object-reference-widget', 'ticket-details-object-reference-widget'
                     )
                 ],
                 [],

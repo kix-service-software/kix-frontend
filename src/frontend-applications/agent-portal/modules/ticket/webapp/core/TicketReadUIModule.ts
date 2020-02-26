@@ -39,6 +39,7 @@ import { ArticleLabelProvider } from "./ArticleLabelProvider";
 import { TicketLabelProvider } from "./TicketLabelProvider";
 import { ChannelService } from "./ChannelService";
 import { TicketPlaceholderHandler } from "./TicketPlaceholderHandler";
+import { TicketsForAssetsHandler } from "./TicketsForAssetsHandler";
 
 export class UIModule implements IUIModule {
 
@@ -110,6 +111,8 @@ export class UIModule implements IUIModule {
         FactoryService.getInstance().registerFactory(
             KIXObjectType.FOLLOW_UP_TYPE, FollowUpTypeBrowserFactory.getInstance()
         );
+
+        ServiceRegistry.registerObjectReferenceHandler('TicketsForAssetsHandler', new TicketsForAssetsHandler());
 
         await this.registerContexts();
         this.registerTicketActions();

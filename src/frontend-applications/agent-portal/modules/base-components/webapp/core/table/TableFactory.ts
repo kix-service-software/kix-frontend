@@ -28,9 +28,9 @@ export abstract class TableFactory implements ITableFactory {
     }
 
     public abstract createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectids?: Array<string | number>,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
-        objectType?: KIXObjectType | string
+        objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): ITable;
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {

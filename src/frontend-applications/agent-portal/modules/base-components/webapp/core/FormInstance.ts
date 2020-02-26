@@ -27,6 +27,9 @@ import { ValidationResult } from "./ValidationResult";
 import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormContext } from "../../../../model/configuration/FormContext";
+import { KIXObjectService } from "./KIXObjectService";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
 
 export class FormInstance implements IFormInstance {
 
@@ -342,6 +345,18 @@ export class FormInstance implements IFormInstance {
         let field = fields.find((f) => f.property === property);
 
         if (!field) {
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                field = fields.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS).find(
+                    (f) => f.options && f.options.some(
+                        (o) => o.option === DynamicFormFieldOption.FIELD_NAME && o.value === dfName
+                    )
+                );
+            }
+        }
+
+        if (!field) {
+
             for (const f of fields) {
                 const foundField = f.children && f.children.length ?
                     this.findFormFieldByProperty(f.children, property) : null;
