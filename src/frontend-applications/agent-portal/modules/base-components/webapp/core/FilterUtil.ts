@@ -49,21 +49,23 @@ export class FilterUtil {
             case SearchOperator.GREATER_THAN_OR_EQUAL:
                 return Number(value) >= criteria.value;
             case SearchOperator.IN:
-                return (criteria.value as any[]).some((v) => {
-                    if (typeof v === 'undefined') {
+                return (criteria.value as any[]).some((cv) => {
+                    if (typeof cv === 'undefined') {
                         return typeof value === 'undefined';
-                    } else if (v === null) {
-                        return value === null;
+                    } else if (cv === null) {
+                        return value === null || (Array.isArray(value) && value.some((v) => v === null));
                     } else {
-                        if (v instanceof KIXObject) {
+                        if (cv instanceof KIXObject) {
                             if (Array.isArray(value)) {
-                                return value.some((sv) => sv.equals(v));
+                                return value.some((v) => v.equals(cv));
                             }
                         }
                         if (typeof value === 'number') {
-                            return value === v;
+                            return value === cv;
+                        } else if (Array.isArray(value)) {
+                            return value.some((v) => v.toString() === cv.toString());
                         } else {
-                            return value ? value.toString().indexOf(v.toString()) !== -1 : false;
+                            return value ? value.toString().split(',').some((v) => v === cv.toString()) : false;
                         }
                     }
                 });
