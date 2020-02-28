@@ -1501,6 +1501,11 @@ msgstr ""
 "Configuration value. The configuration value consists of a simple array, "
 "number or, in the case of a complex key, a JSON string - see standard value."
 
+#, fuzzy
+#| msgid "Helptext_Admin_SysConfigEdit_Name"
+msgid "Helptext_Admin_SysConfigSearch"
+msgstr "The  name cannot be changed."
+
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
 "Insert additional information (only displayed within the admin module)."
@@ -2977,6 +2982,9 @@ msgstr ""
 msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 
+msgid "Please enter a search term."
+msgstr ""
+
 msgid "Please select a contact"
 msgstr ""
 
@@ -3112,6 +3120,15 @@ msgstr ""
 msgid "Relevant Config Items"
 msgstr "Relevant Assets"
 
+msgid "Reload Agent Portal Configurations"
+msgstr ""
+
+msgid "Reload Frontend Configurations"
+msgstr ""
+
+msgid "Reload Frontend Configurations?"
+msgstr ""
+
 msgid "Reminder Tickets"
 msgstr ""
 
@@ -3152,6 +3169,9 @@ msgid "Required field '{0}' is no JSON."
 msgstr ""
 
 msgid "Reset"
+msgstr ""
+
+msgid "Reset?"
 msgstr ""
 
 msgid "Reset data"
@@ -3442,7 +3462,7 @@ msgstr ""
 msgid "System: Logs"
 msgstr ""
 
-msgid "System: SysConfig"
+msgid "System: Sysconfig ({0})"
 msgstr ""
 
 msgid "-> (tab)"
@@ -3909,6 +3929,9 @@ msgid "Your rating"
 msgstr ""
 
 msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr ""
+
+msgid "You will reset {0} Sysconfig Options. Execute now?"
 msgstr ""
 
 msgid "Zip"

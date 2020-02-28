@@ -1566,6 +1566,11 @@ msgstr ""
 "Zeichenkette, Zahl oder im Falle eines komplexen Schlüssels ein JSON-String "
 "- siehe jeweiliger Standardwert."
 
+#, fuzzy
+#| msgid "Helptext_Admin_SysConfigEdit_Name"
+msgid "Helptext_Admin_SysConfigSearch"
+msgstr "Der Name der Konfiguration kann nicht bearbeitet werden."
+
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -3106,6 +3111,11 @@ msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
+#, fuzzy
+#| msgid "Please enter decimal numbers only."
+msgid "Please enter a search term."
+msgstr "Bitte geben Sie nur Dezimalzahlen ein."
+
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
 
@@ -3244,6 +3254,21 @@ msgstr "Seite neu laden"
 msgid "Relevant Config Items"
 msgstr "Relevante Assets"
 
+#, fuzzy
+#| msgid "Import configurations"
+msgid "Reload Agent Portal Configurations"
+msgstr "Konfigurationen importieren"
+
+#, fuzzy
+#| msgid "Import configurations"
+msgid "Reload Frontend Configurations"
+msgstr "Konfigurationen importieren"
+
+#, fuzzy
+#| msgid "Import configurations"
+msgid "Reload Frontend Configurations?"
+msgstr "Konfigurationen importieren"
+
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
 
@@ -3286,6 +3311,11 @@ msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
 #, fuzzy
 #| msgid "Reset data"
 msgid "Reset"
+msgstr "Daten zurücksetzen"
+
+#, fuzzy
+#| msgid "Reset data"
+msgid "Reset?"
 msgstr "Daten zurücksetzen"
 
 msgid "Reset data"
@@ -3578,7 +3608,9 @@ msgstr "System: Dynamische Felder"
 msgid "System: Logs"
 msgstr "System: Logs"
 
-msgid "System: SysConfig"
+#, fuzzy
+#| msgid "System: SysConfig"
+msgid "System: Sysconfig ({0})"
 msgstr "System: SysConfig"
 
 msgid "-> (tab)"
@@ -4052,6 +4084,11 @@ msgid "Your rating"
 msgstr "Ihre Bewertung"
 
 msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
+
+#, fuzzy
+#| msgid "You will edit {0} attributes for {1} {2}. Execute now?"
+msgid "You will reset {0} Sysconfig Options. Execute now?"
 msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
 
 msgid "Zip"
@@ -5409,9 +5446,6 @@ msgstr "PLZ"
 
 #~ msgid "Floor"
 #~ msgstr "Geschoss"
-
-#~ msgid "Please enter decimal numbers only."
-#~ msgstr "Bitte geben Sie nur Dezimalzahlen ein."
 
 #~ msgid "Room Label"
 #~ msgstr "Raumbeschriftung"
