@@ -7,41 +7,20 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TranslationPatternProperty } from "../../../model/TranslationPatternProperty";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
+import { AbstractComponentState } from "../../../../base-components/webapp/core/AbstractComponentState";
+import { ITable } from "../../../../base-components/webapp/core/table";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('translation-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(
-            null, null, null,
-            'table-widget', 'Translatable#Internationalisation: Translations',
-            [
-                'i18n-admin-translation-create',
-                'i18n-admin-translation-import',
-                'i18n-admin-translation-csv-export'
-            ], null,
-            new TableWidgetConfiguration(
-                null, null, null,
-                KIXObjectType.TRANSLATION_PATTERN,
-                [TranslationPatternProperty.VALUE, SortOrder.UP], null,
-                new TableConfiguration(null, null, null,
-                    KIXObjectType.TRANSLATION_PATTERN,
-                    new KIXObjectLoadingOptions(null, null, null, [TranslationPatternProperty.AVAILABLE_LANGUAGES]),
-                    null, null, [], true, false, null, null, TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                )
-            ),
-            false, false, 'kix-icon-gears'
-        )
-    ) { }
+        public instanceId: string = 'admin-sysconfig-overview',
+        public table: ITable = null,
+        public filterValue: string = '',
+        public prepared: boolean = false,
+        public title: string = "Internationalisation: Translations (0)",
+        public placeholder: string = 'Please enter a search term.'
+    ) {
+        super();
+    }
 
 }

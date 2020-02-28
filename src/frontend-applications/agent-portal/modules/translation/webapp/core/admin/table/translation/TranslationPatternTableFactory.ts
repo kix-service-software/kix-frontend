@@ -15,14 +15,12 @@ import { TranslationPatternTableContentProvider } from ".";
 import { TranslationPatternProperty } from "../../../../../model/TranslationPatternProperty";
 import { TableHeaderHeight } from "../../../../../../../model/configuration/TableHeaderHeight";
 import { TableRowHeight } from "../../../../../../../model/configuration/TableRowHeight";
-import { RoutingConfiguration } from "../../../../../../../model/configuration/RoutingConfiguration";
-import { TranslationDetailsContext } from "../../context";
-import { ContextMode } from "../../../../../../../model/ContextMode";
 import { IColumnConfiguration } from "../../../../../../../model/configuration/IColumnConfiguration";
 import {
     DefaultColumnConfiguration
 } from "../../../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../../../model/DataType";
+import { KIXObjectProperty } from "../../../../../../../model/kix/KIXObjectProperty";
 
 
 export class TranslationPatternTableFactory extends TableFactory {
@@ -50,7 +48,9 @@ export class TranslationPatternTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             this.getDefaultColumnConfiguration(TranslationPatternProperty.VALUE),
-            this.getDefaultColumnConfiguration(TranslationPatternProperty.AVAILABLE_LANGUAGES)
+            this.getDefaultColumnConfiguration(TranslationPatternProperty.AVAILABLE_LANGUAGES),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -58,22 +58,13 @@ export class TranslationPatternTableFactory extends TableFactory {
                 KIXObjectType.TRANSLATION_PATTERN, null, null, tableColumns, [], true, false, null, null,
                 TableHeaderHeight.LARGE, TableRowHeight.LARGE
             );
-            defaultRouting = true;
         } else if (!tableConfiguration.tableColumns) {
             tableConfiguration.tableColumns = tableColumns;
-        }
-
-        if (defaultRouting) {
-            tableConfiguration.routingConfiguration = new RoutingConfiguration(
-                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
-                ContextMode.DETAILS, TranslationPatternProperty.ID
-            );
         }
 
         return tableConfiguration;
     }
 
-    // TODO: implementieren
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {

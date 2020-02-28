@@ -124,6 +124,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_CREATED, objectType);
 
         return response.result;
     }
@@ -168,6 +169,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_DELETED, objectType);
     }
 
     private async sendRequest<T extends ISocketResponse>(
