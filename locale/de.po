@@ -1712,6 +1712,11 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
+#, fuzzy
+#| msgid "Helptext_Admin_SysConfigEdit_Name"
+msgid "Helptext_Admin_TranslationSearch"
+msgstr "Der Name der Konfiguration kann nicht bearbeitet werden."
+
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
 "Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
@@ -2486,7 +2491,9 @@ msgstr "Internes Feld"
 msgid "Internationalisation"
 msgstr "Internationalisierung"
 
-msgid "Internationalisation: Translations"
+#, fuzzy
+#| msgid "Internationalisation: Translations"
+msgid "Internationalisation: Translations ({0})"
 msgstr "Internationalisierung: Übersetzungen"
 
 msgid "Invalid date for pending date."
@@ -2562,6 +2569,11 @@ msgid "Linked as"
 msgstr "Verknüpft als"
 
 msgid "Linked Objects"
+msgstr "Verknüpfte Objekte"
+
+#, fuzzy
+#| msgid "Linked Objects"
+msgid "Linked Objects ({0})"
 msgstr "Verknüpfte Objekte"
 
 msgid "Link FAQ with"
@@ -2653,9 +2665,6 @@ msgstr "Lade Ticket Status"
 
 msgid "Load Ticket Type"
 msgstr "Lade Ticket Typ"
-
-msgid "Load Translation"
-msgstr "Lade Übersetzung"
 
 msgid "Load User"
 msgstr "Lade Benutzer"
@@ -2900,9 +2909,6 @@ msgstr "Kein Artikel verfügbar."
 msgid "No data available."
 msgstr "Keine Daten verfügbar."
 
-msgid "No linked objects available."
-msgstr "Keine verknüpften Objekte verfügbar."
-
 msgid "No objects available."
 msgstr "Keine Objekte verfügbar."
 
@@ -3085,9 +3091,6 @@ msgstr "Passwörter stimmen nicht überein."
 
 msgid "Pattern"
 msgstr "Pattern"
-
-msgid "Pattern Information"
-msgstr "Pattern-Informationen"
 
 msgid "Pending"
 msgstr "Wartend"
@@ -3831,9 +3834,6 @@ msgstr "zur Version"
 msgid "Translation"
 msgstr "Übersetzung"
 
-msgid "Translation:"
-msgstr "Übersetzung:"
-
 msgid "TranslationLanguage"
 msgstr "Übersetzungssprache"
 
@@ -4114,6 +4114,18 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Load Translation"
+#~ msgstr "Lade Übersetzung"
+
+#~ msgid "No linked objects available."
+#~ msgstr "Keine verknüpften Objekte verfügbar."
+
+#~ msgid "Pattern Information"
+#~ msgstr "Pattern-Informationen"
+
+#~ msgid "Translation:"
+#~ msgstr "Übersetzung:"
 
 #~ msgid "Helptext_Textmodules_TicketCreate"
 #~ msgstr ""

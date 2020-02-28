@@ -1637,6 +1637,11 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "The type can only be used within the system if set “valid”."
 
+#, fuzzy
+#| msgid "Helptext_Admin_SysConfigEdit_Name"
+msgid "Helptext_Admin_TranslationSearch"
+msgstr "The  name cannot be changed."
+
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
 "Insert additional information (only displayed within the admin module)."
@@ -2356,7 +2361,7 @@ msgstr ""
 msgid "Internationalisation"
 msgstr ""
 
-msgid "Internationalisation: Translations"
+msgid "Internationalisation: Translations ({0})"
 msgstr ""
 
 msgid "Invalid date for pending date."
@@ -2432,6 +2437,9 @@ msgid "Linked as"
 msgstr ""
 
 msgid "Linked Objects"
+msgstr ""
+
+msgid "Linked Objects ({0})"
 msgstr ""
 
 msgid "Link FAQ with"
@@ -2523,9 +2531,6 @@ msgstr "Loading Ticket State"
 
 msgid "Load Ticket Type"
 msgstr "Loading Ticket Type"
-
-msgid "Load Translation"
-msgstr "Loading Translation"
 
 msgid "Load User"
 msgstr "Loading User"
@@ -2770,9 +2775,6 @@ msgstr ""
 msgid "No data available."
 msgstr ""
 
-msgid "No linked objects available."
-msgstr ""
-
 msgid "No objects available."
 msgstr ""
 
@@ -2954,9 +2956,6 @@ msgid "Passwords do not match."
 msgstr ""
 
 msgid "Pattern"
-msgstr ""
-
-msgid "Pattern Information"
 msgstr ""
 
 msgid "Pending"
@@ -3674,9 +3673,6 @@ msgstr ""
 msgid "Translation"
 msgstr ""
 
-msgid "Translation:"
-msgstr ""
-
 msgid "TranslationLanguage"
 msgstr ""
 
@@ -3955,6 +3951,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Load Translation"
+#~ msgstr "Loading Translation"
 
 #~ msgid "Helptext_Textmodules_TicketCreate"
 #~ msgstr ""
