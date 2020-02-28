@@ -12,27 +12,31 @@ import { FormPageConfiguration } from "../../../model/configuration/FormPageConf
 import { FormGroupConfiguration } from "../../../model/configuration/FormGroupConfiguration";
 import { FormFieldConfiguration } from "../../../model/configuration/FormFieldConfiguration";
 import { ResolverUtil } from "./ResolverUtil";
+import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
 
 export class FormConfigurationResolver {
 
-    public static async resolve(token: string, configuration: FormConfiguration): Promise<FormConfiguration> {
+    public static async resolve(
+        token: string, configuration: FormConfiguration, sysConfigOptions: SysConfigOption[]
+    ): Promise<FormConfiguration> {
         configuration.pages = await ResolverUtil.loadConfigurations<FormPageConfiguration>(
-            token, configuration.pageConfigurationIds, configuration.pages
+            token, configuration.pageConfigurationIds, configuration.pages, sysConfigOptions
         );
         for (const pageConfig of configuration.pages) {
             pageConfig.groups = await ResolverUtil.loadConfigurations<FormGroupConfiguration>(
-                token, pageConfig.groupConfigurationIds, pageConfig.groups
+                token, pageConfig.groupConfigurationIds, pageConfig.groups, sysConfigOptions
             );
             for (const groupConfig of pageConfig.groups) {
                 groupConfig.formFields = await ResolverUtil.loadConfigurations<FormFieldConfiguration>(
-                    token, groupConfig.fieldConfigurationIds, groupConfig.formFields
+                    token, groupConfig.fieldConfigurationIds, groupConfig.formFields, sysConfigOptions
                 );
                 for (const fieldConfig of groupConfig.formFields) {
                     await this.resolveFieldChildrenConfig(
                         token, fieldConfig,
                         [
                             `group: ${groupConfig.id}`, `page: ${pageConfig.id}`, `form: ${configuration.id}`
-                        ]
+                        ],
+                        sysConfigOptions
                     );
                 }
             }
@@ -43,18 +47,18 @@ export class FormConfigurationResolver {
     }
 
     private static async resolveFieldChildrenConfig(
-        token: string, config: FormFieldConfiguration, ancenstorIds: string[]
+        token: string, config: FormFieldConfiguration, ancenstorIds: string[], sysConfigOptions: SysConfigOption[]
     ): Promise<void> {
         if (config && (config.fieldConfigurationIds || config.children)) {
             ancenstorIds.unshift(`field: ${config.id}`);
 
             config.children = await ResolverUtil.loadConfigurations<FormFieldConfiguration>(
-                token, config.fieldConfigurationIds, config.children
+                token, config.fieldConfigurationIds, config.children, sysConfigOptions
             );
 
             for (const fieldConfig of config.children) {
                 if (fieldConfig.fieldConfigurationIds || fieldConfig.children) {
-                    await this.resolveFieldChildrenConfig(token, fieldConfig, [...ancenstorIds]);
+                    await this.resolveFieldChildrenConfig(token, fieldConfig, [...ancenstorIds], sysConfigOptions);
                 }
             }
         }

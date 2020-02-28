@@ -6,19 +6,18 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<if(state.loading)>
-    <loading-spinner/>
-</if>
-<else-if(state.configItem)>
+<if(state.configItem)>
     <div.ci-label-container>
         <object-property-label object=state.configItem property="Name" labelProvider=component.labelProvider/>
         <object-property-label object=state.configItem property="Number" labelProvider=component.labelProvider/>
         <object-property-label object=state.configItem property="CurDeplStateID" labelProvider=component.labelProvider/>
-        <object-property-label object=state.configItem property="CurInciStateID" labelProvider=component.labelProvider
+        <object-property-label
+            object=state.configItem
+            property="CurInciStateID"
+            labelProvider=component.labelProvider
             showIcon=true/>
     </div>
-</else-if>
+</if>
 <else>
     <span.error>Kein Config Item verfügbar.</span>
 </else>

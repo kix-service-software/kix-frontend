@@ -11,6 +11,10 @@ export enum SysConfigOptionProperty {
 
     NAME = 'Name',
 
-    VALUE = 'Value'
+    VALUE = 'Value',
+
+    CONTEXT = 'Context',
+
+    CONTEXT_METADATA = 'ContextMetadata'
 
 }

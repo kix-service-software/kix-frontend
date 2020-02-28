@@ -8,9 +8,10 @@
  */
 
 import { IConfiguration } from "../../../model/configuration/IConfiguration";
+import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
 
 export interface IConfigurationResolver<T extends IConfiguration = IConfiguration> {
 
-    resolve(token: string, configuration: T): Promise<void>;
+    resolve(token: string, configuration: T, sysConfigOptions: SysConfigOption[]): Promise<void>;
 
 }

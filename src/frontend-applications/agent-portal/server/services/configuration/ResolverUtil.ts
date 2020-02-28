@@ -9,12 +9,13 @@
 
 import { IConfiguration } from "../../../model/configuration/IConfiguration";
 import { ModuleConfigurationService } from "./ModuleConfigurationService";
+import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
 
 export class ResolverUtil {
 
 
     public static async loadConfigurations<T extends IConfiguration>(
-        token: string, ids: string[], configurations: T[]
+        token: string, ids: string[], configurations: T[], sysConfigOptions: SysConfigOption[]
     ): Promise<T[]> {
 
         if (!configurations) {
@@ -27,9 +28,12 @@ export class ResolverUtil {
         let newConfigurations: T[] = [];
 
         const idsToLoad = ids.filter((cid) => !configurations.some((c) => c.id === cid));
-        const loadedConfigurations = idsToLoad ? await ModuleConfigurationService.getInstance().loadConfigurations<T>(
-            token, idsToLoad
-        ) : [];
+
+        const loadedOptions = idsToLoad
+            ? sysConfigOptions.filter((o) => idsToLoad.some((id) => o.Value && id === o.Name))
+            : [];
+
+        const loadedConfigurations = loadedOptions.map((o) => JSON.parse(o.Value));
 
         for (const configId of ids) {
             let configuration = configurations.find((c) => c.id === configId);

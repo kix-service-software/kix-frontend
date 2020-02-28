@@ -7,13 +7,8 @@
  * --
  */
 
-import { IRow } from "../../../core/table";
+export enum SysconfigEvent {
 
-export class ComponentState {
+    SYSCONFIG_OPTIONS_UPDATED = 'SYSCONFIG_OPTIONS_UPDATED'
 
-    public constructor(
-        public rows: IRow[] = [],
-        public ready: boolean = false,
-        public loading: boolean = false
-    ) { }
 }

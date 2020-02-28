@@ -479,6 +479,7 @@ export class Table implements ITable {
     }
 
     public async reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
+        EventService.getInstance().publish(TableEvent.RELOAD, new TableEventData(this.getTableId()));
         let selectedRows: IRow[] = [];
         if (keepSelection) {
             selectedRows = this.getSelectedRows(true);

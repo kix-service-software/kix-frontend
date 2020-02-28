@@ -14,6 +14,9 @@ import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDe
 import { SysConfigOptionDefinition } from "../../model/SysConfigOptionDefinition";
 import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
 import { EventService } from "../../../base-components/webapp/core/EventService";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { BrowserUtil } from "../../../base-components/webapp/core/BrowserUtil";
+import { SysconfigEvent } from "./SysconfigEvent";
 
 export class SysconfigTableResetAction extends AbstractAction {
 
@@ -37,22 +40,28 @@ export class SysconfigTableResetAction extends AbstractAction {
             const rows = this.data.getSelectedRows();
             const objects: SysConfigOptionDefinition[] = rows.map((r) => r.getRowObject().getObject());
 
-            let i = 1;
-            for (const o of objects) {
-                EventService.getInstance().publish(
-                    ApplicationEvent.APP_LOADING,
-                    { loading: true, hint: `Reset Sysconfig Options ${i}/${objects.length}` }
-                );
+            const title = await TranslationService.translate('Translatable#Reset?');
+            const question = await TranslationService.translate(
+                'Translatable#You will reset {0} Sysconfig Options. Execute now?', [objects.length]
+            );
 
-                await KIXObjectService.updateObject(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-                    [[SysConfigOptionDefinitionProperty.VALUE, null]], o.Name, true
-                );
-                i++;
-            }
+            BrowserUtil.openConfirmOverlay(title, question, async () => {
+                let i = 1;
+                for (const o of objects) {
+                    EventService.getInstance().publish(
+                        ApplicationEvent.APP_LOADING,
+                        { loading: true, hint: `Reset Sysconfig Options ${i}/${objects.length}` }
+                    );
 
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                    await KIXObjectService.updateObject(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
+                        [[SysConfigOptionDefinitionProperty.VALUE, null]], o.Name, true
+                    );
+                    i++;
+                }
+
+                EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
+                EventService.getInstance().publish(SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED);
+            });
         }
     }
-
 }

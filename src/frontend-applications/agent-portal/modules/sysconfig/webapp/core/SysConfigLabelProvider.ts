@@ -149,9 +149,11 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
         return 'SysConfig';
     }
 
-
     public async getIcons(object: SysConfigOptionDefinition, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
+        if (property === SysConfigOptionDefinitionProperty.IS_MODIFIED && object && object.IsModified) {
+            icons.push('kix-icon-check');
+        }
         return icons;
     }
 

@@ -124,10 +124,6 @@ export class RoutingService {
         if (routingConfiguration) {
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
 
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: ''
-            });
-
             await ContextService.getInstance().setContext(
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,
@@ -135,10 +131,6 @@ export class RoutingService {
                 objectId, reset, routingConfiguration.history,
                 addHistory
             );
-
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: false
-            });
         }
     }
 

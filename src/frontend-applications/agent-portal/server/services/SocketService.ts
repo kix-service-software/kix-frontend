@@ -50,16 +50,16 @@ export class SocketService {
     }
 
     private async registerNamespaces(): Promise<void> {
-        const registries = await PluginService.getInstance().getExtensions<ISocketNamespaceRegistryExtension>(
+        const namespaces = await PluginService.getInstance().getExtensions<ISocketNamespaceRegistryExtension>(
             AgentPortalExtensions.SOCKET_NAMESPACE
         );
 
-        registries.forEach((r) => {
-            r.getNamespaceClasses().forEach((c) => {
+        for (const namespace of namespaces) {
+            for (const c of namespace.getNamespaceClasses()) {
                 LoggingService.getInstance().info(`Register socket namespace: ${c.constructor.name}`);
-                c.registerNamespace(this.socketIO);
-            });
-        });
+                await c.registerNamespace(this.socketIO);
+            }
+        }
     }
 
     public broadcast(event: NotificationEvent, data: any): void {

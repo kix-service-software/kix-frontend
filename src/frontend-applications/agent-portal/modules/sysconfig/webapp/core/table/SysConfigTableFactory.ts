@@ -50,7 +50,7 @@ export class SysConfigTableFactory extends TableFactory {
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(null, null, null,
-                SysConfigOptionDefinitionProperty.IS_MODIFIED, true, false, false, false, 100, true, true, true
+                SysConfigOptionDefinitionProperty.IS_MODIFIED, false, true, true, false, 100, true, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
                 SysConfigOptionDefinitionProperty.CONTEXT, true, false, true, false, 150, true, true, true,

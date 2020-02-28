@@ -22,6 +22,19 @@ import { SocketEvent } from "../../modules/base-components/webapp/core/SocketEve
 import { PermissionService } from "../services/PermissionService";
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ContextConfigurationResolver } from "../services/configuration/ContextConfigurationResolver";
+import { SysConfigService } from "../../modules/sysconfig/server/SysConfigService";
+import { SysConfigOptionProperty } from "../../modules/sysconfig/model/SysConfigOptionProperty";
+import { ConfigurationService } from "../../../../server/services/ConfigurationService";
+import { KIXObjectType } from "../../model/kix/KIXObjectType";
+import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../model/FilterCriteria";
+import { SearchOperator } from "../../modules/search/model/SearchOperator";
+import { FilterDataType } from "../../model/FilterDataType";
+import { FilterType } from "../../model/FilterType";
+import { SysConfigOption } from "../../modules/sysconfig/model/SysConfigOption";
+import { CacheService } from "../services/cache";
+import { ISocketResponse } from "../../modules/base-components/webapp/core/ISocketResponse";
+import { ISocketRequest } from "../../modules/base-components/webapp/core/ISocketRequest";
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -38,6 +51,8 @@ export class ContextNamespace extends SocketNameSpace {
         super();
     }
 
+    private rebuildPromise: Promise<void>;
+
     protected getNamespace(): string {
         return 'context';
     }
@@ -46,14 +61,74 @@ export class ContextNamespace extends SocketNameSpace {
         this.registerEventHandler(
             client, ContextEvent.LOAD_CONTEXT_CONFIGURATION, this.loadContextConfiguration.bind(this)
         );
+        this.registerEventHandler(
+            client, ContextEvent.LOAD_CONTEXT_CONFIGURATIONS, this.loadContextConfigurations.bind(this)
+        );
+        this.registerEventHandler(
+            client, ContextEvent.REBUILD_CONFIG, this.rebuildConfiguration.bind(this)
+        );
+    }
+
+    protected initialize(): Promise<void> {
+        return this.rebuildConfigCache();
+    }
+
+    private async rebuildConfiguration(
+        data: ISocketRequest
+    ): Promise<SocketResponse<ISocketResponse | SocketErrorResponse>> {
+        await this.rebuildConfigCache().catch(() => null);
+
+        const response: ISocketResponse = { requestId: data.requestId };
+        return new SocketResponse(ContextEvent.REBUILD_CONFIG_FINISHED, response);
+    }
+
+    public async rebuildConfigCache(): Promise<void> {
+        if (!this.rebuildPromise) {
+            this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
+
+                CacheService.getInstance().deleteKeys('ContextNamespace');
+
+                const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+                const loadingOptions = new KIXObjectLoadingOptions([
+                    new FilterCriteria(
+                        SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
+                        FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
+                    )
+                ]);
+
+                const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+                    serverConfig.BACKEND_API_TOKEN, 'ContextNamespace', KIXObjectType.SYS_CONFIG_OPTION, null,
+                    loadingOptions, null
+                ).catch((): SysConfigOption[] => []);
+
+                const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
+
+                for (const contextOption of contextOptions) {
+
+                    if (contextOption.Value) {
+                        const newConfig = await ContextConfigurationResolver.getInstance().resolve(
+                            serverConfig.BACKEND_API_TOKEN,
+                            JSON.parse(contextOption.Value) as ContextConfiguration,
+                            options
+                        );
+
+                        CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextNamespace');
+                    }
+                }
+
+                this.rebuildPromise = null;
+                resolve();
+            });
+        }
+
+        return this.rebuildPromise;
     }
 
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
     ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        let configuration = await ModuleConfigurationService.getInstance().loadConfiguration(
-            data.token, data.contextId
-        );
+        let configuration = await CacheService.getInstance().get(data.contextId, 'ContextNamespace');
 
         if (!configuration) {
             return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(
@@ -65,12 +140,44 @@ export class ContextNamespace extends SocketNameSpace {
             data.token, configuration as ContextConfiguration
         ).catch(() => configuration);
 
-        configuration = await ContextConfigurationResolver.getInstance().resolve(
-            data.token, configuration as ContextConfiguration);
-
-
         const response = new LoadContextConfigurationResponse(data.requestId, configuration as ContextConfiguration);
         return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATION_LOADED, response);
+    }
+
+    protected async loadContextConfigurations(
+        data: ISocketRequest
+    ): Promise<SocketResponse<ISocketResponse | SocketErrorResponse>> {
+        const configurations = [];
+
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                SysConfigOptionProperty.CONTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
+            )
+        ]);
+
+        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            serverConfig.BACKEND_API_TOKEN, 'ContextNamespace', KIXObjectType.SYS_CONFIG_OPTION, null,
+            loadingOptions, null
+        ).catch((): SysConfigOption[] => []);
+
+        const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
+
+        for (const contextOption of contextOptions) {
+            const configuration = await CacheService.getInstance().get(contextOption.Name, 'ContextNamespace');
+
+            if (configuration) {
+                configurations.push(configuration);
+            }
+        }
+
+        const response = {
+            requestId: data.requestId,
+            configurations
+        };
+        return new SocketResponse(ContextEvent.CONTEXT_CONFIGURATIONS_LOADED, response);
     }
 
 }

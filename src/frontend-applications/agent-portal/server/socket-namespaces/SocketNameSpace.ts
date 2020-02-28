@@ -23,12 +23,17 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     protected namespace: SocketIO.Namespace;
 
     public registerNamespace(server: SocketIO.Server): void {
+        this.initialize();
         this.namespace = server.of('/' + this.getNamespace());
         this.namespace
             .use(AuthenticationService.getInstance().isSocketAuthenticated.bind(AuthenticationService.getInstance()))
             .on(SocketEvent.CONNECTION, (client: SocketIO.Socket) => {
                 this.registerEvents(client);
             });
+    }
+
+    protected async initialize(): Promise<void> {
+        return;
     }
 
     protected registerEventHandler<RQ extends ISocketRequest, RS>(

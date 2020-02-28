@@ -21,6 +21,7 @@ import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 
 export class MainDialogComponent implements IMainDialogListener {
 
+    private loadingTimeout: any;
     private state: ComponentState;
 
     private dialogId: string;
@@ -108,11 +109,24 @@ export class MainDialogComponent implements IMainDialogListener {
         isLoading: boolean, loadingHint: string, showClose: boolean = false,
         time: number = null, cancelCallback: () => void
     ): void {
-        this.state.loadingHint = loadingHint;
-        this.state.isLoading = isLoading;
-        this.state.showClose = showClose;
-        this.state.time = time;
-        this.state.cancelCallback = cancelCallback;
+        if (this.loadingTimeout) {
+            window.clearTimeout(this.loadingTimeout);
+        }
+        if (isLoading) {
+            this.loadingTimeout = setTimeout(() => {
+                this.state.loadingHint = loadingHint;
+                this.state.isLoading = isLoading;
+                this.state.showClose = showClose;
+                this.state.time = time;
+                this.state.cancelCallback = cancelCallback;
+            }, 500);
+        } else {
+            this.state.loadingHint = loadingHint;
+            this.state.isLoading = isLoading;
+            this.state.showClose = showClose;
+            this.state.time = time;
+            this.state.cancelCallback = cancelCallback;
+        }
     }
 
 }
