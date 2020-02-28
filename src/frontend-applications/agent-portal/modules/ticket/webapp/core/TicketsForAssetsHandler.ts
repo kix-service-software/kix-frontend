@@ -19,14 +19,14 @@ import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptio
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { TicketProperty } from "../../model/TicketProperty";
 import { FormService } from "../../../base-components/webapp/core/FormService";
+import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core";
 
 export class TicketsForAssetsHandler implements IObjectReferenceHandler {
 
-    public objectType: KIXObjectType = KIXObjectType.TICKET;
+    public name: string = 'TicketsForAssetsHandler';
 
-    public getLoadingOptions(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions();
-    }
+    public objectType: KIXObjectType = KIXObjectType.TICKET;
 
     public async determineObjects(ticket: Ticket, config: any): Promise<Ticket[]> {
         let tickets = [];
@@ -65,7 +65,7 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
     private getDynamicFieldValues(ticket: Ticket, property: string): number[] {
         let values: number[];
         const dfName = KIXObjectService.getDynamicFieldName(property);
-        if (dfName) {
+        if (ticket && ticket.DynamicFields && dfName) {
             const dynamicField = ticket.DynamicFields.find((df) => df.Name === dfName);
             if (dynamicField && dynamicField.Value && Array.isArray(dynamicField.Value) && dynamicField.Value.length) {
                 values = dynamicField.Value.map((v) => Number(v));
@@ -115,5 +115,19 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
         return tickets;
     }
 
+    public isPossibleFormField(formField: FormFieldConfiguration, config: any): boolean {
+        if (formField && config && config.properties && Array.isArray(config.properties)) {
+            if (formField.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                const dfNameOption = formField.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                if (dfNameOption) {
+                    config.properties.some((p) => p === 'DynamicFields.' + dfNameOption.value);
+                }
+            }
+
+            return config.properties.some((p) => p === formField.property);
+        }
+
+        return false;
+    }
 
 }

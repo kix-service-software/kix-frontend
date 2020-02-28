@@ -26,6 +26,8 @@ import { FormService } from '../../core/FormService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { IObjectReferenceHandler } from '../../core/IObjectReferenceHandler';
+import { EventService } from '../../core/EventService';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
 
 class Component {
 
@@ -34,6 +36,7 @@ class Component {
     private handler: IObjectReferenceHandler;
     private config: ObjectReferenceWidgetConfiguration;
     private object: KIXObject;
+    private loadTimeout: any;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -59,15 +62,19 @@ class Component {
             if (this.handler) {
                 this.object = await context.getObject();
                 if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-                    const objects = this.handler
-                        ? await this.handler.determineObjects(this.object, this.config.handlerConfiguration)
-                        : [];
-                    this.createTable(this.handler.objectType, objects);
+                    this.createObjectTable();
+
+                    EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
+                        eventSubscriberId: 'referenced-object-widget-' + this.handler.name,
+                        eventPublished: () => {
+                            this.createObjectTable();
+                        }
+                    });
                 } else if (context.getDescriptor().contextType === ContextType.DIALOG) {
                     this.formValueChanged(null, null, null);
                     const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
                     FormService.getInstance().registerFormInstanceListener(formId, {
-                        formListenerId: 'reference-object-widget-form-listener',
+                        formListenerId: 'reference-object-widget-form-listener-' + this.handler.name,
                         formValueChanged: this.formValueChanged.bind(this),
                         updateForm: () => null
                     });
@@ -76,15 +83,32 @@ class Component {
         }
     }
 
+    private async createObjectTable(): Promise<void> {
+        const objects = this.handler
+            ? await this.handler.determineObjects(this.object, this.config.handlerConfiguration)
+            : [];
+        this.createTable(this.handler.objectType, objects);
+    }
+
     private async formValueChanged(
         formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any
     ): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext();
-        const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-        const objects = await this.handler.determineObjectsByForm(
-            formId, this.object, this.config.handlerConfiguration
-        );
-        this.createTable(this.handler.objectType, objects);
+        if (this.handler.isPossibleFormField(formField, this.config.handlerConfiguration)) {
+            if (this.loadTimeout) {
+                window.clearTimeout(this.loadTimeout);
+                this.loadTimeout = null;
+            }
+
+            this.loadTimeout = setTimeout(async () => {
+                const context = ContextService.getInstance().getActiveContext();
+                const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+                const objects = await this.handler.determineObjectsByForm(
+                    formId, this.object, this.config.handlerConfiguration
+                );
+                this.createTable(this.handler.objectType, objects);
+                this.loadTimeout = null;
+            }, 300);
+        }
     }
 
     private createTable(objectType: KIXObjectType, objects: KIXObject[]): void {

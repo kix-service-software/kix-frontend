@@ -40,6 +40,7 @@ import { TicketLabelProvider } from "./TicketLabelProvider";
 import { ChannelService } from "./ChannelService";
 import { TicketPlaceholderHandler } from "./TicketPlaceholderHandler";
 import { TicketsForAssetsHandler } from "./TicketsForAssetsHandler";
+import { SuggestedFAQHandler } from "./SuggestedFAQHandler";
 
 export class UIModule implements IUIModule {
 
@@ -113,6 +114,7 @@ export class UIModule implements IUIModule {
         );
 
         ServiceRegistry.registerObjectReferenceHandler('TicketsForAssetsHandler', new TicketsForAssetsHandler());
+        ServiceRegistry.registerObjectReferenceHandler('SuggestedFAQHandler', new SuggestedFAQHandler());
 
         await this.registerContexts();
         this.registerTicketActions();

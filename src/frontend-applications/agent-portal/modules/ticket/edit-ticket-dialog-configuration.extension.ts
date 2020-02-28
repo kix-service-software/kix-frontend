@@ -133,6 +133,32 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         );
         configurations.push(ticketsForAssetsWidget);
 
+        const suggestedFAQWidget = new WidgetConfiguration(
+            'ticket-edit-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-edit-suggested-faq-config', 'Suggested FAQ',
+                'SuggestedFAQHandler',
+                {
+                    properties: [
+                        'Title',
+                        'Subject'
+                    ],
+                    minLength: 3
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Title', true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Votes', true, false, false, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-faq'
+        );
+        configurations.push(suggestedFAQWidget);
+
         const widget = new WidgetConfiguration(
             'ticket-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'edit-ticket-dialog', 'Translatable#Edit Ticket', [], null, null, false, false, 'kix-icon-edit'
@@ -150,6 +176,9 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                     new ConfiguredWidget('ticket-edit-dialog-contact-widget', 'ticket-edit-dialog-contact-widget'),
                     new ConfiguredWidget(
                         'ticket-edit-dialog-object-reference-widget', 'ticket-edit-dialog-object-reference-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget'
                     )
                 ],
                 [], [], [], [], [], [], [],
