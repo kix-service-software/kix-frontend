@@ -33,15 +33,7 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'edit-translation-dialog', '/kix-module-translation$0/webapp/components/edit-translation-dialog', []
-        ),
-        new UIComponent(
-            'i18n-translation-language-list-widget',
-            '/kix-module-translation$0/webapp/components/i18n-translation-language-list-widget', []
-        ),
-        new UIComponent(
-            'i18n-translation-info-widget',
-            '/kix-module-translation$0/webapp/components/i18n-translation-info-widget', []
-        ),
+        )
     ];
 
     public webDependencies: string[] = [

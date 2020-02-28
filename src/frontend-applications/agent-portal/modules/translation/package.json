@@ -22,9 +22,6 @@
             },
             "i18n-edit-translation": {
                 "module": "edit-translation-dialog-configuration.extension"
-            },
-            "i18n-translation-details-configuration": {
-                "module": "i18n-translation-details.extension"
             }
         }
     }
