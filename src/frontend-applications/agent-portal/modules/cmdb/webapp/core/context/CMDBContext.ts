@@ -83,6 +83,7 @@ export class CMDBContext extends Context {
         window.clearTimeout(timeout);
 
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
+        this.setFilteredObjectList(KIXObjectType.CONFIG_ITEM, configItems);
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 

@@ -77,6 +77,7 @@ export class TicketContext extends Context {
         window.clearTimeout(timeout);
 
         this.setObjectList(KIXObjectType.TICKET, tickets);
+        this.setFilteredObjectList(KIXObjectType.TICKET, tickets);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }

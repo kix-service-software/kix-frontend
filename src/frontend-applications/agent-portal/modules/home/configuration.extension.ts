@@ -182,18 +182,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 },
                 data: {
                     datasets: [{
-                        backgroundColor: [
-                            "rgb(91, 91, 91)",
-                            "rgb(4, 83, 125)",
-                            "rgb(0, 141, 210)",
-                            "rgb(129, 189, 223)",
-                            "rgb(160, 230, 200)",
-                            "rgb(130, 200, 38)",
-                            "rgb(0, 152, 70)",
-                            "rgb(227, 30, 36)",
-                            "rgb(239, 127, 26)",
-                            "rgb(254, 204, 0)"
-                        ]
+                        backgroundColor: "rgb(91, 91, 91)"
                     }]
                 },
             }
