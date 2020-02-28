@@ -3590,6 +3590,9 @@ msgstr "Erfolgreich verarbeitete Zeilen"
 msgid "Successfully rated."
 msgstr "Bewertung erfolgreich."
 
+msgid "Suggested FAQ"
+msgstr ""
+
 msgid "Sunday"
 msgstr "Sonntag"
 

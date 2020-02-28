@@ -3442,6 +3442,9 @@ msgstr ""
 msgid "Successfully rated."
 msgstr ""
 
+msgid "Suggested FAQ"
+msgstr ""
+
 msgid "Sunday"
 msgstr ""
 
