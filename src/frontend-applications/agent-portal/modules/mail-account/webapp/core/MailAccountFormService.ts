@@ -17,6 +17,7 @@ import { MailAccountProperty } from "../../model/MailAccountProperty";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
 import { DispatchingType } from "../../model/DispatchingType";
+import { IdService } from "../../../../model/IdService";
 
 export class MailAccountFormService extends KIXObjectFormService {
 
@@ -73,6 +74,7 @@ export class MailAccountFormService extends KIXObjectFormService {
             'Translatable#Helptext_Admin_MailAccountEdit_IMAPFolder', undefined,
             new FormFieldValue(value)
         );
+        folderField.instanceId = IdService.generateDateBasedId(folderField.property);
         typeField.children.push(folderField);
         formFieldValues.set(folderField.instanceId, new FormFieldValue(value));
     }
