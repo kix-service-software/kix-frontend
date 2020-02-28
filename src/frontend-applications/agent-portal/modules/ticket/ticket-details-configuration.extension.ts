@@ -83,9 +83,22 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
         configurations.push(infoConfig);
 
+        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
+            'ticket-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects, []
+        );
+        configurations.push(linkedObjectsConfig);
+
+        const linkedObjectsWidget = new WidgetConfiguration(
+            'ticket-details-linked-objects-widget', 'linked objects', ConfigurationType.Widget,
+            'linked-objects-widget', 'Translatable#Linked Objects', [],
+            new ConfigurationDefinition('ticket-details-linked-objects-config', ConfigurationType.LinkedObjects),
+            null, false, false, null, false
+        );
+        configurations.push(linkedObjectsWidget);
+
         const tabSettings = new TabWidgetConfiguration(
             'ticket-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
-            ['ticket-details-info-widget']
+            ['ticket-details-info-widget', 'ticket-details-linked-objects-widget']
         );
         configurations.push(tabSettings);
 
@@ -102,24 +115,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             'ticket-history-widget', 'Translatable#History', [], null, null, true, true, null, false
         );
         configurations.push(ticketHistoryLane);
-
-        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
-            'ticket-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects,
-            [
-                ['Tickets', KIXObjectType.TICKET],
-                ['Config Items', KIXObjectType.CONFIG_ITEM],
-                ['FAQs', KIXObjectType.FAQ_ARTICLE]
-            ]
-        );
-        configurations.push(linkedObjectsConfig);
-
-        const linkedObjectsWidget = new WidgetConfiguration(
-            'ticket-details-linked-objects-widget', 'linked objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects', ['linked-objects-edit-action'],
-            new ConfigurationDefinition('ticket-details-linked-objects-config', ConfigurationType.LinkedObjects),
-            null, true, true, null, false
-        );
-        configurations.push(linkedObjectsWidget);
 
         // Sidebars
         const organisationObjectInformation = new ObjectInformationWidgetConfiguration(
@@ -323,10 +318,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 [
                     new ConfiguredWidget('ticket-details-tab-widget', 'ticket-details-tab-widget'),
                     new ConfiguredWidget(
-                        'ticket-details-linked-objects-widget', 'ticket-details-linked-objects-widget', null,
-                        [new UIComponentPermission('links', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
                         'ticket-details-history-widget', 'ticket-details-history-widget', null,
                         [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
                     )
@@ -359,7 +350,11 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     new ConfiguredWidget('article-attachment-widget', 'ticket-details-article-attachments-overlay')
                 ],
                 [
-                    new ConfiguredWidget('ticket-details-info-widget', 'ticket-details-info-widget')
+                    new ConfiguredWidget('ticket-details-info-widget', 'ticket-details-info-widget'),
+                    new ConfiguredWidget(
+                        'ticket-details-linked-objects-widget', 'ticket-details-linked-objects-widget', null,
+                        [new UIComponentPermission('links', [CRUD.READ])]
+                    )
                 ]
             )
         );

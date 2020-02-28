@@ -9,26 +9,27 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
-import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData } from '../../../../base-components/webapp/core/table';
-import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { Context } from '../../../../../model/Context';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { LinkObject } from '../../../model/LinkObject';
 import { LinkUtil } from '../../core';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { DataType } from '../../../../../model/DataType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { Link } from '../../../model/Link';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { TabContainerEvent } from '../../../../base-components/webapp/core/TabContainerEvent';
+import { TabContainerEventData } from '../../../../base-components/webapp/core/TabContainerEventData';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private tableSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -39,13 +40,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        WidgetService.getInstance().setWidgetType('linked-object-group', WidgetType.GROUP);
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
         context.registerListener('kix-object-linked-objects-widget', {
             objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {
-                this.initWidget(object);
+                this.prepareTable(context);
             },
             sidebarToggled: () => { return; },
             explorerBarToggled: () => { return; },
@@ -55,138 +55,85 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             additionalInformationChanged: () => { return; }
         });
 
-        await this.initWidget(await context.getObject<KIXObject>());
+        this.prepareTable(context);
     }
 
-    public onDestroy(): void {
-        EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-        if (this.state.widgetConfiguration.configuration) {
-            const linkedObjectTypes: Array<[string, KIXObjectType]> =
-                this.state.widgetConfiguration.configuration.linkedObjectTypes;
-            for (const lot of linkedObjectTypes) {
-                TableFactoryService.getInstance().destroyTable(`link-objects-${lot[1]}`);
+    private async prepareTable(context: Context): Promise<void> {
+        this.state.prepared = false;
+
+        const object = await context.getObject();
+
+        let linkObjects = [];
+        if (object && object.Links) {
+            linkObjects = await this.prepareLinkObjects(object);
+        }
+
+        const title = await TranslationService.translate('Translatable#Linked Objects ({0})', [linkObjects.length]);
+        EventService.getInstance().publish(
+            TabContainerEvent.CHANGE_TITLE, new TabContainerEventData(this.state.instanceId, title)
+        );
+
+        const tableConfiguration = new TableConfiguration(
+            null, null, null, KIXObjectType.LINK_OBJECT, null, 25, null, [], false, false,
+            null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+        );
+        const table = await TableFactoryService.getInstance().createTable(
+            'linked-objects-widget', KIXObjectType.LINK_OBJECT, tableConfiguration,
+            null, null, null, null, null, null, true, linkObjects
+        );
+
+        this.state.table = table;
+
+        setTimeout(() => this.state.prepared = true, 10);
+    }
+
+    private async prepareLinkObjects(object: KIXObject): Promise<LinkObject[]> {
+        const links = await LinkUtil.getLinkObjects(object);
+        links.sort((a, b) => {
+            return SortUtil.compareValues(a.linkedObjectType, b.linkedObjectType, DataType.STRING);
+        });
+        const linkedObjectIds: Map<KIXObjectType | string, string[]> = new Map();
+        links.forEach((lo) => {
+            if (linkedObjectIds.has(lo.linkedObjectType)) {
+                if (linkedObjectIds.get(lo.linkedObjectType).findIndex((id) => id === lo.linkedObjectKey) === -1) {
+                    linkedObjectIds.get(lo.linkedObjectType).push(lo.linkedObjectKey);
+                }
+            } else {
+                linkedObjectIds.set(lo.linkedObjectType, [lo.linkedObjectKey]);
             }
-        }
+        });
+        return await this.prepareLinkedObjects(linkedObjectIds, links);
     }
 
-    private async initWidget(kixObject?: KIXObject): Promise<void> {
-        this.state.kixObject = kixObject;
-        this.setActions();
-        this.state.linkedObjectGroups = null;
-        await this.prepareLinkedObjectsGroups();
-    }
-
-    private async setActions(): Promise<void> {
-        if (this.state.widgetConfiguration && this.state.kixObject) {
-            this.state.actions = await ActionFactory.getInstance().generateActions(
-                this.state.widgetConfiguration.actions, [this.state.kixObject]
-            );
-        }
-    }
-
-    private async prepareLinkedObjectsGroups(): Promise<void> {
-        const linkedObjectGroups = [];
-        if (this.state.widgetConfiguration.configuration) {
-            const linkedObjectTypes: Array<[string, KIXObjectType]> =
-                this.state.widgetConfiguration.configuration.linkedObjectTypes;
-
-            let objectsCount = 0;
-            for (const lot of linkedObjectTypes) {
-                const objectLinks = this.state.kixObject.Links.filter((link) => this.checkLink(link, lot[1]));
-
-                const linkDescriptions = await LinkUtil.getLinkDescriptions(this.state.kixObject, objectLinks);
-
-                const tableConfiguration = new TableConfiguration(null, null, null,
-                    null, null, null, null, [], false, false, null, null,
-                    TableHeaderHeight.SMALL, TableRowHeight.SMALL
+    private async prepareLinkedObjects(
+        linkedObjectIds: Map<KIXObjectType | string, string[]>, links: LinkObject[]
+    ): Promise<LinkObject[]> {
+        let linkedObjects = [];
+        const iterator = linkedObjectIds.entries();
+        let objectIds = iterator.next();
+        while (objectIds && objectIds.value) {
+            if (objectIds.value[1].length) {
+                const objects = await KIXObjectService.loadObjects(
+                    objectIds.value[0], objectIds.value[1], null
                 );
-
-                const objects = linkDescriptions.map((ld) => ld.linkableObject);
-                const table = await TableFactoryService.getInstance().createTable(
-                    `link-objects-${lot[1]}`, lot[1], tableConfiguration,
-                    objects.map((o) => o.ObjectId), null, true, null, true, false, true
-                );
-                if (table) {
-                    await table.addColumns([
-                        TableFactoryService.getInstance().getDefaultColumnConfiguration(lot[1], 'LinkedAs')
-                    ]);
-
-                    objectsCount += objects.length;
-                    const groupTitle = await TranslationService.translate(lot[0]);
-                    const title = `${groupTitle} (${objects.length})`;
-
-                    linkedObjectGroups.push([title, table, objects.length, linkDescriptions]);
-                }
+                linkedObjects = [...linkedObjects, ...objects];
             }
 
-            this.state.linkedObjectGroups = linkedObjectGroups;
-
-            const text = await TranslationService.translate(this.state.widgetConfiguration.title, []);
-            this.state.title = `${text} (${objectsCount})`;
-            this.initTableSubscriber();
+            objectIds = iterator.next();
         }
-    }
 
-    private initTableSubscriber(): void {
-        this.tableSubscriber = {
-            eventSubscriberId: 'linked-objects-widget',
-            eventPublished: async (data: TableEventData, eventId: string) => {
-                const group = data && this.state.linkedObjectGroups ? this.state.linkedObjectGroups.find(
-                    (g) => g[1].getTableId() === data.tableId
-                ) : null;
-                if (group) {
-                    if (eventId === TableEvent.TABLE_READY) {
-                        const values: any[] = [];
-                        for (let index = 0; index < group[3].length; index++) {
-                            const linkArray = group[3][index];
-                            let name = linkArray.linkTypeDescription.asSource
-                                ? linkArray.linkTypeDescription.linkType.SourceName
-                                : linkArray.linkTypeDescription.linkType.TargetName;
-                            name = await TranslationService.translate(name);
-                            const value: [any, [string, any]] = [linkArray.linkableObject, ['LinkedAs', name]];
-                            values.push(value);
-                        }
-                        if (!!values.length) {
-
-                            group[1].setRowObjectValues(values);
-                        }
-                    }
-                }
-            }
-        };
-
-        EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
-    }
-
-    public setGroupMinimizedStates(): void {
-        setTimeout(() => {
-            this.state.linkedObjectGroups.forEach((log, index) => {
-                const widgetComponent = (this as any).getComponent('linked-object-group-' + index);
-                if (widgetComponent && !log[2]) {
-                    widgetComponent.setMinizedState(true);
-                }
-            });
-
-            setTimeout(() => this.state.setMinimizedState = false, 100);
-        }, 100);
-    }
-
-    private checkLink(link: Link, objectType: KIXObjectType): boolean {
-        const objectId = this.state.kixObject.ObjectId.toString();
-        const rootObjectType = this.state.kixObject.KIXObjectType;
-
-        // source or target object have to be of relevant 'objectType'
-        // AND this object should not be the root object: other type OR at least id
-        // tslint:disable-next-line:max-line-length
-        // FIXME: Refactoring: http://git.intra.cape-it.de/Softwareentwicklung/KIXng/frontend/app/merge_requests/1934#note_63255
-        return (link.SourceObject === objectType &&
-            (link.SourceObject !== rootObjectType || link.SourceKey !== objectId)
-        ) || (link.TargetObject === objectType &&
-            (link.TargetObject !== rootObjectType || link.TargetKey !== objectId)
+        for (const o of linkedObjects) {
+            const linkObject = links.find(
+                (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
             );
+            if (linkObject) {
+                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getText(o, true, false);
+                linkObject.title = await LabelService.getInstance().getText(o, false, true);
+            }
+        }
 
+        return links;
     }
-
 }
 
 module.exports = Component;

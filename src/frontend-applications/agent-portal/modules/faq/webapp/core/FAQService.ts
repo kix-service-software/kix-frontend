@@ -35,6 +35,8 @@ import { FAQVote } from "../../model/FAQVote";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../../../model/ContextMode";
 
 
 export class FAQService extends KIXObjectService {
@@ -299,6 +301,13 @@ export class FAQService extends KIXObjectService {
             match = await super.checkFilterValue(article, criteria);
         }
         return match;
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        return new RoutingConfiguration(
+            FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
+            ContextMode.DETAILS, FAQArticleProperty.ID
+        );
     }
 
 }
