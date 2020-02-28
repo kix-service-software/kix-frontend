@@ -27,6 +27,7 @@ import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpeci
 import { FormService } from "./FormService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
+import { IdService } from "../../../../model/IdService";
 
 export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
@@ -102,6 +103,8 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             } else {
                 formFieldValue = new FormFieldValue(null);
             }
+
+            f.instanceId = IdService.generateDateBasedId(f.property);
             formFieldValues.set(f.instanceId, formFieldValue);
 
             if (f.children) {
@@ -183,6 +186,9 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
             f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
         );
+
+        newField.instanceId = IdService.generateDateBasedId(newField.property);
+
         const children: FormFieldConfiguration[] = [];
         if (withChildren && f.children) {
             for (const child of f.children) {

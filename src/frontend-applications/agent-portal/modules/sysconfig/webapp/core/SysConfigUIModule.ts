@@ -23,6 +23,8 @@ import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { SysConfigService } from "./SysConfigService";
 import { SysConfigTableCSSHandler } from "./table";
+import { ActionFactory } from "../../../base-components/webapp/core/ActionFactory";
+import { SysconfigTableResetAction } from "./SysconfigTableResetAction";
 
 export class UIModule implements IUIModule {
 
@@ -56,6 +58,8 @@ export class UIModule implements IUIModule {
             false, 'edit-sysconfig-dialog', ['sysconfig'], EditSysConfigDialogContext
         );
         await ContextService.getInstance().registerContext(editSysConfigDialogContext);
+
+        ActionFactory.getInstance().registerAction('sysconfig-reset-action', SysconfigTableResetAction);
     }
 
 }

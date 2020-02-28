@@ -11,7 +11,6 @@ import { IConfiguration } from "./IConfiguration";
 import { FormFieldOption } from "./FormFieldOption";
 import { FormFieldValue } from "./FormFieldValue";
 import { ConfigurationType } from "./ConfigurationType";
-import { IdService } from "../IdService";
 
 export class FormFieldConfiguration implements IConfiguration {
 
@@ -47,7 +46,5 @@ export class FormFieldConfiguration implements IConfiguration {
         public draggableFields: boolean = false,
         public defaultHint: string = hint,
         public type: ConfigurationType = ConfigurationType.FormField
-    ) {
-        this.instanceId = existingFieldId ? existingFieldId : IdService.generateDateBasedId(this.property);
-    }
+    ) { }
 }

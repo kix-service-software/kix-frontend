@@ -23,6 +23,7 @@ import { ArticleProperty } from "../../model/ArticleProperty";
 import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { TicketParameterUtil } from "./TicketParameterUtil";
 import { ArticleFormService } from "./ArticleFormService";
+import { IdService } from "../../../../model/IdService";
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -99,6 +100,7 @@ export class TicketFormService extends KIXObjectFormService {
             null, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false
         );
         typeField.children.push(pendingField);
+        pendingField.instanceId = IdService.generateDateBasedId(pendingField.property);
         formFieldValues.set(pendingField.instanceId, new FormFieldValue(ticket.PendingTime));
     }
 

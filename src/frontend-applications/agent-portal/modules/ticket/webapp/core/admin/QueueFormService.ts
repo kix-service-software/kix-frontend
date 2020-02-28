@@ -16,6 +16,7 @@ import { FormContext } from "../../../../../model/configuration/FormContext";
 import { QueueProperty } from "../../../model/QueueProperty";
 import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
 import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
+import { IdService } from "../../../../../model/IdService";
 
 export class QueueFormService extends KIXObjectFormService {
 
@@ -74,6 +75,7 @@ export class QueueFormService extends KIXObjectFormService {
             new FormFieldValue(value)
         );
         followUpField.children.push(lockField);
+        lockField.instanceId = IdService.generateDateBasedId(lockField.property);
         formFieldValues.set(lockField.instanceId, new FormFieldValue(value));
     }
 

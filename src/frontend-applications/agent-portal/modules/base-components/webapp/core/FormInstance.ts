@@ -27,6 +27,7 @@ import { ValidationResult } from "./ValidationResult";
 import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormContext } from "../../../../model/configuration/FormContext";
+import { IdService } from "../../../../model/IdService";
 import { KIXObjectService } from "./KIXObjectService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
@@ -65,6 +66,7 @@ export class FormInstance implements IFormInstance {
 
     private initValues(formFields: FormFieldConfiguration[]): void {
         formFields.forEach((f) => {
+            f.instanceId = IdService.generateDateBasedId(f.property);
             this.formFieldValues.set(f.instanceId, f.defaultValue
                 ? new FormFieldValue(f.defaultValue.value, f.defaultValue.valid)
                 : new FormFieldValue(null)

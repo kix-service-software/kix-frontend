@@ -19,7 +19,7 @@ export class ComponentState {
         public instanceId: string = IdService.generateDateBasedId('system-sysconfig-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#System: SysConfig',
-            [], null,
+            ['sysconfig-reset-action'], null,
             new TableWidgetConfiguration(
                 null, null, null,
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
