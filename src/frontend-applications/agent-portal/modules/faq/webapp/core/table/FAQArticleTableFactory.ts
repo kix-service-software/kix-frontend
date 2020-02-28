@@ -29,7 +29,8 @@ export class FAQArticleTableFactory extends TableFactory {
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean, objectType?: KIXObjectType | string,
+        objects?: KIXObject[]
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
@@ -38,7 +39,7 @@ export class FAQArticleTableFactory extends TableFactory {
 
         const table = new Table(tableKey, tableConfiguration);
         const contentProvider = new FAQArticleTableContentProvider(
-            table, objectIds, tableConfiguration.loadingOptions, contextId
+            table, objectIds, tableConfiguration.loadingOptions, contextId, objects
         );
 
         table.setContentProvider(contentProvider);

@@ -10,8 +10,11 @@
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 
 export interface IObjectReferenceHandler {
+
+    name: string;
 
     objectType: KIXObjectType;
 
@@ -19,6 +22,6 @@ export interface IObjectReferenceHandler {
 
     determineObjectsByForm(formId: string, object: KIXObject, config: any): Promise<KIXObject[]>;
 
-    getLoadingOptions(): KIXObjectLoadingOptions;
+    isPossibleFormField(formField: FormFieldConfiguration, config: any): boolean;
 
 }

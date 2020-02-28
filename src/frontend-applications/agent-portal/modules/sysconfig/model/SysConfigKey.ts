@@ -55,6 +55,8 @@ export enum SysConfigKey {
 
     TICKET_TYPE_DEFAULT = 'Ticket::Type::Default',
 
-    BROWSER_SOCKET_TIMEOUT_CONFIG = 'Agent::Portal::Browser::Socket::Timeout'
+    BROWSER_SOCKET_TIMEOUT_CONFIG = 'Agent::Portal::Browser::Socket::Timeout',
+
+    TICKET_SEARCH_INDEX_STOPWORDS = 'Ticket::SearchIndex::StopWords'
 
 }

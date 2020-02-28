@@ -27,10 +27,10 @@ import { ValidationResult } from "./ValidationResult";
 import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormContext } from "../../../../model/configuration/FormContext";
-import { IdService } from "../../../../model/IdService";
 import { KIXObjectService } from "./KIXObjectService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
+import { IdService } from "../../../../model/IdService";
 
 export class FormInstance implements IFormInstance {
 

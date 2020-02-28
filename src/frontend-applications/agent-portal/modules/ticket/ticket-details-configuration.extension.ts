@@ -209,6 +209,31 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
         configurations.push(ticketsForAssetsWidget);
 
+        const suggestedFAQWidget = new WidgetConfiguration(
+            'ticket-details-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-details-suggested-faq-config', 'Suggested FAQ',
+                'SuggestedFAQHandler',
+                {
+                    properties: [
+                        'Title',
+                        'Subject'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Title', true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Votes', true, false, false, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-faq'
+        );
+        configurations.push(suggestedFAQWidget);
+
 
         // Overlays
         const organisationInfoOverlay = new WidgetConfiguration(
@@ -289,6 +314,9 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     ),
                     new ConfiguredWidget(
                         'ticket-details-object-reference-widget', 'ticket-details-object-reference-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-details-dialog-suggested-faq-widget', 'ticket-details-dialog-suggested-faq-widget'
                     )
                 ],
                 [],

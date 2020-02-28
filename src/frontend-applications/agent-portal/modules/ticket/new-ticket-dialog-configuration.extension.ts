@@ -40,9 +40,9 @@ import { FormContext } from "../../model/configuration/FormContext";
 import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 import { UserProperty } from "../user/model/UserProperty";
 import { ContactProperty } from "../customer/model/ContactProperty";
-import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
 import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
 import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
+import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
 
 
 export class NewTicketDialogModuleExtension implements IConfigurationExtension {
@@ -129,6 +129,31 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         );
         configurations.push(ticketsForAssetsWidget);
 
+        const suggestedFAQWidget = new WidgetConfiguration(
+            'ticket-new-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-new-suggested-faq-config', 'Suggested FAQ',
+                'SuggestedFAQHandler',
+                {
+                    properties: [
+                        'Title',
+                        'Subject'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Title', true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Votes', true, false, false, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-faq'
+        );
+        configurations.push(suggestedFAQWidget);
+
         const dialogWidget = new WidgetConfiguration(
             'ticket-new-dialog-widget', 'New Ticket Dialog', ConfigurationType.Widget,
             'new-ticket-dialog', 'Translatable#New Ticket', [], null, null,
@@ -147,6 +172,9 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     new ConfiguredWidget('ticket-new-dialog-contact-widget', 'ticket-new-dialog-contact-widget'),
                     new ConfiguredWidget(
                         'ticket-new-dialog-object-reference-widget', 'ticket-new-dialog-object-reference-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-new-dialog-suggested-faq-widget', 'ticket-new-dialog-suggested-faq-widget'
                     )
                 ],
                 [], [], [], [], [], [], [],

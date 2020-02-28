@@ -100,7 +100,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return criteria;
     }
 
-    private getFulltextCriteria(value: string): FilterCriteria[] {
+    public getFulltextCriteria(value: string): FilterCriteria[] {
         const criteria: FilterCriteria[] = [];
         if (value) {
             criteria.push(new FilterCriteria(
