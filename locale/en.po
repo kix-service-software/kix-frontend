@@ -2037,8 +2037,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
 msgstr ""
-"Choose if the following article is shown in the customer portal. If \"Email\""
-" is choosen as chanal above, and one of the following form fields (To, Cc, "
+"Choose if the following article is shown in the customer portal. If \"Email"
+"\" is choosen as chanal above, and one of the following form fields (To, Cc, "
 "Bcc) contains an adresss conected to the tickets customer, the checkbox will "
 "be set automatically and cannot be removed."
 
@@ -2117,8 +2117,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr ""
-"Choose if the following article is shown in the customer portal. If \"Email\""
-" is choosen as chanal above, and one of the following form fields (To, Cc, "
+"Choose if the following article is shown in the customer portal. If \"Email"
+"\" is choosen as chanal above, and one of the following form fields (To, Cc, "
 "Bcc) contains an adresss conected to the tickets customer, the checkbox will "
 "be set automatically and cannot be removed."
 
@@ -3149,6 +3149,9 @@ msgid "Required field '{0}' has no value."
 msgstr ""
 
 msgid "Required field '{0}' is no JSON."
+msgstr ""
+
+msgid "Reset"
 msgstr ""
 
 msgid "Reset data"

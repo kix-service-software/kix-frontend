@@ -3283,6 +3283,11 @@ msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 msgid "Required field '{0}' is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
 
+#, fuzzy
+#| msgid "Reset data"
+msgid "Reset"
+msgstr "Daten zurücksetzen"
+
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
 
