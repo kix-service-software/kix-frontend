@@ -281,7 +281,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         TicketProperty.STATE_ID, SearchOperator.EQUALS,
                         FilterDataType.NUMERIC, FilterType.OR, 1
                     )
-                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
+                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
             ),
             null,
             [
@@ -296,6 +296,10 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                    'label-list-cell-content'
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true

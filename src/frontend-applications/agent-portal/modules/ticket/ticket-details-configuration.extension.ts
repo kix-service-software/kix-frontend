@@ -68,6 +68,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 TicketProperty.LOCK_ID,
                 TicketProperty.TYPE_ID,
                 TicketProperty.QUEUE_ID,
+                'DynamicFields.AffectedAsset',
                 TicketProperty.PRIORITY_ID,
                 TicketProperty.RESPONSIBLE_ID,
                 TicketProperty.OWNER_ID,

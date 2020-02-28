@@ -301,7 +301,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             new FormFieldConfiguration(
                 'ticket-edit-form-field-priority',
                 'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true,
-                'Translatable#Helptext_Tickets_TicketCreate_Priority',
+                'Translatable#Helptext_Tickets_TicketEdit_Priority',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
 
@@ -333,6 +333,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                     'ticket-edit-form-field-title',
                     'ticket-edit-form-field-contact',
                     'ticket-edit-form-field-organisation',
+                    'ticket-edit-form-field-affectedasset',
                     'ticket-edit-form-field-type',
                     'ticket-edit-form-field-queue',
                     'ticket-edit-form-field-channel',
@@ -352,6 +353,13 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                         'ticket-edit-form-field-planend', null, KIXObjectProperty.DYNAMIC_FIELDS, null, false, null,
                         [
                             new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'PlanEnd')
+                        ]
+                    ),
+                    new FormFieldConfiguration(
+                        'ticket-edit-form-field-affectedasset', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
+                        false, 'Translatable#Helptext_Tickets_TicketEdit_AffectedAsset',
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'AffectedAsset')
                         ]
                     )
                 ]

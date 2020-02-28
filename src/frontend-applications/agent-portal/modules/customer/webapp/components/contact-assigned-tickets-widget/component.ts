@@ -34,6 +34,7 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { StateType } from '../../../../ticket/model/StateType';
 import { TicketState } from '../../../../ticket/model/TicketState';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component {
 
@@ -172,7 +173,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter), null,
+                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -188,6 +189,10 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
+                        'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                        'label-list-cell-content'
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
@@ -258,7 +263,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter), null,
+                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -274,6 +279,10 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
+                        'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                        'label-list-cell-content'
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
@@ -340,7 +349,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter), null,
+                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -356,6 +365,10 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
+                        'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                        'label-list-cell-content'
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
@@ -428,7 +441,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter), null,
+                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -444,6 +457,10 @@ class Component {
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.QUEUE_ID, true, false, true, true, 100, true, true, true
+                    ),
+                    new DefaultColumnConfiguration(null, null, null,
+                        'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                        'label-list-cell-content'
                     ),
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.ORGANISATION_ID, true, false, true, true, 150, true, true
