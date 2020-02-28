@@ -41,6 +41,7 @@ import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { UserProperty } from "../../../user/model/UserProperty";
 import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
 import { ConfigItem } from "../../../cmdb/model/ConfigItem";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -480,6 +481,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static isDynamicFieldProperty(property: string): boolean {
         return Boolean(property.match(/^DynamicFields?\..+/));
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        return null;
     }
 
 }

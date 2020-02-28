@@ -18,6 +18,7 @@ import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpeci
 import { FilterCriteria } from "../../../../model/FilterCriteria";
 import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
 import { KIXObjectSpecificDeleteOptions } from "../../../../model/KIXObjectSpecificDeleteOptions";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
 
 export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIXService {
 
@@ -65,5 +66,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
     prepareObjectTree(
         objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]>;
+
+    getObjectRoutingConfiguration(object?: KIXObject): RoutingConfiguration;
 
 }

@@ -8,19 +8,13 @@
  */
 
 import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
 import { ITable } from "../../../../base-components/webapp/core/table";
-import { CreateLinkDescription } from "../../../server/api/CreateLinkDescription";
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public kixObject: KIXObject = null,
-        public actions: AbstractAction[] = [],
-        public linkedObjectGroups: Array<[string, ITable, number, CreateLinkDescription[]]> = null,
-        public title: string = 'Linked Objects',
-        public setMinimizedState: boolean = true
+        public table: ITable = null,
+        public prepared: boolean = false
     ) {
         super();
     }

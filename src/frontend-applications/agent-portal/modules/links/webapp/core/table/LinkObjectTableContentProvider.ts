@@ -12,6 +12,7 @@ import { LinkObject } from "../../../model/LinkObject";
 import { ITable } from "../../../../base-components/webapp/core/table";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
 
 export class LinkObjectTableContentProvider extends TableContentProvider<LinkObject> {
 
@@ -19,9 +20,10 @@ export class LinkObjectTableContentProvider extends TableContentProvider<LinkObj
         table: ITable,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
-        contextId?: string
+        contextId?: string,
+        objects?: KIXObject[]
     ) {
-        super(KIXObjectType.LINK_OBJECT, table, objectIds, loadingOptions, contextId);
+        super(KIXObjectType.LINK_OBJECT, table, objectIds, loadingOptions, contextId, objects);
     }
 
 }

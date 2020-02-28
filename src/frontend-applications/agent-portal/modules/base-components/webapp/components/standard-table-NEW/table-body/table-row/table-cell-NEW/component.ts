@@ -13,6 +13,8 @@ import {
 } from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IColumn, ICell, ValueState, TableCSSHandlerRegistry } from '../../../../../core/table';
 import { KIXModulesService } from '../../../../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { ServiceRegistry } from '../../../../../core/ServiceRegistry';
+import { IKIXObjectService } from '../../../../../core/IKIXObjectService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -33,15 +35,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (input.cell) {
             const table = input.cell.getRow().getTable();
             const tableConfiguration = table.getTableConfiguration();
+            const object = input.cell.getRow().getRowObject().getObject();
             if (tableConfiguration && tableConfiguration.routingConfiguration) {
-                this.state.object = input.cell.getRow().getRowObject().getObject();
+                this.state.object = object;
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
-                if (
-                    this.state.routingConfiguration && this.state.routingConfiguration.objectIdProperty
-                    && this.state.object
-                ) {
-                    this.state.objectId = this.state.object[this.state.routingConfiguration.objectIdProperty];
+            } else if (object.KIXObjectType) {
+                const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(object.KIXObjectType);
+                if (service) {
+                    this.state.routingConfiguration = service.getObjectRoutingConfiguration(object);
                 }
+            }
+
+            if (
+                this.state.routingConfiguration
+                && this.state.routingConfiguration.objectIdProperty
+                && object
+            ) {
+                this.state.objectId = object[this.state.routingConfiguration.objectIdProperty];
             }
 
             this.setValueStateClass(input.cell);

@@ -29,6 +29,8 @@ import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ConfigItemDetailsContext } from ".";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../../../model/ContextMode";
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -232,6 +234,17 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             KIXObjectType.CONFIG_ITEM, null, loadingOptions
         );
         return configItems;
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        if (object && object.KIXObjectType === KIXObjectType.CONFIG_ITEM_VERSION) {
+            return null;
+        }
+
+        return new RoutingConfiguration(
+            ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+            ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
+        );
     }
 
 }

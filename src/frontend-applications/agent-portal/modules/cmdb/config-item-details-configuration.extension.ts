@@ -38,9 +38,23 @@ export class Extension implements IConfigurationExtension {
         );
         configurations.push(configItemInfoLaneTab);
 
+        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
+            'config-item-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects, []
+        );
+        configurations.push(linkedObjectsConfig);
+
+        const configItemLinkedObjectsWidget = new WidgetConfiguration(
+            'config-item-details-linked-object-widget', 'Linked Objects', ConfigurationType.Widget,
+            'linked-objects-widget', 'Translatable#Linked Objects',
+            [],
+            new ConfigurationDefinition('config-item-details-linked-objects-config', ConfigurationType.LinkedObjects),
+            null, false, false, null, false
+        );
+        configurations.push(configItemLinkedObjectsWidget);
+
         const tabConfig = new TabWidgetConfiguration(
             'config-item-details-object-info-tab-config', 'Tab Config', ConfigurationType.TabWidget,
-            ['config-item-details-object-info']
+            ['config-item-details-object-info', 'config-item-details-linked-object-widget']
         );
         configurations.push(tabConfig);
 
@@ -57,26 +71,6 @@ export class Extension implements IConfigurationExtension {
             null, null, true, true, null, false
         );
         configurations.push(configItemHistoryLane);
-
-        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
-            'config-item-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects,
-            [
-                ["Config Items", KIXObjectType.CONFIG_ITEM],
-                ["Tickets", KIXObjectType.TICKET],
-                ["FAQs", KIXObjectType.FAQ_ARTICLE]
-            ]
-        );
-        configurations.push(linkedObjectsConfig);
-
-        const configItemLinkedObjectsLane = new WidgetConfiguration(
-            'config-item-details-linked-object-widget', 'Linked Objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects',
-            ['linked-objects-edit-action'],
-            new ConfigurationDefinition('config-item-details-linked-objects-config', ConfigurationType.LinkedObjects),
-            null, true, true, null, false
-        );
-        configurations.push(configItemLinkedObjectsLane);
-
 
         const widgetConfig = new TableWidgetConfiguration(
             'config-item-details-version-list-table-widget', 'Table Widget', ConfigurationType.TableWidget,
@@ -104,10 +98,6 @@ export class Extension implements IConfigurationExtension {
                         null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'config-item-details-linked-object-widget', 'config-item-details-linked-object-widget', null,
-                        [new UIComponentPermission('links', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
                         'config-item-details-history-widget', 'config-item-details-history-widget', null,
                         [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
                     )
@@ -126,7 +116,11 @@ export class Extension implements IConfigurationExtension {
                 ],
                 [],
                 [
-                    new ConfiguredWidget('config-item-details-object-info', 'config-item-details-object-info')
+                    new ConfiguredWidget('config-item-details-object-info', 'config-item-details-object-info'),
+                    new ConfiguredWidget(
+                        'config-item-details-linked-object-widget', 'config-item-details-linked-object-widget', null,
+                        [new UIComponentPermission('links', [CRUD.READ])]
+                    )
                 ]
             )
         );

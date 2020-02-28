@@ -40,6 +40,8 @@ import { Channel } from "../../model/Channel";
 import { ChannelProperty } from "../../model/ChannelProperty";
 import { UserProperty } from "../../../user/model/UserProperty";
 import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../../../model/ContextMode";
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -314,5 +316,14 @@ export class TicketService extends KIXObjectService<Ticket> {
         } else {
             return super.getResource(objectType);
         }
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        if (object && object.KIXObjectType === KIXObjectType.ARTICLE) {
+            return null;
+        }
+        return new RoutingConfiguration(
+            TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.DETAILS, TicketProperty.TICKET_ID
+        );
     }
 }
