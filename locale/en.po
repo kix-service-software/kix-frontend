@@ -2099,6 +2099,11 @@ msgstr ""
 msgid "Helptext_Tickets_Link_Type"
 msgstr "Search for tickets with the chosen type."
 
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketCreate_Subject"
+msgid "Helptext_Tickets_TicketCreate_AffectedAsset"
+msgstr "Briefly summarize the ticket topic."
+
 msgid "Helptext_Tickets_TicketCreate_Body"
 msgstr ""
 "Describe the ticket concern. If you chose “Email” as channel, this is the "
@@ -2157,6 +2162,11 @@ msgstr "Briefly summarize the ticket topic."
 msgid "Helptext_Tickets_TicketCreate_Type"
 msgstr "The ticket type classifies which type of request the ticket is."
 
+#, fuzzy
+#| msgid "Helptext_Tickets_TicketEdit_State"
+msgid "Helptext_Tickets_TicketEdit_AffectedAsset"
+msgstr "The state marks the recent ticket process state."
+
 msgid "Helptext_Tickets_TicketEdit_Channel"
 msgstr ""
 "Choose if you want to save the ticket description only internally (Note) or "
@@ -2177,6 +2187,9 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketEdit_Owner"
 msgstr "Choose a person who is supposed to process the ticket."
+
+msgid "Helptext_Tickets_TicketEdit_Priority"
+msgstr "The Priority marks the ticket urgency."
 
 msgid "Helptext_Tickets_TicketEdit_Responsible"
 msgstr ""
@@ -4247,9 +4260,6 @@ msgstr ""
 #~ "The pattern refers to the base string. Depending on which languages are "
 #~ "configured in the SysConfig, translations can be created to show in the "
 #~ "user interface."
-
-#~ msgid "Helptext_Tickets_TicketEdit_Priority"
-#~ msgstr "The Priority marks the ticket urgency."
 
 #~ msgid "Helptext_Tickets_TicketEdit_Queue"
 #~ msgstr "Insert the scope of responsitility for the ticket."
