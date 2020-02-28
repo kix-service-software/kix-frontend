@@ -10,7 +10,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     "with-toggle": component.toggleEnabled,
     "show-object": state.ready
 }>
-    <if(state.rows && state.ready)>
+    <if(state.loading)>
+        <tr.empty-row style=("height: " + component.getRowHeight())>
+            <td colspan=component.getFullColumnLength()>
+                <loading-spinner/>
+            </td>
+        </tr>
+    </if>
+    <else-if(state.rows && state.ready)>
         <if(!!state.rows.length)>
             <for|row| of=state.rows>
                 <table-row
@@ -29,8 +36,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </td>
             </tr>
         </else>
-    </if>
-    <else>
-        <loading-spinner/>
-    </else>
+    </else-if>
 </tbody>

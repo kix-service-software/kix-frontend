@@ -20,12 +20,18 @@ export class SysConfigOption extends KIXObject<SysConfigOption> {
 
     public Value: any;
 
+    public Context: string;
+
+    public ContextMetadata: string;
+
     public constructor(sysConfigOption?: SysConfigOption) {
         super();
         if (sysConfigOption) {
             this.Name = sysConfigOption.Name;
             this.ObjectId = this.Name;
             this.Value = sysConfigOption.Value;
+            this.Context = sysConfigOption.Context;
+            this.ContextMetadata = sysConfigOption.ContextMetadata;
         }
     }
 

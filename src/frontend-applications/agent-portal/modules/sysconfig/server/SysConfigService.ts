@@ -22,6 +22,7 @@ import { ModuleConfigurationService } from "../../../server/services/configurati
 import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
 import { KIXObjectSpecificDeleteOptions } from "../../../model/KIXObjectSpecificDeleteOptions";
 import { SysConfigKey } from "../model/SysConfigKey";
+import { FilterCriteria } from "../../../model/FilterCriteria";
 
 export class SysConfigService extends KIXObjectAPIService {
 
@@ -137,6 +138,10 @@ export class SysConfigService extends KIXObjectAPIService {
         const stateTypes: string[] = viewableStateTypes && viewableStateTypes.length ? viewableStateTypes[0].Value : [];
 
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
+    }
+
+    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return [];
     }
 
 }

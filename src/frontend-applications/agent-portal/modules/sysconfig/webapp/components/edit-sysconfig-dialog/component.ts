@@ -13,6 +13,10 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { EditSysConfigDialogContext } from "../../core";
 import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
 import { SysConfigOptionDefinitionProperty } from "../../../model/SysConfigOptionDefinitionProperty";
+import { EventService } from "../../../../base-components/webapp/core/EventService";
+import { SysconfigEvent } from "../../core/SysconfigEvent";
+import { DialogService } from "../../../../base-components/webapp/core/DialogService";
+import { BrowserUtil } from "../../../../base-components/webapp/core/BrowserUtil";
 
 class Component extends AbstractEditDialog {
 
@@ -57,6 +61,15 @@ class Component extends AbstractEditDialog {
             const formFieldInstanceID = sysConfigField.instanceId;
             formInstance.provideFormFieldValue(formFieldInstanceID, defaultValue.value);
         }
+    }
+
+    protected async handleDialogSuccess(objectId: string | number): Promise<void> {
+        EventService.getInstance().publish(SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED);
+
+        DialogService.getInstance().setMainDialogLoading(false);
+        DialogService.getInstance().submitMainDialog();
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        BrowserUtil.openSuccessOverlay(this.successHint);
     }
 
 }

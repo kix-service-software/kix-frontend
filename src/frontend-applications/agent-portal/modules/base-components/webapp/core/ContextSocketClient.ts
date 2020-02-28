@@ -16,6 +16,8 @@ import { SocketErrorResponse } from "./SocketErrorResponse";
 import { SocketEvent } from "./SocketEvent";
 import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
 import { IdService } from "../../../../model/IdService";
+import { ISocketRequest } from "./ISocketRequest";
+import { ISocketResponse } from "./ISocketResponse";
 
 export class ContextSocketClient extends SocketClient {
 
@@ -67,6 +69,81 @@ export class ContextSocketClient extends SocketClient {
                     reject(error.error);
                 }
             });
+        });
+    }
+
+    public async loadContextConfigurations(): Promise<ContextConfiguration[]> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<ContextConfiguration[]>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId();
+            const token = ClientStorageService.getToken();
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + ContextEvent.LOAD_CONTEXT_CONFIGURATIONS);
+            }, socketTimeout);
+
+            this.socket.on(ContextEvent.CONTEXT_CONFIGURATIONS_LOADED,
+                (result) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve(result.configurations);
+                    }
+                }
+            );
+
+            const request: ISocketRequest = {
+                token,
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId()
+            };
+            this.socket.emit(ContextEvent.LOAD_CONTEXT_CONFIGURATIONS, request);
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+        });
+    }
+
+    public async rebuildConfiguration(): Promise<void> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId();
+            const token = ClientStorageService.getToken();
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + ContextEvent.REBUILD_CONFIG);
+            }, socketTimeout);
+
+            this.socket.on(ContextEvent.REBUILD_CONFIG_FINISHED,
+                (result: ISocketResponse) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve();
+                    }
+                }
+            );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request: ISocketRequest = {
+                token,
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId()
+            };
+
+            this.socket.emit(ContextEvent.REBUILD_CONFIG, request);
         });
     }
 }

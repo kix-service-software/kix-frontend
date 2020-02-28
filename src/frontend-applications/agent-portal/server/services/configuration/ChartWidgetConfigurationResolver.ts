@@ -13,6 +13,7 @@ import { IConfigurationResolver } from "./IConfigurationResolver";
 import { IConfiguration } from "../../../model/configuration/IConfiguration";
 import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
 import { ChartComponentConfiguration } from "../../../modules/charts/model/ChartComponentConfiguration";
+import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
 
 export class ChartWidgetConfigurationResolver implements IConfigurationResolver<IConfiguration> {
 
@@ -27,14 +28,18 @@ export class ChartWidgetConfigurationResolver implements IConfigurationResolver<
 
     private constructor() { }
 
-    public async resolve(token: string, configuration: IConfiguration): Promise<void> {
+    public async resolve(
+        token: string, configuration: IConfiguration, sysConfigOptions: SysConfigOption[]
+    ): Promise<void> {
         if (configuration && configuration.subConfigurationDefinition) {
-            const chartConfig = await ModuleConfigurationService.getInstance()
-                .loadConfiguration<ChartComponentConfiguration>(
-                    token, configuration.subConfigurationDefinition.configurationId
-                );
+            const option = sysConfigOptions.find(
+                (o) => o.Name === configuration.subConfigurationDefinition.configurationId
+            );
+            if (option && option.Value) {
+                const chartConfig = JSON.parse(option.Value);
 
-            configuration.configuration = chartConfig;
+                configuration.configuration = chartConfig;
+            }
         }
     }
 

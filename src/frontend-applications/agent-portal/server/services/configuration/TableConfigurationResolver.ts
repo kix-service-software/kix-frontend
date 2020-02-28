@@ -12,6 +12,7 @@ import { IConfigurationResolver } from "./IConfigurationResolver";
 import { TableConfiguration } from "../../../model/configuration/TableConfiguration";
 import { IColumnConfiguration } from "../../../model/configuration/IColumnConfiguration";
 import { ResolverUtil } from "./ResolverUtil";
+import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
 
 export class TableConfigurationResolver implements IConfigurationResolver<TableConfiguration> {
 
@@ -26,7 +27,9 @@ export class TableConfigurationResolver implements IConfigurationResolver<TableC
 
     private constructor() { }
 
-    public async resolve(token: string, tableConfig: TableConfiguration): Promise<void> {
+    public async resolve(
+        token: string, tableConfig: TableConfiguration, sysConfigOptions: SysConfigOption[]
+    ): Promise<void> {
         if (tableConfig && tableConfig.tableColumnConfigurations) {
             if (!tableConfig.tableColumns
                 && tableConfig.tableColumnConfigurations
@@ -36,7 +39,7 @@ export class TableConfigurationResolver implements IConfigurationResolver<TableC
             }
 
             tableConfig.tableColumns = await ResolverUtil.loadConfigurations<IColumnConfiguration>(
-                token, tableConfig.tableColumnConfigurations, tableConfig.tableColumns
+                token, tableConfig.tableColumnConfigurations, tableConfig.tableColumns, sysConfigOptions
             );
         }
     }

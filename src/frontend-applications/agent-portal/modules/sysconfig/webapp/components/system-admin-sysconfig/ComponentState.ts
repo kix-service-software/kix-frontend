@@ -7,25 +7,20 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SysConfigOptionDefinitionProperty } from "../../../model/SysConfigOptionDefinitionProperty";
-import { SortOrder } from "../../../../../model/SortOrder";
+import { ITable } from "../../../../base-components/webapp/core/table";
+import { AbstractComponentState } from "../../../../base-components/webapp/core/AbstractComponentState";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
+
     public constructor(
-        public instanceId: string = IdService.generateDateBasedId('system-sysconfig-list'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
-            'table-widget', 'Translatable#System: SysConfig',
-            ['sysconfig-reset-action'], null,
-            new TableWidgetConfiguration(
-                null, null, null,
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-                [SysConfigOptionDefinitionProperty.NAME, SortOrder.UP]
-            ), false, false, 'kix-icon-gears'
-        )
-    ) { }
+        public instanceId: string = 'admin-sysconfig-overview',
+        public table: ITable = null,
+        public filterValue: string = '',
+        public prepared: boolean = false,
+        public title: string = "System: Sysconfig (0)",
+        public placeholder: string = 'Please enter a search term.'
+    ) {
+        super();
+    }
 
 }

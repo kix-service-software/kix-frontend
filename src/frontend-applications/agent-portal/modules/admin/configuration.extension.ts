@@ -23,12 +23,6 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
-        configurations.push(
-            new WidgetConfiguration(
-                'admin-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-                'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
-            )
-        );
 
         configurations.push(
             new WidgetConfiguration(
@@ -41,9 +35,7 @@ export class Extension implements IConfigurationExtension {
             new ContextConfiguration(
                 this.getModuleId(), 'Admin Dashboard', ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('admin-dashboard-notes-widget', 'admin-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget('admin-dashboard-category-explorer', 'admin-dashboard-category-explorer')
                 ]
