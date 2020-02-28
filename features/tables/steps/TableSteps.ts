@@ -59,12 +59,20 @@ const heights = {
 Given('Tabelle: {string}', async (objectType: KIXObjectType | string) => {
     table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
     expect(table).exist;
+
+    // to enable column checks for dynamic field properties
+    table['checkDF'] = () => { return true; };
+
     await table.initialize();
 });
 
 Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType | string) => {
     table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
     expect(table).exist;
+
+    // to enable column checks for dynamic field properties
+    table['checkDF'] = () => { return true; };
+
     await table.initialize();
 });
 

@@ -13,7 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     on-showPage("showPage")/>
 <form.form autocomplete="off">
     <input id="username" style="display:none" type="text" name="fakeusernameremembered"/>
-    <input id="password" style="display:none" type="password" name="fakepasswordremembered"/>
+    <input id="password" style="display:none" type="password" name="fakepasswordremembered" autocomplete="off"/>
     <if(state.isSearchContext)>
         <search-form formId=state.formId objectType=state.objectType/>
     </if>

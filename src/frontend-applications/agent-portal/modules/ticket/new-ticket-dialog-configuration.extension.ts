@@ -40,6 +40,7 @@ import { FormContext } from "../../model/configuration/FormContext";
 import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 import { UserProperty } from "../user/model/UserProperty";
 import { ContactProperty } from "../customer/model/ContactProperty";
+import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
 import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
 import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 
@@ -328,6 +329,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 [
                     'ticket-new-form-field-contact',
                     'ticket-new-form-field-organisation',
+                    'ticket-new-form-field-affectedasset',
                     'ticket-new-form-field-type',
                     'ticket-new-form-field-queue',
                     'ticket-new-form-field-channel',
@@ -336,6 +338,15 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     'ticket-new-form-field-responsible',
                     'ticket-new-form-field-priority',
                     'ticket-new-form-field-state',
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'ticket-new-form-field-affectedasset', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
+                        false, 'Translatable#Helptext_Tickets_TicketCreate_AffectedAsset',
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'AffectedAsset')
+                        ]
+                    )
                 ]
             )
         );
