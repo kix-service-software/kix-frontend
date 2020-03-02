@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-02 10:54+0000\n"
+"PO-Revision-Date: 2020-03-02 10:58+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -1710,10 +1710,8 @@ msgstr ""
 msgid "Helptext_Admin_Tickets_TypeCreate_Valid"
 msgstr "Der Typ kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
-#, fuzzy
-#| msgid "Helptext_Admin_SysConfigEdit_Name"
 msgid "Helptext_Admin_TranslationSearch"
-msgstr "Der Name der Konfiguration kann nicht bearbeitet werden."
+msgstr ""
 
 msgid "Helptext_Admin_Users_RoleCreate_Comment"
 msgstr ""
@@ -2216,10 +2214,8 @@ msgstr ""
 msgid "Helptext_Tickets_Link_Type"
 msgstr "Suchen Sie nach Tickets mit dem gewählten Typ."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketCreate_Subject"
 msgid "Helptext_Tickets_TicketCreate_AffectedAsset"
-msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
+msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_Body"
 msgstr ""
@@ -2287,12 +2283,8 @@ msgstr ""
 "Der Ticket-Typ dient der Einordnung, um welche Art von Anfrage es sich bei "
 "dem Ticket handelt."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_TicketEdit_State"
 msgid "Helptext_Tickets_TicketEdit_AffectedAsset"
 msgstr ""
-"Der Status definiert, in welchem Bearbeitungszustand sich ein Ticket "
-"befindet."
 
 msgid "Helptext_Tickets_TicketEdit_Channel"
 msgstr ""
