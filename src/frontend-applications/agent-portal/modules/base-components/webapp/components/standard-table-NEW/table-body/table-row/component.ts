@@ -112,12 +112,16 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }
     }
 
-    public toggleRow(): void {
+    public toggleRow(event): void {
+        event.stopPropagation();
+        event.preventDefault();
         this.state.row.expand(!this.state.open);
         this.setRowClasses();
     }
 
     public changeSelect(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
         if (this.state.row.isSelected()) {
             this.state.row.select(false);
         } else {
@@ -178,7 +182,12 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.state.rowClasses = stateClass;
     }
 
-    public rowClicked(): void {
+    public rowClicked(event): void {
+        const config = this.state.row.getTable().getTableConfiguration();
+        if (!config.routingConfiguration && config.toggle) {
+            this.toggleRow(event);
+        }
+
         EventService.getInstance().publish(
             TableEvent.ROW_CLICKED,
             new TableEventData(this.state.row.getTable().getTableId(), this.state.row.getRowId())
