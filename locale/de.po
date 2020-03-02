@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-02 10:58+0000\n"
+"PO-Revision-Date: 2020-03-02 12:23+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -2481,10 +2481,8 @@ msgstr "Internes Feld"
 msgid "Internationalisation"
 msgstr "Internationalisierung"
 
-#, fuzzy
-#| msgid "Internationalisation: Translations"
 msgid "Internationalisation: Translations ({0})"
-msgstr "Internationalisierung: Übersetzungen"
+msgstr "Internationalisierung: Übersetzungen ({0})"
 
 msgid "Invalid date for pending date."
 msgstr "Ungültiges Datum bei 'Warten bis'"
@@ -2562,7 +2560,7 @@ msgid "Linked Objects"
 msgstr "Verknüpfte Objekte"
 
 msgid "Linked Objects ({0})"
-msgstr "Verknüpfte Objekte"
+msgstr "Verknüpfte Objekte ({0})"
 
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
@@ -3606,7 +3604,7 @@ msgid "System: Logs"
 msgstr "System: Logs"
 
 msgid "System: Sysconfig ({0})"
-msgstr ""
+msgstr "System: SysConfig ({0})"
 
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
