@@ -113,7 +113,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 'TicketsForAssetsHandler',
                 {
                     properties: [
-                        'DynamicFields.AffactedAsset'
+                        'DynamicFields.AffectedAsset'
                     ]
                 },
                 [

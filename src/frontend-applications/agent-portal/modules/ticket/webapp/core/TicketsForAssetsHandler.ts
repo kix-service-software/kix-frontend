@@ -100,10 +100,12 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
             }
 
             if (filter && filter.length) {
-                filter.push(new FilterCriteria(
-                    TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
-                    FilterDataType.NUMERIC, FilterType.AND, ticket.TicketID
-                ));
+                if (ticket) {
+                    filter.push(new FilterCriteria(
+                        TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, ticket.TicketID
+                    ));
+                }
                 const loadingOptions = new KIXObjectLoadingOptions(
                     filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]
                 );
@@ -120,7 +122,7 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
             if (formField.property === KIXObjectProperty.DYNAMIC_FIELDS) {
                 const dfNameOption = formField.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
                 if (dfNameOption) {
-                    config.properties.some((p) => p === 'DynamicFields.' + dfNameOption.value);
+                    return config.properties.some((p) => p === 'DynamicFields.' + dfNameOption.value);
                 }
             }
 

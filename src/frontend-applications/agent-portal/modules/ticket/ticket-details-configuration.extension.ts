@@ -188,7 +188,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 'TicketsForAssetsHandler',
                 {
                     properties: [
-                        'DynamicFields.AffactedAsset'
+                        'DynamicFields.AffectedAsset'
                     ]
                 },
                 [
