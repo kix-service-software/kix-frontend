@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-02 10:45+0000\n"
+"PO-Revision-Date: 2020-03-02 10:48+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -3268,20 +3268,14 @@ msgstr "Seite neu laden"
 msgid "Relevant Config Items"
 msgstr "Relevante Assets"
 
-#, fuzzy
-#| msgid "Import configurations"
 msgid "Reload Agent Portal Configurations"
-msgstr "Konfigurationen importieren"
+msgstr ""
 
-#, fuzzy
-#| msgid "Import configurations"
 msgid "Reload Frontend Configurations"
-msgstr "Konfigurationen importieren"
+msgstr ""
 
-#, fuzzy
-#| msgid "Import configurations"
 msgid "Reload Frontend Configurations?"
-msgstr "Konfigurationen importieren"
+msgstr ""
 
 msgid "Reminder Tickets"
 msgstr "Erinnerungstickets"
@@ -3325,10 +3319,8 @@ msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
 msgid "Reset"
 msgstr "Zzurücksetzen"
 
-#, fuzzy
-#| msgid "Reset data"
 msgid "Reset?"
-msgstr "Daten zurücksetzen"
+msgstr "Zurücksetzen?"
 
 msgid "Reset data"
 msgstr "Daten zurücksetzen"
@@ -3623,10 +3615,8 @@ msgstr "System: Dynamische Felder"
 msgid "System: Logs"
 msgstr "System: Logs"
 
-#, fuzzy
-#| msgid "System: SysConfig"
 msgid "System: Sysconfig ({0})"
-msgstr "System: SysConfig"
+msgstr ""
 
 msgid "-> (tab)"
 msgstr "-> (Tabulator)"
@@ -4098,10 +4088,8 @@ msgstr "Ihre Bewertung"
 msgid "You will edit {0} attributes for {1} {2}. Execute now?"
 msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
 
-#, fuzzy
-#| msgid "You will edit {0} attributes for {1} {2}. Execute now?"
 msgid "You will reset {0} Sysconfig Options. Execute now?"
-msgstr "Sie ändern {0} Attribute an {1} {2}. Jetzt starten?"
+msgstr ""
 
 msgid "Zip"
 msgstr "PLZ"
