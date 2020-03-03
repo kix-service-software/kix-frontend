@@ -12,8 +12,11 @@
 .table-container {
     width: 100%;
     overflow: auto;
-    margin-bottom: @margin-small;
     padding-bottom: @margin-small;
+
+    &:not(:last-child) {
+        margin-bottom: @margin-small;
+    }
 
     >.standard-table-NEW {
         width: 100%;
