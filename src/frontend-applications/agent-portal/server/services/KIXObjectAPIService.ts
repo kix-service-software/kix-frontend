@@ -404,4 +404,16 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         return objectFilter;
     }
+
+    public static getDynamicFieldName(property: string): string {
+        let name: string;
+        if (KIXObjectAPIService.isDynamicFieldProperty(property)) {
+            name = property.replace(/^DynamicFields?\.(.+)/, '$1');
+        }
+        return name;
+    }
+
+    public static isDynamicFieldProperty(property: string): boolean {
+        return Boolean(property.match(/^DynamicFields?\..+/));
+    }
 }

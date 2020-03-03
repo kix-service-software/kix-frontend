@@ -123,6 +123,16 @@ export class Article extends KIXObject<Article> {
             this.CreatedBy = article.CreatedBy;
 
             this.bodyAttachment = article.bodyAttachment;
+
+            if (this.Attachments) {
+                const bodyAttachmentIndex = article.Attachments.findIndex(
+                    (a) => a.Disposition === 'inline' && a.Filename === 'file-2'
+                );
+                if (bodyAttachmentIndex > -1) {
+                    this.bodyAttachment = article.Attachments[bodyAttachmentIndex];
+                    this.Attachments.splice(bodyAttachmentIndex, 1);
+                }
+            }
         }
     }
 
