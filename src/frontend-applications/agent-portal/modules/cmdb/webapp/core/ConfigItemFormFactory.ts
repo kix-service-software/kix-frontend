@@ -29,6 +29,7 @@ import { isArray } from "util";
 import { ConfigItemProperty } from "../../model/ConfigItemProperty";
 import { SearchProperty } from "../../../search/model/SearchProperty";
 import { VersionProperty } from "../../model/VersionProperty";
+import { IdService } from "../../../../model/IdService";
 
 export class ConfigItemFormFactory {
 
@@ -100,6 +101,8 @@ export class ConfigItemFormFactory {
         if (formField.countDefault === 0 || (parent && !parent.asStructure && parent.empty)) {
             formField.empty = true;
         }
+
+        formField.instanceId = IdService.generateDateBasedId();
 
         if (ad.Sub) {
             formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId, formField));
