@@ -9,7 +9,7 @@
 
 .widget-container {
     display: grid;
-    grid-template-columns: [first-line] repeat(3, 1fr) [last-line];
+    grid-template-columns: [first-line] repeat(3, minmax(100px, 1fr)) [last-line];
     grid-auto-rows: auto;
     grid-gap: @margin-default;
     grid-auto-flow: row;
