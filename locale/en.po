@@ -3009,6 +3009,11 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
+#, fuzzy
+#| msgid "Overview Ticket Priorities"
+msgid "Prepare Ticket for print"
+msgstr "Tickets by Priorities"
+
 msgid "Preview ({0})"
 msgstr ""
 

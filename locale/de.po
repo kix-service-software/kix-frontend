@@ -3132,6 +3132,11 @@ msgstr "Adresse"
 msgid "Preferences"
 msgstr "Persönliche Einstellungen"
 
+#, fuzzy
+#| msgid "Overview Ticket Priorities"
+msgid "Prepare Ticket for print"
+msgstr "Tickets nach Prioritäten"
+
 msgid "Preview ({0})"
 msgstr "Treffervorschau ({0})"
 
