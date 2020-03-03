@@ -218,9 +218,7 @@ export abstract class Context {
         let sidebars = this.configuration.sidebars;
 
         if (show && sidebars) {
-            sidebars = sidebars
-                .filter((sb) => this.configuration.sidebars.some((s) => sb.instanceId === s.instanceId))
-                .filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
+            sidebars = sidebars.filter((sb) => this.shownSidebars.some((s) => sb.instanceId === s));
         }
 
         return sidebars;
@@ -241,8 +239,14 @@ export abstract class Context {
         }
     }
 
-    public closeSidebar(): void {
+    public closeAllSidebars(): void {
         this.shownSidebars = [];
+        this.listeners.forEach((l) => l.sidebarToggled());
+    }
+
+    public openAllSidebars(): void {
+        this.shownSidebars = [];
+        this.shownSidebars = this.configuration.sidebars.map((s) => s.instanceId);
         this.listeners.forEach((l) => l.sidebarToggled());
     }
 
@@ -265,7 +269,7 @@ export abstract class Context {
         return explorer ? explorer.length > 0 : false;
     }
 
-    public isSidebarShown(): boolean {
+    public areSidebarsShown(): boolean {
         const sidebars = this.shownSidebars;
         return sidebars ? sidebars.length > 0 : false;
     }

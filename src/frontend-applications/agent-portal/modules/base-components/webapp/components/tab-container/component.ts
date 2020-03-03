@@ -90,10 +90,6 @@ class TabLaneComponent implements IEventSubscriber {
             this.prepareContext();
             this.hideSidebarIfNeeded();
             window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
-            const sidebarTranslations = await TranslationService.createTranslationObject(
-                ['Translatable#Close Sidebars']
-            );
-            this.state.translations = { ...this.state.translations, ...sidebarTranslations };
         }
 
         if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
@@ -147,7 +143,7 @@ class TabLaneComponent implements IEventSubscriber {
     ): void {
         context.registerListener(this.contextListenerId, {
             sidebarToggled: () => {
-                this.state.showSidebar = context.isSidebarShown();
+                this.state.showSidebar = context.areSidebarsShown();
             },
             explorerBarToggled: () => { return; },
             objectChanged: () => { return; },
@@ -172,7 +168,7 @@ class TabLaneComponent implements IEventSubscriber {
     private setSidebars(): void {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
-        this.state.showSidebar = context.isSidebarShown();
+        this.state.showSidebar = context.areSidebarsShown();
     }
 
     public isActiveTab(tabId: string): boolean {

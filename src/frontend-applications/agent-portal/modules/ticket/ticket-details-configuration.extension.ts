@@ -123,7 +123,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             KIXObjectType.ORGANISATION,
             [
                 OrganisationProperty.NUMBER,
-                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
                 OrganisationProperty.URL,
                 OrganisationProperty.STREET,
                 OrganisationProperty.ZIP,

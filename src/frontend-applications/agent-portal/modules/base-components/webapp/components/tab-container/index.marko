@@ -45,14 +45,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             instanceId: state.activeTab.instanceId
                         }/>
                         <if(state.showSidebar)>
-                            <div.dialog-sidebar-shield>
-                                <div.sidebar-close-bar on-click("hideSidebarIfNeeded") title=state.translations["Translatable#Close Sidebars"]>
-                                    <span.kix-icon-triangle-right>
-                                        <span.path1/>
-                                        <span.path2/>
-                                    </span>
-                                </div>
-                            </div>
+                            <div.dialog-sidebar-shield/>
                         </if>
                     </if>
                 </div>

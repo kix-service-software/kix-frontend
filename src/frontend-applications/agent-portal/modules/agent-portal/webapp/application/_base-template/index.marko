@@ -24,14 +24,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <router-outlet id="base-router"/>
                 </div>
                 <if(state.showSidebar)>
-                    <div.sidebar-shield>
-                        <div.sidebar-close-bar on-click("hideSidebarIfNeeded") title=state.translations["Translatable#Close Sidebars"]>
-                            <span.kix-icon-triangle-right>
-                                <span.path1/>
-                                <span.path2/>
-                            </span>
-                        </div>
-                    </div>
+                    <div.sidebar-shield/>
                     <sidebar contextType="MAIN" no-update/>
                 </if>
                 <div.site-menu-wrapper no-update>

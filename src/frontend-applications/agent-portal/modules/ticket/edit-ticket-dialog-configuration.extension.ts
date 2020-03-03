@@ -58,7 +58,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             KIXObjectType.ORGANISATION,
             [
                 OrganisationProperty.NUMBER,
-                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
                 OrganisationProperty.URL,
                 OrganisationProperty.STREET,
                 OrganisationProperty.ZIP,

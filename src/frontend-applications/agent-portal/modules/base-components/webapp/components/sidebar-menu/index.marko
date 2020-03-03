@@ -6,11 +6,29 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.widget-bar>
+    <if(Array.isArray(state.sidebars) && state.sidebars.length)>
+        <div.bar-icon.sidebar-toggle
+            class={
+                        "sidebars-shown": component.areSidebarsShown()
+                    }
+            on-click("toggleAllSidebars")
+            title=(
+                        component.areSidebarsShown()
+                                    ? state.translations["Translatable#Close Sidebars"]
+                                    : state.translations["Translatable#Open Sidebars"]
+                    )>
+            <span class=(component.areSidebarsShown() ? "kix-icon-triangle-right" : "kix-icon-open-left")>
+                <span.path1/>
+                <span.path2/>
+            </span>
+        </div>
+    </if>
     <for|sidebar| of=state.sidebars>
         <div.bar-icon
-            class=(component.isShown(sidebar) ? "select-active" : "")
+            class={
+                        "select-active": component.isShown(sidebar)
+                    }
             on-click("toggleSidebar", sidebar.instanceId)
             title=state.translations[sidebar.configuration.title]
             key=("sidebarmenu-" + sidebar.instanceId)>
