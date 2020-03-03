@@ -47,7 +47,7 @@ export class Version extends KIXObject<Version> {
     public constructor(version?: Version) {
         super();
         if (version) {
-            this.VersionID = version.VersionID;
+            this.VersionID = Number(version.VersionID);
             this.ObjectId = this.VersionID;
             this.CreateTime = version.CreateTime;
             this.CurDeplStateType = version.CurDeplStateType;

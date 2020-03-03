@@ -52,9 +52,21 @@ export class Extension implements IConfigurationExtension {
         );
         configurations.push(configItemLinkedObjectsWidget);
 
+        const configItemHistoryWidget = new WidgetConfiguration(
+            'config-item-details-history-widget', 'History', ConfigurationType.Widget,
+            "config-item-history-widget", "Translatable#History", [], null,
+            new ConfigurationDefinition('config-item-history-config', ConfigurationType.Table),
+            false, false, null, false
+        );
+        configurations.push(configItemHistoryWidget);
+
         const tabConfig = new TabWidgetConfiguration(
             'config-item-details-object-info-tab-config', 'Tab Config', ConfigurationType.TabWidget,
-            ['config-item-details-object-info', 'config-item-details-linked-object-widget']
+            [
+                'config-item-details-object-info',
+                'config-item-details-linked-object-widget',
+                'config-item-details-history-widget'
+            ]
         );
         configurations.push(tabConfig);
 
@@ -64,13 +76,6 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('config-item-details-object-info-tab-config', ConfigurationType.TabWidget)
         );
         configurations.push(tabLane);
-
-        const configItemHistoryLane = new WidgetConfiguration(
-            'config-item-details-history-widget', 'History', ConfigurationType.Widget,
-            "config-item-history-widget", "Translatable#History", [],
-            null, null, true, true, null, false
-        );
-        configurations.push(configItemHistoryLane);
 
         const widgetConfig = new TableWidgetConfiguration(
             'config-item-details-version-list-table-widget', 'Table Widget', ConfigurationType.TableWidget,
@@ -96,10 +101,6 @@ export class Extension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'config-item-details-object-info-tab-widget', 'config-item-details-object-info-tab-widget',
                         null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
-                        'config-item-details-history-widget', 'config-item-details-history-widget', null,
-                        [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
                     )
                 ],
                 [
@@ -120,6 +121,10 @@ export class Extension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'config-item-details-linked-object-widget', 'config-item-details-linked-object-widget', null,
                         [new UIComponentPermission('links', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'config-item-details-history-widget', 'config-item-details-history-widget', null,
+                        [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
                     )
                 ]
             )

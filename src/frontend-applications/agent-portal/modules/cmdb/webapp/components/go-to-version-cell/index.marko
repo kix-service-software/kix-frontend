@@ -6,10 +6,11 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.isActive)>
-    <icon icon="kix-icon-open-right"/>
-    <span on-click("goToClicked") style="cursor: pointer">
-        <translation-string pattern="Translatable#to Version"/>
-    </span>
+    <div.go-to-version on-click("goToClicked")>
+        <icon icon="kix-icon-open-right"/>
+        <span>
+            <translation-string pattern="Translatable#to Version"/>
+        </span>
+    </div>
 </if>

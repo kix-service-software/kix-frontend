@@ -96,9 +96,21 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
         configurations.push(linkedObjectsWidget);
 
+        const ticketHistoryWidget = new WidgetConfiguration(
+            'ticket-details-history-widget', 'History Widget', ConfigurationType.Widget,
+            'ticket-history-widget', 'Translatable#History', [],
+            new ConfigurationDefinition('ticket-details-history-config', ConfigurationType.Table),
+            null, false, false, null, false
+        );
+        configurations.push(ticketHistoryWidget);
+
         const tabSettings = new TabWidgetConfiguration(
             'ticket-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
-            ['ticket-details-info-widget', 'ticket-details-linked-objects-widget']
+            [
+                'ticket-details-info-widget',
+                'ticket-details-linked-objects-widget',
+                'ticket-details-history-widget'
+            ]
         );
         configurations.push(tabSettings);
 
@@ -109,12 +121,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             false, true
         );
         configurations.push(tabWidget);
-
-        const ticketHistoryLane = new WidgetConfiguration(
-            'ticket-details-history-widget', 'History Widget', ConfigurationType.Widget,
-            'ticket-history-widget', 'Translatable#History', [], null, null, true, true, null, false
-        );
-        configurations.push(ticketHistoryLane);
 
         // Sidebars
         const organisationObjectInformation = new ObjectInformationWidgetConfiguration(
@@ -317,10 +323,6 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 [],
                 [
                     new ConfiguredWidget('ticket-details-tab-widget', 'ticket-details-tab-widget'),
-                    new ConfiguredWidget(
-                        'ticket-details-history-widget', 'ticket-details-history-widget', null,
-                        [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
-                    )
                 ],
                 [
                     new ConfiguredWidget(
@@ -354,6 +356,10 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     new ConfiguredWidget(
                         'ticket-details-linked-objects-widget', 'ticket-details-linked-objects-widget', null,
                         [new UIComponentPermission('links', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-details-history-widget', 'ticket-details-history-widget', null,
+                        [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
                     )
                 ]
             )

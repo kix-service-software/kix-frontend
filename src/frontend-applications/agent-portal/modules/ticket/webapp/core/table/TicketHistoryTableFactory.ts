@@ -43,11 +43,11 @@ export class TicketHistoryTableFactory extends TableFactory {
                 null, null, null, TicketHistoryProperty.HISTORY_TYPE, true, false, true, true, 200
             ),
             new DefaultColumnConfiguration(null, null, null, TicketHistoryProperty.NAME, true, false, true, true, 550),
-            new DefaultColumnConfiguration(
-                null, null, null, TicketHistoryProperty.CREATE_BY, true, false, true, true, 300
-            ),
             new DefaultColumnConfiguration(null, null, null,
                 TicketHistoryProperty.CREATE_TIME, true, false, true, true, 150, true, false, false, DataType.DATE_TIME
+            ),
+            new DefaultColumnConfiguration(
+                null, null, null, TicketHistoryProperty.CREATE_BY, true, false, true, true, 300
             ),
             new DefaultColumnConfiguration(null, null, null,
                 TicketHistoryProperty.ARTICLE_ID, true, true, false, false, 150,
