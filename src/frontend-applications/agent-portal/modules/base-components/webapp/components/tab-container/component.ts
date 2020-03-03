@@ -16,13 +16,13 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
 import { ContextType } from '../../../../../model/ContextType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { Context } from 'vm';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { Context } from '../../../../../model/Context';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -158,10 +158,10 @@ class TabLaneComponent implements IEventSubscriber {
     public hideSidebarIfNeeded(): void {
         const context: Context = ContextService.getInstance().getActiveContext(this.state.contextType);
         if (context &&
-            context.isSidebarShown() &&
+            context.areSidebarsShown() &&
             window.innerWidth <= 1400
         ) {
-            context.closeSidebar();
+            context.areSidebarsShown();
         }
     }
 

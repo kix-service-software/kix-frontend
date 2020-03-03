@@ -12,7 +12,6 @@ import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { ContextConfiguration } from '../../../../../model/configuration/ContextConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { Context } from 'vm';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
 import { ContextMode } from '../../../../../model/ContextMode';
@@ -23,6 +22,7 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { Context } from '../../../../../model/Context';
 
 
 class Component extends AbstractMarkoComponent<ComponentState> {
