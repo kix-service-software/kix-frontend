@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-02 12:23+0000\n"
+"PO-Revision-Date: 2020-03-03 09:23+0000\n"
 "Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -3003,10 +3003,8 @@ msgstr "Einmal pro Tag"
 msgid "Open/close at line ends = open and close elements"
 msgstr "Auf-/Zuklappen an Zeilenenden  =  Öffnen und Schließen von Elementen"
 
-#, fuzzy
-#| msgid "Sidebars"
 msgid "Open Sidebars"
-msgstr "Sidebars"
+msgstr "Geöffnete Sidebars"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
@@ -3132,10 +3130,8 @@ msgstr "Adresse"
 msgid "Preferences"
 msgstr "Persönliche Einstellungen"
 
-#, fuzzy
-#| msgid "Overview Ticket Priorities"
 msgid "Prepare Ticket for print"
-msgstr "Tickets nach Prioritäten"
+msgstr "Ticket für den Druck vorbereiten"
 
 msgid "Preview ({0})"
 msgstr "Treffervorschau ({0})"
