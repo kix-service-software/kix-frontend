@@ -65,9 +65,11 @@ class EditorComponent {
         this.autoCompletePlugins = [];
 
         if (!this.instanceExists()) {
-            const userLanguage = await TranslationService.getUserLanguage();
-            if (userLanguage) {
-                this.state.config['language'] = userLanguage;
+            if (!this.state.readOnly) {
+                const userLanguage = await TranslationService.getUserLanguage();
+                if (userLanguage) {
+                    this.state.config['language'] = userLanguage;
+                }
             }
             if (this.state.inline) {
                 this.editor = CKEDITOR.inline(this.state.id, {

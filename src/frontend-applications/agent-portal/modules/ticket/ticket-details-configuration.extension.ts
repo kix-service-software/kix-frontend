@@ -335,7 +335,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 ],
                 [
                     'ticket-edit-action', 'article-new-action', 'linked-objects-edit-action',
-                    'ticket-lock-action', 'ticket-watch-action', 'print-action',
+                    'ticket-lock-action', 'ticket-watch-action', 'ticket-print-action',
                 ],
                 [
                     new ConfiguredWidget(

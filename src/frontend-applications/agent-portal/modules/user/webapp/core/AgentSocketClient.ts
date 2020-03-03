@@ -66,33 +66,36 @@ export class AgentSocketClient extends SocketClient {
         );
 
         const socketTimeout = ClientStorageService.getSocketTimeout();
-
         this.currentUserRequestPromise = new Promise<User>((resolve, reject) => {
 
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + AgentEvent.GET_CURRENT_USER);
-            }, socketTimeout);
+            if (this.agentSocket) {
+                const timeout = window.setTimeout(() => {
+                    reject('Timeout: ' + AgentEvent.GET_CURRENT_USER);
+                }, socketTimeout);
 
-            this.agentSocket.on(
-                AgentEvent.GET_CURRENT_USER_FINISHED, async (result: GetCurrentUserResponse) => {
-                    if (result.requestId === requestId) {
-                        window.clearTimeout(timeout);
-                        BrowserCacheService.getInstance().set(
-                            KIXObjectType.CURRENT_USER, result.currentUser, KIXObjectType.CURRENT_USER
-                        );
-                        this.currentUserRequestPromise = null;
-                        resolve(result.currentUser);
-                    }
+                this.agentSocket.on(
+                    AgentEvent.GET_CURRENT_USER_FINISHED, async (result: GetCurrentUserResponse) => {
+                        if (result.requestId === requestId) {
+                            window.clearTimeout(timeout);
+                            BrowserCacheService.getInstance().set(
+                                KIXObjectType.CURRENT_USER, result.currentUser, KIXObjectType.CURRENT_USER
+                            );
+                            this.currentUserRequestPromise = null;
+                            resolve(result.currentUser);
+                        }
+                    });
+
+                this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                    window.clearTimeout(timeout);
+                    console.error('Socket Error: getCurrentUser');
+                    console.error(error.error);
+                    reject(error.error);
                 });
 
-            this.agentSocket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
-                window.clearTimeout(timeout);
-                console.error('Socket Error: getCurrentUser');
-                console.error(error.error);
-                reject(error.error);
-            });
-
-            this.agentSocket.emit(AgentEvent.GET_CURRENT_USER, currentUserRequest);
+                this.agentSocket.emit(AgentEvent.GET_CURRENT_USER, currentUserRequest);
+            } else {
+                resolve(null);
+            }
         });
 
         return await this.currentUserRequestPromise;

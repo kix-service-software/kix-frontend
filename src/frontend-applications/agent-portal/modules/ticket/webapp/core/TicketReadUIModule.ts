@@ -39,6 +39,7 @@ import { ArticleLabelProvider } from "./ArticleLabelProvider";
 import { TicketLabelProvider } from "./TicketLabelProvider";
 import { ChannelService } from "./ChannelService";
 import { TicketPlaceholderHandler } from "./TicketPlaceholderHandler";
+import { TicketPrintAction } from "./actions/TicketPrintAction";
 import { TicketsForAssetsHandler } from "./TicketsForAssetsHandler";
 import { SuggestedFAQHandler } from "./SuggestedFAQHandler";
 
@@ -127,6 +128,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
+        ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
     }
 
     private async registerContexts(): Promise<void> {

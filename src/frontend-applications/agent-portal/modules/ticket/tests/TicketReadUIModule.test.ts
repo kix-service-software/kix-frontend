@@ -259,6 +259,10 @@ describe('TicketReadUIModule', () => {
             it('should register TicketLockAction', () => {
                 expect(ActionFactory.getInstance().hasAction('ticket-lock-action')).true;
             });
+
+            it('should register TicketPrintAction', () => {
+                expect(ActionFactory.getInstance().hasAction('ticket-print-action')).true;
+            });
         });
 
         describe('Check tables', () => {

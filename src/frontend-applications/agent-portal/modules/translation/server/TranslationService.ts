@@ -23,6 +23,7 @@ import { PODefinition } from "../../../server/model/PODefinition";
 import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
 import { IdService } from "../../../model/IdService";
 import { Error } from "../../../../../server/model/Error";
+import { UserService } from "../../user/server/UserService";
 
 export class TranslationAPIService extends KIXObjectAPIService {
 
@@ -261,4 +262,13 @@ export class TranslationAPIService extends KIXObjectAPIService {
         });
     }
 
+    public static async getUserLanguage(token: string): Promise<string> {
+        const currentUser = await UserService.getInstance().getUserByToken(token);
+        let language = 'en';
+        if (currentUser) {
+            const preference = currentUser.Preferences.find((p) => p.ID === 'UserLanguage');
+            language = preference ? preference.Value : null;
+        }
+        return language;
+    }
 }
