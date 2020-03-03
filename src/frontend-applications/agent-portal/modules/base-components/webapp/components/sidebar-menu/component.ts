@@ -68,22 +68,42 @@ class SidebarMenuComponent {
 
     private async setSidebarMenu(context: Context): Promise<void> {
         if (context) {
-            this.state.sidebars = Array.from(context ? (context.getSidebars() || []) : []);
+            this.state.sidebars = Array.from(context.getSidebars() || []);
 
             this.state.translations = await TranslationService.createTranslationObject(
-                this.state.sidebars.map((s) => s.configuration.title)
+                [
+                    'Translatable#Close Sidebars',
+                    'Translatable#Open Sidebars',
+                    ...this.state.sidebars.map((s) => s.configuration.title)
+                ]
             );
         }
     }
 
-    private toggleSidebar(instanceId: string): void {
+    public toggleSidebar(instanceId: string): void {
         ContextService.getInstance().getActiveContext(this.state.contextType).toggleSidebarWidget(instanceId);
     }
 
-    private isShown(sidebar: ConfiguredWidget): boolean {
+    public isShown(sidebar: ConfiguredWidget): boolean {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         const sidebars = context.getSidebars(true) || [];
         return (sidebars.findIndex((sb) => sb.instanceId === sidebar.instanceId) !== -1);
+    }
+
+    public toggleAllSidebars(): void {
+        const context: Context = ContextService.getInstance().getActiveContext(this.state.contextType);
+        if (context) {
+            if (context.areSidebarsShown()) {
+                context.closeAllSidebars();
+            } else {
+                context.openAllSidebars();
+            }
+        }
+    }
+
+    public areSidebarsShown(): boolean {
+        const context: Context = ContextService.getInstance().getActiveContext(this.state.contextType);
+        return context && context.areSidebarsShown();
     }
 
 }
