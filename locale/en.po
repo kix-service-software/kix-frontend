@@ -2883,6 +2883,9 @@ msgstr ""
 msgid "Open/close at line ends = open and close elements"
 msgstr ""
 
+msgid "Open Sidebars"
+msgstr ""
+
 msgid "Open Tickets"
 msgstr ""
 
@@ -3824,9 +3827,6 @@ msgid "URL"
 msgstr ""
 
 msgid "Use KIX CSS"
-msgstr ""
-
-msgid "User"
 msgstr ""
 
 msgid "User Management"

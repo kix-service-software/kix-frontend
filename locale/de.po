@@ -3003,6 +3003,11 @@ msgstr "Einmal pro Tag"
 msgid "Open/close at line ends = open and close elements"
 msgstr "Auf-/Zuklappen an Zeilenenden  =  Öffnen und Schließen von Elementen"
 
+#, fuzzy
+#| msgid "Sidebars"
+msgid "Open Sidebars"
+msgstr "Sidebars"
+
 msgid "Open Tickets"
 msgstr "Offene Tickets"
 
@@ -3959,9 +3964,6 @@ msgstr "URL"
 msgid "Use KIX CSS"
 msgstr "KIX CSS verwenden"
 
-msgid "User"
-msgstr "Benutzer"
-
 msgid "User Management"
 msgstr "Nutzerverwaltung"
 
@@ -4084,6 +4086,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "User"
+#~ msgstr "Benutzer"
 
 #~ msgid "Load Translation"
 #~ msgstr "Lade Übersetzung"
