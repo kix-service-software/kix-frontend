@@ -33,8 +33,11 @@ export class ConfigItemHistoryLabelProvider extends LabelProvider<ConfigItemHist
             case ConfigItemHistoryProperty.HISTORY_TYPE:
                 displayValue = 'Translatable#Action';
                 break;
+            case ConfigItemHistoryProperty.COMMENT:
+                displayValue = 'Translatable#Comment';
+                break;
             case ConfigItemHistoryProperty.CREATE_BY:
-                displayValue = 'Translatable#User';
+                displayValue = 'Translatable#Created by';
                 break;
             case ConfigItemHistoryProperty.VERSION_ID:
                 displayValue = 'Translatable#to version';

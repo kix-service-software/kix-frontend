@@ -49,9 +49,21 @@ export class Extension implements IConfigurationExtension {
         );
         configurations.push(faqLinkedObjectsLane);
 
+        const faqHistoryWidget = new WidgetConfiguration(
+            'faq-article-history-widget', 'History Widget', ConfigurationType.Widget,
+            'faq-article-history-widget', 'Translatable#History', [], null,
+            new ConfigurationDefinition('faq-article-history-config', ConfigurationType.Table),
+            false, false, null, false
+        );
+        configurations.push(faqHistoryWidget);
+
         const tabWidgetConfig = new TabWidgetConfiguration(
             'faq-article-info-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
-            ['faq-article-info-widget', 'faq-article-linked-objects-widget']
+            [
+                'faq-article-info-widget',
+                'faq-article-linked-objects-widget',
+                'faq-article-history-widget'
+            ]
         );
         configurations.push(tabWidgetConfig);
 
@@ -61,13 +73,6 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('faq-article-info-tab-widget-config', ConfigurationType.TabWidget)
         );
         configurations.push(tabLane);
-
-        const faqHistoryLane = new WidgetConfiguration(
-            'faq-article-history-widget', 'History Widget', ConfigurationType.Widget,
-            'faq-article-history-widget', 'Translatable#History', [], null, null,
-            true, true, null, false
-        );
-        configurations.push(faqHistoryLane);
 
         const faqArticleWidget = new WidgetConfiguration(
             'faq-article-content-widget', 'FAQ Article Content', ConfigurationType.Widget,
@@ -83,11 +88,7 @@ export class Extension implements IConfigurationExtension {
                 this.getModuleId(),
                 [], [],
                 [
-                    new ConfiguredWidget('faq-article-info-tab-widget', 'faq-article-info-tab-widget'),
-                    new ConfiguredWidget(
-                        'faq-article-history-widget', 'faq-article-history-widget', null,
-                        [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
-                    )
+                    new ConfiguredWidget('faq-article-info-tab-widget', 'faq-article-info-tab-widget')
                 ],
                 [
                     new ConfiguredWidget('faq-article-content-widget', 'faq-article-content-widget')
@@ -104,6 +105,10 @@ export class Extension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'faq-article-linked-objects-widget', 'faq-article-linked-objects-widget', null,
                         [new UIComponentPermission('links', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'faq-article-history-widget', 'faq-article-history-widget', null,
+                        [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
                     )
                 ]
 

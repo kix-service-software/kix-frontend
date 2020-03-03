@@ -41,11 +41,11 @@ export class FAQArticleHistoryTableFactory extends TableFactory {
         const tableColumns = [
             new DefaultColumnConfiguration(
                 null, null, null, FAQArticleHistoryProperty.NAME, true, false, true, true, 200),
-            new DefaultColumnConfiguration(
-                null, null, null, FAQArticleHistoryProperty.CREATED_BY, true, false, true, true, 300),
             new DefaultColumnConfiguration(null, null, null,
                 FAQArticleHistoryProperty.CREATED, true, false, true, true, 150, true, false, false, DataType.DATE_TIME
-            )
+            ),
+            new DefaultColumnConfiguration(
+                null, null, null, FAQArticleHistoryProperty.CREATED_BY, true, false, true, true, 300)
         ];
 
         if (!tableConfiguration) {

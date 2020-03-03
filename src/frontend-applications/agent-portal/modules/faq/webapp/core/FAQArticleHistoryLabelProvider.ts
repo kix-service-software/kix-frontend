@@ -33,7 +33,7 @@ export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
                 displayValue = 'Translatable#Created at';
                 break;
             case FAQArticleHistoryProperty.CREATED_BY:
-                displayValue = 'Translatable#User';
+                displayValue = 'Translatable#Created by';
                 break;
             case FAQArticleHistoryProperty.ID:
                 displayValue = 'Translatable#Id';

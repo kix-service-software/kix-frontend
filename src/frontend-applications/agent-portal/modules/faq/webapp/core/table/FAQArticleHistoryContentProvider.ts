@@ -27,27 +27,22 @@ export class FAQArticleHistoryContentProvider extends TableContentProvider<FAQHi
     }
 
     public async loadData(): Promise<Array<IRowObject<FAQHistory>>> {
-        let rowObjects = [];
+        const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             const faqArticle = await context.getObject<FAQArticle>();
             if (faqArticle) {
-                rowObjects = faqArticle.History
-                    .sort((a, b) => b.ID - a.ID)
-                    .map((fh) => {
-                        const values: TableValue[] = [];
-
-                        for (const property in fh) {
-                            if (fh.hasOwnProperty(property)) {
-                                values.push(new TableValue(property, fh[property]));
-                            }
-                        }
-
-                        return new RowObject<FAQHistory>(values, fh);
-                    });
+                for (const fh of faqArticle.History) {
+                    const values: TableValue[] = [];
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+                    for (const column of columns) {
+                        const tableValue = await this.getTableValue(fh, column.property, column);
+                        values.push(tableValue);
+                    }
+                    rowObjects.push(new RowObject<FAQHistory>(values, fh));
+                }
             }
         }
-
         return rowObjects;
     }
 }

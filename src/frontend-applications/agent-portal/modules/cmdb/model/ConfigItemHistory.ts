@@ -38,7 +38,7 @@ export class ConfigItemHistory extends KIXObject<ConfigItemHistory> {
 
     public HistoryType: string;
 
-    public VersionID: string;
+    public VersionID: number;
 
     public constructor(configItemHistory?: ConfigItemHistory) {
         super();
@@ -55,7 +55,7 @@ export class ConfigItemHistory extends KIXObject<ConfigItemHistory> {
             this.CreateTime = configItemHistory.CreateTime;
             this.HistoryTypeID = configItemHistory.HistoryTypeID;
             this.HistoryType = configItemHistory.HistoryType;
-            this.VersionID = configItemHistory.VersionID;
+            this.VersionID = Number(configItemHistory.VersionID);
         }
     }
 
