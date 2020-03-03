@@ -12,13 +12,13 @@ import { IActionListener } from '../../../../../modules/base-components/webapp/c
 import { IdService } from '../../../../../model/IdService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { Context } from 'vm';
 import {
     AbstractContextServiceListener
 } from '../../../../../modules/base-components/webapp/core/AbstractContextServiceListener';
 import { IContextListener } from '../../../../../modules/base-components/webapp/core/IContextListener';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Context } from '../../../../../model/Context';
 
 export class Component implements IActionListener {
 

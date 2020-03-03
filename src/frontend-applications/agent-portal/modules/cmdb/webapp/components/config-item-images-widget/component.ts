@@ -14,12 +14,12 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { Context } from 'vm';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { ConfigItemImage } from '../../../model/ConfigItemImage';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ImagesLoadingOptions } from '../../../model/ImagesLoadingOptions';
 import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 

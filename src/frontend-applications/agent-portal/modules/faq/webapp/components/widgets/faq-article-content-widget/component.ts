@@ -15,7 +15,6 @@ import { ContextService } from '../../../../../../modules/base-components/webapp
 import { FAQDetailsContext } from '../../../core/context/FAQDetailsContext';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
-import { Context } from 'vm';
 import { FAQService } from '../../../core';
 import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
 import { FAQArticleProperty } from '../../../../model/FAQArticleProperty';
@@ -27,6 +26,7 @@ import { FAQArticleAttachmentLoadingOptions } from '../../../../model/FAQArticle
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
+import { Context } from '../../../../../../model/Context';
 
 class Component {
 
