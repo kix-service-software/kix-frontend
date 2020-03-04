@@ -228,6 +228,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         const filterCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
                 && f.property !== ContactProperty.ORGANISATION_IDS
+                && f.property !== KIXObjectProperty.VALID_ID
         );
 
         return filterCriteria;
