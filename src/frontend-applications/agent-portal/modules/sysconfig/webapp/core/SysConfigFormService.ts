@@ -83,6 +83,7 @@ export class SysConfigFormService extends KIXObjectFormService {
                         formValue = '';
                     }
                     break;
+                case SysConfigOptionDefinitionProperty.DEFAULT_VALID_ID:
                 case KIXObjectProperty.VALID_ID:
                     if (sysConfig.IsRequired) {
                         formField.readonly = true;
@@ -100,9 +101,16 @@ export class SysConfigFormService extends KIXObjectFormService {
 
         const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
         const value = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.VALUE);
-
         if (value && defaultParameter && value[1] === defaultParameter[1]) {
             value[1] = null;
+        }
+
+        const defaultValidParameter = parameter.find(
+            (p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT_VALID_ID
+        );
+        const valid = parameter.find((p) => p[0] === KIXObjectProperty.VALID_ID);
+        if (valid && defaultValidParameter && valid[1] === defaultValidParameter[1]) {
+            valid[1] = null;
         }
 
         return parameter;

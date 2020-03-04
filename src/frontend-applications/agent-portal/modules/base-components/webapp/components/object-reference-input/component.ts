@@ -27,14 +27,19 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { UIUtil } from '../../core/UIUtil';
+import { IdService } from '../../../../../model/IdService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
     private objects: KIXObject[];
     private autocomplete: boolean = false;
+    private formListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.formListenerId = IdService.generateDateBasedId('object-ref-input');
         this.state.loadNodes = this.load.bind(this);
     }
 
@@ -55,7 +60,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         await super.onMount();
         this.state.searchCallback = this.search.bind(this);
         this.setOptions();
+        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+            formListenerId: this.formListenerId,
+            updateForm: () => { return; },
+            formValueChanged: (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
+                if (formField.instanceId === this.state.field.instanceId) {
+                    this.setCurrentNode(null, value, false);
+                }
+            }
+        });
         this.state.prepared = true;
+    }
+
+    public async onDestroy(): Promise<void> {
+        super.onDestroy();
+        if (this.formListenerId) {
+            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
+        }
     }
 
     private async load(): Promise<TreeNode[]> {
@@ -113,9 +134,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         return nodes;
     }
 
-    public async setCurrentNode(nodes?: TreeNode[]): Promise<void> {
+    public async setCurrentNode(nodes?: TreeNode[], value?: any, update: boolean = true): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const defaultValue = value ? value : formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (defaultValue && defaultValue.value) {
             const objectIds: any[] = Array.isArray(defaultValue.value)
                 ? defaultValue.value : [defaultValue.value];
@@ -136,7 +157,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                                 selectedNodes.push(node);
                             }
                         });
-                        this.nodesChanged(selectedNodes);
+                        if (update) {
+                            this.nodesChanged(selectedNodes);
+                        }
                     }
                 } else {
                     const objectOption = this.state.field.options.find(
@@ -151,12 +174,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                                 nodes.push(node);
                                 selectedNodes.push(node);
                             }
-                            this.nodesChanged(selectedNodes);
+                            if (update) {
+                                this.nodesChanged(selectedNodes);
+                            }
                         }
                     }
-
-                    treeHandler.setSelection(selectedNodes, true, false, true);
                 }
+                treeHandler.setSelection(selectedNodes, true, !update, true);
             }
         }
     }
