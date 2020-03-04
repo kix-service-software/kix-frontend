@@ -47,6 +47,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 ContactProperty.FIRSTNAME,
                 ContactProperty.LASTNAME,
                 UserProperty.USER_LOGIN,
+                UserProperty.USER_ACCESS,
+                UserProperty.USER_LANGUAGE,
                 ContactProperty.PRIMARY_ORGANISATION_ID,
                 ContactProperty.PHONE,
                 ContactProperty.MOBILE,

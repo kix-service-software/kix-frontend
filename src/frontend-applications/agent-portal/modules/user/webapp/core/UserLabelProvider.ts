@@ -56,6 +56,9 @@ export class UserLabelProvider extends LabelProvider<User> {
             case PersonalSettingsProperty.NOTIFICATIONS:
                 displayValue = 'Translatable#Ticket Notifications';
                 break;
+            case UserProperty.USER_ACCESS:
+                displayValue = 'Translatable#Access';
+                break;
             default:
                 if (this.isContactProperty(property)) {
                     const contactLabelProvider = LabelService.getInstance().getLabelProviderForType(
@@ -140,6 +143,16 @@ export class UserLabelProvider extends LabelProvider<User> {
                 displayValue = await this.getPropertyValueDisplayText(
                     KIXObjectProperty.VALID_ID, user.ValidID, translatable
                 );
+                break;
+            case UserProperty.USER_ACCESS:
+                displayValue = '';
+                if (user.IsAgent) {
+                    displayValue = 'Agent';
+                }
+
+                if (user.IsCustomer) {
+                    displayValue = user.IsAgent ? displayValue + ', Customer' : 'Customer';
+                }
                 break;
             default:
                 if (this.isContactProperty(property)) {
