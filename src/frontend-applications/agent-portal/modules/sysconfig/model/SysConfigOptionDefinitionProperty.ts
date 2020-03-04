@@ -17,6 +17,8 @@ export enum SysConfigOptionDefinitionProperty {
 
     DEFAULT = 'Default',
 
+    DEFAULT_VALID_ID = 'DefaultValidID',
+
     DESCRIPTION = 'Description',
 
     GROUP = 'Group',

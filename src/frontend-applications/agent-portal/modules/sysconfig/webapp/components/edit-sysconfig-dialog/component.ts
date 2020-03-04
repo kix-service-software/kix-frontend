@@ -17,6 +17,10 @@ import { EventService } from "../../../../base-components/webapp/core/EventServi
 import { SysconfigEvent } from "../../core/SysconfigEvent";
 import { DialogService } from "../../../../base-components/webapp/core/DialogService";
 import { BrowserUtil } from "../../../../base-components/webapp/core/BrowserUtil";
+import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
+import { ContextService } from "../../../../base-components/webapp/core/ContextService";
+import { SysConfigOptionDefinition } from "../../../model/SysConfigOptionDefinition";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
 
 class Component extends AbstractEditDialog {
 
@@ -55,11 +59,22 @@ class Component extends AbstractEditDialog {
 
     public async reset(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const sysConfigField = await formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
+        const sysConfigValueField = await formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
         const defaultValue = await formInstance.getFormFieldValueByProperty(SysConfigOptionDefinitionProperty.DEFAULT);
-        if (sysConfigField) {
-            const formFieldInstanceID = sysConfigField.instanceId;
-            formInstance.provideFormFieldValue(formFieldInstanceID, defaultValue.value);
+        if (sysConfigValueField && defaultValue) {
+            formInstance.provideFormFieldValue(sysConfigValueField.instanceId, defaultValue.value);
+        }
+
+        const sysConfigValidField = await formInstance.getFormFieldByProperty(KIXObjectProperty.VALID_ID);
+        const context = ContextService.getInstance().getActiveContext();
+        if (sysConfigValidField && context) {
+            const sysConfigId = await context.getObjectId();
+            const optionDefs = sysConfigId ? await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]
+            ) : null;
+            if (optionDefs && optionDefs[0]) {
+                formInstance.provideFormFieldValue(sysConfigValidField.instanceId, optionDefs[0].DefaultValidID);
+            }
         }
     }
 

@@ -24,6 +24,8 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
 
     public Default: any;
 
+    public DefaultValidID: number;
+
     public Description: string;
 
     public Group: string;
@@ -50,6 +52,7 @@ export class SysConfigOptionDefinition extends KIXObject<SysConfigOptionDefiniti
             this.ObjectId = this.Name;
             this.Value = sysConfigOptionDefinition.Value;
             this.Default = sysConfigOptionDefinition.Default;
+            this.DefaultValidID = sysConfigOptionDefinition.DefaultValidID;
             this.Description = sysConfigOptionDefinition.Description;
             this.Group = sysConfigOptionDefinition.Group;
             this.IsModified = sysConfigOptionDefinition.IsModified;

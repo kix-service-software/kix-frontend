@@ -17,6 +17,7 @@ import { EventService } from "../../../base-components/webapp/core/EventService"
 import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { BrowserUtil } from "../../../base-components/webapp/core/BrowserUtil";
 import { SysconfigEvent } from "./SysconfigEvent";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class SysconfigTableResetAction extends AbstractAction {
 
@@ -53,8 +54,11 @@ export class SysconfigTableResetAction extends AbstractAction {
                         { loading: true, hint: `Reset Sysconfig Options ${i}/${objects.length}` }
                     );
 
-                    await KIXObjectService.updateObject(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION,
-                        [[SysConfigOptionDefinitionProperty.VALUE, null]], o.Name, true
+                    await KIXObjectService.updateObject(KIXObjectType.SYS_CONFIG_OPTION,
+                        [
+                            [SysConfigOptionDefinitionProperty.VALUE, null],
+                            [KIXObjectProperty.VALID_ID, null]
+                        ], o.Name, true
                     );
                     i++;
                 }
