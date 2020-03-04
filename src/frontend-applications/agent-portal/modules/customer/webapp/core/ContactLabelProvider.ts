@@ -20,6 +20,7 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { UserProperty } from "../../../user/model/UserProperty";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
 import { User } from "../../../user/model/User";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
@@ -159,6 +160,9 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case UserProperty.IS_CUSTOMER:
                 displayValue = 'Translatable#Customer Login';
                 break;
+            case UserProperty.USER_ACCESS:
+                displayValue = 'Translatable#Access';
+                break;
             default:
                 if (this.isUserProperty(property)) {
                     const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
@@ -261,6 +265,18 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                     ContactProperty.ORGANISATION_IDS, contact.OrganisationIDs, translatable
                 );
                 break;
+            case UserProperty.USER_ACCESS:
+                displayValue = '';
+                if (contact.User) {
+                    if (contact.User.IsAgent) {
+                        displayValue = 'Agent';
+                    }
+
+                    if (contact.User.IsCustomer) {
+                        displayValue = contact.User.IsAgent ? displayValue + ', Customer' : 'Customer';
+                    }
+                }
+                break;
             default:
                 if (this.isUserProperty(property)) {
                     const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
@@ -353,10 +369,10 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     private async getUserByContact(contact: Contact): Promise<User> {
         let user;
         if (contact) {
-            user = contact.User;
-            if (!user && contact.AssignedUserID) {
+            if (contact.AssignedUserID) {
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]);
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [contact.AssignedUserID], null, null, true
+                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true
                 ).catch(() => [] as User[]);
                 user = users && users.length ? users[0] : null;
             }
