@@ -161,7 +161,7 @@ class TabLaneComponent implements IEventSubscriber {
             context.areSidebarsShown() &&
             window.innerWidth <= 1400
         ) {
-            context.closeSidebar();
+            context.closeAllSidebars();
         }
     }
 
