@@ -26,11 +26,6 @@ class Extension implements IKIXModuleExtension {
 
     public uiComponents: UIComponent[] = [
         new UIComponent(
-            'mail-account-input-dispatching',
-            '/kix-module-mail-account$0/webapp/components/mail-account-input-dispatching',
-            []
-        ),
-        new UIComponent(
             'mail-account-input-types',
             '/kix-module-mail-account$0/webapp/components/mail-account-input-types',
             []

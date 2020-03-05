@@ -129,10 +129,11 @@ export class Extension implements IConfigurationExtension {
                                 )
                             ],
                             null, null,
-                            ['SubQueues', 'TicketStats', 'Tickets'],
+                            ['SubQueues'],
                             ['SubQueues']
                         )
                     ),
+                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true),
                     new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
                         new TreeNode(DispatchingType.FRONTEND_KEY_DEFAULT, 'Translatable#Default'),
                     ])

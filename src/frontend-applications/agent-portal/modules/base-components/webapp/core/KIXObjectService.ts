@@ -283,14 +283,22 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         switch (property) {
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
+                let users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, null,
                     new KIXObjectLoadingOptions(
                         null, null, null, [UserProperty.CONTACT]
                     ), null, true
                 ).catch((error) => [] as User[]);
+                if (!showInvalid) {
+                    users = users.filter((s) => s.ValidID === 1);
+                }
                 users.forEach((u) => nodes.push(new TreeNode(
-                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man'
+                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man',
+                    undefined, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined,
+                    u.ValidID === 1 || invalidClickable,
+                    undefined, undefined, undefined, undefined,
+                    u.ValidID !== 1
                 )));
                 break;
             case KIXObjectProperty.VALID_ID:
@@ -423,13 +431,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
     public static async search(
-        objectType: KIXObjectType | string, searchValue: string, limit: number = 10, validObjects: boolean = true
+        objectType: KIXObjectType | string, searchValue: string, limit: number = 10, onlyValidObjects: boolean = false
     ): Promise<KIXObject[]> {
         let result = [];
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
             const filter = await service.prepareFullTextFilter(searchValue);
-            if (validObjects) {
+            if (onlyValidObjects) {
                 filter.push(new FilterCriteria(
                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
                 ));
@@ -440,13 +448,23 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return result;
     }
 
-    public static async prepareTree(objects: KIXObject[]): Promise<TreeNode[]> {
+    public static async prepareTree(
+        objects: KIXObject[], showInvalid: boolean = true, invalidClickable: boolean = true
+    ): Promise<TreeNode[]> {
         const nodes = [];
 
         for (const o of objects) {
-            const icon = await LabelService.getInstance().getObjectIcon(o);
-            const text = await LabelService.getInstance().getText(o);
-            nodes.push(new TreeNode(o.ObjectId, text, icon));
+            if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
+                const icon = await LabelService.getInstance().getObjectIcon(o);
+                const text = await LabelService.getInstance().getText(o);
+                nodes.push(new TreeNode(
+                    o.ObjectId, text, icon, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable,
+                    undefined, undefined, undefined, undefined,
+                    typeof o.ValidID !== 'undefined' && o.ValidID !== 1
+                ));
+            }
         }
 
         return nodes;

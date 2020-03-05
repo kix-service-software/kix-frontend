@@ -94,18 +94,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
                 );
 
-                const showValidOption = this.state.field.options
-                    ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
-                    : null;
-                const validClickableOption = this.state.field.options
-                    ? this.state.field.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
-                    : null;
-
-                const showInvalid = showValidOption ? showValidOption.value : true;
-                const invalidClickable = validClickableOption ? validClickableOption.value : false;
+                const showInvalid = this.showInvalidNodes();
+                const invalidClickable = this.areInvalidClickable();
 
                 const objectId = await UIUtil.getEditObjectId(objectOption.value);
-
 
                 if (structureOption && structureOption.value) {
                     nodes = await KIXObjectService.prepareObjectTree(
@@ -115,9 +107,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 } else {
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);
-                        nodes.push(node);
+                        if (node) {
+                            nodes.push(node);
+                        }
                     }
-
                 }
                 SortUtil.sortObjects(nodes, 'label', DataType.STRING);
             }
@@ -132,6 +125,20 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
         await this.setCurrentNode(nodes);
         return nodes;
+    }
+
+    private showInvalidNodes(): boolean {
+        const showValidOption = this.state.field.options
+            ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
+            : null;
+        return showValidOption ? showValidOption.value : true;
+    }
+
+    private areInvalidClickable(): boolean {
+        const validClickableOption = this.state.field.options
+            ? this.state.field.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
+            : null;
+        return validClickableOption ? validClickableOption.value : false;
     }
 
     public async setCurrentNode(nodes?: TreeNode[], value?: any, update: boolean = true): Promise<void> {
@@ -170,9 +177,11 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         if (objects && !!objects.length) {
                             for (const object of objects) {
                                 const node = await this.createTreeNode(object);
-                                node.selected = true;
-                                nodes.push(node);
-                                selectedNodes.push(node);
+                                if (node) {
+                                    node.selected = true;
+                                    nodes.push(node);
+                                    selectedNodes.push(node);
+                                }
                             }
                             if (update) {
                                 this.nodesChanged(selectedNodes);
@@ -291,7 +300,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     } else {
                         for (const o of this.objects) {
                             const node = await this.createTreeNode(o);
-                            nodes.push(node);
+                            if (node) {
+                                nodes.push(node);
+                            }
                         }
                     }
                     nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
@@ -306,14 +317,25 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (typeof o === 'string') {
             return new TreeNode(o, o);
         } else {
-            const text = await LabelService.getInstance().getText(o);
-            const icon = LabelService.getInstance().getObjectIcon(o);
-            let tooltip = await LabelService.getInstance().getTooltip(o);
+            const showInvalid = this.showInvalidNodes();
+            // typeof o.ValidID === 'undefined' - needed for objects without ValidID like ValidObject
+            if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
+                const invalidClickable = this.areInvalidClickable();
+                const text = await LabelService.getInstance().getText(o);
+                const icon = LabelService.getInstance().getObjectIcon(o);
+                let tooltip = await LabelService.getInstance().getTooltip(o);
 
-            tooltip = (tooltip && tooltip !== text) ? text + ": " + tooltip : text;
-            return new TreeNode(
-                o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon, undefined, undefined, undefined,
-                undefined, undefined, undefined, undefined, undefined, undefined, undefined, tooltip);
+                tooltip = (tooltip && tooltip !== text) ? text + ": " + tooltip : text;
+                return new TreeNode(
+                    o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable,
+                    tooltip, undefined, undefined, undefined,
+                    typeof o.ValidID !== 'undefined' && o.ValidID !== 1
+                );
+            } else {
+                return;
+            }
         }
     }
 

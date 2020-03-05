@@ -94,7 +94,7 @@ export class FAQService extends KIXObjectService {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid: boolean = false, invalidClickable: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 

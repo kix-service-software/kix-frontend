@@ -33,6 +33,7 @@ import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
 export class Extension implements IConfigurationExtension {
 
@@ -102,7 +103,8 @@ export class Extension implements IConfigurationExtension {
                             [FAQCategoryProperty.SUB_CATEGORIES],
                             [FAQCategoryProperty.SUB_CATEGORIES]
                         )
-                    )
+                    ),
+                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
                 ]
             )
         );

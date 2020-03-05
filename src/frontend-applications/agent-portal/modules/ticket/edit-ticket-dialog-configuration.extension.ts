@@ -259,7 +259,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                                 )
                             ],
                             null, null,
-                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES],
                             [QueueProperty.SUB_QUEUES]
                         )
                     )

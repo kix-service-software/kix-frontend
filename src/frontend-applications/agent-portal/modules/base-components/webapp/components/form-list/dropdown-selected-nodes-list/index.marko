@@ -10,6 +10,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <for|node| of=state.nodes>
         <div.selected-node
             title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
+            class={
+                        "show-as-invalid": node.showAsInvalid
+                    }
             key=("form-list-selected-node-" + component.treeId + "[]")>
             <icon icon=node.icon showUnknown=true/>
             <span.item-text>${node.label}</span>

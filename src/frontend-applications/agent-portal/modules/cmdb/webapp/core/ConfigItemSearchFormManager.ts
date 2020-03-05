@@ -252,20 +252,10 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
             );
         } else if (input.Type === 'Organisation') {
             const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
-            const nodes = [];
-            for (const o of organisations) {
-                const displayValue = await LabelService.getInstance().getText(o);
-                nodes.push(new TreeNode(o.ObjectId, displayValue, new ObjectIcon(o.KIXObjectType, o.ObjectId)));
-            }
-            return nodes;
+            return await KIXObjectService.prepareTree(organisations);
         } else if (input.Type === 'Contact') {
             const contacts = await KIXObjectService.search(KIXObjectType.CONTACT, searchValue, limit);
-            const nodes = [];
-            for (const c of contacts) {
-                const displayValue = await LabelService.getInstance().getText(c);
-                nodes.push(new TreeNode(c.ObjectId, displayValue, new ObjectIcon(c.KIXObjectType, c.ObjectId)));
-            }
-            return nodes;
+            return await KIXObjectService.prepareTree(contacts);
         }
 
         return tree;
