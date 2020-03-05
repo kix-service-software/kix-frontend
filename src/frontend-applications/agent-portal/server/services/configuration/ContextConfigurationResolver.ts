@@ -18,6 +18,7 @@ import { WidgetConfiguration } from "../../../model/configuration/WidgetConfigur
 import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
 import { ChartWidgetConfigurationResolver } from "./ChartWidgetConfigurationResolver";
 import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
+import { ResolverUtil } from "./ResolverUtil";
 
 export class ContextConfigurationResolver {
 
@@ -44,11 +45,9 @@ export class ContextConfigurationResolver {
             ...configuration.overlays.map((c) => c.configurationId),
             ...configuration.others.map((c) => c.configurationId),
             ...configuration.dialogs.map((c) => c.configurationId)
-
         ];
-        const configurations = await ModuleConfigurationService.getInstance().loadConfigurations<WidgetConfiguration>(
-            token, configIds
-        );
+
+        const configurations = await ResolverUtil.loadConfigurations(token, configIds, [], sysConfigOptions);
 
         await this.resolveWidgetConfigurations(token, configuration.content, configurations, sysConfigOptions);
         await this.resolveWidgetConfigurations(token, configuration.lanes, configurations, sysConfigOptions);
