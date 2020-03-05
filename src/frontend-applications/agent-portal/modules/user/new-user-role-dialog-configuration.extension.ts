@@ -23,15 +23,11 @@ import { FormFieldOption } from "../../model/configuration/FormFieldOption";
 import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
 import { FormFieldValue } from "../../model/configuration/FormFieldValue";
 import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
 export class Extension implements IConfigurationExtension {
 
@@ -123,18 +119,8 @@ export class Extension implements IConfigurationExtension {
             'Translatable#Helptext_Admin_Users_RoleCreate_User',
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ]
-                    )
-                )
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ]
         );
         configurations.push(agentsField);

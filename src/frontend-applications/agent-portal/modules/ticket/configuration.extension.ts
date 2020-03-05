@@ -43,7 +43,6 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 import { ToggleOptions } from "../base-components/webapp/core/table";
 
@@ -373,7 +372,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                                 )
                             ],
                             null, null,
-                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES],
                             [QueueProperty.SUB_QUEUES]
                         )
                     )

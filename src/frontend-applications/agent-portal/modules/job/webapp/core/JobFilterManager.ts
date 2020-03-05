@@ -165,10 +165,10 @@ export class JobFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.LOCK_ID:
             case ArticleProperty.SENDER_TYPE_ID:
             case ArticleProperty.CHANNEL_ID:
-                nodes = await TicketService.getInstance().getTreeNodes(property, false);
+                nodes = await TicketService.getInstance().getTreeNodes(property, true, true);
                 break;
             case TicketProperty.QUEUE_ID:
-                nodes = await TicketService.getInstance().getTreeNodes(property, true, false);
+                nodes = await TicketService.getInstance().getTreeNodes(property, true, true);
                 break;
             case TicketProperty.ORGANISATION_ID:
                 if (Array.isArray(objectIds) && !!objectIds.length) {

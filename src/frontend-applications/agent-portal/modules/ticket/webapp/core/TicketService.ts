@@ -125,7 +125,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         switch (property) {
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
                 nodes = await QueueService.getInstance().prepareObjectTree(
                     queuesHierarchy, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
@@ -139,7 +139,13 @@ export class TicketService extends KIXObjectService<Ticket> {
                 for (const t of types) {
                     const icons = await labelProvider.getIcons(null, property, t.ID);
                     const text = await LabelService.getInstance().getText(t);
-                    nodes.push(new TreeNode(t.ID, text, (icons && icons.length) ? icons[0] : null));
+                    nodes.push(new TreeNode(
+                        t.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        t.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        t.ValidID !== 1
+                    ));
                 }
                 break;
             case TicketProperty.PRIORITY_ID:
@@ -150,7 +156,13 @@ export class TicketService extends KIXObjectService<Ticket> {
                 for (const p of priorities) {
                     const icons = await labelProvider.getIcons(null, property, p.ID);
                     const text = await LabelService.getInstance().getText(p);
-                    nodes.push(new TreeNode(p.ID, text, (icons && icons.length) ? icons[0] : null));
+                    nodes.push(new TreeNode(
+                        p.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        p.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        p.ValidID !== 1
+                    ));
                 }
                 break;
             case TicketProperty.STATE_ID:
@@ -161,7 +173,13 @@ export class TicketService extends KIXObjectService<Ticket> {
                 for (const s of states) {
                     const icons = await labelProvider.getIcons(null, property, s.ID);
                     const text = await LabelService.getInstance().getText(s);
-                    nodes.push(new TreeNode(s.ID, text, (icons && icons.length) ? icons[0] : null));
+                    nodes.push(new TreeNode(
+                        s.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        s.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        s.ValidID !== 1
+                    ));
                 }
                 break;
             case TicketProperty.LOCK_ID:
@@ -190,7 +208,12 @@ export class TicketService extends KIXObjectService<Ticket> {
                     users = users.filter((s) => s.ValidID === 1);
                 }
                 users.forEach((u) => nodes.push(new TreeNode(
-                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man'
+                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man',
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    undefined, undefined,
+                    u.ValidID === 1 || invalidClickable,
+                    undefined, undefined, undefined, undefined,
+                    u.ValidID !== 1
                 )));
                 break;
             case ArticleProperty.CHANNEL_ID:
@@ -201,7 +224,13 @@ export class TicketService extends KIXObjectService<Ticket> {
                 for (const c of channels) {
                     const name = await LabelService.getInstance().getPropertyValueDisplayText(c, ChannelProperty.NAME);
                     const icons = await LabelService.getInstance().getPropertyValueDisplayIcons(c, ChannelProperty.ID);
-                    nodes.push(new TreeNode(c.ID, name, icons && icons.length ? icons[0] : null));
+                    nodes.push(new TreeNode(
+                        c.ID, name, icons && icons.length ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        c.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        c.ValidID !== 1
+                    ));
                 }
                 break;
             case ArticleProperty.SENDER_TYPE_ID:

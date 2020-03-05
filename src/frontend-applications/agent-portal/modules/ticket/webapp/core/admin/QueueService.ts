@@ -22,7 +22,6 @@ import { SearchOperator } from "../../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
 import { FollowUpType } from "../../../model/FollowUpType";
-import { SysConfigService } from "../../../../sysconfig/webapp/core";
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -150,7 +149,7 @@ export class QueueService extends KIXObjectService<Queue> {
         return properties;
     }
 
-    public async getQueuesHierarchy(): Promise<Queue[]> {
+    public async getQueuesHierarchy(withData: boolean = true): Promise<Queue[]> {
         const loadingOptions = new KIXObjectLoadingOptions(
             [
                 new FilterCriteria(
@@ -158,9 +157,9 @@ export class QueueService extends KIXObjectService<Queue> {
                 )
             ],
             null, null,
-            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+            withData ? [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'] : [QueueProperty.SUB_QUEUES],
             [QueueProperty.SUB_QUEUES],
-            [["TicketStats.StateType", 'Open']]
+            withData ? [["TicketStats.StateType", 'Open']] : undefined
         );
 
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);

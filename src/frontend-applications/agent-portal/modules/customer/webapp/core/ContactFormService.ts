@@ -256,16 +256,7 @@ export class ContactFormService extends KIXObjectFormService {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                )
-                            ]
-                        )
-                    )
+                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
                 ], roleIdsValue
             );
             return new FormFieldConfiguration(
@@ -341,12 +332,15 @@ export class ContactFormService extends KIXObjectFormService {
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                 new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions([
-                    new FilterCriteria(
-                        QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
-                    )
-                ],
-                    undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES]))
+                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            QueueProperty.PARENT_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, null
+                        )
+                    ],
+                    undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES])
+                ),
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ], queueFormValue
         );
         return queueField;
@@ -375,12 +369,10 @@ export class ContactFormService extends KIXObjectFormService {
                         new FilterCriteria(
                             'Data.' + NotificationProperty.DATA_VISIBLE_FOR_AGENT,
                             SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 1
-                        ),
-                        new FilterCriteria(
-                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
                         )
                     ])
-                )
+                ),
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ], notificationValue
         );
     }
