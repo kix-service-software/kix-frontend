@@ -29,6 +29,7 @@ export class CacheService {
 
     private useRedisCache: boolean = false;
     private useInMemoryCache: boolean = false;
+    private ignorePrefixes: string[] = [];
 
     private constructor() {
         this.init();
@@ -195,10 +196,14 @@ export class CacheService {
 
     private async clearCache(): Promise<void> {
         if (this.useRedisCache) {
-            await RedisCache.getInstance().clear();
+            await RedisCache.getInstance().clear(this.ignorePrefixes);
         } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().clear();
+            await InMemoryCache.getInstance().clear(this.ignorePrefixes);
         }
+    }
+
+    public adddIgnorePrefixes(ignoreList: string[]): void {
+        this.ignorePrefixes = [...this.ignorePrefixes, ...ignoreList];
     }
 
 }

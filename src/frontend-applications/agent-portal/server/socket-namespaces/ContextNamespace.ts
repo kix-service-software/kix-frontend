@@ -35,6 +35,7 @@ import { SysConfigOption } from "../../modules/sysconfig/model/SysConfigOption";
 import { CacheService } from "../services/cache";
 import { ISocketResponse } from "../../modules/base-components/webapp/core/ISocketResponse";
 import { ISocketRequest } from "../../modules/base-components/webapp/core/ISocketRequest";
+import { LoggingService } from "../../../../server/services/LoggingService";
 
 export class ContextNamespace extends SocketNameSpace {
 
@@ -70,13 +71,16 @@ export class ContextNamespace extends SocketNameSpace {
     }
 
     protected initialize(): Promise<void> {
+        CacheService.getInstance().adddIgnorePrefixes(['ContextConfiguration']);
         return this.rebuildConfigCache();
     }
 
     private async rebuildConfiguration(
         data: ISocketRequest
     ): Promise<SocketResponse<ISocketResponse | SocketErrorResponse>> {
-        await this.rebuildConfigCache().catch(() => null);
+        await this.rebuildConfigCache().catch((error) => {
+            LoggingService.getInstance().error('Error on rebuild context configurations', error);
+        });
 
         const response: ISocketResponse = { requestId: data.requestId };
         return new SocketResponse(ContextEvent.REBUILD_CONFIG_FINISHED, response);
@@ -86,7 +90,7 @@ export class ContextNamespace extends SocketNameSpace {
         if (!this.rebuildPromise) {
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
 
-                CacheService.getInstance().deleteKeys('ContextNamespace');
+                await CacheService.getInstance().deleteKeys('ContextConfiguration');
 
                 const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -98,11 +102,13 @@ export class ContextNamespace extends SocketNameSpace {
                 ]);
 
                 const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                    serverConfig.BACKEND_API_TOKEN, 'ContextNamespace', KIXObjectType.SYS_CONFIG_OPTION, null,
+                    serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
                     loadingOptions, null
                 ).catch((): SysConfigOption[] => []);
 
                 const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
+
+                LoggingService.getInstance().info(`Build ${contextOptions.length} context configurations.`);
 
                 for (const contextOption of contextOptions) {
 
@@ -113,7 +119,7 @@ export class ContextNamespace extends SocketNameSpace {
                             options
                         );
 
-                        CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextNamespace');
+                        await CacheService.getInstance().set(newConfig.contextId, newConfig, 'ContextConfiguration');
                     }
                 }
 
@@ -128,7 +134,7 @@ export class ContextNamespace extends SocketNameSpace {
     protected async loadContextConfiguration(
         data: LoadContextConfigurationRequest
     ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
-        let configuration = await CacheService.getInstance().get(data.contextId, 'ContextNamespace');
+        let configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
 
         if (!configuration) {
             return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(
@@ -159,14 +165,14 @@ export class ContextNamespace extends SocketNameSpace {
         ]);
 
         const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-            serverConfig.BACKEND_API_TOKEN, 'ContextNamespace', KIXObjectType.SYS_CONFIG_OPTION, null,
+            serverConfig.BACKEND_API_TOKEN, 'ContextConfiguration', KIXObjectType.SYS_CONFIG_OPTION, null,
             loadingOptions, null
         ).catch((): SysConfigOption[] => []);
 
         const contextOptions = options.filter((c) => c.ContextMetadata === 'Context');
 
         for (const contextOption of contextOptions) {
-            const configuration = await CacheService.getInstance().get(contextOption.Name, 'ContextNamespace');
+            const configuration = await CacheService.getInstance().get(contextOption.Name, 'ContextConfiguration');
 
             if (configuration) {
                 configurations.push(configuration);
