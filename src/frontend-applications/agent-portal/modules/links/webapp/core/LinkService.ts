@@ -15,6 +15,7 @@ import { LinkObject } from "../../model/LinkObject";
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { IKIXObjectService } from "../../../../modules/base-components/webapp/core/IKIXObjectService";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { LinkObjectProperty } from "../../model/LinkObjectProperty";
 
 export class LinkService extends KIXObjectService<Link> {
 
@@ -60,7 +61,7 @@ export class LinkService extends KIXObjectService<Link> {
         const routingConfig = service ? service.getObjectRoutingConfiguration() : null;
 
         if (routingConfig) {
-            routingConfig.objectIdProperty = object.linkedObjectKey;
+            routingConfig.objectIdProperty = LinkObjectProperty.LINKED_OBJECT_KEY;
         }
 
         return routingConfig;
