@@ -36,12 +36,6 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
-        const notesSidebar = new WidgetConfiguration(
-            'user-ticket-list-notes-widget', 'User Ticket List Notes Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebar);
-
         const tableConfig = new TableConfiguration(
             'user-ticket-list-table', 'User Ticket List Table', ConfigurationType.Table,
             KIXObjectType.TICKET, new KIXObjectLoadingOptions([
@@ -76,9 +70,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ContextConfiguration(
                 this.getModuleId(), 'User Ticket List', ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('user-ticket-list-notes-widget', 'user-ticket-list-notes-widget')
-                ],
+                [],
                 [], [],
                 [
                     new ConfiguredWidget('user-ticket-list-table-widget', 'user-ticket-list-table-widget')

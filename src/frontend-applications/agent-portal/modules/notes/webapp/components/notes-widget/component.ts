@@ -16,7 +16,7 @@ import { NotesService } from '../../core/NotesService';
 
 export class Component {
 
-    private state: ComponentState;
+    public state: ComponentState;
     private editorValue: string;
 
     public onCreate(input: any): void {

@@ -62,14 +62,6 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
         );
         configurations.push(queueExplorerConfig);
 
-
-        // sidebars
-        const notesSidebarConfig = new WidgetConfiguration(
-            'ticket-dashboard-notes-widget', 'Note Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebarConfig);
-
         const predefinedTicketFilter = [
             new KIXObjectPropertyFilter('Translatable#Owner', [
                 new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
@@ -270,9 +262,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ContextConfiguration(
                 this.getModuleId(), 'Ticket Dashboard Configuration', ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('ticket-notes', 'ticket-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget(
                         'ticket-dashboard-queue-explorer', 'ticket-dashboard-queue-explorer', null,

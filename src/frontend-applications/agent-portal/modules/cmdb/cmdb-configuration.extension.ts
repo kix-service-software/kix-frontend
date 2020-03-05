@@ -52,11 +52,6 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
-        const notesSidebar = new WidgetConfiguration(
-            'cmdb-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebar);
 
         const classExplorer = new WidgetConfiguration(
             'cmdb-dashboard-class-explorer', 'Class Explorer', ConfigurationType.Widget,
@@ -259,9 +254,7 @@ export class Extension implements IConfigurationExtension {
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('cmdb-dashboard-notes-widget', 'cmdb-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget(
                         'cmdb-dashboard-class-explorer', 'cmdb-dashboard-class-explorer', null,

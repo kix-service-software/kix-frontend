@@ -78,20 +78,11 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
         configurations.push(contactListWidget);
 
-        const notesSidebar = new WidgetConfiguration(
-            'customer-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null,
-            false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebar);
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('customer-dashboard-notes-widget', 'customer-dashboard-notes-widget')
-                ],
+                [],
                 [], [],
                 [
                     new ConfiguredWidget(
