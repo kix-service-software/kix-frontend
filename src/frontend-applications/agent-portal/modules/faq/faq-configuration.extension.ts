@@ -80,20 +80,11 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
         configurations.push(faqCategoryExplorer);
 
-        const notesSidebar = new WidgetConfiguration(
-            'faq-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null,
-            false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebar);
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('faq-dashboard-notes-widget', 'faq-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget(
                         'faq-dashboard-category-explorer', 'faq-dashboard-category-explorer', null,
