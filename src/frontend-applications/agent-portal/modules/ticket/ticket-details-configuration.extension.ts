@@ -29,6 +29,7 @@ import { UserProperty } from "../user/model/UserProperty";
 import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
 import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
+import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -64,6 +65,9 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 TicketProperty.ORGANISATION_ID,
                 TicketProperty.CONTACT_ID,
                 TicketProperty.CREATED,
+                KIXObjectProperty.CREATE_BY,
+                TicketProperty.CHANGED,
+                KIXObjectProperty.CHANGE_BY,
                 TicketProperty.AGE,
                 TicketProperty.LOCK_ID,
                 TicketProperty.TYPE_ID,

@@ -20,7 +20,6 @@
         "require ./components/new-ticket-state-dialog",
         "require ./components/new-ticket-type-dialog",
         "require ./components/queue-input-follow-up",
-        "require ./components/relevant-config-item-list",
         "require ./components/search-ticket-dialog",
         "require ./components/ticket-admin-priorities",
         "require ./components/ticket-admin-queues",

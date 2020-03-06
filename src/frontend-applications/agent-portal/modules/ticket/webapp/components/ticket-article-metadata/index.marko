@@ -9,72 +9,78 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 <div.article-metadata-container>
     <if(state.article)>
         <object-property-label object=state.article property="From" labelProvider=state.labelProvider/>
-        <object-property-label object=state.article property="To" labelProvider=state.labelProvider>
-            <@info>
-                <if(state.article.toList.length > 1)>
-                    <overlay-icon
-                        content="article-receiver-list"
-                        instanceId="to-receiver-overlay"
-                        data={
-                                                receiver: state.article.toList
-                                            }/>
-                </if>
-            </@info>
-            <@value>
-                <span>${state.receiverToString}</span>
-                <if(state.article.toList.length > 1)>
-                    <p.further-link>
-                        <a on-click("showOverlay", "To")>
-                            <translation-string pattern="Translatable#and further"/>
-                        </a>
-                    </p>
-                </if>
-            </@value>
-        </object-property-label>
-        <object-property-label object=state.article property="Cc" labelProvider=state.labelProvider>
-            <@info>
-                <if(state.article.ccList.length > 1)>
-                    <overlay-icon
-                        content="article-receiver-list"
-                        instanceId="cc-receiver-overlay"
-                        data={
-                                                receiver: state.article.ccList
-                                            }/>
-                </if>
-            </@info>
-            <@value>
-                <span>${state.receiverCcString}</span>
-                <if(state.article.ccList.length > 1)>
-                    <p.further-link>
-                        <a on-click("showOverlay", "Cc")>
-                            <translation-string pattern="Translatable#and further"/>
-                        </a>
-                    </p>
-                </if>
-            </@value>
-        </object-property-label>
-        <object-property-label object=state.article property="Bcc" labelProvider=state.labelProvider>
-            <@info>
-                <if(state.article.bccList.length > 1)>
-                    <overlay-icon
-                        content="article-receiver-list"
-                        instanceId="bcc-receiver-overlay"
-                        data={
-                                                receiver: state.article.bccList
-                                            }/>
-                </if>
-            </@info>
-            <@value>
-                <span>${state.receiverBccString}</span>
-                <if(state.article.bccList.length > 1)>
-                    <p.further-link>
-                        <a on-click("showOverlay", "Bcc")>
-                            <translation-string pattern="Translatable#and further"/>
-                        </a>
-                    </p>
-                </if>
-            </@value>
-        </object-property-label>
+        <if(state.showTo)>
+            <object-property-label object=state.article property="To" labelProvider=state.labelProvider>
+                <@info>
+                    <if(state.article.toList.length > 1)>
+                        <overlay-icon
+                            content="article-receiver-list"
+                            instanceId="to-receiver-overlay"
+                            data={
+                                                        receiver: state.article.toList
+                                                    }/>
+                    </if>
+                </@info>
+                <@value>
+                    <span>${state.receiverToString}</span>
+                    <if(state.article.toList.length > 1)>
+                        <p.further-link>
+                            <a on-click("showOverlay", "To")>
+                                <translation-string pattern="Translatable#and further"/>
+                            </a>
+                        </p>
+                    </if>
+                </@value>
+            </object-property-label>
+        </if>
+        <if(state.showCc)>
+            <object-property-label object=state.article property="Cc" labelProvider=state.labelProvider>
+                <@info>
+                    <if(state.article.ccList.length > 1)>
+                        <overlay-icon
+                            content="article-receiver-list"
+                            instanceId="cc-receiver-overlay"
+                            data={
+                                                        receiver: state.article.ccList
+                                                    }/>
+                    </if>
+                </@info>
+                <@value>
+                    <span>${state.receiverCcString}</span>
+                    <if(state.article.ccList.length > 1)>
+                        <p.further-link>
+                            <a on-click("showOverlay", "Cc")>
+                                <translation-string pattern="Translatable#and further"/>
+                            </a>
+                        </p>
+                    </if>
+                </@value>
+            </object-property-label>
+        </if>
+        <if(state.showBcc)>
+            <object-property-label object=state.article property="Bcc" labelProvider=state.labelProvider>
+                <@info>
+                    <if(state.article.bccList.length > 1)>
+                        <overlay-icon
+                            content="article-receiver-list"
+                            instanceId="bcc-receiver-overlay"
+                            data={
+                                                        receiver: state.article.bccList
+                                                    }/>
+                    </if>
+                </@info>
+                <@value>
+                    <span>${state.receiverBccString}</span>
+                    <if(state.article.bccList.length > 1)>
+                        <p.further-link>
+                            <a on-click("showOverlay", "Bcc")>
+                                <translation-string pattern="Translatable#and further"/>
+                            </a>
+                        </p>
+                    </if>
+                </@value>
+            </object-property-label>
+        </if>
         <object-property-label object=state.article property="Subject" labelProvider=state.labelProvider/>
     </if>
 </div>

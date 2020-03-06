@@ -100,9 +100,6 @@ class Extension implements IKIXModuleExtension {
             'new-ticket-queue-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-queue-dialog', []
         ),
         new UIComponent(
-            'relevant-config-item-list', '/kix-module-ticket$0/webapp/components/relevant-config-item-list', []
-        ),
-        new UIComponent(
             'new-ticket-state-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-state-dialog', []
         ),
         new UIComponent('new-ticket-type-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-type-dialog', []),

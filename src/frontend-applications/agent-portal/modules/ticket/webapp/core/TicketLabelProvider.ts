@@ -289,9 +289,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.CLOSE_TIME:
                 displayValue = 'Translatable#Closed at';
                 break;
-            case TicketProperty.CHANGED:
-                displayValue = 'Translatable#Changed at';
-                break;
             case TicketProperty.LAST_CHANGE_TIME:
                 displayValue = 'Translatable#Last changed time';
                 break;

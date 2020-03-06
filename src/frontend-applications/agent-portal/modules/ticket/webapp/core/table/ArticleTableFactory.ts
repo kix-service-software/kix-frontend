@@ -102,7 +102,7 @@ export class ArticleTableFactory extends TableFactory {
                 'article-communication-action',
                 'article-tag-action',
                 'article-maximize-action'
-            ], true);
+            ], true, null, null, true);
         }
 
         return tableConfiguration;

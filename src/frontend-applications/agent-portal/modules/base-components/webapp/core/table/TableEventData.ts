@@ -15,6 +15,7 @@ export class TableEventData {
         public tableId: string,
         public rowId?: string,
         public columnId?: string,
-        public table?: ITable
+        public table?: ITable,
+        public openRows?: boolean
     ) { }
 }

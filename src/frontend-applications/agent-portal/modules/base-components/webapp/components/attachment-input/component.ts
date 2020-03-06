@@ -115,6 +115,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         const uploadInput = (this as any).getEl('fileUploadInput');
         if (uploadInput && uploadInput.files) {
             this.appendFiles(Array.from(uploadInput.files));
+            this.state.minimized = false;
         }
     }
 

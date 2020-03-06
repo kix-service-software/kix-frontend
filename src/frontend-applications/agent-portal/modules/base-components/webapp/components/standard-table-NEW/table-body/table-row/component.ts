@@ -44,6 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
+            EventService.getInstance().subscribe(TableEvent.TOGGLE_ROWS, this);
             this.prepareObserver();
         }
     }
@@ -54,6 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
+        EventService.getInstance().unsubscribe(TableEvent.TOGGLE_ROWS, this);
 
         if (this.observer) {
             this.observer.disconnect();
@@ -108,13 +110,21 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 (this as any).setStateDirty('row');
                 this.setRowClasses();
             }
+
+            if (eventId === TableEvent.TOGGLE_ROWS) {
+                this.state.open = data.openRows;
+                this.state.row.expand(data.openRows);
+                this.setRowClasses();
+            }
             this.setRowClasses();
         }
     }
 
-    public toggleRow(event): void {
-        event.stopPropagation();
-        event.preventDefault();
+    public toggleRow(event?: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         this.state.row.expand(!this.state.open);
         this.setRowClasses();
     }

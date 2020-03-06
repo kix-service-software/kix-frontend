@@ -15,6 +15,7 @@ export class ToggleOptions {
         public actions: string[] = [],
         public toggleFirst: boolean = false,
         public data: {} = {},
-        public rowObjectProperty?: string
+        public rowObjectProperty?: string,
+        public toggleAll: boolean = false
     ) { }
 }

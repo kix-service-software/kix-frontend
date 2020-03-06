@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <tr class={
     "fist-column-fixed": component.firstColumnIsFixed()
 } style=("height: " + component.getHeaderHeight())>
@@ -20,6 +19,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     </for>
     <th.column-spacer/>
     <if(component.isToggleable())>
-        <th.toggle/>
+        <th.toggle>
+            <if(state.toggleAll)>
+                <if(state.closeAll)>
+                    <span.kix-icon-all-close on-click("toggleAll", false)/>
+                </if>
+                <else>
+                    <span.kix-icon-all-open on-click("toggleAll", true)/>
+                </else>
+            </if>
+        </th>
     </if>
 </tr>
