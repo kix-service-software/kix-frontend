@@ -52,14 +52,14 @@ class FormComponent {
                 this.keyListenerElement.dispatchEvent(new KeyboardEvent('keypress', { key: 'Tab' }));
                 this.keyListener = this.keyDown.bind(this);
                 this.keyListenerElement.addEventListener('keydown', this.keyListener);
-            }
 
-            setTimeout(() => {
-                const elements = this.keyListenerElement.getElementsByClassName('field-input');
-                if (elements && elements.length) {
-                    elements.item(0).firstElementChild.focus();
-                }
-            }, 500);
+                setTimeout(() => {
+                    const elements = this.keyListenerElement.getElementsByClassName('field-input');
+                    if (elements && elements.length) {
+                        elements.item(0).firstElementChild.focus();
+                    }
+                }, 500);
+            }
         }
     }
 
