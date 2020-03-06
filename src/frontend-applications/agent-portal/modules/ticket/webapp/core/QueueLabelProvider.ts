@@ -56,7 +56,6 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
                 displayValue = 'Translatable#Parent Queue';
                 break;
             case QueueProperty.QUEUE_ID:
-            case 'ICON':
                 displayValue = 'Translatable#Icon';
                 break;
             default:

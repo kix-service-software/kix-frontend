@@ -14,7 +14,6 @@ import { ContactProperty } from "../../model/ContactProperty";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Organisation } from "../../model/Organisation";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { UserProperty } from "../../../user/model/UserProperty";
@@ -91,9 +90,6 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case ContactProperty.ID:
                 displayValue = 'Translatable#ID';
                 break;

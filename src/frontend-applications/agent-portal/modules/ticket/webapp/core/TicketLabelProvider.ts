@@ -21,7 +21,6 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { User } from "../../../user/model/User";
 import { AgentService } from "../../../user/webapp/core";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
@@ -203,9 +202,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case TicketProperty.WATCHERS:
                 displayValue = 'Translatable#Observer';
                 break;
@@ -215,14 +211,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case TicketProperty.CHANGED:
-                displayValue = 'Translatable#Changed at';
-                break;
             case TicketProperty.TIME_UNITS:
                 displayValue = 'Translatable#Accounted time';
-                break;
-            case TicketProperty.CREATED:
-                displayValue = 'Translatable#Created at';
                 break;
             case TicketProperty.LOCK_ID:
                 displayValue = 'Translatable#Lock State';
@@ -298,11 +288,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case 'UserID':
                 displayValue = 'Translatable#Agent';
                 break;
-            case 'LinkedAs':
-                displayValue = 'Translatable#Linked as';
-                break;
             default:
-                displayValue = await super.getPropertyText(property);
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
