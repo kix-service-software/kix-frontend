@@ -26,6 +26,21 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.prepareTranslations();
+        document.addEventListener('keydown', this.keyDown.bind(this), false);
+    }
+
+    public onDestroy(): void {
+        document.removeEventListener('keydown', this.keyDown.bind(this), false);
+    }
+
+    public keyDown(event: any): void {
+        if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && event.ctrlKey) {
+            if (event.key === 'ArrowRight') {
+                this.showPage(this.state.activePageIndex + 1);
+            } else {
+                this.showPage(this.state.activePageIndex - 1);
+            }
+        }
     }
 
     private async prepareTranslations(): Promise<void> {

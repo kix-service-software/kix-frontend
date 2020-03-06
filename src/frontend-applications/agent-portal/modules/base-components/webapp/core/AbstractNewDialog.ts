@@ -54,7 +54,10 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+        DialogService.getInstance().setMainDialogHint(
+            // tslint:disable-next-line:max-line-length
+            'Translatable#For keyboard navigation, press "Ctrl" to switch focus to dialog. See manual for more detailed information.'
+        );
 
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
@@ -68,6 +71,15 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             );
             this.dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
         }
+
+        EventService.getInstance().subscribe(ApplicationEvent.DIALOG_SUBMIT, {
+            eventSubscriberId: 'AbstractDialog' + this.state.formId,
+            eventPublished: (data: any, eventId: string) => {
+                if (data && data.formId === this.state.formId) {
+                    this.submit();
+                }
+            }
+        });
     }
 
     public async onDestroy(): Promise<void> {
