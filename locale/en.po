@@ -1503,11 +1503,10 @@ msgstr ""
 
 msgid "Helptext_Admin_SysConfigSearch"
 msgstr ""
-"Searchable are properties of the colums \"Name\", \"Context\" and \""
-"Metadata\". If only a part of a name is inserted it must be put in * "
-"(Wildcard-Search). Additionally it is possible to insert \"modified\" to "
-"find all modified values as well as \"!modified\" to find all unmodified "
-"values."
+"Searchable are properties of the colums \"Name\", \"Context\" and \"Metadata"
+"\". If only a part of a name is inserted it must be put in * (Wildcard-"
+"Search). Additionally it is possible to insert \"modified\" to find all "
+"modified values as well as \"!modified\" to find all unmodified values."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
@@ -2613,6 +2612,9 @@ msgstr ""
 msgid "My locked tickets with new articles"
 msgstr ""
 
+msgid "My Open Tickets"
+msgstr ""
+
 msgid "My Queues"
 msgstr "My Teams"
 
@@ -3670,9 +3672,6 @@ msgid "to Article"
 msgstr ""
 
 msgid "Today"
-msgstr ""
-
-msgid "ToDo / Processing required"
 msgstr ""
 
 msgid "to version"

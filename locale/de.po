@@ -1570,9 +1570,9 @@ msgid "Helptext_Admin_SysConfigSearch"
 msgstr ""
 "Durchsuchbar sind die Eigenschaften in den Spalten \"Name\", \"Kontext\" und "
 "\"Metadaten\". Wird nur ein Teil einer Bezeichnung gesucht, muss dieser in * "
-"gesetzt werden (Wildcard-Suche).  Zusätzlich möglich ist die Eingabe von \""
-"modified\" = findet alle geänderten Schlüssel & \"!modified\" = findet alle "
-"nicht geänderten Schlüssel."
+"gesetzt werden (Wildcard-Suche).  Zusätzlich möglich ist die Eingabe von "
+"\"modified\" = findet alle geänderten Schlüssel & \"!modified\" = findet "
+"alle nicht geänderten Schlüssel."
 
 msgid "Helptext_Admin_SystemAddressCreate_Comment"
 msgstr ""
@@ -2738,6 +2738,11 @@ msgstr "Meine gesperrten Tickets"
 msgid "My locked tickets with new articles"
 msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 
+#, fuzzy
+#| msgid "Open Tickets"
+msgid "My Open Tickets"
+msgstr "Offene Tickets"
+
 msgid "My Queues"
 msgstr "Meine Teams"
 
@@ -3808,9 +3813,6 @@ msgstr "zum Artikel"
 msgid "Today"
 msgstr "Heute"
 
-msgid "ToDo / Processing required"
-msgstr "ToDo / Bearbeitung erforderlich"
-
 msgid "to version"
 msgstr "zur Version"
 
@@ -4095,6 +4097,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "ToDo / Processing required"
+#~ msgstr "ToDo / Bearbeitung erforderlich"
 
 #~ msgid "User"
 #~ msgstr "Benutzer"
