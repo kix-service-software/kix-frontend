@@ -137,6 +137,11 @@ export class ContextNamespace extends SocketNameSpace {
         let configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
 
         if (!configuration) {
+            await this.rebuildConfigCache();
+            configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
+        }
+
+        if (!configuration) {
             return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(
                 data.requestId, `No configuration extension for context ${data.contextId} available.`
             ));
