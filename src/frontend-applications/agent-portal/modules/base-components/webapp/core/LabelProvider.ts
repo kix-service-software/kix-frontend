@@ -25,6 +25,7 @@ import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
 import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
 import { ConfigItem } from "../../../cmdb/model/ConfigItem";
 import { LabelService } from "./LabelService";
+import { SearchProperty } from "../../../search/model/SearchProperty";
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -50,6 +51,9 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     public async getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise<string> {
         let displayValue = property;
         switch (property) {
+            case SearchProperty.FULLTEXT:
+                displayValue = 'Translatable#Full Text';
+                break;
             case KIXObjectProperty.COMMENT:
                 displayValue = 'Translatable#Comment';
                 break;
@@ -57,15 +61,19 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 displayValue = 'Translatable#Validity';
                 break;
             case KIXObjectProperty.CREATE_BY:
+            case 'CreatedBy':
                 displayValue = 'Translatable#Created by';
                 break;
             case KIXObjectProperty.CREATE_TIME:
+            case 'Created':
                 displayValue = 'Translatable#Created at';
                 break;
             case KIXObjectProperty.CHANGE_BY:
+            case 'ChangedBy':
                 displayValue = 'Translatable#Changed by';
                 break;
             case KIXObjectProperty.CHANGE_TIME:
+            case 'Changed':
                 displayValue = 'Translatable#Changed at';
                 break;
             case 'ICON':

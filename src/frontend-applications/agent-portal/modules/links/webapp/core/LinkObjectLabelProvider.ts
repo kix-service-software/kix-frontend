@@ -45,7 +45,7 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
         return displayValue ? displayValue.toString() : '';
     }
 
-    public async getPropertyText(property: string, translatable: boolean = true): Promise<string> {
+    public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
             case LinkObjectProperty.LINKED_OBJECT_TYPE:
@@ -57,11 +57,11 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
             case LinkObjectProperty.TITLE:
                 displayValue = 'Translatable#Label';
                 break;
-            case LinkObjectProperty.LINKED_AS:
+            case LinkObjectProperty.LINKED_AS: // != KIXObjectProperty.LINKED_AS (l != L)
                 displayValue = 'Translatable#Linked as';
                 break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

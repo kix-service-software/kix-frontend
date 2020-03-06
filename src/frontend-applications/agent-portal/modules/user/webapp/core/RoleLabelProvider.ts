@@ -10,7 +10,6 @@
 import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
 import { Role } from "../../model/Role";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { RoleProperty } from "../../model/RoleProperty";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
@@ -26,9 +25,6 @@ export class RoleLabelProvider extends LabelProvider<Role> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case RoleProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;

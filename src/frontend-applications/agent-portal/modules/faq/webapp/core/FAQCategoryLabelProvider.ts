@@ -36,9 +36,6 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
             case FAQCategoryProperty.ID:
                 displayValue = 'Translatable#Id';
                 break;
-            case 'ICON':
-                displayValue = 'Translatable#Icon';
-                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }

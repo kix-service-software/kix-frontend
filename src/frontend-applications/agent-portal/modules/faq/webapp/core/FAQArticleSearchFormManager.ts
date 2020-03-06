@@ -116,7 +116,7 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
     private isDropDown(property: string): boolean {
         return property === FAQArticleProperty.APPROVED
             || property === FAQArticleProperty.CATEGORY_ID
-            || property === FAQArticleProperty.VALID_ID
+            || property === KIXObjectProperty.VALID_ID
             || property === FAQArticleProperty.LANGUAGE
             || property === FAQArticleProperty.KEYWORDS
             || property === FAQArticleProperty.CREATED_BY

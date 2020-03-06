@@ -50,7 +50,7 @@ export class ConfigItemClassDefinitionTableFactory extends TableFactory {
                 true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(null, null, null,
-                ConfigItemClassDefinitionProperty.CURRENT, true, false, true, true, 150,
+                ConfigItemClassDefinitionProperty.CURRENT, true, false, false, true, 150,
                 true, true, false, DataType.DATE_TIME
             )
         ];

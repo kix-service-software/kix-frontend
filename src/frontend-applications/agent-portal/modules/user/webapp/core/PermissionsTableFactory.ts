@@ -88,6 +88,7 @@ export class PermissionsTableFactory extends TableFactory {
         let config;
         switch (property) {
             case PermissionProperty.RoleID:
+            case PermissionProperty.TYPE_ID:
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, true,
                     DataType.STRING, true, null, null, false
@@ -96,12 +97,6 @@ export class PermissionsTableFactory extends TableFactory {
             case 'ICON':
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, false, true, false, false, null, false, false, false, undefined, false
-                );
-                break;
-            case PermissionProperty.TYPE_ID:
-                config = new DefaultColumnConfiguration(null, null, null,
-                    property, true, false, true, false, 150, true, true, true,
-                    DataType.STRING, true, null, null, false
                 );
                 break;
             case PermissionProperty.TARGET:

@@ -51,6 +51,8 @@ export class ConfigItemClassTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration('ICON'),
             this.getDefaultColumnConfiguration(ConfigItemClassProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];

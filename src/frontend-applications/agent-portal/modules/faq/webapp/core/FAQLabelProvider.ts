@@ -12,7 +12,6 @@ import { FAQArticle } from "../../model/FAQArticle";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FAQArticleProperty } from "../../model/FAQArticleProperty";
 import { FAQCategory } from "../../model/FAQCategory";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
@@ -59,9 +58,6 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case FAQArticleProperty.APPROVED:
                 displayValue = 'Translatable#Approved';
                 break;
@@ -73,18 +69,6 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
                 displayValue = 'Translatable#Show in Customer Portal';
-                break;
-            case FAQArticleProperty.CHANGED:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case FAQArticleProperty.CHANGED_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case FAQArticleProperty.CREATED:
-                displayValue = 'Translatable#Created at';
-                break;
-            case FAQArticleProperty.CREATED_BY:
-                displayValue = 'Translatable#Created by';
                 break;
             case FAQArticleProperty.FIELD_1:
                 displayValue = 'Translatable#Symptom';
@@ -124,17 +108,11 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case FAQArticleProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
             case FAQArticleProperty.VOTES:
                 displayValue = 'Translatable#Rating';
                 break;
-            case 'LinkedAs':
-                displayValue = 'Translatable#Linked as';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {

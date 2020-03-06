@@ -82,7 +82,7 @@ export class Extension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-priority-edit-form-field-comment',
-                'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Comment',
                 null, null, null, null, null, null, null, null, 250
             )

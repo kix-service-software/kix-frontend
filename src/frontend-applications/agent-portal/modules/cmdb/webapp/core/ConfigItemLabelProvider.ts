@@ -18,7 +18,6 @@ import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalo
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { VersionProperty } from "../../model/VersionProperty";
 
@@ -98,12 +97,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                     KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK], null, null, true
                 ).catch((error): SysConfigOption[] => []);
                 displayValue = hookConfig && hookConfig.length ? hookConfig[0].Value : 'CI#';
-                break;
-            case 'LinkedAs':
-                displayValue = 'Translatable#Linked as';
-                break;
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
                 break;
             case ConfigItemProperty.NAME:
                 displayValue = 'Translatable#Name';

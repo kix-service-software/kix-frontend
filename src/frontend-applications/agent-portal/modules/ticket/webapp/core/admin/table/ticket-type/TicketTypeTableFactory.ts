@@ -49,6 +49,7 @@ export class TicketTypeTableFactory extends TableFactory {
         const tableColumns = [
             this.getDefaultColumnConfiguration(TicketTypeProperty.NAME),
             this.getDefaultColumnConfiguration('ICON'),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.COMMENT),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),

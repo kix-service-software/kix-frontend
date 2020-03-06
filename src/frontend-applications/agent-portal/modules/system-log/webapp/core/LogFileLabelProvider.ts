@@ -26,13 +26,13 @@ export class LogFileLabelProvider extends LabelProvider {
         let displayValue = property;
         switch (property) {
             case LogFileProperty.DISPLAY_NAME:
-                displayValue = 'Translatable#Title';
+                displayValue = 'Translatable#Name';
                 break;
             case LogFileProperty.FILE_SIZE:
                 displayValue = 'Translatable#Size';
                 break;
             case LogFileProperty.MODIFIY_TIME:
-                displayValue = 'Translatable#Modification Time';
+                displayValue = 'Translatable#Changed at';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, false, translatable);

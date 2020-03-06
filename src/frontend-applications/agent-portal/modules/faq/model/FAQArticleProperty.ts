@@ -39,8 +39,6 @@ export enum FAQArticleProperty {
 
     APPROVED = 'Approved',
 
-    VALID_ID = 'ValidID',
-
     CREATED_BY = 'CreatedBy',
 
     CREATED = 'Created',
