@@ -141,7 +141,7 @@ export class ContactFormService extends KIXObjectFormService {
                 accessValue, null, accessChildren
             );
             accessGroup = new FormGroupConfiguration(
-                'user-access-group', 'Translatable#Login Information', null, null,
+                'user-information-group', 'Translatable#User Information', null, null,
                 [access]
             );
         }

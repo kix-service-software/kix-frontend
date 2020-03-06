@@ -135,7 +135,7 @@ export class RoutingService {
     }
 
     public async buildUrl(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<string> {
-        let url = '#';
+        let url;
         const descriptor = ContextFactory.getInstance().getContextDescriptor(routingConfiguration.contextId);
         if (descriptor) {
             url = descriptor.urlPaths[0];

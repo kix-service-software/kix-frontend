@@ -21,7 +21,7 @@ class Extension implements IAdminModuleExtension {
             new AdminModuleCategory(
                 null, 'user-management', 'Translatable#User Management', null, [], [
                 new AdminModule(
-                    null, 'users', 'Translatable#Agents', null,
+                    null, 'users', 'Translatable#Users', null,
                     KIXObjectType.USER, 'user-admin-users', [
                     new UIComponentPermission('system/users', [CRUD.CREATE], true),
                     new UIComponentPermission('system/users/*', [CRUD.UPDATE], true)
