@@ -23,7 +23,7 @@ import { ObjectReferenceOptions } from '../../base-components/webapp/core/Object
 import { DynamicFormFieldOption } from '../webapp/core/DynamicFormFieldOption';
 import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
-import { DynamicFieldType } from '../model/DynamicFieldType';
+import { DynamicFieldTypes } from '../model/DynamicFieldTypes';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -215,7 +215,7 @@ describe('DynamicFieldFormUtil', () => {
                 let df: DynamicField;
                 if (name === 'Date') {
                     df = new DynamicField();
-                    df.FieldType = DynamicFieldType.DATE;
+                    df.FieldType = DynamicFieldTypes.DATE;
                     df.Name = 'Date';
                     df.Label = 'Date';
                     df.Config = dfConfig;
@@ -305,7 +305,7 @@ describe('DynamicFieldFormUtil', () => {
                 let df: DynamicField;
                 if (name === 'DateTime') {
                     df = new DynamicField();
-                    df.FieldType = DynamicFieldType.DATE_TIME;
+                    df.FieldType = DynamicFieldTypes.DATE_TIME;
                     df.Name = 'DateTime';
                     df.Label = 'DateTime';
                     df.Config = dfConfig;

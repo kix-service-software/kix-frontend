@@ -33,7 +33,7 @@ import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicField
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { SortUtil } from "../../../../model/SortUtil";
@@ -98,8 +98,8 @@ export class JobFilterManager extends AbstractDynamicFormManager {
                             DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                             FilterDataType.STRING, FilterType.AND,
                             [
-                                DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
-                                DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION, DynamicFieldType.CI_REFERENCE
+                                DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
+                                DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION, DynamicFieldTypes.CI_REFERENCE
                             ]
                         )
                     ]
@@ -219,7 +219,7 @@ export class JobFilterManager extends AbstractDynamicFormManager {
             const dfName = KIXObjectService.getDynamicFieldName(property);
             if (dfName) {
                 const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-                if (dynamicField.FieldType === DynamicFieldType.CI_REFERENCE) {
+                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
                     const configItems = await CMDBService.searchConfigItems(searchValue, limit);
                     tree = configItems.map(
                         (ci) => new TreeNode(

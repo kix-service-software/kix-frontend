@@ -14,7 +14,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ILabelProvider } from '../../../../base-components/webapp/core/ILabelProvider';
 import { Label } from '../../../../base-components/webapp/core/Label';
-import { DynamicFieldType } from '../../../model/DynamicFieldType';
+import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../../model/ContextMode';
@@ -56,10 +56,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 : null;
             if (dfValue) {
                 let icon = null;
-                if (this.state.field.FieldType === DynamicFieldType.CHECK_LIST) {
+                if (this.state.field.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     this.setCheckListValues(dfValue);
                 } else {
-                    if (this.state.field.FieldType === DynamicFieldType.CI_REFERENCE) {
+                    if (this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
                         icon = 'kix-icon-ci';
                     }
                     const value = this.labelProvider
@@ -82,7 +82,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public labelClicked(label: Label): void {
-        if (label && label.id && this.state.field.FieldType === DynamicFieldType.CI_REFERENCE) {
+        if (label && label.id && this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
             const routingConfig = new RoutingConfiguration(
                 'config-item-details', KIXObjectType.CONFIG_ITEM, ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
             );

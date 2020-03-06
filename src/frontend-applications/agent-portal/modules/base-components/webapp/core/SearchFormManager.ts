@@ -20,8 +20,7 @@ import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
 import { InputFieldTypes } from "./InputFieldTypes";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
-import { DynamicFieldService } from "../../../dynamic-fields/webapp/core/DynamicFieldService";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 
 export class SearchFormManager extends AbstractDynamicFormManager {
     public objectType: string;
@@ -39,8 +38,8 @@ export class SearchFormManager extends AbstractDynamicFormManager {
                         DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                         FilterDataType.STRING, FilterType.AND,
                         [
-                            DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
-                            DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION, DynamicFieldType.CI_REFERENCE
+                            DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
+                            DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION, DynamicFieldTypes.CI_REFERENCE
                         ]
                     ),
                     new FilterCriteria(
@@ -70,16 +69,16 @@ export class SearchFormManager extends AbstractDynamicFormManager {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (field) {
                 switch (field.FieldType) {
-                    case DynamicFieldType.TEXT:
-                    case DynamicFieldType.TEXT_AREA:
+                    case DynamicFieldTypes.TEXT:
+                    case DynamicFieldTypes.TEXT_AREA:
                         operations = SearchDefinition.getStringOperators();
                         break;
-                    case DynamicFieldType.SELECTION:
-                    case DynamicFieldType.CI_REFERENCE:
+                    case DynamicFieldTypes.SELECTION:
+                    case DynamicFieldTypes.CI_REFERENCE:
                         operations = [SearchOperator.IN];
                         break;
-                    case DynamicFieldType.DATE:
-                    case DynamicFieldType.DATE_TIME:
+                    case DynamicFieldTypes.DATE:
+                    case DynamicFieldTypes.DATE_TIME:
                         operations = SearchDefinition.getDateTimeOperators();
                         break;
                     default:
@@ -95,11 +94,11 @@ export class SearchFormManager extends AbstractDynamicFormManager {
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (field) {
-                if (field.FieldType === DynamicFieldType.SELECTION) {
+                if (field.FieldType === DynamicFieldTypes.SELECTION) {
                     inputType = InputFieldTypes.DROPDOWN;
-                } else if (field.FieldType === DynamicFieldType.DATE) {
+                } else if (field.FieldType === DynamicFieldTypes.DATE) {
                     inputType = InputFieldTypes.DATE;
-                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
                     inputType = InputFieldTypes.DATE_TIME;
                 }
             }

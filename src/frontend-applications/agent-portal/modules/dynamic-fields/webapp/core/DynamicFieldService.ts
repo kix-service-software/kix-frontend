@@ -13,6 +13,9 @@ import { DynamicField } from "../../model/DynamicField";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
+import { TreeNode } from "../../../base-components/webapp/core/tree";
+import { LabelService } from "../../../base-components/webapp/core/LabelService";
+import { DynamicFieldType } from "../../model/DynamicFieldType";
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
@@ -30,7 +33,8 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
-        return kixObjectType === KIXObjectType.DYNAMIC_FIELD;
+        return kixObjectType === KIXObjectType.DYNAMIC_FIELD
+            || kixObjectType === KIXObjectType.DYNAMIC_FIELD_TYPE;
     }
 
     public getLinkObjectName(): string {
@@ -42,9 +46,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects: O[];
-        if (objectType === KIXObjectType.DYNAMIC_FIELD) {
-            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
-        }
+        objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
 
         return objects;
     }
@@ -68,4 +70,20 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         return schema;
     }
 
+    public async prepareObjectTree(
+        dynamicFieldType: DynamicFieldType[], showInvalid?: boolean,
+        invalidClickable?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        if (dynamicFieldType && !!dynamicFieldType.length) {
+            for (const o of dynamicFieldType) {
+                const fieldType = o.Name;
+                if (await DynamicFieldService.getInstance().getConfigSchema(fieldType)) {
+
+                    nodes.push(new TreeNode(fieldType, await LabelService.getInstance().getText(o)));
+                }
+            }
+        }
+        return nodes;
+    }
 }

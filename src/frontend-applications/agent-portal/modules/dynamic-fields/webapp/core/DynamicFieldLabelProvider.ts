@@ -65,6 +65,9 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
             case DynamicFieldProperty.INTERNAL_FIELD:
                 displayValue = dynamicField.InternalField ? 'Translatable#yes' : 'Translatable#no';
                 break;
+            case DynamicFieldProperty.FIELD_TYPE:
+                displayValue = dynamicField.FieldTypeDisplayName;
+                break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
         }

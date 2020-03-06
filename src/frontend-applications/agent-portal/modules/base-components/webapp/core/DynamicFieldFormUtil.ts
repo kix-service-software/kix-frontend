@@ -14,7 +14,6 @@ import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { IKIXObjectFormService } from "../../../base-components/webapp/core/IKIXObjectFormService";
 import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
-import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 import { InputFieldTypes } from "./InputFieldTypes";
@@ -26,7 +25,7 @@ import { TreeNode } from "./tree";
 import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { FormValidationService } from "./FormValidationService";
 import { ValidationResult } from "./ValidationResult";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { CheckListInputType } from "../../../dynamic-fields/webapp/core/CheckListInputType";
 import { CheckListItem } from "../../../dynamic-fields/webapp/core/CheckListItem";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
@@ -82,23 +81,23 @@ export class DynamicFieldFormUtil {
                     : null;
 
                 switch (dynamicField.FieldType) {
-                    case DynamicFieldType.TEXT:
+                    case DynamicFieldTypes.TEXT:
                         field.inputComponent = null;
                         break;
-                    case DynamicFieldType.TEXT_AREA:
+                    case DynamicFieldTypes.TEXT_AREA:
                         field.inputComponent = 'text-area-input';
                         break;
-                    case DynamicFieldType.DATE:
-                    case DynamicFieldType.DATE_TIME:
+                    case DynamicFieldTypes.DATE:
+                    case DynamicFieldTypes.DATE_TIME:
                         this.prepareDateField(field, dynamicField);
                         break;
-                    case DynamicFieldType.SELECTION:
+                    case DynamicFieldTypes.SELECTION:
                         await this.prepareSelectionField(field, dynamicField);
                         break;
-                    case DynamicFieldType.CHECK_LIST:
+                    case DynamicFieldTypes.CHECK_LIST:
                         this.prepareChecklistField(field, dynamicField);
                         break;
-                    case DynamicFieldType.CI_REFERENCE:
+                    case DynamicFieldTypes.CI_REFERENCE:
                         this.prepareCIReferenceField(field, dynamicField);
                         break;
                     default:
@@ -117,7 +116,7 @@ export class DynamicFieldFormUtil {
 
         const offset = dynamicField.Config.DefaultValue ? Number(dynamicField.Config.DefaultValue) : 0;
 
-        if (dynamicField.FieldType === DynamicFieldType.DATE) {
+        if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
             type = InputFieldTypes.DATE;
             date.setDate(date.getDate() + offset);
             date.setHours(0, 0, 0, 0);
@@ -257,11 +256,11 @@ export class DynamicFieldFormUtil {
             }
 
             if (dynamicField) {
-                if (dynamicField.FieldType === DynamicFieldType.SELECTION ||
-                    dynamicField.FieldType === DynamicFieldType.CI_REFERENCE
+                if (dynamicField.FieldType === DynamicFieldTypes.SELECTION ||
+                    dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE
                 ) {
                     field.defaultValue = new FormFieldValue(dfValue);
-                } else if (dynamicField.FieldType === DynamicFieldType.CHECK_LIST && dfValue && dfValue[0]) {
+                } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST && dfValue && dfValue[0]) {
                     field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
                 } else if (dfValue && Array.isArray(dfValue)) {
                     for (let i = 0; i < dfValue.length; i++) {
@@ -312,9 +311,9 @@ export class DynamicFieldFormUtil {
             const dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
             if (dynamicField) {
                 const fieldType = dynamicField.FieldType;
-                if (setValue && (fieldType === DynamicFieldType.DATE || fieldType === DynamicFieldType.DATE_TIME)) {
+                if (setValue && (fieldType === DynamicFieldTypes.DATE || fieldType === DynamicFieldTypes.DATE_TIME)) {
                     setValue = DateTimeUtil.getKIXDateTimeString(setValue);
-                } else if (setValue && fieldType === DynamicFieldType.CHECK_LIST) {
+                } else if (setValue && fieldType === DynamicFieldTypes.CHECK_LIST) {
                     setValue = JSON.stringify(setValue);
                     notArray = true;
                 }

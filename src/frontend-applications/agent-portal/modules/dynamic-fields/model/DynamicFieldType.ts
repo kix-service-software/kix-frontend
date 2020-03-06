@@ -7,20 +7,26 @@
  * --
  */
 
-export enum DynamicFieldType {
+import { KIXObject } from "../../../model/kix/KIXObject";
+import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 
-    TEXT = 'Text',
+export class DynamicFieldType extends KIXObject {
 
-    TEXT_AREA = 'TextArea',
+    public ObjectId: string | number;
 
-    SELECTION = 'Multiselect',
+    public KIXObjectType: string = KIXObjectType.DYNAMIC_FIELD_TYPE;
 
-    DATE = 'Date',
+    public DisplayName: string;
 
-    DATE_TIME = 'DateTime',
+    public Name: string;
 
-    CHECK_LIST = 'CheckList',
-
-    CI_REFERENCE = 'ITSMConfigItemReference'
+    public constructor(dynamicFieldType?: DynamicFieldType) {
+        super(dynamicFieldType);
+        if (dynamicFieldType) {
+            this.ObjectId = dynamicFieldType.ObjectId;
+            this.DisplayName = dynamicFieldType.DisplayName;
+            this.Name = dynamicFieldType.Name;
+        }
+    }
 
 }

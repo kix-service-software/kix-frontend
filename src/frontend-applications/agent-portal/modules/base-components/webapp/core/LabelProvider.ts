@@ -19,7 +19,7 @@ import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { UserProperty } from "../../../user/model/UserProperty";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
 import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
@@ -255,17 +255,17 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                 separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
                     dynamicField.Config.ItemSeparator : ', ';
                 switch (dynamicField.FieldType) {
-                    case DynamicFieldType.DATE:
-                    case DynamicFieldType.DATE_TIME:
+                    case DynamicFieldTypes.DATE:
+                    case DynamicFieldTypes.DATE_TIME:
                         values = await LabelProvider.getDFDateDateTimeFieldValues(dynamicField, fieldValue);
                         break;
-                    case DynamicFieldType.SELECTION:
+                    case DynamicFieldTypes.SELECTION:
                         values = await LabelProvider.getDFSelectionFieldValues(dynamicField, fieldValue);
                         break;
-                    case DynamicFieldType.CI_REFERENCE:
+                    case DynamicFieldTypes.CI_REFERENCE:
                         values = await LabelProvider.getDFCIReferenceFieldValues(dynamicField, fieldValue);
                         break;
-                    case DynamicFieldType.CHECK_LIST:
+                    case DynamicFieldTypes.CHECK_LIST:
                         values = LabelProvider.getDFChecklistFieldShortValues(dynamicField, fieldValue);
                         break;
                     default:
@@ -284,7 +284,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         if (Array.isArray(fieldValue.Value)) {
             const valuesPromises = [];
             for (const v of fieldValue.Value) {
-                if (field.FieldType === DynamicFieldType.DATE) {
+                if (field.FieldType === DynamicFieldTypes.DATE) {
                     valuesPromises.push(DateTimeUtil.getLocalDateString(v));
                 } else {
                     valuesPromises.push(DateTimeUtil.getLocalDateTimeString(v));
@@ -293,7 +293,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             values = await Promise.all<string>(valuesPromises);
         } else {
             let v: string;
-            if (field.FieldType === DynamicFieldType.DATE) {
+            if (field.FieldType === DynamicFieldTypes.DATE) {
                 v = await DateTimeUtil.getLocalDateString(fieldValue.DisplayValue);
             } else {
                 v = await DateTimeUtil.getLocalDateTimeString(fieldValue.DisplayValue);

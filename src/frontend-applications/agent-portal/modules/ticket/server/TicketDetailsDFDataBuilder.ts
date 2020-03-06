@@ -8,7 +8,7 @@
  */
 
 import { DynamicFieldValue } from "../../dynamic-fields/model/DynamicFieldValue";
-import { DynamicFieldType } from "../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../dynamic-fields/model/DynamicFieldTypes";
 import { DynamicField } from "../../dynamic-fields/model/DynamicField";
 import { DynamicFieldFormUtil } from "../../base-components/webapp/core/DynamicFieldFormUtil";
 import { ConfigItem } from "../../cmdb/model/ConfigItem";
@@ -38,17 +38,17 @@ export class TicketDetailsDFDataBuilder {
                 separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
                     dynamicField.Config.ItemSeparator : ', ';
                 switch (dynamicField.FieldType) {
-                    case DynamicFieldType.DATE:
-                    case DynamicFieldType.DATE_TIME:
+                    case DynamicFieldTypes.DATE:
+                    case DynamicFieldTypes.DATE_TIME:
                         values = await this.getDFDateDateTimeFieldValues(token, dynamicField, fieldValue);
                         break;
-                    case DynamicFieldType.SELECTION:
+                    case DynamicFieldTypes.SELECTION:
                         values = await this.getDFSelectionFieldValues(token, dynamicField, fieldValue);
                         break;
-                    case DynamicFieldType.CI_REFERENCE:
+                    case DynamicFieldTypes.CI_REFERENCE:
                         values = await this.getDFCIReferenceFieldValues(token, fieldValue);
                         break;
-                    case DynamicFieldType.CHECK_LIST:
+                    case DynamicFieldTypes.CHECK_LIST:
                         values = this.getDFChecklistFieldShortValues(fieldValue);
                         break;
                     default:
@@ -67,7 +67,7 @@ export class TicketDetailsDFDataBuilder {
         if (Array.isArray(fieldValue.Value)) {
             const valuesPromises = [];
             for (const v of fieldValue.Value) {
-                if (field.FieldType === DynamicFieldType.DATE) {
+                if (field.FieldType === DynamicFieldTypes.DATE) {
                     valuesPromises.push(DateTimeUtil.getLocalDateString(token, v));
                 } else {
                     valuesPromises.push(DateTimeUtil.getLocalDateTimeString(token, v));
@@ -76,7 +76,7 @@ export class TicketDetailsDFDataBuilder {
             values = await Promise.all<string>(valuesPromises);
         } else {
             let v: string;
-            if (field.FieldType === DynamicFieldType.DATE) {
+            if (field.FieldType === DynamicFieldTypes.DATE) {
                 v = await DateTimeUtil.getLocalDateString(token, fieldValue.DisplayValue);
             } else {
                 v = await DateTimeUtil.getLocalDateTimeString(token, fieldValue.DisplayValue);

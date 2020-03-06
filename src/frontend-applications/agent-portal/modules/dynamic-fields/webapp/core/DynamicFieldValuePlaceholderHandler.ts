@@ -11,7 +11,7 @@ import { IPlaceholderHandler } from "../../../base-components/webapp/core/IPlace
 import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
 import { KIXObject } from "../../../../model/kix/KIXObject";
-import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 import { DynamicFieldValue } from "../../model/DynamicFieldValue";
 import { CheckListItem } from "./CheckListItem";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
@@ -90,8 +90,8 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
         if (
             dynamicField &&
             (
-                dynamicField.FieldType === DynamicFieldType.SELECTION ||
-                dynamicField.FieldType === DynamicFieldType.CI_REFERENCE
+                dynamicField.FieldType === DynamicFieldTypes.SELECTION ||
+                dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE
             )
         ) {
             const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
@@ -110,7 +110,7 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
             if (dynamicField) {
                 const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
                     dynamicField.Config.ItemSeparator : ', ';
-                if (dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
+                if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     result = this.getChecklistStringValue(dfValue);
                 } else {
                     const labelProvider = LabelService.getInstance().getLabelProvider(object);
@@ -147,7 +147,7 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
         let result: string = dfValue.DisplayValueHTML ? dfValue.DisplayValueHTML : '';
         if (!result) {
             const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
-            if (dynamicField && dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
+            if (dynamicField && dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                 result = this.getChecklistHTMLValue(dfValue);
             } else {
                 result = await this.handleValue(object, dfValue);

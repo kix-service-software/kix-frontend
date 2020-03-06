@@ -17,7 +17,7 @@ import { DynamicFieldValue } from '../../../src/frontend-applications/agent-port
 import { DynamicFieldValuePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { DynamicField } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicField';
-import { DynamicFieldType } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldType';
+import { DynamicFieldTypes } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldTypes';
 import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
@@ -44,16 +44,16 @@ describe('Placeholder replacement for dynamic field values', () => {
             if (dfName) {
                 dynamicField = new DynamicField({
                     Name: dfName,
-                    FieldType: DynamicFieldType.TEXT,
+                    FieldType: DynamicFieldTypes.TEXT,
                     ValidID: 1,
                     Config: {
                         ItemSeparator: sepatator
                     }
                 } as DynamicField);
                 if (dfName === testDFValues[2].Name) {
-                    dynamicField.FieldType = DynamicFieldType.SELECTION;
+                    dynamicField.FieldType = DynamicFieldTypes.SELECTION;
                 } else if (dfName === testDFValues[3].Name) {
-                    dynamicField.FieldType = DynamicFieldType.CI_REFERENCE;
+                    dynamicField.FieldType = DynamicFieldTypes.CI_REFERENCE;
                 }
             }
             return new Promise((resolve, reject) => {
