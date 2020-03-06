@@ -17,7 +17,7 @@ import { AuthenticationSocketClient } from "../AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../../server/model/rest/CRUD";
 import { ValidationResult } from "../ValidationResult";
-import { DynamicFieldType } from "../../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
 import { KIXObjectService } from "../KIXObjectService";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
@@ -196,7 +196,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (
-                field && field.FieldType === DynamicFieldType.SELECTION &&
+                field && field.FieldType === DynamicFieldTypes.SELECTION &&
                 field.Config && Number(field.Config.CountMax) > 1
             ) {
                 isMultiSelect = true;
@@ -211,15 +211,15 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (field) {
-                if (field.FieldType === DynamicFieldType.TEXT_AREA) {
+                if (field.FieldType === DynamicFieldTypes.TEXT_AREA) {
                     inputFieldType = InputFieldTypes.TEXT_AREA;
-                } else if (field.FieldType === DynamicFieldType.DATE) {
+                } else if (field.FieldType === DynamicFieldTypes.DATE) {
                     inputFieldType = InputFieldTypes.DATE;
-                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
                     inputFieldType = InputFieldTypes.DATE_TIME;
-                } else if (field.FieldType === DynamicFieldType.SELECTION) {
+                } else if (field.FieldType === DynamicFieldTypes.SELECTION) {
                     inputFieldType = InputFieldTypes.DROPDOWN;
-                } else if (field.FieldType === DynamicFieldType.CI_REFERENCE) {
+                } else if (field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
                     inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
                 }
             }

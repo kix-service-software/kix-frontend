@@ -24,7 +24,7 @@ import { SearchOperator } from "../../model/SearchOperator";
 import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { TableFactoryService } from "../../../base-components/webapp/core/table";
 
 export abstract class SearchDefinition {
@@ -77,9 +77,9 @@ export abstract class SearchDefinition {
             if (KIXObjectService.isDynamicFieldProperty(c.property)) {
                 const field = await KIXObjectService.loadDynamicField(c.property);
                 if (field) {
-                    if (field.FieldType === DynamicFieldType.DATE) {
+                    if (field.FieldType === DynamicFieldTypes.DATE) {
                         c.type = FilterDataType.DATE;
-                    } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                    } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
                         c.type = FilterDataType.DATETIME;
                     }
                 }
@@ -96,11 +96,11 @@ export abstract class SearchDefinition {
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (field) {
-                if (field.FieldType === DynamicFieldType.DATE) {
+                if (field.FieldType === DynamicFieldTypes.DATE) {
                     return [new FilterCriteria(
                         property, operator, FilterDataType.DATE, FilterType.AND, value
                     )];
-                } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
+                } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
                     return [new FilterCriteria(
                         property, operator, FilterDataType.DATETIME, FilterType.AND, value
                     )];

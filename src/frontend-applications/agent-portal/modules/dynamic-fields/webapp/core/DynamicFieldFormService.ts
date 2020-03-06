@@ -16,7 +16,7 @@ import { FormFieldConfiguration } from "../../../../model/configuration/FormFiel
 import { FormContext } from "../../../../model/configuration/FormContext";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
 
 export class DynamicFieldFormService extends KIXObjectFormService {
@@ -67,7 +67,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                 }
 
                 if (dynamicField && f.property === DynamicFieldProperty.CONFIG) {
-                    if (dynamicField.FieldType === DynamicFieldType.SELECTION) {
+                    if (dynamicField.FieldType === DynamicFieldTypes.SELECTION) {
                         const oldPossibleValues = value.PossibleValues;
                         const possibleValueArray = [];
                         Object.keys(oldPossibleValues).forEach((key) => {
@@ -78,7 +78,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         });
                         value.PossibleValues = possibleValueArray;
                         value.TranslatableValues = Boolean(value.TranslatableValues === '1');
-                    } else if (dynamicField.FieldType === DynamicFieldType.CHECK_LIST) {
+                    } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                         value.DefaultValue = JSON.parse(value.DefaultValue);
                     }
                 }
@@ -106,13 +106,13 @@ export class DynamicFieldFormService extends KIXObjectFormService {
 
         if (configParameter) {
             configParameter[1] = { ...configParameter[1] };
-            if (fieldTypeParameter[1] === DynamicFieldType.SELECTION) {
+            if (fieldTypeParameter[1] === DynamicFieldTypes.SELECTION) {
                 configParameter[1].TranslatableValues = configParameter[1].TranslatableValues ? 1 : 0;
                 const possibleValue = configParameter[1].PossibleValues;
                 const possibleValueHash = {};
                 possibleValue.forEach((p) => possibleValueHash[p.Key] = p.Value);
                 configParameter[1].PossibleValues = possibleValueHash;
-            } else if (fieldTypeParameter[1] === DynamicFieldType.CHECK_LIST) {
+            } else if (fieldTypeParameter[1] === DynamicFieldTypes.CHECK_LIST) {
                 configParameter[1].DefaultValue = JSON.stringify(configParameter[1].DefaultValue);
             }
         }

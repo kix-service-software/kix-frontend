@@ -39,7 +39,7 @@ import { Error } from "../../../../../../server/model/Error";
 import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { UserProperty } from "../../../user/model/UserProperty";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { ConfigItem } from "../../../cmdb/model/ConfigItem";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
 
@@ -322,7 +322,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let nodes: TreeNode[] = [];
         const field = await KIXObjectService.loadDynamicField(name);
         if (field) {
-            if (field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.PossibleValues) {
+            if (field.FieldType === DynamicFieldTypes.SELECTION && field.Config && field.Config.PossibleValues) {
                 for (const pv in field.Config.PossibleValues) {
                     if (field.Config.PossibleValues[pv]) {
                         const value = field.Config.PossibleValues[pv];
@@ -330,7 +330,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                         nodes.push(node);
                     }
                 }
-            } else if (field.FieldType === DynamicFieldType.CI_REFERENCE && objectIds) {
+            } else if (field.FieldType === DynamicFieldTypes.CI_REFERENCE && objectIds) {
                 const configItems = await KIXObjectService.loadObjects<ConfigItem>(
                     KIXObjectType.CONFIG_ITEM, objectIds
                 );

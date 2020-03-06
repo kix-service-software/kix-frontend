@@ -46,7 +46,8 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
     }
 
     public isServiceFor(type: KIXObjectType | string): boolean {
-        return type === KIXObjectType.DYNAMIC_FIELD;
+        return type === KIXObjectType.DYNAMIC_FIELD
+            || type === KIXObjectType.DYNAMIC_FIELD_TYPE;
     }
 
     public async loadObjects<T>(
@@ -58,6 +59,11 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.DYNAMIC_FIELD) {
             objects = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'DynamicField'
+            );
+        } else if (objectType === KIXObjectType.DYNAMIC_FIELD_TYPE) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'types');
+            objects = await super.load(
+                token, objectType, uri, loadingOptions, objectIds, 'DynamicFieldType'
             );
         }
 

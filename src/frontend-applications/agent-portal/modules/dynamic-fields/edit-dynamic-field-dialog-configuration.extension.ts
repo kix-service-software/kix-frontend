@@ -28,7 +28,6 @@ import { TreeNode } from '../base-components/webapp/core/tree';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { EditDynamicFieldDialogContext } from './webapp/core/EditDynamicFieldDialogContext';
-import { DynamicFieldType } from './model/DynamicFieldType';
 
 export class Extension implements IConfigurationExtension {
 
@@ -86,15 +85,8 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Field Type', DynamicFieldProperty.FIELD_TYPE, 'object-reference-input', true,
                 'Translatable#Helptext_Admin_DynamicFieldCreate_FieldType',
                 [
-                    new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
-                        new TreeNode(DynamicFieldType.TEXT, 'Text', 'kix-icon-filetype-text'),
-                        new TreeNode(DynamicFieldType.TEXT_AREA, 'Text Area', 'kix-icon-filetype-text'),
-                        new TreeNode(DynamicFieldType.SELECTION, 'Selection', 'kix-icon-menue'),
-                        new TreeNode(DynamicFieldType.DATE, 'Date', 'kix-icon-calendar'),
-                        new TreeNode(DynamicFieldType.DATE_TIME, 'Date Time', 'kix-icon-calendar'),
-                        new TreeNode(DynamicFieldType.CHECK_LIST, 'Checklist', 'kix-icon-checklist'),
-                        new TreeNode(DynamicFieldType.CI_REFERENCE, 'Asset Reference', 'kix-icon-ci')
-                    ])
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.DYNAMIC_FIELD_TYPE),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
                 ], null, null, null, null, null, null, null, null, null, null, null, null, true
             )
         );

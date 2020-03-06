@@ -28,8 +28,7 @@ import { DynamicFieldFormUtil } from "../../../base-components/webapp/core/Dynam
 import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
 import { InputFieldTypes } from "../../../base-components/webapp/core/InputFieldTypes";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
-import { DynamicFieldService } from "../../../dynamic-fields/webapp/core/DynamicFieldService";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -59,8 +58,8 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
                     DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                     FilterDataType.STRING, FilterType.AND,
                     [
-                        DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
-                        DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION
+                        DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
+                        DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION
                     ]
                 ),
                 new FilterCriteria(
@@ -165,7 +164,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
-            if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.CountMax > 1) {
+            if (field && field.FieldType === DynamicFieldTypes.SELECTION && field.Config && field.Config.CountMax > 1) {
                 isMultiSelect = true;
             }
         }

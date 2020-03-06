@@ -17,7 +17,7 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFormFieldOption } from "./DynamicFormFieldOption";
 import { DynamicField } from "../../model/DynamicField";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 
 export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
 
@@ -45,8 +45,8 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
     }
 
     public isValidatorForDF(dynamicField: DynamicField): boolean {
-        return dynamicField.FieldType === DynamicFieldType.DATE ||
-            dynamicField.FieldType === DynamicFieldType.DATE_TIME;
+        return dynamicField.FieldType === DynamicFieldTypes.DATE ||
+            dynamicField.FieldType === DynamicFieldTypes.DATE_TIME;
     }
 
     public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
@@ -63,7 +63,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
                 const restricition = dynamicField.Config.DateRestriction;
                 const currentTime = new Date();
 
-                if (dynamicField.FieldType === DynamicFieldType.DATE) {
+                if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
                     currentTime.setHours(0, 0, 0, 0);
                 }
 

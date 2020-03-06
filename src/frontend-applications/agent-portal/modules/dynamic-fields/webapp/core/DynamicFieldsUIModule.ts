@@ -28,13 +28,15 @@ import { DynamicFieldFormService } from "./DynamicFieldFormService";
 import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
 import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
 import { DynamicFieldValuePlaceholderHandler } from "./DynamicFieldValuePlaceholderHandler";
-import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
 import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
 import { DynamicFieldDateTimeValidator } from "./DynamicFieldDateTimeValidator";
-import { ConfigItemClassService, CMDBService } from "../../../cmdb/webapp/core";
+import { CMDBService } from "../../../cmdb/webapp/core";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
 import { ConfigItemClass } from "../../../cmdb/model/ConfigItemClass";
+import { DynamicFieldTypeBrowserFactory } from "./DynamicFieldTypeBrowserFactory";
+import { DynamicFieldTypeLabelProvider } from "./DynamicFieldTypeLabelProvider";
 
 export class UIModule implements IUIModule {
 
@@ -56,9 +58,14 @@ export class UIModule implements IUIModule {
             KIXObjectType.DYNAMIC_FIELD, DynamicFieldBrowserFactory.getInstance()
         );
 
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.DYNAMIC_FIELD_TYPE, DynamicFieldTypeBrowserFactory.getInstance()
+        );
+
         TableFactoryService.getInstance().registerFactory(new DynamicFieldTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new DynamicFieldLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new DynamicFieldTypeLabelProvider());
 
         ActionFactory.getInstance().registerAction('dynamic-field-create-action', DynamicFieldCreateAction);
 
@@ -90,7 +97,7 @@ export class UIModule implements IUIModule {
         this.registerSchemaForDateTime();
         this.registerSchemaForSelection();
         this.registerSchemaForCheckList();
-        DynamicFieldService.getInstance().registerConfigSchemaHandler(DynamicFieldType.CI_REFERENCE, this.getSchemaForCIReference.bind(this));
+        DynamicFieldService.getInstance().registerConfigSchemaHandler(DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this));
     }
 
     private registerSchemaForText(): void {
@@ -150,7 +157,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.TEXT, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT, schema);
     }
 
     private registerSchemaForTextArea(): void {
@@ -210,7 +217,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.TEXT_AREA, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT_AREA, schema);
     }
 
     private registerSchemaForDate(): void {
@@ -272,7 +279,7 @@ export class UIModule implements IUIModule {
                 },
             }
         };
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.DATE, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE, schema);
     }
 
     private registerSchemaForDateTime(): void {
@@ -334,7 +341,7 @@ export class UIModule implements IUIModule {
                 },
             }
         };
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.DATE_TIME, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE_TIME, schema);
     }
 
     private registerSchemaForSelection(): void {
@@ -401,7 +408,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.SELECTION, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.SELECTION, schema);
     }
 
     private registerSchemaForCheckList(): void {
@@ -458,7 +465,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.CHECK_LIST, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.CHECK_LIST, schema);
     }
 
     private async getSchemaForCIReference(): Promise<any> {

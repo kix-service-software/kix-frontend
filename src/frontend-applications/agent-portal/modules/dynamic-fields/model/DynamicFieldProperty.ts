@@ -15,6 +15,8 @@ export enum DynamicFieldProperty {
 
     FIELD_TYPE = "FieldType",
 
+    FIELD_TYPE_DISPLAY_NAME = "FieldTypeDisplayName",
+
     INTERNAL_FIELD = "InternalField",
 
     LABEL = "Label",

@@ -104,6 +104,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
                     );
 
+
                 } else {
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);

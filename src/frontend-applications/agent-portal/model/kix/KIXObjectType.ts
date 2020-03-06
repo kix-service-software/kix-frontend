@@ -49,6 +49,8 @@ export enum KIXObjectType {
 
     DYNAMIC_FIELD = 'DynamicField',
 
+    DYNAMIC_FIELD_TYPE = 'DynamicFieldType',
+
     EXEC_PLAN = 'ExecPlan',
 
     EXEC_PLAN_TYPE = 'ExecPlanType',
