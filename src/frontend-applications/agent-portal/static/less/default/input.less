@@ -37,6 +37,8 @@
     &:focus:not(:disabled):not(:read-only),
     &:hover:not(:disabled):not(:read-only) {
         border-color: darken(@secondary-3, 20%);
+        background-color: @secondary-4;
+        color: #000;
     }
 
     &.invalid {
@@ -152,12 +154,16 @@ textarea.input-style {
 
             &:hover {
                 border-color: @secondary-3;
+                background-color: @secondary-4;
+                color: #000;
             }
         }
 
         &:hover:not(.readonly),
         &.list-shown {
             border-color: darken(@secondary-3, 20%);
+            background-color: @secondary-4;
+            color: #000;
 
             >input.input-style:not(:disabled),
             >input.input-style:not(:disabled)~.form-input-control-list>.form-list-button,

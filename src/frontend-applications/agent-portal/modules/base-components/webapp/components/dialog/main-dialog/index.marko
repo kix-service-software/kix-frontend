@@ -10,25 +10,23 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div.main-dialog-container>
         <div.shield/>
         <div.main-dialog>
-            <div no-update>
-                <widget
-                    key="main-dialog-tab-container-widget"
-                    isDialog=true
-                    title=component.dialogTitle
-                    minimizable=false
-                    icon=component.dialogIcon>
-                    <@content>
-                        <tab-container
-                            key="main-dialog-tab-container"
-                            tabWidgets=state.dialogWidgets
-                            tabId=component.dialogId
-                            minimizable=false
-                            contextType="DIALOG"
-                            on-tabChanged("tabChanged")/>
-                        <kix-footer leftText=state.dialogHint/>
-                    </@content>
-                </widget>
-            </div>
+            <widget
+                key="main-dialog-tab-container-widget"
+                isDialog=true
+                title=component.dialogTitle
+                minimizable=false
+                icon=component.dialogIcon>
+                <@content>
+                    <tab-container
+                        key="main-dialog-tab-container"
+                        tabWidgets=state.dialogWidgets
+                        tabId=component.dialogId
+                        minimizable=false
+                        contextType="DIALOG"
+                        on-tabChanged("tabChanged")/>
+                    <kix-footer leftText=state.dialogHint/>
+                </@content>
+            </widget>
             <if(state.isLoading)>
                 <loading-shield loadingHint=state.loadingHint cancelCallback=state.cancelCallback time=state.time/>
             </if>

@@ -77,17 +77,11 @@ export class TreeHandler {
 
     public handleKeyEvent(event: any): void {
         if (this.active) {
-            if (!this.multiselect) {
-                event = {
-                    ...event,
-                    ctrlKey: false,
-                    key: event.key,
-                    shiftKey: false
-                };
-            }
-
             switch (event.key) {
                 case 'a':
+                    if (!this.multiselect) {
+                        event = { ...event, ctrlKey: false, key: event.key, shiftKey: false };
+                    }
                     if (event.ctrlKey) {
                         if (event.preventDefault && event.stopPropagation) {
                             event.preventDefault();
@@ -108,13 +102,26 @@ export class TreeHandler {
                     this.selectNavigationNode();
                     break;
                 case 'Tab':
-                    this.selectNavigationNode();
-                    this.finishListener.forEach((l) => l());
+                    if (!event.ctrlKey) {
+                        this.selectNavigationNode();
+                        this.finishListener.forEach((l) => l());
+                        if (event.preventDefault && event.stopPropagation) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                    }
                     break;
                 case 'Escape':
                     this.finishListener.forEach((l) => l());
+                    if (event.preventDefault && event.stopPropagation) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
                     break;
                 default:
+                    if (!this.multiselect) {
+                        event = { ...event, ctrlKey: false, key: event.key, shiftKey: false };
+                    }
                     const affectedNodes = this.navigationHandler.handleEvent(event, this.filterValue);
                     if (affectedNodes) {
                         affectedNodes.forEach((n) => {

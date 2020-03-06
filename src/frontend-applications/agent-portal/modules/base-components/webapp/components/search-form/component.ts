@@ -152,7 +152,7 @@ class Component implements ISearchFormListener {
     }
 
     public keyDown(event: any): void {
-        if ((event.keyCode === 13 || event.key === 'Enter') && this.state.canSearch) {
+        if ((event.ctrlKey && event.key === 'Enter') && this.state.canSearch) {
             if (event.preventDefault) {
                 event.preventDefault();
             }

@@ -37,6 +37,9 @@ class TabLaneComponent implements IEventSubscriber {
     private tabTitles: Map<string, string>;
     private hideSidebar: boolean;
 
+    private keyListenerElement: any;
+    private keyListener: any;
+
     public onCreate(input: any): void {
         this.state = new ComponentState(input.tabWidgets);
         this.tabTitles = new Map();
@@ -99,6 +102,14 @@ class TabLaneComponent implements IEventSubscriber {
             }
         }
 
+        if (this.state.contextType === ContextType.DIALOG) {
+            this.keyListenerElement = (this as any).getEl();
+            if (this.keyListenerElement) {
+                this.keyListener = this.keydown.bind(this);
+                this.keyListenerElement.addEventListener('keydown', this.keyListener, false);
+            }
+        }
+
         this.state.prepared = true;
     }
 
@@ -112,6 +123,10 @@ class TabLaneComponent implements IEventSubscriber {
         }
         ContextService.getInstance().unregisterListener(this.contextServiceListenerId);
         window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+
+        if (this.state.contextType === ContextType.DIALOG && this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.keydown.bind(this), false);
+        }
     }
 
     public async tabClicked(tab: WidgetConfiguration, silent?: boolean): Promise<void> {
@@ -209,6 +224,26 @@ class TabLaneComponent implements IEventSubscriber {
         return this.tabIcons.has(tab.instanceId)
             ? this.tabIcons.get(tab.instanceId)
             : tab.icon;
+    }
+
+    public keydown(event: any): void {
+        if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && event.ctrlKey) {
+            const index = this.state.tabWidgets.findIndex((tw) => tw.instanceId === this.state.activeTab.instanceId);
+            let nextTab: WidgetConfiguration;
+
+            if (event.key === 'ArrowUp') {
+                nextTab = index > 0
+                    ? this.state.tabWidgets[index - 1]
+                    : this.state.tabWidgets[this.state.tabWidgets.length - 1];
+            } else {
+                nextTab = index < this.state.tabWidgets.length - 1
+                    ? this.state.tabWidgets[index + 1]
+                    : this.state.tabWidgets[0];
+            }
+
+
+            this.tabClicked(nextTab);
+        }
     }
 }
 

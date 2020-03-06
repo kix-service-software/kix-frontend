@@ -31,7 +31,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+        // tslint:disable-next-line:max-line-length
+        DialogService.getInstance().setMainDialogHint('Translatable#For keyboard navigation, press "Ctrl" to switch focus to dialog. See manual for more detailed information.');
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);

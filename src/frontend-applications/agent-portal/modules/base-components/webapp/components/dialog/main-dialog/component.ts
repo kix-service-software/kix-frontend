@@ -29,12 +29,27 @@ export class MainDialogComponent implements IMainDialogListener {
     public dialogTitle: string = null;
     public dialogIcon: string | ObjectIcon = null;
 
+    private keyListenerElement;
+    private keyListener;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onMount(): void {
         DialogService.getInstance().registerMainDialogListener(this);
+    }
+
+    public onDestroy(): void {
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.handleKeyEvent.bind(this), false);
+        }
+    }
+
+    private handleKeyEvent(event: any): void {
+        if (event && event.key === 'Escape') {
+            this.close();
+        }
     }
 
     public open(
@@ -48,6 +63,14 @@ export class MainDialogComponent implements IMainDialogListener {
             this.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
             this.state.show = true;
+
+            setTimeout(() => {
+                this.keyListenerElement = (this as any).getEl();
+                if (this.keyListenerElement) {
+                    this.keyListener = this.handleKeyEvent.bind(this);
+                    this.keyListenerElement.addEventListener('keydown', this.keyListener, false);
+                }
+            }, 50);
         }
     }
 
@@ -63,6 +86,11 @@ export class MainDialogComponent implements IMainDialogListener {
         if (data && data.byX) {
             ContextService.getInstance().closeDialogContext();
         }
+
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.handleKeyEvent.bind(this), false);
+        }
+
         this.state.show = false;
         document.body.style.overflow = 'unset';
     }

@@ -15,6 +15,7 @@ import { AbstractEditDialog } from '../../../../base-components/webapp/core/Abst
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { DialogService } from '../../../../base-components/webapp/core/DialogService';
+import { TranslationService } from '../../core/TranslationService';
 
 class Component extends AbstractEditDialog {
 
@@ -29,6 +30,11 @@ class Component extends AbstractEditDialog {
     }
 
     public async onMount(): Promise<void> {
+        // tslint:disable-next-line:max-line-length
+        DialogService.getInstance().setMainDialogHint('Translatable#For keyboard navigation, press "Ctrl" to switch focus to dialog. See manual for more detailed information.');
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Cancel", "Translatable#Save"
+        ]);
         await super.onMount();
     }
 
