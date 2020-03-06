@@ -296,8 +296,7 @@ export class WebformService {
             form.title, form.hintMessage,
             'Translatable#Name', 'Translatable#Email', 'Translatable#Subject', 'Translatable#Message',
             'Translatable#Attachments', 'Translatable#Close', 'Translatable#Cancel',
-            // tslint:disable-next-line:max-line-length
-            'Translatable#For keyboard navigation, press "Ctrl" to switch focus to dialog. See manual for more detailed information.'
+            'Translatable#All form fields marked by * are required fields.'
         ];
         for (const pattern of patterns) {
             const text = await TranslationAPIService.getInstance().translate(pattern, undefined, language);
