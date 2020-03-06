@@ -63,7 +63,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (config.replaceObjectId) {
                 id = config.replaceObjectId;
             } else {
-                id = this.state.object ? this.state.object[config.objectIdProperty] : undefined;
+                if (this.state.object) {
+                    if (config.objectIdProperty.match(/^.+\..+$/)) {
+                        const subObjectData = config.objectIdProperty.split('.');
+                        id = this.state.object[subObjectData[0]] ?
+                            this.state.object[subObjectData[0]][subObjectData[1]]
+                            : undefined;
+                    } else {
+                        id = this.state.object[config.objectIdProperty];
+                    }
+                }
             }
         }
 

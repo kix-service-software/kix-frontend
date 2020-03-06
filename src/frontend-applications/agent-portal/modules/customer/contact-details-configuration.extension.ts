@@ -30,6 +30,8 @@ import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 import { UserProperty } from "../user/model/UserProperty";
+import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../model/ContextMode";
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -39,6 +41,12 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
+
+        const userRouting = new RoutingConfiguration(
+            'user-details', KIXObjectType.USER,
+            ContextMode.DETAILS, ContactProperty.ASSIGNED_USER_ID, false
+        );
+
         const infoConfig = new ObjectInformationWidgetConfiguration(
             'contact-details-object-information-config', 'Contact Info', ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
@@ -64,6 +72,9 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 KIXObjectProperty.CREATE_TIME,
                 KIXObjectProperty.CHANGE_BY,
                 KIXObjectProperty.CHANGE_TIME
+            ], false,
+            [
+                [UserProperty.USER_LOGIN, userRouting],
             ]
         );
         configurations.push(infoConfig);

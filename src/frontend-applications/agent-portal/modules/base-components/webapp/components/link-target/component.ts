@@ -36,7 +36,10 @@ class Component {
             const contextUrl = await RoutingService.getInstance().buildUrl(
                 this.state.routingConfiguration, this.state.objectId
             );
-            this.state.url = '/' + contextUrl;
+            this.state.url = contextUrl ? '/' + contextUrl
+                : this.state.routingConfiguration.contextType
+                    && this.state.routingConfiguration.contextType === ContextType.DIALOG
+                    ? '/#' : undefined;
         } else if (this.state.object) {
             const url = await KIXObjectService.getObjectUrl(this.state.object);
             if (url) {

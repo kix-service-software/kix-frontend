@@ -40,10 +40,6 @@ class Extension implements IKIXModuleExtension {
             'edit-user-role-dialog', '/kix-module-user$0/webapp/components/edit-user-role-dialog', []),
         new UIComponent('user-admin-users', '/kix-module-user$0/webapp/components/user-admin-users', []),
         new UIComponent(
-            'edit-user-dialog', '/kix-module-user$0/webapp/components/edit-user-dialog', []),
-        new UIComponent(
-            'user-info-widget', '/kix-module-user$0/webapp/components/user-info-widget', []),
-        new UIComponent(
             'user-personal-settings-widget',
             '/kix-module-user$0/webapp/components/user-personal-settings-widget', []),
         new UIComponent(

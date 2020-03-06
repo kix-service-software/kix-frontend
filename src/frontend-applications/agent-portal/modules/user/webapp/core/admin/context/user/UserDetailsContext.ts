@@ -35,7 +35,7 @@ export class UserDetailsContext extends Context {
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
-        const objectName = await TranslationService.translate('Translatable#Agent');
+        const objectName = await TranslationService.translate('Translatable#User');
         const object = await this.getObject<User>();
         const text = await LabelService.getInstance().getText(object);
         return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${text}`);

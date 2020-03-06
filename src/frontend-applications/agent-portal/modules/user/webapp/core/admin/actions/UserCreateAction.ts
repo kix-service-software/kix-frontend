@@ -24,7 +24,7 @@ export class UserCreateAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#New Agent';
+        this.text = 'Translatable#New User';
         this.icon = 'kix-icon-new-gear';
     }
 

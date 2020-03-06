@@ -6,9 +6,8 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(!state.loading)>
-    <if(state.routingConfiguration || (state.object && state.url))>
+    <if(state.url)>
         <a href=state.url on-click("linkClicked") target="_blank">
             <if(input.content)>
                 <${input.content}/>

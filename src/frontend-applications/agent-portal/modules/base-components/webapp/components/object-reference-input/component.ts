@@ -180,7 +180,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                                 const node = await this.createTreeNode(object);
                                 if (node) {
                                     node.selected = true;
-                                    nodes.push(node);
+                                    if (nodes) {
+                                        nodes.push(node);
+                                    }
                                     selectedNodes.push(node);
                                 }
                             }

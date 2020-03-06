@@ -110,11 +110,20 @@ export class ContactTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
+            case UserProperty.USER_LOGIN:
+            case ContactProperty.FIRSTNAME:
+            case ContactProperty.LASTNAME:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 150, true, true, false,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
             case ContactProperty.EMAIL:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 175, true, true);
                 break;
             case ContactProperty.PHONE:
+            case ContactProperty.MOBILE:
             case ContactProperty.COUNTRY:
             case ContactProperty.CITY:
                 config = new DefaultColumnConfiguration(

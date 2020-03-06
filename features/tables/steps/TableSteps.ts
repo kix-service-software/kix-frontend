@@ -106,7 +106,7 @@ Then('DisplayLimit: {int}', async (displayLimit: Number) => {
 
 Then('Die Spalte {string} muss sortierbar sein: {int}', async (columnId: string, sortable: Number) => {
     const column = table.getColumn(columnId);
-    expect(column).exist;
+    expect(column, `existing columns: ${table['columns'].map((c) => c.getColumnId())}`).exist;
     expect(column.getColumnConfiguration().sortable).equals(Boolean(sortable));
 });
 

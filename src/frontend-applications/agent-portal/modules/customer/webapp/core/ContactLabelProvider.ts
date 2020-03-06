@@ -148,21 +148,6 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.CREATE_NEW_TICKET:
                 displayValue = 'Translatable#New Ticket';
                 break;
-            case UserProperty.USER_LOGIN:
-                displayValue = 'Translatable#Login Name';
-                break;
-            case UserProperty.USER_PASSWORD:
-                displayValue = 'Translatable#Password';
-                break;
-            case UserProperty.IS_AGENT:
-                displayValue = 'Translatable#Agent Login';
-                break;
-            case UserProperty.IS_CUSTOMER:
-                displayValue = 'Translatable#Customer Login';
-                break;
-            case UserProperty.USER_ACCESS:
-                displayValue = 'Translatable#Access';
-                break;
             default:
                 if (this.isUserProperty(property)) {
                     const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
@@ -265,18 +250,6 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                     ContactProperty.ORGANISATION_IDS, contact.OrganisationIDs, translatable
                 );
                 break;
-            case UserProperty.USER_ACCESS:
-                displayValue = '';
-                if (contact.User) {
-                    if (contact.User.IsAgent) {
-                        displayValue = 'Agent';
-                    }
-
-                    if (contact.User.IsCustomer) {
-                        displayValue = contact.User.IsAgent ? displayValue + ', Customer' : 'Customer';
-                    }
-                }
-                break;
             default:
                 if (this.isUserProperty(property)) {
                     const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
@@ -348,19 +321,21 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         contact: Contact, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
 
-        const icons = [];
+        let icons = [];
 
         switch (property) {
-            case UserProperty.IS_AGENT:
-            case UserProperty.IS_CUSTOMER:
-                if (contact) {
-                    const user = await this.getUserByContact(contact);
-                    if (user && Boolean(user[property])) {
-                        icons.push('kix-icon-check');
+            default:
+                if (this.isUserProperty(property)) {
+                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
+                    if (userLabelProvider) {
+                        const user = await this.getUserByContact(contact);
+                        if (user) {
+                            icons = await userLabelProvider.getIcons(
+                                user, property, value
+                            );
+                        }
                     }
                 }
-                break;
-            default:
         }
 
         return icons;

@@ -43,7 +43,12 @@ export class OrganisationContext extends Context {
         super.setFilteredObjectList(objectType, filteredObjectList);
 
         if (objectType === KIXObjectType.ORGANISATION) {
-            this.loadContacts();
+            const isOrganisationDepending = this.getAdditionalInformation(
+                OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
+            );
+            if (isOrganisationDepending) {
+                this.loadContacts();
+            }
         }
     }
 

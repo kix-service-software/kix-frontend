@@ -15,11 +15,7 @@ import { SortOrder } from "../../../../../model/SortOrder";
 import { ContactProperty } from "../../../../customer/model/ContactProperty";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
 import { UserProperty } from "../../../model/UserProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
 import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
 import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
 
@@ -28,7 +24,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('user-admin-users'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
-            'table-widget', 'Translatable#User Management: Agents',
+            'table-widget', 'Translatable#User Management: Users',
             ['user-admin-user-create-action', 'csv-export-action'], null,
             new TableWidgetConfiguration(
                 null, null, null, KIXObjectType.USER, [ContactProperty.LASTNAME, SortOrder.UP],
@@ -36,12 +32,7 @@ export class ComponentState {
                 new TableConfiguration(
                     null, null, undefined, KIXObjectType.USER,
                     new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                UserProperty.IS_AGENT, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ], null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
+                        null, null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
                     ), undefined, undefined, [], true, false, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )

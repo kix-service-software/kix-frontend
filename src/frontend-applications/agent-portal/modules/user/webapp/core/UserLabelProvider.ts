@@ -59,6 +59,12 @@ export class UserLabelProvider extends LabelProvider<User> {
             case UserProperty.USER_ACCESS:
                 displayValue = 'Translatable#Access';
                 break;
+            case UserProperty.IS_AGENT:
+                displayValue = 'Translatable#Agent Login';
+                break;
+            case UserProperty.IS_CUSTOMER:
+                displayValue = 'Translatable#Customer Login';
+                break;
             default:
                 if (this.isContactProperty(property)) {
                     const contactLabelProvider = LabelService.getInstance().getLabelProviderForType(
@@ -145,14 +151,23 @@ export class UserLabelProvider extends LabelProvider<User> {
                 );
                 break;
             case UserProperty.USER_ACCESS:
-                displayValue = '';
+                const userIsA = [];
                 if (user.IsAgent) {
-                    displayValue = 'Agent';
+                    userIsA.push(
+                        await TranslationService.translate(
+                            'Translatable#Agent Portal', undefined, undefined, !translatable
+                        )
+                    );
                 }
-
                 if (user.IsCustomer) {
-                    displayValue = user.IsAgent ? displayValue + ', Customer' : 'Customer';
+                    userIsA.push(
+                        await TranslationService.translate(
+                            'Translatable#Customer Portal', undefined, undefined, !translatable
+                        )
+                    );
                 }
+                displayValue = userIsA.join(', ');
+                translatable = false;
                 break;
             default:
                 if (this.isContactProperty(property)) {
@@ -213,10 +228,29 @@ export class UserLabelProvider extends LabelProvider<User> {
     public async getObjectName(plural: boolean = false, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(
-                plural ? 'Translatable#Agents' : 'Translatable#Agent'
+                plural ? 'Translatable#Users' : 'Translatable#User'
             );
         }
-        return plural ? 'Agents' : 'Agent';
+        return plural ? 'Users' : 'User';
+    }
+
+    public async getIcons(
+        user: User, property: string, value?: string | number
+    ): Promise<Array<string | ObjectIcon>> {
+
+        const icons = [];
+
+        switch (property) {
+            case UserProperty.IS_AGENT:
+            case UserProperty.IS_CUSTOMER:
+                if (user && Boolean(user[property])) {
+                    icons.push('kix-icon-check');
+                }
+                break;
+            default:
+        }
+
+        return icons;
     }
 
 }

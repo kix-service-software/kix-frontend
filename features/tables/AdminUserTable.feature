@@ -37,6 +37,8 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'UserLogin'     | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
             | 'Lastname'      | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
             | 'Firstname'     | 1        | 1          | 0          | 250   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
+            | 'IsCustomer'    | 1        | 1          | 1          | 100   | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Contact'  |
+            | 'IsAgent'       | 1        | 1          | 1          | 100   | 1        | 0        | 1        | 'STRING'   | 1           | 0          | 'Contact'  |
             | 'Phone'         | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
             | 'Mobile'        | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
             | 'Email'         | 1        | 1          | 0          | 200   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'User'     |
