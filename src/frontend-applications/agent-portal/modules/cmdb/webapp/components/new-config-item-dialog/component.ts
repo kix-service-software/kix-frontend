@@ -111,6 +111,7 @@ class Component {
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
+                        ContextService.getInstance().updateObjectLists(KIXObjectType.CONFIG_ITEM);
                     }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);

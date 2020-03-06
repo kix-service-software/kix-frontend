@@ -66,19 +66,16 @@ export class ConfigItemChartFactory {
         ]);
 
         const result: [string[], ChartDataSets[]] = [[], []];
-        const labelWarning = await TranslationService.translate('Translatable#Warning');
-        const labelIncident = await TranslationService.translate('Translatable#Incident state');
-
 
         if (property === ConfigItemProperty.CUR_INCI_STATE_ID) {
             result[1] = [
                 {
-                    label: labelWarning,
+                    label: 'Warning',
                     data: [],
                     backgroundColor: "#ffed00"
                 },
                 {
-                    label: labelIncident,
+                    label: 'Incident',
                     data: [],
                     backgroundColor: "#e31e24"
                 }
@@ -107,6 +104,11 @@ export class ConfigItemChartFactory {
                     }
                 }
             }
+
+            const labelWarning = await TranslationService.translate('Translatable#Warning');
+            const labelIncident = await TranslationService.translate('Translatable#Incident');
+            result[1][0].label = labelWarning;
+            result[1][1].label = labelIncident;
         } else {
             result[1] = [{
                 data: []

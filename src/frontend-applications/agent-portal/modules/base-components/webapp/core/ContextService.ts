@@ -214,4 +214,9 @@ export class ContextService {
         return configuration;
     }
 
+    public updateObjectLists(objectType: KIXObjectType | string): void {
+        const contexts = ContextFactory.getInstance().getContextInstances(ContextType.MAIN, ContextMode.DASHBOARD);
+        contexts.forEach((c) => c.reloadObjectList(objectType));
+    }
+
 }

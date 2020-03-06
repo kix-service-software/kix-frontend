@@ -99,6 +99,9 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                     } else {
                         AbstractEditDialog.prototype.showValidationError.call(this, result);
                     }
+
+                    ContextService.getInstance().updateObjectLists(this.objectType);
+
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
                     if (!objectId) {
