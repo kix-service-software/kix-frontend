@@ -264,42 +264,12 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketCreate_Channel'
             )
         );
-        configurations.push(
-            new FormFieldConfiguration(
-                'ticket-new-form-field-links',
-                'Translatable#Link Ticket with', TicketProperty.LINK, 'link-input', false,
-                'Translatable#Helptext_Tickets_TicketCreate_Links'
-            )
-        );
+
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-owner',
                 'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
                 'Translatable#Helptext_Tickets_TicketCreate_Owner',
-                [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                )
-                            ], undefined, undefined, undefined, undefined,
-                            [
-                                ['requiredPermission', 'TicketRead,TicketUpdate']
-                            ]
-                        )
-                    )
-                ]
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
-                'ticket-new-form-field-responsible',
-                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
-                'Translatable#Helptext_Tickets_TicketCreate_Responsible',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
 
@@ -361,9 +331,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                     'ticket-new-form-field-type',
                     'ticket-new-form-field-queue',
                     'ticket-new-form-field-channel',
-                    'ticket-new-form-field-links',
                     'ticket-new-form-field-owner',
-                    'ticket-new-form-field-responsible',
                     'ticket-new-form-field-priority',
                     'ticket-new-form-field-state',
                 ], null,

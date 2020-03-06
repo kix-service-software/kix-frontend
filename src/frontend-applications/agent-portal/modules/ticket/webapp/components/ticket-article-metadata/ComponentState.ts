@@ -18,7 +18,9 @@ export class ComponentState {
         public receiverToString: string = '',
         public receiverCcString: string = '',
         public receiverBccString: string = '',
-        public fromString: string = ''
+        public showTo: boolean = false,
+        public showCc: boolean = false,
+        public showBcc: boolean = false,
     ) { }
 
 }

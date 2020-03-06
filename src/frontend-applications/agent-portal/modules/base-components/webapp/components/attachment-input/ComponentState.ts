@@ -15,7 +15,7 @@ export class ComponentState extends FormInputComponentState<any> {
     public constructor(
         public count: number = 0,
         public dragging: boolean = false,
-        public minimized: boolean = false,
+        public minimized: boolean = true,
         public labels: Label[] = [],
         public multiple: boolean = true,
         public accept: string = null,

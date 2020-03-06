@@ -10,5 +10,10 @@
 import { IColumn } from "../../../core/table";
 
 export class ComponentState {
-    public columns: IColumn[] = [];
+
+    public constructor(
+        public columns: IColumn[] = [],
+        public toggleAll: boolean = false,
+        public closeAll: boolean = true
+    ) { }
 }

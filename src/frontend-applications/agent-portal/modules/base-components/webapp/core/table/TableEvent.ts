@@ -41,6 +41,8 @@ export enum TableEvent {
 
     RELOAD = 'RELOAD',
 
-    RELOADED = 'RELOADED'
+    RELOADED = 'RELOADED',
+
+    TOGGLE_ROWS = 'TOGGLE_ROWS'
 
 }
