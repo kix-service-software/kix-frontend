@@ -124,6 +124,9 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                             } else {
                                 await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
                             }
+
+                            ContextService.getInstance().updateObjectLists(this.objectType);
+
                             resolve();
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);

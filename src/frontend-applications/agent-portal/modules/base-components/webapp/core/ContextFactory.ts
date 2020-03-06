@@ -179,4 +179,10 @@ export class ContextFactory {
         return descriptor.contextMode === contextMode && descriptor.urlPaths.some((u) => u === contextUrl);
     }
 
+    public getContextInstances(type: ContextType, mode: ContextMode): Context[] {
+        return this.contextInstances.filter(
+            (c) => c.getDescriptor().contextMode === mode && c.getDescriptor().contextType === type
+        );
+    }
+
 }
