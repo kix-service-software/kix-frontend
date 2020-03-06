@@ -60,6 +60,7 @@ export class RedisCache implements ICache {
     }
 
     public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
+        LoggingService.getInstance().info('Clear Cache: (ignore) ' + ignoreKeyPrefixes.join(', '));
         let keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::*`);
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
         for (const key of keys) {

@@ -188,7 +188,12 @@ export class KIXModuleNamespace extends SocketNameSpace {
     private async loadFormConfiguration(
         data: LoadFormConfigurationRequest
     ): Promise<SocketResponse> {
-        const form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
+        let form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
+
+        if (!form) {
+            await this.rebuildConfigCache();
+            form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
+        }
 
         return new SocketResponse(
             KIXModulesEvent.LOAD_FORM_CONFIGURATION_FINISHED,
