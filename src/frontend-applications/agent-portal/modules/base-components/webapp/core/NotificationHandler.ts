@@ -10,11 +10,12 @@
 import { ObjectUpdatedEventData } from "../../../../model/ObjectUpdatedEventData";
 import { ContextService } from "./ContextService";
 import { ContextType } from "../../../../model/ContextType";
-import { Context } from "vm";
 import { AgentSocketClient } from "../../../user/webapp/core/AgentSocketClient";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { BrowserUtil } from "./BrowserUtil";
 import { ContextMode } from "../../../../model/ContextMode";
+import { Context } from "../../../../model/Context";
+import { AdditionalContextInformation } from "./AdditionalContextInformation";
 
 export class NotificationHandler {
 
@@ -50,25 +51,27 @@ export class NotificationHandler {
     }
 
     private static checkForDataUpdate(context: Context, events: ObjectUpdatedEventData[]): void {
-        let showRefreshNotification = false;
-        if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-            showRefreshNotification = events.some((e) => {
-                const objectType = this.getObjectType(e.Namespace);
-                const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
-                const eventObjectId = e.ObjectID.split('::');
-                const isObject = eventObjectId[0] === context.getObjectId().toString();
-                return isObjectType && isObject;
-            });
-        } else if (context.getDescriptor().contextMode === ContextMode.DASHBOARD) {
-            showRefreshNotification = events.some((e) => {
-                const objectType = this.getObjectType(e.Namespace);
-                const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
-                return isObjectType;
-            });
-        }
+        if (!context.getAdditionalInformation(AdditionalContextInformation.DONT_SHOW_UPDATE_NOTIFICATION)) {
+            let showRefreshNotification = false;
+            if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
+                showRefreshNotification = events.some((e) => {
+                    const objectType = this.getObjectType(e.Namespace);
+                    const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
+                    const eventObjectId = e.ObjectID.split('::');
+                    const isObject = eventObjectId[0] === context.getObjectId().toString();
+                    return isObjectType && isObject;
+                });
+            } else if (context.getDescriptor().contextMode === ContextMode.DASHBOARD) {
+                showRefreshNotification = events.some((e) => {
+                    const objectType = this.getObjectType(e.Namespace);
+                    const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
+                    return isObjectType;
+                });
+            }
 
-        if (showRefreshNotification) {
-            BrowserUtil.openAppRefreshOverlay('Translatable#Data has been updated.');
+            if (showRefreshNotification) {
+                BrowserUtil.openAppRefreshOverlay('Translatable#Data has been updated.');
+            }
         }
     }
 

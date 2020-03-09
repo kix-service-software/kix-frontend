@@ -47,7 +47,7 @@ export class BrowserUtil {
         const settings = new RefreshToastSettings(message, reloadApp);
         const componentContent = new ComponentContent('refresh-app-toast', settings);
         OverlayService.getInstance().openOverlay(
-            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, false
+            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, true
         );
     }
 

@@ -14,11 +14,14 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <b title=(input.title || "")><translation-string pattern=(input.title || "")/></b>
         <p>
             <translation-string pattern=state.message/>
-            <p>
+            <div.refresh-links>
                 <a on-click("refreshClicked")>
                     <translation-string pattern="Translatable#Refresh Page"/>
                 </a>
-            </p>
+                <a on-click("dontShowClicked")>
+                    <translation-string pattern="Translatable#Don't show again"/>
+                </a>
+            </div>
         </p>
     </div>
     <div.close-button>
