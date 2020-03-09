@@ -34,10 +34,13 @@
                 white-space: nowrap;
             }
 
-            >p {
+            .refresh-links {
                 .font-size-small;
                 line-height: 1rem;
-                margin-top: .125rem;
+                margin-top: @margin-small;
+
+                display: grid;
+                grid-row-gap: @margin-small;
 
                 a:hover {
                     cursor: pointer;

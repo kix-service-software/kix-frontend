@@ -12,6 +12,9 @@ import { RefreshToastSettings } from '../../../../../../modules/base-components/
 import { ContextHistory } from '../../../../../../modules/base-components/webapp/core/ContextHistory';
 import { ApplicationEvent } from '../../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { EventService } from '../../../../../../modules/base-components/webapp/core/EventService';
+import { ContextService } from '../../../core/ContextService';
+import { ContextType } from '../../../../../../model/ContextType';
+import { AdditionalContextInformation } from '../../../core/AdditionalContextInformation';
 
 class Component {
 
@@ -35,6 +38,16 @@ class Component {
         } else {
             EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
+    }
+
+    public dontShowClicked(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
+
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        context.setAdditionalInformation(AdditionalContextInformation.DONT_SHOW_UPDATE_NOTIFICATION, true);
+
+        EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
     }
 
     public close(): void {
