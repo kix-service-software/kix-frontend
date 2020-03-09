@@ -116,9 +116,6 @@ msgstr ""
 msgid "Agent Assignment"
 msgstr ""
 
-msgid "Agent Information"
-msgstr ""
-
 msgid "Agent Login"
 msgstr ""
 
@@ -722,6 +719,12 @@ msgstr ""
 msgid "Dynamic field successfully created."
 msgstr ""
 
+msgid "Dynamic Field Type"
+msgstr ""
+
+msgid "Dynamic Field Types"
+msgstr ""
+
 msgid "Edit"
 msgstr ""
 
@@ -1034,6 +1037,11 @@ msgid "Follow Up Ticket Lock"
 msgstr ""
 
 msgid "Force"
+msgstr ""
+
+msgid ""
+"For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual "
+"for more detailed information."
 msgstr ""
 
 msgid "Format"
@@ -2139,9 +2147,6 @@ msgstr ""
 "Bcc) contains an adresss conected to the tickets customer, the checkbox will "
 "be set automatically and cannot be removed."
 
-msgid "Helptext_Tickets_TicketCreate_Links"
-msgstr "Link this ticket with an asset, a FAQ article or another ticket."
-
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
 "The organisation is automatically assigned depending on the chosen contact."
@@ -2154,11 +2159,6 @@ msgstr "The Priority marks the ticket urgency."
 
 msgid "Helptext_Tickets_TicketCreate_Queue"
 msgstr "Insert the scope of responsitility for the ticket."
-
-msgid "Helptext_Tickets_TicketCreate_Responsible"
-msgstr ""
-"Choose a person who is responsible for the ticket process. Can be the same "
-"as owner, but not necessarily."
 
 msgid "Helptext_Tickets_TicketCreate_State"
 msgstr "The state marks the recent ticket process state."
@@ -2333,6 +2333,9 @@ msgstr ""
 msgid "Imprint"
 msgstr ""
 
+msgid "Incident"
+msgstr ""
+
 msgid "Incident state"
 msgstr ""
 
@@ -2462,9 +2465,6 @@ msgstr ""
 msgid "Links will be removed."
 msgstr ""
 
-msgid "Link Ticket with"
-msgstr ""
-
 msgid "Link to"
 msgstr ""
 
@@ -2561,9 +2561,6 @@ msgstr ""
 msgid "Logged in"
 msgstr ""
 
-msgid "Login Information"
-msgstr ""
-
 msgid "Login Name"
 msgstr ""
 
@@ -2592,9 +2589,6 @@ msgid "Minutes"
 msgstr ""
 
 msgid "Mobile"
-msgstr ""
-
-msgid "Modification Time"
 msgstr ""
 
 msgid "Modified"
@@ -2649,9 +2643,6 @@ msgid "New Account"
 msgstr ""
 
 msgid "New Address"
-msgstr ""
-
-msgid "New Agent"
 msgstr ""
 
 msgid "New Article"
@@ -2739,6 +2730,9 @@ msgid "New Translations"
 msgstr ""
 
 msgid "New Type"
+msgstr ""
+
+msgid "New User"
 msgstr ""
 
 msgid "New Value"
@@ -3141,9 +3135,6 @@ msgstr ""
 
 msgid "Refresh Page"
 msgstr ""
-
-msgid "Relevant Config Items"
-msgstr "Relevant Assets"
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Reload Frontend Configurations"
@@ -3836,19 +3827,32 @@ msgstr ""
 msgid "Use KIX CSS"
 msgstr ""
 
+#, fuzzy
+#| msgid "Load User"
+msgid "User"
+msgstr "Loading User"
+
+#, fuzzy
+#| msgid "Queue Information"
+msgid "User Information"
+msgstr "Team Information"
+
 msgid "User Management"
 msgstr ""
 
-msgid "User Management: Agents"
+msgid "User Management: Roles"
 msgstr ""
 
-msgid "User Management: Roles"
+msgid "User Management: Users"
 msgstr ""
 
 msgid "User manual"
 msgstr ""
 
 msgid "User Name"
+msgstr ""
+
+msgid "Users"
 msgstr ""
 
 msgid "Validation error"
@@ -3958,6 +3962,17 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Helptext_Tickets_TicketCreate_Links"
+#~ msgstr "Link this ticket with an asset, a FAQ article or another ticket."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Responsible"
+#~ msgstr ""
+#~ "Choose a person who is responsible for the ticket process. Can be the "
+#~ "same as owner, but not necessarily."
+
+#~ msgid "Relevant Config Items"
+#~ msgstr "Relevant Assets"
 
 #~ msgid "Load Translation"
 #~ msgstr "Loading Translation"

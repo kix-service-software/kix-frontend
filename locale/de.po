@@ -116,9 +116,6 @@ msgstr "Agent"
 msgid "Agent Assignment"
 msgstr "Agentenzuordnung"
 
-msgid "Agent Information"
-msgstr "Agenten-Informationen"
-
 msgid "Agent Login"
 msgstr "Agentenlogin"
 
@@ -734,6 +731,16 @@ msgstr "Dynamische Felder"
 msgid "Dynamic field successfully created."
 msgstr "Dynamisches Feld wurde erfolgreich angelegt."
 
+#, fuzzy
+#| msgid "Dynamic Field"
+msgid "Dynamic Field Type"
+msgstr "Dynamisches Feld"
+
+#, fuzzy
+#| msgid "Dynamic Fields"
+msgid "Dynamic Field Types"
+msgstr "Dynamische Felder"
+
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -1049,6 +1056,11 @@ msgstr "Tickets werden gesperrt"
 
 msgid "Force"
 msgstr "Erzwingen"
+
+msgid ""
+"For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual "
+"for more detailed information."
+msgstr ""
 
 msgid "Format"
 msgstr "Format"
@@ -2256,11 +2268,6 @@ msgstr ""
 "des Kunden dieses Tickets zugeordnet ist,  wird der Haken automatisch "
 "gesetzt und kann nicht entfernt werden."
 
-msgid "Helptext_Tickets_TicketCreate_Links"
-msgstr ""
-"Verknüpfen Sie dieses Ticket mit einem Asset, einem FAQ Artikel oder einem "
-"anderen Ticket."
-
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr "Der Kunde wird automatisch in Abhängigkeit vom Kontakt zugeordnet."
 
@@ -2272,11 +2279,6 @@ msgstr "Die Priorität kennzeichnet die Dringlichkeit eines Tickets."
 
 msgid "Helptext_Tickets_TicketCreate_Queue"
 msgstr "Geben Sie hier einen Zuständigkeitsbereich für das Ticket an."
-
-msgid "Helptext_Tickets_TicketCreate_Responsible"
-msgstr ""
-"Wählen Sie eine Person aus, die für die Ticketbearbeitung verantwortlich "
-"ist. Diese kann mit dem Bearbeiter identisch sein, muss aber nicht."
 
 msgid "Helptext_Tickets_TicketCreate_State"
 msgstr ""
@@ -2459,6 +2461,11 @@ msgstr "Der Import wird gestartet"
 msgid "Imprint"
 msgstr "Impressum"
 
+#, fuzzy
+#| msgid "Incident state"
+msgid "Incident"
+msgstr "Vorfallstatus"
+
 msgid "Incident state"
 msgstr "Vorfallstatus"
 
@@ -2588,9 +2595,6 @@ msgstr "Verknüpfungen aktualisiert."
 msgid "Links will be removed."
 msgstr "Verknüpfungen werden entfernt."
 
-msgid "Link Ticket with"
-msgstr "Ticket verknüpfen mit"
-
 msgid "Link to"
 msgstr "Verknüpfen mit"
 
@@ -2687,9 +2691,6 @@ msgstr "Ticket sperren"
 msgid "Logged in"
 msgstr "Angemeldet"
 
-msgid "Login Information"
-msgstr "Zugangsdaten"
-
 msgid "Login Name"
 msgstr "Nutzername"
 
@@ -2719,9 +2720,6 @@ msgstr "Minuten"
 
 msgid "Mobile"
 msgstr "Mobil"
-
-msgid "Modification Time"
-msgstr "Änderungsdatum"
 
 msgid "Modified"
 msgstr "Geändert"
@@ -2776,9 +2774,6 @@ msgstr "Neues Konto"
 
 msgid "New Address"
 msgstr "Neue Adresse"
-
-msgid "New Agent"
-msgstr "Neuer Agent"
 
 msgid "New Article"
 msgstr "Neuer Artikel"
@@ -2866,6 +2861,11 @@ msgstr "Neue Übersetzungen"
 
 msgid "New Type"
 msgstr "Neuer Typ"
+
+#, fuzzy
+#| msgid "New Customer"
+msgid "New User"
+msgstr "Neuer Kunde"
 
 msgid "New Value"
 msgstr "Neuer Wert"
@@ -3269,9 +3269,6 @@ msgstr "Empfänger: An"
 
 msgid "Refresh Page"
 msgstr "Seite neu laden"
-
-msgid "Relevant Config Items"
-msgstr "Relevante Assets"
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Lade Frontend-Konfigurationen neu"
@@ -3973,13 +3970,23 @@ msgstr "URL"
 msgid "Use KIX CSS"
 msgstr "KIX CSS verwenden"
 
+msgid "User"
+msgstr "Benutzer"
+
+#, fuzzy
+#| msgid "Owner Information"
+msgid "User Information"
+msgstr "Besitzer Informationen"
+
 msgid "User Management"
 msgstr "Nutzerverwaltung"
 
-msgid "User Management: Agents"
-msgstr "Nutzerverwaltung: Agenten"
-
 msgid "User Management: Roles"
+msgstr "Nutzerverwaltung: Rollen"
+
+#, fuzzy
+#| msgid "User Management: Roles"
+msgid "User Management: Users"
 msgstr "Nutzerverwaltung: Rollen"
 
 msgid "User manual"
@@ -3987,6 +3994,11 @@ msgstr "Handbuch für Anwender"
 
 msgid "User Name"
 msgstr "Benutzername"
+
+#, fuzzy
+#| msgid "User"
+msgid "Users"
+msgstr "Benutzer"
 
 msgid "Validation error"
 msgstr "Validierungsfehler"
@@ -4096,11 +4108,39 @@ msgstr "PLZ"
 msgid "ZIP"
 msgstr "PLZ"
 
+#~ msgid "Agent Information"
+#~ msgstr "Agenten-Informationen"
+
+#~ msgid "Helptext_Tickets_TicketCreate_Links"
+#~ msgstr ""
+#~ "Verknüpfen Sie dieses Ticket mit einem Asset, einem FAQ Artikel oder "
+#~ "einem anderen Ticket."
+
+#~ msgid "Helptext_Tickets_TicketCreate_Responsible"
+#~ msgstr ""
+#~ "Wählen Sie eine Person aus, die für die Ticketbearbeitung verantwortlich "
+#~ "ist. Diese kann mit dem Bearbeiter identisch sein, muss aber nicht."
+
+#~ msgid "Link Ticket with"
+#~ msgstr "Ticket verknüpfen mit"
+
+#~ msgid "Login Information"
+#~ msgstr "Zugangsdaten"
+
+#~ msgid "Modification Time"
+#~ msgstr "Änderungsdatum"
+
+#~ msgid "New Agent"
+#~ msgstr "Neuer Agent"
+
+#~ msgid "Relevant Config Items"
+#~ msgstr "Relevante Assets"
+
+#~ msgid "User Management: Agents"
+#~ msgstr "Nutzerverwaltung: Agenten"
+
 #~ msgid "ToDo / Processing required"
 #~ msgstr "ToDo / Bearbeitung erforderlich"
-
-#~ msgid "User"
-#~ msgstr "Benutzer"
 
 #~ msgid "Load Translation"
 #~ msgstr "Lade Übersetzung"
@@ -5196,9 +5236,6 @@ msgstr "PLZ"
 #~ msgid "Insert a password for the contact."
 #~ msgstr "Legen Sie ein Passwort für den Kontakt fest."
 
-#~ msgid "New Customer"
-#~ msgstr "Neuer Kunde"
-
 #~ msgid "No customer available"
 #~ msgstr "Kein Kunde verfügbar"
 
@@ -5384,9 +5421,6 @@ msgstr "PLZ"
 
 #~ msgid "Attachment"
 #~ msgstr "Anhang"
-
-#~ msgid "Owner Information"
-#~ msgstr "Besitzer Informationen"
 
 #~ msgid "Assigned Owner"
 #~ msgstr "Zugeordneter Besitzer"
