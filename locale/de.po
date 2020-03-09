@@ -713,6 +713,9 @@ msgstr "Anzeigename"
 msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
 msgstr "Denken Sie daran, den Platzhalter <YOUR_FRONTEND_HOST> zu ersetzen."
 
+msgid "Don't show again"
+msgstr ""
+
 msgid ". (dot)"
 msgstr ". (Punkt)"
 

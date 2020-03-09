@@ -701,6 +701,9 @@ msgstr ""
 msgid "Do not forget to replace <YOUR_FRONTEND_HOST> placeholder."
 msgstr ""
 
+msgid "Don't show again"
+msgstr ""
+
 msgid ". (dot)"
 msgstr ""
 
