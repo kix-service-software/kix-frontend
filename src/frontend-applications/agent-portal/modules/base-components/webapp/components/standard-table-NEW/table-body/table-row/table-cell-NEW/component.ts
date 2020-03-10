@@ -39,7 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (tableConfiguration && tableConfiguration.routingConfiguration) {
                 this.state.object = object;
                 this.state.routingConfiguration = tableConfiguration.routingConfiguration;
-            } else if (object.KIXObjectType) {
+            } else if (object && object.KIXObjectType) {
                 const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(object.KIXObjectType);
                 if (service) {
                     this.state.routingConfiguration = service.getObjectRoutingConfiguration(object);
