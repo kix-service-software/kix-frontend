@@ -14,8 +14,6 @@ import { NotificationProperty } from "../../model/NotificationProperty";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { SortUtil } from "../../../../model/SortUtil";
-import { DataType } from "../../../../model/DataType";
 
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
@@ -48,7 +46,9 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
 
             if (articleEventsConfig && articleEventsConfig.length) {
                 const articleEvents = articleEventsConfig[0].Value as string[];
-                hasArticleEvent = events.some((e) => articleEvents.some((ae) => ae === e));
+                hasArticleEvent = events.some(
+                    (e) => articleEvents.some((ae) => ae === e) || e === 'ArticleDynamicFieldUpdate'
+                );
             }
         }
 
@@ -58,39 +58,15 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
     public async getTreeNodes(
         property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
-        let values: TreeNode[] = [];
+        let nodes: TreeNode[] = [];
 
         switch (property) {
             case NotificationProperty.DATA_EVENTS:
-                const ticketEvents = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_EVENTS], null, null, true
-                ).catch((error): SysConfigOption[] => []);
-                const articleEvents = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
-                ).catch((error): SysConfigOption[] => []);
-                values = this.prepareEventTree(ticketEvents, articleEvents);
+                nodes = await super.getTicketArticleEventTree();
                 break;
             default:
         }
 
-        return values;
-    }
-
-    private prepareEventTree(ticketEvents: SysConfigOption[], articleEvents: SysConfigOption[]): TreeNode[] {
-        let nodes = [];
-        if (ticketEvents && ticketEvents.length) {
-            nodes = ticketEvents[0].Value.map((event: string) => {
-                return new TreeNode(event, event);
-            });
-        }
-        if (articleEvents && articleEvents.length) {
-            nodes = [
-                ...nodes,
-                ...articleEvents[0].Value.map((event: string) => {
-                    return new TreeNode(event, event);
-                })
-            ];
-        }
-        return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        return nodes;
     }
 }
