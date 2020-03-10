@@ -42,6 +42,10 @@ import { UserProperty } from "../../../user/model/UserProperty";
 import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { ConfigItem } from "../../../cmdb/model/ConfigItem";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
+import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
+import { SortUtil } from "../../../../model/SortUtil";
+import { DataType } from "../../../../model/DataType";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -505,4 +509,57 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return null;
     }
 
+    public async getTicketArticleEventTree(): Promise<TreeNode[]> {
+        const ticketEvents = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_EVENTS], null, null, true
+        ).catch((error): SysConfigOption[] => []);
+        const articleEvents = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
+        ).catch((error): SysConfigOption[] => []);
+
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, KIXObjectType.TICKET
+            )
+        ]);
+        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
+        ).catch(() => [] as DynamicField[]);
+
+        const dfEvents = dynamicFields ? dynamicFields.map((d) => `TicketDynamicFieldUpdate_${d.Name}`) : [];
+
+        // TODO: there is currently only one article df event
+        dfEvents.push('ArticleDynamicFieldUpdate');
+
+        return this.prepareEventTree(ticketEvents, articleEvents, dfEvents);
+    }
+
+    private prepareEventTree(
+        ticketEvents: SysConfigOption[], articleEvents: SysConfigOption[], dfEvents: string[]
+    ): TreeNode[] {
+        let nodes = [];
+        if (ticketEvents && ticketEvents.length) {
+            nodes = ticketEvents[0].Value.map((event: string) => {
+                return new TreeNode(event, event);
+            });
+        }
+        if (articleEvents && articleEvents.length) {
+            nodes = [
+                ...nodes,
+                ...articleEvents[0].Value.map((event: string) => {
+                    return new TreeNode(event, event);
+                })
+            ];
+        }
+        if (dfEvents && dfEvents.length) {
+            nodes = [
+                ...nodes,
+                ...dfEvents.map((event: string) => {
+                    return new TreeNode(event, event);
+                })
+            ];
+        }
+        return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+    }
 }

@@ -14,8 +14,6 @@ import { JobProperty } from "../../model/JobProperty";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { MacroActionType } from "../../model/MacroActionType";
-import { SortUtil } from "../../../../model/SortUtil";
-import { DataType } from "../../../../model/DataType";
 import { Job } from "../../model/Job";
 import { ExecPlan } from "../../model/ExecPlan";
 import { Macro } from "../../model/Macro";
@@ -50,13 +48,7 @@ export class JobService extends KIXObjectService<Job> {
 
         switch (property) {
             case JobProperty.EXEC_PLAN_EVENTS:
-                const ticketEvents = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_EVENTS], null, null, true
-                ).catch((error): SysConfigOption[] => []);
-                const articleEvents = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
-                ).catch((error): SysConfigOption[] => []);
-                nodes = this.prepareEventTree(ticketEvents, articleEvents);
+                nodes = await super.getTicketArticleEventTree();
                 break;
             case JobProperty.MACRO_ACTIONS:
                 const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
@@ -72,24 +64,6 @@ export class JobService extends KIXObjectService<Job> {
         return nodes;
     }
 
-    private prepareEventTree(ticketEvents: SysConfigOption[], articleEvents: SysConfigOption[]): TreeNode[] {
-        let nodes = [];
-        if (ticketEvents && ticketEvents.length) {
-            nodes = ticketEvents[0].Value.map((event: string) => {
-                return new TreeNode(event, event);
-            });
-        }
-        if (articleEvents && articleEvents.length) {
-            nodes = [
-                ...nodes,
-                ...articleEvents[0].Value.map((event: string) => {
-                    return new TreeNode(event, event);
-                })
-            ];
-        }
-        return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
-    }
-
     public async hasArticleEvent(events: string[]): Promise<boolean> {
         let hasArticleEvent = false;
         if (events) {
@@ -99,7 +73,9 @@ export class JobService extends KIXObjectService<Job> {
 
             if (articleEventsConfig && articleEventsConfig.length) {
                 const articleEvents = articleEventsConfig[0].Value as string[];
-                hasArticleEvent = events.some((e) => articleEvents.some((ae) => ae === e));
+                hasArticleEvent = events.some(
+                    (e) => articleEvents.some((ae) => ae === e) || e === 'ArticleDynamicFieldUpdate'
+                );
             }
         }
         return hasArticleEvent;
