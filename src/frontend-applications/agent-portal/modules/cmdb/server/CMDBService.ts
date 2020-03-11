@@ -41,6 +41,7 @@ import { LoggingService } from "../../../../../server/services/LoggingService";
 import { ConfigItemFactory } from "./ConfigItemFactory";
 import { ConfigItemImageFactory } from "./ConfigItemImageFactory";
 import { Error } from "../../../../../server/model/Error";
+import { AttachmentLoadingOptions } from "../model/AttachmentLoadingOptions";
 
 export class CMDBAPIService extends KIXObjectAPIService {
 
@@ -123,7 +124,10 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 );
                 break;
             case KIXObjectType.CONFIG_ITEM_ATTACHMENT:
-                objects = await this.getAttachments(token, objectIds, loadingOptions);
+                objects = await this.getAttachments(
+                    token, objectIds, loadingOptions,
+                    objectLoadingOptions as AttachmentLoadingOptions
+                );
                 break;
             default:
         }
@@ -234,17 +238,25 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
 
     private async getAttachments(
-        token: string, attachmentIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
+        token: string, attachmentIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions,
+        objectLoadingOptions: AttachmentLoadingOptions
     ): Promise<ConfigItemAttachment[]> {
-        const subResource = 'configitems/attachments';
-
-        loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
-
-        const query = this.prepareQuery(loadingOptions);
 
         let attachments: ConfigItemAttachment[] = [];
 
-        if (attachmentIds && attachmentIds.length) {
+        if (
+            attachmentIds && attachmentIds.length &&
+            objectLoadingOptions.configItemId && objectLoadingOptions.versionId
+        ) {
+            const subResource = this.buildUri(
+                'configitems', objectLoadingOptions.configItemId,
+                'versions', objectLoadingOptions.versionId,
+                'attachments'
+            );
+
+            loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
+
+            const query = this.prepareQuery(loadingOptions);
             attachmentIds = attachmentIds.filter(
                 (id) => typeof id !== 'undefined' && id.toString() !== '' && id !== null
             );

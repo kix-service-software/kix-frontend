@@ -21,6 +21,7 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { AttachmentLoadingOptions } from '../../../model/AttachmentLoadingOptions';
 
 class Component {
 
@@ -94,14 +95,17 @@ class Component {
     }
 
     public async fileClicked(attachment: ConfigItemAttachment): Promise<void> {
-        const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
-            KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.ID]
-        );
-
-        if (attachments && attachments.length) {
-            BrowserUtil.startBrowserDownload(
-                attachments[0].Filename, attachments[0].Content, attachments[0].ContentType
+        if (this.state.version) {
+            const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
+                KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.ID], undefined,
+                new AttachmentLoadingOptions(this.state.version.ConfigItemID, this.state.version.VersionID)
             );
+
+            if (attachments && attachments.length) {
+                BrowserUtil.startBrowserDownload(
+                    attachments[0].Filename, attachments[0].Content, attachments[0].ContentType
+                );
+            }
         }
     }
 
