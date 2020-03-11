@@ -60,6 +60,7 @@ class Extension implements IInitialDataExtension {
                         ...parameter,
                         [DynamicFieldProperty.NAME, 'PlanBegin'],
                         [DynamicFieldProperty.LABEL, 'Plan Begin']
+                        // "Translatable#Plan Begin" - for extract-translatables script
                     ]
                 ).catch((error) => {
                     LoggingService.getInstance().error('Could not create dynamic field PlanBegin', error);
@@ -73,6 +74,7 @@ class Extension implements IInitialDataExtension {
                         ...parameter,
                         [DynamicFieldProperty.NAME, 'PlanEnd'],
                         [DynamicFieldProperty.LABEL, 'Plan End']
+                        // "Translatable#Plan End" - for extract-translatables script
                     ]
                 ).catch((error) => {
                     LoggingService.getInstance().error('Could not create dynamic field PlanEnd', error);

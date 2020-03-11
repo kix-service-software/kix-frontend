@@ -8,13 +8,16 @@
  */
 
 import { ToolbarAction } from "./ToolbarAction";
+import { AbstractComponentState } from "../../../../../base-components/webapp/core/AbstractComponentState";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public toolbarGroups: ToolbarAction[][] = [],
         public show: boolean = false,
         public ownedTicketsCount: number = 0
-    ) { }
+    ) {
+        super();
+    }
 
 }

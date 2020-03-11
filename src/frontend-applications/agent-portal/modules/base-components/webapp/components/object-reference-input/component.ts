@@ -121,6 +121,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
         );
         if (additionalNodes) {
+            for (const node of (additionalNodes.value as TreeNode[])) {
+                const label = await TranslationService.translate(node.label);
+                const tooltip = await TranslationService.translate(node.tooltip);
+                node.label = label;
+                node.tooltip = tooltip;
+            }
             nodes = [...additionalNodes.value, ...nodes];
         }
 

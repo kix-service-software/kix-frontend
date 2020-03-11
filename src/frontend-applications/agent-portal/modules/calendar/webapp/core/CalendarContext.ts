@@ -8,6 +8,7 @@
  */
 
 import { Context } from "../../../../model/Context";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class CalendarContext extends Context {
 
@@ -19,7 +20,7 @@ export class CalendarContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return "Calendar";
+        return await TranslationService.translate("Translatable#Calendar");
     }
 
 }
