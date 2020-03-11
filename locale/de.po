@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-10 13:59+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2020-03-11 10:48+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -213,13 +213,13 @@ msgid "Article Text"
 msgstr "Artikelinhalt"
 
 msgid "Assets"
-msgstr ""
+msgstr "Assets"
 
 msgid "Assets: General Catalog"
 msgstr "Assets: General Catalog"
 
 msgid "Assets: Import/Export"
-msgstr ""
+msgstr "Assets: Import/Export"
 
 msgid "Assigned agent"
 msgstr "Zugeordneter Agent"
@@ -2681,7 +2681,7 @@ msgid "Load Ticket Type"
 msgstr "Lade Ticket Typ"
 
 msgid "Load User"
-msgstr "Lade Benutzer"
+msgstr "Lade Nutzer"
 
 msgid "Load Webform"
 msgstr "Lade Webformular"
@@ -2878,10 +2878,8 @@ msgstr "Neue Übersetzungen"
 msgid "New Type"
 msgstr "Neuer Typ"
 
-#, fuzzy
-#| msgid "New Customer"
 msgid "New User"
-msgstr "Neuer Kunde"
+msgstr "Neuer Nutzer"
 
 msgid "New Value"
 msgstr "Neuer Wert"
@@ -3992,7 +3990,7 @@ msgid "Use KIX CSS"
 msgstr "KIX CSS verwenden"
 
 msgid "User"
-msgstr "Benutzer"
+msgstr "Nutzer"
 
 msgid "User Information"
 msgstr "Nutzer Informationen"
@@ -4003,21 +4001,17 @@ msgstr "Nutzerverwaltung"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
-#, fuzzy
-#| msgid "User Management: Roles"
 msgid "User Management: Users"
-msgstr "Nutzerverwaltung: Rollen"
+msgstr "Nutzerverwaltung: Nutzer"
 
 msgid "User manual"
 msgstr "Handbuch für Anwender"
 
 msgid "User Name"
-msgstr "Benutzername"
+msgstr "Nutzername"
 
-#, fuzzy
-#| msgid "User"
 msgid "Users"
-msgstr "Benutzer"
+msgstr "Nutzer"
 
 msgid "Validation error"
 msgstr "Validierungsfehler"
