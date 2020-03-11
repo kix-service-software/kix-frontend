@@ -1746,6 +1746,11 @@ msgstr ""
 msgid "Helptext_Admin_Users_RoleCreate_Name"
 msgstr ""
 
+#, fuzzy
+#| msgid "Helptext_Admin_Users_RoleCreate_User"
+msgid "Helptext_Admin_Users_RoleCreate_UsageContext"
+msgstr "Es werden nur gültige Agenten angezeigt."
+
 msgid "Helptext_Admin_Users_RoleCreate_User"
 msgstr "Es werden nur gültige Agenten angezeigt."
 
@@ -3977,6 +3982,11 @@ msgstr "Aktualisierung wird durchgeführt"
 
 msgid "URL"
 msgstr "URL"
+
+#, fuzzy
+#| msgid "Context"
+msgid "Usage Context"
+msgstr "Kontext"
 
 msgid "Use KIX CSS"
 msgstr "KIX CSS verwenden"

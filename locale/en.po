@@ -1662,6 +1662,11 @@ msgstr ""
 msgid "Helptext_Admin_Users_RoleCreate_Name"
 msgstr ""
 
+#, fuzzy
+#| msgid "Helptext_Admin_Users_RoleCreate_User"
+msgid "Helptext_Admin_Users_RoleCreate_UsageContext"
+msgstr "Only valid agents are available."
+
 msgid "Helptext_Admin_Users_RoleCreate_User"
 msgstr "Only valid agents are available."
 
@@ -3827,6 +3832,9 @@ msgid "Update Webform"
 msgstr ""
 
 msgid "URL"
+msgstr ""
+
+msgid "Usage Context"
 msgstr ""
 
 msgid "Use KIX CSS"
