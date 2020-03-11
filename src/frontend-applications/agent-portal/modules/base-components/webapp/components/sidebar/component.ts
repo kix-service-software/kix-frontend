@@ -69,6 +69,7 @@ class Component {
             this.state.showSidebar = context ? context.areSidebarsShown() : false;
             if (this.state.showSidebar) {
                 this.state.sidebars = [...context.getSidebars(true)] || [];
+                this.setShieldHeight(context);
             } else {
                 this.state.sidebars = [];
             }
@@ -79,6 +80,28 @@ class Component {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
         return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
+    }
+
+    private setShieldHeight(context: Context): void {
+        const shield = (this as any).getEl();
+        if (shield && context) {
+            const visible = getComputedStyle(shield).getPropertyValue('display');
+            const sidebarArea = shield.nextElementSibling;
+            if (visible && visible !== 'none' && sidebarArea) {
+                const isDialogContext = context.getDescriptor().contextType === ContextType.DIALOG;
+                setTimeout(() => {
+                    const sidebarHeight = sidebarArea.getBoundingClientRect().height;
+                    const formHeight = isDialogContext && shield.previousElementSibling
+                        ? shield.previousElementSibling.getBoundingClientRect().height : 0;
+                    const relevantHeight = sidebarHeight && sidebarHeight > formHeight
+                        ? sidebarHeight : formHeight ? formHeight : null;
+                    if (relevantHeight) {
+                        const addHeight = isDialogContext ? '1rem' : '13.5rem';
+                        shield.style.height = `calc(${relevantHeight}px + ${addHeight})`;
+                    }
+                }, 200);
+            }
+        }
     }
 }
 
