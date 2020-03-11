@@ -15,7 +15,6 @@ import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions"
 import { LoggingService } from "../../../../../server/services/LoggingService";
 import { ContactProperty } from "../model/ContactProperty";
 import { FilterCriteria } from "../../../model/FilterCriteria";
-import { FilterType } from "../../../model/FilterType";
 import { CreateContact } from "./api/CreateContact";
 import { CreateContactResponse } from "./api/CreateContactResponse";
 import { CreateContactRequest } from "./api/CreateContactRequest";
@@ -87,7 +86,9 @@ export class ContactAPIService extends KIXObjectAPIService {
             }
         }
 
-        const contactParameter = parameter.filter((p) => !userParameter.some((up) => up[0] === p[0]));
+        const contactParameter = parameter.filter(
+            (p) => !userParameter.some((up) => up[0] === p[0]) || p[0] === KIXObjectProperty.VALID_ID
+        );
         this.prepareOrganisationIdsParameter(contactParameter);
 
         const createContact = new CreateContact(contactParameter);
@@ -109,35 +110,29 @@ export class ContactAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, parameter: Array<[string, any]>, assignedUserId?: number
     ): Promise<string | number> {
         let userId: string | number = assignedUserId;
-        parameter = parameter.filter((p) => p[0] !== UserProperty.USER_ACCESS);
+
+        const validParameterValue = this.getParameterValue(parameter, KIXObjectProperty.VALID_ID);
+        parameter = parameter.filter((p) => p[0] !== UserProperty.USER_ACCESS && p[0] !== KIXObjectProperty.VALID_ID);
 
         const isAgent = this.getParameterValue(parameter, UserProperty.IS_AGENT);
         const isCustomer = this.getParameterValue(parameter, UserProperty.IS_CUSTOMER);
 
+        // use own valid (do not overwrite contact valid - reference)
+        const validValue = (!isAgent && !isCustomer) || (validParameterValue && validParameterValue !== 1) ? 2 : 1;
+        parameter.push([KIXObjectProperty.VALID_ID, validValue]);
+
         if (userId) {
-            let validValue = 1;
-            if (!isAgent && !isCustomer) {
-                validValue = 2;
-            }
-            const validParameter = parameter.find((p) => p[0] === KIXObjectProperty.VALID_ID);
-            if (validParameter) {
-                validParameter[1] = validValue;
-            } else {
-                parameter.push([KIXObjectProperty.VALID_ID, validValue]);
-            }
             await UserService.getInstance().updateObject(
                 token, clientRequestId, KIXObjectType.USER, parameter, userId
             ).catch((error) => {
                 throw new Error(error.Code, error.Message);
             });
-        } else {
-            if (isAgent || isCustomer) {
-                userId = await UserService.getInstance().createObject(
-                    token, clientRequestId, KIXObjectType.USER, parameter
-                ).catch((error) => {
-                    throw new Error(error.Code, error.Message);
-                });
-            }
+        } else if (isAgent || isCustomer) {
+            userId = await UserService.getInstance().createObject(
+                token, clientRequestId, KIXObjectType.USER, parameter
+            ).catch((error) => {
+                throw new Error(error.Code, error.Message);
+            });
         }
         return userId;
     }
@@ -165,7 +160,9 @@ export class ContactAPIService extends KIXObjectAPIService {
             }
         }
 
-        const contactParameter = parameter.filter((p) => !userParameter.some((up) => up[0] === p[0]));
+        const contactParameter = parameter.filter(
+            (p) => !userParameter.some((up) => up[0] === p[0]) || p[0] === KIXObjectProperty.VALID_ID
+        );
         this.prepareOrganisationIdsParameter(contactParameter);
         const updateContact = new UpdateContact(contactParameter);
 
@@ -191,7 +188,8 @@ export class ContactAPIService extends KIXObjectAPIService {
             p[0] === UserProperty.ROLE_IDS ||
             p[0] === PersonalSettingsProperty.MY_QUEUES ||
             p[0] === PersonalSettingsProperty.NOTIFICATIONS ||
-            p[0] === PersonalSettingsProperty.USER_LANGUAGE
+            p[0] === PersonalSettingsProperty.USER_LANGUAGE ||
+            p[0] === KIXObjectProperty.VALID_ID // use contact valid to bias user valid
         );
     }
 

@@ -31,6 +31,7 @@ class Component {
     }
 
     public onMount(): void {
+        this.state.loading = true;
         ContextService.getInstance().registerListener({
             constexServiceListenerId: this.contextServiceListernerId,
             contextChanged: (contextId: string, context: Context, type: ContextType) => {
@@ -41,6 +42,9 @@ class Component {
             contextRegistered: () => { return; }
         });
         this.setContext(ContextService.getInstance().getActiveContext(this.state.contextType));
+        setTimeout(() => {
+            this.state.loading = false;
+        }, 100);
     }
 
     public onDestroy(): void {

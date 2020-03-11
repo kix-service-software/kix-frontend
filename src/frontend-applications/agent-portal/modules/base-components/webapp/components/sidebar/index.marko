@@ -9,7 +9,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <div.sidebar-shield/>
 <div.sidebar-area class={
-    "show-object": state.sidebars
+    "show-object": state.sidebars && !state.loading
 }>
     <if(!state.loading && state.showSidebar && state.sidebars)>
         <for|sidebar| of=state.sidebars>

@@ -110,7 +110,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
         if (!this.rebuildPromise) {
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
 
-                await CacheService.getInstance().deleteKeys('FormConfiguration');
+                await CacheService.getInstance().deleteKeys('FormConfiguration', true);
 
                 const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
