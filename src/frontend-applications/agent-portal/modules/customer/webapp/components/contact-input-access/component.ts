@@ -48,14 +48,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
     private async load(): Promise<TreeNode[]> {
         const nodes = await this.getNodes();
         this.setCurrentNode(nodes);
-        const nodesWithTranslation: Array<[TreeNode, string]> = [];
-        for (const node of nodes) {
-            const translatedLabel = await TranslationService.translate(node.label);
-            nodesWithTranslation.push([node, translatedLabel]);
-        }
-        return nodesWithTranslation.sort((a, b) => {
+        return nodes.sort((a, b) => {
             return SortUtil.compareString(a[1], b[1]);
-        }).map((nwt) => nwt[0]);
+        });
 
     }
 
@@ -111,9 +106,11 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async getNodes(unique: boolean = false): Promise<TreeNode[]> {
+        const agentLabel = await TranslationService.translate('Translatable#Agent Portal');
+        const customerLabel = await TranslationService.translate('Translatable#Customer Portal');
         return [
-            new TreeNode(UserProperty.IS_AGENT, 'Translatable#Agent Portal'),
-            new TreeNode(UserProperty.IS_CUSTOMER, 'Translatable#Customer Portal')
+            new TreeNode(UserProperty.IS_AGENT, agentLabel),
+            new TreeNode(UserProperty.IS_CUSTOMER, customerLabel)
         ];
     }
 }

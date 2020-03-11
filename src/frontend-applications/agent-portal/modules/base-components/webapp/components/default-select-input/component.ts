@@ -50,16 +50,14 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     public async load(): Promise<TreeNode[]> {
         let nodes = [];
         if (this.state.field && this.state.field.options && !!this.state.field.options) {
+            const translatableOption = this.state.field.options.find(
+                (o) => o.option === DefaultSelectInputFormOption.TRANSLATABLE
+            );
+            const translatable = !translatableOption || Boolean(translatableOption.value);
             const nodesOption = this.state.field.options.find(
                 (o) => o.option === DefaultSelectInputFormOption.NODES
             );
-            nodes = nodesOption ? (nodesOption.value as TreeNode[]).map(
-                (n) => new TreeNode(
-                    n.id, n.label, n.icon, n.secondaryIcon, n.children, n.parent, n.nextNode, n.previousNode,
-                    n.properties, n.expanded, n.visible, n.expandOnClick, n.selectable, n.tooltip, n.flags,
-                    n.navigationNode, n.selected
-                )
-            ) : [];
+            nodes = await this.getNodes(nodesOption ? nodesOption.value : [], translatable);
 
             if (this.state.field.countMax && this.state.field.countMax > 1) {
                 const uniqueOption = this.state.field.options.find(
@@ -132,6 +130,24 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes = nodes.filter((n) => !usedValues.some((v) => v === n.id));
         }
         return nodes;
+    }
+
+    private async getNodes(nodes: TreeNode[], translatable: boolean = true): Promise<TreeNode[]> {
+        const newNodes = [];
+        for (const node of nodes) {
+            const label = translatable ? await TranslationService.translate(node.label) :
+                await TranslationService.translate(node.label, null, undefined, true);
+            const tooltip = translatable ? await TranslationService.translate(node.tooltip) :
+                await TranslationService.translate(node.tooltip, null, undefined, true);
+            newNodes.push(
+                new TreeNode(
+                    node.id, label, node.icon, node.secondaryIcon, node.children, node.parent, node.nextNode,
+                    node.previousNode, node.properties, node.expanded, node.visible, node.expandOnClick,
+                    node.selectable, tooltip, node.flags, node.navigationNode, node.selected
+                )
+            );
+        }
+        return newNodes;
     }
 }
 

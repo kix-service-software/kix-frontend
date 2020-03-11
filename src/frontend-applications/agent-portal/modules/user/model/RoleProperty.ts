@@ -17,6 +17,8 @@ export enum RoleProperty {
 
     VALID_ID = 'ValidID',
 
+    USAGE_CONTEXT = 'UsageContext',
+
     CREATE_TIME = 'CreateTime',
 
     CREATE_BY = 'CreateBy',

@@ -27,6 +27,9 @@ import { FormPageConfiguration } from "../../model/configuration/FormPageConfigu
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { DefaultSelectInputFormOption } from "../../model/configuration/DefaultSelectInputFormOption";
+import { TreeNode } from "../base-components/webapp/core/tree";
+import { RoleUsageContextTypes } from "./model/RoleUsageContextTypes";
 import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
 export class Extension implements IConfigurationExtension {
@@ -64,6 +67,22 @@ export class Extension implements IConfigurationExtension {
         const configurations = [];
 
         const formId = 'user-role-edit-form';
+
+        const usageContextField = new FormFieldConfiguration(
+            'user-role-edit-form-field-usage-context',
+            'Translatable#Usage Context', RoleProperty.USAGE_CONTEXT, 'default-select-input', true,
+            'Translatable#Helptext_Admin_Users_RoleCreate_UsageContext',
+            [
+                new FormFieldOption(DefaultSelectInputFormOption.NODES,
+                    [
+                        new TreeNode(RoleUsageContextTypes.AGENT, 'Translatable#Agent'),
+                        new TreeNode(RoleUsageContextTypes.CUSTOMER, 'Translatable#Customer'),
+                    ]),
+                new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
+            ]
+        );
+        configurations.push(usageContextField);
+
         const nameField = new FormFieldConfiguration(
             'user-role-edit-form-field-name',
             'Translatable#Name', RoleProperty.NAME, null, true,
@@ -93,6 +112,7 @@ export class Extension implements IConfigurationExtension {
             'user-role-edit-form-group-role-information', 'Translatable#Role Information',
             [
                 'user-role-edit-form-field-name',
+                'user-role-edit-form-field-usage-context',
                 'user-role-edit-form-field-comment',
                 'user-role-edit-form-field-validity'
             ]

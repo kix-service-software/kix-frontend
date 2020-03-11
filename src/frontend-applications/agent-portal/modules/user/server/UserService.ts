@@ -165,7 +165,9 @@ export class UserService extends KIXObjectAPIService {
             });
 
             const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
-            await this.updateUserRoles(token, clientRequestId, roleIds, userId);
+            if (roleIds) {
+                await this.updateUserRoles(token, clientRequestId, roleIds, userId);
+            }
 
             const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
             if (userLanguage) {

@@ -77,8 +77,11 @@ export class CacheService {
         }
     }
 
-    public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
-        const prefixes = await this.getCacheKeyPrefixes(cacheKeyPrefix);
+    public async deleteKeys(cacheKeyPrefix: string, force: boolean = false): Promise<void> {
+        let prefixes = await this.getCacheKeyPrefixes(cacheKeyPrefix);
+        if (!force) {
+            prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
+        }
         for (const prefix of prefixes) {
             if (this.useRedisCache) {
                 await RedisCache.getInstance().deleteKeys(prefix);

@@ -31,6 +31,9 @@ export class RoleLabelProvider extends LabelProvider<Role> {
             case RoleProperty.ID:
                 displayValue = 'Translatable#Icon';
                 break;
+            case RoleProperty.USAGE_CONTEXT:
+                displayValue = 'Translatable#Usage Context';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
