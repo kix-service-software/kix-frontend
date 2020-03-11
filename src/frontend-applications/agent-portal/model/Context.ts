@@ -24,7 +24,7 @@ import { KIXObjectService } from "../modules/base-components/webapp/core/KIXObje
 import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
 import { EventService } from "../modules/base-components/webapp/core/EventService";
 import { ApplicationEvent } from "../modules/base-components/webapp/core/ApplicationEvent";
-
+import { ClientStorageService } from "../modules/base-components/webapp/core/ClientStorageService";
 
 export abstract class Context {
 
@@ -97,6 +97,19 @@ export abstract class Context {
     public setConfiguration(configuration: ContextConfiguration): void {
         this.configuration = configuration;
         this.shownSidebars = [...this.configuration.sidebars.map((s) => s.instanceId)];
+        if (this.shownSidebars.length) {
+            this.filterShownSidebarsByPreference();
+        }
+    }
+
+    private filterShownSidebarsByPreference(): void {
+        const shownSidebarsOption = ClientStorageService.getOption(this.configuration.id + '-context-shown-sidebars');
+        if (shownSidebarsOption || shownSidebarsOption === '') {
+            const shownSidebarsInPreference = shownSidebarsOption.split('###');
+            this.shownSidebars = this.shownSidebars.filter(
+                (s) => shownSidebarsInPreference.some((sP) => sP === s)
+            );
+        }
     }
 
     public setAdditionalInformation(key: string, value: any): void {
@@ -235,19 +248,29 @@ export abstract class Context {
                 this.shownSidebars.push(instanceId);
             }
 
+            this.setShownSidebarPreference();
             this.listeners.forEach((l) => l.sidebarToggled());
         }
     }
 
     public closeAllSidebars(): void {
         this.shownSidebars = [];
+        this.setShownSidebarPreference();
         this.listeners.forEach((l) => l.sidebarToggled());
     }
 
     public openAllSidebars(): void {
         this.shownSidebars = [];
         this.shownSidebars = this.configuration.sidebars.map((s) => s.instanceId);
+        this.setShownSidebarPreference();
         this.listeners.forEach((l) => l.sidebarToggled());
+    }
+
+    private setShownSidebarPreference(): void {
+        ClientStorageService.setOption(
+            this.configuration.id + '-context-shown-sidebars',
+            this.shownSidebars ? this.shownSidebars.map((s) => s).join('###') : ''
+        );
     }
 
     public toggleExplorerBar(): void {
