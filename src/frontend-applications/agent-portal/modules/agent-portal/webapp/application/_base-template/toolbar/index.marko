@@ -11,13 +11,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div.kix-toolbar>
         <if(state.show)>
             <div.toolbar-group>
-                <div title="Personal Kanban Board" on-click("showKanban")>
+                <div title=state.translations["Translatable#Personal Kanban Board"] on-click("showKanban")>
                     <div.action-icon>
                         <icon icon="kix-icon-kanban"/>
                     </div>
                     <div.action-text>${state.ownedTicketsCount}</div>
                 </div>
-                <div title="Personal Ticket Calendar" on-click("showCalendar")>
+                <div title=state.translations["Translatable#Personal Ticket Calendar"] on-click("showCalendar")>
                     <div.action-icon>
                         <icon icon="kix-icon-calendar"/>
                     </div>
