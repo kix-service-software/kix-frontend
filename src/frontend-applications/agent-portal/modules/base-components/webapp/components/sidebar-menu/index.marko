@@ -18,10 +18,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                     ? state.translations["Translatable#Close Sidebars"]
                                     : state.translations["Translatable#Open Sidebars"]
                     )>
-            <span class=(component.areSidebarsShown() ? "kix-icon-triangle-right" : "kix-icon-open-left")>
-                <span.path1/>
-                <span.path2/>
-            </span>
+            <div>
+                <span class=(component.areSidebarsShown() ? "kix-icon-all-close" : "kix-icon-all-open")/>
+            </div>
         </div>
     </if>
     <for|sidebar| of=state.sidebars>

@@ -7,9 +7,20 @@
  * --
  */
 
+
+.sidebar-shield {
+    background-color: rgba(255, 255, 255, 0.8);
+    width: (@sidebar-width+6.5rem);
+    min-height: 100%;
+    right: 0;
+    position: absolute;
+    z-index: 1;
+    display: none;
+}
+
 .sidebar-area {
-    height: 100%;
     width: @sidebar-width;
+    transition: opacity 0.5s;
     opacity: 0;
 
     .sidebar {

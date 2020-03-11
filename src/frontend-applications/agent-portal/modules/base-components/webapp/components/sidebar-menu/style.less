@@ -30,15 +30,22 @@
 
             &.sidebars-shown {
                 background: @secondary-2;
+                color: @secondary-1;
 
                 &:hover {
                     background: @secondary-1;
+                    color: @secondary-0;
                 }
             }
 
             &:hover {
                 background: @secondary-3;
                 color: @secondary-1;
+            }
+
+            >div {
+                height: @margin-default;
+                transform: rotate(90deg);
             }
         }
 
@@ -58,6 +65,7 @@
             box-shadow: none;
         }
 
+        &>div>span,
         &>span {
             .vertical-align;
         }
