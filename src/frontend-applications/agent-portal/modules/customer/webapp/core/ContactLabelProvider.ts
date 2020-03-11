@@ -20,6 +20,7 @@ import { UserProperty } from "../../../user/model/UserProperty";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
 import { User } from "../../../user/model/User";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { PersonalSettingsProperty } from "../../../user/model/PersonalSettingsProperty";
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
@@ -250,7 +251,9 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (this.isUserProperty(property)) {
                     const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
                     if (userLabelProvider) {
-                        const user = await this.getUserByContact(contact);
+                        const user = await this.getUserByContact(
+                            contact, property !== PersonalSettingsProperty.USER_LANGUAGE
+                        );
                         if (user) {
                             displayValue = await userLabelProvider.getDisplayText(
                                 user, property, defaultValue, translatable
@@ -337,10 +340,12 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return icons;
     }
 
-    private async getUserByContact(contact: Contact): Promise<User> {
+    private async getUserByContact(contact: Contact, useInclude: boolean = true): Promise<User> {
         let user;
         if (contact) {
-            if (contact.AssignedUserID) {
+            if (useInclude && contact.User) {
+                user = contact.User;
+            } else if (contact.AssignedUserID) {
                 const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]);
                 const users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true
