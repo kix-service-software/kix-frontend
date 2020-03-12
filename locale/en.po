@@ -4,7 +4,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
 "PO-Revision-Date: 2020-03-12 10:24+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"Last-Translator: khuesig <Katja.Huesig@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
 "Language: en\n"
@@ -3030,10 +3030,8 @@ msgstr ""
 msgid "Preferences"
 msgstr ""
 
-#, fuzzy
-#| msgid "Overview Ticket Priorities"
 msgid "Prepare Ticket for print"
-msgstr "Tickets by Priorities"
+msgstr ""
 
 msgid "Preview ({0})"
 msgstr ""
@@ -3852,15 +3850,11 @@ msgstr ""
 msgid "Use KIX CSS"
 msgstr ""
 
-#, fuzzy
-#| msgid "Load User"
 msgid "User"
-msgstr "Loading User"
+msgstr ""
 
-#, fuzzy
-#| msgid "Queue Information"
 msgid "User Information"
-msgstr "Team Information"
+msgstr ""
 
 msgid "User Management"
 msgstr ""
