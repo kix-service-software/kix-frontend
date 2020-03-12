@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-11 10:48+0000\n"
+"PO-Revision-Date: 2020-03-12 10:24+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -654,7 +654,7 @@ msgid "(Current version)"
 msgstr "(aktuelle Version)"
 
 msgid "Customer"
-msgstr "Kunden"
+msgstr "Kunde"
 
 msgid "Customer Dashboard"
 msgstr "Kunden Dashboard"
@@ -1749,10 +1749,10 @@ msgstr ""
 msgid "Helptext_Admin_Users_RoleCreate_Name"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_Users_RoleCreate_UsageContext"
-msgstr "Es werden nur gültige Agenten angezeigt."
+msgstr ""
+"Legen Sie fest, ob die Rolle für Agenten im Agentenportal genutzt werden "
+"soll, oder für Kontakte im Kundenportal."
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
 msgstr "Es werden nur gültige Agenten angezeigt."
@@ -3995,10 +3995,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "URL"
 msgstr "URL"
 
-#, fuzzy
-#| msgid "Context"
 msgid "Usage Context"
-msgstr "Kontext"
+msgstr "Rollenkontext"
 
 msgid "Use KIX CSS"
 msgstr "KIX CSS verwenden"
