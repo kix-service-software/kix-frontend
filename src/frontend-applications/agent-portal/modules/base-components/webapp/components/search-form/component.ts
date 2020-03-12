@@ -92,6 +92,8 @@ class Component implements ISearchFormListener {
             if (cache && cache.objectType === this.objectType) {
                 if (cache.status === CacheState.VALID) {
                     SearchService.getInstance().provideResult(this.objectType);
+                    this.state.resultCount = cache.result.length;
+
                     await this.setCanSearch();
                     this.state.manager.reset(false);
                     for (const criteria of cache.criteria) {
@@ -209,10 +211,11 @@ class Component implements ISearchFormListener {
 
         await this.setAdditionalColumns();
 
-        this.state.resultCount = Array.isArray(result) ? result.length : 0;
-        (this as any).setStateDirty();
-
         DialogService.getInstance().setMainDialogLoading(false);
+
+        setTimeout(() => {
+            this.state.resultCount = Array.isArray(result) ? result.length : 0;
+        }, 100);
     }
 
     private async setAdditionalColumns(): Promise<void> {
