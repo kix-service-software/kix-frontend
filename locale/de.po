@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-11 10:48+0000\n"
+"PO-Revision-Date: 2020-03-12 12:24+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -305,7 +305,7 @@ msgid "Button with 3 points = Here you can find further actions"
 msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
 
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -654,7 +654,7 @@ msgid "(Current version)"
 msgstr "(aktuelle Version)"
 
 msgid "Customer"
-msgstr "Kunden"
+msgstr "Kunde"
 
 msgid "Customer Dashboard"
 msgstr "Kunden Dashboard"
@@ -737,15 +737,11 @@ msgstr "Dynamische Felder"
 msgid "Dynamic field successfully created."
 msgstr "Dynamisches Feld wurde erfolgreich angelegt."
 
-#, fuzzy
-#| msgid "Dynamic Field"
 msgid "Dynamic Field Type"
-msgstr "Dynamisches Feld"
+msgstr "Dynamischer Feldtyp"
 
-#, fuzzy
-#| msgid "Dynamic Fields"
 msgid "Dynamic Field Types"
-msgstr "Dynamische Felder"
+msgstr "Dynamische Feldtypen"
 
 msgid "Edit"
 msgstr "Bearbeiten"
@@ -1749,10 +1745,10 @@ msgstr ""
 msgid "Helptext_Admin_Users_RoleCreate_Name"
 msgstr ""
 
-#, fuzzy
-#| msgid "Helptext_Admin_Users_RoleCreate_User"
 msgid "Helptext_Admin_Users_RoleCreate_UsageContext"
-msgstr "Es werden nur gültige Agenten angezeigt."
+msgstr ""
+"Legen Sie fest, ob die Rolle für Agenten im Agentenportal genutzt werden "
+"soll, oder für Kontakte im Kundenportal."
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
 msgstr "Es werden nur gültige Agenten angezeigt."
@@ -1930,7 +1926,7 @@ msgid "Helptext_Customers_ContactCreate_Organisation"
 msgstr ""
 "Wählen Sie den Kunden, welchem der Kontakt zugeordnet sein soll. Bei der "
 "Eingabe von mindestens 3 Zeichen wird Ihnen eine Liste mit bereits im System "
-"registrierten Kontakten vorgeschlagen. Sie können „*“ als Platzhalter "
+"registrierten Kunden vorgeschlagen. Sie können „*“ als Platzhalter "
 "verwenden.  („KNR“ und „Kundenname“ möglich)"
 
 msgid "Helptext_Customers_ContactCreate_Phone"
@@ -2480,10 +2476,8 @@ msgstr "Der Import wird gestartet"
 msgid "Imprint"
 msgstr "Impressum"
 
-#, fuzzy
-#| msgid "Incident state"
 msgid "Incident"
-msgstr "Vorfallstatus"
+msgstr "Vorfall"
 
 msgid "Incident state"
 msgstr "Vorfallstatus"
@@ -3139,10 +3133,8 @@ msgstr "Persönliches Kanban-Board"
 msgid "Personal Settings"
 msgstr "Persönliche Einstellungen"
 
-#, fuzzy
-#| msgid "Personal Backlog"
 msgid "Personal Ticket Calendar"
-msgstr "Persönliches Backlog"
+msgstr "Persönlicher Ticket Kalender"
 
 msgid "Phone"
 msgstr "Telefon"
@@ -3152,10 +3144,10 @@ msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
 msgid "Plan Begin"
-msgstr ""
+msgstr "Plan Beginn"
 
 msgid "Plan End"
-msgstr ""
+msgstr "Plan Ende"
 
 msgid "Please enter a search term."
 msgstr "Bitte geben Sie einen Suchbegriff ein."
@@ -3995,10 +3987,8 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "URL"
 msgstr "URL"
 
-#, fuzzy
-#| msgid "Context"
 msgid "Usage Context"
-msgstr "Kontext"
+msgstr "Rollenkontext"
 
 msgid "Use KIX CSS"
 msgstr "KIX CSS verwenden"
