@@ -104,7 +104,10 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                 formFieldValue = new FormFieldValue(null);
             }
 
-            f.instanceId = IdService.generateDateBasedId(f.property);
+            if (!f.instanceId) {
+                f.instanceId = IdService.generateDateBasedId(f.property);
+            }
+
             formFieldValues.set(f.instanceId, formFieldValue);
 
             if (f.children) {

@@ -66,7 +66,9 @@ export class FormInstance implements IFormInstance {
 
     private initValues(formFields: FormFieldConfiguration[]): void {
         formFields.forEach((f) => {
-            f.instanceId = IdService.generateDateBasedId(f.property);
+            if (!f.instanceId) {
+                f.instanceId = IdService.generateDateBasedId(f.property);
+            }
             this.formFieldValues.set(f.instanceId, f.defaultValue
                 ? new FormFieldValue(f.defaultValue.value, f.defaultValue.valid)
                 : new FormFieldValue(null)
