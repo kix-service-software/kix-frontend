@@ -129,7 +129,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
         ];
     }
 
-    public async getOperatorDisplayText(operator: ImportPropertyOperator): Promise<string> {
+    public getOperatorDisplayText(operator: ImportPropertyOperator): Promise<string> {
         return ImportPropertyOperatorUtil.getText(operator);
     }
 

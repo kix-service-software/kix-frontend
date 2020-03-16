@@ -177,8 +177,8 @@ export class TicketSearchFormManager extends SearchFormManager {
             || property === TicketProperty.ESCALATION_UPDATE_TIME;
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {

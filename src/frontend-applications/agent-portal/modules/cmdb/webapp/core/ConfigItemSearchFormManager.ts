@@ -229,8 +229,8 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         return [];
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
