@@ -18,91 +18,93 @@
     align-content: center;
     box-shadow: @shadow-3;
 
-    >.dialog-widget {
-        >.widget-content {
-            >.tab-container {
-                height: 100%;
-
-                >.lane-widget {
+    >div {
+        >.dialog-widget {
+            >.widget-content {
+                >.tab-container {
                     height: 100%;
-                    margin-bottom: 0;
 
-                    >.widget-header {
-                        border-bottom-right-radius: 0;
-                        border-bottom-left-radius: 0;
-                        padding-left: 0;
-                        height: @default-widget-header-height;
+                    >.lane-widget {
+                        height: 100%;
+                        margin-bottom: 0;
 
-                        >.header-left {
-                            padding-left: 2px;
+                        >.widget-header {
+                            border-bottom-right-radius: 0;
+                            border-bottom-left-radius: 0;
+                            padding-left: 0;
+                            height: @default-widget-header-height;
 
-                            >.tab-list {
-                                margin-top: .5em;
+                            >.header-left {
+                                padding-left: 2px;
 
-                                >li {
-                                    height: 1.75em;
+                                >.tab-list {
+                                    margin-top: .5em;
 
-                                    &.active {
-                                        background-color: @secondary-5;
+                                    >li {
+                                        height: 1.75em;
+
+                                        &.active {
+                                            background-color: @secondary-5;
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    >.widget-content {
-                        .full-size();
-                        top: @default-widget-header-height;
-                        background-color: @secondary-5;
-                        border-width: 2px;
-                        margin: 0;
-                        padding: 0;
-                        overflow: hidden;
-
-                        >div.tab-sidebar-grid {
+                        >.widget-content {
                             .full-size();
-                            opacity: 0;
-                            top: @margin-default;
-                            bottom: @margin-default;
-                            display: grid;
-                            grid-template-columns: minmax(@default-widget-width, auto) min-content;
-                            grid-column-gap: @margin-default;
-                            overflow: auto;
+                            top: @default-widget-header-height;
+                            background-color: @secondary-5;
+                            border-width: 2px;
+                            margin: 0;
+                            padding: 0;
+                            overflow: hidden;
 
-                            &.has-sidebar {
+                            >div.tab-sidebar-grid {
+                                .full-size();
+                                opacity: 0;
+                                top: @margin-default;
+                                bottom: @margin-default;
+                                display: grid;
+                                grid-template-columns: minmax(@default-widget-width, auto) min-content;
+                                grid-column-gap: @margin-default;
+                                overflow: auto;
 
-                                &.show-sidebar {
-                                    grid-template-columns: minmax(@default-widget-width, auto) max-content min-content;
+                                &.has-sidebar {
 
-                                    // hide sidebar
-                                    @media only screen and (max-width: 1400px) {
-                                        grid-template-columns: minmax(@default-widget-width, auto) min-content;
+                                    &.show-sidebar {
+                                        grid-template-columns: minmax(@default-widget-width, auto) max-content min-content;
 
-                                        .hide-sidebar();
+                                        // hide sidebar
+                                        @media only screen and (max-width: 1400px) {
+                                            grid-template-columns: minmax(@default-widget-width, auto) min-content;
 
-                                        >.sidebar-shield {
-                                            min-height: 100%;
-                                        }
+                                            .hide-sidebar();
 
-                                        >.tab-content,
-                                        >.sidebar-area,
-                                        >.site-menu-wrapper {
-                                            z-index: 1;
+                                            >.sidebar-shield {
+                                                min-height: 100%;
+                                            }
+
+                                            >.tab-content,
+                                            >.sidebar-area,
+                                            >.site-menu-wrapper {
+                                                z-index: 1;
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            >.tab-content {
-                                margin: 0;
-                                height: 100%;
-                                position: relative;
-
-                                >.lane-widget {
+                                >.tab-content {
+                                    margin: 0;
                                     height: 100%;
+                                    position: relative;
 
-                                    >.widget-content {
-                                        background-color: @secondary-5;
+                                    >.lane-widget {
+                                        height: 100%;
+
+                                        >.widget-content {
+                                            background-color: @secondary-5;
+                                        }
                                     }
                                 }
                             }
