@@ -26,6 +26,10 @@ div.kix-kanban-item {
         display: grid;
         grid-template-columns: max-content auto;
         grid-column-gap: @margin-small;
+
+        >span:not(.icon) {
+            .shorten-text();
+        }
     }
 
     .extra.content {
@@ -37,7 +41,7 @@ div.kix-kanban-item {
             font-size: 0.9rem;
 
             .key-value-pair {
-                grid-template-columns: 7rem 0.5rem auto;
+                grid-template-columns: 7rem 0 auto;
             }
         }
 

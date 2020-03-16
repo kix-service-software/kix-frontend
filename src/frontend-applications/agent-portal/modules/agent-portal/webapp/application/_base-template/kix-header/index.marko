@@ -6,11 +6,9 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <header>
     <img#logo alt="KIX Cloud" src="/static/img/kix-cloud-logo.png"/>
     <div>
-        <!-- Neues Objekt -->
         <if(state.allowNew)>
             <a href="?new" on-click("openDialog")>
                 <button.special-button type="button">
@@ -20,10 +18,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </a>
             <div.header-separator/>
         </if>
-        <!-- Lesezeichen & Suchvorlagen -->
         <bookmarks/>
         <div.header-separator/>
-        <!-- Schnellsuche -->
         <quick-search/>
         <toolbar/>
         <div.kix-toolbar>
