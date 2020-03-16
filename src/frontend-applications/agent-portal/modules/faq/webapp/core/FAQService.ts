@@ -143,9 +143,11 @@ export class FAQService extends KIXObjectService {
                 nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, invalidClickable, filterIds);
                 break;
             case FAQArticleProperty.CUSTOMER_VISIBLE:
+                const yesText = await TranslationService.translate('Translatable#Yes');
+                const noText = await TranslationService.translate('Translatable#No');
                 nodes = [
-                    new TreeNode(0, 'Translatable#No', 'kix-icon-close'),
-                    new TreeNode(1, 'Translatable#Yes', 'kix-icon-check')
+                    new TreeNode(0, noText, 'kix-icon-close'),
+                    new TreeNode(1, yesText, 'kix-icon-check')
                 ];
                 break;
             default:

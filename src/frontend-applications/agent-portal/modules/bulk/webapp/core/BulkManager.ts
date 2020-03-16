@@ -88,7 +88,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         ];
     }
 
-    public async getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
+    public getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
         return PropertyOperatorUtil.getText(operator);
     }
 

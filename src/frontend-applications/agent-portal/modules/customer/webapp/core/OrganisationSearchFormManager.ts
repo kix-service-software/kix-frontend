@@ -93,17 +93,16 @@ export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
         return property === KIXObjectProperty.VALID_ID;
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
         return true;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        const nodes = await OrganisationService.getInstance().getTreeNodes(property, true);
-        return nodes;
+    public getTreeNodes(property: string): Promise<TreeNode[]> {
+        return OrganisationService.getInstance().getTreeNodes(property, true);
     }
 
 }
