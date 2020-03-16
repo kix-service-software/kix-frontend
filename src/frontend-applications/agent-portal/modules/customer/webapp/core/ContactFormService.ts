@@ -29,7 +29,6 @@ import { FilterType } from "../../../../model/FilterType";
 import { PersonalSettingsProperty } from "../../../user/model/PersonalSettingsProperty";
 import { QueueProperty } from "../../../ticket/model/QueueProperty";
 import { NotificationProperty } from "../../../notification/model/NotificationProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { OrganisationProperty } from "../../model/OrganisationProperty";
 import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";

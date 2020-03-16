@@ -18,6 +18,10 @@
     box-shadow: 2px 2px 2px 0 @color;
 }
 
+.shadow-1-with-inset(@color: @shadow-color, @color-inset: @shadow-color) {
+    box-shadow: 2px 2px 2px 0 @color, 0 -2px 2px -1px inset @color-inset;
+}
+
 .shadow-2(@color: @secondary-0) {
     box-shadow: 2px 2px 6px 0 @color;
 }

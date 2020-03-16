@@ -17,11 +17,11 @@
 
                 >.tab-list {
                     list-style: none;
-                    margin-top: .25em;
+                    margin-top: .22em;
                     opacity: 0;
 
                     >li {
-                        .shadow-1(@primary-0);
+                        .shadow-1-with-inset(@primary-0, @primary-2);
                         background-color: @primary-4;
                         color: @primary-0;
                         border-top-left-radius: @border-radius;
@@ -42,6 +42,7 @@
                         cursor: pointer;
 
                         &.active {
+                            .shadow-1(@primary-0);
                             background-color: @secondary-6;
                             max-width: 20rem;
                         }
