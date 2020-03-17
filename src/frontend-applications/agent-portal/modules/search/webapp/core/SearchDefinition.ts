@@ -74,8 +74,9 @@ export abstract class SearchDefinition {
         });
 
         for (const c of filteredCriteria) {
-            if (KIXObjectService.isDynamicFieldProperty(c.property)) {
-                const field = await KIXObjectService.loadDynamicField(c.property);
+            const dfName = KIXObjectService.getDynamicFieldName(c.property);
+            if (dfName) {
+                const field = await KIXObjectService.loadDynamicField(dfName);
                 if (field) {
                     if (field.FieldType === DynamicFieldTypes.DATE) {
                         c.type = FilterDataType.DATE;
