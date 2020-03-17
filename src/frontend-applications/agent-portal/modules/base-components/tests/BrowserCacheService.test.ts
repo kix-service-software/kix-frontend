@@ -394,22 +394,24 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.PERSONAL_SETTINGS);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.PERSONAL_SETTINGS)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
             });
 
             it('should resolve the namespace for UserPreferences', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER_PREFERENCE);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.USER_PREFERENCE)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
             });
 
         });

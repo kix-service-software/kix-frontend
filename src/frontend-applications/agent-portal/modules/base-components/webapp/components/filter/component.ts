@@ -29,13 +29,16 @@ class Component {
         TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
     }
 
-    public onInput(input: ComponentInput): void {
+    public async onInput(input: ComponentInput): Promise<void> {
         if (input.predefinedFilter) {
             this.predefinedFilter = input.predefinedFilter;
             const selectedNodes = this.treeHandler.getSelectedNodes();
+            const names = await TranslationService.createTranslationObject(this.predefinedFilter.map((pf) => pf.name));
             const nodes = this.predefinedFilter.map(
                 (pf: KIXObjectPropertyFilter, index) => new TreeNode(
-                    index, pf.name, pf.icon ? pf.icon : null, undefined, undefined, undefined, undefined, undefined,
+                    index,
+                    names[pf.name] ? names[pf.name] : pf.name,
+                    pf.icon ? pf.icon : null, undefined, undefined, undefined, undefined, undefined,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
                     selectedNodes.some((n) => n.id === index)
                 )

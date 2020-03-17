@@ -94,7 +94,7 @@ export class Extension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'mail-filter-edit-form-group-stop-after-match',
-                'Translatable#Stop after match', MailFilterProperty.STOP_AFTER_MATCH, 'checkbox-input', true,
+                'Translatable#Stop after match', MailFilterProperty.STOP_AFTER_MATCH, 'checkbox-input', false,
                 'Translatable#Helptext_Admin_MailFilterCreate_StopAfterMatch', undefined,
                 new FormFieldValue(false)
             )

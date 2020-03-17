@@ -196,7 +196,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
-                return await CMDBService.getInstance().getTreeNodes(property);
+                return await CMDBService.getInstance().getTreeNodes(property, true, true);
             default:
                 const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
                 const input = await ConfigItemClassAttributeUtil.getAttributeInput(
@@ -229,8 +229,8 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         return [];
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {

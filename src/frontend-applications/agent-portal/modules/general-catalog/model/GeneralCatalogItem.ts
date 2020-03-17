@@ -21,18 +21,6 @@ export class GeneralCatalogItem extends KIXObject<GeneralCatalogItem> {
 
     public Class: string;
 
-    public Comment: string;
-
-    public ValidID: number;
-
-    public CreateBy: number;
-
-    public CreateTime: string;
-
-    public ChangeBy: number;
-
-    public ChangeTime: string;
-
     public constructor(item?: GeneralCatalogItem) {
         super(item);
         if (item) {
@@ -40,12 +28,6 @@ export class GeneralCatalogItem extends KIXObject<GeneralCatalogItem> {
             this.ObjectId = this.ItemID;
             this.Name = item.Name;
             this.Class = item.Class;
-            this.Comment = item.Comment;
-            this.ValidID = item.ValidID;
-            this.CreateBy = item.CreateBy;
-            this.CreateTime = item.CreateTime;
-            this.ChangeBy = item.ChangeBy;
-            this.ChangeTime = item.ChangeTime;
         }
     }
 

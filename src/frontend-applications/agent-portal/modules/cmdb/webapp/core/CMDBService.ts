@@ -156,7 +156,16 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 for (const c of classes) {
                     const icon = LabelService.getInstance().getObjectIcon(c);
                     const text = await LabelService.getInstance().getText(c);
-                    nodes.push(new TreeNode(c.ID, text, icon));
+                    nodes.push(
+                        new TreeNode(
+                            c.ID, text, icon,
+                            undefined, undefined, undefined,
+                            undefined, undefined, undefined, undefined, undefined, undefined,
+                            c.ValidID === 1 || invalidClickable,
+                            undefined, undefined, undefined, undefined,
+                            c.ValidID !== 1
+                        )
+                    );
                 }
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
@@ -177,7 +186,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 for (const i of items) {
                     const text = await LabelService.getInstance().getText(i);
                     nodes.push(new TreeNode(
-                        i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID)
+                        i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
+                        undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        i.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        i.ValidID !== 1
                     ));
                 }
                 break;

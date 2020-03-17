@@ -8,15 +8,16 @@
  */
 
 import { PropertyOperator } from "./PropertyOperator";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class PropertyOperatorUtil {
 
-    public static getText(operator: PropertyOperator): string {
+    public static async getText(operator: PropertyOperator): Promise<string> {
         switch (operator) {
             case PropertyOperator.CHANGE:
-                return 'Translatable#Change to';
+                return await TranslationService.translate('Translatable#Change to');
             case PropertyOperator.CLEAR:
-                return 'Translatable#Clear';
+                return await TranslationService.translate('Translatable#Clear');
             default:
                 return operator;
         }

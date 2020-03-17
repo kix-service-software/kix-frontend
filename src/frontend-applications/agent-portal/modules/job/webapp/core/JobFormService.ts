@@ -31,6 +31,7 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { TicketProperty } from "../../../ticket/model/TicketProperty";
+import { IdService } from "../../../../model/IdService";
 
 export class JobFormService extends KIXObjectFormService {
 
@@ -121,6 +122,7 @@ export class JobFormService extends KIXObjectFormService {
                                 field.maxLength, field.regEx, field.regExErrorMessage, field.empty, field.asStructure,
                                 field.readonly, field.placeholder, undefined, field.showLabel, field.name
                             );
+                            actionField.instanceId = IdService.generateDateBasedId(field.property);
                             group.formFields.push(actionField);
                         }
                         actionIndex++;
@@ -227,37 +229,58 @@ export class JobFormService extends KIXObjectFormService {
         actionType: string, actionFieldInstanceId: string, action?: MacroAction
     ): Promise<FormFieldConfiguration[]> {
         const fields: FormFieldConfiguration[] = [];
-        if (actionType) {
-            const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, null, true
-            ).catch((error): MacroActionType[] => []);
-            if (macroActionTypes && !!macroActionTypes.length) {
-                for (const optionName in macroActionTypes[0].Options) {
-                    if (optionName) {
-                        const option = macroActionTypes[0].Options[optionName] as MacroActionTypeOption;
-                        if (option) {
-                            let defaultValue;
-                            if (action && action.Parameters) {
-                                defaultValue = action.Parameters[option.Name];
-                            }
-                            const inputType = (actionType === 'ArticleCreate' || actionType === 'TicketCreate')
-                                && option.Name === 'Body' ? 'rich-text-input' : null;
+        if (!actionFieldInstanceId) {
+            console.error('No "actionFieldInstanceID" given!');
+        } else {
+            if (actionType) {
+                const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
+                    KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, null, true
+                ).catch((error): MacroActionType[] => []);
+                if (macroActionTypes && !!macroActionTypes.length) {
+                    for (const optionName in macroActionTypes[0].Options) {
+                        if (optionName) {
+                            const option = macroActionTypes[0].Options[optionName] as MacroActionTypeOption;
+                            if (option) {
+                                const actionPropertyField = this.getActionOptionField(
+                                    action, option, actionType, actionFieldInstanceId
+                                );
 
-                            fields.push(
-                                new FormFieldConfiguration(
-                                    `job-action-${actionType}-${option.Name}`, option.Label,
-                                    `ACTION###${actionFieldInstanceId}###${option.Name}`, inputType,
-                                    Boolean(option.Required), option.Description, undefined,
-                                    typeof defaultValue !== undefined ? new FormFieldValue(defaultValue) : undefined
-                                )
-                            );
+                                // special instance id to distinguish between the actions
+                                actionPropertyField.instanceId = IdService.generateDateBasedId(
+                                    `ACTION###${actionFieldInstanceId}###${option.Name}`
+                                );
+
+                                fields.push(actionPropertyField);
+                            }
                         }
                     }
                 }
+                const validField = await this.getValidField(actionType, actionFieldInstanceId, action);
+
+                // special instance id to distinguish between the actions
+                validField.instanceId = IdService.generateDateBasedId(`ACTION###${actionFieldInstanceId}###SKIP`);
+
+                fields.unshift(validField);
             }
-            fields.unshift(await this.getValidField(actionType, actionFieldInstanceId, action));
         }
         return fields;
+    }
+
+    private getActionOptionField(
+        action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string
+    ) {
+        let defaultValue;
+        if (action && action.Parameters) {
+            defaultValue = action.Parameters[option.Name];
+        }
+        const inputType = (actionType === 'ArticleCreate' || actionType === 'TicketCreate')
+            && option.Name === 'Body' ? 'rich-text-input' : null;
+        return new FormFieldConfiguration(
+            `job-action-${actionType}-${option.Name}`, option.Label,
+            `ACTION###${actionFieldInstanceId}###${option.Name}`,
+            inputType, Boolean(option.Required), option.Description, undefined,
+            typeof defaultValue !== undefined ? new FormFieldValue(defaultValue) : undefined);
+
     }
 
     private async getValidField(
@@ -268,8 +291,8 @@ export class JobFormService extends KIXObjectFormService {
             defaultValue = action[KIXObjectProperty.VALID_ID] !== 1;
         }
         return new FormFieldConfiguration(
-            `job-action-${actionType}-skip`,
-            'Translatable#Skip', `ACTION###${actionFieldInstanceId}###SKIP`,
+            `job-action-${actionType}-skip`, 'Translatable#Skip',
+            `ACTION###${actionFieldInstanceId}###SKIP`,
             'checkbox-input', false,
             'Translatable#Helptext_Admin_JobCreateEdit_ActionSkip', undefined,
             typeof defaultValue !== undefined ? new FormFieldValue(defaultValue) : new FormFieldValue(false)
@@ -299,7 +322,7 @@ export class JobFormService extends KIXObjectFormService {
                     const newValue = {};
                     for (const valueProperty in value) {
                         if (valueProperty) {
-                            let newValutProperty = valueProperty;
+                            let newValueProperty = valueProperty;
 
                             switch (valueProperty) {
                                 case TicketProperty.TYPE_ID:
@@ -311,8 +334,8 @@ export class JobFormService extends KIXObjectFormService {
                                 case TicketProperty.CONTACT_ID:
                                 case TicketProperty.OWNER_ID:
                                 case TicketProperty.RESPONSIBLE_ID:
-                                    if (!newValutProperty.match(/^Ticket::/)) {
-                                        newValutProperty = 'Ticket::' + newValutProperty;
+                                    if (!newValueProperty.match(/^Ticket::/)) {
+                                        newValueProperty = 'Ticket::' + newValueProperty;
                                     }
                                     break;
                                 case ArticleProperty.SENDER_TYPE_ID:
@@ -322,22 +345,22 @@ export class JobFormService extends KIXObjectFormService {
                                 case ArticleProperty.FROM:
                                 case ArticleProperty.SUBJECT:
                                 case ArticleProperty.BODY:
-                                    if (!newValutProperty.match(/^Article::/)) {
-                                        newValutProperty = 'Article::' + newValutProperty;
+                                    if (!newValueProperty.match(/^Article::/)) {
+                                        newValueProperty = 'Article::' + newValueProperty;
                                     }
                                     break;
                                 default:
                                     if (
-                                        newValutProperty.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
+                                        newValueProperty.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
                                     ) {
-                                        newValutProperty = newValutProperty.replace(
+                                        newValueProperty = newValueProperty.replace(
                                             new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`),
                                             'Ticket::DynamicField_$1'
                                         );
                                     }
                             }
 
-                            newValue[newValutProperty] = value[valueProperty];
+                            newValue[newValueProperty] = value[valueProperty];
                         }
                     }
                     value = newValue;

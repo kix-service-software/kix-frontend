@@ -26,19 +26,21 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.prepareTranslations();
-        document.addEventListener('keydown', this.keyDown.bind(this), false);
+        document.addEventListener('keyup', this.keyUp.bind(this), false);
     }
 
     public onDestroy(): void {
-        document.removeEventListener('keydown', this.keyDown.bind(this), false);
+        document.removeEventListener('keyup', this.keyUp.bind(this), false);
     }
 
-    public keyDown(event: any): void {
-        if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && event.ctrlKey) {
-            if (event.key === 'ArrowRight') {
-                this.showPage(this.state.activePageIndex + 1);
-            } else {
-                this.showPage(this.state.activePageIndex - 1);
+    public keyUp(event: any): void {
+        if (this.state.pages && this.state.pages.length > 1) {
+            if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && event.ctrlKey) {
+                if (event.key === 'ArrowRight') {
+                    this.showPage(this.state.activePageIndex + 1);
+                } else {
+                    this.showPage(this.state.activePageIndex - 1);
+                }
             }
         }
     }
