@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,7 +7,8 @@
  * --
  */
 
-import { SearchDefinition, SearchResultCategory } from "../../../search/webapp/core";
+import { SearchResultCategory } from "../../../search/webapp/core/SearchResultCategory";
+import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { TicketSearchFormManager } from "./TicketSearchFormManager";
 import { FilterCriteria } from "../../../../model/FilterCriteria";

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,9 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Article } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Article';
-import { ArticlePlaceholderHandler, ArticleLabelProvider, TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { ArticleLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/ArticleLabelProvider';
+import { ArticlePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/ArticlePlaceholderHandler';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { ArticleProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/ArticleProperty';
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
@@ -21,6 +23,7 @@ import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/
 import { ContextService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/ContextService';
 import { ContextDescriptor } from '../../../src/frontend-applications/agent-portal/model/ContextDescriptor';
 import { Context } from '../../../src/frontend-applications/agent-portal/model/Context';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -35,9 +38,11 @@ describe('Placeholder replacement for article', () => {
         const articleLabelProvider = new ArticleLabelProvider();
         articleLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(articleLabelProvider);
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
+        (TranslationService.getInstance() as any).translations = null;
         LabelService.getInstance()['labelProviders'] = [];
     });
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,8 @@ import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ConfigItemDetailsContext } from ".";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../../../model/ContextMode";
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -150,10 +152,21 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     KIXObjectType.CONFIG_ITEM_CLASS
                 );
                 classes = showInvalid ? classes : classes.filter((c) => c.ValidID === 1);
-                nodes = classes.map((c) => {
+                nodes = [];
+                for (const c of classes) {
                     const icon = LabelService.getInstance().getObjectIcon(c);
-                    return new TreeNode(c.ID, c.Name, icon);
-                });
+                    const text = await LabelService.getInstance().getText(c);
+                    nodes.push(
+                        new TreeNode(
+                            c.ID, text, icon,
+                            undefined, undefined, undefined,
+                            undefined, undefined, undefined, undefined, undefined, undefined,
+                            c.ValidID === 1 || invalidClickable,
+                            undefined, undefined, undefined, undefined,
+                            c.ValidID !== 1
+                        )
+                    );
+                }
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
@@ -170,11 +183,17 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                     KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions, null, false
                 );
 
-                items.forEach(
-                    (i) => nodes.push(new TreeNode(
-                        i.ItemID, i.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID)
-                    ))
-                );
+                for (const i of items) {
+                    const text = await LabelService.getInstance().getText(i);
+                    nodes.push(new TreeNode(
+                        i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
+                        undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        i.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        i.ValidID !== 1
+                    ));
+                }
                 break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
@@ -209,6 +228,37 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         } else {
             return super.getResource(objectType);
         }
+    }
+
+    public static async searchConfigItems(searchValue: string, limit?: number) {
+        const filter = [
+            new FilterCriteria(
+                ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, searchValue
+            )
+        ];
+
+        const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit, [ConfigItemProperty.CURRENT_VERSION]);
+
+        const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+            KIXObjectType.CONFIG_ITEM, null, loadingOptions
+        );
+        return configItems;
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        if (object && object.KIXObjectType === KIXObjectType.CONFIG_ITEM_VERSION) {
+            return null;
+        }
+
+        return new RoutingConfiguration(
+            ConfigItemDetailsContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+            ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
+        );
     }
 
 }

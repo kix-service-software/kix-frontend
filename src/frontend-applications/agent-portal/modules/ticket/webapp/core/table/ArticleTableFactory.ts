@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -66,6 +66,9 @@ export class ArticleTableFactory extends TableFactory {
             new DefaultColumnConfiguration(
                 null, null, null, ArticleProperty.FROM, true, false, true, false, 300, true, true),
             new DefaultColumnConfiguration(null, null, null,
+                ArticleProperty.CUSTOMER_VISIBLE, false, true, false, true, 75, true, true, true
+            ),
+            new DefaultColumnConfiguration(null, null, null,
                 ArticleProperty.CHANNEL_ID, false, true, true, false, 75, true, true, true
             ),
             new DefaultColumnConfiguration(
@@ -99,7 +102,7 @@ export class ArticleTableFactory extends TableFactory {
                 'article-communication-action',
                 'article-tag-action',
                 'article-maximize-action'
-            ], true);
+            ], true, null, null, true);
         }
 
         return tableConfiguration;

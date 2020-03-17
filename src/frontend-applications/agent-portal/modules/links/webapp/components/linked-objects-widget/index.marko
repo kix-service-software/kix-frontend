@@ -1,29 +1,19 @@
 <!--
-Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<widget instanceId=state.instanceId contextType="MAIN" title=state.title contentActions=state.actions>
+
+<widget instanceId=state.instanceId>
     <@content>
-        <div.link-groups class={
-            "show-object": state.linkedObjectGroups && !state.setMinimizedState
-        }>
-            <if(state.linkedObjectGroups && state.linkedObjectGroups.length)>
-                <for|group, index| of=state.linkedObjectGroups>
-                    <widget instanceId="linked-object-group" key=("linked-object-group-" + index) title=group[0]>
-                        <@content>
-                            <standard-table-NEW table=group[1]/>
-                        </@content>
-                    </widget>
-                </for>
-                $ component.setGroupMinimizedStates();
-            </if>
-            <else>
-                <translation-string pattern="Translatable#No linked objects available."/>
-            </else>
-        </div>
+        <if(state.prepared)>
+            <standard-table-NEW table=state.table/>
+        </if>
+        <else>
+            <loading-spinner/>
+        </else>
     </@content>
 </widget>

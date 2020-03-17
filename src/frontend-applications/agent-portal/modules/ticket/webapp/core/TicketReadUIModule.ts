@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,7 +10,7 @@
 import { IUIModule } from "../../../../model/IUIModule";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import {
-    TicketPlaceholderHandler, TicketService, TicketTypeService, TicketStateService,
+    TicketService, TicketTypeService, TicketStateService,
     TicketPriorityService, QueueService, TicketFormService, ArticleFormService, PendingTimeValidator,
     EmailRecipientValidator, TicketSearchDefinition, TicketHistoryLabelProvider, TicketTypeLabelProvider,
     TicketPriorityLabelProvider, TicketStateLabelProvider, TicketStateTypeLabelProvider, QueueLabelProvider,
@@ -38,6 +38,10 @@ import { ChannelBrowserFactory } from "./ChannelBrowserFactory";
 import { ArticleLabelProvider } from "./ArticleLabelProvider";
 import { TicketLabelProvider } from "./TicketLabelProvider";
 import { ChannelService } from "./ChannelService";
+import { TicketPlaceholderHandler } from "./TicketPlaceholderHandler";
+import { TicketPrintAction } from "./actions/TicketPrintAction";
+import { TicketsForAssetsHandler } from "./TicketsForAssetsHandler";
+import { SuggestedFAQHandler } from "./SuggestedFAQHandler";
 
 export class UIModule implements IUIModule {
 
@@ -110,6 +114,9 @@ export class UIModule implements IUIModule {
             KIXObjectType.FOLLOW_UP_TYPE, FollowUpTypeBrowserFactory.getInstance()
         );
 
+        ServiceRegistry.registerObjectReferenceHandler('TicketsForAssetsHandler', new TicketsForAssetsHandler());
+        ServiceRegistry.registerObjectReferenceHandler('SuggestedFAQHandler', new SuggestedFAQHandler());
+
         await this.registerContexts();
         this.registerTicketActions();
     }
@@ -121,6 +128,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('show-user-tickets', ShowUserTicketsAction);
         ActionFactory.getInstance().registerAction('ticket-watch-action', TicketWatchAction);
         ActionFactory.getInstance().registerAction('ticket-lock-action', TicketLockAction);
+        ActionFactory.getInstance().registerAction('ticket-print-action', TicketPrintAction);
     }
 
     private async registerContexts(): Promise<void> {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,7 +9,7 @@
 
 import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 
@@ -49,17 +49,23 @@ export class FilterUtil {
             case SearchOperator.GREATER_THAN_OR_EQUAL:
                 return Number(value) >= criteria.value;
             case SearchOperator.IN:
-                return (criteria.value as any[]).some((v) => {
-                    if (v) {
-                        if (v instanceof KIXObject) {
+                return (criteria.value as any[]).some((cv) => {
+                    if (typeof cv === 'undefined') {
+                        return typeof value === 'undefined';
+                    } else if (cv === null) {
+                        return value === null || (Array.isArray(value) && value.some((v) => v === null));
+                    } else {
+                        if (cv instanceof KIXObject) {
                             if (Array.isArray(value)) {
-                                return value.some((sv) => sv.equals(v));
+                                return value.some((v) => v.equals(cv));
                             }
                         }
                         if (typeof value === 'number') {
-                            return value === v;
+                            return value === cv;
+                        } else if (Array.isArray(value)) {
+                            return value.some((v) => v.toString() === cv.toString());
                         } else {
-                            return value ? value.toString().indexOf(v.toString()) !== -1 : false;
+                            return value ? value.toString().split(',').some((v) => v === cv.toString()) : false;
                         }
                     }
                 });

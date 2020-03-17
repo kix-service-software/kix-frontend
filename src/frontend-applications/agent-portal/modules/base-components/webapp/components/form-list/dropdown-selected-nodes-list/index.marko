@@ -1,25 +1,27 @@
 <!--
-Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
+
 <if(state.nodes.length)>
     <for|node| of=state.nodes>
         <div.selected-node
             title=(state.translations[node.tooltip] ? state.translations[node.tooltip] : node.tooltip)
+            class={
+                        "show-as-invalid": node.showAsInvalid
+                    }
             key=("form-list-selected-node-" + component.treeId + "[]")>
             <icon icon=node.icon showUnknown=true/>
-            <span.item-text>
-                <translation-string pattern=node.label/>
-            </span>
+            <span.item-text>${node.label}</span>
             <if(node.secondaryIcon)>
                 <icon icon=node.secondaryIcon showUnknown=true/>
             </if>
             <if(input.canRemoveNode)>
-                <span.kix-icon-close tabindex="0" on-click("removeNode", node) on-focus("stopFocus")/>
+                <span.kix-icon-close.selected-node-remove tabindex="0" on-click("removeNode", node) on-focus("stopFocus")/>
             </if>
         </div>
     </for>

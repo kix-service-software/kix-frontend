@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,7 +28,6 @@ import { TreeNode } from '../base-components/webapp/core/tree';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { EditDynamicFieldDialogContext } from './webapp/core/EditDynamicFieldDialogContext';
-import { DynamicFieldType } from './model/DynamicFieldType';
 
 export class Extension implements IConfigurationExtension {
 
@@ -86,13 +85,8 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Field Type', DynamicFieldProperty.FIELD_TYPE, 'object-reference-input', true,
                 'Translatable#Helptext_Admin_DynamicFieldCreate_FieldType',
                 [
-                    new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, [
-                        new TreeNode(DynamicFieldType.TEXT, 'Text', 'kix-icon-filetype-text'),
-                        new TreeNode(DynamicFieldType.TEXT_AREA, 'Text Area', 'kix-icon-filetype-text'),
-                        new TreeNode(DynamicFieldType.SELECTION, 'Selection', 'kix-icon-menue'),
-                        new TreeNode(DynamicFieldType.DATE, 'Date', 'kix-icon-calendar'),
-                        new TreeNode(DynamicFieldType.DATE_TIME, 'Date Time', 'kix-icon-calendar')
-                    ])
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.DYNAMIC_FIELD_TYPE),
+                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
                 ], null, null, null, null, null, null, null, null, null, null, null, null, true
             )
         );
@@ -138,8 +132,16 @@ export class Extension implements IConfigurationExtension {
                     'dynamic-field-edit-form-field-label',
                     'dynamic-field-edit-form-field-type',
                     'dynamic-field-edit-form-field-object-type',
+                    'dynamic-field-edit-form-field-customer-visible',
                     'dynamic-field-edit-form-field-valid',
                     'dynamic-field-edit-form-field-config',
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'dynamic-field-edit-form-field-customer-visible',
+                        'Translatable#Show in Customer Portal', DynamicFieldProperty.CUSTOMER_VISIBLE,
+                        'checkbox-input', false, 'Translatable#Helptext_Admin_DynamicFieldCreate_CustomerVisible'
+                    )
                 ]
             )
         );

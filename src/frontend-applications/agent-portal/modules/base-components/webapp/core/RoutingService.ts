@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,7 +10,7 @@
 import { ComponentRouter } from "../../../../model/ComponentRouter";
 import { IRoutingServiceListener } from "./IRoutingServiceListener";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
 import { KIXModulesSocketClient } from "./KIXModulesSocketClient";
 import { ContextService } from "./ContextService";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
@@ -124,10 +124,6 @@ export class RoutingService {
         if (routingConfiguration) {
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
 
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: ''
-            });
-
             await ContextService.getInstance().setContext(
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,
@@ -135,15 +131,11 @@ export class RoutingService {
                 objectId, reset, routingConfiguration.history,
                 addHistory
             );
-
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: false
-            });
         }
     }
 
     public async buildUrl(routingConfiguration: RoutingConfiguration, objectId: string | number): Promise<string> {
-        let url = '#';
+        let url;
         const descriptor = ContextFactory.getInstance().getContextDescriptor(routingConfiguration.contextId);
         if (descriptor) {
             url = descriptor.urlPaths[0];

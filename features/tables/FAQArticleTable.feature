@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+# Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file LICENSE for license information (GPL3). If you
@@ -33,14 +33,15 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
         Then Die Spalte <column> zeigt Spaltenbezeichnung an: <columnTitle>
         Then Die Spalte <column> zeigt Spaltenicon an: <columnIcon>
         Examples:
-            | column       | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType   |
-            | 'Number'     | 1        | 1          | 0          | 120   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
-            | 'Title'      | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
-            | 'Language'   | 1        | 1          | 1          | 125   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
-            | 'Votes'      | 1        | 1          | 1          | 120   | 0        | 1        | 1        | 'STRING'   | 1           | 0          | 'FAQArticle' |
-            | 'CategoryID' | 1        | 1          | 1          | 125   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
-            | 'Changed'    | 1        | 1          | 0          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'FAQArticle' |
-            | 'ChangedBy'  | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
+            | column            | sortable | filterable | listFilter | width | flexible | showText | showIcon | type       | columnTitle | columnIcon | objectType   |
+            | 'Number'          | 1        | 1          | 0          | 120   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
+            | 'Title'           | 1        | 1          | 0          | 300   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
+            | 'Language'        | 1        | 1          | 1          | 125   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
+            | 'CustomerVisible' | 1        | 1          | 1          | 75    | 1        | 0        | 1        | 'STRING'   | 0           | 1          | 'FAQArticle' |
+            | 'Votes'           | 1        | 1          | 1          | 120   | 0        | 1        | 1        | 'STRING'   | 1           | 0          | 'FAQArticle' |
+            | 'CategoryID'      | 1        | 1          | 1          | 125   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
+            | 'Changed'         | 1        | 1          | 0          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'FAQArticle' |
+            | 'ChangedBy'       | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'FAQArticle' |
 
     Scenario Outline: Tabelle - Schmal mit korrekter Spalte <column>
         Given Tabelle - Schmal: <objectType>

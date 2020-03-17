@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -43,7 +43,6 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 import { ToggleOptions } from "../base-components/webapp/core/table";
 
@@ -62,14 +61,6 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             false, false, null
         );
         configurations.push(queueExplorerConfig);
-
-
-        // sidebars
-        const notesSidebarConfig = new WidgetConfiguration(
-            'ticket-dashboard-notes-widget', 'Note Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebarConfig);
 
         const predefinedTicketFilter = [
             new KIXObjectPropertyFilter('Translatable#Owner', [
@@ -200,18 +191,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                 type: 'line',
                 data: {
                     datasets: [{
-                        backgroundColor: [
-                            "rgb(91, 91, 91)",
-                            "rgb(4, 83, 125)",
-                            "rgb(0, 141, 210)",
-                            "rgb(129, 189, 223)",
-                            "rgb(160, 230, 200)",
-                            "rgb(130, 200, 38)",
-                            "rgb(0, 152, 70)",
-                            "rgb(227, 30, 36)",
-                            "rgb(239, 127, 26)",
-                            "rgb(254, 204, 0)"
-                        ]
+                        backgroundColor: "rgb(91, 91, 91)"
                     }]
                 },
                 options: {
@@ -282,9 +262,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
             new ContextConfiguration(
                 this.getModuleId(), 'Ticket Dashboard Configuration', ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('ticket-notes', 'ticket-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget(
                         'ticket-dashboard-queue-explorer', 'ticket-dashboard-queue-explorer', null,
@@ -384,7 +362,7 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
                                 )
                             ],
                             null, null,
-                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES],
                             [QueueProperty.SUB_QUEUES]
                         )
                     )

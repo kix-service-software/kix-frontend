@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -9,24 +9,40 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 
 <if(state.toolbarGroups.length)>
     <div.kix-toolbar>
-        <for|group| of=state.toolbarGroups>
+        <if(state.show)>
             <div.toolbar-group>
-                <for|action| of=group>
-                    <div title=action.title on-click("actionClicked", action)>
-                        <div.action-icon>
-                            <icon icon=action.icon showUnknown=true/>
-                        </div>
-                        <if(action.infoIcon)>
-                            <span.kix-icon-i-orange.new-icon>
-                                <span.path1/>
-                                <span.path2/>
-                            </span>
-                        </if>
-                        <div.action-text>${action.count}</div>
+                <div title=state.translations["Translatable#Personal Kanban Board"] on-click("showKanban")>
+                    <div.action-icon>
+                        <icon icon="kix-icon-kanban"/>
                     </div>
-                </for>
+                    <div.action-text>${state.ownedTicketsCount}</div>
+                </div>
+                <div title=state.translations["Translatable#Personal Ticket Calendar"] on-click("showCalendar")>
+                    <div.action-icon>
+                        <icon icon="kix-icon-calendar"/>
+                    </div>
+                    <div.action-text>${state.ownedTicketsCount}</div>
+                </div>
             </div>
-        </for>
+            <for|group| of=state.toolbarGroups>
+                <div.toolbar-group>
+                    <for|action| of=group>
+                        <div title=action.title on-click("actionClicked", action)>
+                            <div.action-icon>
+                                <icon icon=action.icon showUnknown=true/>
+                            </div>
+                            <if(action.infoIcon)>
+                                <span.kix-icon-i-orange.new-icon>
+                                    <span.path1/>
+                                    <span.path2/>
+                                </span>
+                            </if>
+                            <div.action-text>${action.count}</div>
+                        </div>
+                    </for>
+                </div>
+            </for>
+        </if>
     </div>
     <div.header-separator/>
 </if>

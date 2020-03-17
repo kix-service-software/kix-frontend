@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,6 +26,9 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public onInput(input: any): void {
         this.table = input.table;
         this.state.columns = this.table.getColumns();
+        if (this.table.getTableConfiguration().toggleOptions) {
+            this.state.toggleAll = this.table.getTableConfiguration().toggleOptions.toggleAll;
+        }
 
         return input;
     }
@@ -98,6 +101,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public firstColumnIsFixed(): boolean {
         return this.table.getTableConfiguration().fixedFirstColumn;
+    }
+
+    public toggleAll(open: boolean): void {
+        EventService.getInstance().publish(
+            TableEvent.TOGGLE_ROWS, new TableEventData(this.table.getTableId(), null, null, null, open)
+        );
+        this.state.closeAll = open;
     }
 }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,7 +11,7 @@ import { ComponentState } from "./ComponentState";
 import { CheckboxOption } from "./CheckboxOption";
 import { AbstractMarkoComponent } from "../../../../base-components/webapp/core/AbstractMarkoComponent";
 import { PermissionFormData } from "../../../../base-components/webapp/core/PermissionFormData";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { PermissionProperty } from "../../../model/PermissionProperty";
 import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
 import { PermissionType } from "../../../model/PermissionType";

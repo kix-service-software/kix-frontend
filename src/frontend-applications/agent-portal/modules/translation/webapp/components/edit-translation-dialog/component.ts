@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,87 +9,52 @@
 
 
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
-import { TranslationService } from '../../core';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { TranslationDetailsContext } from '../../core/admin/context';
-import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { EditTranslationDialogContext } from '../../core/admin/context';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { ValidationResult } from '../../../../../modules/base-components/webapp/core/ValidationResult';
-import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
-import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
-import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
-import { Error } from '../../../../../../../server/model/Error';
+import { AbstractEditDialog } from '../../../../base-components/webapp/core/AbstractEditDialog';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { DialogService } from '../../../../base-components/webapp/core/DialogService';
+import { TranslationService } from '../../core/TranslationService';
 
-class Component extends AbstractMarkoComponent<ComponentState> {
+class Component extends AbstractEditDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        super.init(
+            'Translatable#Update Translation',
+            undefined,
+            KIXObjectType.TRANSLATION_PATTERN,
+            EditTranslationDialogContext.CONTEXT_ID
+        );
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+        // tslint:disable-next-line:max-line-length
+        DialogService.getInstance().setMainDialogHint("Translatable#For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual for more detailed information.");
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
+        await super.onMount();
     }
 
     public async onDestroy(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
+        await super.onDestroy();
     }
 
     public async cancel(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
-        DialogService.getInstance().closeMainDialog();
+        await super.cancel();
     }
 
     public async submit(): Promise<void> {
-        setTimeout(async () => {
-            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-            const result = await formInstance.validateForm();
-            const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-            if (validationError) {
-                this.showValidationError(result);
-            } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Translation');
-
-                const context = await ContextService.getInstance().getContext<TranslationDetailsContext>(
-                    TranslationDetailsContext.CONTEXT_ID
-                );
-
-                await KIXObjectService.updateObjectByForm(
-                    KIXObjectType.TRANSLATION_PATTERN, this.state.formId, context.getObjectId()
-                ).then(async (typeId) => {
-                    context.getObject(KIXObjectType.TRANSLATION_PATTERN, true);
-                    DialogService.getInstance().setMainDialogLoading(false);
-
-                    const toast = await TranslationService.translate('Translatable#Changes saved.');
-                    BrowserUtil.openSuccessOverlay(toast);
-                    DialogService.getInstance().submitMainDialog();
-                }).catch((error: Error) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
-                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                });
-            }
-        }, 300);
+        await super.submit();
     }
 
-    public showValidationError(result: ValidationResult[]): void {
-        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
-        const content = new ComponentContent('list-with-title',
-            {
-                title: 'Translatable#Error on form validation:',
-                list: errorMessages
-            }
-        );
-
-        OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
-        );
+    protected async handleDialogSuccess(objectId: string | number): Promise<void> {
+        DialogService.getInstance().setMainDialogLoading(false);
+        DialogService.getInstance().submitMainDialog();
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        BrowserUtil.openSuccessOverlay(this.successHint);
     }
 
 }

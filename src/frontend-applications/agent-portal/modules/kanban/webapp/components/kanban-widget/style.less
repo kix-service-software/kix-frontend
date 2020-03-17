@@ -1,0 +1,55 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.kix-kanban-container {
+
+    .widget-header {
+        display: none;
+    }
+
+    .kix-kanban-board {
+        .kanban-container {
+            display: grid; // use grid - item float (default from jkanban) does not support 100% height of sub-elements
+            grid-auto-flow: column;
+            grid-auto-columns: minmax(100px, 1fr);
+            grid-gap: 2rem;
+
+            &::after {
+                grid-row: 2; // remove after from kanban columns
+            }
+
+            .kanban-board {
+                // overwrite jkanban direct styling on object 
+                width: 100% !important;
+                margin: 0 !important;
+                grid-row: 1;
+
+                .kanban-board-header {
+                    .shorten-text();
+                    text-align: center;
+                    color: @primary-1;
+                    height: 3.5rem;
+                    position: sticky;
+                    top: @header-height;
+                    background-color: inherit;
+                }
+
+                .kanban-drag {
+                    height: calc(100% - 3.5rem); // substract header
+                    padding: @margin-small;
+
+                    .kanban-item {
+                        padding: 0.25rem;
+                        margin-bottom: 1rem;
+                    }
+                }
+            }
+        }
+    }
+}

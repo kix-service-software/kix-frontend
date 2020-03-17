@@ -1,11 +1,12 @@
 <!--
-Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
+
 <if(state.node.visible)>
     <li.tree-node
         class={
@@ -24,13 +25,10 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <div.node-value on-click("nodeClicked") title=component.getToolTip()>
             <icon icon=state.node.icon showUnknown=true/>
             <span.node-title class=(state.node.expanded ? "expanded" : "")>
-                <translation-string pattern=state.node.label/>
-                <if(state.node.properties)>
+                ${state.node.label}<if(state.node.properties)>
                     (<for|prop, index| of=state.node.properties>
                         <if(index != 0)>|</if>
-                        <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>
-                            <translation-string pattern=prop.value/>
-                        </span>
+                        <span title=prop.title class=(prop.cssClass ? prop.cssClass : "")>${prop.value}</span>
                     </for>)
                 </if>
             </span>

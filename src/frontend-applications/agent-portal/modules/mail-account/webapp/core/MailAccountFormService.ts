@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ import { MailAccountProperty } from "../../model/MailAccountProperty";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
 import { DispatchingType } from "../../model/DispatchingType";
+import { IdService } from "../../../../model/IdService";
 
 export class MailAccountFormService extends KIXObjectFormService {
 
@@ -36,16 +37,6 @@ export class MailAccountFormService extends KIXObjectFormService {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.MAIL_ACCOUNT;
-    }
-
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        switch (property) {
-            case MailAccountProperty.TRUSTED:
-                value = Number(value);
-                break;
-            default:
-        }
-        return [[property, value]];
     }
 
     protected async postPrepareForm(
@@ -83,6 +74,7 @@ export class MailAccountFormService extends KIXObjectFormService {
             'Translatable#Helptext_Admin_MailAccountEdit_IMAPFolder', undefined,
             new FormFieldValue(value)
         );
+        folderField.instanceId = IdService.generateDateBasedId(folderField.property);
         typeField.children.push(folderField);
         formFieldValues.set(folderField.instanceId, new FormFieldValue(value));
     }
@@ -110,6 +102,16 @@ export class MailAccountFormService extends KIXObjectFormService {
             default:
         }
         return hasPermissions;
+    }
+
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case MailAccountProperty.TRUSTED:
+                value = Number(value);
+                break;
+            default:
+        }
+        return [[property, value]];
     }
 
 }

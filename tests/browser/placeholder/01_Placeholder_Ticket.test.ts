@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,12 +12,14 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
-import { TicketPlaceholderHandler, TicketLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TicketLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketLabelProvider';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { TicketProperty } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/TicketProperty';
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
 import { DynamicFieldValue } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldValue';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -32,10 +34,12 @@ describe('Placeholder replacement for ticket', () => {
         const ticketLabelProvider = new TicketLabelProvider();
         ticketLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(ticketLabelProvider);
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
         LabelService.getInstance()['labelProviders'] = [];
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace simple ticket attribute placeholder', async () => {

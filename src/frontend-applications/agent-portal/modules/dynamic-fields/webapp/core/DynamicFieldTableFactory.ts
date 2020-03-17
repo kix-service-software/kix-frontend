@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -49,6 +49,7 @@ export class DynamicFieldTableFactory extends TableFactory {
             this.getDefaultColumnConfiguration(DynamicFieldProperty.FIELD_TYPE),
             this.getDefaultColumnConfiguration(DynamicFieldProperty.OBJECT_TYPE),
             this.getDefaultColumnConfiguration(DynamicFieldProperty.INTERNAL_FIELD),
+            this.getDefaultColumnConfiguration(DynamicFieldProperty.CUSTOMER_VISIBLE),
             this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
             this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
@@ -87,7 +88,11 @@ export class DynamicFieldTableFactory extends TableFactory {
                 break;
             case DynamicFieldProperty.INTERNAL_FIELD:
                 config = new DefaultColumnConfiguration(
-                    null, null, null, property, false, true, true, false, 100, true, true, true);
+                    null, null, null, property, true, false, true, false, 100, true, true, true);
+                break;
+            case DynamicFieldProperty.CUSTOMER_VISIBLE:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, false, true, false, true, 100, true, true, true);
                 break;
             default:
                 config = super.getDefaultColumnConfiguration(property);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,14 +27,19 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { UIUtil } from '../../core/UIUtil';
+import { IdService } from '../../../../../model/IdService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
     private objects: KIXObject[];
     private autocomplete: boolean = false;
+    private formListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.formListenerId = IdService.generateDateBasedId('object-ref-input');
         this.state.loadNodes = this.load.bind(this);
     }
 
@@ -55,7 +60,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         await super.onMount();
         this.state.searchCallback = this.search.bind(this);
         this.setOptions();
+        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
+            formListenerId: this.formListenerId,
+            updateForm: () => { return; },
+            formValueChanged: (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
+                if (formField.instanceId === this.state.field.instanceId) {
+                    this.setCurrentNode(null, value, false);
+                }
+            }
+        });
         this.state.prepared = true;
+    }
+
+    public async onDestroy(): Promise<void> {
+        super.onDestroy();
+        if (this.formListenerId) {
+            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
+        }
     }
 
     private async load(): Promise<TreeNode[]> {
@@ -73,30 +94,24 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
                 );
 
-                const showValidOption = this.state.field.options
-                    ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
-                    : null;
-                const validClickableOption = this.state.field.options
-                    ? this.state.field.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
-                    : null;
-
-                const showInvalid = showValidOption ? showValidOption.value : true;
-                const invalidClickable = validClickableOption ? validClickableOption.value : false;
+                const showInvalid = this.showInvalidNodes();
+                const invalidClickable = this.areInvalidClickable();
 
                 const objectId = await UIUtil.getEditObjectId(objectOption.value);
-
 
                 if (structureOption && structureOption.value) {
                     nodes = await KIXObjectService.prepareObjectTree(
                         this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
                     );
 
+
                 } else {
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);
-                        nodes.push(node);
+                        if (node) {
+                            nodes.push(node);
+                        }
                     }
-
                 }
                 SortUtil.sortObjects(nodes, 'label', DataType.STRING);
             }
@@ -106,6 +121,12 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             (o) => o.option === ObjectReferenceOptions.ADDITIONAL_NODES
         );
         if (additionalNodes) {
+            for (const node of (additionalNodes.value as TreeNode[])) {
+                const label = await TranslationService.translate(node.label);
+                const tooltip = await TranslationService.translate(node.tooltip);
+                node.label = label;
+                node.tooltip = tooltip;
+            }
             nodes = [...additionalNodes.value, ...nodes];
         }
 
@@ -113,9 +134,23 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         return nodes;
     }
 
-    public async setCurrentNode(nodes?: TreeNode[]): Promise<void> {
+    private showInvalidNodes(): boolean {
+        const showValidOption = this.state.field.options
+            ? this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID)
+            : null;
+        return showValidOption ? showValidOption.value : true;
+    }
+
+    private areInvalidClickable(): boolean {
+        const validClickableOption = this.state.field.options
+            ? this.state.field.options.find((o) => o.option === FormFieldOptions.INVALID_CLICKABLE)
+            : null;
+        return validClickableOption ? validClickableOption.value : false;
+    }
+
+    public async setCurrentNode(nodes?: TreeNode[], value?: any, update: boolean = true): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const defaultValue = value ? value : formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (defaultValue && defaultValue.value) {
             const objectIds: any[] = Array.isArray(defaultValue.value)
                 ? defaultValue.value : [defaultValue.value];
@@ -136,7 +171,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                                 selectedNodes.push(node);
                             }
                         });
-                        this.nodesChanged(selectedNodes);
+                        if (update) {
+                            this.nodesChanged(selectedNodes);
+                        }
                     }
                 } else {
                     const objectOption = this.state.field.options.find(
@@ -147,16 +184,21 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         if (objects && !!objects.length) {
                             for (const object of objects) {
                                 const node = await this.createTreeNode(object);
-                                node.selected = true;
-                                nodes.push(node);
-                                selectedNodes.push(node);
+                                if (node) {
+                                    node.selected = true;
+                                    if (nodes) {
+                                        nodes.push(node);
+                                    }
+                                    selectedNodes.push(node);
+                                }
                             }
-                            this.nodesChanged(selectedNodes);
+                            if (update) {
+                                this.nodesChanged(selectedNodes);
+                            }
                         }
                     }
-
-                    treeHandler.setSelection(selectedNodes, true, false, true);
                 }
+                treeHandler.setSelection(selectedNodes, true, !update, true);
             }
         }
     }
@@ -267,7 +309,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     } else {
                         for (const o of this.objects) {
                             const node = await this.createTreeNode(o);
-                            nodes.push(node);
+                            if (node) {
+                                nodes.push(node);
+                            }
                         }
                     }
                     nodes = SortUtil.sortObjects(nodes, 'label', DataType.STRING);
@@ -282,14 +326,25 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         if (typeof o === 'string') {
             return new TreeNode(o, o);
         } else {
-            const text = await LabelService.getInstance().getText(o);
-            const icon = LabelService.getInstance().getObjectIcon(o);
-            let tooltip = await LabelService.getInstance().getTooltip(o);
+            const showInvalid = this.showInvalidNodes();
+            // typeof o.ValidID === 'undefined' - needed for objects without ValidID like ValidObject
+            if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
+                const invalidClickable = this.areInvalidClickable();
+                const text = await LabelService.getInstance().getText(o);
+                const icon = LabelService.getInstance().getObjectIcon(o);
+                let tooltip = await LabelService.getInstance().getTooltip(o);
 
-            tooltip = (tooltip && tooltip !== text) ? text + ": " + tooltip : text;
-            return new TreeNode(
-                o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon, undefined, undefined, undefined,
-                undefined, undefined, undefined, undefined, undefined, undefined, undefined, tooltip);
+                tooltip = (tooltip && tooltip !== text) ? text + ": " + tooltip : text;
+                return new TreeNode(
+                    o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable,
+                    tooltip, undefined, undefined, undefined,
+                    typeof o.ValidID !== 'undefined' && o.ValidID !== 1
+                );
+            } else {
+                return;
+            }
         }
     }
 

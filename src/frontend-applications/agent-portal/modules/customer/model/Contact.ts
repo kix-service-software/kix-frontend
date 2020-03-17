@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,6 +11,7 @@ import { KIXObject } from "../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 import { Ticket } from "../../ticket/model/Ticket";
 import { TicketStats } from "./TicketStats";
+import { User } from "../../user/model/User";
 
 export class Contact extends KIXObject<Contact> {
 
@@ -20,11 +21,15 @@ export class Contact extends KIXObject<Contact> {
 
     public ID: number;
 
+    public AssignedUserID: number;
+
+    public User: User;
+
     public Firstname: string;
 
-    public Lastname: string;
+    public Fullname: string;
 
-    public Login: string;
+    public Lastname: string;
 
     public City: string;
 
@@ -60,9 +65,10 @@ export class Contact extends KIXObject<Contact> {
         if (contact) {
             this.ID = contact.ID;
             this.ObjectId = this.ID;
+            this.AssignedUserID = contact.AssignedUserID;
             this.Firstname = contact.Firstname;
+            this.Fullname = contact.Fullname;
             this.Lastname = contact.Lastname;
-            this.Login = contact.Login;
             this.City = contact.City;
             this.Street = contact.Street;
             this.Comment = contact.Comment;
@@ -77,6 +83,7 @@ export class Contact extends KIXObject<Contact> {
             this.Zip = contact.Zip;
             this.TicketStats = contact.TicketStats;
 
+            this.User = contact.User ? new User(contact.User) : null;
             this.Tickets = contact.Tickets
                 ? contact.Tickets.map((t) => new Ticket(t))
                 : [];

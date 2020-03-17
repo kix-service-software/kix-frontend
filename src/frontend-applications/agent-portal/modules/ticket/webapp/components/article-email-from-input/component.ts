@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -105,7 +105,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
             const queue = queues[0];
 
-            let userName = `${user.UserFirstname} ${user.UserLastname}`;
+            let userName = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
             userName = userName
                 .replace(/ä/g, 'ae').replace(/Ä/g, 'Ae')
                 .replace(/ö/g, 'oe').replace(/Ö/g, 'Oe')
@@ -122,9 +122,9 @@ class Component extends FormInputComponent<number, ComponentState> {
                 .replace(/ü/g, 'ue').replace(/Ü/g, 'Ue');
 
             const labels = [
-                [`\"<${realName}>\" <${queueMail}>`, `${realName}`],
-                [`<${userName}> \"via\" <${realName}> <${queueMail}>`, `${userName} via ${realName}`],
-                [`<${userName}> <${queueMail}>`, `${userName}`]
+                [`\"${realName}\" <${queueMail}>`, `${realName}`],
+                [`${userName} \"via\" ${realName} <${queueMail}>`, `${userName} via ${realName}`],
+                [`${userName} <${queueMail}>`, `${userName}`]
             ];
 
             const nodes: TreeNode[] = [];

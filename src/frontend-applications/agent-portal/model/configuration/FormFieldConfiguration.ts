@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,7 +11,6 @@ import { IConfiguration } from "./IConfiguration";
 import { FormFieldOption } from "./FormFieldOption";
 import { FormFieldValue } from "./FormFieldValue";
 import { ConfigurationType } from "./ConfigurationType";
-import { IdService } from "../IdService";
 
 export class FormFieldConfiguration implements IConfiguration {
 
@@ -48,6 +47,6 @@ export class FormFieldConfiguration implements IConfiguration {
         public defaultHint: string = hint,
         public type: ConfigurationType = ConfigurationType.FormField
     ) {
-        this.instanceId = existingFieldId ? existingFieldId : IdService.generateDateBasedId(this.property);
+        this.instanceId = existingFieldId ? existingFieldId : null;
     }
 }

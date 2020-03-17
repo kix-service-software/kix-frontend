@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,7 +16,9 @@ import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpec
 import { ArticleProperty } from "../../model/ArticleProperty";
 import { TicketProperty } from "../../model/TicketProperty";
 import { Attachment } from "../../../../model/kix/Attachment";
-import { TicketSocketClient, QueueService, TicketDetailsContext } from ".";
+import { TicketSocketClient } from "./TicketSocketClient";
+import { QueueService, } from "./admin/QueueService";
+import { TicketDetailsContext } from "./context/TicketDetailsContext";
 import { FilterCriteria } from "../../../../model/FilterCriteria";
 import { SearchProperty } from "../../../search/model/SearchProperty";
 import { SearchOperator } from "../../../search/model/SearchOperator";
@@ -29,13 +31,17 @@ import { TicketPriority } from "../../model/TicketPriority";
 import { TicketState } from "../../model/TicketState";
 import { User } from "../../../user/model/User";
 import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
 import { StateType } from "../../model/StateType";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { Article } from "../../model/Article";
 import { InlineContent } from "../../../../modules/base-components/webapp/core/InlineContent";
 import { Channel } from "../../model/Channel";
 import { ChannelProperty } from "../../model/ChannelProperty";
+import { UserProperty } from "../../../user/model/UserProperty";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../../../model/ContextMode";
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -119,7 +125,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         switch (property) {
             case TicketProperty.QUEUE_ID:
-                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy();
+                const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
                 nodes = await QueueService.getInstance().prepareObjectTree(
                     queuesHierarchy, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
@@ -132,7 +138,14 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 for (const t of types) {
                     const icons = await labelProvider.getIcons(null, property, t.ID);
-                    nodes.push(new TreeNode(t.ID, t.Name, (icons && icons.length) ? icons[0] : null));
+                    const text = await LabelService.getInstance().getText(t);
+                    nodes.push(new TreeNode(
+                        t.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        t.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        t.ValidID !== 1
+                    ));
                 }
                 break;
             case TicketProperty.PRIORITY_ID:
@@ -142,7 +155,14 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 for (const p of priorities) {
                     const icons = await labelProvider.getIcons(null, property, p.ID);
-                    nodes.push(new TreeNode(p.ID, p.Name, (icons && icons.length) ? icons[0] : null));
+                    const text = await LabelService.getInstance().getText(p);
+                    nodes.push(new TreeNode(
+                        p.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        p.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        p.ValidID !== 1
+                    ));
                 }
                 break;
             case TicketProperty.STATE_ID:
@@ -152,22 +172,49 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 for (const s of states) {
                     const icons = await labelProvider.getIcons(null, property, s.ID);
-                    nodes.push(new TreeNode(s.ID, s.Name, (icons && icons.length) ? icons[0] : null));
+                    const text = await LabelService.getInstance().getText(s);
+                    nodes.push(new TreeNode(
+                        s.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        s.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        s.ValidID !== 1
+                    ));
                 }
                 break;
             case TicketProperty.LOCK_ID:
-                nodes.push(new TreeNode(1, 'Translatable#Unlocked', 'kix-icon-lock-open'));
-                nodes.push(new TreeNode(2, 'Translatable#Locked', 'kix-icon-lock-close'));
+                const unlocked = await TranslationService.translate('Translatable#Unlocked');
+                const locked = await TranslationService.translate('Translatable#Locked');
+                nodes.push(new TreeNode(1, unlocked, 'kix-icon-lock-open'));
+                nodes.push(new TreeNode(2, locked, 'kix-icon-lock-close'));
                 break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
+                if (loadingOptions) {
+                    if (Array.isArray(loadingOptions.includes)) {
+                        loadingOptions.includes.push(UserProperty.CONTACT);
+                    } else {
+                        loadingOptions.includes = [UserProperty.CONTACT];
+                    }
+                } else {
+                    loadingOptions = new KIXObjectLoadingOptions(
+                        null, null, null, [UserProperty.CONTACT]
+                    );
+                }
                 let users = await KIXObjectService.loadObjects<User>(
                     KIXObjectType.USER, null, loadingOptions, null, true
                 ).catch((error) => [] as User[]);
                 if (!showInvalid) {
                     users = users.filter((s) => s.ValidID === 1);
                 }
-                users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                users.forEach((u) => nodes.push(new TreeNode(
+                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man',
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    undefined, undefined,
+                    u.ValidID === 1 || invalidClickable,
+                    undefined, undefined, undefined, undefined,
+                    u.ValidID !== 1
+                )));
                 break;
             case ArticleProperty.CHANNEL_ID:
                 const channels = await KIXObjectService.loadObjects<Channel>(
@@ -177,7 +224,13 @@ export class TicketService extends KIXObjectService<Ticket> {
                 for (const c of channels) {
                     const name = await LabelService.getInstance().getPropertyValueDisplayText(c, ChannelProperty.NAME);
                     const icons = await LabelService.getInstance().getPropertyValueDisplayIcons(c, ChannelProperty.ID);
-                    nodes.push(new TreeNode(c.ID, name, icons && icons.length ? icons[0] : null));
+                    nodes.push(new TreeNode(
+                        c.ID, name, icons && icons.length ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        c.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        c.ValidID !== 1
+                    ));
                 }
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
@@ -292,5 +345,14 @@ export class TicketService extends KIXObjectService<Ticket> {
         } else {
             return super.getResource(objectType);
         }
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        if (object && object.KIXObjectType === KIXObjectType.ARTICLE) {
+            return null;
+        }
+        return new RoutingConfiguration(
+            TicketDetailsContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.DETAILS, TicketProperty.TICKET_ID
+        );
     }
 }

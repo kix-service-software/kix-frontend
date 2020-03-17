@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -368,6 +368,7 @@ describe('BrowserCacheService', () => {
                 expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
             });
 
         });
@@ -378,10 +379,11 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(3);
 
                 expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ROLE)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
             });
 
         });
@@ -392,22 +394,24 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.PERSONAL_SETTINGS);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.PERSONAL_SETTINGS)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
             });
 
             it('should resolve the namespace for UserPreferences', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.USER_PREFERENCE);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(3);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.USER_PREFERENCE)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
             });
 
         });

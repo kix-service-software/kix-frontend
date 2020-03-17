@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,7 @@ import { DefaultColumnConfiguration } from "../../../../../model/configuration/D
 import { LinkObjectProperty } from "../../../model/LinkObjectProperty";
 import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
 import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
 
 
 export class LinkObjectTableFactory extends TableFactory {
@@ -24,13 +25,14 @@ export class LinkObjectTableFactory extends TableFactory {
 
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean
+        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
         const table = new Table(tableKey, tableConfiguration);
-        table.setContentProvider(new LinkObjectTableContentProvider(table, objectIds, null, contextId));
+        table.setContentProvider(new LinkObjectTableContentProvider(table, objectIds, null, contextId, objects));
         table.setColumnConfiguration(tableConfiguration.tableColumns);
 
         return table;

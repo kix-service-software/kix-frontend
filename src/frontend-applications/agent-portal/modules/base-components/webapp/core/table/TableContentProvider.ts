@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,6 +21,7 @@ import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
 import { LabelService } from "../LabelService";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
+import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -33,7 +34,8 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         protected table: ITable,
         protected objectIds: Array<number | string>,
         protected loadingOptions: KIXObjectLoadingOptions,
-        protected contextId?: string
+        protected contextId?: string,
+        protected objects?: KIXObject[]
     ) { }
 
     public async initialize(): Promise<void> {
@@ -89,7 +91,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     public async loadData(): Promise<Array<IRowObject<T>>> {
         let objects = [];
 
-        if (this.contextId && !this.objectIds) {
+        if (this.objects) {
+            objects = this.objects;
+        } else if (this.contextId && !this.objectIds) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList(this.objectType) : [];
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
@@ -136,12 +140,12 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
                         ) {
                             const value = propertyMap.get(property).get(o[property]);
                             values.push(value);
-                        } else if (!property.match(/^DynamicFields?\..+/)) {
+                        } else if (!KIXObjectService.getDynamicFieldName(property)) {
                             const tableValue = await this.getTableValue(o, property, column);
                             values.push(tableValue);
                         }
                     }
-                    await this.addSpecificValues(values, o);
+                    await this.prepareSpecificValues(values, o);
                     const rowObject = new RowObject<T>(values, o);
 
                     if (this.hasChildRows(rowObject)) {
@@ -158,29 +162,25 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
     }
 
     protected async getTableValue(object: any, property: string, column: IColumnConfiguration): Promise<TableValue> {
-        const showText = column ? column.showText : true;
         const showIcons = column ? column.showIcon : true;
         const translatable = column ? column.translatable : true;
 
-        let displayValue = object[property];
-        if (showText) {
-            displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
-                object, property, object[property], translatable
-            );
-        }
+        const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+            object, property, object[property], translatable
+        );
 
         let icons = [];
         if (showIcons) {
-            icons = await LabelService.getInstance().getPropertyValueDisplayIcons(object, property);
+            icons = await LabelService.getInstance().getPropertyValueDisplayIcons(object, property, true);
         }
 
         return new TableValue(property, object[property], displayValue, undefined, icons);
     }
 
-    protected async addSpecificValues(values: TableValue[], object: any): Promise<void> {
+    protected async prepareSpecificValues(values: TableValue[], object: any): Promise<void> {
         if (Array.isArray(object[KIXObjectProperty.DYNAMIC_FIELDS])) {
             for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
-                let dfValue: [string[], string];
+                let dfValue: [string[], string, string[]];
 
                 const labelProvider = LabelService.getInstance().getLabelProvider(object);
                 if (labelProvider) {

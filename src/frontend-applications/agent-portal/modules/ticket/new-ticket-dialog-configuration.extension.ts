@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,7 +16,6 @@ import { ConfigurationType } from "../../model/configuration/ConfigurationType";
 import { KIXObjectType } from "../../model/kix/KIXObjectType";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { HelpWidgetConfiguration } from "../../model/configuration/HelpWidgetConfiguration";
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
@@ -38,6 +37,12 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
+import { OrganisationProperty } from "../customer/model/OrganisationProperty";
+import { UserProperty } from "../user/model/UserProperty";
+import { ContactProperty } from "../customer/model/ContactProperty";
+import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
+import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
 
 
 export class NewTicketDialogModuleExtension implements IConfigurationExtension {
@@ -53,13 +58,13 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             ConfigurationType.ObjectInformation,
             KIXObjectType.ORGANISATION,
             [
-                'Number',
-                'Name',
-                'Url',
-                'Street',
-                'Zip',
-                'City',
-                'Country'
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
             ], true
         );
         configurations.push(organisationInformation);
@@ -79,14 +84,14 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
             ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
             [
-                'Login',
-                'Title',
-                'Lastname',
-                'Firstname',
-                'PrimaryOrganisationID',
-                'Phone',
-                'Mobile',
-                'Email'
+                UserProperty.USER_LOGIN,
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.EMAIL
             ], true
         );
         configurations.push(contactInformation);
@@ -99,19 +104,55 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
         );
         configurations.push(contactInfoSidebar);
 
-        const helpSettings = new HelpWidgetConfiguration(
-            'ticket-new-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
-            'Translatable#Helptext_Textmodules_TicketCreate', null
-        );
-        configurations.push(helpSettings);
 
-        const helpWidget = new WidgetConfiguration(
-            'ticket-new-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
-            'help-widget', 'Translatable#Text Modules', [],
-            new ConfigurationDefinition('ticket-new-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-textblocks'
+        const ticketsForAssetsWidget = new WidgetConfiguration(
+            'ticket-new-dialog-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-details-object-reference-widget-config', 'Tickets for Assets',
+                'TicketsForAssetsHandler',
+                {
+                    properties: [
+                        'DynamicFields.AffectedAsset'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-ticket'
         );
-        configurations.push(helpWidget);
+        configurations.push(ticketsForAssetsWidget);
+
+        const suggestedFAQWidget = new WidgetConfiguration(
+            'ticket-new-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-new-suggested-faq-config', 'Suggested FAQ',
+                'SuggestedFAQHandler',
+                {
+                    properties: [
+                        'Title',
+                        'Subject'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Title', true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Votes', true, false, false, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-faq'
+        );
+        configurations.push(suggestedFAQWidget);
 
         const dialogWidget = new WidgetConfiguration(
             'ticket-new-dialog-widget', 'New Ticket Dialog', ConfigurationType.Widget,
@@ -129,7 +170,12 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                         'ticket-new-dialog-organisation-widget', 'ticket-new-dialog-organisation-widget'
                     ),
                     new ConfiguredWidget('ticket-new-dialog-contact-widget', 'ticket-new-dialog-contact-widget'),
-                    new ConfiguredWidget('ticket-new-dialog-help-widget', 'ticket-new-dialog-help-widget')
+                    new ConfiguredWidget(
+                        'ticket-new-dialog-object-reference-widget', 'ticket-new-dialog-object-reference-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-new-dialog-suggested-faq-widget', 'ticket-new-dialog-suggested-faq-widget'
+                    )
                 ],
                 [], [], [], [], [], [], [],
                 [
@@ -204,7 +250,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                                 )
                             ],
                             null, null,
-                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES],
                             [QueueProperty.SUB_QUEUES]
                         )
                     )
@@ -218,42 +264,12 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketCreate_Channel'
             )
         );
-        configurations.push(
-            new FormFieldConfiguration(
-                'ticket-new-form-field-links',
-                'Translatable#Link Ticket with', TicketProperty.LINK, 'link-input', false,
-                'Translatable#Helptext_Tickets_TicketCreate_Links'
-            )
-        );
+
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-owner',
                 'Translatable#Owner', TicketProperty.OWNER_ID, 'object-reference-input', false,
                 'Translatable#Helptext_Tickets_TicketCreate_Owner',
-                [
-                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions(
-                            [
-                                new FilterCriteria(
-                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                    FilterType.AND, 1
-                                )
-                            ], undefined, undefined, undefined, undefined,
-                            [
-                                ['requiredPermission', 'TicketRead,TicketUpdate']
-                            ]
-                        )
-                    )
-                ]
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
-                'ticket-new-form-field-responsible',
-                'Translatable#Responsible', TicketProperty.RESPONSIBLE_ID, 'object-reference-input', false,
-                'Translatable#Helptext_Tickets_TicketCreate_Responsible',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
 
@@ -311,14 +327,22 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 [
                     'ticket-new-form-field-contact',
                     'ticket-new-form-field-organisation',
+                    'ticket-new-form-field-affectedasset',
                     'ticket-new-form-field-type',
                     'ticket-new-form-field-queue',
                     'ticket-new-form-field-channel',
-                    'ticket-new-form-field-links',
                     'ticket-new-form-field-owner',
-                    'ticket-new-form-field-responsible',
                     'ticket-new-form-field-priority',
                     'ticket-new-form-field-state',
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'ticket-new-form-field-affectedasset', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
+                        false, 'Translatable#Helptext_Tickets_TicketCreate_AffectedAsset',
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'AffectedAsset')
+                        ]
+                    )
                 ]
             )
         );

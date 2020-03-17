@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -207,6 +207,21 @@ export class WebformFormService extends KIXObjectFormService {
             stateId = objects && !!objects.length ? objects[0].ID : null;
         }
         return stateId;
+    }
+
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        if (value) {
+            if (property === WebformProperty.USER_LOGIN) {
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [value], null, null, true
+                ).catch((error) => [] as User[]);
+                value = users && !!users.length ? users[0].UserLogin : value;
+            }
+            parameter.push([property, value]);
+        }
+
+        return parameter;
     }
 
 }

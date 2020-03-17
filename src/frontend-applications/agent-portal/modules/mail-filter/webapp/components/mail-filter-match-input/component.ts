@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,6 +10,7 @@
 import { ComponentState } from "./ComponentState";
 import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { MailFilterMatch } from "../../../model/MailFilterMatch";
 
 class Component extends AbstractMarkoComponent {
 
@@ -26,9 +27,9 @@ class Component extends AbstractMarkoComponent {
     }
 
     private async update(input): Promise<void> {
-        if (input.value && typeof input.value !== 'undefined') {
-            this.state.value = input.value[0];
-            this.state.negate = Boolean(input.value[1]);
+        if (input.value && typeof input.value === 'object' && (input.value as MailFilterMatch).Value) {
+            this.state.value = (input.value as MailFilterMatch).Value;
+            this.state.negate = Boolean((input.value as MailFilterMatch).Not);
         } else {
             this.state.value = '';
         }
@@ -50,7 +51,7 @@ class Component extends AbstractMarkoComponent {
     }
 
     private emitChanges(): void {
-        (this as any).emit('change', [this.state.value, this.state.negate]);
+        (this as any).emit('change', new MailFilterMatch(null, this.state.value, this.state.negate));
     }
 }
 

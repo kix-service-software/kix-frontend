@@ -1,0 +1,38 @@
+<!--
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<if(state.field)>
+    <div.dynamic-field-label-list>
+        <object-property-label property=input.property object=input.object labelProvider=input.labelProvider>
+            <if(state.field.FieldType === "CheckList")>
+                <@info>
+                    <overlay-icon
+                        title=state.field.Name
+                        icon="kix-icon-checklist"
+                        content="dynamic-field-checklist-information"
+                        data={
+                                                checklist: state.checklist,
+                                                field: state.field
+                                            }/>
+                </@info>
+            </if>
+            <@propertyValue>
+                <translation-string pattern=state.field.Label/>
+            </@propertyValue>
+            <@value>
+                <if(state.field.FieldType === "CheckList")>
+                    <dynamic-field-checklist-progress checklist=state.checklist/>
+                </if>
+                <else>
+                    <label-list labels=state.labels removeLabels=false on-labelClicked("labelClicked")/>
+                </else>
+            </@value>
+        </object-property-label>
+    </div>
+</if>

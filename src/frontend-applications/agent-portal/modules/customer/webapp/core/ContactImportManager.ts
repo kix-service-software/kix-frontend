@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -101,7 +101,6 @@ export class ContactImportManager extends ImportManager {
         const properties: Array<[string, string]> = [];
         const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
         const attributes = [
-            ContactProperty.PASSWORD,
             ContactProperty.PRIMARY_ORGANISATION_ID,
             ContactProperty.FIRSTNAME,
             ContactProperty.LASTNAME,
@@ -127,7 +126,7 @@ export class ContactImportManager extends ImportManager {
     }
 
     public async getRequiredProperties(): Promise<string[]> {
-        return [ContactProperty.LOGIN, ContactProperty.PRIMARY_ORGANISATION_ID];
+        return [ContactProperty.EMAIL, ContactProperty.PRIMARY_ORGANISATION_ID];
     }
 
     public getAlternativeProperty(property: string): string {
@@ -172,8 +171,8 @@ export class ContactImportManager extends ImportManager {
         } else {
             const filter = [
                 new FilterCriteria(
-                    ContactProperty.LOGIN, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, contact.Login
+                    ContactProperty.EMAIL, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, contact.Email
                 )
             ];
             const loadingOptions = new KIXObjectLoadingOptions(filter);

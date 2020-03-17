@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,9 +22,9 @@ export interface ITableFactory {
     isFactoryFor(objectType: KIXObjectType | string): boolean;
 
     createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectids?: Array<number | string>,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
-        objectType?: KIXObjectType | string
+        objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): ITable;
 
     getDefaultColumnConfiguration(property: string): IColumnConfiguration;

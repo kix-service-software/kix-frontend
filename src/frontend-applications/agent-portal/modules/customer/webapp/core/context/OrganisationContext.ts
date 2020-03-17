@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -43,7 +43,12 @@ export class OrganisationContext extends Context {
         super.setFilteredObjectList(objectType, filteredObjectList);
 
         if (objectType === KIXObjectType.ORGANISATION) {
-            this.loadContacts();
+            const isOrganisationDepending = this.getAdditionalInformation(
+                OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
+            );
+            if (isOrganisationDepending) {
+                this.loadContacts();
+            }
         }
     }
 
@@ -58,9 +63,8 @@ export class OrganisationContext extends Context {
             KIXObjectType.ORGANISATION, null, null, null, false
         ).catch((error) => []);
 
-        window.clearTimeout(timeout);
-
         this.setObjectList(KIXObjectType.ORGANISATION, organisations);
+        super.setFilteredObjectList(KIXObjectType.ORGANISATION, organisations);
 
         const isOrganisationDepending = this.getAdditionalInformation(
             OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
@@ -68,6 +72,8 @@ export class OrganisationContext extends Context {
         if (isOrganisationDepending) {
             await this.loadContacts();
         }
+
+        window.clearTimeout(timeout);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
@@ -97,6 +103,14 @@ export class OrganisationContext extends Context {
     public reset(): void {
         super.reset();
         this.initContext();
+    }
+
+    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+        if (objectType === KIXObjectType.ORGANISATION) {
+            return this.loadOrganisations();
+        } else if (objectType === KIXObjectType.CONTACT) {
+            return this.loadContacts();
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -45,14 +45,16 @@ export class TranslationCSVExportAction extends AbstractAction<ITable> {
                 csvString += ';';
 
                 const translationStrings: string[] = [];
-                languages.forEach((l) => {
-                    const language = translation.Languages.find((tl) => tl.Language === l[0]);
+                for (const l of languages) {
                     let translationString = '';
-                    if (language) {
-                        translationString = `"${this.escapeText(language.Value)}"`;
+                    if (translation.AvailableLanguages.some((al) => al === l[0])) {
+                        const translated = await TranslationService.getTranslationObject(translation.Value);
+                        if (translated && translated.Languages && translated.Languages[l[0]]) {
+                            translationString = `"${this.escapeText(translated.Languages[l[0]])}"`;
+                        }
                     }
                     translationStrings.push(translationString);
-                });
+                }
                 csvString += translationStrings.join(';') + "\n";
             }
 

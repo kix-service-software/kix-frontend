@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,9 +14,13 @@ import { ContactProperty } from "../../model/ContactProperty";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Organisation } from "../../model/Organisation";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { UserProperty } from "../../../user/model/UserProperty";
+import { LabelService } from "../../../base-components/webapp/core/LabelService";
+import { User } from "../../../user/model/User";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { PersonalSettingsProperty } from "../../../user/model/PersonalSettingsProperty";
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
@@ -59,7 +63,16 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 }
                 break;
             default:
-                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
+                if (this.isUserProperty(property)) {
+                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
+                    if (userLabelProvider) {
+                        displayValue = await userLabelProvider.getPropertyValueDisplayText(
+                            property, value, translatable
+                        );
+                    }
+                } else {
+                    displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
+                }
         }
 
         if (displayValue) {
@@ -78,9 +91,6 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case ContactProperty.ID:
                 displayValue = 'Translatable#ID';
                 break;
@@ -92,9 +102,6 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             case ContactProperty.EMAIL:
                 displayValue = 'Translatable#Email';
-                break;
-            case ContactProperty.LOGIN:
-                displayValue = 'Translatable#Login Name';
                 break;
             case ContactProperty.ORGANISATION_IDS:
                 displayValue = 'Translatable#Assigned Organisations';
@@ -126,9 +133,6 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case ContactProperty.PASSWORD:
-                displayValue = 'Translatable#Password';
-                break;
             case ContactProperty.OPEN_TICKETS_COUNT:
                 displayValue = 'Translatable#Open Tickets';
                 break;
@@ -142,7 +146,14 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 displayValue = 'Translatable#New Ticket';
                 break;
             default:
-                displayValue = await super.getPropertyText(property, short, translatable);
+                if (this.isUserProperty(property)) {
+                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
+                    if (userLabelProvider) {
+                        displayValue = await userLabelProvider.getPropertyText(property, short, translatable);
+                    }
+                } else {
+                    displayValue = await super.getPropertyText(property, short, translatable);
+                }
         }
 
         if (displayValue) {
@@ -152,6 +163,11 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         }
 
         return displayValue;
+    }
+
+    private isUserProperty(property: string): boolean {
+        const userProperties = Object.keys(UserProperty).map((p) => UserProperty[p]);
+        return userProperties.some((p) => p === property);
     }
 
     public async getExportPropertyValue(property: string, value: any): Promise<any> {
@@ -232,7 +248,21 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 );
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                if (this.isUserProperty(property)) {
+                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
+                    if (userLabelProvider) {
+                        const user = await this.getUserByContact(
+                            contact, property !== PersonalSettingsProperty.USER_LANGUAGE
+                        );
+                        if (user) {
+                            displayValue = await userLabelProvider.getDisplayText(
+                                user, property, defaultValue, translatable
+                            );
+                        }
+                    }
+                } else {
+                    displayValue = await super.getDisplayText(contact, property, defaultValue, translatable);
+                }
         }
 
         if (displayValue) {
@@ -249,17 +279,19 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
     ): Promise<string> {
         let returnString = '';
         if (contact) {
+            const user = await this.getUserByContact(contact);
+            const idString = user ? user.UserLogin : contact.Email;
             if (id) {
-                returnString = contact.Login;
+                returnString = idString;
             }
             if (name) {
                 returnString = `${contact.Firstname} ${contact.Lastname}`;
             }
             if (id && name) {
-                returnString = `${contact.Firstname} ${contact.Lastname} (${contact.Login})`;
+                returnString = `${contact.Firstname} ${contact.Lastname} (${idString})`;
             }
             if (!id && !name) {
-                returnString = `${contact.Firstname} ${contact.Lastname} (${contact.Login})`;
+                returnString = `${contact.Firstname} ${contact.Lastname} (${idString})`;
             }
         } else {
             const contactLabel = await TranslationService.translate('Translatable#Contact');
@@ -284,5 +316,44 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         return contactLabel;
     }
 
+    public async getIcons(
+        contact: Contact, property: string, value?: string | number
+    ): Promise<Array<string | ObjectIcon>> {
+
+        let icons = [];
+
+        switch (property) {
+            default:
+                if (this.isUserProperty(property)) {
+                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
+                    if (userLabelProvider) {
+                        const user = await this.getUserByContact(contact);
+                        if (user) {
+                            icons = await userLabelProvider.getIcons(
+                                user, property, value
+                            );
+                        }
+                    }
+                }
+        }
+
+        return icons;
+    }
+
+    private async getUserByContact(contact: Contact, useInclude: boolean = true): Promise<User> {
+        let user;
+        if (contact) {
+            if (useInclude && contact.User) {
+                user = contact.User;
+            } else if (contact.AssignedUserID) {
+                const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]);
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true
+                ).catch(() => [] as User[]);
+                user = users && users.length ? users[0] : null;
+            }
+        }
+        return user;
+    }
 }
 

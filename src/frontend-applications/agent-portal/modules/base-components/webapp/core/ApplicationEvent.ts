@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,18 @@ export enum ApplicationEvent {
 
     CLOSE_OVERLAY = 'CLOSE_OVERLAY',
 
-    DROPDOWN_OPENED = 'DROPDOWN_OPENED'
+    DROPDOWN_OPENED = 'DROPDOWN_OPENED',
+
+    CACHE_KEYS_DELETED = 'CACHE_KEYS_DELETED',
+
+    CACHE_CLEARED = 'CACHE_CLEARED',
+
+    OBJECT_UPDATED = 'OBJECT_UPDATED',
+
+    OBJECT_CREATED = 'OBJECT_CREATED',
+
+    OBJECT_DELETED = 'OBJECT_DELETED',
+
+    DIALOG_SUBMIT = 'DIALOG_SUBMIT'
 
 }

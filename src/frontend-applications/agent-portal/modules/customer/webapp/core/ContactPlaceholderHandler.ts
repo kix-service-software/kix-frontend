@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,7 @@ import { ContactProperty } from "../../model/ContactProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class ContactPlaceholderHandler implements IPlaceholderHandler {
 
@@ -41,7 +42,7 @@ export class ContactPlaceholderHandler implements IPlaceholderHandler {
                     case ContactProperty.ORGANISATION_IDS:
                         result = contact[attribute] ? contact[attribute].toString() : '';
                         break;
-                    case ContactProperty.LOGIN:
+                    case UserProperty.USER_LOGIN:
                     case ContactProperty.FIRSTNAME:
                     case ContactProperty.LASTNAME:
                     case ContactProperty.EMAIL:
@@ -67,7 +68,11 @@ export class ContactPlaceholderHandler implements IPlaceholderHandler {
 
     private isKnownProperty(property: string): boolean {
         let knownProperties = Object.keys(ContactProperty).map((p) => ContactProperty[p]);
-        knownProperties = [...knownProperties, ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p])];
+        knownProperties = [
+            ...knownProperties,
+            ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
+            ...Object.keys(UserProperty).map((p) => UserProperty[p])
+        ];
         return knownProperties.some((p) => p === property);
     }
 }

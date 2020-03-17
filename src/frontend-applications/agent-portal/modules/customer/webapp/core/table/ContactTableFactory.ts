@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -22,6 +22,8 @@ import { ContextMode } from "../../../../../model/ContextMode";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
 import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
 import { DataType } from "../../../../../model/DataType";
+import { UserProperty } from "../../../../user/model/UserProperty";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 
 export class ContactTableFactory extends TableFactory {
 
@@ -51,8 +53,10 @@ export class ContactTableFactory extends TableFactory {
                 this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
-                this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
+                this.getDefaultColumnConfiguration(UserProperty.USER_LOGIN),
                 this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(UserProperty.IS_CUSTOMER),
+                this.getDefaultColumnConfiguration(UserProperty.IS_AGENT),
                 this.getDefaultColumnConfiguration(ContactProperty.CITY),
                 this.getDefaultColumnConfiguration(ContactProperty.STREET),
                 this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID)
@@ -62,8 +66,10 @@ export class ContactTableFactory extends TableFactory {
                 this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
                 this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
-                this.getDefaultColumnConfiguration(ContactProperty.LOGIN),
+                this.getDefaultColumnConfiguration(UserProperty.USER_LOGIN),
                 this.getDefaultColumnConfiguration(ContactProperty.PRIMARY_ORGANISATION_ID),
+                this.getDefaultColumnConfiguration(UserProperty.IS_CUSTOMER),
+                this.getDefaultColumnConfiguration(UserProperty.IS_AGENT),
                 this.getDefaultColumnConfiguration(ContactProperty.PHONE),
                 this.getDefaultColumnConfiguration(ContactProperty.COUNTRY),
                 this.getDefaultColumnConfiguration(ContactProperty.CITY),
@@ -84,6 +90,12 @@ export class ContactTableFactory extends TableFactory {
             tableConfiguration.tableColumns = tableColumns;
         }
 
+        if (!tableConfiguration.loadingOptions) {
+            tableConfiguration.loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, [ContactProperty.USER]
+            );
+        }
+
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
                 ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
@@ -98,11 +110,20 @@ export class ContactTableFactory extends TableFactory {
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
         switch (property) {
+            case UserProperty.USER_LOGIN:
+            case ContactProperty.FIRSTNAME:
+            case ContactProperty.LASTNAME:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 150, true, true, false,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
             case ContactProperty.EMAIL:
                 config = new DefaultColumnConfiguration(
                     null, null, null, property, true, false, true, false, 175, true, true);
                 break;
             case ContactProperty.PHONE:
+            case ContactProperty.MOBILE:
             case ContactProperty.COUNTRY:
             case ContactProperty.CITY:
                 config = new DefaultColumnConfiguration(
@@ -116,6 +137,12 @@ export class ContactTableFactory extends TableFactory {
                 config = new DefaultColumnConfiguration(null, null, null,
                     property, true, false, true, false, 150, true, true, false, DataType.STRING, true, null,
                     'Translatable#Organisation'
+                );
+                break;
+            case UserProperty.IS_AGENT:
+            case UserProperty.IS_CUSTOMER:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, false, true, true, false, undefined, true, true, true, undefined
                 );
                 break;
             default:

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -93,17 +93,16 @@ export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
         return property === KIXObjectProperty.VALID_ID;
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
         return true;
     }
 
-    public async getTreeNodes(property: string): Promise<TreeNode[]> {
-        const nodes = await OrganisationService.getInstance().getTreeNodes(property, true);
-        return nodes;
+    public getTreeNodes(property: string): Promise<TreeNode[]> {
+        return OrganisationService.getInstance().getTreeNodes(property, true);
     }
 
 }

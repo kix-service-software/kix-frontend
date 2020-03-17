@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,9 +8,10 @@
  */
 
 import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Role } from "../../../model/Role";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { RoleProperty } from "../../../model/RoleProperty";
+import { KIXObjectSpecificCreateOptions } from "../../../../../model/KIXObjectSpecificCreateOptions";
+import { RoleUsageContextTypes } from "../../../model/RoleUsageContextTypes";
 
 
 export class UserRoleFormService extends KIXObjectFormService {
@@ -43,6 +44,26 @@ export class UserRoleFormService extends KIXObjectFormService {
             } else {
                 parameter.push([property, value]);
             }
+        }
+
+        return parameter;
+    }
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<Array<[string, any]>> {
+
+        const contextParameter = parameter.find((p) => p[0] === RoleProperty.USAGE_CONTEXT);
+
+        if (contextParameter) {
+            let usageContext = 0;
+            if (contextParameter[1].find((v) => v === RoleUsageContextTypes.AGENT)) {
+                usageContext += 1;
+            }
+            if (contextParameter[1].find((v) => v === RoleUsageContextTypes.CUSTOMER)) {
+                usageContext += 2;
+            }
+            contextParameter[1] = usageContext.toString();
         }
 
         return parameter;

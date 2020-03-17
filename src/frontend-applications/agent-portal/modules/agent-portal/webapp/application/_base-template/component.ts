@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,7 +19,6 @@ import {
 } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { IUIModule } from '../../../../../model/IUIModule';
-import { TranslationService } from '../../../../translation/webapp/core';
 import { ClientNotificationSocketClient } from '../../../../notification/webapp/core/ClientNotificationSocketClient';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ClientStorageService } from '../../../../base-components/webapp/core/ClientStorageService';
@@ -55,9 +54,6 @@ class Component {
         await this.initModules();
         const endInitModules = Date.now();
         console.debug(`modules initialization finished: ${endInitModules - startInitModules}ms`);
-
-
-        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Close Sidebars']);
 
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'BASE-TEMPLATE',
@@ -131,10 +127,10 @@ class Component {
         if (context) {
             this.state.hasExplorer = context.isExplorerBarShown();
             this.hideSidebarIfNeeded();
-            this.state.showSidebar = context.isSidebarShown();
+            this.state.showSidebar = context.areSidebarsShown();
             context.registerListener(this.contextListernerId, {
                 sidebarToggled: () => {
-                    this.state.showSidebar = context.isSidebarShown();
+                    this.state.showSidebar = context.areSidebarsShown();
                 },
                 explorerBarToggled: () => {
                     this.state.hasExplorer = context.isExplorerBarShown();
@@ -148,16 +144,16 @@ class Component {
         }
     }
 
-    public hideSidebarIfNeeded(): void {
+    private hideSidebarIfNeeded(): void {
         const context: Context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (context &&
-            context.isSidebarShown() &&
+            context.areSidebarsShown() &&
             (
                 (!this.state.hasExplorer && window.innerWidth <= 1475) ||
                 (this.state.hasExplorer && window.innerWidth <= 1700)
             )
         ) {
-            context.closeSidebar();
+            context.closeAllSidebars();
         }
     }
 

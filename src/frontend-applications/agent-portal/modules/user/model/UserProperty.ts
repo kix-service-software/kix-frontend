@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,37 +13,31 @@ export enum UserProperty {
 
     USER_LOGIN = 'UserLogin',
 
-    USER_TITLE = 'UserTitle',
-
-    USER_FULLNAME = 'UserFullname',
-
-    USER_FIRSTNAME = 'UserFirstname',
-
-    USER_LASTNAME = 'UserLastname',
-
     PREFERENCES = 'Preferences',
 
-    USER_EMAIL = 'UserEmail',
-
-    USER_PHONE = 'UserPhone',
-
-    USER_MOBILE = 'UserMobile',
-
-    LAST_LOGIN = 'UserLastLogin',
+    USER_LAST_LOGIN = 'UserLastLogin',
 
     USER_COMMENT = 'UserComment',
 
     USER_PASSWORD = 'UserPw',
 
-    ROLEIDS = 'RoleIDs',
+    IS_AGENT = 'IsAgent',
+
+    IS_CUSTOMER = 'IsCustomer',
+
+    ROLE_IDS = 'RoleIDs',
 
     USER_LANGUAGE = 'UserLanguage',
 
     MY_QUEUES = 'MyQueues',
 
+    CONTACT = 'Contact',
+
     // UI properties
     USER_VALID = 'UserValid',
 
-    NOTIFICATIONS = 'NotificationTransport'
+    NOTIFICATIONS = 'NotificationTransport',
+
+    USER_ACCESS = 'USER_ACCESS'
 
 }

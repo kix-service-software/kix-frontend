@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,7 +10,7 @@
 import { IUIModule } from "../../../../model/IUIModule";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import {
-    ContactPlaceholderHandler, ContactService, ContactFormService, ContactTableFactory,
+    ContactService, ContactFormService, ContactTableFactory,
     ContactLabelProvider, ContactBrowserFactory, ContactSearchDefinition, ContactDetailsContext,
     ContactSearchContext, ContactSearchAction, ContactCSVExportAction, ContactTableDependingAction
 } from ".";
@@ -25,6 +25,7 @@ import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
+import { ContactPlaceholderHandler } from "./ContactPlaceholderHandler";
 
 export class UIModule implements IUIModule {
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -49,6 +49,8 @@ export enum KIXObjectType {
 
     DYNAMIC_FIELD = 'DynamicField',
 
+    DYNAMIC_FIELD_TYPE = 'DynamicFieldType',
+
     EXEC_PLAN = 'ExecPlan',
 
     EXEC_PLAN_TYPE = 'ExecPlanType',
@@ -62,8 +64,6 @@ export enum KIXObjectType {
     FAQ_CATEGORY = 'FAQCategory',
 
     FAQ_VOTE = 'FAQVote',
-
-    FAQ_VISIBILITY = 'FAQVisibility',
 
     FAQ_KEYWORD = 'FAQKeyword',
 

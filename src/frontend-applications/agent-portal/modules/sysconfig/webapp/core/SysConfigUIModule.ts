@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,6 +23,9 @@ import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { SysConfigService } from "./SysConfigService";
 import { SysConfigTableCSSHandler } from "./table";
+import { ActionFactory } from "../../../base-components/webapp/core/ActionFactory";
+import { SysconfigTableResetAction } from "./SysconfigTableResetAction";
+import { ReloadConfigurationCacheAction } from './ReloadConfigurationCacheAction';
 
 export class UIModule implements IUIModule {
 
@@ -56,6 +59,9 @@ export class UIModule implements IUIModule {
             false, 'edit-sysconfig-dialog', ['sysconfig'], EditSysConfigDialogContext
         );
         await ContextService.getInstance().registerContext(editSysConfigDialogContext);
+
+        ActionFactory.getInstance().registerAction('sysconfig-reset-action', SysconfigTableResetAction);
+        ActionFactory.getInstance().registerAction('activate-configuration', ReloadConfigurationCacheAction);
     }
 
 }

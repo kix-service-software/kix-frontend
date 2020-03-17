@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,11 +12,10 @@ import { PlaceholderService } from "../../../../modules/base-components/webapp/c
 import { UserPlaceholderHandler } from "./UserPlaceholderHandler";
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import {
-    RoleService, UserRoleFormService, RoleTableFactory, UserTableFactory, UserCreateAction, NewUserDialogContext,
-    UserEditAction, EditUserDialogContext, UserDetailsContext, UserRoleCreateAction, NewUserRoleDialogContext,
+    RoleService, UserRoleFormService, RoleTableFactory, UserTableFactory, UserCreateAction,
+    UserEditAction, UserDetailsContext, UserRoleCreateAction, NewUserRoleDialogContext,
     UserRoleEditAction, EditUserRoleDialogContext, RoleDetailsContext
 } from "./admin";
-import { UserFormService } from "./UserFormService";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
 import { UserLabelProvider } from "./UserLabelProvider";
 import { RoleLabelProvider } from "./RoleLabelProvider";
@@ -38,6 +37,7 @@ import { PersonalSettingsDialogContext } from "./PersonalSettingsDialogContext";
 import { UserPasswordValidator } from "./UserPasswordValidator";
 import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
 import { AgentService } from "./AgentService";
+import { PersonalSettingsFormService } from "./PersonalSettingsFormService";
 
 
 export class UIModule implements IUIModule {
@@ -55,7 +55,7 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerServiceInstance(AgentService.getInstance());
         ServiceRegistry.registerServiceInstance(RoleService.getInstance());
-        ServiceRegistry.registerServiceInstance(UserFormService.getInstance());
+        ServiceRegistry.registerServiceInstance(PersonalSettingsFormService.getInstance());
 
         LabelService.getInstance().registerLabelProvider(new UserLabelProvider());
         LabelService.getInstance().registerLabelProvider(new RoleLabelProvider());
@@ -93,21 +93,7 @@ export class UIModule implements IUIModule {
 
         ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
 
-        const newUserContext = new ContextDescriptor(
-            NewUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
-            ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-user-dialog', ['users'], NewUserDialogContext
-        );
-        await ContextService.getInstance().registerContext(newUserContext);
-
         ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
-
-        const editUserContext = new ContextDescriptor(
-            EditUserDialogContext.CONTEXT_ID, [KIXObjectType.USER],
-            ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-user-dialog', ['users'], EditUserDialogContext
-        );
-        await ContextService.getInstance().registerContext(editUserContext);
 
         const userDetailsContextDescriptor = new ContextDescriptor(
             UserDetailsContext.CONTEXT_ID, [KIXObjectType.USER],

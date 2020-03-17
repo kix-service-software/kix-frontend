@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -111,6 +111,7 @@ class Component {
                             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID, true
                         );
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
+                        ContextService.getInstance().updateObjectLists(KIXObjectType.CONFIG_ITEM);
                     }).catch((error: Error) => {
                         DialogService.getInstance().setMainDialogLoading(false);
                         BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
@@ -140,7 +141,7 @@ class Component {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
         );
     }
 

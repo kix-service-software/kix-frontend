@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,6 +26,7 @@ import { NotificationMessage } from "../../model/NotificationMessage";
 import { Notification } from "../../model/Notification";
 import { TicketProperty } from "../../../ticket/model/TicketProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { IdService } from "../../../../model/IdService";
 
 export class NotificationFormService extends KIXObjectFormService {
 
@@ -144,6 +145,7 @@ export class NotificationFormService extends KIXObjectFormService {
                 'Translatable#Helptext_Admin_NotificationEdit_MessageSubject' :
                 'Translatable#Helptext_Admin_NotificationCreate_MessageSubject'
         );
+        subjectField.instanceId = IdService.generateDateBasedId(`notification-${language[0]}`);
         const bodyField = new FormFieldConfiguration(
             'body-field',
             'Translatable#Text', `${NotificationProperty.MESSAGE_BODY}###${language[0]}`, 'rich-text-input', true,
@@ -152,12 +154,14 @@ export class NotificationFormService extends KIXObjectFormService {
                 'Translatable#Helptext_Admin_NotificationCreate_MessageText',
             [new FormFieldOption('NO_IMAGES', true)]
         );
+        bodyField.instanceId = IdService.generateDateBasedId(`notification-${language[0]}`);
         const languagField = new FormFieldConfiguration(
             'language-field',
             language[1], null, null, null, null, null, null, null, [subjectField, bodyField],
             undefined, undefined, undefined, undefined, undefined, undefined, undefined,
             true, true
         );
+        languagField.instanceId = IdService.generateDateBasedId(`notification-${language[0]}`);
         return languagField;
     }
 

@@ -1,5 +1,5 @@
 <!--
-Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
@@ -8,10 +8,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 -->
 
 <div.link-input>
-    <if(state.loading)>
-        <loading-spinner/>
-    </if>
-    <else>
+    <if(!state.loading)>
         <if(state.allowCreate)>
             <button.form-button type="button" title=state.translations["Assign Links"] on-click("openDialog")>
                 <span.kix-icon-new-link/>
@@ -45,5 +42,5 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <if(!state.minimized)>
             <label-list labels=state.labels on-removeLabel("removeLink")/>
         </if>
-    </else>
+    </if>
 </div>

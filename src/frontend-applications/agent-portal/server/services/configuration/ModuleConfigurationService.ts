@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,6 +26,7 @@ import { SearchOperator } from "../../../modules/search/model/SearchOperator";
 import { FormContext } from "../../../model/configuration/FormContext";
 import { FormConfiguration } from "../../../model/configuration/FormConfiguration";
 import { SysConfigAccessLevel } from "../../../modules/sysconfig/model/SysConfigAccessLevel";
+import { SysConfigOptionProperty } from "../../../modules/sysconfig/model/SysConfigOptionProperty";
 
 export class ModuleConfigurationService {
 
@@ -64,38 +65,13 @@ export class ModuleConfigurationService {
     public async loadConfiguration<T extends IConfiguration>(token: string, id: string): Promise<T> {
         let configuration: T;
 
-        let cachedOptions = await CacheService.getInstance().get(
-            'ModuleConfigurationService::SysConfigOption', 'ModuleConfigurationService'
-        );
+        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            token, 'ModuleConfigurationService::SysConfigOption', KIXObjectType.SYS_CONFIG_OPTION, [id], null, null
+        ).catch(() => []);
 
-        let option;
-        if (!cachedOptions) {
-            cachedOptions = [];
+        if (options && options.length && options[0].Value) {
+            configuration = JSON.parse(options[0].Value);
         }
-
-        option = cachedOptions.find((o) => o.Name === id);
-        if (!option) {
-            const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, [id], null, null
-            ).catch((error) => {
-                LoggingService.getInstance().error(`Could not load configuration: ${id}`);
-                return null;
-            });
-
-            if (options && options.length) {
-                option = options[0];
-                cachedOptions.push(option);
-            }
-        }
-
-        CacheService.getInstance().set(
-            'ModuleConfigurationService::SysConfigOption', cachedOptions, 'ModuleConfigurationService'
-        );
-
-        if (option && option.Value) {
-            configuration = JSON.parse(option.Value);
-        }
-
 
         return configuration;
     }
@@ -103,49 +79,17 @@ export class ModuleConfigurationService {
     public async loadConfigurations<T extends IConfiguration>(token: string, ids: string[]): Promise<T[]> {
         let configurations: T[];
 
-        let cachedOptions = await CacheService.getInstance().get(
-            'ModuleConfigurationService::SysConfigOption', 'ModuleConfigurationService'
-        );
+        const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
+            token, 'ModuleConfigurationService::SysConfigOption', KIXObjectType.SYS_CONFIG_OPTION, null,
+            new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    SysConfigOptionProperty.NAME, SearchOperator.IN, FilterDataType.STRING, FilterType.OR,
+                    ids
+                )
+            ]), null
+        ).catch((): SysConfigOption[] => []);
 
-        const options = [];
-        if (!cachedOptions) {
-            cachedOptions = [];
-        }
-
-        const optionsToLoad = [];
-        ids.forEach((id) => {
-            const option = cachedOptions.find((o) => o.Name === id);
-            if (option) {
-                options.push(option);
-            } else {
-                optionsToLoad.push(id);
-            }
-        });
-
-        if (optionsToLoad.length) {
-            const loadedOptions = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                token, 'ModuleConfigurationService', KIXObjectType.SYS_CONFIG_OPTION, optionsToLoad, null, null
-            ).catch((error) => {
-                LoggingService.getInstance().error(`Could not load configuration: ${optionsToLoad}`);
-                return null;
-            });
-
-            if (loadedOptions && loadedOptions.length) {
-                loadedOptions.forEach((lo) => {
-                    cachedOptions.push(lo);
-                    options.push(lo);
-                });
-            }
-        }
-
-        CacheService.getInstance().set(
-            'ModuleConfigurationService::SysConfigOption', cachedOptions, 'ModuleConfigurationService'
-        );
-
-        if (options) {
-            configurations = options.filter((o) => o.Value).map((o) => JSON.parse(o.Value));
-        }
-
+        configurations = options.filter((o) => o.Value).map((o) => JSON.parse(o.Value));
 
         return configurations;
     }

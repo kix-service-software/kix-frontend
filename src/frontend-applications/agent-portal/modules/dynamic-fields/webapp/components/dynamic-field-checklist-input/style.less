@@ -1,0 +1,78 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.check-list-container {
+    margin: 0.5rem 1rem 1rem 1rem;
+
+    .checklist-progress-container {
+        display: grid;
+        grid-template-columns: 3fr 10fr 1.5rem;
+        grid-column-gap: @margin-small;
+        align-items: center;
+        text-align: right;
+
+        >.progress {
+            grid-template-columns: auto 2rem;
+
+            progress {
+                width: 100%;
+            }
+        }
+
+        .form-separator {
+            background-color: @secondary-3;
+            height: 1px;
+        }
+
+        span.minimize-icon {
+            font-size: 1.5rem;
+        }
+
+        &:hover {
+            cursor: pointer;
+        }
+    }
+
+    .checklist-item {
+        display: grid;
+        grid-template-columns: auto 15rem;
+        grid-row-gap: @margin-small;
+        align-items: center;
+        margin-bottom: @margin-small;
+        margin-right: 3rem;
+        margin-left: 1.5rem;
+        border-bottom: 1px solid @secondary-3;
+
+        .checklist-item-text {
+            grid-column: 1 / span 2;
+        }
+
+        .checklist-item-title {
+            .checklist-item-description {
+                font-style: italic;
+                color: @secondary-1;
+            }
+        }
+
+        .checklist-sub-item-container {
+            grid-column: 1 / span 2;
+
+            .checklist-item {
+                margin-left: 1.5rem;
+                margin-right: 0;
+
+                &:last-child {
+                    border: 0;
+                }
+            }
+        }
+
+
+    }
+}

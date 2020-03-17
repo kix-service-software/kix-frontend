@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -36,8 +36,13 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { UserProperty } from "../user/model/UserProperty";
+import { ContactProperty } from "../customer/model/ContactProperty";
+import { OrganisationProperty } from "../customer/model/OrganisationProperty";
+import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
+import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 
 export class EditTicketDialogModuleExtension implements IConfigurationExtension {
 
@@ -52,13 +57,13 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             ConfigurationType.ObjectInformation,
             KIXObjectType.ORGANISATION,
             [
-                'Number',
-                'Name',
-                'Url',
-                'Street',
-                'Zip',
-                'City',
-                'Country'
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
             ], true
         );
         configurations.push(organisationInformation);
@@ -78,14 +83,14 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
             [
-                'Login',
-                'Title',
-                'Lastname',
-                'Firstname',
-                'PrimaryOrganisationID',
-                'Phone',
-                'Mobile',
-                'Email'
+                UserProperty.USER_LOGIN,
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.EMAIL
             ], true
         );
         configurations.push(contactInformation);
@@ -104,13 +109,55 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
         );
         configurations.push(helpSettings);
 
-        const helpWidget = new WidgetConfiguration(
-            'ticket-edit-dialog-help-widget', 'Help Widget', ConfigurationType.Widget,
-            'help-widget', 'Translatable#Text Modules', [],
-            new ConfigurationDefinition('ticket-edit-dialog-help-widget-config', ConfigurationType.HelpWidget),
-            null, false, false, 'kix-icon-textblocks'
+        const ticketsForAssetsWidget = new WidgetConfiguration(
+            'ticket-edit-dialog-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-edit-object-reference-widget-config', 'Tickets for Assets',
+                'TicketsForAssetsHandler',
+                {
+                    properties: [
+                        'DynamicFields.AffectedAsset'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-ticket'
         );
-        configurations.push(helpWidget);
+        configurations.push(ticketsForAssetsWidget);
+
+        const suggestedFAQWidget = new WidgetConfiguration(
+            'ticket-edit-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-edit-suggested-faq-config', 'Suggested FAQ',
+                'SuggestedFAQHandler',
+                {
+                    properties: [
+                        'Title',
+                        'Subject'
+                    ],
+                    minLength: 3
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Title', true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Votes', true, false, false, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-faq'
+        );
+        configurations.push(suggestedFAQWidget);
 
         const widget = new WidgetConfiguration(
             'ticket-edit-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
@@ -127,7 +174,12 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                         'ticket-edit-dialog-organisation-widget', 'ticket-edit-dialog-organisation-widget'
                     ),
                     new ConfiguredWidget('ticket-edit-dialog-contact-widget', 'ticket-edit-dialog-contact-widget'),
-                    new ConfiguredWidget('ticket-edit-dialog-help-widget', 'ticket-edit-dialog-help-widget')
+                    new ConfiguredWidget(
+                        'ticket-edit-dialog-object-reference-widget', 'ticket-edit-dialog-object-reference-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget'
+                    )
                 ],
                 [], [], [], [], [], [], [],
                 [
@@ -207,7 +259,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                                 )
                             ],
                             null, null,
-                            [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'],
+                            [QueueProperty.SUB_QUEUES],
                             [QueueProperty.SUB_QUEUES]
                         )
                     )
@@ -278,7 +330,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
             new FormFieldConfiguration(
                 'ticket-edit-form-field-priority',
                 'Translatable#Priority', TicketProperty.PRIORITY_ID, 'object-reference-input', true,
-                'Translatable#Helptext_Tickets_TicketCreate_Priority',
+                'Translatable#Helptext_Tickets_TicketEdit_Priority',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
 
@@ -310,6 +362,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                     'ticket-edit-form-field-title',
                     'ticket-edit-form-field-contact',
                     'ticket-edit-form-field-organisation',
+                    'ticket-edit-form-field-affectedasset',
                     'ticket-edit-form-field-type',
                     'ticket-edit-form-field-queue',
                     'ticket-edit-form-field-channel',
@@ -317,6 +370,27 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                     'ticket-edit-form-field-responsible',
                     'ticket-edit-form-field-priority',
                     'ticket-edit-form-field-state'
+                ], null,
+                [
+                    new FormFieldConfiguration(
+                        'ticket-edit-form-field-planbegin', null, KIXObjectProperty.DYNAMIC_FIELDS, null, false, null,
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'PlanBegin')
+                        ]
+                    ),
+                    new FormFieldConfiguration(
+                        'ticket-edit-form-field-planend', null, KIXObjectProperty.DYNAMIC_FIELDS, null, false, null,
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'PlanEnd')
+                        ]
+                    ),
+                    new FormFieldConfiguration(
+                        'ticket-edit-form-field-affectedasset', null, KIXObjectProperty.DYNAMIC_FIELDS, null,
+                        false, 'Translatable#Helptext_Tickets_TicketEdit_AffectedAsset',
+                        [
+                            new FormFieldOption(DynamicFormFieldOption.FIELD_NAME, 'AffectedAsset')
+                        ]
+                    )
                 ]
             )
         );

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,7 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { OrganisationDetailsContext, ContactDetailsContext } from '../../core';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ContactProperty } from '../../../model/ContactProperty';
+import { UserProperty } from '../../../../user/model/UserProperty';
 
 class Component {
 
@@ -49,19 +50,21 @@ class Component {
 
     private async initRoutingConfiguration(): Promise<void> {
         if (this.state.object.KIXObjectType === KIXObjectType.ORGANISATION) {
-            if (this.state.property === OrganisationProperty.ID
-                || this.state.property === OrganisationProperty.NAME) {
-                const context = await ContextService.getInstance().getContext(OrganisationDetailsContext.CONTEXT_ID);
+            if (
+                this.state.property === OrganisationProperty.ID
+                || this.state.property === OrganisationProperty.NAME
+            ) {
                 this.routingConfiguration = new RoutingConfiguration(
                     OrganisationDetailsContext.CONTEXT_ID, KIXObjectType.ORGANISATION,
                     ContextMode.DETAILS, OrganisationProperty.ID, false
                 );
             }
         } else if (this.state.object.KIXObjectType === KIXObjectType.CONTACT) {
-            if (this.state.property === ContactProperty.FIRSTNAME
+            if (
+                this.state.property === ContactProperty.FIRSTNAME
                 || this.state.property === ContactProperty.LASTNAME
-                || this.state.property === ContactProperty.LOGIN) {
-                const context = await ContextService.getInstance().getContext(ContactDetailsContext.CONTEXT_ID);
+                || this.state.property === UserProperty.USER_LOGIN
+            ) {
                 this.routingConfiguration = new RoutingConfiguration(
                     ContactDetailsContext.CONTEXT_ID, KIXObjectType.CONTACT,
                     ContextMode.DETAILS, ContactProperty.ID, false

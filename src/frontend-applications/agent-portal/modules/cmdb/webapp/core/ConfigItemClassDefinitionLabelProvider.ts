@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,8 @@ import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/Da
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { User } from "../../../user/model/User";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<ConfigItemClassDefinition> {
 
@@ -49,15 +51,6 @@ export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<Config
         let displayValue = ciClassDefinition[property];
 
         switch (property) {
-            case ConfigItemClassDefinitionProperty.CREATE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
-            case ConfigItemClassDefinitionProperty.CREATE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [displayValue], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                break;
             case ConfigItemClassDefinitionProperty.CURRENT:
                 displayValue = value ? 'Translatable#(Current definition)' : '';
                 break;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -47,7 +47,7 @@ export class Version extends KIXObject<Version> {
     public constructor(version?: Version) {
         super();
         if (version) {
-            this.VersionID = version.VersionID;
+            this.VersionID = Number(version.VersionID);
             this.ObjectId = this.VersionID;
             this.CreateTime = version.CreateTime;
             this.CurDeplStateType = version.CurDeplStateType;

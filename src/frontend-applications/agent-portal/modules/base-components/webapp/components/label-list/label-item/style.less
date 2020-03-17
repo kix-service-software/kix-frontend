@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,9 +12,11 @@
     overflow: hidden;
     display: inline-block;
     max-width: 100%;
+
     &:not(:last-child) {
         margin-right: @margin-small;
     }
+
     >.label-item {
         display: grid;
         grid-auto-flow: column;
@@ -25,21 +27,26 @@
         border-radius: @border-radius;
         padding: 0 @margin-small;
         white-space: nowrap;
+
         &.toggled {
             border: 1px solid @secondary-7;
         }
+
         span:first-child[class^="kix-icon-"],
         span:first-child[class*=" kix-icon-"] {
             font-size: .875rem;
         }
+
         .label-text {
             .shorten-text;
             align-self: end;
         }
-        .kix-icon-close {
+
+        .label-item-remove {
             font-size: .75rem;
             color: @secondary-2;
             cursor: pointer;
+
             &:hover {
                 color: darken(@secondary-2, 20%);
             }

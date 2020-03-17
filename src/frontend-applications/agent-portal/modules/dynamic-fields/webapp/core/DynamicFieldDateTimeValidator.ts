@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,7 @@
  */
 
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { IFormFieldValidator } from "../../../base-components/webapp/core/IFormFieldValidator";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
 import { FormService } from "../../../base-components/webapp/core/FormService";
@@ -17,13 +17,7 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFormFieldOption } from "./DynamicFormFieldOption";
 import { DynamicField } from "../../model/DynamicField";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
+import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 
 export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
 
@@ -41,35 +35,18 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
             const nameOption = formField.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
 
             if (nameOption) {
-                const dynamicField = await this.getDynamicField(nameOption.value);
-                return await this.checkDynamicField(dynamicField, fieldValue, formField.label);
+                const dynamicField = await KIXObjectService.loadDynamicField(nameOption.value);
+                if (this.isValidatorForDF(dynamicField)) {
+                    return await this.checkDynamicField(dynamicField, fieldValue, formField.label);
+                }
             }
         }
         return new ValidationResult(ValidationSeverity.OK, '');
     }
 
-    private async getDynamicField(name: string): Promise<DynamicField> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, name
-                )
-            ], null, null, [DynamicFieldProperty.CONFIG]
-        );
-        const fields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-        );
-
-        const dynamicField = fields && fields.length ? fields[0] : null;
-
-        return dynamicField && (dynamicField.FieldType === 'Date' || dynamicField.FieldType === 'DateTime')
-            ? dynamicField
-            : null;
-    }
-
     public isValidatorForDF(dynamicField: DynamicField): boolean {
-        return dynamicField.FieldType === 'Date' || dynamicField.FieldType === 'DateTime';
+        return dynamicField.FieldType === DynamicFieldTypes.DATE ||
+            dynamicField.FieldType === DynamicFieldTypes.DATE_TIME;
     }
 
     public async validateDF(dynamicField: DynamicField, value: any): Promise<ValidationResult> {
@@ -86,7 +63,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
                 const restricition = dynamicField.Config.DateRestriction;
                 const currentTime = new Date();
 
-                if (dynamicField.FieldType === 'Date') {
+                if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
                     currentTime.setHours(0, 0, 0, 0);
                 }
 

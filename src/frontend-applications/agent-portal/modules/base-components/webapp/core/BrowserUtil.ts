@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,7 +21,7 @@ export class BrowserUtil {
 
     public static openErrorOverlay(error: string): void {
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', null, true
         );
     }
 
@@ -40,14 +40,14 @@ export class BrowserUtil {
         const content = new ComponentContent(
             'confirm-overlay', new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels)
         );
-        OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, false);
+        OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, null, false);
     }
 
     public static openAppRefreshOverlay(message: string, reloadApp?: boolean): void {
         const settings = new RefreshToastSettings(message, reloadApp);
         const componentContent = new ComponentContent('refresh-app-toast', settings);
         OverlayService.getInstance().openOverlay(
-            OverlayType.HINT_TOAST, null, componentContent, '', false, null, null, null, null, false
+            OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, true
         );
     }
 

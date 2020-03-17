@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,10 +20,15 @@
         line-height: @form-list-tree-node-size;
 
         &.navigation-node,
-        &:hover:not(.active):not(.show-as-invalid) {
+        &:hover {
+            &:not(.not-clickable) {
+                >.node-value {
+                    font-weight: bold;
+                }
+            }
+
             >.node-value {
                 background: @secondary-5;
-                font-weight: bold;
             }
         }
 
@@ -39,11 +44,11 @@
             }
         }
 
-        &.show-as-invalid {
-            &.not-clickable {
-                cursor: initial;
-            }
+        &.not-clickable {
+            cursor: initial;
+        }
 
+        &.show-as-invalid {
             >.node-value {
                 color: @secondary-1
             }

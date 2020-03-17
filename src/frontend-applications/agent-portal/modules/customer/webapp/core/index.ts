@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,7 +16,6 @@ export { ContactFormService } from './ContactFormService';
 export { ContactLabelProvider } from './ContactLabelProvider';
 export { ContactBrowserFactory } from './ContactBrowserFactory';
 export { ContactSearchDefinition } from './ContactSearchDefinition';
-export { ContactPlaceholderHandler } from './ContactPlaceholderHandler';
 export { ContactDialogUtil } from './ContactDialogUtil';
 
 export { OrganisationService } from './OrganisationService';
@@ -25,7 +24,6 @@ export { OrganisationBrowserFactory } from './OrganisationBrowserFactory';
 export { OrganisationSearchDefinition } from './OrganisationSearchDefinition';
 export { OrganisationFormService } from './OrganisationFormService';
 export { OrganisationImportManager } from './OrganisationImportManager';
-export { OrganisationPlaceholderHandler } from './OrganisationPlaceholderHandler';
 export { OrganisationDialogUtil } from './OrganisationDialogUtil';
 
 export { UIModule as CustomerUIModule } from './CustomerUIModule';

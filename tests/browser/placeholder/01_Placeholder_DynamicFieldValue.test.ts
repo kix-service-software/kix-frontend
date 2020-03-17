@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,11 +14,11 @@ import chaiAsPromised = require('chai-as-promised');
 import { KIXObject } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObject';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { DynamicFieldValue } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldValue';
-import { DynamicFieldValuePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/webapp/core';
+import { DynamicFieldValuePlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { DynamicField } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicField';
-import { DynamicFieldProperty } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldProperty';
-import { DynamicFieldType } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldType';
+import { DynamicFieldTypes } from '../../../src/frontend-applications/agent-portal/modules/dynamic-fields/model/DynamicFieldTypes';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -32,35 +32,40 @@ describe('Placeholder replacement for dynamic field values', () => {
     let sepatator: string = '###';
     before(() => {
         object = someTestFunctions.prepareObject();
+
+        (TranslationService.getUserLanguage) = async (): Promise<string> => 'en';
+        (TranslationService.getInstance() as any).translations = {};
+
         testDFValues = someTestFunctions.getDynamicFieldValues();
 
-        orgFuntion = KIXObjectService.loadObjects;
-        KIXObjectService.loadObjects = (objectType, objectIds?, loadingOptions?, objectLoadingOptions?, silent?, cache?): Promise<any> => {
-            const dynamicFields: DynamicField[] = [];
-            if (loadingOptions && loadingOptions.filter) {
-                const nameFilter = loadingOptions.filter.find((c) => c.property === DynamicFieldProperty.NAME);
-                if (nameFilter && nameFilter.value === testDFValues[2].Name) {
-                    dynamicFields.push(
-                        new DynamicField({
-                            Name: nameFilter.value,
-                            FieldType: DynamicFieldType.SELECTION,
-                            ValidID: 1,
-                            Config: {
-                                ItemSeparator: sepatator
-                            }
-                        } as DynamicField)
-                    )
+        orgFuntion = KIXObjectService.loadDynamicField;
+        KIXObjectService.loadDynamicField = (dfName: string): Promise<DynamicField> => {
+            let dynamicField: DynamicField;
+            if (dfName) {
+                dynamicField = new DynamicField({
+                    Name: dfName,
+                    FieldType: DynamicFieldTypes.TEXT,
+                    ValidID: 1,
+                    Config: {
+                        ItemSeparator: sepatator
+                    }
+                } as DynamicField);
+                if (dfName === testDFValues[2].Name) {
+                    dynamicField.FieldType = DynamicFieldTypes.SELECTION;
+                } else if (dfName === testDFValues[3].Name) {
+                    dynamicField.FieldType = DynamicFieldTypes.CI_REFERENCE;
                 }
             }
             return new Promise((resolve, reject) => {
-                resolve(dynamicFields);
+                resolve(dynamicField);
                 reject();
             });
         }
     });
 
     after(() => {
-        KIXObjectService.loadObjects = orgFuntion;
+        KIXObjectService.loadDynamicField = orgFuntion;
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace dynamic field placeholders', async () => {
@@ -77,6 +82,18 @@ describe('Placeholder replacement for dynamic field values', () => {
             expect(text).equal(fieldValue.DisplayValue);
         });
 
+        it('Should replace text placeholder with html value string (with use of "HTML" option)', async () => {
+            const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[0].Name}_HTML>`, object);
+            const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[0].Name);
+            expect(text).equal(fieldValue.DisplayValueHTML);
+        });
+
+        it('Should replace text placeholder with short value string (with use of "Short" option)', async () => {
+            const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[0].Name}_Short>`, object);
+            const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[0].Name);
+            expect(text).equal(fieldValue.DisplayValueShort);
+        });
+
         it('Should replace selection placeholder with value string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[2].Name}>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[2].Name);
@@ -86,6 +103,18 @@ describe('Placeholder replacement for dynamic field values', () => {
         it('Should replace selection placeholder with key string', async () => {
             const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[2].Name}_Key>`, object);
             const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[2].Name);
+            expect(text).equal((fieldValue.Value as string[]).join(sepatator));
+        });
+
+        it('Should replace CI reference placeholder with value string', async () => {
+            const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[3].Name}>`, object);
+            const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[3].Name);
+            expect(text).equal(fieldValue.DisplayValue);
+        });
+
+        it('Should replace CI refernece placeholder with key string', async () => {
+            const text = await dFValuePlaceholderHandler.replace(`<KIX_ANY_DynamicField_${testDFValues[3].Name}_Key>`, object);
+            const fieldValue = object.DynamicFields.find((v) => v.Name === testDFValues[3].Name);
             expect(text).equal((fieldValue.Value as string[]).join(sepatator));
         });
 
@@ -118,7 +147,9 @@ class someTestFunctions {
                 {
                     ID: '1', Name: 'TextDF', Label: 'Text DF',
                     Value: ['Test Text', 'Test Text 2'],
-                    DisplayValue: 'Test Text, Test Text 2'
+                    DisplayValue: 'Test Text, Test Text 2',
+                    DisplayValueHTML: 'HTML',
+                    DisplayValueShort: 'short'
                 } as DynamicFieldValue
             ),
             new DynamicFieldValue(
@@ -135,8 +166,14 @@ class someTestFunctions {
             ),
             new DynamicFieldValue(
                 {
+                    ID: '1', Name: 'CIReference', Label: 'CI Reference DF',
+                    Value: ['1', '3', '5'], DisplayValue: 'CI1, CI2, CI3'
+                } as DynamicFieldValue
+            ),
+            new DynamicFieldValue(
+                {
                     ID: '1', Name: 'DateTimeDF', Label: 'Date Time DF',
-                    Value: ['2020-01-13 08:17:30'], DisplayValue: 'ReplaceMe :D'
+                    Value: ['2020-01-13 08:17:30'], DisplayValue: 'ReplaceMe'
                 } as DynamicFieldValue
             ),
         ];

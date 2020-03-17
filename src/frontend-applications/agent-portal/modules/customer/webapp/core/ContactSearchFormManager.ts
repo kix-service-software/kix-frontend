@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -25,6 +25,7 @@ import { InputFieldTypes } from "../../../../modules/base-components/webapp/core
 import { TreeNode } from "../../../base-components/webapp/core/tree";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Organisation } from "../../model/Organisation";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class ContactSearchFormManager extends AbstractDynamicFormManager {
 
@@ -38,7 +39,7 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
             [ContactProperty.FIRSTNAME, null],
             [ContactProperty.LASTNAME, null],
             [ContactProperty.EMAIL, null],
-            [ContactProperty.LOGIN, null],
+            [UserProperty.USER_LOGIN, null],
             [ContactProperty.COUNTRY, null],
             [ContactProperty.STREET, null],
             [ContactProperty.ZIP, null],
@@ -106,8 +107,8 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
             || property === ContactProperty.PRIMARY_ORGANISATION_ID;
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {

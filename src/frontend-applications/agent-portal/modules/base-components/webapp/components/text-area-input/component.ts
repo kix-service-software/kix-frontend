@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,11 +17,11 @@ import { FormFieldValue } from '../../../../../model/configuration/FormFieldValu
 
 class Component extends FormInputComponent<string, ComponentState> {
 
-    private formListendenerId: string;
+    private formListenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.formListendenerId = IdService.generateDateBasedId('text-area-input');
+        this.formListenerId = IdService.generateDateBasedId('text-area-input');
     }
 
     public onInput(input: any): void {
@@ -41,7 +41,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         await super.onMount();
         this.setCurrentValue();
         FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-            formListenerId: this.formListendenerId,
+            formListenerId: this.formListenerId,
             updateForm: () => { return; },
             formValueChanged: (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
                 if (formField.instanceId === this.state.field.instanceId) {
@@ -53,8 +53,8 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onDestroy(): Promise<void> {
         super.onDestroy();
-        if (this.state.formId && this.formListendenerId) {
-            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListendenerId);
+        if (this.state.formId && this.formListenerId) {
+            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
         }
     }
 

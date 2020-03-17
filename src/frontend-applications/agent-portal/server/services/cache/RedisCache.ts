@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -32,26 +32,35 @@ export class RedisCache implements ICache {
     private setAsync: (key: string, value: string) => Promise<void>;
     private delAsync: (key: string) => Promise<void>;
     private keysAsync: (pattern: string) => Promise<string[]>;
-    private flushAllAsync: () => Promise<boolean>;
 
     private constructor() {
 
-        const config = ConfigurationService.getInstance().getServerConfiguration();
+        this.connect();
 
-        const port = config.REDIS_CACHE_PORT;
-        const host = config.REDIS_CACHE_HOST;
+        this.redisClient.on("error", (err) => {
+            LoggingService.getInstance().error("REDIS Error: " + err);
+        });
 
-        const redis = require("redis");
-        this.redisClient = redis.createClient(port, host);
+        this.redisClient.on('reconnecting', () => {
+            LoggingService.getInstance().info('REDIS: Connection reestablished');
+        });
+
+        this.redisClient.on('connect', () => {
+            LoggingService.getInstance().info('REDIS connecting');
+        });
+
+        this.redisClient.on('ready', (client) => {
+            LoggingService.getInstance().info('REDIS ready');
+        });
 
         this.getAsync = promisify(this.redisClient.get).bind(this.redisClient);
         this.setAsync = promisify(this.redisClient.set).bind(this.redisClient);
         this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
         this.keysAsync = promisify(this.redisClient.keys).bind(this.redisClient);
-        this.flushAllAsync = promisify(this.redisClient.flushall).bind(this.redisClient);
     }
 
     public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
+        LoggingService.getInstance().info('Clear Cache: (ignore) ' + ignoreKeyPrefixes.join(', '));
         let keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::*`);
         keys = keys.filter((k) => !ignoreKeyPrefixes.some((p) => k.startsWith(`${this.KIX_CACHE_PREFIX}::${p}`)));
         for (const key of keys) {
@@ -60,7 +69,12 @@ export class RedisCache implements ICache {
     }
 
     public async get(key: string, cacheKeyPrefix?: string): Promise<any> {
-        let value = await this.getAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`);
+        let value = await this.getAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`)
+            .catch((error) => {
+                LoggingService.getInstance().error(error);
+                this.checkConnection();
+                return null;
+            });
 
         try {
             value = JSON.parse(value);
@@ -75,19 +89,69 @@ export class RedisCache implements ICache {
             value = JSON.stringify(value);
         }
 
-        await this.setAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`, value);
+        await this.setAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::${key}`, value)
+            .catch(() => this.checkConnection());
     }
 
     public async delete(key: string, cacheKeyPrefix?: string): Promise<void> {
-        await this.delAsync(key);
+        await this.delAsync(key).catch(() => this.checkConnection());
     }
 
     public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
-        const keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`);
+        const keys = await this.keysAsync(`${this.KIX_CACHE_PREFIX}::${cacheKeyPrefix}::*`)
+            .catch(() => {
+                this.checkConnection();
+                return null;
+            });
         LoggingService.getInstance().debug(
             `Redis Cache: delete cacheKeyPrefix ${cacheKeyPrefix} - key count: ${keys.length}`
         );
-        keys.forEach((k) => this.delAsync(k));
+        if (keys) {
+            keys.forEach((k) => this.delAsync(k).catch(() => this.checkConnection()));
+        }
+    }
+
+    private checkConnection() {
+        if (this.redisClient && !this.redisClient.connected) {
+            LoggingService.getInstance().info('REDIS quit');
+            this.redisClient.quit();
+            this.connect();
+        }
+    }
+
+    private connect(): void {
+
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+
+        const port = config.REDIS_CACHE_PORT;
+        const host = config.REDIS_CACHE_HOST;
+
+        const redis = require("redis");
+
+        this.redisClient = redis.createClient({
+            port,
+            host,
+            retry_strategy: (options) => {
+                if (options.error) {
+                    LoggingService.getInstance().error(options.error);
+                }
+
+                if (options.error && options.error.code === 'ECONNREFUSED') {
+                    LoggingService.getInstance().error('The server refused the connection');
+                    return new Error('REDIS: The server refused the connection');
+                }
+                if (options.total_retry_time > 1000 * 60 * 60) {
+                    LoggingService.getInstance().error('Retry time exhausted');
+                    return new Error('REDIS: Retry time exhausted');
+                }
+                if (options.attempt > 10) {
+                    LoggingService.getInstance().error('REDIS: Attempts > 10');
+                    return undefined;
+                }
+
+                return Math.min(options.attempt * 100, 3000);
+            }
+        });
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -33,6 +33,8 @@ import { ISocketObjectRequest } from "./ISocketObjectRequest";
 import { SocketErrorResponse } from "./SocketErrorResponse";
 import { SocketEvent } from "./SocketEvent";
 import { Error } from "../../../../../../server/model/Error";
+import { EventService } from "./EventService";
+import { ApplicationEvent } from "./ApplicationEvent";
 
 export class KIXObjectSocketClient extends SocketClient {
 
@@ -122,6 +124,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_CREATED, objectType);
 
         return response.result;
     }
@@ -144,7 +147,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
-
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, objectType);
         return response.objectId;
     }
 
@@ -166,6 +169,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_DELETED, objectType);
     }
 
     private async sendRequest<T extends ISocketResponse>(

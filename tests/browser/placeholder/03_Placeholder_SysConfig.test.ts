@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,10 +11,11 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { SysConfigPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/webapp/core';
+import { SysConfigPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/webapp/core/SysConfigPlaceholderHandler';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { SysConfigOptionType } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOptionType';
 import { SysConfigOptionDefinition } from '../../../src/frontend-applications/agent-portal/modules/sysconfig/model/SysConfigOptionDefinition';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -28,10 +29,12 @@ describe('Placeholder replacement for SysConfig', () => {
         KIXObjectService.loadObjects = async (objectType, objectIds: string[]) => {
             return someTestFunctions.getSysConfigDefinitions(objectIds) as any[];
         }
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
         KIXObjectService.loadObjects = orgLoadFuntion;
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace SysConfig placeholder.', async () => {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,6 +21,7 @@ import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 
 export class MainDialogComponent implements IMainDialogListener {
 
+    private loadingTimeout: any;
     private state: ComponentState;
 
     private dialogId: string;
@@ -28,12 +29,27 @@ export class MainDialogComponent implements IMainDialogListener {
     public dialogTitle: string = null;
     public dialogIcon: string | ObjectIcon = null;
 
+    private keyListenerElement;
+    private keyListener;
+
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onMount(): void {
         DialogService.getInstance().registerMainDialogListener(this);
+    }
+
+    public onDestroy(): void {
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.handleKeyEvent.bind(this), false);
+        }
+    }
+
+    private handleKeyEvent(event: any): void {
+        if (event && event.key === 'Escape') {
+            this.close();
+        }
     }
 
     public open(
@@ -47,6 +63,14 @@ export class MainDialogComponent implements IMainDialogListener {
             this.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
             this.state.show = true;
+
+            setTimeout(() => {
+                this.keyListenerElement = (this as any).getEl();
+                if (this.keyListenerElement) {
+                    this.keyListener = this.handleKeyEvent.bind(this);
+                    this.keyListenerElement.addEventListener('keydown', this.keyListener, false);
+                }
+            }, 50);
         }
     }
 
@@ -62,6 +86,11 @@ export class MainDialogComponent implements IMainDialogListener {
         if (data && data.byX) {
             ContextService.getInstance().closeDialogContext();
         }
+
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.handleKeyEvent.bind(this), false);
+        }
+
         this.state.show = false;
         document.body.style.overflow = 'unset';
     }
@@ -108,11 +137,24 @@ export class MainDialogComponent implements IMainDialogListener {
         isLoading: boolean, loadingHint: string, showClose: boolean = false,
         time: number = null, cancelCallback: () => void
     ): void {
-        this.state.loadingHint = loadingHint;
-        this.state.isLoading = isLoading;
-        this.state.showClose = showClose;
-        this.state.time = time;
-        this.state.cancelCallback = cancelCallback;
+        if (this.loadingTimeout) {
+            window.clearTimeout(this.loadingTimeout);
+        }
+        if (isLoading) {
+            this.loadingTimeout = setTimeout(() => {
+                this.state.loadingHint = loadingHint;
+                this.state.isLoading = isLoading;
+                this.state.showClose = showClose;
+                this.state.time = time;
+                this.state.cancelCallback = cancelCallback;
+            }, 500);
+        } else {
+            this.state.loadingHint = loadingHint;
+            this.state.isLoading = isLoading;
+            this.state.showClose = showClose;
+            this.state.time = time;
+            this.state.cancelCallback = cancelCallback;
+        }
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,13 @@ import { DynamicFieldFactory } from "./DynamicFieldFactory";
 import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
 import { LoggingService } from "../../../../../server/services/LoggingService";
 import { Error } from "../../../../../server/model/Error";
+import { DynamicField } from "../model/DynamicField";
+import { FilterCriteria } from "../../../model/FilterCriteria";
+import { DynamicFieldProperty } from "../model/DynamicFieldProperty";
+import { SearchOperator } from "../../search/model/SearchOperator";
+import { FilterDataType } from "../../../model/FilterDataType";
+import { FilterType } from "../../../model/FilterType";
+import { KIXObjectService } from "../../base-components/webapp/core/KIXObjectService";
 
 
 export class DynamicFieldAPIService extends KIXObjectAPIService {
@@ -39,7 +46,8 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
     }
 
     public isServiceFor(type: KIXObjectType | string): boolean {
-        return type === KIXObjectType.DYNAMIC_FIELD;
+        return type === KIXObjectType.DYNAMIC_FIELD
+            || type === KIXObjectType.DYNAMIC_FIELD_TYPE;
     }
 
     public async loadObjects<T>(
@@ -51,6 +59,11 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.DYNAMIC_FIELD) {
             objects = await super.load(
                 token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'DynamicField'
+            );
+        } else if (objectType === KIXObjectType.DYNAMIC_FIELD_TYPE) {
+            const uri = this.buildUri(this.RESOURCE_URI, 'types');
+            objects = await super.load(
+                token, objectType, uri, loadingOptions, objectIds, 'DynamicFieldType'
             );
         }
 
@@ -82,6 +95,24 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
         return id;
+    }
+
+    public async loadDynamicField(token: string, name: string, id?: number): Promise<DynamicField> {
+        let dynamicFields: DynamicField[];
+        if (name || id) {
+            const filter = id ? null : [
+                new FilterCriteria(
+                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, name
+                )
+            ];
+            dynamicFields = await this.loadObjects<DynamicField>(
+                token, '',
+                KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
+                new KIXObjectLoadingOptions(filter, null, null, [DynamicFieldProperty.CONFIG]), null
+            ).catch(() => [] as DynamicField[]);
+        }
+        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -35,6 +35,8 @@ import { FAQVote } from "../../model/FAQVote";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../../../model/ContextMode";
 
 
 export class FAQService extends KIXObjectService {
@@ -60,7 +62,6 @@ export class FAQService extends KIXObjectService {
             || type === KIXObjectType.FAQ_ARTICLE_HISTORY
             || type === KIXObjectType.FAQ_CATEGORY
             || type === KIXObjectType.FAQ_VOTE
-            || type === KIXObjectType.FAQ_VISIBILITY
             || type === KIXObjectType.FAQ_KEYWORD;
     }
 
@@ -93,7 +94,7 @@ export class FAQService extends KIXObjectService {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid: boolean = false, invalidClickable: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
@@ -121,9 +122,6 @@ export class FAQService extends KIXObjectService {
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
-            case FAQArticleProperty.VISIBILITY:
-                nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.VISIBILITY);
-                break;
             case FAQArticleProperty.APPROVED:
                 nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.APPROVED);
                 break;
@@ -143,6 +141,14 @@ export class FAQService extends KIXObjectService {
                 break;
             case FAQArticleProperty.CHANGED_BY:
                 nodes = await super.getTreeNodes(KIXObjectProperty.CHANGE_BY, showInvalid, invalidClickable, filterIds);
+                break;
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                const yesText = await TranslationService.translate('Translatable#Yes');
+                const noText = await TranslationService.translate('Translatable#No');
+                nodes = [
+                    new TreeNode(0, noText, 'kix-icon-close'),
+                    new TreeNode(1, yesText, 'kix-icon-check')
+                ];
                 break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
@@ -297,6 +303,13 @@ export class FAQService extends KIXObjectService {
             match = await super.checkFilterValue(article, criteria);
         }
         return match;
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        return new RoutingConfiguration(
+            FAQDetailsContext.CONTEXT_ID, KIXObjectType.FAQ_ARTICLE,
+            ContextMode.DETAILS, FAQArticleProperty.ID
+        );
     }
 
 }

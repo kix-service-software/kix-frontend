@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,10 @@ import { ValidationResult } from "./ValidationResult";
 import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormContext } from "../../../../model/configuration/FormContext";
+import { KIXObjectService } from "./KIXObjectService";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
+import { IdService } from "../../../../model/IdService";
 
 export class FormInstance implements IFormInstance {
 
@@ -62,6 +66,9 @@ export class FormInstance implements IFormInstance {
 
     private initValues(formFields: FormFieldConfiguration[]): void {
         formFields.forEach((f) => {
+            if (!f.instanceId) {
+                f.instanceId = IdService.generateDateBasedId(f.property);
+            }
             this.formFieldValues.set(f.instanceId, f.defaultValue
                 ? new FormFieldValue(f.defaultValue.value, f.defaultValue.valid)
                 : new FormFieldValue(null)
@@ -202,7 +209,7 @@ export class FormInstance implements IFormInstance {
     ): void {
         if (parent) {
             if (clearChildren) {
-                parent.children.forEach((c) => this.formFieldValues.delete(c.instanceId));
+                parent.children.forEach((c) => this.deleteValuesRecursive(c));
                 parent.children = [];
             }
             newFields.forEach((f) => {
@@ -211,6 +218,13 @@ export class FormInstance implements IFormInstance {
             });
             this.initValues(newFields);
             this.listeners.forEach((l) => l.updateForm());
+        }
+    }
+
+    private deleteValuesRecursive(formField: FormFieldConfiguration): void {
+        this.formFieldValues.delete(formField.instanceId);
+        if (formField.children) {
+            formField.children.forEach((c) => this.deleteValuesRecursive(c));
         }
     }
 
@@ -331,12 +345,25 @@ export class FormInstance implements IFormInstance {
         return field;
     }
 
-    private findFormFieldByProperty(fields: FormFieldConfiguration[], property: string): FormFieldConfiguration {
+    private findFormFieldByProperty(fields: FormFieldConfiguration[] = [], property: string): FormFieldConfiguration {
         let field = fields.find((f) => f.property === property);
 
         if (!field) {
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                field = fields.filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS).find(
+                    (f) => f.options && f.options.some(
+                        (o) => o.option === DynamicFormFieldOption.FIELD_NAME && o.value === dfName
+                    )
+                );
+            }
+        }
+
+        if (!field) {
+
             for (const f of fields) {
-                const foundField = this.findFormFieldByProperty(f.children, property);
+                const foundField = f.children && f.children.length ?
+                    this.findFormFieldByProperty(f.children, property) : null;
                 if (foundField) {
                     field = foundField;
                     break;
@@ -384,7 +411,7 @@ export class FormInstance implements IFormInstance {
             if (formFieldValue) {
                 formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
                 result = [...result, ...fieldResult];
-                if (field.children && !!field.children.length) {
+                if (!field.empty && field.children && !!field.children.length) {
                     const childrenResult = await this.validateFields(field.children);
                     result = [...result, ...childrenResult];
                 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,7 +13,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { CMDBService } from '../../core';
+import { CMDBService, ConfigItemDetailsContext } from '../../core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
@@ -25,29 +25,32 @@ import { ComponentContent } from '../../../../../modules/base-components/webapp/
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { StringContent } from '../../../../../modules/base-components/webapp/core/StringContent';
+import { AbstractEditDialog } from '../../../../base-components/webapp/core/AbstractEditDialog';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 
-class Component {
-
-    private state: ComponentState;
+class Component extends AbstractEditDialog {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        super.init(
+            'Translatable#Update Config Item',
+            undefined,
+            KIXObjectType.CONFIG_ITEM,
+            ConfigItemDetailsContext.CONTEXT_ID
+        );
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
-        ]);
+        super.onMount();
     }
 
     public async onDestroy(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
+        super.onDestroy();
     }
 
     public async cancel(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
-        DialogService.getInstance().closeMainDialog();
+        super.cancel();
     }
 
     public async submit(): Promise<void> {
@@ -81,6 +84,8 @@ class Component {
                                 ? toast : 'Translatable#New Version created';
                             BrowserUtil.openSuccessOverlay(hint);
 
+                            EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, this.objectType);
+
                             DialogService.getInstance().submitMainDialog();
                         }
                     }
@@ -99,13 +104,13 @@ class Component {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
         );
     }
 
     public showError(error: any): void {
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', true
+            OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', null, true
         );
     }
 

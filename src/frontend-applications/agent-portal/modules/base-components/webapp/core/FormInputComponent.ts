@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -51,6 +51,7 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         });
         this.state.defaultValue = formInstance.getFormFieldValue<T>(this.state.field.instanceId);
         FormInputComponent.prototype.setInvalidState.call(this);
+        this.state.prepared = true;
     }
 
     public async onDestroy(): Promise<void> {

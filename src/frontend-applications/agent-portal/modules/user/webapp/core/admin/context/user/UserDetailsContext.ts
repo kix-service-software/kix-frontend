@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -35,7 +35,7 @@ export class UserDetailsContext extends Context {
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
-        const objectName = await TranslationService.translate('Translatable#Agent');
+        const objectName = await TranslationService.translate('Translatable#User');
         const object = await this.getObject<User>();
         const text = await LabelService.getInstance().getText(object);
         return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${text}`);
@@ -67,7 +67,7 @@ export class UserDetailsContext extends Context {
         const userId = Number(this.objectId);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLEIDS]
+            null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLE_IDS, UserProperty.CONTACT]
         );
 
         const timeout = window.setTimeout(() => {

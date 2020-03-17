@@ -1,0 +1,52 @@
+<!--
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+
+<div.ticket-print-container>
+    <if(state.prepared)>
+        <h1>${input.title}</h1>
+        <div.ticket-print-information>
+            <div>
+                <for|property| of=state.leftProperties>
+                    <div.property-label>
+                        <div.label>${property[0]}</div>
+                        <div.value>${property[1]}</div>
+                    </div>
+                </for>
+            </div>
+            <div>
+                <for|property| of=state.rightProperties>
+                    <div.property-label>
+                        <div.label>${property[0]}</div>
+                        <div.value>${property[1]}</div>
+                    </div>
+                </for>
+            </div>
+        </div>
+        <if(Array.isArray(input.articles))>
+            <div.ticket-print-articles>
+                <for|article| of=input.articles>
+                    <div.ticket-print-article>
+                        <h2>${article.subject}</h2>
+                        <div.article-information>
+                            <for|property| of=article.properties>
+                                <div.property-label>
+                                    <div.label>${property[0]}</div>
+                                    <div.value>${property[1]}</div>
+                                </div>
+                            </for>
+                        </div>
+                        <div.article-text>
+                            <editor readOnly=true value=article.content inlineContent=article.inlineContent useReadonlyStyle=true/>
+                        </div>
+                    </div>
+                </for>
+            </div>
+        </if>
+    </if>
+</div>

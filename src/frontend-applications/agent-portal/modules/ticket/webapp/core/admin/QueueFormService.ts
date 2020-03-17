@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,6 +16,7 @@ import { FormContext } from "../../../../../model/configuration/FormContext";
 import { QueueProperty } from "../../../model/QueueProperty";
 import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
 import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
+import { IdService } from "../../../../../model/IdService";
 
 export class QueueFormService extends KIXObjectFormService {
 
@@ -35,16 +36,6 @@ export class QueueFormService extends KIXObjectFormService {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.QUEUE;
-    }
-
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        switch (property) {
-            case QueueProperty.FOLLOW_UP_LOCK:
-                value = Number(value);
-                break;
-            default:
-        }
-        return [[property, value]];
     }
 
     protected async postPrepareForm(
@@ -84,6 +75,17 @@ export class QueueFormService extends KIXObjectFormService {
             new FormFieldValue(value)
         );
         followUpField.children.push(lockField);
+        lockField.instanceId = IdService.generateDateBasedId(lockField.property);
         formFieldValues.set(lockField.instanceId, new FormFieldValue(value));
+    }
+
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        switch (property) {
+            case QueueProperty.FOLLOW_UP_LOCK:
+                value = Number(value);
+                break;
+            default:
+        }
+        return [[property, value]];
     }
 }

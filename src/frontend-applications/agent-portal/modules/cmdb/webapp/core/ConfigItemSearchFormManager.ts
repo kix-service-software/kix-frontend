@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -196,7 +196,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
             case ConfigItemProperty.CUR_INCI_STATE_ID:
             case ConfigItemProperty.CHANGE_BY:
-                return await CMDBService.getInstance().getTreeNodes(property);
+                return await CMDBService.getInstance().getTreeNodes(property, true, true);
             default:
                 const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
                 const input = await ConfigItemClassAttributeUtil.getAttributeInput(
@@ -229,8 +229,8 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         return [];
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
@@ -252,20 +252,10 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
             );
         } else if (input.Type === 'Organisation') {
             const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
-            const nodes = [];
-            for (const o of organisations) {
-                const displayValue = await LabelService.getInstance().getText(o);
-                nodes.push(new TreeNode(o.ObjectId, displayValue, new ObjectIcon(o.KIXObjectType, o.ObjectId)));
-            }
-            return nodes;
+            return await KIXObjectService.prepareTree(organisations);
         } else if (input.Type === 'Contact') {
             const contacts = await KIXObjectService.search(KIXObjectType.CONTACT, searchValue, limit);
-            const nodes = [];
-            for (const c of contacts) {
-                const displayValue = await LabelService.getInstance().getText(c);
-                nodes.push(new TreeNode(c.ObjectId, displayValue, new ObjectIcon(c.KIXObjectType, c.ObjectId)));
-            }
-            return nodes;
+            return await KIXObjectService.prepareTree(contacts);
         }
 
         return tree;

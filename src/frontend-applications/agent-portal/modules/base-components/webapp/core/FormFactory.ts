@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,6 +11,7 @@ import { FormConfiguration } from "../../../../model/configuration/FormConfigura
 import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
 import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { IdService } from "../../../../model/IdService";
 
 export class FormFactory {
 
@@ -33,15 +34,20 @@ export class FormFactory {
     }
 
     private static initFormFields(fields: FormFieldConfiguration[]): FormFieldConfiguration[] {
-        return fields
-            ? fields.map((f) => new FormFieldConfiguration(
-                f.id,
-                f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
-                f.fieldConfigurationIds, FormFactory.initFormFields(f.children), f.parentInstanceId, f.countDefault,
-                f.countMax, f.countMin, f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
-                f.placeholder, f.existingFieldId, f.showLabel, f.name, f.draggableFields
-            ))
-            : [];
+        if (fields) {
+            fields = fields.map((f) => {
+                const field = new FormFieldConfiguration(
+                    f.id,
+                    f.label, f.property, f.inputComponent, f.required, f.hint, f.options, f.defaultValue,
+                    f.fieldConfigurationIds, FormFactory.initFormFields(f.children), f.parentInstanceId, f.countDefault,
+                    f.countMax, f.countMin, f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure,
+                    f.readonly, f.placeholder, f.existingFieldId, f.showLabel, f.name, f.draggableFields
+                );
+                field.instanceId = IdService.generateDateBasedId();
+                return field;
+            });
+        }
+        return fields ? fields : [];
     }
 
 }

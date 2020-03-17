@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,13 +12,13 @@ import { IActionListener } from '../../../../../modules/base-components/webapp/c
 import { IdService } from '../../../../../model/IdService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { Context } from 'vm';
 import {
     AbstractContextServiceListener
 } from '../../../../../modules/base-components/webapp/core/AbstractContextServiceListener';
 import { IContextListener } from '../../../../../modules/base-components/webapp/core/IContextListener';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Context } from '../../../../../model/Context';
 
 export class Component implements IActionListener {
 

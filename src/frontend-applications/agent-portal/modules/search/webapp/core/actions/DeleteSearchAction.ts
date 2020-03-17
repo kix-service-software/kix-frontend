@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,8 +8,8 @@
  */
 
 import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SearchService } from "..";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { SearchService } from "../SearchService";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
 import { ConfirmOverlayContent } from "../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
 import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
@@ -42,7 +42,7 @@ export class DeleteSearchAction extends AbstractAction {
             );
 
             OverlayService.getInstance().openOverlay(
-                OverlayType.CONFIRM, null, content, 'Translatable#Delete Search', false
+                OverlayType.CONFIRM, null, content, 'Translatable#Delete Search', null, false
             );
         }
     }

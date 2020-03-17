@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,8 +26,8 @@ import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { FormService } from "./FormService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
+import { IdService } from "../../../../model/IdService";
 
 export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
@@ -76,8 +76,8 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             if (kixObject || f.defaultValue) {
                 let value = await this.getValue(
                     f.property,
-                    kixObject && formContext === FormContext.EDIT ? kixObject[f.property] :
-                        f.defaultValue ? f.defaultValue.value : null,
+                    kixObject && formContext === FormContext.EDIT && typeof kixObject[f.property] !== 'undefined' ?
+                        kixObject[f.property] : f.defaultValue ? f.defaultValue.value : null,
                     kixObject,
                     f
                 );
@@ -103,6 +103,11 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             } else {
                 formFieldValue = new FormFieldValue(null);
             }
+
+            if (!f.instanceId) {
+                f.instanceId = IdService.generateDateBasedId(f.property);
+            }
+
             formFieldValues.set(f.instanceId, formFieldValue);
 
             if (f.children) {
@@ -120,27 +125,30 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
     protected handleCountValues(formFields: FormFieldConfiguration[]): void {
         const fields = [...formFields];
         for (const field of fields) {
-            if (field.countMin > 0) {
-                field.empty = false;
+            if (!field.asStructure) {
+                if (field.countMin > 0) {
+                    field.empty = false;
 
-                for (let i = 1; i < field.countMin; i++) {
-                    const newField = this.getNewFormField(field);
-                    const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                    formFields.splice(index, 0, newField);
+                    for (let i = 1; i < field.countMin; i++) {
+                        const newField = this.getNewFormField(field);
+                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                        formFields.splice(index, 0, newField);
+                    }
                 }
-            }
 
-            if (field.countDefault > 1 && field.countDefault > field.countMin && field.countDefault <= field.countMax) {
-                const c = field.countMin === 0 ? 1 : field.countMin;
-                for (let i = c; i < field.countDefault; i++) {
-                    const newField = this.getNewFormField(field);
-                    const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                    formFields.splice(index, 0, newField);
+                const countDefault = field.countDefault;
+                if (countDefault > 1 && countDefault > field.countMin && countDefault <= field.countMax) {
+                    const c = field.countMin === 0 ? 1 : field.countMin;
+                    for (let i = c; i < countDefault; i++) {
+                        const newField = this.getNewFormField(field);
+                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                        formFields.splice(index, 0, newField);
+                    }
                 }
-            }
 
-            if (field.countMin === 0 && field.countDefault === 0) {
-                field.empty = true;
+                if (field.countMin === 0 && countDefault === 0) {
+                    field.empty = true;
+                }
             }
         }
     }
@@ -181,6 +189,9 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             f.maxLength, f.regEx, f.regExErrorMessage, f.empty, f.asStructure, f.readonly,
             f.placeholder, undefined, f.showLabel, f.name, f.draggableFields, f.defaultHint
         );
+
+        newField.instanceId = IdService.generateDateBasedId(newField.property);
+
         const children: FormFieldConfiguration[] = [];
         if (withChildren && f.children) {
             for (const child of f.children) {
@@ -310,5 +321,43 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             }
         }
         return parameter;
+    }
+
+    protected getFormFieldOfForm(form: FormConfiguration, property: string): FormFieldConfiguration {
+        let formField: FormFieldConfiguration;
+        if (Array.isArray(form.pages)) {
+            PAGES:
+            for (const page of form.pages) {
+                if (Array.isArray(page.groups)) {
+                    for (const group of page.groups) {
+                        if (Array.isArray(group.formFields)) {
+                            formField = this.getFormField(group.formFields, property);
+                            if (formField) {
+                                break PAGES;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return formField;
+    }
+
+    private getFormField(fields: FormFieldConfiguration[], property): FormFieldConfiguration {
+        let foundField: FormFieldConfiguration;
+        if (Array.isArray(fields)) {
+            for (const field of fields) {
+                if (field.property === property) {
+                    foundField = field;
+                    break;
+                } else if (Array.isArray(field.children)) {
+                    foundField = this.getFormField(field.children, property);
+                    if (foundField) {
+                        break;
+                    }
+                }
+            }
+        }
+        return foundField;
     }
 }

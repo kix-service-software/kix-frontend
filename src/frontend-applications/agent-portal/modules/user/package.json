@@ -10,12 +10,6 @@
             "new-user-role-dialog-configuration": {
                 "module": "new-user-role-dialog-configuration.extension"
             },
-            "new-user-dialog-configuration": {
-                "module": "new-user-dialog-configuration.extension"
-            },
-            "edit-user-dialog-configuration": {
-                "module": "edit-user-dialog-configuration.extension"
-            },
             "edit-user-role-dialog-configuration": {
                 "module": "edit-user-role-dialog-configuration.extension"
             },

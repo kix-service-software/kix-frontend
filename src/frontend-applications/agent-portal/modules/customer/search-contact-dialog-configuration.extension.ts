@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,6 +27,7 @@ import { SearchProperty } from "../search/model/SearchProperty";
 import { ContactProperty } from "./model/ContactProperty";
 import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { UserProperty } from "../user/model/UserProperty";
 
 export class ModuleExtension implements IConfigurationExtension {
 
@@ -91,7 +92,7 @@ export class ModuleExtension implements IConfigurationExtension {
                 [
                     SearchProperty.FULLTEXT,
                     ContactProperty.FIRSTNAME, ContactProperty.LASTNAME,
-                    ContactProperty.EMAIL, ContactProperty.LOGIN
+                    ContactProperty.EMAIL, UserProperty.USER_LOGIN
                 ]
             )
         );

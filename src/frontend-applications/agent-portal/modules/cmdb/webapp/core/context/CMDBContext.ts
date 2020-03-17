@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -83,6 +83,7 @@ export class CMDBContext extends Context {
         window.clearTimeout(timeout);
 
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
+        this.setFilteredObjectList(KIXObjectType.CONFIG_ITEM, configItems);
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
@@ -102,6 +103,12 @@ export class CMDBContext extends Context {
         super.reset();
         this.currentCIClass = null;
         this.loadConfigItems();
+    }
+
+    public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+        if (objectType === KIXObjectType.CONFIG_ITEM) {
+            return this.loadConfigItems();
+        }
     }
 
 }

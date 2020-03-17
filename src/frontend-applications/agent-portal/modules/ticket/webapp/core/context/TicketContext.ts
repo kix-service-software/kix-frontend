@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,7 +18,7 @@ import { EventService } from "../../../../../modules/base-components/webapp/core
 import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SysConfigService } from "../../../../sysconfig/webapp/core";
+import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 
 
 export class TicketContext extends Context {
@@ -53,7 +53,7 @@ export class TicketContext extends Context {
         );
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            [stateTypeFilterCriteria], null, 1000, ['Watchers']
+            [stateTypeFilterCriteria], null, 1000, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
         );
 
         if (this.queueId) {
@@ -77,6 +77,7 @@ export class TicketContext extends Context {
         window.clearTimeout(timeout);
 
         this.setObjectList(KIXObjectType.TICKET, tickets);
+        this.setFilteredObjectList(KIXObjectType.TICKET, tickets);
 
         EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
@@ -87,9 +88,9 @@ export class TicketContext extends Context {
         this.loadTickets();
     }
 
-    public async reloadObjectList(objectType: KIXObjectType): Promise<void> {
+    public reloadObjectList(objectType: KIXObjectType): Promise<void> {
         if (objectType === KIXObjectType.TICKET) {
-            this.loadTickets();
+            return this.loadTickets();
         }
     }
 

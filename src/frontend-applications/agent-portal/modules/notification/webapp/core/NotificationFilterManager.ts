@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -36,10 +36,11 @@ import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../translation/webapp/core";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
 import { SortUtil } from "../../../../model/SortUtil";
+import { CMDBService } from "../../../cmdb/webapp/core";
 
 export class NotificationFilterManager extends AbstractDynamicFormManager {
 
@@ -100,8 +101,8 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
                             DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                             FilterDataType.STRING, FilterType.AND,
                             [
-                                DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
-                                DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION
+                                DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
+                                DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION, DynamicFieldTypes.CI_REFERENCE
                             ]
                         )
                     ]
@@ -189,7 +190,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
                 }
                 break;
             default:
-                nodes = await TicketService.getInstance().getTreeNodes(property);
+                nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);
         }
         return nodes;
     }
@@ -203,7 +204,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        let tree = [];
+        let tree: TreeNode[];
 
         switch (property) {
             case TicketProperty.CONTACT_ID:
@@ -215,6 +216,21 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
                 tree = await KIXObjectService.prepareTree(organisations);
                 break;
             default:
+        }
+
+        if (!tree && CMDBService) {
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                    const configItems = await CMDBService.searchConfigItems(searchValue, limit);
+                    tree = configItems.map(
+                        (ci) => new TreeNode(
+                            ci.ConfigItemID, ci.Name, 'kix-icon-ci'
+                        )
+                    );
+                }
+            }
         }
 
         return tree;

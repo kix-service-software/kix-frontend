@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -44,6 +44,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             EventService.getInstance().subscribe(TableEvent.ROW_TOGGLED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
             EventService.getInstance().subscribe(TableEvent.ROW_VALUE_CHANGED, this);
+            EventService.getInstance().subscribe(TableEvent.TOGGLE_ROWS, this);
             this.prepareObserver();
         }
     }
@@ -54,6 +55,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().unsubscribe(TableEvent.ROW_TOGGLED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_STATE_CHANGED, this);
         EventService.getInstance().unsubscribe(TableEvent.ROW_VALUE_CHANGED, this);
+        EventService.getInstance().unsubscribe(TableEvent.TOGGLE_ROWS, this);
 
         if (this.observer) {
             this.observer.disconnect();
@@ -108,16 +110,28 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 (this as any).setStateDirty('row');
                 this.setRowClasses();
             }
+
+            if (eventId === TableEvent.TOGGLE_ROWS) {
+                this.state.open = data.openRows;
+                this.state.row.expand(data.openRows);
+                this.setRowClasses();
+            }
             this.setRowClasses();
         }
     }
 
-    public toggleRow(): void {
+    public toggleRow(event?: any): void {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         this.state.row.expand(!this.state.open);
         this.setRowClasses();
     }
 
     public changeSelect(event: any): void {
+        event.stopPropagation();
+        event.preventDefault();
         if (this.state.row.isSelected()) {
             this.state.row.select(false);
         } else {
@@ -178,7 +192,12 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         this.state.rowClasses = stateClass;
     }
 
-    public rowClicked(): void {
+    public rowClicked(event): void {
+        const config = this.state.row.getTable().getTableConfiguration();
+        if (!config.routingConfiguration && config.toggle) {
+            this.toggleRow(event);
+        }
+
         EventService.getInstance().publish(
             TableEvent.ROW_CLICKED,
             new TableEventData(this.state.row.getTable().getTableId(), this.state.row.getRowId())

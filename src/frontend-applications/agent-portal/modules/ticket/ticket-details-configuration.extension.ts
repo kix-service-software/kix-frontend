@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,12 @@ import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 import { TicketProperty } from "./model/TicketProperty";
+import { ContactProperty } from "../customer/model/ContactProperty";
+import { UserProperty } from "../user/model/UserProperty";
+import { OrganisationProperty } from "../customer/model/OrganisationProperty";
+import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
+import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
+import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
 
 export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
 
@@ -59,10 +65,14 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 TicketProperty.ORGANISATION_ID,
                 TicketProperty.CONTACT_ID,
                 TicketProperty.CREATED,
+                KIXObjectProperty.CREATE_BY,
+                TicketProperty.CHANGED,
+                KIXObjectProperty.CHANGE_BY,
                 TicketProperty.AGE,
                 TicketProperty.LOCK_ID,
                 TicketProperty.TYPE_ID,
                 TicketProperty.QUEUE_ID,
+                'DynamicFields.AffectedAsset',
                 TicketProperty.PRIORITY_ID,
                 TicketProperty.RESPONSIBLE_ID,
                 TicketProperty.OWNER_ID,
@@ -77,9 +87,34 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
         configurations.push(infoConfig);
 
+        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
+            'ticket-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects, []
+        );
+        configurations.push(linkedObjectsConfig);
+
+        const linkedObjectsWidget = new WidgetConfiguration(
+            'ticket-details-linked-objects-widget', 'linked objects', ConfigurationType.Widget,
+            'linked-objects-widget', 'Translatable#Linked Objects', [],
+            new ConfigurationDefinition('ticket-details-linked-objects-config', ConfigurationType.LinkedObjects),
+            null, false, false, null, false
+        );
+        configurations.push(linkedObjectsWidget);
+
+        const ticketHistoryWidget = new WidgetConfiguration(
+            'ticket-details-history-widget', 'History Widget', ConfigurationType.Widget,
+            'ticket-history-widget', 'Translatable#History', [],
+            new ConfigurationDefinition('ticket-details-history-config', ConfigurationType.Table),
+            null, false, false, null, false
+        );
+        configurations.push(ticketHistoryWidget);
+
         const tabSettings = new TabWidgetConfiguration(
             'ticket-details-tab-widget-config', 'Tab Widget Config', ConfigurationType.TabWidget,
-            ['ticket-details-info-widget']
+            [
+                'ticket-details-info-widget',
+                'ticket-details-linked-objects-widget',
+                'ticket-details-history-widget'
+            ]
         );
         configurations.push(tabSettings);
 
@@ -91,47 +126,23 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         );
         configurations.push(tabWidget);
 
-        const ticketHistoryLane = new WidgetConfiguration(
-            'ticket-details-history-widget', 'History Widget', ConfigurationType.Widget,
-            'ticket-history-widget', 'Translatable#History', [], null, null, true, true, null, false
-        );
-        configurations.push(ticketHistoryLane);
-
-        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
-            'ticket-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects,
-            [
-                ['Tickets', KIXObjectType.TICKET],
-                ['Config Items', KIXObjectType.CONFIG_ITEM],
-                ['FAQs', KIXObjectType.FAQ_ARTICLE]
-            ]
-        );
-        configurations.push(linkedObjectsConfig);
-
-        const linkedObjectsWidget = new WidgetConfiguration(
-            'ticket-details-linked-objects-widget', 'linked objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects', ['linked-objects-edit-action'],
-            new ConfigurationDefinition('ticket-details-linked-objects-config', ConfigurationType.LinkedObjects),
-            null, true, true, null, false
-        );
-        configurations.push(linkedObjectsWidget);
-
         // Sidebars
         const organisationObjectInformation = new ObjectInformationWidgetConfiguration(
             'ticket-details-organisation-information-settings', 'Organisation Information Settings',
             ConfigurationType.ObjectInformation,
             KIXObjectType.ORGANISATION,
             [
-                'Number',
-                'Name',
-                'Url',
-                'Street',
-                'Zip',
-                'City',
-                'Country'
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
             ], true,
             [
-                ['Number', organisationRouting],
-                ['Name', organisationRouting]
+                [OrganisationProperty.NUMBER, organisationRouting],
+                [OrganisationProperty.NAME, organisationRouting]
             ]
         );
         configurations.push(organisationObjectInformation);
@@ -151,20 +162,20 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
             [
-                'Title',
-                'Firstname',
-                'Lastname',
-                'Login',
-                'PrimaryOrganisationID',
-                'Phone',
-                'Mobile',
-                'Fax',
-                'Email'
+                UserProperty.USER_LOGIN,
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.FAX,
+                ContactProperty.EMAIL
             ], true,
             [
-                ['Lastname', contactRouting],
-                ['Firstname', contactRouting],
-                ['Login', contactRouting]
+                [ContactProperty.LASTNAME, contactRouting],
+                [ContactProperty.FIRSTNAME, contactRouting],
+                [UserProperty.USER_LOGIN, contactRouting]
             ]
         );
         configurations.push(contactObjectInformation);
@@ -178,6 +189,55 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
             null, false, false, 'kix-icon-man-bubble', false
         );
         configurations.push(contactInfoSidebar);
+
+        const ticketsForAssetsWidget = new WidgetConfiguration(
+            'ticket-details-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-details-object-reference-widget-config', 'Tickets for Assets',
+                'TicketsForAssetsHandler',
+                {
+                    properties: [
+                        'DynamicFields.AffectedAsset'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-ticket'
+        );
+        configurations.push(ticketsForAssetsWidget);
+
+        const suggestedFAQWidget = new WidgetConfiguration(
+            'ticket-details-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
+            'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
+            new ObjectReferenceWidgetConfiguration(
+                'ticket-details-suggested-faq-config', 'Suggested FAQ',
+                'SuggestedFAQHandler',
+                {
+                    properties: [
+                        'Title',
+                        'Subject'
+                    ]
+                },
+                [
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Title', true, false, true, false, 130, true, false
+                    ),
+                    new DefaultColumnConfiguration(
+                        null, null, null, 'Votes', true, false, false, false, 50, true, false
+                    ),
+                ]
+            ),
+            false, false, 'kix-icon-faq'
+        );
+        configurations.push(suggestedFAQWidget);
 
 
         // Overlays
@@ -256,19 +316,17 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     new ConfiguredWidget(
                         'ticket-details-contact-info-widget', 'ticket-details-contact-info-widget', null,
                         [new UIComponentPermission('contacts', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-details-object-reference-widget', 'ticket-details-object-reference-widget'
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-details-dialog-suggested-faq-widget', 'ticket-details-dialog-suggested-faq-widget'
                     )
                 ],
                 [],
                 [
                     new ConfiguredWidget('ticket-details-tab-widget', 'ticket-details-tab-widget'),
-                    new ConfiguredWidget(
-                        'ticket-details-linked-objects-widget', 'ticket-details-linked-objects-widget', null,
-                        [new UIComponentPermission('links', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
-                        'ticket-details-history-widget', 'ticket-details-history-widget', null,
-                        [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
-                    )
                 ],
                 [
                     new ConfiguredWidget(
@@ -281,7 +339,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                 ],
                 [
                     'ticket-edit-action', 'article-new-action', 'linked-objects-edit-action',
-                    'ticket-lock-action', 'ticket-watch-action', 'print-action',
+                    'ticket-lock-action', 'ticket-watch-action', 'ticket-print-action',
                 ],
                 [
                     new ConfiguredWidget(
@@ -298,7 +356,15 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
                     new ConfiguredWidget('article-attachment-widget', 'ticket-details-article-attachments-overlay')
                 ],
                 [
-                    new ConfiguredWidget('ticket-details-info-widget', 'ticket-details-info-widget')
+                    new ConfiguredWidget('ticket-details-info-widget', 'ticket-details-info-widget'),
+                    new ConfiguredWidget(
+                        'ticket-details-linked-objects-widget', 'ticket-details-linked-objects-widget', null,
+                        [new UIComponentPermission('links', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'ticket-details-history-widget', 'ticket-details-history-widget', null,
+                        [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
+                    )
                 ]
             )
         );

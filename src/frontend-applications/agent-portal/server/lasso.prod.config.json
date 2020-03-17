@@ -26,5 +26,6 @@
             }
         }
     ],
-    "outputDir": "dist/frontend-applications/agent-portal/static"
+    "outputDir": "dist/frontend-applications/agent-portal/static",
+    "bundleReadTimeout": 200000
 }

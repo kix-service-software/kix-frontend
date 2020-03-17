@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,87 +8,94 @@
  */
 
 import { ComponentState } from "./ComponentState";
-import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
 import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { ValidationSeverity } from "../../../../../modules/base-components/webapp/core/ValidationSeverity";
 import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
 import { ContextType } from "../../../../../model/ContextType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { ValidationResult } from "../../../../../modules/base-components/webapp/core/ValidationResult";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
-import { Error } from "../../../../../../../server/model/Error";
+import { AbstractEditDialog } from "../../../../base-components/webapp/core/AbstractEditDialog";
+import { ContactDetailsContext } from "../../core";
+import { Contact } from "../../../model/Contact";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../../model/FilterCriteria";
+import { ContactProperty } from "../../../model/ContactProperty";
+import { SearchOperator } from "../../../../search/model/SearchOperator";
+import { FilterType } from "../../../../../model/FilterType";
+import { FilterDataType } from "../../../../../model/FilterDataType";
+import { UserDetailsContext } from "../../../../user/webapp/core/admin";
 
-class Component {
+class Component extends AbstractEditDialog {
 
-    private state: ComponentState;
+    private isAgentDialog: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            this.isAgentDialog = Boolean(dialogContext.getAdditionalInformation('IS_AGENT_DIALOG'));
+        }
+        super.init(
+            this.isAgentDialog ? 'Translatable#Update Agent' : 'Translatable#Update Contact',
+            undefined,
+            KIXObjectType.CONTACT,
+            this.isAgentDialog ? null : ContactDetailsContext.CONTEXT_ID
+        );
     }
 
     public async onMount(): Promise<void> {
         this.state.loading = true;
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
-
-        this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
-        ]);
+        await super.onMount();
         this.state.loading = false;
     }
 
     public async onDestroy(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
+        super.onDestroy();
     }
 
     public async cancel(): Promise<void> {
-        FormService.getInstance().deleteFormInstance(this.state.formId);
-        DialogService.getInstance().closeMainDialog();
+        super.cancel();
     }
 
     public async submit(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const result = await formInstance.validateForm();
-        const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
-        if (validationError) {
-            this.showValidationError(result);
-        } else {
-            DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Contact');
-            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-            if (context) {
-                await KIXObjectService.updateObjectByForm(
-                    KIXObjectType.CONTACT, this.state.formId, context.getObjectId()
-                ).then(async (contactId) => {
-                    context.getObject(KIXObjectType.CONTACT, true);
-                    DialogService.getInstance().setMainDialogLoading(false);
-
-                    const toast = await TranslationService.translate('Translatable#Changes saved.');
-                    BrowserUtil.openSuccessOverlay(toast);
-                    DialogService.getInstance().submitMainDialog();
-                }).catch((error: Error) => {
-                    DialogService.getInstance().setMainDialogLoading();
-                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-                });
+        let contactId;
+        if (this.isAgentDialog) {
+            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (dialogContext) {
+                const userId = dialogContext.getAdditionalInformation('USER_ID');
+                if (userId) {
+                    const contact = await this.loadContact(userId);
+                    contactId = contact ? contact.ID : null;
+                }
             }
         }
+        await super.submit(contactId);
     }
 
-    private showValidationError(result: ValidationResult[]): void {
-        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
-        const content = new ComponentContent('list-with-title',
-            {
-                title: 'Translatable#Error on form validation:',
-                list: errorMessages
-            }
-        );
+    protected async handleDialogSuccess(objectId: string | number): Promise<void> {
+        if (this.isAgentDialog && objectId) {
+            this.contextId = UserDetailsContext.CONTEXT_ID;
+            this.objectType = KIXObjectType.USER;
+        }
+        super.handleDialogSuccess(objectId);
+    }
 
-        OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
-        );
+    private async loadContact(userId: number): Promise<Contact> {
+        let contact: Contact;
+        if (userId) {
+            const contacts = await KIXObjectService.loadObjects<Contact>(
+                KIXObjectType.CONTACT, null,
+                new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.AND, userId
+                        )
+                    ]
+                ), null, true
+            ).catch(() => [] as Contact[]);
+            contact = contacts && contacts.length ? contacts[0] : null;
+        }
+        return contact;
     }
 
 }

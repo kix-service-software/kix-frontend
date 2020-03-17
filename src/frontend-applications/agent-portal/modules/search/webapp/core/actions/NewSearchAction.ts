@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SearchService } from "..";
+import { SearchService } from "../SearchService";
 import { CacheState } from "../../../model/CacheState";
 import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
 import { ContextMode } from "../../../../../model/ContextMode";

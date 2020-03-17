@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,6 +12,7 @@ import { TableConfigurationResolver } from "./TableConfigurationResolver";
 import { IConfigurationResolver } from "./IConfigurationResolver";
 import { TableWidgetConfiguration } from "../../../model/configuration/TableWidgetConfiguration";
 import { TableConfiguration } from "../../../model/configuration/TableConfiguration";
+import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
 
 export class TableWidgetConfigurationResolver implements IConfigurationResolver<TableWidgetConfiguration> {
 
@@ -26,16 +27,21 @@ export class TableWidgetConfigurationResolver implements IConfigurationResolver<
 
     private constructor() { }
 
-    public async resolve(token: string, configuration: TableWidgetConfiguration): Promise<void> {
+    public async resolve(
+        token: string, configuration: TableWidgetConfiguration, sysConfigOptions: SysConfigOption[]
+    ): Promise<void> {
         if (configuration) {
             if (configuration.subConfigurationDefinition) {
-                const tableConfig = await ModuleConfigurationService.getInstance()
-                    .loadConfiguration<TableConfiguration>(
-                        token, configuration.subConfigurationDefinition.configurationId
-                    );
 
-                configuration.tableConfiguration = tableConfig;
-                await TableConfigurationResolver.getInstance().resolve(token, tableConfig);
+                const tableOption = sysConfigOptions.find(
+                    (o) => o.Name === configuration.subConfigurationDefinition.configurationId
+                );
+
+                if (tableOption && tableOption.Value) {
+                    const tableConfig = JSON.parse(tableOption.Value);
+                    configuration.tableConfiguration = tableConfig;
+                    await TableConfigurationResolver.getInstance().resolve(token, tableConfig, sysConfigOptions);
+                }
             }
         }
     }

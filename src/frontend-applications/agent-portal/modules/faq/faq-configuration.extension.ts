@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -80,20 +80,11 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
         configurations.push(faqCategoryExplorer);
 
-        const notesSidebar = new WidgetConfiguration(
-            'faq-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null,
-            false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebar);
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('faq-dashboard-notes-widget', 'faq-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget(
                         'faq-dashboard-category-explorer', 'faq-dashboard-category-explorer', null,

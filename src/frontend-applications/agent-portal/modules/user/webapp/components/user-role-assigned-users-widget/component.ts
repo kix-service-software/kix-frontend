@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,6 +23,7 @@ import { TableHeaderHeight } from '../../../../../model/configuration/TableHeade
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ContactProperty } from '../../../../customer/model/ContactProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -69,14 +70,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     DataType.STRING, true, null, null, false
                 ),
                 new DefaultColumnConfiguration(null, null, null,
-                    UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true, true
+                    ContactProperty.FIRSTNAME, true, false, true, false, 250, true, true, true
                 ),
                 new DefaultColumnConfiguration(null, null, null,
-                    UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
+                    ContactProperty.LASTNAME, true, false, true, false, 250, true, true, false,
                     DataType.STRING, true, null, null, false
                 ),
                 new DefaultColumnConfiguration(null, null, null,
-                    UserProperty.USER_EMAIL, true, false, true, false, 250, true, true, true
+                    ContactProperty.EMAIL, true, false, true, false, 250, true, true, true
                 ),
                 new DefaultColumnConfiguration(
                     null, null, null, KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true

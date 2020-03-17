@@ -59,12 +59,20 @@ const heights = {
 Given('Tabelle: {string}', async (objectType: KIXObjectType | string) => {
     table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType);
     expect(table).exist;
+
+    // to enable column checks for dynamic field properties
+    table['checkDF'] = () => { return true; };
+
     await table.initialize();
 });
 
 Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType | string) => {
     table = await TableFactoryService.getInstance().createTable(`test-table-${objectType}`, objectType, null, null, null, false, false, true);
     expect(table).exist;
+
+    // to enable column checks for dynamic field properties
+    table['checkDF'] = () => { return true; };
+
     await table.initialize();
 });
 
@@ -98,7 +106,7 @@ Then('DisplayLimit: {int}', async (displayLimit: Number) => {
 
 Then('Die Spalte {string} muss sortierbar sein: {int}', async (columnId: string, sortable: Number) => {
     const column = table.getColumn(columnId);
-    expect(column).exist;
+    expect(column, `existing columns: ${table['columns'].map((c) => c.getColumnId())}`).exist;
     expect(column.getColumnConfiguration().sortable).equals(Boolean(sortable));
 });
 

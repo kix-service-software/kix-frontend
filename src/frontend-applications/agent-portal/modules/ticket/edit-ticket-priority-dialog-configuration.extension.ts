@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -82,7 +82,7 @@ export class Extension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-priority-edit-form-field-comment',
-                'Translatable#Comment', TicketPriorityProperty.COMMENT, 'text-area-input', false,
+                'Translatable#Comment', KIXObjectProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Admin_Tickets_PriorityCreate_Comment',
                 null, null, null, null, null, null, null, null, 250
             )

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,8 +9,17 @@
 
 import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AgentService } from ".";
+import { AgentService } from "./AgentService";
 import { PersonalSettingsProperty } from "../../model/PersonalSettingsProperty";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../model/FilterCriteria";
+import { NotificationProperty } from "../../../notification/model/NotificationProperty";
+import { SearchOperator } from "../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../model/FilterDataType";
+import { FilterType } from "../../../../model/FilterType";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
+import { Notification } from "../../../notification/model/Notification";
 
 export class PersonalSettingsFormService extends KIXObjectFormService {
 
@@ -39,7 +48,15 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
 
         if (property === PersonalSettingsProperty.MY_QUEUES && value && typeof value === 'string') {
             value = value.split(',').map((v) => Number(v));
-        } else if (property === PersonalSettingsProperty.NOTIFICATIONS && value) {
+        } else if (property === PersonalSettingsProperty.NOTIFICATIONS) {
+            value = await this.handleNotifications(value);
+        }
+
+        return value;
+    }
+
+    public async handleNotifications(value: any): Promise<any> {
+        if (value) {
             try {
                 const notifications = JSON.parse(value);
                 value = [];
@@ -51,8 +68,49 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
             } catch (e) {
                 console.warn('Could not load/parse notification preference.');
             }
+        } else {
+            const loadingOptions = new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    'Data.' + NotificationProperty.DATA_VISIBLE_FOR_AGENT, SearchOperator.EQUALS,
+                    FilterDataType.STRING, FilterType.AND, 1
+                ),
+                new FilterCriteria(
+                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                    FilterDataType.NUMERIC, FilterType.AND, 1
+                )
+            ]);
+            const notifications = await KIXObjectService.loadObjects<Notification>(
+                KIXObjectType.NOTIFICATION, null, loadingOptions, null, true
+            ).catch(() => [] as Notification[]);
+            if (notifications) {
+                value = notifications.map((n) => n.ID);
+            }
+        }
+        return value;
+    }
+
+    public async postPrepareValues(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+
+        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+        if (queuesParameter) {
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
         }
 
-        return value;
+        const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+        if (notificationParameter) {
+            const transport = 'Email';
+            const notificationPreference = {};
+            if (Array.isArray(notificationParameter[1])) {
+                notificationParameter[1].forEach((e) => {
+                    const eventKey = `Notification-${e}-${transport}`;
+                    notificationPreference[eventKey] = 1;
+                });
+
+            }
+
+            notificationParameter[1] = JSON.stringify(notificationPreference);
+        }
+
+        return parameter;
     }
 }

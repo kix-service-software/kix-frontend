@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -67,7 +67,7 @@ export class WebformService extends KIXObjectService<Webform> {
                     }
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
                 return null;
             });
@@ -87,7 +87,7 @@ export class WebformService extends KIXObjectService<Webform> {
                     }
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
                 return null;
             });
@@ -119,21 +119,6 @@ export class WebformService extends KIXObjectService<Webform> {
             this.getParameterValue(parameter, WebformProperty.USER_PASSWORD),
             this.getParameterValue(parameter, KIXObjectProperty.VALID_ID)
         );
-    }
-
-    protected async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        if (value) {
-            if (property === WebformProperty.USER_LOGIN) {
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                value = users && !!users.length ? users[0].UserLogin : value;
-            }
-            parameter.push([property, value]);
-        }
-
-        return parameter;
     }
 
     private getParameterValue(parameter: Array<[string, any]>, property: string): any {

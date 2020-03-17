@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,9 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
+import { UserProperty } from "../user/model/UserProperty";
+import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
+import { ContextMode } from "../../model/ContextMode";
 
 export class ModuleFactoryExtension implements IConfigurationExtension {
 
@@ -38,6 +41,12 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
+
+        const userRouting = new RoutingConfiguration(
+            'user-details', KIXObjectType.USER,
+            ContextMode.DETAILS, ContactProperty.ASSIGNED_USER_ID, false
+        );
+
         const infoConfig = new ObjectInformationWidgetConfiguration(
             'contact-details-object-information-config', 'Contact Info', ConfigurationType.ObjectInformation,
             KIXObjectType.CONTACT,
@@ -45,7 +54,9 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 ContactProperty.TITLE,
                 ContactProperty.FIRSTNAME,
                 ContactProperty.LASTNAME,
-                ContactProperty.LOGIN,
+                UserProperty.USER_LOGIN,
+                UserProperty.USER_ACCESS,
+                UserProperty.USER_LANGUAGE,
                 ContactProperty.PRIMARY_ORGANISATION_ID,
                 ContactProperty.PHONE,
                 ContactProperty.MOBILE,
@@ -61,6 +72,9 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                 KIXObjectProperty.CREATE_TIME,
                 KIXObjectProperty.CHANGE_BY,
                 KIXObjectProperty.CHANGE_TIME
+            ], false,
+            [
+                [UserProperty.USER_LOGIN, userRouting],
             ]
         );
         configurations.push(infoConfig);

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,7 @@ import { IUIModule } from "../../../../model/IUIModule";
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import {
     TranslationPatternLabelProvider, TranslationLanguageLabelProvider, TranslationBrowserFactory,
-    TranslationPatternBrowserFactory, TranslationService
+    TranslationPatternBrowserFactory
 } from ".";
 import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
@@ -23,10 +23,11 @@ import { ContextDescriptor } from "../../../../model/ContextDescriptor";
 import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { TranslationCreateAction, TranslationEditAction } from "./admin/actions";
-import { NewTranslationDialogContext, EditTranslationDialogContext, TranslationDetailsContext } from "./admin/context";
+import { TranslationCreateAction, TranslationCSVExportAction } from "./admin/actions";
+import { NewTranslationDialogContext, EditTranslationDialogContext } from "./admin/context";
 import { TranslationFormService } from "./admin/TranslationFormService";
 import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from "./admin/table";
+import { TranslationService } from "./TranslationService";
 
 export class UIModule implements IUIModule {
 
@@ -55,7 +56,9 @@ export class UIModule implements IUIModule {
         TableFactoryService.getInstance().registerFactory(new TranslationPatternTableFactory());
         TableFactoryService.getInstance().registerFactory(new TranslationLanguageTableFactory());
 
+        ActionFactory.getInstance().registerAction('i18n-admin-translation-csv-export', TranslationCSVExportAction);
         ActionFactory.getInstance().registerAction('i18n-admin-translation-create', TranslationCreateAction);
+
         const newTranslationDialogContext = new ContextDescriptor(
             NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
@@ -63,19 +66,11 @@ export class UIModule implements IUIModule {
         );
         await ContextService.getInstance().registerContext(newTranslationDialogContext);
 
-        ActionFactory.getInstance().registerAction('i18n-admin-translation-edit', TranslationEditAction);
         const editTranslationDialogContext = new ContextDescriptor(
             EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
             false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
         );
         await ContextService.getInstance().registerContext(editTranslationDialogContext);
-
-        const translationDetailsContext = new ContextDescriptor(
-            TranslationDetailsContext.CONTEXT_ID, [KIXObjectType.TRANSLATION],
-            ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['translations'], TranslationDetailsContext
-        );
-        await ContextService.getInstance().registerContext(translationDetailsContext);
     }
 }

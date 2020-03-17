@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,7 +13,7 @@ import { ToastContent } from './ToastContent';
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
-import { TranslationService } from '../../../translation/webapp/core';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export abstract class AbstractAction<T = any> implements IAction<T> {
 

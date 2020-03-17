@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,6 +26,23 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.prepareTranslations();
+        document.addEventListener('keyup', this.keyUp.bind(this), false);
+    }
+
+    public onDestroy(): void {
+        document.removeEventListener('keyup', this.keyUp.bind(this), false);
+    }
+
+    public keyUp(event: any): void {
+        if (this.state.pages && this.state.pages.length > 1) {
+            if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && event.ctrlKey) {
+                if (event.key === 'ArrowRight') {
+                    this.showPage(this.state.activePageIndex + 1);
+                } else {
+                    this.showPage(this.state.activePageIndex - 1);
+                }
+            }
+        }
     }
 
     private async prepareTranslations(): Promise<void> {

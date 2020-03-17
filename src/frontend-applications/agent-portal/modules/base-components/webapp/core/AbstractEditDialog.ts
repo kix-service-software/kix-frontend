@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,7 +9,7 @@
 
 import { AbstractMarkoComponent } from "./AbstractMarkoComponent";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { DialogService } from "./DialogService";
 import { ContextService } from "./ContextService";
 import { ContextMode } from "../../../../model/ContextMode";
@@ -27,6 +27,7 @@ import { ComponentContent } from "./ComponentContent";
 import { OverlayService } from "./OverlayService";
 import { OverlayType } from "./OverlayType";
 import { Error } from "../../../../../../server/model/Error";
+import { AbstractNewDialog } from "./AbstractNewDialog";
 
 export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 
@@ -46,7 +47,10 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+        DialogService.getInstance().setMainDialogHint(
+            // tslint:disable-next-line:max-line-length
+            "Translatable#For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual for more detailed information."
+        );
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
         ]);
@@ -59,6 +63,15 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
             );
             dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
         }
+
+        EventService.getInstance().subscribe(ApplicationEvent.DIALOG_SUBMIT, {
+            eventSubscriberId: 'AbstractDialog' + this.state.formId,
+            eventPublished: (data: any, eventId: string) => {
+                if (data && data.formId === this.state.formId) {
+                    this.submit();
+                }
+            }
+        });
     }
 
     public async onDestroy(): Promise<void> {
@@ -74,35 +87,49 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         DialogService.getInstance().closeMainDialog();
     }
 
-    public submit(): Promise<void> {
+    public submit(objectId?: number | string): Promise<void> {
         return new Promise<void>((resolve, reject) => {
             setTimeout(async () => {
                 const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
                 const result = await formInstance.validateForm();
                 const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
                 if (validationError) {
-                    AbstractEditDialog.prototype.showValidationError.call(this, result);
+                    if (this.showValidationError) {
+                        this.showValidationError(result);
+                    } else {
+                        AbstractEditDialog.prototype.showValidationError.call(this, result);
+                    }
+
+                    ContextService.getInstance().updateObjectLists(this.objectType);
+
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
-                    let context;
-                    if (this.contextId) {
-                        context = await ContextService.getInstance().getContext(this.contextId);
-                    } else {
-                        context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                    if (!objectId) {
+                        let context;
+                        if (this.contextId) {
+                            context = await ContextService.getInstance().getContext(this.contextId);
+                        } else {
+                            context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                        }
+                        if (context && context.getObjectId()) {
+                            objectId = context.getObjectId();
+                        }
                     }
-                    if (context && context.getObjectId()) {
-                        KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, context.getObjectId())
-                            .then(async (objectId) => {
-                                await AbstractEditDialog.prototype.handleDialogSuccess.call(this, objectId);
-                                resolve();
-                            }).catch((error: Error) => {
-                                DialogService.getInstance().setMainDialogLoading(false);
-                                BrowserUtil.openErrorOverlay(
-                                    error.Message ? `${error.Code}: ${error.Message}` : error.toString()
-                                );
-                                reject();
-                            });
-                    }
+                    KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, objectId)
+                        .then(async (succesObjectId) => {
+                            if (this.handleDialogSuccess) {
+                                await this.handleDialogSuccess(succesObjectId);
+                            } else {
+                                await AbstractEditDialog.prototype.handleDialogSuccess.call(this, succesObjectId);
+                            }
+                            resolve();
+                        }).catch((error: Error) => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.openErrorOverlay(
+                                error.Message ? `${error.Code}: ${error.Message}` : error.toString()
+                            );
+                            reject();
+                        });
                 }
             }, 300);
         });
@@ -139,7 +166,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
         );
     }
 

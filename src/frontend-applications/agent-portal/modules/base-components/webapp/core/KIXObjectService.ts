@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -38,7 +38,14 @@ import { IKIXObjectService } from "./IKIXObjectService";
 import { Error } from "../../../../../../server/model/Error";
 import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { UserProperty } from "../../../user/model/UserProperty";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
+import { ConfigItem } from "../../../cmdb/model/ConfigItem";
+import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
+import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
+import { SortUtil } from "../../../../model/SortUtil";
+import { DataType } from "../../../../model/DataType";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -73,7 +80,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                         }
                     );
                     OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, content, '', true
+                        OverlayType.WARNING, null, content, '', null, true
                     );
                 }
                 return [];
@@ -119,12 +126,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 // FIXME: Publish event to show an error dialog
                 const content = new ComponentContent('list-with-title',
                     {
-                        title: `Error while creating ${objectType}`,
+                        title: `Translatable#Error on create:`,
                         list: [`${error.Code}: ${error.Message}`]
                     }
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
                 return null;
             } else {
@@ -149,12 +156,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return objectId;
     }
 
-    public static async createObjectByForm(
+    public static createObjectByForm(
         objectType: KIXObjectType | string, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        return await service.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
+        return service.createObjectByForm(objectType, formId, createOptions, cacheKeyPrefix);
     }
 
     public async createObjectByForm(
@@ -181,12 +188,12 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                     // FIXME: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
-                            title: `Fehler beim Aktualisieren (${objectType}):`,
+                            title: `Translatable#Error on update:`,
                             list: [`${error.Code}: ${error.Message}`]
                         }
                     );
                     OverlayService.getInstance().openOverlay(
-                        OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                        OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                     );
                     return null;
                 } else {
@@ -207,18 +214,21 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return updatedObjectId;
     }
 
-    public static async updateObjectByForm(
+    public static updateObjectByForm(
         objectType: KIXObjectType | string, formId: string, objectId: number | string,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
-        return await service.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
+        return service.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
     }
 
     public async updateObjectByForm(
         objectType: KIXObjectType | string, formId: string, objectId: number | string,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
+        if (!objectId) {
+            throw new Error(null, `Can not update "${objectType}". No objectId given`);
+        }
         const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
         const parameter: Array<[string, any]> = await service.prepareFormFields(formId, true);
 
@@ -252,7 +262,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 }
             );
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
             );
         }
         return failIds;
@@ -277,37 +287,64 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         switch (property) {
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, null, null, null, true
+                let users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, null,
+                    new KIXObjectLoadingOptions(
+                        null, null, null, [UserProperty.CONTACT]
+                    ), null, true
                 ).catch((error) => [] as User[]);
-                users.forEach((u) => nodes.push(new TreeNode(u.UserID, u.UserFullname, 'kix-icon-man')));
+                if (!showInvalid) {
+                    users = users.filter((s) => s.ValidID === 1);
+                }
+                users.forEach((u) => nodes.push(new TreeNode(
+                    u.UserID, u.Contact ? u.Contact.Fullname : u.UserLogin, 'kix-icon-man',
+                    undefined, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined,
+                    u.ValidID === 1 || invalidClickable,
+                    undefined, undefined, undefined, undefined,
+                    u.ValidID !== 1
+                )));
                 break;
             case KIXObjectProperty.VALID_ID:
                 const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
-                nodes = validObjects.map((vo) => new TreeNode(Number(vo.ID), vo.Name));
+                nodes = [];
+                for (const vo of validObjects) {
+                    const text = await LabelService.getInstance().getText(vo);
+                    nodes.push(new TreeNode(Number(vo.ID), text));
+                }
                 break;
             default:
-                const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
-                if (property.match(dFRegEx)) {
-                    const dfName = property.replace(dFRegEx, '$1');
-                    if (dfName) {
-                        nodes = await this.getNodesForDF(dfName);
-                    }
+                const dfName = KIXObjectService.getDynamicFieldName(property);
+                if (dfName) {
+                    nodes = await this.getNodesForDF(dfName, filterIds);
                 }
         }
         return nodes;
     }
 
-    private async getNodesForDF(name: string): Promise<TreeNode[]> {
-        const nodes: TreeNode[] = [];
-        const field = await this.loadDynamicField(name);
-        if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.PossibleValues) {
-            for (const pv in field.Config.PossibleValues) {
-                if (field.Config.PossibleValues[pv]) {
-                    const value = field.Config.PossibleValues[pv];
-                    const node = new TreeNode(pv, value);
-                    nodes.push(node);
+    private async getNodesForDF(name: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
+        let nodes: TreeNode[] = [];
+        const field = await KIXObjectService.loadDynamicField(name);
+        if (field) {
+            if (field.FieldType === DynamicFieldTypes.SELECTION && field.Config && field.Config.PossibleValues) {
+                for (const pv in field.Config.PossibleValues) {
+                    if (field.Config.PossibleValues[pv]) {
+                        const value = field.Config.PossibleValues[pv];
+                        const node = new TreeNode(pv, value);
+                        nodes.push(node);
+                    }
                 }
+            } else if (field.FieldType === DynamicFieldTypes.CI_REFERENCE && objectIds) {
+                const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                    KIXObjectType.CONFIG_ITEM, objectIds
+                );
+
+                nodes = configItems.map(
+                    (ci) => new TreeNode(
+                        ci.ConfigItemID, ci.Name, 'kix-icon-ci'
+                    )
+                );
+
             }
         }
         return nodes;
@@ -398,13 +435,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
     public static async search(
-        objectType: KIXObjectType | string, searchValue: string, limit: number = 10, validObjects: boolean = true
+        objectType: KIXObjectType | string, searchValue: string, limit: number = 10, onlyValidObjects: boolean = false
     ): Promise<KIXObject[]> {
         let result = [];
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
             const filter = await service.prepareFullTextFilter(searchValue);
-            if (validObjects) {
+            if (onlyValidObjects) {
                 filter.push(new FilterCriteria(
                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
                 ));
@@ -415,32 +452,114 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return result;
     }
 
-    public static async prepareTree(objects: KIXObject[]): Promise<TreeNode[]> {
+    public static async prepareTree(
+        objects: KIXObject[], showInvalid: boolean = true, invalidClickable: boolean = true
+    ): Promise<TreeNode[]> {
         const nodes = [];
 
         for (const o of objects) {
-            const icon = await LabelService.getInstance().getObjectIcon(o);
-            const text = await LabelService.getInstance().getText(o);
-            nodes.push(new TreeNode(o.ObjectId, text, icon));
+            if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
+                const icon = await LabelService.getInstance().getObjectIcon(o);
+                const text = await LabelService.getInstance().getText(o);
+                nodes.push(new TreeNode(
+                    o.ObjectId, text, icon, undefined, undefined,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable,
+                    undefined, undefined, undefined, undefined,
+                    typeof o.ValidID !== 'undefined' && o.ValidID !== 1
+                ));
+            }
         }
 
         return nodes;
     }
 
-    private async loadDynamicField(name: string): Promise<DynamicField> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
+    public static async loadDynamicField(name: string, id?: number): Promise<DynamicField> {
+        let dynamicFields: DynamicField[];
+        if (name || id) {
+            const filter = id ? null : [
                 new FilterCriteria(
-                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, name
+                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
+                    FilterType.AND, name
                 )
-            ], null, null, [DynamicFieldProperty.CONFIG]
-        );
-        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
-        );
-
+            ];
+            dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
+                new KIXObjectLoadingOptions(
+                    filter, null, null, [DynamicFieldProperty.CONFIG]
+                ), null, true
+            ).catch(() => [] as DynamicField[]);
+        }
         return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
     }
 
+    public static getDynamicFieldName(property: string): string {
+        let name: string;
+        if (KIXObjectService.isDynamicFieldProperty(property)) {
+            name = property.replace(/^DynamicFields?\.(.+)/, '$1');
+        }
+        return name;
+    }
+
+    public static isDynamicFieldProperty(property: string): boolean {
+        return Boolean(property.match(/^DynamicFields?\..+/));
+    }
+
+    public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
+        return null;
+    }
+
+    public async getTicketArticleEventTree(): Promise<TreeNode[]> {
+        const ticketEvents = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_EVENTS], null, null, true
+        ).catch((error): SysConfigOption[] => []);
+        const articleEvents = await KIXObjectService.loadObjects<SysConfigOption>(
+            KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
+        ).catch((error): SysConfigOption[] => []);
+
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria(
+                DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, KIXObjectType.TICKET
+            )
+        ]);
+        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
+        ).catch(() => [] as DynamicField[]);
+
+        const dfEvents = dynamicFields ? dynamicFields.map((d) => `TicketDynamicFieldUpdate_${d.Name}`) : [];
+
+        // TODO: there is currently only one article df event
+        dfEvents.push('ArticleDynamicFieldUpdate');
+
+        return this.prepareEventTree(ticketEvents, articleEvents, dfEvents);
+    }
+
+    private prepareEventTree(
+        ticketEvents: SysConfigOption[], articleEvents: SysConfigOption[], dfEvents: string[]
+    ): TreeNode[] {
+        let nodes = [];
+        if (ticketEvents && ticketEvents.length) {
+            nodes = ticketEvents[0].Value.map((event: string) => {
+                return new TreeNode(event, event);
+            });
+        }
+        if (articleEvents && articleEvents.length) {
+            nodes = [
+                ...nodes,
+                ...articleEvents[0].Value.map((event: string) => {
+                    return new TreeNode(event, event);
+                })
+            ];
+        }
+        if (dfEvents && dfEvents.length) {
+            nodes = [
+                ...nodes,
+                ...dfEvents.map((event: string) => {
+                    return new TreeNode(event, event);
+                })
+            ];
+        }
+        return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+    }
 }

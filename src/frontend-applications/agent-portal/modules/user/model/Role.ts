@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,6 +10,7 @@
 import { KIXObject } from "../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 import { Permission } from "./Permission";
+import { RoleUsageContextTypes } from "./RoleUsageContextTypes";
 
 export class Role extends KIXObject<Role> {
 
@@ -37,6 +38,8 @@ export class Role extends KIXObject<Role> {
 
     public Permissions: Permission[];
 
+    public UsageContext: number | string[];
+
     public constructor(role?: Role) {
         super(role);
         if (role) {
@@ -51,8 +54,22 @@ export class Role extends KIXObject<Role> {
             this.ValidID = role.ValidID;
             this.UserIDs = role.UserIDs;
             this.Permissions = role.Permissions
-                ? (role.Permissions as Permission[]).map((p) => new Permission(p))
+                ? role.Permissions.map((p) => new Permission(p))
                 : [];
+            if (!Array.isArray(role.UsageContext)) {
+                this.UsageContext = [];
+                if (role.UsageContext) {
+                    if (role.UsageContext === 1) {
+                        this.UsageContext = [RoleUsageContextTypes.AGENT];
+                    } else if (role.UsageContext === 2) {
+                        this.UsageContext = [RoleUsageContextTypes.CUSTOMER];
+                    } else if (role.UsageContext === 3) {
+                        this.UsageContext = [RoleUsageContextTypes.AGENT, RoleUsageContextTypes.CUSTOMER];
+                    }
+                }
+            } else {
+                this.UsageContext = role.UsageContext;
+            }
         }
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -120,17 +120,10 @@ export class WebformService {
             if (form && form.userLogin && form.webformUserPassword) {
                 const parameter = this.prepareParameter(request, form);
 
-                const users = await UserService.getInstance().loadObjects<User>(
-                    serverConfig.BACKEND_API_TOKEN, 'webform-service', KIXObjectType.USER, [form.userLogin], null, null
-                ).catch((error): User[] => null);
-
-                let token: string;
-                if (users && users.length) {
-                    token = await AuthenticationService.getInstance().login(
-                        users[0].UserLogin, form.webformUserPassword,
-                        IdService.generateDateBasedId('web-form-login'), false
-                    ).catch((error) => null);
-                }
+                const token = await AuthenticationService.getInstance().login(
+                    form.userLogin, form.webformUserPassword,
+                    IdService.generateDateBasedId('web-form-login'), false
+                ).catch((error) => null);
 
                 if (token) {
                     const service = KIXObjectServiceRegistry.getServiceInstance(KIXObjectType.TICKET);
@@ -187,7 +180,6 @@ export class WebformService {
         const parameter: Array<[string, any]> = [
             [TicketProperty.TITLE, request.subject],
             [TicketProperty.CONTACT_ID, request.email],
-            [TicketProperty.ORGANISATION_ID, request.email],
             [TicketProperty.STATE_ID, form.StateID],
             [TicketProperty.PRIORITY_ID, form.PrioritiyID],
             [TicketProperty.QUEUE_ID, form.QueueID],

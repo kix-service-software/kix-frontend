@@ -1,0 +1,10 @@
+{
+    "dependencies": [
+        "require ./components/kanban-module",
+        "require ./components/kanban-widget",
+        "require ./components/kanban-widget/kanban-item",
+        "require ./core",
+        "./static/jkanban.min.js",
+        "./static/jkanban.min.css"
+    ]
+}
