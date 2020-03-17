@@ -126,12 +126,17 @@ export class TicketAPIService extends KIXObjectAPIService {
             const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
             const contactId = this.getParameterValue(parameter, TicketProperty.CONTACT_ID);
 
+            let organisationId = this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID);
+            if (isNaN(organisationId)) {
+                organisationId = null;
+            }
+
             const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId, contactId);
 
             const createTicket = new CreateTicket(
                 this.getParameterValue(parameter, TicketProperty.TITLE),
                 this.getParameterValue(parameter, TicketProperty.CONTACT_ID),
-                this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID),
+                organisationId,
                 this.getParameterValue(parameter, TicketProperty.STATE_ID),
                 this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
                 queueId,
