@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,8 +20,6 @@ import { ContextMode } from "../../model/ContextMode";
 import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
 import { ContactProperty } from "./model/ContactProperty";
 import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../modules/base-components/webapp/core/InputFieldTypes";
 import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
 import { FormValidationService } from "../../modules/base-components/webapp/core/FormValidationService";
 import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
@@ -31,7 +29,7 @@ import { FormPageConfiguration } from "../../model/configuration/FormPageConfigu
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 
-export class NewContactDialogModuleExtension implements IConfigurationExtension {
+export class Extension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return NewContactDialogContext.CONTEXT_ID;
@@ -75,13 +73,6 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         );
         configurations.push(
             new FormFieldConfiguration(
-                'contact-new-form-field-firstname',
-                'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
-                'Translatable#Helptext_Customers_ContactCreate_Firstname'
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
                 'contact-new-form-field-lastname',
                 'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
                 'Translatable#Helptext_Customers_ContactCreate_Lastname'
@@ -89,20 +80,9 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         );
         configurations.push(
             new FormFieldConfiguration(
-                'contact-new-form-field-login',
-                'Translatable#Login Name', ContactProperty.LOGIN, null, true,
-                'Translatable#Helptext_Customers_ContactCreate_Login'
-            )
-        );
-
-        configurations.push(
-            new FormFieldConfiguration(
-                'contact-new-form-field-password',
-                'Translatable#Password', ContactProperty.PASSWORD, null, true,
-                'Translatable#Helptext_Customers_ContactCreate_Password',
-                [
-                    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-                ]
+                'contact-new-form-field-firstname',
+                'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
+                'Translatable#Helptext_Customers_ContactCreate_Firstname'
             )
         );
         configurations.push(
@@ -114,20 +94,6 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ORGANISATION),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                     new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true)
-                ]
-            )
-        );
-
-        configurations.push(
-            new FormGroupConfiguration(
-                'contact-new-form-group-information', 'Translatable#Contact Information',
-                [
-                    'contact-new-form-field-title',
-                    'contact-new-form-field-firstname',
-                    'contact-new-form-field-lastname',
-                    'contact-new-form-field-login',
-                    'contact-new-form-field-password',
-                    'contact-new-form-field-organisation'
                 ]
             )
         );
@@ -164,14 +130,15 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         );
 
         configurations.push(
-            new FormGroupConfiguration(
-                'contact-new-form-group-communication', 'Translatable#Communication',
+            new FormFieldConfiguration(
+                'contact-new-form-field-communication-container', 'Translatable#Communication',
+                'COMMUNICATION_CONTAINER', null, false, null, null, null,
                 [
                     'contact-new-form-field-phone',
                     'contact-new-form-field-mobile',
                     'contact-new-form-field-fax',
                     'contact-new-form-field-email'
-                ]
+                ], null, null, null, null, null, null, null, null, true, true
             )
         );
 
@@ -205,14 +172,15 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         );
 
         configurations.push(
-            new FormGroupConfiguration(
-                'contact-new-form-group-address', 'Translatable#Postal Address',
+            new FormFieldConfiguration(
+                'contact-new-form-field-address-container', 'Translatable#Postal Address',
+                'ADDRESS_CONTAINER', null, false, null, null, null,
                 [
                     'contact-new-form-field-street',
                     'contact-new-form-field-zip',
                     'contact-new-form-field-city',
                     'contact-new-form-field-country'
-                ]
+                ], null, null, null, null, null, null, null, null, true, true
             )
         );
 
@@ -235,11 +203,27 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
         );
 
         configurations.push(
-            new FormGroupConfiguration(
-                'contact-new-form-group-other', 'Translatable#Other',
+            new FormFieldConfiguration(
+                'contact-new-form-field-other-container', 'Translatable#Other',
+                'OTHER_CONTAINER', null, false, null, null, null,
                 [
                     'contact-new-form-field-comment',
                     'contact-new-form-field-valid'
+                ], null, null, null, null, null, null, null, null, true, true
+            )
+        );
+
+        configurations.push(
+            new FormGroupConfiguration(
+                'contact-new-form-group-information', 'Translatable#Contact Information',
+                [
+                    'contact-new-form-field-title',
+                    'contact-new-form-field-firstname',
+                    'contact-new-form-field-lastname',
+                    'contact-new-form-field-organisation',
+                    'contact-new-form-field-communication-container',
+                    'contact-new-form-field-address-container',
+                    'contact-new-form-field-other-container'
                 ]
             )
         );
@@ -248,10 +232,7 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
             new FormPageConfiguration(
                 'contact-new-form-page', 'Translatable#New Contact',
                 [
-                    'contact-new-form-group-information',
-                    'contact-new-form-group-communication',
-                    'contact-new-form-group-address',
-                    'contact-new-form-group-other'
+                    'contact-new-form-group-information'
                 ]
             )
         );
@@ -270,5 +251,5 @@ export class NewContactDialogModuleExtension implements IConfigurationExtension 
 }
 
 module.exports = (data, host, options) => {
-    return new NewContactDialogModuleExtension();
+    return new Extension();
 };

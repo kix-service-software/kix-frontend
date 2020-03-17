@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -49,10 +49,12 @@ export interface ILabelProvider<T> {
 
     getObjectTypeIcon(): string | ObjectIcon;
 
-    getIcons(object: T, property: string, value?: string | number): Promise<Array<string | ObjectIcon>>;
+    getIcons(
+        object: T, property: string, value?: string | number, forTable?: boolean
+    ): Promise<Array<string | ObjectIcon>>;
 
     canShow(property: string, object: T): boolean;
 
-    getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string]>;
+    getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string, string[]]>;
 
 }

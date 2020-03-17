@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -87,7 +87,7 @@ export class Extension implements IConfigurationExtension {
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
                 new FormFieldOption(ObjectReferenceOptions.FREETEXT, true)
             ], null, null,
-                null, null, null, null, 100
+                null, null, null, null, null, 100
             )
         );
         configurations.push(
@@ -95,7 +95,7 @@ export class Extension implements IConfigurationExtension {
                 'general-catalog-new-form-field-name',
                 'Translatable#Name', GeneralCatalogItemProperty.NAME, null, true,
                 'Translatable#Helptext_Admin_GeneralCatalogCreate_Name', null, null, null,
-                null, null, null, null, 100
+                null, null, null, null, null, 100
             )
         );
         configurations.push(

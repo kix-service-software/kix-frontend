@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,6 +14,9 @@ import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOp
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { ContactProperty } from "../../../model/ContactProperty";
 import { TicketStats } from "../../../model/TicketStats";
+import { UserProperty } from "../../../../user/model/UserProperty";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { User } from "../../../../user/model/User";
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 
@@ -40,5 +43,30 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
         });
 
         return rowObjects;
+    }
+
+    protected async prepareSpecificValues(values: TableValue[], contact: Contact): Promise<void> {
+        await super.prepareSpecificValues(values, contact);
+        for (const value of values) {
+            if (this.isUserProperty(value.property)) {
+                let user = contact.User;
+                if (!user && contact.AssignedUserID) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [contact.AssignedUserID], null, null, true
+                    ).catch(() => [] as User[]);
+                    user = users && users.length ? users[0] : null;
+                }
+                if (user) {
+                    value.objectValue = user[value.property];
+                } else if (value.property === UserProperty.IS_AGENT || value.property === UserProperty.IS_CUSTOMER) {
+                    value.objectValue = 0;
+                }
+            }
+        }
+    }
+
+    private isUserProperty(property: string): boolean {
+        const userProperties = Object.keys(UserProperty).map((p) => UserProperty[p]);
+        return userProperties.some((p) => p === property);
     }
 }

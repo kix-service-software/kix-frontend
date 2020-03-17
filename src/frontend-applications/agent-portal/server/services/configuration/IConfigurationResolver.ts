@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,9 +8,10 @@
  */
 
 import { IConfiguration } from "../../../model/configuration/IConfiguration";
+import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
 
 export interface IConfigurationResolver<T extends IConfiguration = IConfiguration> {
 
-    resolve(token: string, configuration: T): Promise<void>;
+    resolve(token: string, configuration: T, sysConfigOptions: SysConfigOption[]): Promise<void>;
 
 }

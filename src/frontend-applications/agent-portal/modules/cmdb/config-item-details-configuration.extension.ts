@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { ConfigItemDetailsContext } from "./webapp/core";
+import { ConfigItemDetailsContext } from "./webapp/core/context/ConfigItemDetailsContext";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";
@@ -38,9 +38,35 @@ export class Extension implements IConfigurationExtension {
         );
         configurations.push(configItemInfoLaneTab);
 
+        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
+            'config-item-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects, []
+        );
+        configurations.push(linkedObjectsConfig);
+
+        const configItemLinkedObjectsWidget = new WidgetConfiguration(
+            'config-item-details-linked-object-widget', 'Linked Objects', ConfigurationType.Widget,
+            'linked-objects-widget', 'Translatable#Linked Objects',
+            [],
+            new ConfigurationDefinition('config-item-details-linked-objects-config', ConfigurationType.LinkedObjects),
+            null, false, false, null, false
+        );
+        configurations.push(configItemLinkedObjectsWidget);
+
+        const configItemHistoryWidget = new WidgetConfiguration(
+            'config-item-details-history-widget', 'History', ConfigurationType.Widget,
+            "config-item-history-widget", "Translatable#History", [], null,
+            new ConfigurationDefinition('config-item-history-config', ConfigurationType.Table),
+            false, false, null, false
+        );
+        configurations.push(configItemHistoryWidget);
+
         const tabConfig = new TabWidgetConfiguration(
             'config-item-details-object-info-tab-config', 'Tab Config', ConfigurationType.TabWidget,
-            ['config-item-details-object-info']
+            [
+                'config-item-details-object-info',
+                'config-item-details-linked-object-widget',
+                'config-item-details-history-widget'
+            ]
         );
         configurations.push(tabConfig);
 
@@ -50,33 +76,6 @@ export class Extension implements IConfigurationExtension {
             new ConfigurationDefinition('config-item-details-object-info-tab-config', ConfigurationType.TabWidget)
         );
         configurations.push(tabLane);
-
-        const configItemHistoryLane = new WidgetConfiguration(
-            'config-item-details-history-widget', 'History', ConfigurationType.Widget,
-            "config-item-history-widget", "Translatable#History", [],
-            null, null, true, true, null, false
-        );
-        configurations.push(configItemHistoryLane);
-
-        const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
-            'config-item-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects,
-            [
-                ["Config Items", KIXObjectType.CONFIG_ITEM],
-                ["Tickets", KIXObjectType.TICKET],
-                ["FAQs", KIXObjectType.FAQ_ARTICLE]
-            ]
-        );
-        configurations.push(linkedObjectsConfig);
-
-        const configItemLinkedObjectsLane = new WidgetConfiguration(
-            'config-item-details-linked-object-widget', 'Linked Objects', ConfigurationType.Widget,
-            'linked-objects-widget', 'Translatable#Linked Objects',
-            ['linked-objects-edit-action'],
-            new ConfigurationDefinition('config-item-details-linked-objects-config', ConfigurationType.LinkedObjects),
-            null, true, true, null, false
-        );
-        configurations.push(configItemLinkedObjectsLane);
-
 
         const widgetConfig = new TableWidgetConfiguration(
             'config-item-details-version-list-table-widget', 'Table Widget', ConfigurationType.TableWidget,
@@ -102,14 +101,6 @@ export class Extension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'config-item-details-object-info-tab-widget', 'config-item-details-object-info-tab-widget',
                         null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
-                        'config-item-details-linked-object-widget', 'config-item-details-linked-object-widget', null,
-                        [new UIComponentPermission('links', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
-                        'config-item-details-history-widget', 'config-item-details-history-widget', null,
-                        [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
                     )
                 ],
                 [
@@ -126,7 +117,15 @@ export class Extension implements IConfigurationExtension {
                 ],
                 [],
                 [
-                    new ConfiguredWidget('config-item-details-object-info', 'config-item-details-object-info')
+                    new ConfiguredWidget('config-item-details-object-info', 'config-item-details-object-info'),
+                    new ConfiguredWidget(
+                        'config-item-details-linked-object-widget', 'config-item-details-linked-object-widget', null,
+                        [new UIComponentPermission('links', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'config-item-details-history-widget', 'config-item-details-history-widget', null,
+                        [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
+                    )
                 ]
             )
         );

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,6 +21,7 @@ import { ContextService } from "../../../../../modules/base-components/webapp/co
 import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
 import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
 import { ToastContent } from "../../../../../modules/base-components/webapp/core/ToastContent";
+import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
 
 class OverlayComponent {
 
@@ -68,8 +69,8 @@ class OverlayComponent {
 
     private openOverlay<T extends KIXObject<T>>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
-        closeButton: boolean, position: [number, number], newListenerId: string, large: boolean,
-        toastTimeoutMillis: number = 2000, autoClose: boolean = true
+        icon: string | ObjectIcon, closeButton: boolean, position: [number, number],
+        newListenerId: string, large: boolean, toastTimeoutMillis: number = 2000, autoClose: boolean = true
     ): void {
         if (this.currentListenerId) {
             this.closeOverlay();
@@ -90,7 +91,7 @@ class OverlayComponent {
 
         setTimeout(async () => {
             this.state.title = title;
-            this.state.icon = this.getWidgetIcon(type);
+            this.state.icon = icon || this.getWidgetIcon(type);
             this.state.content = content;
             this.state.hasCloseButton = closeButton;
             this.state.type = type;
@@ -272,8 +273,6 @@ class OverlayComponent {
                 return 'kix-icon-info';
             case OverlayType.WARNING:
                 return 'kix-icon-exclamation';
-            case OverlayType.WARNING:
-                return 'kix-icon-close';
             default:
                 return '';
         }

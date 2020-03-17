@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,13 +16,13 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
 import { ContextType } from '../../../../../model/ContextType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { Context } from 'vm';
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { Context } from '../../../../../model/Context';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -36,6 +36,9 @@ class TabLaneComponent implements IEventSubscriber {
     private tabIcons: Map<string, string | ObjectIcon>;
     private tabTitles: Map<string, string>;
     private hideSidebar: boolean;
+
+    private keyListenerElement: any;
+    private keyListener: any;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.tabWidgets);
@@ -90,16 +93,20 @@ class TabLaneComponent implements IEventSubscriber {
             this.prepareContext();
             this.hideSidebarIfNeeded();
             window.addEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
-            const sidebarTranslations = await TranslationService.createTranslationObject(
-                ['Translatable#Close Sidebars']
-            );
-            this.state.translations = { ...this.state.translations, ...sidebarTranslations };
         }
 
         if (this.state.tabWidgets.length && this.state.activeTab && this.state.tabId) {
             const tab = this.state.tabWidgets.find((tw) => tw.instanceId === this.state.tabId);
             if (tab && tab.instanceId !== this.state.activeTab.instanceId) {
                 this.state.activeTab = tab;
+            }
+        }
+
+        if (this.state.contextType === ContextType.DIALOG) {
+            this.keyListenerElement = (this as any).getEl();
+            if (this.keyListenerElement) {
+                this.keyListener = this.keydown.bind(this);
+                this.keyListenerElement.addEventListener('keydown', this.keyListener, false);
             }
         }
 
@@ -116,6 +123,10 @@ class TabLaneComponent implements IEventSubscriber {
         }
         ContextService.getInstance().unregisterListener(this.contextServiceListenerId);
         window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
+
+        if (this.state.contextType === ContextType.DIALOG && this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.keydown.bind(this), false);
+        }
     }
 
     public async tabClicked(tab: WidgetConfiguration, silent?: boolean): Promise<void> {
@@ -147,7 +158,7 @@ class TabLaneComponent implements IEventSubscriber {
     ): void {
         context.registerListener(this.contextListenerId, {
             sidebarToggled: () => {
-                this.state.showSidebar = context.isSidebarShown();
+                this.state.showSidebar = context.areSidebarsShown();
             },
             explorerBarToggled: () => { return; },
             objectChanged: () => { return; },
@@ -162,17 +173,17 @@ class TabLaneComponent implements IEventSubscriber {
     public hideSidebarIfNeeded(): void {
         const context: Context = ContextService.getInstance().getActiveContext(this.state.contextType);
         if (context &&
-            context.isSidebarShown() &&
+            context.areSidebarsShown() &&
             window.innerWidth <= 1400
         ) {
-            context.closeSidebar();
+            context.closeAllSidebars();
         }
     }
 
     private setSidebars(): void {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.hasSidebars = context ? context.getSidebars().length > 0 : false;
-        this.state.showSidebar = context.isSidebarShown();
+        this.state.showSidebar = context.areSidebarsShown();
     }
 
     public isActiveTab(tabId: string): boolean {
@@ -213,6 +224,26 @@ class TabLaneComponent implements IEventSubscriber {
         return this.tabIcons.has(tab.instanceId)
             ? this.tabIcons.get(tab.instanceId)
             : tab.icon;
+    }
+
+    public keydown(event: any): void {
+        if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && event.ctrlKey) {
+            const index = this.state.tabWidgets.findIndex((tw) => tw.instanceId === this.state.activeTab.instanceId);
+            let nextTab: WidgetConfiguration;
+
+            if (event.key === 'ArrowUp') {
+                nextTab = index > 0
+                    ? this.state.tabWidgets[index - 1]
+                    : this.state.tabWidgets[this.state.tabWidgets.length - 1];
+            } else {
+                nextTab = index < this.state.tabWidgets.length - 1
+                    ? this.state.tabWidgets[index + 1]
+                    : this.state.tabWidgets[0];
+            }
+
+
+            this.tabClicked(nextTab);
+        }
     }
 }
 

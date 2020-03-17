@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,6 +17,13 @@ import { ConfigurationDefinition } from "../../model/configuration/Configuration
 import { WidgetSize } from "../../model/configuration/WidgetSize";
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
+import { KIXObjectType } from "../../model/kix/KIXObjectType";
+import { ContactProperty } from "../customer/model/ContactProperty";
+import { UserProperty } from "./model/UserProperty";
+import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
+import { ContextMode } from "../../model/ContextMode";
+import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
+import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
 
 export class Extension implements IConfigurationExtension {
 
@@ -27,10 +34,43 @@ export class Extension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
+        const contactRouting = new RoutingConfiguration(
+            'contact-details', KIXObjectType.CONTACT,
+            ContextMode.DETAILS, 'Contact.ID', false
+        );
+
+        const infoConfig = new ObjectInformationWidgetConfiguration(
+            'user-details-object-information-config', 'User Info', ConfigurationType.ObjectInformation,
+            KIXObjectType.USER,
+            [
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                UserProperty.USER_LOGIN,
+                UserProperty.USER_ACCESS,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.FAX,
+                ContactProperty.EMAIL,
+                KIXObjectProperty.VALID_ID,
+                ContactProperty.COMMENT,
+                KIXObjectProperty.CREATE_TIME,
+                KIXObjectProperty.CREATE_BY,
+                KIXObjectProperty.CHANGE_TIME,
+                KIXObjectProperty.CHANGE_BY
+            ], false,
+            [
+                [ContactProperty.EMAIL, contactRouting],
+            ]
+        );
+        configurations.push(infoConfig);
+
         const userInfoWidgetConfig = new WidgetConfiguration(
             'user-details-info-widget', 'User info widget', ConfigurationType.Widget,
-            'user-info-widget', 'Translatable#Agent Information', [], null, null,
-            false, true, null, false
+            'object-information-widget', 'Translatable#User Information', [],
+            new ConfigurationDefinition(
+                'user-details-object-information-config', ConfigurationType.ObjectInformation
+            ), null, false, true, null, false
         );
         configurations.push(userInfoWidgetConfig);
 

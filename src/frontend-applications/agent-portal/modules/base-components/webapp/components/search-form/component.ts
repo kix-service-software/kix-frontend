@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -92,6 +92,8 @@ class Component implements ISearchFormListener {
             if (cache && cache.objectType === this.objectType) {
                 if (cache.status === CacheState.VALID) {
                     SearchService.getInstance().provideResult(this.objectType);
+                    this.state.resultCount = cache.result.length;
+
                     await this.setCanSearch();
                     this.state.manager.reset(false);
                     for (const criteria of cache.criteria) {
@@ -152,7 +154,7 @@ class Component implements ISearchFormListener {
     }
 
     public keyDown(event: any): void {
-        if ((event.keyCode === 13 || event.key === 'Enter') && this.state.canSearch) {
+        if ((event.ctrlKey && event.key === 'Enter') && this.state.canSearch) {
             if (event.preventDefault) {
                 event.preventDefault();
             }
@@ -209,10 +211,11 @@ class Component implements ISearchFormListener {
 
         await this.setAdditionalColumns();
 
-        this.state.resultCount = Array.isArray(result) ? result.length : 0;
-        (this as any).setStateDirty();
-
         DialogService.getInstance().setMainDialogLoading(false);
+
+        setTimeout(() => {
+            this.state.resultCount = Array.isArray(result) ? result.length : 0;
+        }, 100);
     }
 
     private async setAdditionalColumns(): Promise<void> {

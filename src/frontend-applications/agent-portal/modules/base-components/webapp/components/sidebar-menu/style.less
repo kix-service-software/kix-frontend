@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,36 +7,71 @@
  * --
  */
 
-.bar-icon {
-    .shadow-1;
-    background: @secondary-6;
-    color: @secondary-3;
-    box-sizing: border-box;
-    width: @margin-default;
-    height: @margin-default;
-    text-align: center;
-    margin-bottom: @margin-tiny;
-    font-size: 1.5em;
-    border-top-left-radius: @border-radius;
-    border-bottom-left-radius: @border-radius;
-    cursor: pointer;
-    &.select-active {
-        background: @secondary-3;
-        color: @secondary-0;
-        &:hover {
-            background: @secondary-2;
-            color: @secondary-0;
+.widget-bar {
+    .bar-icon {
+        .shadow-1;
+        background: @secondary-6;
+        color: @secondary-3;
+        box-sizing: border-box;
+        width: @margin-default;
+        height: @margin-default;
+        text-align: center;
+        margin-bottom: @margin-tiny;
+        font-size: 1.5em;
+        border-top-left-radius: @border-radius;
+        border-bottom-left-radius: @border-radius;
+        cursor: pointer;
+        transition: background-color 0.25s, color 0.25s;
+
+        &.sidebar-toggle {
+            margin-bottom: @margin-small;
+            background: @secondary-4;
+            color: @secondary-2;
+
+            &.sidebars-shown {
+                background: @secondary-2;
+                color: @secondary-1;
+
+                &:hover {
+                    background: @secondary-1;
+                    color: @secondary-0;
+                }
+            }
+
+            &:hover {
+                background: @secondary-3;
+                color: @secondary-1;
+            }
+
+            >div {
+                height: @margin-default;
+                transform: rotate(90deg);
+            }
         }
-    }
-    &:hover {
-        background: @secondary-4;
-        color: @secondary-2;
-        box-shadow: none;
-    }
-    &>span {
-        .vertical-align;
-    }
-    &:last-of-type {
-        margin-bottom: 0;
+
+        &.select-active {
+            background: @secondary-3;
+            color: @secondary-0;
+
+            &:hover {
+                background: @secondary-2;
+                color: @secondary-0;
+            }
+        }
+
+        &:hover {
+            background: @secondary-4;
+            color: @secondary-2;
+            box-shadow: none;
+        }
+
+        &>div>span,
+        &>span {
+            .vertical-align;
+        }
+
+        &:last-of-type {
+            margin-bottom: 0;
+        }
     }
 }

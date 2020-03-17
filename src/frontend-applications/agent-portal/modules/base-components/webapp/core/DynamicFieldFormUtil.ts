@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,18 +10,10 @@
 import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { IKIXObjectFormService } from "../../../base-components/webapp/core/IKIXObjectFormService";
 import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
-import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 import { InputFieldTypes } from "./InputFieldTypes";
@@ -30,10 +22,22 @@ import { FormFieldOption } from "../../../../model/configuration/FormFieldOption
 import { DateTimeUtil } from "./DateTimeUtil";
 import { ObjectReferenceOptions } from "./ObjectReferenceOptions";
 import { TreeNode } from "./tree";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { FormValidationService } from "./FormValidationService";
 import { ValidationResult } from "./ValidationResult";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
+import { CheckListInputType } from "../../../dynamic-fields/webapp/core/CheckListInputType";
+import { CheckListItem } from "../../../dynamic-fields/webapp/core/CheckListItem";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { FilterCriteria } from "../../../../model/FilterCriteria";
+import { SearchProperty } from "../../../search/model/SearchProperty";
+import { SearchOperator } from "../../../search/model/SearchOperator";
+import { VersionProperty } from "../../../cmdb/model/VersionProperty";
+import { FilterType } from "../../../../model/FilterType";
+import { FilterDataType } from "../../../../model/FilterDataType";
+import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
+import { KIXObjectService } from "./KIXObjectService";
 
 export class DynamicFieldFormUtil {
 
@@ -61,92 +65,42 @@ export class DynamicFieldFormUtil {
         const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (nameOption) {
             const name = nameOption.value;
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                        FilterType.AND, name
-                    )
-                ],
-                null, null, [DynamicFieldProperty.CONFIG]
-            );
-            const fields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
-            if (fields && fields.length && fields[0].ValidID === 1) {
-                const config = fields[0].Config;
+            const dynamicField = await KIXObjectService.loadDynamicField(name);
+            if (dynamicField && dynamicField.ValidID === 1) {
+                const config = dynamicField.Config;
                 field.countDefault = Number(config.CountDefault);
                 field.countMax = Number(config.CountMax);
                 field.countMin = Number(config.CountMin);
 
                 if (!field.label || field.label === '') {
-                    field.label = fields[0].Label;
+                    field.label = dynamicField.Label;
                 }
 
                 field.defaultValue = config.DefaultValue
                     ? new FormFieldValue(config.DefaultValue, true)
                     : null;
 
-                if (fields[0].FieldType === DynamicFieldType.TEXT) {
-                    field.inputComponent = null;
-                } else if (fields[0].FieldType === DynamicFieldType.TEXT_AREA) {
-                    field.inputComponent = 'text-area-input';
-                } else if (
-                    fields[0].FieldType === DynamicFieldType.DATE || fields[0].FieldType === DynamicFieldType.DATE_TIME
-                ) {
-
-                    const date = new Date();
-                    let type = InputFieldTypes.DATE_TIME;
-
-                    const offset = config.DefaultValue ? Number(config.DefaultValue) : 0;
-
-                    if (fields[0].FieldType === DynamicFieldType.DATE) {
-                        type = InputFieldTypes.DATE;
-                        date.setDate(date.getDate() + offset);
-                        date.setHours(0, 0, 0, 0);
-                    } else {
-                        date.setSeconds(date.getSeconds() + offset);
-                    }
-
-                    field.options.push(
-                        new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, type),
-                    );
-
-                    field.defaultValue = new FormFieldValue(date);
-                    field.inputComponent = 'date-time-input';
-                } else if (fields[0].FieldType === DynamicFieldType.SELECTION) {
-
-                    field.inputComponent = 'object-reference-input';
-                    const nodes: TreeNode[] = [];
-
-                    if (fields[0].Config.PossibleValues) {
-                        const translatable = Number(fields[0].Config.TranslatableValues);
-                        for (const pv in fields[0].Config.PossibleValues) {
-                            if (fields[0].Config.PossibleValues[pv]) {
-                                const value = fields[0].Config.PossibleValues[pv];
-                                const label = translatable
-                                    ? await TranslationService.translate(value)
-                                    : value;
-                                const node = new TreeNode(pv, label);
-                                nodes.push(node);
-                            }
-                        }
-                    }
-
-                    field.options.push(new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, nodes));
-                    field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field.countMin));
-                    field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field.countMax));
-
-                    const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
-                    field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
-
-                    if (field.countMin > 0) {
-                        field.required = true;
-                    }
-
-                    field.countDefault = 1;
-                    field.countMax = 1;
-                    field.countMin = 1;
+                switch (dynamicField.FieldType) {
+                    case DynamicFieldTypes.TEXT:
+                        field.inputComponent = null;
+                        break;
+                    case DynamicFieldTypes.TEXT_AREA:
+                        field.inputComponent = 'text-area-input';
+                        break;
+                    case DynamicFieldTypes.DATE:
+                    case DynamicFieldTypes.DATE_TIME:
+                        this.prepareDateField(field, dynamicField);
+                        break;
+                    case DynamicFieldTypes.SELECTION:
+                        await this.prepareSelectionField(field, dynamicField);
+                        break;
+                    case DynamicFieldTypes.CHECK_LIST:
+                        this.prepareChecklistField(field, dynamicField);
+                        break;
+                    case DynamicFieldTypes.CI_REFERENCE:
+                        this.prepareCIReferenceField(field, dynamicField);
+                        break;
+                    default:
                 }
 
                 success = true;
@@ -156,60 +110,185 @@ export class DynamicFieldFormUtil {
         return success;
     }
 
+    private static prepareDateField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
+        const date = new Date();
+        let type = InputFieldTypes.DATE_TIME;
+
+        const offset = dynamicField.Config.DefaultValue ? Number(dynamicField.Config.DefaultValue) : 0;
+
+        if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
+            type = InputFieldTypes.DATE;
+            date.setDate(date.getDate() + offset);
+            date.setHours(0, 0, 0, 0);
+        } else {
+            date.setSeconds(date.getSeconds() + offset);
+        }
+
+        field.options.push(
+            new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, type),
+        );
+
+        field.defaultValue = new FormFieldValue(date);
+        field.inputComponent = 'date-time-input';
+    }
+
+    private static async prepareSelectionField(
+        field: FormFieldConfiguration, dynamicField: DynamicField
+    ): Promise<void> {
+        field.inputComponent = 'object-reference-input';
+        const nodes: TreeNode[] = [];
+
+        if (dynamicField.Config.PossibleValues) {
+            const translatable = Number(dynamicField.Config.TranslatableValues);
+            for (const pv in dynamicField.Config.PossibleValues) {
+                if (dynamicField.Config.PossibleValues[pv]) {
+                    const value = dynamicField.Config.PossibleValues[pv];
+                    const label = translatable
+                        ? await TranslationService.translate(value)
+                        : value;
+                    const node = new TreeNode(pv, label);
+                    nodes.push(node);
+                }
+            }
+        }
+
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.ADDITIONAL_NODES, nodes));
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field.countMin));
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field.countMax));
+
+        const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
+
+        if (field.countMin > 0) {
+            field.required = true;
+        }
+
+        field.countDefault = 1;
+        field.countMax = 1;
+        field.countMin = 1;
+    }
+
+    private static prepareChecklistField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
+        field.inputComponent = 'dynamic-field-checklist-input';
+        field.defaultValue = new FormFieldValue(
+            dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
+        );
+        field.countDefault = 1;
+        field.countMax = 1;
+        field.countMin = 1;
+    }
+
+    private static prepareCIReferenceField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
+        field.inputComponent = 'object-reference-input';
+        const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
+
+        const filter = [
+            new FilterCriteria(
+                ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
+            ),
+            new FilterCriteria(
+                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
+            )
+        ];
+
+        if (dynamicField.Config) {
+            const classes = dynamicField.Config.ITSMConfigItemClasses;
+            if (classes && Array.isArray(classes) && classes.length) {
+                filter.push(new FilterCriteria(
+                    ConfigItemProperty.CLASS_ID, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, classes.map((c) => Number(c))
+                ));
+            }
+
+            const depStates = dynamicField.Config.DeploymentStates;
+            if (depStates && Array.isArray(depStates) && depStates.length) {
+                filter.push(new FilterCriteria(
+                    ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, depStates.map((d) => Number(d))
+                ));
+            }
+        }
+
+
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM));
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true));
+        field.options.push(new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE));
+        field.options.push(
+            new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS, new KIXObjectLoadingOptions(filter))
+        );
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MIN, field.countMin));
+        field.options.push(new FormFieldOption(ObjectReferenceOptions.COUNT_MAX, field.countMax));
+
+        field.defaultValue = new FormFieldValue(
+            dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
+        );
+
+        field.countDefault = 1;
+        field.countMax = 1;
+        field.countMin = 1;
+    }
+
     public static async handleDynamicFieldValues(
         formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService
     ): Promise<void> {
         const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
         for (const field of fields) {
-            let values = [];
+            let dfValue;
             const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-            let isMultiselect = false;
+            let dynamicField: DynamicField;
             if (fieldNameOption) {
                 if (object && object.DynamicFields && object.DynamicFields.length) {
-                    const dfValue: DynamicFieldValue = object.DynamicFields.find(
+                    const objectDFValue: DynamicFieldValue = object.DynamicFields.find(
                         (df) => df.Name === fieldNameOption.value
                     );
-                    if (dfValue) {
-                        values = dfValue.Value;
+                    if (objectDFValue) {
+                        dfValue = objectDFValue.Value;
+                        if (Array.isArray(dfValue) && dfValue.length === 0 && field.defaultValue) {
+                            dfValue.push(field.defaultValue.value);
+                        }
                     }
                 }
-                if (values.length === 0 && field.defaultValue) {
-                    values.push(field.defaultValue.value);
-                }
-                const dynamicField = await this.loadDynamicField(fieldNameOption.value);
-                if (dynamicField) {
-                    isMultiselect = dynamicField.FieldType === DynamicFieldType.SELECTION;
-                }
+
+                dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
             }
 
-            if (isMultiselect) {
-                field.defaultValue = new FormFieldValue(values);
-            } else {
-                for (let i = 0; i < values.length; i++) {
-                    if (i === 0) {
-                        field.defaultValue = new FormFieldValue(values[i], true);
-                    } else {
-                        const newField = formService.getNewFormField(field);
-                        newField.defaultValue = new FormFieldValue(values[i], true);
-                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                        formFields.splice(index + i, 0, newField);
+            if (dynamicField) {
+                if (dynamicField.FieldType === DynamicFieldTypes.SELECTION ||
+                    dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE
+                ) {
+                    field.defaultValue = new FormFieldValue(dfValue);
+                } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST && dfValue && dfValue[0]) {
+                    field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
+                } else if (dfValue && Array.isArray(dfValue)) {
+                    for (let i = 0; i < dfValue.length; i++) {
+                        if (i === 0) {
+                            field.defaultValue = new FormFieldValue(dfValue[i], true);
+                        } else {
+                            const newField = formService.getNewFormField(field);
+                            newField.defaultValue = new FormFieldValue(dfValue[i], true);
+                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                            formFields.splice(index + i, 0, newField);
+                        }
                     }
-                }
 
-                if (field.countMin > 0 && values.length < field.countMin) {
-                    const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
-                        ? field.countDefault
-                        : field.countMin;
-                    const count = values.length === 0 ? countDefault : field.countMin - values.length;
+                    if (field.countMin > 0 && dfValue.length < field.countMin) {
+                        const countDefault = field.countDefault > field.countMin && field.countDefault < field.countMax
+                            ? field.countDefault
+                            : field.countMin;
+                        const count = dfValue.length === 0 ? countDefault : field.countMin - dfValue.length;
 
-                    for (let i = 1; i < count; i++) {
-                        const newField = formService.getNewFormField(field);
-                        newField.defaultValue = new FormFieldValue(null, false);
-                        const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
-                        formFields.splice(index, 0, newField);
+                        for (let i = 1; i < count; i++) {
+                            const newField = formService.getNewFormField(field);
+                            newField.defaultValue = new FormFieldValue(null, false);
+                            const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
+                            formFields.splice(index, 0, newField);
+                        }
+                    } else if (field.countMin === 0 && !dfValue.length) {
+                        field.empty = true;
                     }
-                } else if (field.countMin === 0 && !values.length) {
-                    field.empty = true;
                 }
             }
         }
@@ -227,12 +306,16 @@ export class DynamicFieldFormUtil {
         const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (fieldNameOption) {
             let setValue = field.empty ? null : value.value;
+            let notArray = false;
 
-            const dynamicField = await this.loadDynamicField(fieldNameOption.value);
+            const dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
             if (dynamicField) {
                 const fieldType = dynamicField.FieldType;
-                if (setValue && (fieldType === 'Date' || fieldType === 'DateTime')) {
+                if (setValue && (fieldType === DynamicFieldTypes.DATE || fieldType === DynamicFieldTypes.DATE_TIME)) {
                     setValue = DateTimeUtil.getKIXDateTimeString(setValue);
+                } else if (setValue && fieldType === DynamicFieldTypes.CHECK_LIST) {
+                    setValue = JSON.stringify(setValue);
+                    notArray = true;
                 }
             }
 
@@ -245,7 +328,7 @@ export class DynamicFieldFormUtil {
                 dfParameter[1].push(dfValue);
             }
 
-            if (Array.isArray(setValue)) {
+            if (notArray || Array.isArray(setValue)) {
                 dfValue.Value = setValue;
             } else if (setValue && !dfValue.Value.some((v) => v === setValue)) {
                 dfValue.Value.push(setValue);
@@ -255,29 +338,39 @@ export class DynamicFieldFormUtil {
         return parameter;
     }
 
-    private static async loadDynamicField(name: string): Promise<DynamicField> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, name
-                )
-            ], null, null, [DynamicFieldProperty.CONFIG]
-        );
-        const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-        );
-
-        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
-    }
-
     public static async validateDFValue(dfName: string, value: any): Promise<ValidationResult[]> {
         let result = [];
-        const dynamicField = await this.loadDynamicField(dfName);
+        const dynamicField = await KIXObjectService.loadDynamicField(dfName);
         if (dynamicField) {
             const dfResult = await FormValidationService.getInstance().validateDynamicFieldValue(dynamicField, value);
             result = [...result, ...dfResult];
         }
         return result;
     }
+
+    public static countValues(checklist: CheckListItem[]): [number, number] {
+        const value: [number, number] = [0, 0];
+        for (const item of checklist) {
+            if (item.input === CheckListInputType.ChecklistState) {
+                value[1]++;
+
+                if (!item.value) {
+                    item.value = '-';
+                }
+
+                if (item.value === 'OK' || item.value === 'NOK' || item.value === 'n.a.') {
+                    value[0]++;
+                }
+            }
+
+            if (item.sub && item.sub.length) {
+                const subCount = this.countValues(item.sub);
+                value[0] = value[0] + subCount[0];
+                value[1] = value[1] + subCount[1];
+            }
+        }
+
+        return value;
+    }
+
 }

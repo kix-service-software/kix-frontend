@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,15 +7,26 @@
  * --
  */
 
-export enum DynamicFieldType {
+import { KIXObject } from "../../../model/kix/KIXObject";
+import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 
-    TEXT = 'Text',
+export class DynamicFieldType extends KIXObject {
 
-    TEXT_AREA = 'TextArea',
+    public ObjectId: string | number;
 
-    SELECTION = 'Multiselect',
+    public KIXObjectType: string = KIXObjectType.DYNAMIC_FIELD_TYPE;
 
-    DATE = 'Date',
+    public DisplayName: string;
 
-    DATE_TIME = 'DateTime'
+    public Name: string;
+
+    public constructor(dynamicFieldType?: DynamicFieldType) {
+        super(dynamicFieldType);
+        if (dynamicFieldType) {
+            this.ObjectId = dynamicFieldType.ObjectId;
+            this.DisplayName = dynamicFieldType.DisplayName;
+            this.Name = dynamicFieldType.Name;
+        }
+    }
+
 }

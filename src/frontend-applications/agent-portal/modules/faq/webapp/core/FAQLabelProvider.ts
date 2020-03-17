@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,6 @@ import { FAQArticle } from "../../model/FAQArticle";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FAQArticleProperty } from "../../model/FAQArticleProperty";
 import { FAQCategory } from "../../model/FAQCategory";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
@@ -40,6 +39,9 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.VOTES:
                 displayValue = value.toString();
                 break;
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                displayValue = Boolean(value) ? 'Translatable#Yes' : 'Translatable#No';
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -56,9 +58,6 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case FAQArticleProperty.APPROVED:
                 displayValue = 'Translatable#Approved';
                 break;
@@ -68,17 +67,8 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.CATEGORY_ID:
                 displayValue = 'Translatable#Category';
                 break;
-            case FAQArticleProperty.CHANGED:
-                displayValue = 'Translatable#Changed at';
-                break;
-            case FAQArticleProperty.CHANGED_BY:
-                displayValue = 'Translatable#Changed by';
-                break;
-            case FAQArticleProperty.CREATED:
-                displayValue = 'Translatable#Created at';
-                break;
-            case FAQArticleProperty.CREATED_BY:
-                displayValue = 'Translatable#Created by';
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                displayValue = 'Translatable#Show in Customer Portal';
                 break;
             case FAQArticleProperty.FIELD_1:
                 displayValue = 'Translatable#Symptom';
@@ -109,7 +99,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 break;
             case FAQArticleProperty.NUMBER:
                 const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK]
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.FAQ_HOOK], null, null, true
                 ).catch((error): SysConfigOption[] => []);
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Value;
@@ -118,20 +108,11 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
             case FAQArticleProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case FAQArticleProperty.VALID_ID:
-                displayValue = 'Translatable#Validity';
-                break;
-            case FAQArticleProperty.VISIBILITY:
-                displayValue = 'Translatable#Visibility';
-                break;
             case FAQArticleProperty.VOTES:
                 displayValue = 'Translatable#Rating';
                 break;
-            case 'LinkedAs':
-                displayValue = 'Translatable#Linked as';
-                break;
             default:
-                displayValue = property;
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -166,10 +147,12 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 }
                 break;
             case FAQArticleProperty.CREATED_BY:
-                displayValue = faqArticle.createdBy ? faqArticle.createdBy.UserFullname : faqArticle.CreatedBy;
+                displayValue = faqArticle.createdBy ? faqArticle.createdBy.Contact ?
+                    faqArticle.createdBy.Contact.Fullname : faqArticle.createdBy.UserLogin : faqArticle.CreatedBy;
                 break;
             case FAQArticleProperty.CHANGED_BY:
-                displayValue = faqArticle.changedBy ? faqArticle.changedBy.UserFullname : faqArticle.ChangedBy;
+                displayValue = faqArticle.changedBy ? faqArticle.createdBy.Contact ?
+                    faqArticle.createdBy.Contact.Fullname : faqArticle.createdBy.UserLogin : faqArticle.ChangedBy;
                 break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
@@ -224,6 +207,13 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
         return 'kix-icon-faq';
     }
 
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        if (property === FAQArticleProperty.CUSTOMER_VISIBLE) {
+            return 'kix-icon-men';
+        }
+        return;
+    }
+
     public async getObjectTooltip(faqArticle: FAQArticle, translatable: boolean = true): Promise<string> {
         if (translatable) {
             return await TranslationService.translate(faqArticle.Title);
@@ -236,7 +226,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     }
 
     public async getIcons(
-        faqArticle: FAQArticle, property: string, value?: any
+        faqArticle: FAQArticle, property: string, value?: any, forTable: boolean = false
     ): Promise<Array<string | ObjectIcon>> {
         const icons = [];
 
@@ -261,8 +251,12 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                     }
                 }
                 break;
-            case FAQArticleProperty.VISIBILITY:
-                icons.push(new ObjectIcon(FAQArticleProperty.VISIBILITY, value));
+            case FAQArticleProperty.CUSTOMER_VISIBLE:
+                if (Boolean(value)) {
+                    icons.push('kix-icon-check');
+                } else if (!forTable) {
+                    icons.push('kix-icon-close');
+                }
                 break;
             default:
         }

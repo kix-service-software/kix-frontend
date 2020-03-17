@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -36,6 +36,7 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
             [SearchProperty.FULLTEXT, null],
             [FAQArticleProperty.NUMBER, null],
             [FAQArticleProperty.TITLE, null],
+            [FAQArticleProperty.CUSTOMER_VISIBLE, null],
             [FAQArticleProperty.FIELD_1, null],
             [FAQArticleProperty.FIELD_2, null],
             [FAQArticleProperty.FIELD_3, null],
@@ -115,11 +116,12 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
     private isDropDown(property: string): boolean {
         return property === FAQArticleProperty.APPROVED
             || property === FAQArticleProperty.CATEGORY_ID
-            || property === FAQArticleProperty.VALID_ID
+            || property === KIXObjectProperty.VALID_ID
             || property === FAQArticleProperty.LANGUAGE
             || property === FAQArticleProperty.KEYWORDS
             || property === FAQArticleProperty.CREATED_BY
-            || property === FAQArticleProperty.CHANGED_BY;
+            || property === FAQArticleProperty.CHANGED_BY
+            || property === FAQArticleProperty.CUSTOMER_VISIBLE;
     }
 
     private isDateTime(property: string): boolean {
@@ -127,8 +129,8 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
             || property === FAQArticleProperty.CHANGED;
     }
 
-    public async getOperatorDisplayText(operator: string): Promise<string> {
-        return await SearchOperatorUtil.getText(operator as SearchOperator);
+    public getOperatorDisplayText(operator: string): Promise<string> {
+        return SearchOperatorUtil.getText(operator as SearchOperator);
     }
 
     public async isMultiselect(property: string): Promise<boolean> {

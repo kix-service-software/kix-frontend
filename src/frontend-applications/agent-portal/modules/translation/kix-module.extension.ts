@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -33,15 +33,7 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'edit-translation-dialog', '/kix-module-translation$0/webapp/components/edit-translation-dialog', []
-        ),
-        new UIComponent(
-            'i18n-translation-language-list-widget',
-            '/kix-module-translation$0/webapp/components/i18n-translation-language-list-widget', []
-        ),
-        new UIComponent(
-            'i18n-translation-info-widget',
-            '/kix-module-translation$0/webapp/components/i18n-translation-info-widget', []
-        ),
+        )
     ];
 
     public webDependencies: string[] = [

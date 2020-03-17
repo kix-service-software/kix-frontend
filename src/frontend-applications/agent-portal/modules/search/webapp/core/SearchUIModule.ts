@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,15 +10,14 @@
 import { IUIModule } from "../../../../model/IUIModule";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import {
-    SearchContext, SearchService, NewSearchAction, EditSearchAction,
-    SaveSearchAction, DeleteSearchAction, LoadSearchAction
-} from ".";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContextType } from "../../../../model/ContextType";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
 import { ContextFactory } from "../../../base-components/webapp/core/ContextFactory";
+import { SearchContext } from "./SearchContext";
+import { NewSearchAction, EditSearchAction, SaveSearchAction, DeleteSearchAction, LoadSearchAction } from "./actions";
+import { SearchService } from "./SearchService";
 
 export class UIModule implements IUIModule {
 

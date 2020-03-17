@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,6 +18,7 @@ import { FormFieldValue } from '../../../src/frontend-applications/agent-portal/
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { FormPageConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/FormPageConfiguration';
 import { FormGroupConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/FormGroupConfiguration';
+import { IdService } from '../../../src/frontend-applications/agent-portal/model/IdService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -183,14 +184,18 @@ class someTestFunctions {
 
         const fields = [...Array(10)].map((v, i) => {
             const children = [...Array(5)].map((v, e) => {
-                return new FormFieldConfiguration(
+                const field = new FormFieldConfiguration(
                     `field-${i}-${e}`, `field-${i}-${e}`, 'something', null, false, undefined, undefined, new FormFieldValue(`field-${i}-${e}`)
                 );
+                field.instanceId = IdService.generateDateBasedId();
+                return field;
             });
-            return new FormFieldConfiguration(
+            const field = new FormFieldConfiguration(
                 `field-${i}`, `field-${i}`, 'something', null, false, undefined, undefined, new FormFieldValue(`field-${i}`),
                 children.map((c) => c.id), children
             );
+            field.instanceId = IdService.generateDateBasedId();
+            return field;
         });
 
         return new FormConfiguration(

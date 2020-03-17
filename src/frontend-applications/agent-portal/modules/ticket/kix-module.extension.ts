@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -74,6 +74,7 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent('article-receiver-list', '/kix-module-ticket$0/webapp/components/article-receiver-list', []),
         new UIComponent('channel-input', '/kix-module-ticket$0/webapp/components/channel-input', []),
+        new UIComponent('customer-visible-input', '/kix-module-ticket$0/webapp/components/customer-visible-input', []),
         new UIComponent('edit-ticket-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-dialog', []),
         new UIComponent(
             'edit-ticket-priority-dialog', '/kix-module-ticket$0/webapp/components/edit-ticket-priority-dialog', []
@@ -97,9 +98,6 @@ class Extension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'new-ticket-queue-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-queue-dialog', []
-        ),
-        new UIComponent(
-            'relevant-config-item-list', '/kix-module-ticket$0/webapp/components/relevant-config-item-list', []
         ),
         new UIComponent(
             'new-ticket-state-dialog', '/kix-module-ticket$0/webapp/components/new-ticket-state-dialog', []

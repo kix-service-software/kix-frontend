@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,9 +28,9 @@ export abstract class TableFactory implements ITableFactory {
     }
 
     public abstract createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectids?: Array<string | number>,
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
-        objectType?: KIXObjectType | string
+        objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): ITable;
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {

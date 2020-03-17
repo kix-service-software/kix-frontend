@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -182,18 +182,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 },
                 data: {
                     datasets: [{
-                        backgroundColor: [
-                            "rgb(91, 91, 91)",
-                            "rgb(4, 83, 125)",
-                            "rgb(0, 141, 210)",
-                            "rgb(129, 189, 223)",
-                            "rgb(160, 230, 200)",
-                            "rgb(130, 200, 38)",
-                            "rgb(0, 152, 70)",
-                            "rgb(227, 30, 36)",
-                            "rgb(239, 127, 26)",
-                            "rgb(254, 204, 0)"
-                        ]
+                        backgroundColor: "rgb(91, 91, 91)"
                     }]
                 },
             }
@@ -217,24 +206,8 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
         );
         configurations.push(chart3);
 
-        const predefinedToDoTableFilter = [
-            new KIXObjectPropertyFilter('Translatable#Responsible Tickets', [
-                new TableFilterCriteria(
-                    TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
-                )
-            ]),
-            new KIXObjectPropertyFilter('Translatable#Owner', [
-                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
-            ]),
-            new KIXObjectPropertyFilter('Translatable#Watched Tickets', [
-                new TableFilterCriteria(
-                    TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
-                )
-            ]),
-        ];
-
-        const tableTodoConfiguration = new TableConfiguration(
-            'home-dashboard-ticket-table-todo', 'Todo Table', ConfigurationType.Table,
+        const tableMyOpenTicketsConfiguration = new TableConfiguration(
+            'home-dashboard-ticket-table-myOpenTickets', 'My Open Tickets Table', ConfigurationType.Table,
             KIXObjectType.TICKET,
             new KIXObjectLoadingOptions(
                 [
@@ -246,31 +219,28 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS,
                         FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
                     ),
-                    new FilterCriteria(
-                        TicketProperty.LOCK_ID, SearchOperator.EQUALS,
-                        FilterDataType.NUMERIC, FilterType.AND, 2
-                    ),
                     stateTypeFilterCriteria
-                ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS]
+                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
             ), null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
         );
-        configurations.push(tableTodoConfiguration);
+        configurations.push(tableMyOpenTicketsConfiguration);
 
-        const tableTodoWidgetConfiguration = new TableWidgetConfiguration(
-            'home-dashboard-ticket-table-todo-widget', 'Todo Table Widget', ConfigurationType.TableWidget,
-            KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP],
-            new ConfigurationDefinition('home-dashboard-ticket-table-todo', ConfigurationType.Table),
-            null, null, true, null, predefinedToDoTableFilter
+        const tableMyOpenTicketsWidgetConfiguration = new TableWidgetConfiguration(
+            'home-dashboard-ticket-table-myOpenTickets-widget', 'My Open Tickets Table Widget',
+            ConfigurationType.TableWidget, KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.DOWN],
+            new ConfigurationDefinition('home-dashboard-ticket-table-myOpenTickets', ConfigurationType.Table)
         );
-        configurations.push(tableTodoWidgetConfiguration);
+        configurations.push(tableMyOpenTicketsWidgetConfiguration);
 
-        const todoWidget = new WidgetConfiguration(
-            'home-dashboard-todo-widget', 'Todo Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#ToDo / Processing required', ['bulk-action', 'csv-export-action'],
-            new ConfigurationDefinition('home-dashboard-ticket-table-todo-widget', ConfigurationType.TableWidget),
+        const myOpenTicketsWidget = new WidgetConfiguration(
+            'home-dashboard-myOpenTickets-widget', 'My Open Tickets Widget', ConfigurationType.Widget,
+            'table-widget', 'Translatable#My Open Tickets', ['bulk-action', 'csv-export-action'],
+            new ConfigurationDefinition(
+                'home-dashboard-ticket-table-myOpenTickets-widget', ConfigurationType.TableWidget
+            ),
             null, false, true, 'kix-icon-ticket', false
         );
-        configurations.push(todoWidget);
+        configurations.push(myOpenTicketsWidget);
 
         const newTicketsTableConfig = new TableConfiguration(
             'home-dashboard-ticket-table-new', 'New Tickets Table', ConfigurationType.Table,
@@ -281,7 +251,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         TicketProperty.STATE_ID, SearchOperator.EQUALS,
                         FilterDataType.NUMERIC, FilterType.OR, 1
                     )
-                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
+                ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
             ),
             null,
             [
@@ -296,6 +266,10 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                    'label-list-cell-content'
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
@@ -315,7 +289,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 
         const newTicketsTableWidget = new TableWidgetConfiguration(
             'home-dashboard-ticket-new-table-widget', 'New Tickets Table Widget', ConfigurationType.TableWidget,
-            KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.DOWN],
+            KIXObjectType.TICKET, [TicketProperty.AGE, SortOrder.UP],
             new ConfigurationDefinition('home-dashboard-ticket-table-new', ConfigurationType.Table),
             null, null, true
         );
@@ -360,7 +334,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
                     ),
                     new ConfiguredWidget(
-                        'home-dashboard-todo-widget', 'home-dashboard-todo-widget', null,
+                        'home-dashboard-myOpenTickets-widget', 'home-dashboard-myOpenTickets-widget', null,
                         [new UIComponentPermission('tickets', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,7 @@ export class CacheService {
 
     private useRedisCache: boolean = false;
     private useInMemoryCache: boolean = false;
+    private ignorePrefixes: string[] = [];
 
     private constructor() {
         this.init();
@@ -76,8 +77,11 @@ export class CacheService {
         }
     }
 
-    public async deleteKeys(cacheKeyPrefix: string): Promise<void> {
-        const prefixes = await this.getCacheKeyPrefixes(cacheKeyPrefix);
+    public async deleteKeys(cacheKeyPrefix: string, force: boolean = false): Promise<void> {
+        let prefixes = await this.getCacheKeyPrefixes(cacheKeyPrefix);
+        if (!force) {
+            prefixes = prefixes.filter((p) => !this.ignorePrefixes.some((ip) => ip === p));
+        }
         for (const prefix of prefixes) {
             if (this.useRedisCache) {
                 await RedisCache.getInstance().deleteKeys(prefix);
@@ -133,9 +137,11 @@ export class CacheService {
             case KIXObjectType.USER_PREFERENCE:
                 cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
@@ -146,10 +152,13 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
                 break;
             case KIXObjectType.ORGANISATION:
-            case KIXObjectType.CONTACT:
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                break;
+            case KIXObjectType.CONTACT:
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.USER);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -191,10 +200,14 @@ export class CacheService {
 
     private async clearCache(): Promise<void> {
         if (this.useRedisCache) {
-            await RedisCache.getInstance().clear();
+            await RedisCache.getInstance().clear(this.ignorePrefixes);
         } else if (this.useInMemoryCache) {
-            await InMemoryCache.getInstance().clear();
+            await InMemoryCache.getInstance().clear(this.ignorePrefixes);
         }
+    }
+
+    public adddIgnorePrefixes(ignoreList: string[]): void {
+        this.ignorePrefixes = [...this.ignorePrefixes, ...ignoreList];
     }
 
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,11 +21,12 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { User } from "../../../user/model/User";
 import { AgentService } from "../../../user/webapp/core";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { UserProperty } from "../../../user/model/UserProperty";
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -126,7 +127,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.LOCK_ID:
-                if (value) {
+                if (typeof value !== 'undefined') {
                     displayValue = value === 1 ? 'Translatable#Unlocked' : 'Translatable#Locked';
                 }
                 break;
@@ -136,9 +137,13 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case KIXObjectProperty.CHANGE_BY:
                 if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
+                        KIXObjectType.USER, [value],
+                        new KIXObjectLoadingOptions(
+                            null, null, 1, [UserProperty.CONTACT]
+                        ), null, true
                     ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    displayValue = users && users.length ?
+                        users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;
                 }
                 break;
             case TicketProperty.WATCHERS:
@@ -197,9 +202,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case TicketProperty.WATCHERS:
                 displayValue = 'Translatable#Observer';
                 break;
@@ -209,14 +211,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case TicketProperty.CHANGED:
-                displayValue = 'Translatable#Changed at';
-                break;
             case TicketProperty.TIME_UNITS:
                 displayValue = 'Translatable#Accounted time';
-                break;
-            case TicketProperty.CREATED:
-                displayValue = 'Translatable#Created at';
                 break;
             case TicketProperty.LOCK_ID:
                 displayValue = 'Translatable#Lock State';
@@ -283,9 +279,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.CLOSE_TIME:
                 displayValue = 'Translatable#Closed at';
                 break;
-            case TicketProperty.CHANGED:
-                displayValue = 'Translatable#Changed at';
-                break;
             case TicketProperty.LAST_CHANGE_TIME:
                 displayValue = 'Translatable#Last changed time';
                 break;
@@ -295,11 +288,8 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case 'UserID':
                 displayValue = 'Translatable#Agent';
                 break;
-            case 'LinkedAs':
-                displayValue = 'Translatable#Linked as';
-                break;
             default:
-                displayValue = await super.getPropertyText(property);
+                displayValue = await super.getPropertyText(property, short, translatable);
         }
 
         if (displayValue) {
@@ -354,15 +344,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     displayValue = await this.getPropertyValueDisplayText(
                         TicketProperty.TYPE_ID, ticket.TypeID, translatable
                     );
-                    break;
-                // TODO: still necessary?
-                case 'UserID':
-                    if (displayValue) {
-                        const users = await KIXObjectService.loadObjects<User>(
-                            KIXObjectType.USER, [displayValue], null, null, true
-                        ).catch((error) => [] as User[]);
-                        displayValue = users && !!users.length ? users[0].UserFullname : displayValue;
-                    }
                     break;
                 case TicketProperty.OWNER:
                     displayValue = await this.getPropertyValueDisplayText(

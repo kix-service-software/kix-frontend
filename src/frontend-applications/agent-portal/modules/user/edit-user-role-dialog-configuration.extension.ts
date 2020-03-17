@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,15 +23,14 @@ import { FormFieldOption } from "../../model/configuration/FormFieldOption";
 import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
 import { FormFieldValue } from "../../model/configuration/FormFieldValue";
 import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { DefaultSelectInputFormOption } from "../../model/configuration/DefaultSelectInputFormOption";
+import { TreeNode } from "../base-components/webapp/core/tree";
+import { RoleUsageContextTypes } from "./model/RoleUsageContextTypes";
+import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
 export class Extension implements IConfigurationExtension {
 
@@ -68,6 +67,22 @@ export class Extension implements IConfigurationExtension {
         const configurations = [];
 
         const formId = 'user-role-edit-form';
+
+        const usageContextField = new FormFieldConfiguration(
+            'user-role-edit-form-field-usage-context',
+            'Translatable#Usage Context', RoleProperty.USAGE_CONTEXT, 'default-select-input', true,
+            'Translatable#Helptext_Admin_Users_RoleCreate_UsageContext',
+            [
+                new FormFieldOption(DefaultSelectInputFormOption.NODES,
+                    [
+                        new TreeNode(RoleUsageContextTypes.AGENT, 'Translatable#Agent'),
+                        new TreeNode(RoleUsageContextTypes.CUSTOMER, 'Translatable#Customer'),
+                    ]),
+                new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
+            ]
+        );
+        configurations.push(usageContextField);
+
         const nameField = new FormFieldConfiguration(
             'user-role-edit-form-field-name',
             'Translatable#Name', RoleProperty.NAME, null, true,
@@ -97,6 +112,7 @@ export class Extension implements IConfigurationExtension {
             'user-role-edit-form-group-role-information', 'Translatable#Role Information',
             [
                 'user-role-edit-form-field-name',
+                'user-role-edit-form-field-usage-context',
                 'user-role-edit-form-field-comment',
                 'user-role-edit-form-field-validity'
             ]
@@ -123,18 +139,8 @@ export class Extension implements IConfigurationExtension {
             'Translatable#Helptext_Admin_Users_RoleCreate_User',
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ]
-                    )
-                )
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
             ]
         );
         configurations.push(agentsField);

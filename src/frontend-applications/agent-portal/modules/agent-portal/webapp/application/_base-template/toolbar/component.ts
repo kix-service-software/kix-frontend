@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,28 +15,50 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { AgentService } from '../../../../../user/webapp/core';
 import { ShowUserTicketsAction } from '../../../../../ticket/webapp/core';
+import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
+import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../model/ContextMode';
+import { RoutingService } from '../../../../../base-components/webapp/core/RoutingService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component {
 
     public state: ComponentState;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        this.initActions();
+        const permissions = [new UIComponentPermission('tickets', [CRUD.READ])];
+        if (await AuthenticationSocketClient.getInstance().checkPermissions(permissions)) {
+            this.state.show = true;
+            this.initActions();
+        }
 
-        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, {
+        this.subscriber = {
             eventSubscriberId: 'app-toolbar-subscriber',
             eventPublished: () => {
                 this.initActions();
             }
-        });
+        };
+
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
     }
 
     private async initActions(): Promise<void> {
         const user = await AgentService.getInstance().getCurrentUser(false);
+        this.state.ownedTicketsCount = user.Tickets.Owned.length;
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Personal Kanban Board", "Translatable#Personal Ticket Calendar"
+        ]);
 
         const myTicketsNewArticles = await TranslationService.translate('Translatable#My tickets with new articles');
         const myTickets = await TranslationService.translate('Translatable#My Tickets');
@@ -96,6 +118,19 @@ class Component {
             showTicketsAction.setText(action.title);
             showTicketsAction.run();
         }
+    }
+
+    public showCalendar(): void {
+        const routingCOnfiguration = new RoutingConfiguration(
+            'calendar', KIXObjectType.ANY, ContextMode.DASHBOARD, null
+        );
+        RoutingService.getInstance().routeToContext(routingCOnfiguration, null);
+    }
+
+
+    public showKanban(): void {
+        const routingCOnfiguration = new RoutingConfiguration('kanban', KIXObjectType.ANY, ContextMode.DASHBOARD, null);
+        RoutingService.getInstance().routeToContext(routingCOnfiguration, null);
     }
 
 }

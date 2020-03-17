@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -26,16 +26,11 @@ import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfi
 import { DefaultSelectInputFormOption } from "../../model/configuration/DefaultSelectInputFormOption";
 import { TreeNode } from "../base-components/webapp/core/tree";
 import { NotificationRecipientTypes } from "./model/NotificationRecipientTypes";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
 export class Extension implements IConfigurationExtension {
 
@@ -198,15 +193,7 @@ export class Extension implements IConfigurationExtension {
                 'object-reference-input', false, 'Translatable#Helptext_Admin_NotificationEdit_SendToAgents',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
-                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                        new KIXObjectLoadingOptions([
-                            new FilterCriteria(
-                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                                FilterType.AND, 1
-                            )
-                        ])
-                    ),
+                    new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
                 ]
             )
@@ -218,15 +205,7 @@ export class Extension implements IConfigurationExtension {
                 'object-reference-input', false,
                 'Translatable#Helptext_Admin_NotificationEdit_SendToRoleMembers', [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
-
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                            FilterType.AND, 1
-                        )
-                    ])
-                ),
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true)
             ]
             )

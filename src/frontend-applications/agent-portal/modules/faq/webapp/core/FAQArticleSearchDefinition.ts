@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,6 +19,7 @@ import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
 import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 
@@ -28,11 +29,15 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, null, ['Links', 'Votes'], ['Links']);
+        return new KIXObjectLoadingOptions(
+            criteria, null, null, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
+        );
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(null, null, null, ['Links', 'Votes'], ['Links']);
+        return new KIXObjectLoadingOptions(
+            null, null, null, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
+        );
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {
@@ -95,7 +100,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
         return criteria;
     }
 
-    private getFulltextCriteria(value: string): FilterCriteria[] {
+    public getFulltextCriteria(value: string): FilterCriteria[] {
         const criteria: FilterCriteria[] = [];
         if (value) {
             criteria.push(new FilterCriteria(

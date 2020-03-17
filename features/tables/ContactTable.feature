@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+# Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 # --
 # This software comes with ABSOLUTELY NO WARRANTY. For details, see
 # the enclosed file LICENSE for license information (GPL3). If you
@@ -37,8 +37,10 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'Firstname'             | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'Lastname'              | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'Email'                 | 1        | 1          | 0          | 175   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
-            | 'Login'                 | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
+            | 'UserLogin'             | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'PrimaryOrganisationID' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
+            | 'IsCustomer'            | 1        | 1          | 1          | 100   | 1        | 0        | 1        | 'STRING' | 1           | 0          | 'Contact'  |
+            | 'IsAgent'               | 1        | 1          | 1          | 100   | 1        | 0        | 1        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'Phone'                 | 1        | 1          | 0          | 130   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'Country'               | 1        | 1          | 0          | 130   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'City'                  | 1        | 1          | 0          | 130   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
@@ -62,7 +64,9 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'Firstname'             | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'Lastname'              | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'Email'                 | 1        | 1          | 0          | 175   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
-            | 'Login'                 | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
+            | 'UserLogin'             | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
+            | 'IsCustomer'            | 1        | 1          | 1          | 100   | 1        | 0        | 1        | 'STRING' | 1           | 0          | 'Contact'  |
+            | 'IsAgent'               | 1        | 1          | 1          | 100   | 1        | 0        | 1        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'PrimaryOrganisationID' | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'City'                  | 1        | 1          | 0          | 130   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |
             | 'Street'                | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING' | 1           | 0          | 'Contact'  |

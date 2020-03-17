@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -72,7 +72,7 @@ export class TemplateExportAction extends AbstractAction {
                     'Translatable#An error occured during export execution. See system log for details.'
                 );
                 OverlayService.getInstance().openOverlay(
-                    OverlayType.WARNING, null, content, 'Translatable#Error!', true
+                    OverlayType.WARNING, null, content, 'Translatable#Error!', null, true
                 );
             });
 

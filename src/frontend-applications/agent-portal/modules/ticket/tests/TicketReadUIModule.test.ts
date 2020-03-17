@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,8 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
-import { TicketReadUIModule, TicketContext, TicketDetailsContext, TicketSearchContext, TicketPlaceholderHandler, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketBrowserFactory, TicketHistoryBrowserFactory, ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService, TicketTableFactory } from '../webapp/core';
+import { TicketReadUIModule, TicketContext, TicketDetailsContext, TicketSearchContext, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketBrowserFactory, TicketHistoryBrowserFactory, ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService, TicketTableFactory } from '../webapp/core';
+import { TicketPlaceholderHandler } from '../webapp/core/TicketPlaceholderHandler';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { PlaceholderService } from '../../base-components/webapp/core/PlaceholderService';
 import { SearchService } from '../../search/webapp/core';
@@ -257,6 +258,10 @@ describe('TicketReadUIModule', () => {
 
             it('should register TicketLockAction', () => {
                 expect(ActionFactory.getInstance().hasAction('ticket-lock-action')).true;
+            });
+
+            it('should register TicketPrintAction', () => {
+                expect(ActionFactory.getInstance().hasAction('ticket-print-action')).true;
             });
         });
 

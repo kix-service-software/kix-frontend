@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,7 +28,7 @@ import { DynamicFieldFormUtil } from "../../../base-components/webapp/core/Dynam
 import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
 import { InputFieldTypes } from "../../../base-components/webapp/core/InputFieldTypes";
-import { DynamicFieldType } from "../../../dynamic-fields/model/DynamicFieldType";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -58,8 +58,8 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
                     DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                     FilterDataType.STRING, FilterType.AND,
                     [
-                        DynamicFieldType.TEXT, DynamicFieldType.TEXT_AREA, DynamicFieldType.DATE,
-                        DynamicFieldType.DATE_TIME, DynamicFieldType.SELECTION
+                        DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
+                        DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION
                     ]
                 ),
                 new FilterCriteria(
@@ -88,7 +88,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         ];
     }
 
-    public async getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
+    public getOperatorDisplayText(operator: PropertyOperator): Promise<string> {
         return PropertyOperatorUtil.getText(operator);
     }
 
@@ -123,7 +123,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
             (v) => v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
         for (const dfValue of dynamicFieldValues) {
-            const dfName = this.getDynamicFieldName(dfValue.property);
+            const dfName = KIXObjectService.getDynamicFieldName(dfValue.property);
             let value = dfObjectValues.find((v) => v.Name === dfName);
             if (!value) {
                 value = {
@@ -161,69 +161,27 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
-        const field = await this.loadDynamicField(property);
-        if (field && field.FieldType === DynamicFieldType.SELECTION && field.Config && field.Config.CountMax > 1) {
-            isMultiSelect = true;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field && field.FieldType === DynamicFieldTypes.SELECTION && field.Config && field.Config.CountMax > 1) {
+                isMultiSelect = true;
+            }
         }
         return isMultiSelect;
     }
 
-    protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
-        let inputFieldType = InputFieldTypes.TEXT;
-        const field = await this.loadDynamicField(property);
-        if (field) {
-            if (field.FieldType === DynamicFieldType.TEXT_AREA) {
-                inputFieldType = InputFieldTypes.TEXT_AREA;
-            } else if (field.FieldType === DynamicFieldType.DATE) {
-                inputFieldType = InputFieldTypes.DATE;
-            } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
-                inputFieldType = InputFieldTypes.DATE_TIME;
-            } else if (field.FieldType === DynamicFieldType.SELECTION) {
-                inputFieldType = InputFieldTypes.DROPDOWN;
-            }
-        }
-        return inputFieldType;
-    }
-
     public async validate(): Promise<ValidationResult[]> {
-        const dfValues = this.values.filter((v) => this.getDynamicFieldName(v.property));
+        const dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
         let validationResult: ValidationResult[] = [];
         for (const v of dfValues) {
-            const result = await DynamicFieldFormUtil.validateDFValue(this.getDynamicFieldName(v.property), v.value);
+            const result = await DynamicFieldFormUtil.validateDFValue(
+                KIXObjectService.getDynamicFieldName(v.property), v.value
+            );
             v.valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);
             validationResult = [...validationResult, ...result];
         }
 
         return validationResult;
-    }
-
-    protected async loadDynamicField(property: string): Promise<DynamicField> {
-        let dynamicField: DynamicField;
-        const name = this.getDynamicFieldName(property);
-        if (name) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, name
-                    )
-                ], null, null, [DynamicFieldProperty.CONFIG]
-            );
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
-
-            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
-        }
-        return dynamicField;
-    }
-
-    public getDynamicFieldName(property: string): string {
-        let dfName: string;
-        const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
-        if (property.match(dFRegEx)) {
-            dfName = property.replace(dFRegEx, '$1');
-        }
-        return dfName;
     }
 }

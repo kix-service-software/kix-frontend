@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -34,6 +34,7 @@ import { FilterCriteria } from "../../../../../model/FilterCriteria";
 import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
 import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
+import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class Table implements ITable {
 
@@ -144,11 +145,9 @@ export class Table implements ITable {
         let column;
 
         let canCreate: boolean = false;
-        if (columnConfiguration && columnConfiguration.property.match(/^DynamicFields?\..+/)) {
-            const dfName = columnConfiguration.property.replace(/^DynamicFields?\.(.+)/, '$1');
-            if (dfName) {
-                canCreate = await this.checkDF(dfName);
-            }
+        const dfName = KIXObjectService.getDynamicFieldName(columnConfiguration.property);
+        if (columnConfiguration && dfName) {
+            canCreate = await this.checkDF(dfName);
         } else {
             canCreate = true;
         }
@@ -171,7 +170,7 @@ export class Table implements ITable {
                         DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
                         FilterType.AND, dfName
                     )
-                ], null, 1, [DynamicFieldProperty.CONFIG]
+                ], null, null, [DynamicFieldProperty.CONFIG]
             ), null, true
         ).catch(() => [] as DynamicField[]);
         if (dynamicFields.length && dynamicFields[0] && dynamicFields[0].ValidID === 1) {
@@ -480,6 +479,7 @@ export class Table implements ITable {
     }
 
     public async reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
+        EventService.getInstance().publish(TableEvent.RELOAD, new TableEventData(this.getTableId()));
         let selectedRows: IRow[] = [];
         if (keepSelection) {
             selectedRows = this.getSelectedRows(true);

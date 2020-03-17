@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,13 +8,23 @@
  */
 
 
-import { UserDetailsContext, EditUserDialogContext } from '../context';
+import { UserDetailsContext } from '../context';
 import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../../model/ContextMode';
+import { EditContactDialogContext } from '../../../../../customer/webapp/core';
+import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 
 export class UserEditAction extends AbstractAction {
+
+    public permissions = [
+        new UIComponentPermission('contacts', [CRUD.CREATE]),
+        new UIComponentPermission('contacts/*', [CRUD.UPDATE]),
+        new UIComponentPermission('system/users', [CRUD.CREATE]),
+        new UIComponentPermission('system/users/*', [CRUD.UPDATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
@@ -29,9 +39,17 @@ export class UserEditAction extends AbstractAction {
         if (context) {
             const id = context.getObjectId();
             if (id) {
+                const dialogContext = await ContextService.getInstance().getContext(
+                    EditContactDialogContext.CONTEXT_ID
+                );
+                if (dialogContext) {
+                    dialogContext.reset();
+                    dialogContext.setAdditionalInformation('IS_AGENT_DIALOG', true);
+                    dialogContext.setAdditionalInformation('USER_ID', id);
+                }
                 ContextService.getInstance().setDialogContext(
-                    EditUserDialogContext.CONTEXT_ID, KIXObjectType.USER,
-                    ContextMode.EDIT_ADMIN, id
+                    EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT,
+                    ContextMode.EDIT
                 );
             }
         }

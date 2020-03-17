@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,7 +9,7 @@
 
 import { KIXObject } from "../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { DynamicFieldType } from "./DynamicFieldType";
+import { DynamicFieldTypes } from "./DynamicFieldTypes";
 
 export class DynamicField extends KIXObject {
 
@@ -21,7 +21,9 @@ export class DynamicField extends KIXObject {
 
     public DisplayGroupID: number;
 
-    public FieldType: string | DynamicFieldType;
+    public FieldType: string | DynamicFieldTypes;
+
+    public FieldTypeDisplayName: string;
 
     public InternalField: number;
 
@@ -33,6 +35,8 @@ export class DynamicField extends KIXObject {
 
     public Config: any;
 
+    public CustomerVisible: boolean;
+
     public constructor(dynamicField?: DynamicField) {
         super(dynamicField);
         if (dynamicField) {
@@ -40,11 +44,13 @@ export class DynamicField extends KIXObject {
             this.ObjectId = dynamicField.ObjectId;
             this.DisplayGroupID = dynamicField.DisplayGroupID;
             this.FieldType = dynamicField.FieldType;
+            this.FieldTypeDisplayName = dynamicField.FieldTypeDisplayName;
             this.InternalField = Number(dynamicField.InternalField);
             this.Label = dynamicField.Label;
             this.Name = dynamicField.Name;
             this.ObjectType = dynamicField.ObjectType;
             this.Config = dynamicField.Config;
+            this.CustomerVisible = Boolean(dynamicField.CustomerVisible);
         }
     }
 

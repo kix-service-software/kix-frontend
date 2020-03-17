@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -42,9 +42,6 @@ export class ArticleBrowserFactory implements IKIXObjectFactory<Article> {
         article.senderType = senderTypes && senderTypes.length ? senderTypes[0] : null;
 
         this.prepareReceiverLists(article);
-        if (!article.bodyAttachment) {
-            this.prepareAttachments(article);
-        }
     }
 
     private prepareReceiverLists(article: Article): void {
@@ -86,18 +83,6 @@ export class ArticleBrowserFactory implements IKIXObjectFactory<Article> {
         article.bccList = bccStringList.map(
             (bcc, index) => new ArticleReceiver(bcc, bccRealNameStringList[index], ArticleProperty.BCC)
         );
-    }
-
-    private prepareAttachments(article: Article): void {
-        if (article.Attachments) {
-            const bodyAttachmentIndex = article.Attachments.findIndex(
-                (a) => a.Disposition === 'inline' && a.Filename === 'file-2'
-            );
-            if (bodyAttachmentIndex > -1) {
-                article.bodyAttachment = article.Attachments[bodyAttachmentIndex];
-                article.Attachments.splice(bodyAttachmentIndex, 1);
-            }
-        }
     }
 
 }

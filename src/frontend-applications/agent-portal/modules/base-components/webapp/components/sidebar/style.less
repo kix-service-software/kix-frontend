@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,9 +7,20 @@
  * --
  */
 
+
+.sidebar-shield {
+    background-color: rgba(255, 255, 255, 0.8);
+    width: (@sidebar-width+6.5rem);
+    min-height: 100%;
+    right: 0;
+    position: absolute;
+    z-index: 1;
+    display: none;
+}
+
 .sidebar-area {
-    height: 100%;
     width: @sidebar-width;
+    transition: opacity 0.5s;
     opacity: 0;
 
     .sidebar {

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -46,6 +46,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         EventService.getInstance().subscribe(TableEvent.SORTED, this);
         EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this);
         EventService.getInstance().subscribe(TableEvent.TABLE_INITIALIZED, this);
+        EventService.getInstance().subscribe(TableEvent.RELOAD, this);
+        EventService.getInstance().subscribe(TableEvent.RELOADED, this);
 
         setTimeout(() => {
             this.state.ready = true;
@@ -54,7 +56,13 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
         if (this.table && data.tableId === this.table.getTableId()) {
-            this.state.rows = this.table.getRows();
+            if (eventId === TableEvent.RELOAD) {
+                this.state.loading = true;
+            } else if (eventId === TableEvent.RELOADED) {
+                this.state.loading = false;
+            } else {
+                this.state.rows = this.table.getRows();
+            }
         }
     }
 

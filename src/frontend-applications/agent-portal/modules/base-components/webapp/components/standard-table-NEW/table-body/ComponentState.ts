@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,6 +13,7 @@ export class ComponentState {
 
     public constructor(
         public rows: IRow[] = [],
-        public ready: boolean = false
+        public ready: boolean = false,
+        public loading: boolean = false
     ) { }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,16 +17,8 @@ import { AuthenticationSocketClient } from "../AuthenticationSocketClient";
 import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../../server/model/rest/CRUD";
 import { ValidationResult } from "../ValidationResult";
-import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterType } from "../../../../../model/FilterType";
-import { FilterDataType } from "../../../../../model/FilterDataType";
+import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
 import { KIXObjectService } from "../KIXObjectService";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { DynamicFieldType } from "../../../../dynamic-fields/model/DynamicFieldType";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -190,38 +182,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return addEmpty;
     }
 
-    protected async loadDynamicField(property: string): Promise<DynamicField> {
-        let dynamicField: DynamicField;
-        const name = this.getDynamicFieldName(property);
-        if (name) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.NAME, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, name
-                    )
-                ], null, null, [DynamicFieldProperty.CONFIG]
-            );
-            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions, null, true
-            ).catch(() => [] as DynamicField[]);
-
-            dynamicField = dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
-        }
-        return dynamicField;
-    }
-
-    protected getDynamicFieldName(property: string): string {
-        let dfName: string;
-        const dFRegEx = new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`);
-        if (property.match(dFRegEx)) {
-            dfName = property.replace(dFRegEx, '$1');
-        }
-        return dfName;
-    }
-
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
-        if (property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))) {
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
             return await this.getInputTypeForDF(property);
         }
         return;
@@ -229,27 +192,36 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
-        const field = await this.loadDynamicField(property);
-        if (
-            field && field.FieldType === DynamicFieldType.SELECTION && field.Config && Number(field.Config.CountMax) > 1
-        ) {
-            isMultiSelect = true;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (
+                field && field.FieldType === DynamicFieldTypes.SELECTION &&
+                field.Config && Number(field.Config.CountMax) > 1
+            ) {
+                isMultiSelect = true;
+            }
         }
         return isMultiSelect;
     }
 
     protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
         let inputFieldType = InputFieldTypes.TEXT;
-        const field = await this.loadDynamicField(property);
-        if (field) {
-            if (field.FieldType === DynamicFieldType.TEXT_AREA) {
-                inputFieldType = InputFieldTypes.TEXT_AREA;
-            } else if (field.FieldType === DynamicFieldType.DATE) {
-                inputFieldType = InputFieldTypes.DATE;
-            } else if (field.FieldType === DynamicFieldType.DATE_TIME) {
-                inputFieldType = InputFieldTypes.DATE_TIME;
-            } else if (field.FieldType === DynamicFieldType.SELECTION) {
-                inputFieldType = InputFieldTypes.DROPDOWN;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const field = await KIXObjectService.loadDynamicField(dfName);
+            if (field) {
+                if (field.FieldType === DynamicFieldTypes.TEXT_AREA) {
+                    inputFieldType = InputFieldTypes.TEXT_AREA;
+                } else if (field.FieldType === DynamicFieldTypes.DATE) {
+                    inputFieldType = InputFieldTypes.DATE;
+                } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
+                    inputFieldType = InputFieldTypes.DATE_TIME;
+                } else if (field.FieldType === DynamicFieldTypes.SELECTION) {
+                    inputFieldType = InputFieldTypes.DROPDOWN;
+                } else if (field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                    inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                }
             }
         }
         return inputFieldType;

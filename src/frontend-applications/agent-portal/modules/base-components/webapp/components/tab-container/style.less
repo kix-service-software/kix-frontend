@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,11 +17,11 @@
 
                 >.tab-list {
                     list-style: none;
-                    margin-top: .25em;
+                    margin-top: .22em;
                     opacity: 0;
 
                     >li {
-                        .shadow-1(@primary-0);
+                        .shadow-1-with-inset(@primary-0, @primary-2);
                         background-color: @primary-4;
                         color: @primary-0;
                         border-top-left-radius: @border-radius;
@@ -42,6 +42,7 @@
                         cursor: pointer;
 
                         &.active {
+                            .shadow-1(@primary-0);
                             background-color: @secondary-6;
                             max-width: 20rem;
                         }
@@ -54,7 +55,7 @@
                             color: lighten(@primary-0, 20%);
                         }
 
-                        @media only screen and(max-width: 1400px) {
+                        @media only screen and(max-width: 1280px) {
                             &:not(.active) {
                                 min-width: 2.75rem;
                                 grid-template-columns: max-content;

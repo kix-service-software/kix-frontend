@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,12 +20,18 @@ export class SysConfigOption extends KIXObject<SysConfigOption> {
 
     public Value: any;
 
+    public Context: string;
+
+    public ContextMetadata: string;
+
     public constructor(sysConfigOption?: SysConfigOption) {
         super();
         if (sysConfigOption) {
             this.Name = sysConfigOption.Name;
             this.ObjectId = this.Name;
             this.Value = sysConfigOption.Value;
+            this.Context = sysConfigOption.Context;
+            this.ContextMetadata = sysConfigOption.ContextMetadata;
         }
     }
 

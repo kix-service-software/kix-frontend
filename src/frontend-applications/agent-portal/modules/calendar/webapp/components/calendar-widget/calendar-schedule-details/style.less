@@ -1,0 +1,45 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+div.kix-calendar-schedule {
+
+    .calendar-schedule-title {
+        font-size: 1.1rem;
+    }
+
+    .calendar-schedule-sub-title {
+        .shorten-text();
+        color: #9e9e9e;
+        margin-bottom: @margin-small;
+        font-size: 0.9rem;
+    }
+
+    .calendar-schedule-description {
+        font-size: 0.9rem;
+        display: grid;
+        grid-template-columns: max-content auto;
+        grid-column-gap: @margin-small;
+    }
+
+    .extra.content {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+
+        .calendar-schedule-details {
+            border-top: 1px solid @secondary-3;
+            padding-top: @margin-small;
+            font-size: 0.9rem;
+
+            .key-value-pair {
+                grid-template-columns: 7rem 0.5rem auto;
+            }
+        }
+    }
+
+}

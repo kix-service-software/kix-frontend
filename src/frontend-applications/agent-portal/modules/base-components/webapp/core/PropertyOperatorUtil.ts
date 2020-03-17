@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,15 +8,16 @@
  */
 
 import { PropertyOperator } from "./PropertyOperator";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class PropertyOperatorUtil {
 
-    public static getText(operator: PropertyOperator): string {
+    public static async getText(operator: PropertyOperator): Promise<string> {
         switch (operator) {
             case PropertyOperator.CHANGE:
-                return 'Translatable#Change to';
+                return await TranslationService.translate('Translatable#Change to');
             case PropertyOperator.CLEAR:
-                return 'Translatable#Clear';
+                return await TranslationService.translate('Translatable#Clear');
             default:
                 return operator;
         }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,8 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Contact } from '../../../src/frontend-applications/agent-portal/modules/customer/model/Contact';
-import { ContactPlaceholderHandler, ContactLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core';
+import { ContactLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/ContactLabelProvider';
+import { ContactPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/ContactPlaceholderHandler';
 import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { ContactProperty } from '../../../src/frontend-applications/agent-portal/modules/customer/model/ContactProperty';
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
@@ -20,7 +21,10 @@ import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/mo
 import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
-import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
+import { User } from '../../../src/frontend-applications/agent-portal/modules/user/model/User';
+import { UserProperty } from '../../../src/frontend-applications/agent-portal/modules/user/model/UserProperty';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -35,7 +39,10 @@ describe('Placeholder replacement for contact', () => {
         const contactLabelProvider = new ContactLabelProvider();
         contactLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(contactLabelProvider);
+        (TranslationService.getInstance() as any).translations = {};
     });
+
+    after(() => (TranslationService.getInstance() as any).translations = null);
 
     describe('Replace simple contact attribute placeholder.', async () => {
 
@@ -45,8 +52,8 @@ describe('Placeholder replacement for contact', () => {
         });
 
         it('Should replace contact login placeholder', async () => {
-            const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${ContactProperty.LOGIN}>`, contact);
-            expect(text).equal(contact.Login);
+            const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${UserProperty.USER_LOGIN}>`, contact);
+            expect(text).equal(contact.User.UserLogin);
         });
 
         it('Should replace contact firstname placeholder', async () => {
@@ -112,6 +119,11 @@ describe('Placeholder replacement for contact', () => {
         it('Should replace contact comment placeholder', async () => {
             const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${ContactProperty.COMMENT}>`, contact);
             expect(text).equal(contact.Comment);
+        });
+
+        it('Should replace contact user comment placeholder', async () => {
+            const text = await contactPlaceholderHandler.replace(`<KIX_CONTACT_${UserProperty.USER_COMMENT}>`, contact);
+            expect(text).equal(contact.User.UserComment);
         });
 
         it('Should replace contact create by placeholder', async () => {
@@ -236,15 +248,21 @@ class someTestFunctions {
                 displayValue = `${property}_Name`;
                 break;
             default:
+                if (contact.User && contact.User[property]) {
+                    displayValue = contact.User[property];
+                }
         }
         return typeof displayValue !== 'undefined' && displayValue !== null ? displayValue.toString() : null;
     }
 
     public static prepareUser(): Contact {
         const contact = new Contact();
+        const user = new User();
+
+        user.UserLogin = 'PlaceholderTest';
+        user.UserComment = 'some user comment';
 
         contact.ID = 2;
-        contact.Login = 'PlaceholderTest';
         contact.Firstname = 'Placeholder';
         contact.Lastname = 'Test';
         contact.Email = 'placeholder@test.com';
@@ -264,6 +282,8 @@ class someTestFunctions {
         contact.CreateBy = 1;
         contact.ChangeTime = '2019-06-05 10:45:30';
         contact.ChangeBy = 2;
+
+        contact.User = user;
 
         return contact;
     }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -16,7 +16,7 @@ export class UpdateTicket extends RequestObject {
     public constructor(
         title: string, contactId: string, organisationId: string, stateId: number, priorityId: number, queueId: number,
         lockId: number, typeId: number, serviceId: number, slaId: number, ownerId: number, responsibleId: number,
-        pendingTime: number, dynamicFields: []
+        pendingTime: number, dynamicFields: [], state: string
     ) {
         super();
 
@@ -33,6 +33,7 @@ export class UpdateTicket extends RequestObject {
         this.applyProperty(TicketProperty.OWNER_ID, ownerId);
         this.applyProperty(TicketProperty.RESPONSIBLE_ID, responsibleId);
         this.applyProperty(TicketProperty.PENDING_TIME, pendingTime);
+        this.applyProperty(TicketProperty.STATE, state);
         this.applyProperty(KIXObjectProperty.DYNAMIC_FIELDS, dynamicFields);
     }
 

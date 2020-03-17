@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,7 +18,6 @@ import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalo
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { VersionProperty } from "../../model/VersionProperty";
 
@@ -95,15 +94,9 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.NUMBER:
                 const hookConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
-                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK]
+                    KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_ITEM_HOOK], null, null, true
                 ).catch((error): SysConfigOption[] => []);
                 displayValue = hookConfig && hookConfig.length ? hookConfig[0].Value : 'CI#';
-                break;
-            case 'LinkedAs':
-                displayValue = 'Translatable#Linked as';
-                break;
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
                 break;
             case ConfigItemProperty.NAME:
                 displayValue = 'Translatable#Name';
@@ -148,10 +141,12 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = configItem.CurInciState;
                 break;
             case ConfigItemProperty.CREATE_BY:
-                displayValue = configItem.createdBy ? configItem.createdBy.UserFullname : configItem.CreateBy;
+                displayValue = configItem.createdBy ? configItem.createdBy.Contact ?
+                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.CreateBy;
                 break;
             case ConfigItemProperty.CHANGE_BY:
-                displayValue = configItem.changedBy ? configItem.changedBy.UserFullname : configItem.ChangeBy;
+                displayValue = configItem.changedBy ? configItem.createdBy.Contact ?
+                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.ChangeBy;
                 break;
             case VersionProperty.NAME:
                 displayValue = configItem.CurrentVersion ? configItem.CurrentVersion.Name : property;
@@ -162,9 +157,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.CLASS_ID:
             case ConfigItemProperty.CLASS:
-            case ConfigItemProperty.CHANGE_BY:
             case ConfigItemProperty.CHANGE_TIME:
-            case ConfigItemProperty.CREATE_BY:
             case ConfigItemProperty.CREATE_TIME:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
                 break;

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,12 +21,16 @@ import { ComponentContent } from '../../../../../modules/base-components/webapp/
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { EventService } from '../../core/EventService';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
 
 
 class FormComponent {
 
     private state: ComponentState;
     private changePageTimeout: any;
+    private keyListenerElement: any;
+    private keyListener: any;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.formId);
@@ -41,7 +45,37 @@ class FormComponent {
 
     public async onMount(): Promise<void> {
         if (!this.state.formInstance) {
-            this.prepareForm();
+            await this.prepareForm();
+
+            this.keyListenerElement = (this as any).getEl();
+            if (this.keyListenerElement) {
+                this.keyListenerElement.dispatchEvent(new KeyboardEvent('keypress', { key: 'Tab' }));
+                this.keyListener = this.keyDown.bind(this);
+                this.keyListenerElement.addEventListener('keydown', this.keyListener);
+
+                setTimeout(() => {
+                    const elements = this.keyListenerElement.getElementsByClassName('field-input');
+                    if (elements && elements.length) {
+                        elements.item(0).firstElementChild.focus();
+                    }
+                }, 500);
+            }
+        }
+    }
+
+    public onDestroy(): void {
+        if (this.keyListenerElement) {
+            this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));
+        }
+    }
+
+    public keyDown(event: any): void {
+        if ((event.ctrlKey && event.key === 'Enter')) {
+            if (event.preventDefault) {
+                event.preventDefault();
+            }
+
+            EventService.getInstance().publish(ApplicationEvent.DIALOG_SUBMIT, { formId: this.state.formId });
         }
     }
 
@@ -185,7 +219,7 @@ class FormComponent {
 
         const toastTitle = await TranslationService.translate('Translatable#Validation error');
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, toastTitle, true
+            OverlayType.WARNING, null, content, toastTitle, null, true
         );
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -75,8 +75,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const isFilterInput = filterInput && document.activeElement === filterInput;
 
         if (isFilterInput && !this.navigationKeyPressed(event.key)) {
-            event.stopPropagation();
-            event.preventDefault();
+            this.stopEvent(event);
             const value = event.target.value;
             if (this.state.autocompleteConfiguration
                 && typeof value !== 'undefined'
@@ -93,12 +92,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 hiddenInput.focus();
             }
         } else if (isFilterInput && event.code === 'Space' && this.state.filterValue && this.state.filterValue !== '') {
-            event.stopPropagation();
-            event.preventDefault();
+            this.stopEvent(event);
             this.state.filterValue = this.state.filterValue + ' ';
         } else if (isFilterInput && event.key === 'a' && event.ctrlKey) {
-            event.stopPropagation();
-            event.preventDefault();
+            this.stopEvent(event);
+        }
+
+        if (event.ctrlKey) {
+            this.stopEvent(event);
         }
     }
 
@@ -109,8 +110,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const isFilterInput = filterInput && document.activeElement === filterInput;
         if (!isFilterInput && event.key === 'Tab' && event.shiftKey) {
             if (document.activeElement === hiddenInput && filterInput) {
-                event.stopPropagation();
-                event.preventDefault();
+                this.stopEvent(event);
                 filterInput.focus();
             }
         } else if (isFilterInput
@@ -119,8 +119,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             && this.state.filterValue
             && this.state.filterValue !== ''
         ) {
-            event.stopPropagation();
-            event.preventDefault();
+            this.stopEvent(event);
             const node = new TreeNode(this.state.filterValue, this.state.filterValue);
             this.handler.setSelection([node], true);
             this.state.filterValue = null;

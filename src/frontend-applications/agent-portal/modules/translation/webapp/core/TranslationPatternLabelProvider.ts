@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,9 +12,6 @@ import { TranslationPattern } from "../../model/TranslationPattern";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { TranslationPatternProperty } from "../../model/TranslationPatternProperty";
 import { TranslationService } from "./TranslationService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 
 export class TranslationPatternLabelProvider extends LabelProvider<TranslationPattern> {
@@ -30,7 +27,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
     }
 
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = property;
+        let displayValue: string;
 
         switch (property) {
             case TranslationPatternProperty.VALUE:
@@ -56,7 +53,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
     public async getDisplayText(
         translation: TranslationPattern, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = translation[property];
+        let displayValue: string;
 
         switch (property) {
             case TranslationPatternProperty.VALUE:
@@ -65,18 +62,8 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
             case TranslationPatternProperty.AVAILABLE_LANGUAGES:
                 displayValue = translation.AvailableLanguages.map((l) => l).join(', ');
                 break;
-            case TranslationPatternProperty.CREATE_BY:
-            case TranslationPatternProperty.CHANGE_BY:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
-                ).catch((error) => [] as User[]);
-                displayValue = users && !!users.length ? users[0].UserFullname : value;
-                break;
-            case TranslationPatternProperty.CREATE_TIME:
-            case TranslationPatternProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             default:
+                displayValue = await super.getDisplayText(translation, property, value, translatable);
         }
 
         if (displayValue) {
@@ -86,18 +73,6 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
         }
 
         return displayValue;
-    }
-
-    public async getPropertyValueDisplayText(property: string, value: string | number): Promise<string> {
-        return value.toString();
-    }
-
-    public getDisplayTextClasses(translation: TranslationPattern, property: string): string[] {
-        return [];
-    }
-
-    public getObjectClasses(translation: TranslationPattern): string[] {
-        return [];
     }
 
     public async getObjectText(

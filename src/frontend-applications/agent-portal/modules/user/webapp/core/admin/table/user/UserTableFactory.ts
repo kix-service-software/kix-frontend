@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -24,6 +24,8 @@ import { TableHeaderHeight } from "../../../../../../../model/configuration/Tabl
 import { TableRowHeight } from "../../../../../../../model/configuration/TableRowHeight";
 import { RoutingConfiguration } from "../../../../../../../model/configuration/RoutingConfiguration";
 import { ContextMode } from "../../../../../../../model/ContextMode";
+import { ContactProperty } from "../../../../../../customer/model/ContactProperty";
+import { IColumnConfiguration } from "../../../../../../../model/configuration/IColumnConfiguration";
 
 export class UserTableFactory extends TableFactory {
 
@@ -39,9 +41,7 @@ export class UserTableFactory extends TableFactory {
 
         table.setContentProvider(
             new UserTableContentProvider(
-                table, objectIds,
-                new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]),
-                contextId
+                table, objectIds, tableConfiguration.loadingOptions, contextId
             )
         );
         table.setColumnConfiguration(tableConfiguration.tableColumns);
@@ -53,41 +53,20 @@ export class UserTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
-            new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_LOGIN, true, false, true, false, 250, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_FIRSTNAME, true, false, true, false, 250, true, true
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_LASTNAME, true, false, true, false, 250, true, true, false,
-                DataType.STRING, true, null, null, false
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_EMAIL, true, false, true, false, 200, true, true
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_PHONE, true, false, true, false, 200, true, true
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                UserProperty.USER_MOBILE, true, false, true, false, 200, true, true
-            ),
-            new DefaultColumnConfiguration(null, null, null,
-                UserProperty.LAST_LOGIN, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(
-                null, null, null, KIXObjectProperty.VALID_ID, true, false, true, false, 100, true, true, true),
-            new DefaultColumnConfiguration(null, null, null,
-                KIXObjectProperty.CREATE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(
-                null, null, null, KIXObjectProperty.CREATE_BY, true, false, true, true, 150, true, true),
-            new DefaultColumnConfiguration(null, null, null,
-                KIXObjectProperty.CHANGE_TIME, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
-            ),
-            new DefaultColumnConfiguration(
-                null, null, null, KIXObjectProperty.CHANGE_BY, true, false, true, false, 150, true, true)
+            this.getDefaultColumnConfiguration(UserProperty.USER_LOGIN),
+            this.getDefaultColumnConfiguration(ContactProperty.FIRSTNAME),
+            this.getDefaultColumnConfiguration(ContactProperty.LASTNAME),
+            this.getDefaultColumnConfiguration(UserProperty.IS_CUSTOMER),
+            this.getDefaultColumnConfiguration(UserProperty.IS_AGENT),
+            this.getDefaultColumnConfiguration(ContactProperty.PHONE),
+            this.getDefaultColumnConfiguration(ContactProperty.MOBILE),
+            this.getDefaultColumnConfiguration(ContactProperty.EMAIL),
+            this.getDefaultColumnConfiguration(UserProperty.USER_LAST_LOGIN),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.VALID_ID),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CREATE_BY),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_TIME),
+            this.getDefaultColumnConfiguration(KIXObjectProperty.CHANGE_BY)
         ];
 
         if (!tableConfiguration) {
@@ -100,6 +79,12 @@ export class UserTableFactory extends TableFactory {
             tableConfiguration.tableColumns = tableColumns;
         }
 
+        if (!tableConfiguration.loadingOptions) {
+            tableConfiguration.loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
+            );
+        }
+
         if (defaultRouting) {
             tableConfiguration.routingConfiguration = new RoutingConfiguration(
                 UserDetailsContext.CONTEXT_ID, KIXObjectType.USER,
@@ -108,5 +93,50 @@ export class UserTableFactory extends TableFactory {
         }
 
         return tableConfiguration;
+    }
+    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+        let config;
+        switch (property) {
+            case UserProperty.USER_LOGIN:
+            case ContactProperty.FIRSTNAME:
+            case ContactProperty.LASTNAME:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 250, true, true, false,
+                    DataType.STRING, true, null, null, false
+                );
+                break;
+            case ContactProperty.EMAIL:
+            case ContactProperty.PHONE:
+            case ContactProperty.MOBILE:
+            case ContactProperty.COUNTRY:
+            case ContactProperty.CITY:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 200, true, true);
+                break;
+            case KIXObjectProperty.VALID_ID:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 100, true, true, true);
+                break;
+            case ContactProperty.PRIMARY_ORGANISATION_ID:
+                config = new DefaultColumnConfiguration(null, null, null,
+                    property, true, false, true, false, 150, true, true, false, DataType.STRING, true, null,
+                    'Translatable#Organisation'
+                );
+                break;
+            case UserProperty.IS_AGENT:
+            case UserProperty.IS_CUSTOMER:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, false, true, true, false, undefined, true, true, true, undefined
+                );
+                break;
+            case UserProperty.USER_LAST_LOGIN:
+                config = new DefaultColumnConfiguration(
+                    null, null, null, property, true, false, true, false, 150, true, true, false, DataType.DATE_TIME
+                );
+                break;
+            default:
+                config = super.getDefaultColumnConfiguration(property);
+        }
+        return config;
     }
 }

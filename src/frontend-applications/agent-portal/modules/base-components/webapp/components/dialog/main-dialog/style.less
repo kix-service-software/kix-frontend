@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -73,26 +73,20 @@
                                 &.has-sidebar {
 
                                     &.show-sidebar {
-                                        grid-template-columns: minmax(@default-widget-width, auto) @sidebar-width min-content;
+                                        grid-template-columns: minmax(@default-widget-width, auto) max-content min-content;
 
                                         // hide sidebar
                                         @media only screen and (max-width: 1400px) {
                                             grid-template-columns: minmax(@default-widget-width, auto) min-content;
 
-                                            >.tab-content {
-                                                z-index: 1;
+                                            .hide-sidebar();
 
-                                                >.dialog-sidebar-shield {
-                                                    display: block;
-                                                }
+                                            >.sidebar-shield {
+                                                min-height: 100%;
                                             }
 
-                                            >.sidebar-area {
-                                                position: absolute;
-                                                right: 4.5rem;
-                                                z-index: 1;
-                                            }
-
+                                            >.tab-content,
+                                            >.sidebar-area,
                                             >.site-menu-wrapper {
                                                 z-index: 1;
                                             }
@@ -111,17 +105,6 @@
                                         >.widget-content {
                                             background-color: @secondary-5;
                                         }
-                                    }
-
-                                    .dialog-sidebar-shield {
-                                        background-color: rgba(255, 255, 255, 0.8);
-                                        width: 21.5rem;
-                                        top: 0;
-                                        right: -4.5rem;
-                                        bottom: 0;
-                                        position: absolute;
-                                        display: none;
-                                        z-index: 10;
                                     }
                                 }
                             }

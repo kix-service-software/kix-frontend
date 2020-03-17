@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,7 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { AdminContext } from "./webapp/core";
+import { AdminContext } from "./webapp/core/AdminContext";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";
@@ -23,12 +23,6 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
-        configurations.push(
-            new WidgetConfiguration(
-                'admin-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-                'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
-            )
-        );
 
         configurations.push(
             new WidgetConfiguration(
@@ -41,9 +35,7 @@ export class Extension implements IConfigurationExtension {
             new ContextConfiguration(
                 this.getModuleId(), 'Admin Dashboard', ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('admin-dashboard-notes-widget', 'admin-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget('admin-dashboard-category-explorer', 'admin-dashboard-category-explorer')
                 ]

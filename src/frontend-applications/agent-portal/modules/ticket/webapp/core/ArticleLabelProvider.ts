@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -46,7 +46,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 displayValue = 'Translatable#No.';
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = 'Translatable#Visible in customer portal';
+                displayValue = 'Translatable#Show in Customer Portal';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
                 displayValue = 'Translatable#Sender Type';
@@ -84,7 +84,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
         if (property === ArticleProperty.CUSTOMER_VISIBLE) {
-            return 'kix-icon-flag';
+            return 'kix-icon-men';
         }
         return;
     }
@@ -121,7 +121,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 }
                 break;
             default:
-                displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+                displayValue = await super.getDisplayText(article, property, defaultValue, translatable);
         }
 
         if (displayValue) {
@@ -182,21 +182,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 }
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                displayValue = 'Translatable#Visible in customer portal';
-                break;
-            case ArticleProperty.INCOMING_TIME:
-                if (displayValue) {
-                    displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue));
-                }
-                break;
-            case ArticleProperty.CREATED_BY:
-            case ArticleProperty.CHANGED_BY:
-                if (value) {
-                    const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [value], null, null, true
-                    ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
-                }
+                displayValue = Boolean(displayValue) ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
@@ -296,8 +282,8 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 }
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                if (article.CustomerVisible) {
-                    icons.push('kix-icon-flag');
+                if (article && article.CustomerVisible) {
+                    icons.push('kix-icon-check');
                 }
                 break;
             default:

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -21,7 +21,7 @@ import { ContextHistory } from "./ContextHistory";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { AdditionalContextInformation } from "./AdditionalContextInformation";
 import { FormService } from "./FormService";
-import { TableFactoryService } from "./table";
+import { TableFactoryService } from "./table/TableFactoryService";
 import { ContextHistoryEntry } from "./ContextHistoryEntry";
 import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
 import { ContextSocketClient } from "./ContextSocketClient";
@@ -212,6 +212,11 @@ export class ContextService {
     public async getContextConfiguration(contextId: string): Promise<ContextConfiguration> {
         const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(contextId);
         return configuration;
+    }
+
+    public updateObjectLists(objectType: KIXObjectType | string): void {
+        const contexts = ContextFactory.getInstance().getContextInstances(ContextType.MAIN, ContextMode.DASHBOARD);
+        contexts.forEach((c) => c.reloadObjectList(objectType));
     }
 
 }

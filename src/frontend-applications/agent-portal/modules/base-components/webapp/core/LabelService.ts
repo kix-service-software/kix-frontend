@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -132,11 +132,11 @@ export class LabelService {
     }
 
     public async getPropertyValueDisplayIcons<T extends KIXObject>(
-        object: T, property: string
+        object: T, property: string, forTable?: boolean
     ): Promise<Array<string | ObjectIcon>> {
         const labelProvider = this.getLabelProvider(object);
         if (labelProvider) {
-            return await labelProvider.getIcons(object, property);
+            return await labelProvider.getIcons(object, property, null, forTable);
         }
         return null;
     }

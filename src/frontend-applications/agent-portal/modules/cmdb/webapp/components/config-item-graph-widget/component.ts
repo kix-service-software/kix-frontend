@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -13,9 +13,9 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ConfigItem } from '../../../model/ConfigItem';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { Context } from 'vm';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 

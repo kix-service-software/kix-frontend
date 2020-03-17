@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,10 +10,9 @@
 import { ComponentState } from './ComponentState';
 import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { TranslationDetailsContext } from '../../core/admin/context';
-import { ContextMode } from '../../../../../model/ContextMode';
-import { TranslationPatternProperty } from '../../../model/TranslationPatternProperty';
+import { DialogService } from '../../../../base-components/webapp/core/DialogService';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 
 class Component extends AbstractNewDialog {
 
@@ -23,10 +22,7 @@ class Component extends AbstractNewDialog {
             'Translatable#Create Translation',
             'Translatable#Translation successfully created.',
             KIXObjectType.TRANSLATION_PATTERN,
-            new RoutingConfiguration(
-                TranslationDetailsContext.CONTEXT_ID, KIXObjectType.TRANSLATION_PATTERN,
-                ContextMode.DETAILS, TranslationPatternProperty.ID, true
-            )
+            null
         );
     }
 
@@ -44,6 +40,13 @@ class Component extends AbstractNewDialog {
 
     public async submit(): Promise<void> {
         await super.submit();
+    }
+
+    protected async handleDialogSuccess(objectId: string | number): Promise<void> {
+        DialogService.getInstance().setMainDialogLoading(false);
+        DialogService.getInstance().submitMainDialog();
+        FormService.getInstance().deleteFormInstance(this.state.formId);
+        BrowserUtil.openSuccessOverlay(this.successHint);
     }
 
 }

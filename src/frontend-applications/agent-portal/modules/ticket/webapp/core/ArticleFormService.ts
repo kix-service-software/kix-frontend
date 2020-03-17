@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -61,7 +61,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return await TicketParameterUtil.prepareValue(property, value);
     }
 
-    protected async getValue(property: string, value: any, ticket: Ticket): Promise<any> {
+    protected async getValue(property: string, value: any, ticket?: Ticket): Promise<any> {
         switch (property) {
             case ArticleProperty.CHANNEL_ID:
                 if (ticket) {
@@ -116,23 +116,58 @@ export class ArticleFormService extends KIXObjectFormService {
     public async getFormFieldsForChannel(
         channel: Channel, formId: string, clear: boolean = false
     ): Promise<FormFieldConfiguration[]> {
-        const fields: FormFieldConfiguration[] = [];
+        let fields: FormFieldConfiguration[] = [];
 
         const formInstance = await FormService.getInstance().getFormInstance(formId);
 
+        let fieldPromises = [];
         if (channel.Name === 'note') {
-            fields.push(await this.getSubjectField(formInstance, clear));
-            fields.push(await this.getBodyField(formInstance, clear));
-            fields.push(await this.getAttachmentField(formInstance, clear));
+            fieldPromises = [
+                this.getVisibleField(formInstance, clear),
+                this.getSubjectField(formInstance, clear),
+                this.getBodyField(formInstance, clear),
+                this.getAttachmentField(formInstance, clear)
+            ];
         } else if (channel.Name === 'email') {
-            fields.push(await this.getFromField(formInstance, clear));
-            fields.push(await this.getToOrCcField(formInstance, clear));
-            fields.push(await this.getSubjectField(formInstance, clear));
-            fields.push(await this.getBodyField(formInstance, clear));
-            fields.push(await this.getAttachmentField(formInstance, clear));
+            fieldPromises = [
+                this.getVisibleField(formInstance, clear),
+                this.getFromField(formInstance, clear),
+                this.getToOrCcField(formInstance, clear),
+                this.getSubjectField(formInstance, clear),
+                this.getBodyField(formInstance, clear),
+                this.getAttachmentField(formInstance, clear)
+            ];
         }
 
+        await Promise.all(fieldPromises).then((newFields: FormFieldConfiguration[]) => {
+            fields = newFields.filter((nf) => typeof nf !== 'undefined' && nf !== null);
+        });
+
+
         return fields;
+    }
+
+    private async getVisibleField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+        const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
+            && formInstance.getObjectType() === KIXObjectType.TICKET;
+        let field = new FormFieldConfiguration(
+            'visible-input',
+            'Translatable#Show in Customer Portal', ArticleProperty.CUSTOMER_VISIBLE, 'customer-visible-input', false,
+            isTicket
+                ? 'Translatable#Helptext_Tickets_TicketCreate_CustomerVisible'
+                : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible'
+        );
+        if (!clear && formInstance) {
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
+            if (existingField) {
+                field = existingField;
+                const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
+                if (value) {
+                    field.defaultValue = value;
+                }
+            }
+        }
+        return field;
     }
 
     private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
@@ -200,7 +235,7 @@ export class ArticleFormService extends KIXObjectFormService {
         const referencedValue = await this.getAttachmentFieldValue();
 
         let field = new FormFieldConfiguration(
-            'attachemnt-input',
+            'attachment-input',
             'Translatable#Attachments', ArticleProperty.ATTACHMENTS, 'attachment-input', false,
             'Translatable#Helptext_Tickets_ArticleCreate_Attachments',
             null, referencedValue ? new FormFieldValue(referencedValue) : null

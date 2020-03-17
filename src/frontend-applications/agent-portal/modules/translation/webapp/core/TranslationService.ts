@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -17,7 +17,9 @@ import { TranslationPatternProperty } from "../../model/TranslationPatternProper
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { Translation } from "../../model/Translation";
 import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { AgentService } from "../../../user/webapp/core";
+import { AgentService } from "../../../user/webapp/core/AgentService";
+import { EventService } from "../../../base-components/webapp/core/EventService";
+import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -29,6 +31,47 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         }
 
         return TranslationService.INSTANCE;
+    }
+
+    private loadTranslationPromise: Promise<void>;
+    private translations: any = null;
+
+    private userLanguage: string = null;
+
+    private constructor() {
+        super();
+        this.init();
+    }
+
+    private async init(): Promise<void> {
+        this.userLanguage = await TranslationService.getUserLanguage();
+        EventService.getInstance().subscribe(ApplicationEvent.CACHE_KEYS_DELETED, {
+            eventSubscriberId: 'TranslationService',
+            eventPublished: this.cacheChanged.bind(this)
+        });
+
+        EventService.getInstance().subscribe(ApplicationEvent.CACHE_CLEARED, {
+            eventSubscriberId: 'TranslationService',
+            eventPublished: this.cacheChanged.bind(this)
+        });
+    }
+
+    public resetTranslations(): void {
+        this.translations = null;
+        this.userLanguage = null;
+    }
+
+    private async cacheChanged(data: string[], eventId: string): Promise<void> {
+        if (eventId === ApplicationEvent.CACHE_KEYS_DELETED) {
+            if (data.some((d) => d === KIXObjectType.TRANSLATION)) {
+                this.translations = null;
+            }
+            if (data.some((d) => d === KIXObjectType.CURRENT_USER)) {
+                this.translations = null;
+            }
+        } else if (eventId === ApplicationEvent.CACHE_CLEARED) {
+            this.translations = null;
+        }
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string) {
@@ -108,11 +151,10 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
 
             if (!getOnlyPattern) {
 
-                const translations = await KIXObjectService.loadObjects<Translation>(KIXObjectType.TRANSLATION);
-                const translation = translations.find((t) => t.Pattern === translationValue);
+                const translation = await this.getTranslationObject(translationValue);
 
                 if (translation) {
-                    language = language ? language : await this.getUserLanguage();
+                    language = language ? language : this.getInstance().userLanguage;
                     if (language) {
                         const translationLanguageValue = translation.Languages[language];
                         if (translationLanguageValue) {
@@ -133,6 +175,33 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         }
 
         return translationValue;
+    }
+
+    public static async getTranslationObject(translationValue: string): Promise<Translation> {
+        if (!this.getInstance().translations) {
+            if (!this.getInstance().loadTranslationPromise) {
+                this.getInstance().loadTranslationPromise =
+                    new Promise<void>(async (resolve, reject) => {
+                        this.getInstance().userLanguage = await TranslationService.getUserLanguage();
+                        const translations = await KIXObjectService.loadObjects<Translation>(
+                            KIXObjectType.TRANSLATION
+                        );
+                        if (translations && translations.length) {
+                            this.getInstance().translations = {};
+                            translations.forEach(
+                                (t) => this.getInstance().translations[t.ObjectId] = t
+                            );
+                        }
+                        this.getInstance().loadTranslationPromise = null;
+                        resolve();
+                    });
+            }
+
+            await this.getInstance().loadTranslationPromise;
+        }
+
+        return this.getInstance().translations && translationValue
+            ? this.getInstance().translations[translationValue] : null;
     }
 
     private static format(format: string, args: string[]): string {

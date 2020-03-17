@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -63,7 +63,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (config.replaceObjectId) {
                 id = config.replaceObjectId;
             } else {
-                id = this.state.object ? this.state.object[config.objectIdProperty] : undefined;
+                if (this.state.object) {
+                    if (config.objectIdProperty.match(/^.+\..+$/)) {
+                        const subObjectData = config.objectIdProperty.split('.');
+                        id = this.state.object[subObjectData[0]] ?
+                            this.state.object[subObjectData[0]][subObjectData[1]]
+                            : undefined;
+                    } else {
+                        id = this.state.object[config.objectIdProperty];
+                    }
+                }
             }
         }
 

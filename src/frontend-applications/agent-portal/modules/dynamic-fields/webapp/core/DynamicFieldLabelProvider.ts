@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -40,6 +40,9 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
             case DynamicFieldProperty.INTERNAL_FIELD:
                 displayValue = 'Translatable#Internal Field';
                 break;
+            case DynamicFieldProperty.CUSTOMER_VISIBLE:
+                displayValue = 'Translatable#Show in Customer Portal';
+                break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);
         }
@@ -61,6 +64,9 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
         switch (property) {
             case DynamicFieldProperty.INTERNAL_FIELD:
                 displayValue = dynamicField.InternalField ? 'Translatable#yes' : 'Translatable#no';
+                break;
+            case DynamicFieldProperty.FIELD_TYPE:
+                displayValue = dynamicField.FieldTypeDisplayName;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
@@ -105,6 +111,15 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
             return [new ObjectIcon('DynamicField', dynamicField.ID)];
         } else if (property === DynamicFieldProperty.INTERNAL_FIELD) {
             return dynamicField.InternalField === 1 ? ['kix-icon-check'] : [];
+        } else if (property === DynamicFieldProperty.CUSTOMER_VISIBLE) {
+            return dynamicField.CustomerVisible ? ['kix-icon-check'] : [];
+        }
+        return null;
+    }
+
+    public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
+        if (property === DynamicFieldProperty.CUSTOMER_VISIBLE) {
+            return 'kix-icon-men';
         }
         return null;
     }

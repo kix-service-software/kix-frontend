@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -8,7 +8,8 @@
  */
 
 import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { CMDBContext, ConfigItemChartWidgetConfiguration } from "./webapp/core";
+import { CMDBContext } from "./webapp/core/context/CMDBContext";
+import { ConfigItemChartWidgetConfiguration } from "./webapp/core/charts/ConfigItemChartWidgetConfiguration";
 import { IConfiguration } from "../../model/configuration/IConfiguration";
 import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";
@@ -51,11 +52,6 @@ export class Extension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
-        const notesSidebar = new WidgetConfiguration(
-            'cmdb-dashboard-notes-widget', 'Notes Widget', ConfigurationType.Widget,
-            'notes-widget', 'Translatable#Notes', [], null, null, false, false, 'kix-icon-note', false
-        );
-        configurations.push(notesSidebar);
 
         const classExplorer = new WidgetConfiguration(
             'cmdb-dashboard-class-explorer', 'Class Explorer', ConfigurationType.Widget,
@@ -258,9 +254,7 @@ export class Extension implements IConfigurationExtension {
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
                 this.getModuleId(),
-                [
-                    new ConfiguredWidget('cmdb-dashboard-notes-widget', 'cmdb-dashboard-notes-widget')
-                ],
+                [],
                 [
                     new ConfiguredWidget(
                         'cmdb-dashboard-class-explorer', 'cmdb-dashboard-class-explorer', null,

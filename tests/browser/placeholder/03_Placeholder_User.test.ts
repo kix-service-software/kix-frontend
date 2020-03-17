@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -20,10 +20,14 @@ import { UserProperty } from '../../../src/frontend-applications/agent-portal/mo
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
 import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/DateTimeUtil';
 import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
-import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { UserPreference } from '../../../src/frontend-applications/agent-portal/modules/user/model/UserPreference';
+import { PersonalSettingsProperty } from '../../../src/frontend-applications/agent-portal/modules/user/model/PersonalSettingsProperty';
+import { ContactProperty } from '../../../src/frontend-applications/agent-portal/modules/customer/model/ContactProperty';
+import { Contact } from '../../../src/frontend-applications/agent-portal/modules/customer/model/Contact';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -37,17 +41,19 @@ describe('Placeholder replacement for user', () => {
         user = someTestFunctions.prepareUser();
 
         const userLabelProvider = new UserLabelProvider();
-        userLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
+        userLabelProvider.getDisplayText = someTestFunctions.changedUserGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(userLabelProvider);
 
         orgFunction = AgentService.getInstance().getCurrentUser;
         AgentService.getInstance().getCurrentUser = async () => {
             return user;
         }
+        (TranslationService.getInstance() as any).translations = {};
     });
 
     after(() => {
         AgentService.getInstance().getCurrentUser = orgFunction;
+        (TranslationService.getInstance() as any).translations = null;
     });
 
     describe('Replace simple current user attribute placeholder.', async () => {
@@ -63,38 +69,43 @@ describe('Placeholder replacement for user', () => {
         });
 
         it('Should replace user firstname placeholder', async () => {
-            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_FIRSTNAME}>`);
-            expect(text).equal(user.UserFirstname);
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${ContactProperty.FIRSTNAME}>`);
+            expect(text).equal(user.Contact.Firstname);
         });
 
         it('Should replace user lastname placeholder', async () => {
-            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_LASTNAME}>`);
-            expect(text).equal(user.UserLastname);
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${ContactProperty.LASTNAME}>`);
+            expect(text).equal(user.Contact.Lastname);
         });
 
         it('Should replace user fullname placeholder', async () => {
-            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_FULLNAME}>`);
-            expect(text).equal(user.UserFullname);
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${ContactProperty.FULLNAME}>`);
+            expect(text).equal(user.Contact.Fullname);
         });
 
         it('Should replace user email placeholder', async () => {
-            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_EMAIL}>`);
-            expect(text).equal(user.UserEmail);
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${ContactProperty.EMAIL}>`);
+            expect(text).equal(user.Contact.Email);
         });
 
         it('Should replace user mobil placeholder', async () => {
-            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_MOBILE}>`);
-            expect(text).equal(user.UserMobile);
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${ContactProperty.MOBILE}>`);
+            expect(text).equal(user.Contact.Mobile);
         });
 
         it('Should replace user phone placeholder', async () => {
-            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_PHONE}>`);
-            expect(text).equal(user.UserPhone);
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${ContactProperty.PHONE}>`);
+            expect(text).equal(user.Contact.Phone);
         });
 
         it('Should replace user comment placeholder', async () => {
             const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_COMMENT}>`);
             expect(text).equal(user.UserComment);
+        });
+
+        it('Should replace user contaxt comment placeholder', async () => {
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${ContactProperty.COMMENT}>`);
+            expect(text).equal(user.Contact.Comment);
         });
 
         it('Should replace user create by placeholder', async () => {
@@ -118,7 +129,7 @@ describe('Placeholder replacement for user', () => {
         });
 
         it('Should replace user language placeholder', async () => {
-            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${UserProperty.USER_LANGUAGE}>`);
+            const text = await userPlaceholderHandler.replace(`<KIX_CURRENT_${PersonalSettingsProperty.USER_LANGUAGE}>`);
             expect(text).equal('en');
         });
     });
@@ -180,13 +191,15 @@ describe('Placeholder replacement for user', () => {
         const ticket: Ticket = new Ticket();
         let ticketPlaceholderHandler: TicketPlaceholderHandler = new TicketPlaceholderHandler();
         const owner: User = new User();
+        owner.Contact = new Contact();
         const responsible: User = new User();
+        responsible.Contact = new Contact();
         let orgLoadFuntion;
         before(() => {
-            owner.UserFirstname = 'Owner';
-            owner.UserEmail = 'owner@ticket.com';
-            responsible.UserFirstname = 'Responsible';
-            responsible.UserEmail = 'respnsible@ticket.com';
+            owner.Contact.Firstname = 'Owner';
+            owner.Contact.Email = 'owner@ticket.com';
+            responsible.Contact.Firstname = 'Responsible';
+            responsible.Contact.Email = 'respnsible@ticket.com';
             ticket.OwnerID = 2;
             ticket.ResponsibleID = 3;
             orgLoadFuntion = KIXObjectService.loadObjects;
@@ -209,70 +222,77 @@ describe('Placeholder replacement for user', () => {
         });
 
         it('Should replace user attribute placeholder from owner', async () => {
-            const firstname = await ticketPlaceholderHandler.replace(`<KIX_OWNER_${UserProperty.USER_FIRSTNAME}>`, ticket);
+            const firstname = await ticketPlaceholderHandler.replace(`<KIX_OWNER_${ContactProperty.FIRSTNAME}>`, ticket);
             expect(firstname).exist;
-            expect(firstname, 'should be firstname of ticket owner').equal(owner.UserFirstname);
-            const email = await ticketPlaceholderHandler.replace(`<KIX_TICKETOWNER_${UserProperty.USER_EMAIL}>`, ticket);
+            expect(firstname, 'should be firstname of ticket owner').equal(owner.Contact.Firstname);
+            const email = await ticketPlaceholderHandler.replace(`<KIX_TICKETOWNER_${ContactProperty.EMAIL}>`, ticket);
             expect(email).exist;
-            expect(email, 'should be email of ticket owner').equal(owner.UserEmail);
+            expect(email, 'should be email of ticket owner').equal(owner.Contact.Email);
         });
 
         it('Should replace user attribute placeholder from responsible', async () => {
-            const firstname = await ticketPlaceholderHandler.replace(`<KIX_RESPONSIBLE_${UserProperty.USER_FIRSTNAME}>`, ticket);
+            const firstname = await ticketPlaceholderHandler.replace(`<KIX_RESPONSIBLE_${ContactProperty.FIRSTNAME}>`, ticket);
             expect(firstname).exist;
-            expect(firstname, 'should be firstname of ticket responsible').equal(responsible.UserFirstname);
-            const email = await ticketPlaceholderHandler.replace(`<KIX_TICKETRESPONSIBLE_${UserProperty.USER_EMAIL}>`, ticket);
+            expect(firstname, 'should be firstname of ticket responsible').equal(responsible.Contact.Firstname);
+            const email = await ticketPlaceholderHandler.replace(`<KIX_TICKETRESPONSIBLE_${ContactProperty.EMAIL}>`, ticket);
             expect(email).exist;
-            expect(email, 'should be email of ticket responsible').equal(responsible.UserEmail);
+            expect(email, 'should be email of ticket responsible').equal(responsible.Contact.Email);
         });
     });
 });
 
 class someTestFunctions {
-    public static async changedGetDisplayTextMethod(user: User, property: string): Promise<string> {
+    public static async changedUserGetDisplayTextMethod(user: User, property: string): Promise<string> {
         let displayValue = user[property];
         switch (property) {
             case KIXObjectProperty.CHANGE_BY:
             case KIXObjectProperty.CREATE_BY:
-            case UserProperty.LAST_LOGIN:
+            case UserProperty.USER_LAST_LOGIN:
             case UserProperty.USER_VALID:
                 displayValue = `${property}_Name`;
                 break;
-            case UserProperty.USER_LANGUAGE:
+            case PersonalSettingsProperty.USER_LANGUAGE:
                 if (user.Preferences) {
-                    const languagePreference = user.Preferences.find((p) => p.ID === UserProperty.USER_LANGUAGE);
+                    const languagePreference = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE);
                     if (languagePreference) {
                         displayValue = languagePreference.Value;
                     }
                 }
                 break;
             default:
+                if (user.Contact && user.Contact[property]) {
+                    displayValue = user.Contact[property];
+                }
         }
         return typeof displayValue !== 'undefined' && displayValue !== null ? displayValue.toString() : null;
     }
 
     public static prepareUser(): User {
-        const user = new User();
-        const preference = new UserPreference();
+        const contact = new Contact();
+        contact.Title = 'some title';
+        contact.Firstname = 'Placeholder';
+        contact.Lastname = 'Test';
+        contact.Fullname = 'Placeholder Test';
+        contact.Email = 'placeholder@test.com';
+        contact.Mobile = '0123 456789';
+        contact.Phone = '9876 54321';
+        contact.Comment = 'some contact comment';
 
-        preference.ID = UserProperty.USER_LANGUAGE;
+        const preference = new UserPreference();
+        preference.ID = PersonalSettingsProperty.USER_LANGUAGE;
         preference.Value = 'en';
 
+        const user = new User();
         user.UserID = 2;
         user.UserLogin = 'PlaceholderTest';
-        user.UserFirstname = 'Placeholder';
-        user.UserLastname = 'Test';
-        user.UserFullname = 'Placeholder Test';
-        user.UserEmail = 'placeholder@test.com';
-        user.UserMobile = '0123 456789';
-        user.UserPhone = '9876 54321';
         user.ValidID = 1;
-        user.UserTitle = 'some title';
         user.UserComment = 'some comment';
         user.CreateTime = '2019-05-30 08:45:30';
         user.CreateBy = 1;
         user.ChangeTime = '2019-06-05 10:45:30';
         user.ChangeBy = 2;
+
+        user.Contact = contact;
         user.Preferences = [
             preference
         ]

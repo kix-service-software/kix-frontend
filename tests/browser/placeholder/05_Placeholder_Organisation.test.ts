@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,8 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { Organisation } from '../../../src/frontend-applications/agent-portal/modules/customer/model/Organisation';
-import { OrganisationPlaceholderHandler, OrganisationLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core';
+import { OrganisationPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/OrganisationPlaceholderHandler';
+import { OrganisationLabelProvider } from '../../../src/frontend-applications/agent-portal/modules/customer/webapp/core/OrganisationLabelProvider';
 import { LabelService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/LabelService';
 import { OrganisationProperty } from '../../../src/frontend-applications/agent-portal/modules/customer/model/OrganisationProperty';
 import { KIXObjectProperty } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectProperty';
@@ -20,7 +21,8 @@ import { DateTimeUtil } from '../../../src/frontend-applications/agent-portal/mo
 import { Ticket } from '../../../src/frontend-applications/agent-portal/modules/ticket/model/Ticket';
 import { KIXObjectService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
-import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core';
+import { TicketPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/ticket/webapp/core/TicketPlaceholderHandler';
+import { TranslationService } from '../../../src/frontend-applications/agent-portal/modules/translation/webapp/core/TranslationService';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -35,7 +37,10 @@ describe('Placeholder replacement for organisation', () => {
         const organisationLabelProvider = new OrganisationLabelProvider();
         organisationLabelProvider.getDisplayText = someTestFunctions.changedGetDisplayTextMethod;
         LabelService.getInstance().registerLabelProvider(organisationLabelProvider);
+        (TranslationService.getInstance() as any).translations = {};
     });
+
+    after(() => (TranslationService.getInstance() as any).translations = null);
 
     describe('Replace simple organisation attribute placeholder.', async () => {
 

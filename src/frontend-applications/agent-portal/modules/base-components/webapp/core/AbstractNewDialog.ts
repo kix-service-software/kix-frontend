@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -12,7 +12,7 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { Context } from "vm";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { DialogService } from "./DialogService";
 import { ContextService } from "./ContextService";
 import { ContextMode } from "../../../../model/ContextMode";
@@ -54,7 +54,10 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
     }
 
     public async onMount(): Promise<void> {
-        DialogService.getInstance().setMainDialogHint('Translatable#All form fields marked by * are required fields.');
+        DialogService.getInstance().setMainDialogHint(
+            // tslint:disable-next-line:max-line-length
+            "Translatable#For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual for more detailed information."
+        );
 
         this.state.translations = await TranslationService.createTranslationObject([
             "Translatable#Cancel", "Translatable#Save"
@@ -68,6 +71,15 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             );
             this.dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
         }
+
+        EventService.getInstance().subscribe(ApplicationEvent.DIALOG_SUBMIT, {
+            eventSubscriberId: 'AbstractDialog' + this.state.formId,
+            eventPublished: (data: any, eventId: string) => {
+                if (data && data.formId === this.state.formId) {
+                    this.submit();
+                }
+            }
+        });
     }
 
     public async onDestroy(): Promise<void> {
@@ -98,12 +110,23 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                 const result = await formInstance.validateForm();
                 const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
                 if (validationError) {
-                    AbstractNewDialog.prototype.showValidationError.call(this, result);
+                    if (this.showValidationError) {
+                        this.showValidationError(result);
+                    } else {
+                        AbstractNewDialog.prototype.showValidationError.call(this, result);
+                    }
                 } else {
                     DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
                     KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
                         .then(async (objectId) => {
-                            await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
+                            if (this.handleDialogSuccess) {
+                                await this.handleDialogSuccess(objectId);
+                            } else {
+                                await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
+                            }
+
+                            ContextService.getInstance().updateObjectLists(this.objectType);
+
                             resolve();
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);
@@ -160,7 +183,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
         );
 
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, 'Translatable#Validation error', true
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
         );
     }
 

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -15,6 +15,7 @@ import { ContextService } from "../ContextService";
 import { ContextType } from "../../../../../model/ContextType";
 import { Context } from "../../../../../model/Context";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
 
 export class TableFactoryService {
 
@@ -95,7 +96,8 @@ export class TableFactoryService {
     public async createTable(
         tableKey: string, objectType: KIXObjectType | string, tableConfiguration?: TableConfiguration,
         objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
-        defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = true
+        defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = true,
+        objects: KIXObject[] = null
     ): Promise<ITable> {
         let table: ITable;
 
@@ -118,7 +120,8 @@ export class TableFactoryService {
             const factory = this.factories.find((f) => f.isFactoryFor(objectType));
             if (factory) {
                 table = factory.createTable(
-                    tableKey, tableConfiguration, objectIds, contextId, defaultRouting, defaultToggle, short, objectType
+                    tableKey, tableConfiguration, objectIds, contextId,
+                    defaultRouting, defaultToggle, short, objectType, objects
                 );
 
                 if (tableContextId) {

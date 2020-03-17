@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -50,7 +50,7 @@ export class ConfigItemClassDefinitionTableFactory extends TableFactory {
                 true, true, false, DataType.DATE_TIME
             ),
             new DefaultColumnConfiguration(null, null, null,
-                ConfigItemClassDefinitionProperty.CURRENT, true, false, true, true, 150,
+                ConfigItemClassDefinitionProperty.CURRENT, true, false, false, true, 150,
                 true, true, false, DataType.DATE_TIME
             )
         ];

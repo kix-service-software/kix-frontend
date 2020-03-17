@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -10,7 +10,6 @@
 import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
 import { TicketType } from "../../model/TicketType";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchProperty } from "../../../search/model/SearchProperty";
 import { TicketTypeProperty } from "../../model/TicketTypeProperty";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
@@ -26,14 +25,10 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
     public async getPropertyText(property: string, short?: boolean, translatable: boolean = true): Promise<string> {
         let displayValue = property;
         switch (property) {
-            case SearchProperty.FULLTEXT:
-                displayValue = 'Translatable#Full Text';
-                break;
             case TicketTypeProperty.NAME:
                 displayValue = 'Translatable#Name';
                 break;
             case TicketTypeProperty.ID:
-            case 'ICON':
                 displayValue = 'Translatable#Icon';
                 break;
             default:

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -7,7 +7,7 @@
  * --
  */
 
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class DateTimeUtil {
 
@@ -164,6 +164,19 @@ export class DateTimeUtil {
 
     private static padZero(value: number): string {
         return (value < 10 ? '0' + value : value).toString();
+    }
+
+    public static getWeek(date: Date) {
+        const firstDayOfYear = new Date(date.getFullYear(), 0, 1);
+        const pastDaysOfYear = ((date as any) - (firstDayOfYear as any)) / 86400000;
+        return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+    }
+
+    public static async getMonthName(date: Date, language?: string): Promise<string> {
+        if (!language) {
+            language = await TranslationService.getUserLanguage();
+        }
+        return date.toLocaleString(language, { month: 'long' });
     }
 
 }

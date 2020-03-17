@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -11,6 +11,8 @@ import md5 = require('md5');
 import { ClientStorageService } from './ClientStorageService';
 import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class BrowserCacheService {
 
@@ -81,6 +83,7 @@ export class BrowserCacheService {
                 this.keyIndex.delete(prefix);
             }
         }
+        EventService.getInstance().publish(ApplicationEvent.CACHE_KEYS_DELETED, prefixes);
     }
 
     public async updateCaches(events: ObjectUpdatedEventData[]): Promise<void> {
@@ -141,9 +144,11 @@ export class BrowserCacheService {
             case KIXObjectType.USER_PREFERENCE:
                 cacheKeyPrefixes.push(KIXObjectType.USER);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.USER:
                 cacheKeyPrefixes.push(KIXObjectType.ROLE);
+                cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 break;
             case KIXObjectType.LINK:
             case KIXObjectType.LINK_OBJECT:
@@ -153,10 +158,14 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.LINK);
                 cacheKeyPrefixes.push(KIXObjectType.LINK_OBJECT);
                 break;
-            case KIXObjectType.CONTACT:
-                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+            case KIXObjectType.ORGANISATION:
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                break;
+            case KIXObjectType.CONTACT:
+                cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
+                cacheKeyPrefixes.push(KIXObjectType.TICKET);
+                cacheKeyPrefixes.push(KIXObjectType.USER);
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
@@ -215,6 +224,7 @@ export class BrowserCacheService {
         }
 
         this.keyIndex = new Map();
+        EventService.getInstance().publish(ApplicationEvent.CACHE_CLEARED);
     }
 
 }

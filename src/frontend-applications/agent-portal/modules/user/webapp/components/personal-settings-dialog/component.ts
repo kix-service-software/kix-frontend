@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -105,11 +105,14 @@ class Component {
                     DialogService.getInstance().setMainDialogLoading(true, loadingHint);
                     await AgentService.getInstance().setPreferencesByForm(this.state.formId)
                         .then(async () => {
-                            DialogService.getInstance().setMainDialogLoading(false);
-                            DialogService.getInstance().submitMainDialog();
-                            EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                            const toast = await TranslationService.translate('Translatable#Changes saved.');
-                            BrowserUtil.openSuccessOverlay(toast);
+                            TranslationService.getInstance().resetTranslations();
+                            setTimeout(async () => {
+                                DialogService.getInstance().setMainDialogLoading(false);
+                                DialogService.getInstance().submitMainDialog();
+                                EventService.getInstance().publish(ApplicationEvent.REFRESH);
+                                const toast = await TranslationService.translate('Translatable#Changes saved.');
+                                BrowserUtil.openSuccessOverlay(toast);
+                            }, 100);
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);
                             BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
@@ -138,7 +141,7 @@ class Component {
 
         const toastTitle = await TranslationService.translate('Translatable#Validation error');
         OverlayService.getInstance().openOverlay(
-            OverlayType.WARNING, null, content, toastTitle, true
+            OverlayType.WARNING, null, content, toastTitle, null, true
         );
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,7 +23,7 @@ export class TableConfiguration implements IConfiguration {
     public constructor(
         public id: string,
         public name: string,
-        public type: string | ConfigurationType,
+        public type: string | ConfigurationType = ConfigurationType.Table,
         public objectType?: KIXObjectType | string,
         public loadingOptions?: KIXObjectLoadingOptions,
         public displayLimit?: number,
@@ -49,14 +49,12 @@ export class TableConfiguration implements IConfiguration {
         }
 
         if (displayLimit === null) {
-            if (this.headerHeight === TableHeaderHeight.SMALL) {
+            if (this.headerHeight <= TableHeaderHeight.SMALL) {
                 this.displayLimit = 5;
+            } else if (this.rowHeight <= TableRowHeight.SMALL) {
+                this.displayLimit = 10;
             } else {
-                if (this.rowHeight === TableRowHeight.SMALL) {
-                    this.displayLimit = 10;
-                } else {
-                    this.displayLimit = 25;
-                }
+                this.displayLimit = 25;
             }
         }
 

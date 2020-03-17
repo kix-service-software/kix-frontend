@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -28,6 +28,7 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
 import { ReleaseInfo } from "../../../../model/ReleaseInfo";
 import { ObjectDefinition } from "../../../../model/kix/ObjectDefinition";
+import { ISocketResponse } from "./ISocketResponse";
 
 export class KIXModulesSocketClient extends SocketClient {
 
@@ -216,6 +217,44 @@ export class KIXModulesSocketClient extends SocketClient {
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
             this.socket.emit(KIXModulesEvent.LOAD_OBJECT_DEFINITIONS, request);
+        });
+    }
+
+    public async rebuildConfiguration(): Promise<void> {
+        const socketTimeout = ClientStorageService.getSocketTimeout();
+        return new Promise<void>((resolve, reject) => {
+
+            const requestId = IdService.generateDateBasedId();
+            const token = ClientStorageService.getToken();
+
+            const timeout = window.setTimeout(() => {
+                reject('Timeout: ' + KIXModulesEvent.REBUILD_FORM_CONFIG);
+            }, socketTimeout);
+
+            this.socket.on(KIXModulesEvent.REBUILD_FORM_CONFIG_FINISHED,
+                (result: ISocketResponse) => {
+                    if (result.requestId === requestId) {
+                        window.clearTimeout(timeout);
+                        resolve();
+                    }
+                }
+            );
+
+            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
+                if (error.requestId === requestId) {
+                    window.clearTimeout(timeout);
+                    console.error(error.error);
+                    reject(error.error);
+                }
+            });
+
+            const request: ISocketRequest = {
+                token,
+                requestId,
+                clientRequestId: ClientStorageService.getClientRequestId()
+            };
+
+            this.socket.emit(KIXModulesEvent.REBUILD_FORM_CONFIG, request);
         });
     }
 }

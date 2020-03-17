@@ -1,17 +1,19 @@
 <!--
-Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
 --
 This software comes with ABSOLUTELY NO WARRANTY. For details, see
 the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
+
+<div.sidebar-shield/>
 <div.sidebar-area class={
-    "show-object": state.sidebars
+    "show-object": state.sidebars && !state.loading
 }>
     <if(!state.loading && state.showSidebar && state.sidebars)>
         <for|sidebar| of=state.sidebars>
-            <div.sidebar>
+            <div.sidebar key=("sidebar-" + sidebar.instanceId)>
                 <${component.getSidebarTemplate(sidebar.instanceId)} ...{
                     instanceId: sidebar.instanceId,
                     minimizable: false,

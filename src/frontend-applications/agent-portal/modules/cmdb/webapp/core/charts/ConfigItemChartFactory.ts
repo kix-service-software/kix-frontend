@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -19,7 +19,7 @@ import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { GeneralCatalogItem } from "../../../../general-catalog/model/GeneralCatalogItem";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 
 export class ConfigItemChartFactory {
 
@@ -66,19 +66,16 @@ export class ConfigItemChartFactory {
         ]);
 
         const result: [string[], ChartDataSets[]] = [[], []];
-        const labelWarning = await TranslationService.translate('Translatable#Warning');
-        const labelIncident = await TranslationService.translate('Translatable#Incident state');
-
 
         if (property === ConfigItemProperty.CUR_INCI_STATE_ID) {
             result[1] = [
                 {
-                    label: labelWarning,
+                    label: 'Warning',
                     data: [],
                     backgroundColor: "#ffed00"
                 },
                 {
-                    label: labelIncident,
+                    label: 'Incident',
                     data: [],
                     backgroundColor: "#e31e24"
                 }
@@ -107,6 +104,11 @@ export class ConfigItemChartFactory {
                     }
                 }
             }
+
+            const labelWarning = await TranslationService.translate('Translatable#Warning');
+            const labelIncident = await TranslationService.translate('Translatable#Incident');
+            result[1][0].label = labelWarning;
+            result[1][1].label = labelIncident;
         } else {
             result[1] = [{
                 data: []

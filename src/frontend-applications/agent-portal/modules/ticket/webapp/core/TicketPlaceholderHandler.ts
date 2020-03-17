@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -14,7 +14,8 @@ import { SortUtil } from "../../../../model/SortUtil";
 import { ArticleProperty } from "../../model/ArticleProperty";
 import { DataType } from "../../../../model/DataType";
 import { SortOrder } from "../../../../model/SortOrder";
-import { ArticlePlaceholderHandler, QueuePlaceholderHandler } from ".";
+import { ArticlePlaceholderHandler } from "./ArticlePlaceholderHandler";
+import { QueuePlaceholderHandler } from "./QueuePlaceholderHandler";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ContextType } from "../../../../model/ContextType";
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
@@ -32,8 +33,11 @@ import {
 } from "../../../../modules/base-components/webapp/core/AdditionalContextInformation";
 import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
 import { FormContext } from "../../../../model/configuration/FormContext";
-import { OrganisationPlaceholderHandler, ContactPlaceholderHandler } from "../../../customer/webapp/core";
-import { DynamicFieldValuePlaceholderHandler } from "../../../dynamic-fields/webapp/core";
+import { OrganisationPlaceholderHandler } from "../../../customer/webapp/core/OrganisationPlaceholderHandler";
+import { ContactPlaceholderHandler } from "../../../customer/webapp/core/ContactPlaceholderHandler";
+import {
+    DynamicFieldValuePlaceholderHandler
+} from "../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler";
 
 export class TicketPlaceholderHandler implements IPlaceholderHandler {
 
@@ -185,7 +189,9 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
 
     private async getTicketValue(attribute: string, ticket?: Ticket, language?: string, optionsString?: string) {
         let result = '';
-        if (PlaceholderService.getInstance().isDynamicFieldAttribute(attribute)) {
+        if (
+            PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) && DynamicFieldValuePlaceholderHandler
+        ) {
             result = await DynamicFieldValuePlaceholderHandler.prototype.replaceDFValue(ticket, optionsString);
         } else if (this.isKnownProperty(attribute)) {
             const ticketLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
@@ -299,7 +305,11 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                     typeof oldObject[property] !== 'undefined'
                     && !(fromForm && this.ignoreProperty(property))
                 ) {
-                    newObject[property] = oldObject[property];
+                    if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                        this.setDynamicFields(newObject, oldObject as Ticket);
+                    } else {
+                        newObject[property] = oldObject[property];
+                    }
                 }
             });
         }
@@ -341,5 +351,21 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
             subject = subjectValue && subjectValue.value ? subjectValue.value.toString() : '';
         }
         return subject;
+    }
+
+    private setDynamicFields(newObject: Ticket, oldObject: Ticket): void {
+        if (!newObject.DynamicFields) {
+            newObject.DynamicFields = [];
+        }
+        if (oldObject && Array.isArray(oldObject.DynamicFields) && oldObject.DynamicFields.length) {
+            oldObject.DynamicFields.forEach((dfValue) => {
+                const dfValueIndex = newObject.DynamicFields.findIndex((dfv) => dfv.Name === dfValue.Name);
+                if (dfValueIndex === -1) {
+                    newObject.DynamicFields.push(dfValue);
+                } else {
+                    newObject.DynamicFields[dfValueIndex] = dfValue;
+                }
+            });
+        }
     }
 }

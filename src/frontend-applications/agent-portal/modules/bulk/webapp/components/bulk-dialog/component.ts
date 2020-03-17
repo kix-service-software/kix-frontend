@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -9,9 +9,10 @@
 
 import { ComponentState } from "./ComponentState";
 import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { BulkDialogContext, BulkService } from "../../core";
+import { BulkDialogContext } from "../../core/BulkDialogContext";
+import { BulkService } from "../../core/BulkService";
 import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { TranslationService } from "../../../../translation/webapp/core";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
 import { TabContainerEvent } from "../../../../../modules/base-components/webapp/core/TabContainerEvent";
 import { TabContainerEventData } from "../../../../../modules/base-components/webapp/core/TabContainerEventData";

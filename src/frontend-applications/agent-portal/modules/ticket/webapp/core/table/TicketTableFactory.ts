@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,14 +18,16 @@ import { RoutingConfiguration } from "../../../../../model/configuration/Routing
 import { TicketDetailsContext } from "..";
 import { ContextMode } from "../../../../../model/ContextMode";
 import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
 
 export class TicketTableFactory extends TableFactory {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
     public createTable(
-        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
-        defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
+        tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[],
+        contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
+        objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): ITable {
 
         tableConfiguration = this.setDefaultTableConfiguration(
@@ -35,7 +37,7 @@ export class TicketTableFactory extends TableFactory {
         const table = new Table(tableKey, tableConfiguration, contextId);
 
         const contentProvider = new TicketTableContentProvider(
-            table, objectIds, tableConfiguration.loadingOptions, contextId
+            table, objectIds, tableConfiguration.loadingOptions, contextId, objects
         );
 
         table.setContentProvider(contentProvider);
@@ -62,6 +64,10 @@ export class TicketTableFactory extends TableFactory {
                     null, null, null, TicketProperty.STATE_ID, true, true, true, false, 150, true, true, true),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                    'label-list-cell-content'
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.OWNER_ID, true, false, true, false, 150, true, true
@@ -94,6 +100,10 @@ export class TicketTableFactory extends TableFactory {
                     null, null, null, TicketProperty.LOCK_ID, false, true, false, false, 41, true, true, true),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, false, 100, true, true, true
+                ),
+                new DefaultColumnConfiguration(null, null, null,
+                    'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                    'label-list-cell-content'
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.RESPONSIBLE_ID, true, false, true, false, 150, true, true

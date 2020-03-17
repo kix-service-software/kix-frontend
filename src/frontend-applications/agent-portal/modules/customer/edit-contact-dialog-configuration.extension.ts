@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,7 +27,6 @@ import { FormFieldValue } from "../../model/configuration/FormFieldValue";
 import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 
 export class Extension implements IConfigurationExtension {
@@ -56,6 +55,7 @@ export class Extension implements IConfigurationExtension {
                 ]
             )
         );
+
         return configurations;
     }
 
@@ -99,18 +99,6 @@ export class Extension implements IConfigurationExtension {
         );
 
         configurations.push(
-            new FormGroupConfiguration(
-                'contact-edit-form-group-information', 'Translatable#Contact Information',
-                [
-                    'contact-edit-form-field-title',
-                    'contact-edit-form-field-firstname',
-                    'contact-edit-form-field-lastname',
-                    'contact-edit-form-field-organisation'
-                ]
-            )
-        );
-
-        configurations.push(
             new FormFieldConfiguration(
                 'contact-edit-form-field-phone',
                 'Translatable#Phone', ContactProperty.PHONE, null, false,
@@ -142,14 +130,15 @@ export class Extension implements IConfigurationExtension {
         );
 
         configurations.push(
-            new FormGroupConfiguration(
-                'contact-edit-form-group-communication', 'Translatable#Communication',
+            new FormFieldConfiguration(
+                'contact-edit-form-field-communication-container', 'Translatable#Communication',
+                'COMMUNICATION_CONTAINER', null, false, null, null, null,
                 [
                     'contact-edit-form-field-phone',
                     'contact-edit-form-field-mobile',
                     'contact-edit-form-field-fax',
                     'contact-edit-form-field-email'
-                ]
+                ], null, null, null, null, null, null, null, null, true, true
             )
         );
 
@@ -183,14 +172,15 @@ export class Extension implements IConfigurationExtension {
         );
 
         configurations.push(
-            new FormGroupConfiguration(
-                'contact-edit-form-group-address', 'Translatable#Postal Address',
+            new FormFieldConfiguration(
+                'contact-edit-form-field-address-container', 'Translatable#Postal Address',
+                'ADDRESS_CONTAINER', null, false, null, null, null,
                 [
                     'contact-edit-form-field-street',
                     'contact-edit-form-field-zip',
                     'contact-edit-form-field-city',
                     'contact-edit-form-field-country'
-                ]
+                ], null, null, null, null, null, null, null, null, true, true
             )
         );
 
@@ -213,11 +203,27 @@ export class Extension implements IConfigurationExtension {
         );
 
         configurations.push(
-            new FormGroupConfiguration(
-                'contact-edit-form-group-other', 'Translatable#Other',
+            new FormFieldConfiguration(
+                'contact-edit-form-field-other-container', 'Translatable#Other',
+                'OTHER_CONTAINER', null, false, null, null, null,
                 [
                     'contact-edit-form-field-comment',
                     'contact-edit-form-field-valid'
+                ], null, null, null, null, null, null, null, null, true, true
+            )
+        );
+
+        configurations.push(
+            new FormGroupConfiguration(
+                'contact-edit-form-group-information', 'Translatable#Contact Information',
+                [
+                    'contact-edit-form-field-title',
+                    'contact-edit-form-field-firstname',
+                    'contact-edit-form-field-lastname',
+                    'contact-edit-form-field-organisation',
+                    'contact-edit-form-field-communication-container',
+                    'contact-edit-form-field-address-container',
+                    'contact-edit-form-field-other-container'
                 ]
             )
         );
@@ -226,17 +232,14 @@ export class Extension implements IConfigurationExtension {
             new FormPageConfiguration(
                 'contact-edit-form-page', 'Translatable#New Contact',
                 [
-                    'contact-edit-form-group-information',
-                    'contact-edit-form-group-communication',
-                    'contact-edit-form-group-address',
-                    'contact-edit-form-group-other'
+                    'contact-edit-form-group-information'
                 ]
             )
         );
 
         configurations.push(
             new FormConfiguration(
-                formId, 'New Contact',
+                formId, 'Edit Contact',
                 ['contact-edit-form-page'],
                 KIXObjectType.CONTACT, true, FormContext.EDIT
             )

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -96,5 +96,16 @@ export class ContactService extends KIXObjectService<Contact> {
                 ContactProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
+    }
+
+    public async updateObjectByForm(
+        objectType: KIXObjectType | string, formId: string, objectId: number | string,
+        cacheKeyPrefix: string = objectType
+    ): Promise<string | number> {
+        if (objectId) {
+            return super.updateObjectByForm(objectType, formId, objectId, cacheKeyPrefix);
+        } else {
+            return super.createObjectByForm(objectType, formId, null, cacheKeyPrefix);
+        }
     }
 }

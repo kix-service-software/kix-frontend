@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -18,6 +18,7 @@ import { FormFieldConfiguration } from "../../../../model/configuration/FormFiel
 import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 
 export class SysConfigFormService extends KIXObjectFormService {
 
@@ -82,6 +83,7 @@ export class SysConfigFormService extends KIXObjectFormService {
                         formValue = '';
                     }
                     break;
+                case SysConfigOptionDefinitionProperty.DEFAULT_VALID_ID:
                 case KIXObjectProperty.VALID_ID:
                     if (sysConfig.IsRequired) {
                         formField.readonly = true;
@@ -91,5 +93,26 @@ export class SysConfigFormService extends KIXObjectFormService {
             }
         }
         return formValue;
+    }
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+    ): Promise<Array<[string, any]>> {
+
+        const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
+        const value = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.VALUE);
+        if (value && defaultParameter && value[1] === defaultParameter[1]) {
+            value[1] = null;
+        }
+
+        const defaultValidParameter = parameter.find(
+            (p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT_VALID_ID
+        );
+        const valid = parameter.find((p) => p[0] === KIXObjectProperty.VALID_ID);
+        if (valid && defaultValidParameter && valid[1] === defaultValidParameter[1]) {
+            valid[1] = null;
+        }
+
+        return parameter;
     }
 }

@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -27,11 +27,16 @@ import { ContextService } from "../../../base-components/webapp/core/ContextServ
 import { DynamicFieldFormService } from "./DynamicFieldFormService";
 import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
 import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
-import { DynamicFieldValuePlaceholderHandler } from "./DynamcFieldValuePlaceholderHandler";
-import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { DynamicFieldValuePlaceholderHandler } from "./DynamicFieldValuePlaceholderHandler";
+import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
 import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
 import { DynamicFieldDateTimeValidator } from "./DynamicFieldDateTimeValidator";
+import { CMDBService } from "../../../cmdb/webapp/core";
+import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
+import { ConfigItemClass } from "../../../cmdb/model/ConfigItemClass";
+import { DynamicFieldTypeBrowserFactory } from "./DynamicFieldTypeBrowserFactory";
+import { DynamicFieldTypeLabelProvider } from "./DynamicFieldTypeLabelProvider";
 
 export class UIModule implements IUIModule {
 
@@ -53,9 +58,14 @@ export class UIModule implements IUIModule {
             KIXObjectType.DYNAMIC_FIELD, DynamicFieldBrowserFactory.getInstance()
         );
 
+        FactoryService.getInstance().registerFactory(
+            KIXObjectType.DYNAMIC_FIELD_TYPE, DynamicFieldTypeBrowserFactory.getInstance()
+        );
+
         TableFactoryService.getInstance().registerFactory(new DynamicFieldTableFactory());
 
         LabelService.getInstance().registerLabelProvider(new DynamicFieldLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new DynamicFieldTypeLabelProvider());
 
         ActionFactory.getInstance().registerAction('dynamic-field-create-action', DynamicFieldCreateAction);
 
@@ -79,27 +89,22 @@ export class UIModule implements IUIModule {
         this.registerSchemas();
     }
 
-
+    // tslint:disable:max-line-length
     private registerSchemas(): void {
         this.registerSchemaForText();
         this.registerSchemaForTextArea();
         this.registerSchemaForDate();
         this.registerSchemaForDateTime();
         this.registerSchemaForSelection();
+        this.registerSchemaForCheckList();
+        DynamicFieldService.getInstance().registerConfigSchemaHandler(DynamicFieldTypes.CI_REFERENCE, this.getSchemaForCIReference.bind(this));
     }
 
-    // tslint:disable:max-line-length
     private registerSchemaForText(): void {
         const schema = {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -130,12 +135,6 @@ export class UIModule implements IUIModule {
                     type: "string",
                     required: false
                 },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
-                    type: "string",
-                    required: false
-                },
                 RegExList: {
                     title: "RegEx List",
                     description: "A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.",
@@ -158,7 +157,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.TEXT, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT, schema);
     }
 
     private registerSchemaForTextArea(): void {
@@ -166,12 +165,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -202,12 +195,6 @@ export class UIModule implements IUIModule {
                     type: "string",
                     required: false
                 },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
-                    type: "string",
-                    required: false
-                },
                 RegExList: {
                     title: "RegEx List",
                     description: "A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.",
@@ -230,7 +217,7 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.TEXT_AREA, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.TEXT_AREA, schema);
     }
 
     private registerSchemaForDate(): void {
@@ -238,12 +225,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -274,12 +255,6 @@ export class UIModule implements IUIModule {
                     type: "integer",
                     required: false
                 },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
-                    type: "string",
-                    required: false
-                },
                 YearsInFuture: {
                     title: "Years in Future",
                     description: "",
@@ -304,7 +279,7 @@ export class UIModule implements IUIModule {
                 },
             }
         };
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.DATE, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE, schema);
     }
 
     private registerSchemaForDateTime(): void {
@@ -312,12 +287,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -348,12 +317,6 @@ export class UIModule implements IUIModule {
                     type: "integer",
                     required: false
                 },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
-                    type: "string",
-                    required: false
-                },
                 YearsInFuture: {
                     title: "Years in Future",
                     description: "",
@@ -378,7 +341,7 @@ export class UIModule implements IUIModule {
                 },
             }
         };
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.DATE_TIME, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.DATE_TIME, schema);
     }
 
     private registerSchemaForSelection(): void {
@@ -386,12 +349,6 @@ export class UIModule implements IUIModule {
             $schema: "http://json-schema.org/draft-03/schema#",
             type: "object",
             properties: {
-                ValueTTL: {
-                    title: "TTL",
-                    description: "Field value cleared after ValueTTL seconds after the field value is set.",
-                    type: "string",
-                    required: true
-                },
                 CountMin: {
                     title: "Count Min",
                     description: "The minimum number of items which are available for input if field is shown in edit mode.",
@@ -419,12 +376,6 @@ export class UIModule implements IUIModule {
                 DefaultValue: {
                     title: "Default Value",
                     description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only. Use the key of the possible value.",
-                    type: "string",
-                    required: false
-                },
-                Link: {
-                    title: "Link",
-                    description: "An URL which may use placedholder referring to this fields value (or any other object property) as parameter, i.e. https://localhost/Field.Value.",
                     type: "string",
                     required: false
                 },
@@ -457,6 +408,139 @@ export class UIModule implements IUIModule {
             }
         };
 
-        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldType.SELECTION, schema);
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.SELECTION, schema);
+    }
+
+    private registerSchemaForCheckList(): void {
+        const schema = {
+            $schema: "http://json-schema.org/draft-03/schema#",
+            type: "object",
+            definitions: {
+                CheckListItem: {
+                    title: "Checklist Item",
+                    description: "",
+                    type: "array",
+                    required: false,
+                    items: {
+                        type: "object",
+                        properties: {
+                            id: {
+                                title: "Id",
+                                type: "string"
+                            },
+                            title: {
+                                title: "Title",
+                                type: "string"
+                            },
+                            description: {
+                                title: "Description",
+                                type: "string"
+                            },
+                            input: {
+                                title: "Input",
+                                type: "string",
+                                default: "ChecklistState",
+                                enum: [
+                                    "Text",
+                                    "ChecklistState"
+                                ]
+                            },
+                            value: {
+                                title: "Value",
+                                type: "string"
+                            },
+                            sub: {
+                                title: "Sub",
+                                $ref: "#/definitions/CheckListItem"
+                            }
+                        }
+                    }
+                }
+            },
+            properties: {
+                DefaultValue: {
+                    title: "Default Value",
+                    $ref: "#/definitions/CheckListItem"
+                }
+            }
+        };
+
+        DynamicFieldService.getInstance().registerConfigSchema(DynamicFieldTypes.CHECK_LIST, schema);
+    }
+
+    private async getSchemaForCIReference(): Promise<any> {
+
+        const states = await CMDBService.getInstance().getDeploymentStates();
+        const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS
+        );
+
+        const schema = {
+            $schema: "http://json-schema.org/draft-03/schema#",
+            type: "object",
+            properties: {
+                CountMin: {
+                    title: "Count Min",
+                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
+                    type: "integer",
+                    required: true
+                },
+                CountMax: {
+                    title: "Count Max",
+                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
+                    type: "integer",
+                    required: true
+                },
+                CountDefault: {
+                    title: "Count Default",
+                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
+                    type: "integer",
+                    required: true
+                },
+                ItemSeparator: {
+                    title: "Item Separator",
+                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
+                    type: "string",
+                    required: false
+                },
+                DefaultValue: {
+                    title: "Default Value",
+                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
+                    type: "string",
+                    required: false
+                },
+                DeploymentStates: {
+                    type: "array",
+                    format: "select",
+                    uniqueItems: true,
+                    description: "This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.",
+                    items: {
+                        enumSource: [{
+                            source: states.map((s) => {
+                                return { value: s.ItemID, title: s.Name };
+                            }),
+                            title: "{{item.title}}",
+                            value: "{{item.value}}"
+                        }]
+                    }
+                },
+                ITSMConfigItemClasses: {
+                    type: "array",
+                    format: "select",
+                    uniqueItems: true,
+                    description: "This configuration defines which Asset Classes are subject to this selection. Please enter Classes.",
+                    items: {
+                        enumSource: [{
+                            source: classes.map((s) => {
+                                return { value: s.ID, title: s.Name };
+                            }),
+                            title: "{{item.title}}",
+                            value: "{{item.value}}"
+                        }]
+                    }
+                }
+            }
+        };
+        return schema;
     }
 }

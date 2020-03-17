@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -23,7 +23,7 @@ import { UserProperty } from "../../../user/model/UserProperty";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
-import { TranslationService } from "../../../translation/webapp/core";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 
 export class WebformLabelProvider extends LabelProvider {
@@ -96,11 +96,12 @@ export class WebformLabelProvider extends LabelProvider {
                                     UserProperty.USER_LOGIN, SearchOperator.EQUALS,
                                     FilterDataType.STRING, FilterType.AND, value
                                 )
-                            ]
+                            ], null, null, [UserProperty.CONTACT]
                         ),
                         null, true
                     ).catch((error) => [] as User[]);
-                    displayValue = users && !!users.length ? users[0].UserFullname : value;
+                    displayValue = users && users.length ?
+                        users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;
                     translatable = false;
                 }
                 break;

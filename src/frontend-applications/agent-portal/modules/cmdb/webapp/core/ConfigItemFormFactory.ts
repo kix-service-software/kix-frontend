@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
  * --
  * This software comes with ABSOLUTELY NO WARRANTY. For details, see
  * the enclosed file LICENSE for license information (GPL3). If you
@@ -29,6 +29,7 @@ import { isArray } from "util";
 import { ConfigItemProperty } from "../../model/ConfigItemProperty";
 import { SearchProperty } from "../../../search/model/SearchProperty";
 import { VersionProperty } from "../../model/VersionProperty";
+import { IdService } from "../../../../model/IdService";
 
 export class ConfigItemFormFactory {
 
@@ -100,6 +101,8 @@ export class ConfigItemFormFactory {
         if (formField.countDefault === 0 || (parent && !parent.asStructure && parent.empty)) {
             formField.empty = true;
         }
+
+        formField.instanceId = IdService.generateDateBasedId();
 
         if (ad.Sub) {
             formField.children = ad.Sub.map((subField) => this.getFormField(subField, formField.instanceId, formField));
