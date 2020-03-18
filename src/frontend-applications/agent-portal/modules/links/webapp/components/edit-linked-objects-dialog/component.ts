@@ -115,6 +115,7 @@ class Component {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
         TableFactoryService.getInstance().destroyTable('edit-linked-objects-dialog');
     }
 
@@ -130,7 +131,6 @@ class Component {
             }
         });
         await this.prepareLinkedObjects(linkedObjectIds);
-        await this.initPredefinedFilter();
     }
 
     private async prepareLinkedObjects(linkedObjectIds: Map<KIXObjectType | string, string[]>): Promise<void> {
@@ -155,26 +155,6 @@ class Component {
                 linkObject.linkedObjectDisplayId = await LabelService.getInstance().getText(o, true, false);
                 linkObject.title = await LabelService.getInstance().getText(o, false, true);
             }
-        }
-    }
-
-    private async initPredefinedFilter(): Promise<void> {
-        if (this.mainObject) {
-            const linkPartners = await LinkUtil.getPossibleLinkPartners(this.mainObject.KIXObjectType);
-
-            linkPartners.forEach((lp) => {
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(lp[1]);
-                const icon = labelProvider ? labelProvider.getObjectIcon(null) : null;
-                this.state.predefinedTableFilter.push(
-                    new KIXObjectPropertyFilter(lp[0].toString(), [
-                        new TableFilterCriteria(
-                            LinkObjectProperty.LINKED_OBJECT_TYPE,
-                            SearchOperator.EQUALS,
-                            lp[1].toString()
-                        )
-                    ], icon),
-                );
-            });
         }
     }
 
@@ -223,12 +203,16 @@ class Component {
                         this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
                         this.highlightDeletedRows();
                     }
+                    if (eventId === TableEvent.TABLE_FILTERED) {
+                        this.state.linkObjectCount = this.state.table.getRows().length;
+                    }
                 }
             }
         };
 
         EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
 
         this.state.table = table;
     }

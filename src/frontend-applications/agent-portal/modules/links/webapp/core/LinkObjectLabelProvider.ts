@@ -122,7 +122,7 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
 
     public async getIcons(object: LinkObject, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
-        if (property === LinkObjectProperty.LINKED_OBJECT_TYPE) {
+        if (object && property === LinkObjectProperty.LINKED_OBJECT_TYPE) {
             const labelProvider = LabelService.getInstance().getLabelProviderForType(object.linkedObjectType);
             if (labelProvider) {
                 const icon = labelProvider.getObjectIcon(object);
