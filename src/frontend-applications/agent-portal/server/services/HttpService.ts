@@ -265,7 +265,8 @@ export class HttpService {
         const options: any = {
             method: RequestMethod.GET,
             qs: {
-                include: 'Tickets,Preferences,RoleIDs,Contact'
+                'include': 'Tickets,Preferences,RoleIDs,Contact',
+                'Tickets.StateType': 'Open'
             }
         };
 
