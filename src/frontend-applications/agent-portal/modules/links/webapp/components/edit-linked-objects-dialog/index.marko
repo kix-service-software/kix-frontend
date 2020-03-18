@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget instanceId="edit-linked-objects-dialog">
     <@content>
         <div.edit-linked-objects-dialog-container>
@@ -14,12 +13,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <span>
                     <translation-string pattern="Translatable#Existing Links ({0})" placeholders=[state.linkObjectCount]/>
                 </span>
-                <filter
-                    predefinedFilter=state.predefinedTableFilter
-                    predefinedFilterPlaceholder="All Objects"
-                    filterCount=state.filterCount
-                    on-filter("filter")
-                    key="edit-linked-objects-filter"/>
+                <filter on-filter("filter") key="edit-linked-objects-filter"/>
             </div>
             <if(state.table)>
                 <standard-table-NEW table=state.table/>
