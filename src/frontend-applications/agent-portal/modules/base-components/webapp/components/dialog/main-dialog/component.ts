@@ -29,8 +29,7 @@ export class MainDialogComponent implements IMainDialogListener {
     public dialogTitle: string = null;
     public dialogIcon: string | ObjectIcon = null;
 
-    private keyListenerElement;
-    private keyListener;
+    private keyDownEventFunction: () => {};
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -41,8 +40,8 @@ export class MainDialogComponent implements IMainDialogListener {
     }
 
     public onDestroy(): void {
-        if (this.keyListenerElement) {
-            this.keyListenerElement.removeEventListener('keydown', this.handleKeyEvent.bind(this), false);
+        if (this.keyDownEventFunction) {
+            document.body.removeEventListener('keydown', this.keyDownEventFunction, false);
         }
     }
 
@@ -65,11 +64,8 @@ export class MainDialogComponent implements IMainDialogListener {
             this.state.show = true;
 
             setTimeout(() => {
-                this.keyListenerElement = (this as any).getEl();
-                if (this.keyListenerElement) {
-                    this.keyListener = this.handleKeyEvent.bind(this);
-                    this.keyListenerElement.addEventListener('keydown', this.keyListener, false);
-                }
+                this.keyDownEventFunction = this.handleKeyEvent.bind(this);
+                document.body.addEventListener('keydown', this.keyDownEventFunction, false);
             }, 50);
         }
     }
@@ -87,8 +83,8 @@ export class MainDialogComponent implements IMainDialogListener {
             ContextService.getInstance().closeDialogContext();
         }
 
-        if (this.keyListenerElement) {
-            this.keyListenerElement.removeEventListener('keydown', this.handleKeyEvent.bind(this), false);
+        if (this.keyDownEventFunction) {
+            document.body.removeEventListener('keydown', this.keyDownEventFunction, false);
         }
 
         this.state.show = false;
