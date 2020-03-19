@@ -20,6 +20,8 @@ export interface IDynamicFormManager {
 
     uniqueProperties: boolean;
 
+    resetOperator?: boolean;
+
     registerListener(listenerId: string, callback: () => void): void;
 
     unregisterListener(listenerId: string): void;
