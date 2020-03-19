@@ -222,16 +222,16 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return await this.httpService.post<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
     }
 
-    protected async sendUpdateRequest<R, C>(
+    protected sendUpdateRequest<R, C>(
         token: string, clientRequestId: string, uri: string, content: C, cacheKeyPrefix: string
     ): Promise<R> {
-        return await this.httpService.patch<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
+        return this.httpService.patch<R>(uri, content, token, clientRequestId, cacheKeyPrefix);
     }
 
-    protected async sendDeleteRequest<R>(
+    protected sendDeleteRequest<R>(
         token: string, clientRequestId: string, uri: string[], cacheKeyPrefix: string
     ): Promise<Error[]> {
-        return await this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix);
+        return this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix);
     }
 
     protected buildUri(...args): string {
@@ -244,11 +244,18 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     ): Promise<Error[]> {
         const uri = [this.buildUri(ressourceUri, objectId)];
 
-        return await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix)
+        const errors = await this.sendDeleteRequest<void>(token, clientRequestId, uri, cacheKeyPrefix)
             .catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
+
+        if (errors && errors.length) {
+            LoggingService.getInstance().error(`${errors[0].Code}: ${errors[0].Message}`, errors[0]);
+            throw new Error(errors[0].Code, errors[0].Message);
+        }
+
+        return [];
     }
 
     protected async createLinks(
