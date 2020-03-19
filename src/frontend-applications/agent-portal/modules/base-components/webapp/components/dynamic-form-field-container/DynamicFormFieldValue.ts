@@ -128,9 +128,13 @@ export class DynamicFormFieldValue {
 
         if (update) {
             this.value.objectType = null;
-            this.value.operator = null;
-            this.operationTreeHandler.setSelection(this.operationTreeHandler.getSelectedNodes(), false, true, true);
-            this.operationTreeHandler.setTree([]);
+
+            if (this.manager.resetOperator) {
+                this.value.operator = null;
+                this.operationTreeHandler.setSelection(this.operationTreeHandler.getSelectedNodes(), false, true, true);
+                this.operationTreeHandler.setTree([]);
+            }
+
             this.value.value = null;
             this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
             this.valueTreeHandler.setTree([]);

@@ -32,6 +32,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     protected readPermissions: Map<string, boolean> = new Map();
 
+    public resetOperator: boolean = true;
+
     public abstract async getProperties(): Promise<Array<[string, string]>>;
 
     public registerListener(listenerId: string, callback: () => void): void {
