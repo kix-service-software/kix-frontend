@@ -202,7 +202,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                     if (preparedValue && preparedValue[1]) {
                         displayValue = preparedValue[1];
                     } else {
-                        displayValue = value.toString();
+                        displayValue = value ? value.toString() : '';
                     }
                 }
                 translatable = false;
