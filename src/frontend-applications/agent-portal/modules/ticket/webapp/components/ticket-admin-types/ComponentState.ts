@@ -21,7 +21,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Types',
             [
-                'ticket-admin-type-create', 'csv-export-action'
+                'ticket-admin-type-create', 'ticket-admin-type-table-delete', 'csv-export-action'
             ], null,
             new TableWidgetConfiguration(
                 null, null, null,
