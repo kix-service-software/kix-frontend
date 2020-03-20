@@ -31,17 +31,13 @@ export class UserPasswordValidator implements IFormFieldValidator {
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
 
-        const currentPassword = await formInstance.getFormFieldValueByProperty<string>(
-            PersonalSettingsProperty.CURRENT_PASSWORD
-        );
-        const password = await formInstance.getFormFieldValueByProperty<string>(
-            PersonalSettingsProperty.USER_PASSWORD
-        );
-        const passwordConfirm = await formInstance.getFormFieldValueByProperty<string>(
-            PersonalSettingsProperty.USER_PASSWORD_CONFIRM
-        );
-
-        if (this.isDefined(password)) {
+        if (formField.property === PersonalSettingsProperty.USER_PASSWORD_CONFIRM) {
+            const password = await formInstance.getFormFieldValueByProperty<string>(
+                PersonalSettingsProperty.USER_PASSWORD
+            );
+            const passwordConfirm = await formInstance.getFormFieldValueByProperty<string>(
+                PersonalSettingsProperty.USER_PASSWORD_CONFIRM
+            );
 
             if (!this.isDefined(passwordConfirm)) {
                 const errorString = await TranslationService.translate(
@@ -56,6 +52,12 @@ export class UserPasswordValidator implements IFormFieldValidator {
                 );
                 return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }
+        }
+
+        if (formField.property === PersonalSettingsProperty.CURRENT_PASSWORD) {
+            const currentPassword = await formInstance.getFormFieldValueByProperty<string>(
+                PersonalSettingsProperty.CURRENT_PASSWORD
+            );
 
             if (!this.isDefined(currentPassword)) {
                 const errorString = await TranslationService.translate(
@@ -70,8 +72,8 @@ export class UserPasswordValidator implements IFormFieldValidator {
                 );
                 return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }
-
         }
+
 
         return new ValidationResult(ValidationSeverity.OK, '');
     }
