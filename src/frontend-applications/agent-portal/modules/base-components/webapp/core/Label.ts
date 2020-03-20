@@ -20,7 +20,9 @@ export class Label {
         public text?: string,
         public additionalText?: string,
         public tooltip?: string,
-        public showUnknownIcon: boolean = false
+        public showUnknownIcon: boolean = false,
+        public additionalIcons: Array<ObjectIcon | string> = [],
+        public infoOverlay: any = null
     ) { }
     public async init(): Promise<void> {
         if (this.object) {
