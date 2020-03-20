@@ -212,6 +212,11 @@ msgstr "Artikel wurde erfolgreich angelegt."
 msgid "Article Text"
 msgstr "Artikelinhalt"
 
+#, fuzzy
+#| msgid "Assets"
+msgid "Asset"
+msgstr "Assets"
+
 msgid "Assets"
 msgstr "Assets"
 

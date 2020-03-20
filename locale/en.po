@@ -204,6 +204,9 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "Asset"
+msgstr ""
+
 msgid "Assets"
 msgstr ""
 
