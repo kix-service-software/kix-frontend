@@ -17,6 +17,7 @@ import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
+import { ConfigItemDuplicateAction } from "./actions";
 
 export class UIModule implements IUIModule {
 
@@ -50,5 +51,6 @@ export class UIModule implements IUIModule {
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('config-item-create-action', ConfigItemCreateAction);
         ActionFactory.getInstance().registerAction('config-item-edit-action', ConfigItemEditAction);
+        ActionFactory.getInstance().registerAction('config-item-duplicate-action', ConfigItemDuplicateAction);
     }
 }

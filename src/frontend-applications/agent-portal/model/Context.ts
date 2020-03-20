@@ -386,6 +386,7 @@ export abstract class Context {
 
     public reset(refresh?: boolean): void {
         this.resetAdditionalInformation();
+        this.objectId = null;
         this.objectLists.clear();
     }
 

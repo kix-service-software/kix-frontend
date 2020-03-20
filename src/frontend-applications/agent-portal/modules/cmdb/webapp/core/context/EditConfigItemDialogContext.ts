@@ -15,6 +15,7 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { VersionProperty } from "../../../model/VersionProperty";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
 
 export class EditConfigItemDialogContext extends Context {
 
@@ -37,8 +38,10 @@ export class EditConfigItemDialogContext extends Context {
         if (objectId) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null,
-                ['Versions', 'Links', VersionProperty.DEFINITION, VersionProperty.DATA, VersionProperty.PREPARED_DATA],
-                ['Links']
+                [
+                    ConfigItemProperty.CURRENT_VERSION, VersionProperty.DEFINITION,
+                    VersionProperty.DATA, VersionProperty.PREPARED_DATA
+                ]
             );
             const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
             object = objects && objects.length ? objects[0] : null;

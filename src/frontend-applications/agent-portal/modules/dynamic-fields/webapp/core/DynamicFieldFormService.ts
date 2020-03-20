@@ -52,7 +52,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         ? dynamicField[f.property]
                         : f.defaultValue ? f.defaultValue.value : null,
                     dynamicField,
-                    f
+                    f, formContext
                 );
 
                 if (f.property === 'ICON') {

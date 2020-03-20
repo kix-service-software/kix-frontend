@@ -302,10 +302,10 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
             const configItemId = response.ConfigItemID;
 
-            await this.createLinks(
-                token, clientRequestId, Number(configItemId),
-                this.getParameterValue(parameter, ConfigItemProperty.LINKS)
-            );
+            const links = this.getParameterValue(parameter, ConfigItemProperty.LINKS);
+            if (links && links.length) {
+                await this.createLinks(token, clientRequestId, Number(configItemId), links);
+            }
 
             return configItemId;
         }
