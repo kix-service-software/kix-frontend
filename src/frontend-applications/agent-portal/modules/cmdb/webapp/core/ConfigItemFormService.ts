@@ -33,6 +33,7 @@ import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptio
 import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
 import { Contact } from "../../../customer/model/Contact";
 import { Organisation } from "../../../customer/model/Organisation";
+import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 
 export class ConfigItemFormService extends KIXObjectFormService {
 
@@ -67,8 +68,8 @@ export class ConfigItemFormService extends KIXObjectFormService {
         formFields: FormFieldConfiguration[], configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
         formContext: FormContext
     ): Promise<void> {
-        if (configItem && formContext === FormContext.EDIT) {
-            const fields = await this.prepareConfigItemValues(configItem, formFields, formFieldValues);
+        if (configItem || formContext === FormContext.EDIT) {
+            const fields = await this.prepareConfigItemValues(configItem, formFields, formFieldValues, formContext);
             formFields.splice(0, formFields.length);
             fields.forEach((f) => formFields.push(f));
         } else {
@@ -79,7 +80,8 @@ export class ConfigItemFormService extends KIXObjectFormService {
                     const value = await this.getValue(
                         f.property,
                         f.defaultValue.value,
-                        null
+                        configItem, f,
+                        formContext
                     );
                     formFieldValue = new FormFieldValue(value, f.defaultValue.valid);
                 } else {
@@ -87,25 +89,29 @@ export class ConfigItemFormService extends KIXObjectFormService {
                 }
                 formFieldValues.set(f.instanceId, formFieldValue);
                 if (f.children) {
-                    await this.prepareFormFieldValues(f.children, null, formFieldValues, formContext);
+                    await this.prepareFormFieldValues(f.children, configItem, formFieldValues, formContext);
                 }
             }
         }
     }
 
     private async prepareConfigItemValues(
-        configItem: ConfigItem, formFields: FormFieldConfiguration[], formFieldValues: Map<string, FormFieldValue<any>>
+        configItem: ConfigItem, formFields: FormFieldConfiguration[], formFieldValues: Map<string, FormFieldValue<any>>,
+        formContext: FormContext
     ): Promise<FormFieldConfiguration[]> {
         let newFormFields: FormFieldConfiguration[] = [];
         for (const formField of formFields) {
             if (configItem[formField.property]) {
                 newFormFields.push(formField);
-                await this.getConfigItemValue(formField, configItem[formField.property], configItem, formFieldValues);
+                await this.getConfigItemValue(
+                    formField, configItem[formField.property], configItem, formFieldValues, formContext
+                );
             } else if (configItem.CurrentVersion) {
                 if (configItem.CurrentVersion[formField.property]) {
                     newFormFields.push(formField);
                     await this.getConfigItemValue(
-                        formField, configItem.CurrentVersion[formField.property], configItem, formFieldValues
+                        formField, configItem.CurrentVersion[formField.property], configItem, formFieldValues,
+                        formContext
                     );
                 } else {
                     newFormFields = [
@@ -125,23 +131,39 @@ export class ConfigItemFormService extends KIXObjectFormService {
 
     private async getConfigItemValue(
         formField: FormFieldConfiguration, value: any,
-        configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>
+        configItem: ConfigItem, formFieldValues: Map<string, FormFieldValue<any>>,
+        formContext: FormContext
     ): Promise<void> {
         const newValue = await this.getValue(
             formField.property,
             value,
-            configItem
+            configItem,
+            formField,
+            formContext
         );
         const formFieldValue = new FormFieldValue(newValue);
         formFieldValues.set(formField.instanceId, formFieldValue);
         if (formField.children) {
-            await this.prepareConfigItemValues(configItem, formField.children, formFieldValues);
+            await this.prepareConfigItemValues(configItem, formField.children, formFieldValues, formContext);
         }
     }
 
-    protected async getValue(property: string, value: any, configItem: ConfigItem): Promise<any> {
+    protected async getValue(
+        property: string, value: any, configItem: ConfigItem,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
         if (value) {
             switch (property) {
+                case ConfigItemProperty.NAME:
+                    if (formContext === FormContext.NEW) {
+                        value = 'Copy of ' + value;
+                    }
+                    break;
+                case KIXObjectProperty.LINKS:
+                    if (formContext === FormContext.NEW) {
+                        value = [];
+                    }
+                    break;
                 case ConfigItemProperty.CLASS_ID:
                     if (configItem) {
                         value = LabelService.getInstance().getPropertyValueDisplayText(configItem, property);
@@ -272,14 +294,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, [preparedData.Value], null
                 );
-                if (contacts && !!contacts.length) {
-                    value = contacts[0].ID;
-                } else {
-                    value = new Contact();
-                    value.ContactID = preparedData.Value;
-                    value.ObjectId = preparedData.Value;
-                    value.DisplayValue = preparedData.DisplayValue;
-                }
+                value = contacts && !!contacts.length ? preparedData.Value : null;
                 break;
             case 'Organisation':
                 const organisations = await KIXObjectService.loadObjects<Organisation>(

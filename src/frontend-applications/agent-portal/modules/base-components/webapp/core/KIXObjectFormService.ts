@@ -79,7 +79,8 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                     kixObject && formContext === FormContext.EDIT && typeof kixObject[f.property] !== 'undefined' ?
                         kixObject[f.property] : f.defaultValue ? f.defaultValue.value : null,
                     kixObject,
-                    f
+                    f,
+                    formContext
                 );
 
                 if (f.property === KIXObjectProperty.DYNAMIC_FIELDS) {
@@ -117,7 +118,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
     }
 
     protected async getValue(
-        property: string, value: any, object: KIXObject, formField: FormFieldConfiguration
+        property: string, value: any, object: KIXObject, formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
         return property === KIXObjectProperty.DYNAMIC_FIELDS ? formField.defaultValue.value : value;
     }

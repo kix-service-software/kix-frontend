@@ -113,7 +113,8 @@ export class Extension implements IConfigurationExtension {
                     'config-item-create-action'
                 ],
                 [
-                    'ticket-create-action', 'config-item-edit-action', 'linked-objects-edit-action', 'print-action'
+                    'config-item-edit-action', 'config-item-duplicate-action',
+                    'ticket-create-action', 'linked-objects-edit-action', 'print-action'
                 ],
                 [],
                 [

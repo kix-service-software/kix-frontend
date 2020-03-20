@@ -17,7 +17,8 @@ export class ComponentState extends AbstractComponentState {
         public formId: string = 'cmdb-config-item-new-form',
         public placeholder: string = '',
         public hint: string = null,
-        public loadNodes: () => Promise<TreeNode[]> = null
+        public loadNodes: () => Promise<TreeNode[]> = null,
+        public hasObject: boolean = false
     ) {
         super();
     }

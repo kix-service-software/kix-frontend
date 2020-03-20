@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <widget instanceId="new-config-item-dialog">
     <@content>
         <div.form>
@@ -27,7 +26,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         loadNodes=state.loadNodes
                         placeholder=state.placeholder
                         on-nodesChanged("classChanged")
-                        multiselect=false/>
+                        multiselect=false
+                        readonly=state.hasObject/>
                 </div>
             </div>
         </div>
