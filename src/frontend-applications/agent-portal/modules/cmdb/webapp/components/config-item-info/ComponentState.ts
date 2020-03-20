@@ -9,13 +9,14 @@
 
 import { ConfigItem } from "../../../model/ConfigItem";
 import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { ConfigItemLabelProvider } from "../../core";
 
 export class ComponentState {
 
     public constructor(
         public configItem: ConfigItem = null,
-        public icon: string | ObjectIcon = null,
-        public loading: boolean = true
+        public loading: boolean = true,
+        public labelProvider: ConfigItemLabelProvider = new ConfigItemLabelProvider()
     ) { }
 
 }

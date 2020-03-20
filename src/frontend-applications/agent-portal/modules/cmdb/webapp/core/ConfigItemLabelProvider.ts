@@ -20,6 +20,10 @@ import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { VersionProperty } from "../../model/VersionProperty";
+import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { LabelService } from "../../../base-components/webapp/core/LabelService";
+import { Label } from "../../../base-components/webapp/core/Label";
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -253,5 +257,41 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             default:
         }
         return icons;
+    }
+
+    public static async createCILabels(dfValue: DynamicFieldValue): Promise<Label[]> {
+        if (Array.isArray(dfValue.Value)) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
+            );
+            const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                KIXObjectType.CONFIG_ITEM, dfValue.Value, loadingOptions
+            ).catch((): ConfigItem[] => []);
+
+            const labels = [];
+            for (const ci of configItems) {
+                const ciIcon = new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
+                const incidentIcons = await LabelService.getInstance().getPropertyValueDisplayIcons(
+                    ci, ConfigItemProperty.CUR_INCI_STATE_ID
+                );
+                const deploymentIcon = await LabelService.getInstance().getPropertyValueDisplayIcons(
+                    ci, ConfigItemProperty.CUR_DEPL_STATE_ID
+                );
+                const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
+                    ...incidentIcons, ...deploymentIcon
+                ],
+                    {
+                        title: 'Translatable#Asset',
+                        content: 'config-item-info',
+                        instanceId: 'config-item-info',
+                        data: { configItem: ci },
+                        large: true
+                    }
+                );
+                labels.push(label);
+            }
+
+            return labels;
+        }
     }
 }

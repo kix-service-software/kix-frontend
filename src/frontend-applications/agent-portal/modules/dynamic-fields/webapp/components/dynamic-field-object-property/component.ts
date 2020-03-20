@@ -20,6 +20,13 @@ import { RoutingConfiguration } from '../../../../../model/configuration/Routing
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
 import { RoutingService } from '../../../../base-components/webapp/core/RoutingService';
+import { ConfigItem } from '../../../../cmdb/model/ConfigItem';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ConfigItemClassProperty } from '../../../../cmdb/model/ConfigItemClassProperty';
+import { VersionProperty } from '../../../../cmdb/model/VersionProperty';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { ConfigItemLabelProvider } from '../../../../cmdb/webapp/core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -55,20 +62,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 ? this.object.DynamicFields.find((dfv) => dfv.Name === this.state.field.Name)
                 : null;
             if (dfValue) {
-                let icon = null;
                 if (this.state.field.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     this.setCheckListValues(dfValue);
                 } else {
                     if (this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                        icon = 'kix-icon-ci';
-                    }
-                    const value = this.labelProvider
-                        ? await this.labelProvider.getDFDisplayValues(dfValue)
-                        : dfValue;
-                    if (Array.isArray(value[0])) {
-                        this.state.labels = value[0].map(
-                            (v, i) => new Label(null, value[2][i], icon, v, null, v)
-                        );
+                        this.state.labels = await ConfigItemLabelProvider.createCILabels(dfValue);
+                    } else {
+                        const value = this.labelProvider
+                            ? await this.labelProvider.getDFDisplayValues(dfValue)
+                            : dfValue;
+                        if (Array.isArray(value[0])) {
+                            this.state.labels = value[0].map(
+                                (v, i) => new Label(null, value[2][i], null, v, null, v)
+                            );
+                        }
                     }
                 }
             }
