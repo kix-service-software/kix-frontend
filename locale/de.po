@@ -733,6 +733,9 @@ msgstr "\" (Doppeltes Hochkomma)"
 msgid "Download"
 msgstr "Download"
 
+msgid "Duplicate"
+msgstr "Duplizieren"
+
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
@@ -5179,9 +5182,6 @@ msgstr "PLZ"
 
 #~ msgid "Assigned Text Modules"
 #~ msgstr "Zuordnung zu Textbausteinen"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplizieren"
 
 #~ msgid "Organisation Details"
 #~ msgstr "Kundendetails"
