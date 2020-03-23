@@ -11,6 +11,7 @@ import { ContextService } from "../../../../modules/base-components/webapp/core/
 import { NewContactDialogContext, ContactDetailsContext, EditContactDialogContext } from ".";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContextMode } from "../../../../model/ContextMode";
+import { Contact } from "../../model/Contact";
 
 export class ContactDialogUtil {
 
@@ -36,6 +37,12 @@ export class ContactDialogUtil {
                 EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.EDIT, contactid
             );
         }
+    }
+
+    public static async duplicate(contact: Contact): Promise<void> {
+        ContextService.getInstance().setDialogContext(
+            NewContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.CREATE, contact.ID
+        );
     }
 
 }
