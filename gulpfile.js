@@ -123,7 +123,7 @@ gulp.task('license-header-marko', () => {
 });
 
 gulp.task('license-header-less', () => {
-    gulp.src('src/**/*.less')
+    gulp.src(['src/**/*.less', '!src/frontend-applications/agent-portal/static/less/default/kix_font.less'])
         .pipe(license(fs.readFileSync('license-ts-header.txt', 'utf8')))
         .pipe(gulp.dest('src/'));
 });

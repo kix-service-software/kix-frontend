@@ -32,6 +32,7 @@ import { TableRowHeight } from '../../../../../model/configuration/TableRowHeigh
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { Error } from '../../../../../../../server/model/Error';
 import { ContextService } from '../../core/ContextService';
+import {TicketProperty} from "../../../../ticket/model/TicketProperty";
 
 class Component implements ISearchFormListener {
 
@@ -223,7 +224,8 @@ class Component implements ISearchFormListener {
         const parameter: Array<[string, any]> = [];
         if (searchCache && searchCache.status === CacheState.VALID && searchCache.objectType === this.objectType) {
             for (const c of searchCache.criteria) {
-                if (c.property !== SearchProperty.FULLTEXT) {
+                if (c.property !== SearchProperty.FULLTEXT && c.property !== TicketProperty.CLOSE_TIME &&
+                    c.property !== TicketProperty.LAST_CHANGE_TIME) {
                     parameter.push([c.property, c.value]);
                 }
             }
