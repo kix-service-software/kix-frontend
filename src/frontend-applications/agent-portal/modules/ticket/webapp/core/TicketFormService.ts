@@ -24,6 +24,10 @@ import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { TicketParameterUtil } from "./TicketParameterUtil";
 import { ArticleFormService } from "./ArticleFormService";
 import { IdService } from "../../../../model/IdService";
+import { ContextService } from "../../../base-components/webapp/core/ContextService";
+import { ContextType } from "../../../../model/ContextType";
+import { Contact } from "../../../customer/model/Contact";
+import { Organisation } from "../../../customer/model/Organisation";
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -104,17 +108,38 @@ export class TicketFormService extends KIXObjectFormService {
         formFieldValues.set(pendingField.instanceId, new FormFieldValue(ticket.PendingTime));
     }
 
-    protected async getValue(property: string, value: any, ticket: Ticket): Promise<any> {
-        if (value) {
-            switch (property) {
-                case TicketProperty.PENDING_TIME:
-                    if (ticket) {
-                        value = ticket[TicketProperty.PENDING_TIME]
-                            ? new Date(ticket[TicketProperty.PENDING_TIME]) : null;
+    protected async getValue(
+        property: string, value: any, ticket: Ticket, formField: FormFieldConfiguration,
+        formContext: FormContext
+    ): Promise<any> {
+        switch (property) {
+            case TicketProperty.CONTACT_ID:
+                if (formContext === FormContext.NEW) {
+                    value = ticket ? ticket.ContactID : null;
+                    if (!value) {
+                        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                        const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                        value = contact ? contact.ID : null;
                     }
-                    break;
-                default:
-            }
+                }
+                break;
+            case TicketProperty.ORGANISATION_ID:
+                if (formContext === FormContext.NEW) {
+                    value = ticket ? ticket.OrganisationID : null;
+                    if (!value) {
+                        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                        const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
+                        value = organisation ? organisation.ID : null;
+                    }
+                }
+                break;
+            case TicketProperty.PENDING_TIME:
+                if (ticket) {
+                    value = ticket[TicketProperty.PENDING_TIME]
+                        ? new Date(ticket[TicketProperty.PENDING_TIME]) : null;
+                }
+                break;
+            default:
         }
         return value;
     }

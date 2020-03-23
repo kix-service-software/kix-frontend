@@ -40,10 +40,13 @@ export class OrganisationDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.ORGANISATION, reload: boolean = false
     ): Promise<O> {
-        const object = await this.loadOrganisation() as any;
+        let object;
+        if (objectType === KIXObjectType.ORGANISATION) {
+            object = await this.loadOrganisation() as any;
 
-        if (reload) {
-            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.ORGANISATION));
+            if (reload) {
+                this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.ORGANISATION));
+            }
         }
 
         return object;

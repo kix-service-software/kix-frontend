@@ -41,10 +41,14 @@ export class ContactDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONTACT, reload: boolean = false
     ): Promise<O> {
-        const object = await this.loadContact() as any;
+        let object;
 
-        if (reload) {
-            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.CONTACT));
+        if (objectType === KIXObjectType.CONTACT) {
+            object = await this.loadContact() as any;
+
+            if (reload) {
+                this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.CONTACT));
+            }
         }
 
         return object;

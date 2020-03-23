@@ -12,13 +12,24 @@ import { TicketDetailsContext, EditTicketDialogContext, NewTicketDialogContext }
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContextMode } from "../../../../model/ContextMode";
+import { Ticket } from "../../model/Ticket";
 
 
 export class TicketDialogUtil {
 
     public static async createTicket(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+
+        let ticketId: number;
+        if (context && context.getDescriptor().contextId === TicketDetailsContext.CONTEXT_ID) {
+            const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
+            if (ticket) {
+                ticketId = ticket.TicketID;
+            }
+        }
+
         ContextService.getInstance().setDialogContext(
-            NewTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.CREATE
+            NewTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.CREATE, ticketId
         );
     }
 
