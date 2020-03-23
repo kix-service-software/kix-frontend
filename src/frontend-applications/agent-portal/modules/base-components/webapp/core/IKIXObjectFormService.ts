@@ -13,6 +13,7 @@ import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { KIXObject } from "../../../../model/kix/KIXObject";
+import { FormContext } from "../../../../model/configuration/FormContext";
 
 export interface IKIXObjectFormService extends IKIXService {
 
@@ -35,7 +36,8 @@ export interface IKIXObjectFormService extends IKIXService {
     prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>>;
 
     postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext
     ): Promise<Array<[string, any]>>;
 
     preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>>;

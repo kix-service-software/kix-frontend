@@ -73,37 +73,32 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
         for (const f of formFields) {
             let formFieldValue: FormFieldValue;
-            if (kixObject || f.defaultValue) {
-                let value = await this.getValue(
-                    f.property,
-                    kixObject && formContext === FormContext.EDIT && typeof kixObject[f.property] !== 'undefined' ?
-                        kixObject[f.property] : f.defaultValue ? f.defaultValue.value : null,
-                    kixObject,
-                    f,
-                    formContext
-                );
+            let value = await this.getValue(
+                f.property,
+                kixObject ? kixObject[f.property] : f.defaultValue ? f.defaultValue.value : null,
+                kixObject,
+                f,
+                formContext
+            );
 
-                if (f.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                    value = f.defaultValue ? f.defaultValue.value : null;
-                }
-
-                if (f.property === 'ICON') {
-                    if (kixObject && formContext === FormContext.EDIT) {
-                        const icon = LabelService.getInstance().getObjectIcon(kixObject);
-                        if (icon instanceof ObjectIcon) {
-                            value = icon;
-                        }
-                    } else {
-                        value = f.defaultValue.value;
-                    }
-                }
-
-                formFieldValue = kixObject && formContext === FormContext.EDIT
-                    ? new FormFieldValue(value)
-                    : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
-            } else {
-                formFieldValue = new FormFieldValue(null);
+            if (f.property === KIXObjectProperty.DYNAMIC_FIELDS) {
+                value = f.defaultValue ? f.defaultValue.value : null;
             }
+
+            if (f.property === 'ICON') {
+                if (kixObject && formContext === FormContext.EDIT) {
+                    const icon = LabelService.getInstance().getObjectIcon(kixObject);
+                    if (icon instanceof ObjectIcon) {
+                        value = icon;
+                    }
+                } else {
+                    value = f.defaultValue.value;
+                }
+            }
+
+            formFieldValue = kixObject && formContext === FormContext.EDIT
+                ? new FormFieldValue(value)
+                : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
 
             if (!f.instanceId) {
                 f.instanceId = IdService.generateDateBasedId(f.property);
@@ -291,7 +286,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
             key = iterator.next();
         }
-        parameter = await this.postPrepareValues(parameter, createOptions);
+        parameter = await this.postPrepareValues(parameter, createOptions, formInstance.getForm().formContext);
 
         return parameter;
     }
@@ -305,7 +300,8 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext
     ): Promise<Array<[string, any]>> {
         return parameter;
     }

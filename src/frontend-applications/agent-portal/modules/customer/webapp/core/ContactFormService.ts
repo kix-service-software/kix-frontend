@@ -40,6 +40,7 @@ import { ServiceRegistry } from "../../../base-components/webapp/core/ServiceReg
 import { PersonalSettingsFormService } from "../../../user/webapp/core";
 import { ServiceType } from "../../../base-components/webapp/core/ServiceType";
 import { Contact } from "../../model/Contact";
+import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -166,21 +167,6 @@ export class ContactFormService extends KIXObjectFormService {
         return contact;
     }
 
-    private async loadAssignedUser(userId: number): Promise<User> {
-        let user: User;
-        if (userId) {
-            const users = await KIXObjectService.loadObjects<User>(
-                KIXObjectType.USER, [userId],
-                new KIXObjectLoadingOptions(
-                    null, null, null,
-                    [UserProperty.PREFERENCES, UserProperty.ROLE_IDS]
-                ), null, true
-            ).catch((error) => [] as User[]);
-            user = users && users.length ? users[0] : null;
-        }
-        return user;
-    }
-
     public async getFormFieldsForAccess(accesses: string[], formId?: string): Promise<FormFieldConfiguration[]> {
         let fields: FormFieldConfiguration[] = [];
         if (accesses && accesses.length) {
@@ -199,37 +185,21 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async addLoginField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
-        let userLoginValue;
-        if (formInstance) {
-            userLoginValue = await formInstance.getFormFieldValueByProperty(UserProperty.USER_LOGIN);
-        }
-        if (!userLoginValue && this.assignedUserId) {
-            const user = await this.loadAssignedUser(this.assignedUserId);
-            if (user) {
-                userLoginValue = new FormFieldValue(user.UserLogin);
-            }
-        }
         return new FormFieldConfiguration(
             'contact-form-field-login',
             'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
-            'Translatable#Helptext_User_UserCreateEdit_Login', null,
-            userLoginValue
+            'Translatable#Helptext_User_UserCreateEdit_Login'
         );
     }
 
     private async addPasswordField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
-        let userPassword;
-        if (formInstance) {
-            userPassword = await formInstance.getFormFieldValueByProperty(UserProperty.USER_PASSWORD);
-        }
-        // no else - because user has no password and should not "shown" in edit dialog
         return new FormFieldConfiguration(
             'contact-form-field-password',
             'Translatable#Password', UserProperty.USER_PASSWORD, null, !Boolean(this.assignedUserId),
             'Translatable#Helptext_User_UserCreateEdit_Password',
             [
                 new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.PASSWORD)
-            ], userPassword, null, null, null, null, null, null, null, null, null, null, null, null,
+            ], null, null, null, null, null, null, null, null, null, null, null, null, null,
             this.assignedUserId ? 'Translatable#not modified' : null
         );
     }
@@ -238,16 +208,6 @@ export class ContactFormService extends KIXObjectFormService {
         accesses: string[], formInstance?: IFormInstance
     ): Promise<FormFieldConfiguration> {
         if (accesses && accesses.some((a) => a === UserProperty.IS_AGENT)) {
-            let roleIdsValue;
-            if (formInstance) {
-                roleIdsValue = await formInstance.getFormFieldValueByProperty(UserProperty.ROLE_IDS);
-            }
-            if (!roleIdsValue && this.assignedUserId) {
-                const user = await this.loadAssignedUser(this.assignedUserId);
-                if (user && user.RoleIDs) {
-                    roleIdsValue = new FormFieldValue(user.RoleIDs);
-                }
-            }
             const roleField = new FormFieldConfiguration(
                 'contact-form-field-user-roles',
                 'Translatable#Roles', UserProperty.ROLE_IDS, 'object-reference-input', false,
@@ -256,7 +216,7 @@ export class ContactFormService extends KIXObjectFormService {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
-                ], roleIdsValue
+                ]
             );
             return new FormFieldConfiguration(
                 'contact-form-field-roles-container', 'Translatable#Role Assignment', 'ROLES_CONTAINER', null,
@@ -288,42 +248,14 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async getLanguageField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
-        let languageValue;
-        if (formInstance) {
-            languageValue = await formInstance.getFormFieldValueByProperty(PersonalSettingsProperty.USER_LANGUAGE);
-        }
-        if (!languageValue && this.assignedUserId) {
-            const user = await this.loadAssignedUser(this.assignedUserId);
-            if (user && user.Preferences) {
-                const value = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE);
-                if (value && value.Value !== null && typeof value.Value !== 'undefined') {
-                    languageValue = new FormFieldValue(value.Value);
-                }
-            }
-        }
         const languageField = new FormFieldConfiguration(
             'contact-form-field-user-language', 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE,
-            'language-input', true, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserLanguage', null,
-            languageValue
+            'language-input', true, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserLanguage'
         );
         return languageField;
     }
 
     private async getQueueField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
-        let queueFormValue;
-        if (formInstance) {
-            queueFormValue = await formInstance.getFormFieldValueByProperty(PersonalSettingsProperty.MY_QUEUES);
-        }
-        if (!queueFormValue && this.assignedUserId) {
-            const user = await this.loadAssignedUser(this.assignedUserId);
-            if (user && user.Preferences) {
-                const value = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
-                if (value && value.Value !== null && typeof value.Value !== 'undefined') {
-                    const queueValue = Array.isArray(value.Value) ? value.Value : value.Value.toString().split(',');
-                    queueFormValue = new FormFieldValue(queueValue);
-                }
-            }
-        }
         const queueField = new FormFieldConfiguration(
             'contact-form-field-user-queues', 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES,
             'object-reference-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_MyQueues',
@@ -340,20 +272,12 @@ export class ContactFormService extends KIXObjectFormService {
                     undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES])
                 ),
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
-            ], queueFormValue
+            ]
         );
         return queueField;
     }
 
     private async getNotifiactionField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
-        let notificationValue;
-        if (formInstance) {
-            notificationValue = await formInstance.getFormFieldValueByProperty(PersonalSettingsProperty.NOTIFICATIONS);
-        }
-        if (!notificationValue && this.assignedUserId) {
-            const value = await this.getNotificationValue(this.assignedUserId);
-            notificationValue = new FormFieldValue(value);
-        }
         return new FormFieldConfiguration(
             'contact-form-field-user-notifications', 'Translatable#Notifications for Tickets',
             PersonalSettingsProperty.NOTIFICATIONS,
@@ -372,8 +296,151 @@ export class ContactFormService extends KIXObjectFormService {
                     ])
                 ),
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
-            ], notificationValue
+            ]
         );
+    }
+
+    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+        const parameter: Array<[string, any]> = [];
+        if (property === UserProperty.USER_ACCESS) {
+            const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
+            parameter.push([UserProperty.IS_AGENT, isAgent]);
+            const isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
+            parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
+        } else {
+            if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
+                if (typeof value === 'object') {
+                    value = value[OrganisationProperty.ID];
+                }
+                parameter.push([ContactProperty.ORGANISATION_IDS, [value]]);
+            }
+            parameter.push([property, value]);
+        }
+
+        return parameter;
+    }
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext
+    ): Promise<Array<[string, any]>> {
+        const service = ServiceRegistry.getServiceInstance<PersonalSettingsFormService>(
+            KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
+        );
+        if (service) {
+            parameter = await service.postPrepareValues(parameter);
+        } else {
+            parameter = this.prepareParameter(parameter);
+        }
+
+        if (this.assignedUserId && formContext === FormContext.EDIT) {
+            parameter.push([ContactProperty.ASSIGNED_USER_ID, this.assignedUserId]);
+        }
+        return parameter;
+    }
+
+    private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {
+        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
+        if (queuesParameter) {
+            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
+        }
+
+        const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
+        if (notificationParameter) {
+            const transport = 'Email';
+            const notificationPreference = {};
+            if (Array.isArray(notificationParameter[1])) {
+                notificationParameter[1].forEach((e) => {
+                    const eventKey = `Notification-${e}-${transport}`;
+                    notificationPreference[eventKey] = 1;
+                });
+
+            }
+
+            notificationParameter[1] = JSON.stringify(notificationPreference);
+        }
+        return parameter;
+    }
+
+    protected async getValue(
+        property: string, value: any, contact: Contact,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
+        const user = await this.loadAssignedUser(this.assignedUserId);
+        switch (property) {
+            case ContactProperty.EMAIL:
+                if (formContext === FormContext.NEW) {
+                    value = null;
+                }
+                break;
+            case UserProperty.USER_ACCESS:
+                if (user) {
+                    value = [];
+                    if (user.IsAgent) {
+                        value.push(UserProperty.IS_AGENT);
+                    }
+                    if (user.IsCustomer) {
+                        value.push(UserProperty.IS_CUSTOMER);
+                    }
+                }
+                break;
+            case UserProperty.USER_LOGIN:
+                if (formContext === FormContext.EDIT) {
+                    value = user ? user.UserLogin : null;
+                }
+                break;
+            case UserProperty.ROLE_IDS:
+                if (formContext === FormContext.EDIT) {
+                    value = user && user.RoleIDs ? user.RoleIDs : null;
+                }
+                break;
+            case UserProperty.USER_LANGUAGE:
+                if (formContext === FormContext.EDIT) {
+                    if (user && user.Preferences) {
+                        const pref = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.USER_LANGUAGE);
+                        if (pref && pref.Value !== null && typeof pref.Value !== 'undefined') {
+                            value = pref.Value;
+                        }
+                    }
+                }
+            case PersonalSettingsProperty.MY_QUEUES:
+                if (formContext === FormContext.EDIT) {
+                    if (user && user.Preferences) {
+                        const pref = user.Preferences.find((p) => p.ID === PersonalSettingsProperty.MY_QUEUES);
+                        if (pref && pref.Value !== null && typeof pref.Value !== 'undefined') {
+                            const queueValue = Array.isArray(pref.Value)
+                                ? pref.Value
+                                : pref.Value.toString().split(',');
+                            value = queueValue;
+                        }
+                    }
+                }
+                break;
+
+            case PersonalSettingsProperty.NOTIFICATIONS:
+                if (formContext === FormContext.EDIT) {
+                    const notificationValue = await this.getNotificationValue(this.assignedUserId);
+                    value = notificationValue;
+                }
+                break;
+            default:
+        }
+        return value;
+    }
+
+    private async loadAssignedUser(userId: number): Promise<User> {
+        let user: User;
+        if (userId) {
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, [userId],
+                new KIXObjectLoadingOptions(
+                    null, null, null,
+                    [UserProperty.PREFERENCES, UserProperty.ROLE_IDS]
+                ), null, true
+            ).catch((error) => [] as User[]);
+            user = users && users.length ? users[0] : null;
+        }
+        return user;
     }
 
     private async getNotificationValue(userId: number): Promise<number[]> {
@@ -403,64 +470,5 @@ export class ContactFormService extends KIXObjectFormService {
             }
         }
         return value;
-    }
-
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        const parameter: Array<[string, any]> = [];
-        if (property === UserProperty.USER_ACCESS) {
-            const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
-            parameter.push([UserProperty.IS_AGENT, isAgent]);
-            const isCustomer = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_CUSTOMER)) : 0;
-            parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
-        } else {
-            if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-                if (typeof value === 'object') {
-                    value = value[OrganisationProperty.ID];
-                }
-                parameter.push([ContactProperty.ORGANISATION_IDS, [value]]);
-            }
-            parameter.push([property, value]);
-        }
-
-        return parameter;
-    }
-
-    public async postPrepareValues(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
-        const service = ServiceRegistry.getServiceInstance<PersonalSettingsFormService>(
-            KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
-        );
-        if (service) {
-            parameter = await service.postPrepareValues(parameter);
-        } else {
-            parameter = this.prepareParameter(parameter);
-        }
-
-        if (this.assignedUserId) {
-            parameter.push([ContactProperty.ASSIGNED_USER_ID, this.assignedUserId]);
-        }
-        return parameter;
-    }
-
-    private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {
-        const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
-        if (queuesParameter) {
-            queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
-        }
-
-        const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
-        if (notificationParameter) {
-            const transport = 'Email';
-            const notificationPreference = {};
-            if (Array.isArray(notificationParameter[1])) {
-                notificationParameter[1].forEach((e) => {
-                    const eventKey = `Notification-${e}-${transport}`;
-                    notificationPreference[eventKey] = 1;
-                });
-
-            }
-
-            notificationParameter[1] = JSON.stringify(notificationPreference);
-        }
-        return parameter;
     }
 }
