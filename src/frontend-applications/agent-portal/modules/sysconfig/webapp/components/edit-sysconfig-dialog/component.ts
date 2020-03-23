@@ -21,6 +21,8 @@ import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { ContextService } from "../../../../base-components/webapp/core/ContextService";
 import { SysConfigOptionDefinition } from "../../../model/SysConfigOptionDefinition";
 import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { ValidationSeverity } from "../../../../base-components/webapp/core/ValidationSeverity";
+import { SysConfigOptionProperty } from "../../../model/SysConfigOptionProperty";
 
 class Component extends AbstractEditDialog {
 
@@ -41,6 +43,12 @@ class Component extends AbstractEditDialog {
     }
 
     public async onMount(): Promise<void> {
+        const context = await ContextService.getInstance().getContext(EditSysConfigDialogContext.CONTEXT_ID);
+        if (context) {
+            if (!context.getObjectId()) {
+                this.state.reset = false;
+            }
+        }
         await super.onMount();
     }
 
@@ -53,10 +61,61 @@ class Component extends AbstractEditDialog {
     }
 
     public async submit(): Promise<void> {
-        this.objectType = KIXObjectType.SYS_CONFIG_OPTION;
-        await super.submit();
-    }
+        const context = await ContextService.getInstance().getContext(EditSysConfigDialogContext.CONTEXT_ID);
+        if (context) {
+            if (context.getObjectId()) {
+                this.objectType = KIXObjectType.SYS_CONFIG_OPTION;
+                await super.submit();
+            } else {
+                const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+                const result = await formInstance.validateForm();
+                const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+                if (validationError) {
+                    if (this.showValidationError) {
+                        this.showValidationError(result);
+                    } else {
+                        super.showValidationError.call(this, result);
+                    }
 
+                    ContextService.getInstance().updateObjectLists(this.objectType);
+
+                } else {
+                    DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
+                    const updateObjects: Map<string, any> = new Map();
+                    for (const p of formInstance.getForm().pages) {
+                        for (const f of p.groups[0].formFields) {
+                            if (f.property === SysConfigOptionDefinitionProperty.DEFAULT) {
+                                continue;
+                            }
+
+                            const option = f.options.find((o) => o.option === 'SYSCONFIG_NAME');
+                            if (!updateObjects.has(option.value)) {
+                                updateObjects.set(option.value, {});
+                            }
+
+                            const key = updateObjects.get(option.value);
+                            const value = formInstance.getFormFieldValue(f.instanceId);
+                            key[f.property] = value.value;
+                        }
+                    }
+
+                    const updatePromises = [];
+                    updateObjects.forEach((value, key) => {
+                        updatePromises.push(
+                            KIXObjectService.updateObject(KIXObjectType.SYS_CONFIG_OPTION,
+                                [
+                                    [SysConfigOptionProperty.VALUE, value[SysConfigOptionDefinitionProperty.VALUE]],
+                                    [KIXObjectProperty.VALID_ID, value[KIXObjectProperty.VALID_ID]]
+                                ], key, false)
+                        );
+                    });
+
+                    await Promise.all(updatePromises);
+                    await this.handleDialogSuccess(null);
+                }
+            }
+        }
+    }
     public async reset(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const sysConfigValueField = await formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);

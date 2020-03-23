@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(!state.loading)>
     <widget instanceId="edit-sysconfig-dialog">
         <@content>
@@ -18,13 +17,15 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <span.kix-icon-close/>
                     <translation-string pattern="Translatable#Cancel"/>
                 </button>
-                <button.form-blank-cancel-button
-                    type="button"
-                    on-click("reset")
-                    title=state.translations["Translatable#Reset to Default"]>
-                    <span.kix-icon-arrow-rotate-left/>
-                    <translation-string pattern="Translatable#Reset to Default"/>
-                </button>
+                <if(state.reset)>
+                    <button.form-blank-cancel-button
+                        type="button"
+                        on-click("reset")
+                        title=state.translations["Translatable#Reset to Default"]>
+                        <span.kix-icon-arrow-rotate-left/>
+                        <translation-string pattern="Translatable#Reset to Default"/>
+                    </button>
+                </if>
                 <if(state.formId)>
                     <button.submit-button type="button" on-click("submit") title=state.translations["Translatable#Save"]>
                         <span.kix-icon-check/>
