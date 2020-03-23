@@ -19,6 +19,12 @@ import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDe
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
+import { KIXObject } from "../../../../model/kix/KIXObject";
+import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
+import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
+import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
+import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
+import { ObjectReferenceOptions } from "../../../base-components/webapp/core/ObjectReferenceOptions";
 
 export class SysConfigFormService extends KIXObjectFormService {
 
@@ -41,58 +47,174 @@ export class SysConfigFormService extends KIXObjectFormService {
             || kixObjectType === KIXObjectType.SYS_CONFIG_OPTION;
     }
 
+    protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
+        const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
+            EditSysConfigDialogContext.CONTEXT_ID
+        );
+
+        if (context) {
+            const sysconfigKeys = await context.getObjectList(
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
+            );
+
+            if (sysconfigKeys && sysconfigKeys.length) {
+                form.pages = await this.createPages(sysconfigKeys as SysConfigOptionDefinition[]);
+            }
+        }
+    }
+
+    private async createPages(sysconfigKeys: SysConfigOptionDefinition[]): Promise<FormPageConfiguration[]> {
+        const pages: FormPageConfiguration[] = [];
+        for (const key of sysconfigKeys) {
+            const page = new FormPageConfiguration(key.Name, key.Name, [], true, false, [
+                new FormGroupConfiguration(key.Name, key.Name, [], null, [
+                    new FormFieldConfiguration(
+                        'sysconfig-edit-form-field-name',
+                        'Translatable#Name', SysConfigOptionDefinitionProperty.NAME, null, true,
+                        'Translatable#Helptext_Admin_SysConfigEdit_Name',
+                        [
+                            new FormFieldOption('SYSCONFIG_NAME', key.Name)
+                        ],
+                        null, null, null, null,
+                        null, null, null, null, null, null, false, false, true
+                    ),
+                    new FormFieldConfiguration(
+                        'sysconfig-edit-form-field-description',
+                        'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, null, false,
+                        'Translatable#Helptext_Admin_SysConfigEdit_Description',
+                        [
+                            new FormFieldOption('SYSCONFIG_NAME', key.Name)
+                        ],
+                        null, null, null, null,
+                        null, null, null, null, null, null, false, false, true
+                    ),
+                    new FormFieldConfiguration(
+                        'sysconfig-edit-form-field-value',
+                        'Translatable#Value', SysConfigOptionDefinitionProperty.VALUE, 'text-area-input', false,
+                        'Translatable#Helptext_Admin_SysConfigEdit_Value',
+                        [
+                            new FormFieldOption(FormFieldOptions.IS_JSON, true),
+                            new FormFieldOption('SYSCONFIG_NAME', key.Name)
+                        ]
+                    ),
+                    new FormFieldConfiguration(
+                        'sysconfig-edit-form-field-default-value',
+                        'Translatable#Default Value', SysConfigOptionDefinitionProperty.DEFAULT,
+                        'text-area-input', false, 'Translatable#Helptext_Admin_SysConfigEdit_Default_Value',
+                        [
+                            new FormFieldOption('SYSCONFIG_NAME', key.Name)
+                        ],
+                        null, null, null, null, null, null, null, null, null, null, false, false, true
+                    ),
+                    new FormFieldConfiguration(
+                        'sysconfig-edit-form-field-valid',
+                        'Translatable#Validity', KIXObjectProperty.VALID_ID,
+                        'object-reference-input', true, 'Translatable#Helptext_Admin_SysConfigEdit_Validity',
+                        [
+                            new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.VALID_OBJECT),
+                            new FormFieldOption('SYSCONFIG_NAME', key.Name)
+                        ]
+                    )
+                ])
+            ]);
+
+            pages.push(page);
+        }
+
+        return pages;
+    }
+
     public async initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>> {
         const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
             EditSysConfigDialogContext.CONTEXT_ID
         );
-        const sysConfigId = context ? context.getObjectId() : null;
-        const sysConfigValues = sysConfigId
-            ? await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
-                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]) : null;
-        return await super.initValues(form, sysConfigValues ? sysConfigValues[0] : null);
+
+        const sysconfigKeys = await context.getObjectList(
+            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
+        );
+
+        if (sysconfigKeys && sysconfigKeys.length) {
+            return super.initValues(form, null);
+        } else {
+            const sysConfigId = context ? context.getObjectId() : null;
+            const sysConfigValues = sysConfigId
+                ? await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
+                    KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]) : null;
+            return super.initValues(form, sysConfigValues ? sysConfigValues[0] : null);
+        }
     }
 
     protected async getValue(
         property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
     ): Promise<any> {
-        let formValue = value;
         if (sysConfig) {
-            switch (property) {
-                case SysConfigOptionDefinitionProperty.SETTING:
-                    if (value && Array.isArray(value)) {
-                        formValue = value.join(',');
-                    } else {
-                        formValue = value;
-                    }
-                    break;
-                case SysConfigOptionDefinitionProperty.DEFAULT:
-                    if (typeof formValue !== 'string' && typeof formValue !== 'number') {
-                        formValue = JSON.stringify(value);
-                    }
-                    break;
-                case SysConfigOptionDefinitionProperty.VALUE:
-                    if (sysConfig.IsModified !== 1) {
-                        formValue = sysConfig.Default;
-                    }
-
-                    if (typeof formValue !== 'string' && typeof formValue !== 'number') {
-                        formValue = JSON.stringify(formValue);
-                    }
-
-                    if (formValue === null) {
-                        formValue = '';
-                    }
-                    break;
-                case SysConfigOptionDefinitionProperty.DEFAULT_VALID_ID:
-                case KIXObjectProperty.VALID_ID:
-                    if (sysConfig.IsRequired) {
-                        formField.readonly = true;
-                    }
-                    break;
-                default:
-            }
+            value = this.handleSingleSysconfigKey(property, value, sysConfig, formField);
+        } else {
+            value = await this.handleSysconfigListValue(property, value, formField);
         }
-        return formValue;
+        return value;
+    }
+
+    private handleSingleSysconfigKey(
+        property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
+    ): any {
+        switch (property) {
+            case SysConfigOptionDefinitionProperty.SETTING:
+                if (value && Array.isArray(value)) {
+                    value = value.join(',');
+                }
+                break;
+            case SysConfigOptionDefinitionProperty.DEFAULT:
+                if (typeof value !== 'string' && typeof value !== 'number') {
+                    value = JSON.stringify(value);
+                }
+                break;
+            case SysConfigOptionDefinitionProperty.VALUE:
+                if (sysConfig.IsModified !== 1) {
+                    value = sysConfig.Default;
+                }
+
+                if (typeof value !== 'string' && typeof value !== 'number') {
+                    value = JSON.stringify(value);
+                }
+
+                if (value === null) {
+                    value = '';
+                }
+                break;
+            case SysConfigOptionDefinitionProperty.DEFAULT_VALID_ID:
+            case KIXObjectProperty.VALID_ID:
+                if (sysConfig.IsRequired) {
+                    formField.readonly = true;
+                }
+                break;
+            default:
+        }
+
+        return value;
+    }
+
+    private async handleSysconfigListValue(
+        property: string, value: any, formField: FormFieldConfiguration
+    ): Promise<any> {
+        const option = formField.options.find((o) => o.option === 'SYSCONFIG_NAME');
+
+        if (option) {
+            const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
+                EditSysConfigDialogContext.CONTEXT_ID
+            );
+
+            const sysconfigKeys = await context.getObjectList(
+                KIXObjectType.SYS_CONFIG_OPTION_DEFINITION
+            );
+
+            const sysConfig = sysconfigKeys.find((sk: SysConfigOptionDefinition) => sk.Name === option.value);
+            value = this.handleSingleSysconfigKey(
+                property, sysConfig[property], sysConfig as SysConfigOptionDefinition, formField
+            );
+        }
+
+        return value;
     }
 
     public async postPrepareValues(

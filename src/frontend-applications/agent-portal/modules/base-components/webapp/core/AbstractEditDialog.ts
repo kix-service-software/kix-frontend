@@ -27,7 +27,6 @@ import { ComponentContent } from "./ComponentContent";
 import { OverlayService } from "./OverlayService";
 import { OverlayType } from "./OverlayType";
 import { Error } from "../../../../../../server/model/Error";
-import { AbstractNewDialog } from "./AbstractNewDialog";
 
 export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 

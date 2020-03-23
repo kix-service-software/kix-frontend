@@ -75,7 +75,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             let formFieldValue: FormFieldValue;
             let value = await this.getValue(
                 f.property,
-                kixObject ? kixObject[f.property] : f.defaultValue ? f.defaultValue.value : null,
+                kixObject ? kixObject[f.property] : (f.defaultValue ? f.defaultValue.value : null),
                 kixObject,
                 f,
                 formContext

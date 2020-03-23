@@ -54,11 +54,12 @@ class Component {
     }
 
     private async prepareTranslations(): Promise<void> {
-        if (this.state.pages) {
+        if (this.state.pages && this.state.pages.length) {
             this.state.translations = await TranslationService.createTranslationObject([
                 'Translatable#Next', 'Translatable#Previous',
                 ...this.state.pages.map((p) => p.name)
             ]);
+            this.state.prepared = true;
         }
     }
 
