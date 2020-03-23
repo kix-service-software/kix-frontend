@@ -541,6 +541,9 @@ msgstr "enthält"
 msgid "Context"
 msgstr "Kontext"
 
+msgid "Copy of {0}"
+msgstr ""
+
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
