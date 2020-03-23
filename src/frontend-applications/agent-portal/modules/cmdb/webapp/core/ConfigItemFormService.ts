@@ -34,6 +34,7 @@ import { InputFieldTypes } from "../../../../modules/base-components/webapp/core
 import { Contact } from "../../../customer/model/Contact";
 import { Organisation } from "../../../customer/model/Organisation";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class ConfigItemFormService extends KIXObjectFormService {
 
@@ -156,7 +157,10 @@ export class ConfigItemFormService extends KIXObjectFormService {
             switch (property) {
                 case ConfigItemProperty.NAME:
                     if (formContext === FormContext.NEW) {
-                        value = 'Copy of ' + value;
+                        const ciName = await TranslationService.translate(
+                            'Translatable#Copy of {0}', [value]
+                        );
+                        value = ciName;
                     }
                     break;
                 case KIXObjectProperty.LINKS:

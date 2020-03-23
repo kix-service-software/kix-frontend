@@ -183,8 +183,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     'organisation-create-action'
                 ],
                 [
-                    'organisation-edit-action', 'contact-create-action', 'ticket-create-action',
-                    'config-item-create-action', 'print-action'
+                    'organisation-edit-action', 'organisation-duplicate-action', 'contact-create-action',
+                    'ticket-create-action', 'config-item-create-action', 'print-action'
                 ],
                 [],
                 [

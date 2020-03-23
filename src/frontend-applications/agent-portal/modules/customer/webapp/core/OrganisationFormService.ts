@@ -10,6 +10,10 @@
 import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
 import { Organisation } from "../../model/Organisation";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { FormContext } from "../../../../model/configuration/FormContext";
+import { OrganisationProperty } from "../../model/OrganisationProperty";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class OrganisationFormService extends KIXObjectFormService {
 
@@ -29,5 +33,30 @@ export class OrganisationFormService extends KIXObjectFormService {
     public isServiceFor(objectType: KIXObjectType): boolean {
         return objectType === KIXObjectType.ORGANISATION;
     }
+
+    protected async getValue(
+        property: string, value: any, organisation: Organisation,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
+        switch (property) {
+            case OrganisationProperty.NUMBER:
+                if (formContext === FormContext.NEW) {
+                    value = null;
+                }
+                break;
+            case OrganisationProperty.NAME:
+                if (formContext === FormContext.NEW && organisation) {
+                    const orgName = await TranslationService.translate(
+                        'Translatable#Copy of {0}', [value]
+                    );
+                    value = orgName;
+                }
+                break;
+            default:
+        }
+
+        return value;
+    }
+
 
 }
