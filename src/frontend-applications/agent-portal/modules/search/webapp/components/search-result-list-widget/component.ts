@@ -27,6 +27,7 @@ import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyF
 import { SearchResultCategory } from "../../core/SearchResultCategory";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
 import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
+import {TicketProperty} from "../../../../ticket/model/TicketProperty";
 
 class Component implements IKIXObjectSearchListener {
 
@@ -133,7 +134,9 @@ class Component implements IKIXObjectSearchListener {
                         if (eventId === TableEvent.TABLE_INITIALIZED && isSearchMainObject) {
                             const parameter: Array<[string, any]> = [];
                             for (const c of cache.criteria) {
-                                if (c.property !== SearchProperty.FULLTEXT) {
+                                if (c.property !== SearchProperty.FULLTEXT &&
+                                    c.property !== TicketProperty.CLOSE_TIME &&
+                                    c.property !== TicketProperty.LAST_CHANGE_TIME) {
                                     parameter.push([c.property, c.value]);
                                 }
                             }
