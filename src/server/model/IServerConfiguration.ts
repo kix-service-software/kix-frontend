@@ -17,8 +17,6 @@ export interface IServerConfiguration {
 
     USE_SSL: boolean;
 
-    PLUGIN_FOLDERS: string[];
-
     FRONTEND_URL: string;
 
     NOTIFICATION_URL: string;
@@ -34,8 +32,6 @@ export interface IServerConfiguration {
     LOG_FILEDIR: string;
 
     LOG_TRACE: boolean;
-
-    DEFAULT_MODULE_ID: string;
 
     ENABLE_PROFILING: boolean;
 

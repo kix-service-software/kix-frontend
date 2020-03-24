@@ -62,7 +62,7 @@ export class QueueService extends KIXObjectService<Queue> {
         }
 
         if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
         }
 
         return objects;

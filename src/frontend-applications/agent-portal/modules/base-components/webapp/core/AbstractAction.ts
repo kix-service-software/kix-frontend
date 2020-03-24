@@ -45,7 +45,7 @@ export abstract class AbstractAction<T = any> implements IAction<T> {
 
     public async run(event: any): Promise<void> {
         const text = await TranslationService.translate('Translatable#We are working on this functionality.');
-        // FIXME: Use event to open overlay
+        // TODO: Use event to open overlay
         const content = new ComponentContent(
             'toast',
             new ToastContent('kix-icon-magicwand', text, 'Coming Soon')

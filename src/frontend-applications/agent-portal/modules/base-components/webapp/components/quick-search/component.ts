@@ -45,7 +45,6 @@ export class Component {
                 ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Search Tickets' }
             );
 
-            // FIXME: Search call
             await SearchService.getInstance().executeFullTextSearch(
                 KIXObjectType.TICKET, textValue
             ).catch((error) => {
@@ -54,7 +53,6 @@ export class Component {
                 );
             });
 
-            // FIXME: Searchcontext ID
             ContextService.getInstance().setContext('search', null, null, null, null, true);
 
             EventService.getInstance().publish(

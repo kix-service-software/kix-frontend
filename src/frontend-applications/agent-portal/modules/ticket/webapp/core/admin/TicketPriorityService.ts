@@ -48,7 +48,7 @@ export class TicketPriorityService extends KIXObjectService<TicketPriority> {
         }
 
         if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
         }
 
         return objects;

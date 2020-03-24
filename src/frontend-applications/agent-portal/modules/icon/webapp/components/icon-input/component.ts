@@ -101,32 +101,26 @@ class Component extends FormInputComponent<any, ComponentState> {
         if (fileError) {
             const errorMessages = await AttachmentUtil.buildErrorMessages([[files[0], fileError]]);
             const title = await TranslationService.translate('Translatable#Error while adding the image:');
-            const content = new ComponentContent('list-with-title',
-                {
-                    title,
-                    list: errorMessages
-                }
-            );
+            const content = new ComponentContent('list-with-title', { title, list: errorMessages });
 
             const error = await TranslationService.translate('Translatable#Error');
 
             OverlayService.getInstance().openOverlay(
-                OverlayType.WARNING,
-                null,
-                content,
-                error,
-                null,
-                true
+                OverlayType.WARNING, null, content, error, null, true
             );
         } else {
+            this.state.icon = null;
             const content = await BrowserUtil.readFile(files[0]);
-            this.state.icon = new ObjectIcon(
-                null, null,
-                files[0].type,
-                content
-            );
-            this.state.title = files[0].name;
-            super.provideValue(this.state.icon);
+
+            setTimeout(() => {
+                this.state.icon = new ObjectIcon(
+                    null, null,
+                    files[0].type,
+                    content
+                );
+                this.state.title = files[0].name;
+                super.provideValue(this.state.icon);
+            }, 10);
         }
     }
 

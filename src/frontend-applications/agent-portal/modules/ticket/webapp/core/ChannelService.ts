@@ -33,7 +33,7 @@ export class ChannelService extends KIXObjectService<Channel> {
         const channels = await super.loadObjects<Channel>(KIXObjectType.CHANNEL, null);
         if (objectIds) {
             const filteredChannels = channels.filter(
-                (c) => objectIds.some((oid) => c.ID === oid)
+                (c) => objectIds.map((id) => Number(id)).some((oid) => c.ID === oid)
             );
 
             return filteredChannels as any[];

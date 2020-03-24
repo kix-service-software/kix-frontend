@@ -351,7 +351,7 @@ export class ArticleFormService extends KIXObjectFormService {
         if (Array.isArray(value)) {
             value = value.filter((a) => a.Disposition !== 'inline');
             if (!!value.length) {
-                // FIXME: not very performant (maybe some reference attachment id)
+                // TODO: not very performant (maybe some reference attachment id)
                 const referencedArticle = await this.getReferencedArticle();
                 for (const attachment of value) {
                     const attachmentWithContent = await TicketService.getInstance().loadArticleAttachment(

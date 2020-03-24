@@ -33,26 +33,28 @@ class IconComponent {
 
     private async setIcon(): Promise<void> {
         if (this.state.icon instanceof ObjectIcon) {
-            const icons = await KIXObjectService.loadObjects<ObjectIcon>(
-                KIXObjectType.OBJECT_ICON, null, null,
-                new ObjectIconLoadingOptions(this.state.icon.Object, this.state.icon.ObjectID)
-            );
-            if (icons && !!icons.length) {
-                const icon = icons[0];
-                if (icon.ContentType === 'text') {
-                    this.state.base64 = false;
-                } else {
-                    this.state.base64 = true;
-                    this.state.contentType = icon.ContentType;
-                }
-                this.state.content = icon.Content;
-            } else if (this.state.icon.Content) {
+            if (this.state.icon.Content) {
                 this.state.base64 = true;
                 this.state.content = this.state.icon.Content;
                 this.state.contentType = this.state.icon.ContentType;
-            } else if (this.state.showUnknown) {
-                this.state.base64 = false;
-                this.state.content = 'kix-icon-unknown';
+            } else {
+                const icons = await KIXObjectService.loadObjects<ObjectIcon>(
+                    KIXObjectType.OBJECT_ICON, null, null,
+                    new ObjectIconLoadingOptions(this.state.icon.Object, this.state.icon.ObjectID)
+                );
+                if (icons && !!icons.length) {
+                    const icon = icons[0];
+                    if (icon.ContentType === 'text') {
+                        this.state.base64 = false;
+                    } else {
+                        this.state.base64 = true;
+                        this.state.contentType = icon.ContentType;
+                    }
+                    this.state.content = icon.Content;
+                } else if (this.state.showUnknown) {
+                    this.state.base64 = false;
+                    this.state.content = 'kix-icon-unknown';
+                }
             }
         } else {
             this.state.base64 = false;

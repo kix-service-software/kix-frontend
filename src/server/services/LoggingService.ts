@@ -36,7 +36,7 @@ export class LoggingService {
 
         this.defaultLevelNumber = serverConfig.LOG_LEVEL || LogLevel.ERROR;
 
-        this.trace = serverConfig.LOG_TRACE || true;
+        this.trace = serverConfig.LOG_TRACE;
 
         // do not log in test mode
         if (!ServerUtil.isTestMode()) {
