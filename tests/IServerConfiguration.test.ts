@@ -38,11 +38,6 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.HTTPS_PORT).to.be.an('number');
     });
 
-    it('Should contain PLUGIN_FOLDERS as type of array.', () => {
-        expect(serverConfiguration.PLUGIN_FOLDERS).to.not.be.undefined;
-        expect(serverConfiguration.PLUGIN_FOLDERS).to.be.an('array');
-    });
-
     it('Should contain FRONTEND_URL as type of string.', () => {
         expect(serverConfiguration.FRONTEND_URL).to.be.an('string');
     });
@@ -51,12 +46,6 @@ describe('Server Configuration', () => {
         expect(serverConfiguration.BACKEND_API_URL).to.not.be.undefined;
         expect(serverConfiguration.BACKEND_API_URL).to.be.an('string');
         expect(serverConfiguration.BACKEND_API_URL).to.not.be.empty;
-    });
-
-    it('Should contain DEFAULT_MODULE_ID as type of string.', () => {
-        expect(serverConfiguration.DEFAULT_MODULE_ID).to.not.be.undefined;
-        expect(serverConfiguration.DEFAULT_MODULE_ID).to.be.an('string');
-        expect(serverConfiguration.DEFAULT_MODULE_ID).to.not.be.empty;
     });
 
     it('Should contain FORCE_SSL as type of boolean.', () => {

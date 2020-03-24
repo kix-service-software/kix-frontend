@@ -268,7 +268,7 @@ class LinkDialogComponent {
             );
             this.state.linkDescriptions = [...this.state.linkDescriptions, ...newLinks];
             this.newLinks = [...this.newLinks, ...newLinks];
-            // FIXME: obsolet, DialogEvnets.DIALOG_CANCELED bzw. .DIALOG_FINISHED verwenden
+            // TODO: obsolet, use DialogEvnets.DIALOG_CANCELED or DIALOG_FINISHED
             DialogService.getInstance().publishDialogResult(
                 this.resultListenerId,
                 [this.state.linkDescriptions, newLinks]

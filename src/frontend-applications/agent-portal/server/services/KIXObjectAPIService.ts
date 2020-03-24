@@ -295,7 +295,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
     }
 
-    protected async createIcons(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
+    public async createIcons(token: string, clientRequestId: string, icon: ObjectIcon): Promise<void> {
         if (icon) {
             const iconService = KIXObjectServiceRegistry.getServiceInstance(
                 KIXObjectType.OBJECT_ICON

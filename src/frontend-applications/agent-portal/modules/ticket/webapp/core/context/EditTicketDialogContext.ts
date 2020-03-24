@@ -20,14 +20,16 @@ import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOp
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Ticket } from "../../../model/Ticket";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
+import { Organisation } from "../../../../customer/model/Organisation";
+import { Contact } from "../../../../customer/model/Contact";
 
 export class EditTicketDialogContext extends Context implements IFormInstanceListener {
 
     public static CONTEXT_ID: string = 'edit-ticket-dialog-context';
     public formListenerId: string;
 
-    private contact: any; // FIXME: Model
-    private organisation: any;  // FIXME: Model
+    private contact: Contact;
+    private organisation: Organisation;
 
     public async initContext(): Promise<void> {
         const formiId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.TICKET);
@@ -80,7 +82,7 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
         let organisationId = null;
         if (value && value.value) {
             if (!isNaN(value.value)) {
-                const organisations = await KIXObjectService.loadObjects(
+                const organisations = await KIXObjectService.loadObjects<Organisation>(
                     KIXObjectType.ORGANISATION, [value.value]
                 );
                 if (organisations && organisations.length) {
@@ -104,7 +106,7 @@ export class EditTicketDialogContext extends Context implements IFormInstanceLis
         let contactId = null;
         if (value && value.value) {
             if (!isNaN(value.value)) {
-                const contacts = await KIXObjectService.loadObjects(
+                const contacts = await KIXObjectService.loadObjects<Contact>(
                     KIXObjectType.CONTACT, [value.value]
                 );
                 if (contacts && contacts.length) {

@@ -10,6 +10,11 @@
             "agent-portal-application-registry": {
                 "module": "NamespaceRegistry.extension"
             }
+        },
+        "kix:initial-data": {
+            "kix-agent-portal": {
+                "module": "initial-data.extension"
+            }
         }
     }
 }

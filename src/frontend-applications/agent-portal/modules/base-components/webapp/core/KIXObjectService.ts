@@ -72,7 +72,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache
             ).catch((error: Error) => {
                 if (!silent) {
-                    // FIXME: Publish event to show an error dialog
+                    // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
                             title: `Error load object (${objectType}):`,
@@ -123,7 +123,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             objectType, parameter, createOptions, cacheKeyPrefix
         ).catch(async (error: Error) => {
             if (catchError) {
-                // FIXME: Publish event to show an error dialog
+                // TODO: Publish event to show an error dialog
                 const content = new ComponentContent('list-with-title',
                     {
                         title: `Translatable#Error on create:`,
@@ -185,7 +185,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const updatedObjectId = await service.updateObject(objectType, parameter, objectId, cacheKeyPrefix)
             .catch((error: Error) => {
                 if (catchError) {
-                    // FIXME: Publish event to show an error dialog
+                    // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
                             title: `Translatable#Error on update:`,
@@ -254,7 +254,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 });
         }
         if (!!errors.length) {
-            // FIXME: Publish event to show an error dialog
+            // TODO: Publish event to show an error dialog
             const content = new ComponentContent('list-with-title',
                 {
                     title: `Fehler beim Löschen (${objectType}):`,

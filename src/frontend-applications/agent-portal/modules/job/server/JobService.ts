@@ -223,7 +223,7 @@ export class JobAPIService extends KIXObjectAPIService {
                     const macroId = await this.updateMacroForJob(
                         token, clientRequestId, parameter, jobs[0]
                     ).catch((error) => {
-                        // FIXME: if new ExecPlans were created, delete them
+                        // TODO: if new ExecPlans were created, delete them
                         // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds);
                         throw new Error(error.Code, error.Message);
                     });
@@ -234,7 +234,7 @@ export class JobAPIService extends KIXObjectAPIService {
                     await super.executeUpdateOrCreateRequest(
                         token, clientRequestId, jobParameter, uri, this.objectType, 'JobID'
                     ).catch((error: Error) => {
-                        // FIXME: if new ExecPlans and/or Macro were created, delete them
+                        // TODO: if new ExecPlans and/or Macro were created, delete them
                         // this.deletePlansAndMacroOfJob(token, clientRequestId, execPlanIds, macroId);
                         throw new Error(error.Code, error.Message);
                     });
@@ -450,7 +450,7 @@ export class JobAPIService extends KIXObjectAPIService {
         const actionIds = macro.Actions.map((a) => a.ID);
         const uri = this.buildUri(this.RESOURCE_URI_Macro, macro.ID, 'actions');
 
-        // FIXME: just delete unnecessary action and update/create other actions
+        // TODO: just delete unnecessary action and update/create other actions
         if (actionIds && !!actionIds.length) {
             await this.deleteObject(
                 token, clientRequestId, KIXObjectType.MACRO_ACTION, actionIds.join(','),

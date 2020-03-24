@@ -149,7 +149,7 @@ export class DynamicFormFieldValue {
 
     public async setPropertyTree(): Promise<void> {
         const properties = await this.manager.getProperties();
-        // FIXME: Its not needed to check unique here, because getProperties() should return only available properties.
+        // TODO: Its not needed to check unique here, because getProperties() should return only available properties.
         // The manager should make the decision
         const unique = this.manager.uniqueProperties;
         const nodes: TreeNode[] = [];
@@ -163,7 +163,7 @@ export class DynamicFormFieldValue {
                     )
                     && !await this.manager.isHiddenProperty(p[0])
                 ) {
-                    // FIXME: the manager should return TreeNode[], e.g. to handle specific labels and icons
+                    // TODO: the manager should return TreeNode[], e.g. to handle specific labels and icons
                     nodes.push(new TreeNode(p[0], p[1]));
                 }
             }
