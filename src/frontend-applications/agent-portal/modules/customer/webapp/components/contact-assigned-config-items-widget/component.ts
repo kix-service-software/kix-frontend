@@ -1,0 +1,81 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { Contact } from '../../../model/Contact';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+
+class Component {
+
+    private state: ComponentState;
+
+    public onCreate(input: any): void {
+        this.state = new ComponentState();
+    }
+
+    public onInput(input: any): void {
+        this.state.instanceId = input.instanceId;
+    }
+
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        context.registerListener('contact-assigned-config-items-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
+            objectChanged: (contactId: string, contact: Contact, type: KIXObjectType) => {
+                if (type === KIXObjectType.CONTACT) {
+                    this.initWidget(contact);
+                }
+            },
+            additionalInformationChanged: () => { return; }
+        });
+
+        this.initWidget(await context.getObject<Contact>(KIXObjectType.CONTACT));
+    }
+
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('contact-assigned-config-items');
+    }
+
+    private async initWidget(contact: Contact): Promise<void> {
+        if (!contact.AssignedConfigItems || !contact.AssignedConfigItems.length) {
+            const groupComponent = (this as any).getComponent('contact-assigned-config-items-widget');
+            if (groupComponent) {
+                groupComponent.setMinizedState(true);
+            }
+        }
+        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+        const count = (contact.AssignedConfigItems)
+            ? ` (${contact.AssignedConfigItems.length})`
+            : ' (0)';
+        this.state.title = title + count;
+        this.prepareTable(contact);
+    }
+
+    private async prepareTable(contact: Contact): Promise<void> {
+        if (contact && this.state.widgetConfiguration) {
+            this.state.table = await TableFactoryService.getInstance().createTable(
+                'contact-assigned-config-items', KIXObjectType.CONFIG_ITEM,
+                this.state.widgetConfiguration.configuration, contact.AssignedConfigItems,
+                null, true, true, true
+            );
+        }
+    }
+}
+
+module.exports = Component;

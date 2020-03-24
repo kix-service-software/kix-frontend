@@ -23,6 +23,8 @@ export class Contact extends KIXObject<Contact> {
 
     public AssignedUserID: number;
 
+    public AssignedConfigItems: number[];
+
     public User: User;
 
     public Firstname: string;
@@ -66,6 +68,7 @@ export class Contact extends KIXObject<Contact> {
             this.ID = contact.ID;
             this.ObjectId = this.ID;
             this.AssignedUserID = contact.AssignedUserID;
+            this.AssignedConfigItems = contact.AssignedConfigItems ? contact.AssignedConfigItems : [];
             this.Firstname = contact.Firstname;
             this.Fullname = contact.Fullname;
             this.Lastname = contact.Lastname;

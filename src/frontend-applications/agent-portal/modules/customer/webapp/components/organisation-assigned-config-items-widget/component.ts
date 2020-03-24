@@ -1,0 +1,80 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { Organisation } from '../../../model/Organisation';
+
+class Component {
+
+    private state: ComponentState;
+
+    public onCreate(input: any): void {
+        this.state = new ComponentState();
+    }
+
+    public onInput(input: any): void {
+        this.state.instanceId = input.instanceId;
+    }
+
+    public async onMount(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext();
+        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+
+        context.registerListener('organisation-assigned-config-items-component', {
+            explorerBarToggled: () => { return; },
+            filteredObjectListChanged: () => { return; },
+            objectListChanged: () => { return; },
+            sidebarToggled: () => { return; },
+            scrollInformationChanged: () => { return; },
+            objectChanged: (orgId: string, organisation: Organisation, type: KIXObjectType) => {
+                if (type === KIXObjectType.ORGANISATION) {
+                    this.initWidget(organisation);
+                }
+            },
+            additionalInformationChanged: () => { return; }
+        });
+
+        this.initWidget(await context.getObject<Organisation>(KIXObjectType.ORGANISATION));
+    }
+
+    public onDestroy(): void {
+        TableFactoryService.getInstance().destroyTable('organisation-assigned-config-items');
+    }
+
+    private async initWidget(organisation: Organisation): Promise<void> {
+        if (!organisation.AssignedConfigItems || !organisation.AssignedConfigItems.length) {
+            const groupComponent = (this as any).getComponent('organisation-assigned-config-items-widget');
+            if (groupComponent) {
+                groupComponent.setMinizedState(true);
+            }
+        }
+        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+        const count = (organisation.AssignedConfigItems)
+            ? ` (${organisation.AssignedConfigItems.length})`
+            : ' (0)';
+        this.state.title = title + count;
+        this.prepareTable(organisation);
+    }
+
+    private async prepareTable(organisation: Organisation): Promise<void> {
+        if (organisation && this.state.widgetConfiguration) {
+            this.state.table = await TableFactoryService.getInstance().createTable(
+                'organisation-assigned-config-items', KIXObjectType.CONFIG_ITEM,
+                this.state.widgetConfiguration.configuration, organisation.AssignedConfigItems,
+                null, true, true, true
+            );
+        }
+    }
+}
+
+module.exports = Component;

@@ -173,6 +173,17 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         );
         configurations.push(assignedOrganisationsLane);
 
+        const assignedConfigItemsLane = new WidgetConfiguration(
+            'contact-details-assigned-config-items-widget', 'Assigned Assets', ConfigurationType.Widget,
+            'contact-assigned-config-items-widget', 'Translatable#Assigned Assets',
+            [], null, new TableConfiguration(
+                null, null, ConfigurationType.Table,
+                KIXObjectType.CONFIG_ITEM, null, null, null, null, null, null, null, null,
+                TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            ), false, true, null, false
+        );
+        configurations.push(assignedConfigItemsLane);
+
         const assignedTicketsLane = new WidgetConfiguration(
             'contact-details-assigned-tickets-widget', 'Assigned Tickets', ConfigurationType.Widget,
             'contact-assigned-tickets-widget', 'Translatable#Overview Tickets',
@@ -191,6 +202,11 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                         'contact-details-assigned-organisations-widget',
                         'contact-details-assigned-organisations-widget',
                         null, [new UIComponentPermission('organisations', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
+                        'contact-details-assigned-config-items-widget',
+                        'contact-details-assigned-config-items-widget',
+                        null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
                         'contact-details-assigned-tickets-widget', 'contact-details-assigned-tickets-widget', null,

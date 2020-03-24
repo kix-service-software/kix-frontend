@@ -60,6 +60,10 @@ class Extension implements IKIXModuleExtension {
             'contact-assigned-tickets-widget',
             '/kix-module-customer$0/webapp/components/contact-assigned-tickets-widget', []
         ),
+        new UIComponent(
+            'contact-assigned-config-items-widget',
+            '/kix-module-customer$0/webapp/components/contact-assigned-config-items-widget', []
+        ),
         new UIComponent('new-contact-dialog', '/kix-module-customer$0/webapp/components/new-contact-dialog', []),
         new UIComponent('edit-contact-dialog', '/kix-module-customer$0/webapp/components/edit-contact-dialog', []),
         new UIComponent('search-contact-dialog', '/kix-module-customer$0/webapp/components/search-contact-dialog', []),
@@ -74,6 +78,10 @@ class Extension implements IKIXModuleExtension {
         new UIComponent(
             'organisation-assigned-tickets-widget',
             '/kix-module-customer$0/webapp/components/organisation-assigned-tickets-widget', []
+        ),
+        new UIComponent(
+            'organisation-assigned-config-items-widget',
+            '/kix-module-customer$0/webapp/components/organisation-assigned-config-items-widget', []
         ),
         new UIComponent(
             'new-organisation-dialog', '/kix-module-customer$0/webapp/components/new-organisation-dialog', []
