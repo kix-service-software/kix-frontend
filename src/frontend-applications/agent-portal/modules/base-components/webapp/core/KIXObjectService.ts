@@ -46,6 +46,7 @@ import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { SortUtil } from "../../../../model/SortUtil";
 import { DataType } from "../../../../model/DataType";
+import { BrowserUtil } from "./BrowserUtil";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
