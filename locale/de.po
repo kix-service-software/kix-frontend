@@ -232,6 +232,11 @@ msgstr "Zugeordneter Agent"
 msgid "Assigned Agents"
 msgstr "Zugeordnete Agenten"
 
+#, fuzzy
+#| msgid "Assigned Agents"
+msgid "Assigned Assets"
+msgstr "Zugeordnete Agenten"
+
 msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
 

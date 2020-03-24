@@ -222,6 +222,11 @@ msgstr ""
 msgid "Assigned Agents"
 msgstr ""
 
+#, fuzzy
+#| msgid "Assigned Queues"
+msgid "Assigned Assets"
+msgstr "Assigned Teams"
+
 msgid "Assigned Contacts"
 msgstr ""
 
@@ -2079,9 +2084,9 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
 msgstr ""
-"Choose if the following article is shown in the Self Service Portal. If \""
-"Email\" is choosen as chanal above, and one of the following form fields ("
-"To, Cc, Bcc) contains an adresss conected to the tickets customer, the "
+"Choose if the following article is shown in the Self Service Portal. If "
+"\"Email\" is choosen as chanal above, and one of the following form fields "
+"(To, Cc, Bcc) contains an adresss conected to the tickets customer, the "
 "checkbox will be set automatically and cannot be removed."
 
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
@@ -2165,9 +2170,9 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr ""
-"Choose if the following article is shown in the Self Service Portal. If \""
-"Email\" is choosen as chanal above, and one of the following form fields ("
-"To, Cc, Bcc) contains an adresss conected to the tickets customer, the "
+"Choose if the following article is shown in the Self Service Portal. If "
+"\"Email\" is choosen as chanal above, and one of the following form fields "
+"(To, Cc, Bcc) contains an adresss conected to the tickets customer, the "
 "checkbox will be set automatically and cannot be removed."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
@@ -4039,9 +4044,6 @@ msgstr ""
 
 #~ msgid "Helptext_Customers_ContactCreate_Login"
 #~ msgstr "The login name needs to be unique and cannot be changed afterwards."
-
-#~ msgid "Assigned Queues"
-#~ msgstr "Assigned Teams"
 
 #~ msgid "Acions"
 #~ msgstr "Actions"
