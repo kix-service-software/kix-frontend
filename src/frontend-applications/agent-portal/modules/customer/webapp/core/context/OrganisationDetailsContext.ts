@@ -18,6 +18,7 @@ import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOp
 import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
 import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { OrganisationProperty } from "../../../model/OrganisationProperty";
 
 export class OrganisationDetailsContext extends Context {
 
@@ -54,7 +55,9 @@ export class OrganisationDetailsContext extends Context {
 
     private async loadOrganisation(): Promise<Organisation> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['Contacts', 'Tickets', 'TicketStats'],
+            null, null, null, [
+            OrganisationProperty.CONTACTS, OrganisationProperty.TICKETS,
+            OrganisationProperty.TICKET_STATS, OrganisationProperty.ASSIGNED_CONFIG_ITEMS],
         );
 
         const timeout = window.setTimeout(() => {

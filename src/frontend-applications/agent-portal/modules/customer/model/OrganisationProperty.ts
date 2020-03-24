@@ -37,6 +37,10 @@ export enum OrganisationProperty {
 
     CONTACTS = 'Contacts',
 
+    ASSIGNED_CONFIG_ITEMS = 'AssignedConfigItems',
+
+    TICKETS = 'Tickets',
+
     // UI properties
     VALID = 'Valid'
 

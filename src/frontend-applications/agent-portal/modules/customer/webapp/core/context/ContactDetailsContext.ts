@@ -62,7 +62,11 @@ export class ContactDetailsContext extends Context {
         }, 500);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [ContactProperty.TICKET_STATS, 'Tickets', ContactProperty.USER]
+            null, null, null,
+            [
+                ContactProperty.TICKET_STATS, 'Tickets', ContactProperty.USER,
+                ContactProperty.ASSIGNED_CONFIG_ITEMS
+            ]
         );
 
         const contacts = await KIXObjectService.loadObjects<Contact>(
