@@ -423,7 +423,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             createdCriteria.property = KIXObjectProperty.CREATE_TIME;
         }
 
-        const changedCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
+        const changedCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CHANGED);
         if (changedCriteria) {
             changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
         }
