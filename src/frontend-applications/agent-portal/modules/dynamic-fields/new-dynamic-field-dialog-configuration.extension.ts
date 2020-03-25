@@ -86,7 +86,7 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_DynamicFieldCreate_FieldType',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.DYNAMIC_FIELD_TYPE),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                 ]
             )
         );

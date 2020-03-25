@@ -25,7 +25,7 @@ export class LinkUtil {
         const links = mainObject && mainObject.Links ? mainObject.Links : [];
 
         const linkTypes = await KIXObjectService.loadObjects<LinkType>(
-            KIXObjectType.LINK_TYPE, null, null, false
+            KIXObjectType.LINK_TYPE, null, null, null, false
         );
 
         return links.map((l) => {

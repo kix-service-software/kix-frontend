@@ -3,6 +3,7 @@
         "require ./components/admin-jobs",
         "require ./components/edit-job-dialog",
         "require ./components/job-details-exec-plans-widget",
+        "require ./components/job-details-filter-widget",
         "require ./components/job-input-actions",
         "require ./components/job-input-events",
         "require ./components/job-input-filter",

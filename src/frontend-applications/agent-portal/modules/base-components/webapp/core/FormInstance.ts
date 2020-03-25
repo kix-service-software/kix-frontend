@@ -157,12 +157,43 @@ export class FormInstance implements IFormInstance {
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
             fields.splice(index, 1);
-            this.formFieldValues.delete(formField.instanceId);
+            this.deleteValuesRecursive(formField);
             const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                await service.updateFields(fields);
+                await service.updateFields(fields, this);
+            }
+            this.listeners.forEach((l) => l.updateForm());
+        }
+    }
+
+    public async removePages(pageIds: string[], protectedPages?: string[]): Promise<void> {
+        if (!pageIds) {
+            pageIds = this.form.pages.map((p) => p.id);
+        }
+
+        if (Array.isArray(pageIds)) {
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+                this.form.objectType, ServiceType.FORM
+            );
+            for (const pageId of pageIds) {
+                if (protectedPages.some((id) => id === pageId)) {
+                    continue;
+                }
+
+                const index = this.form.pages.findIndex((p) => p.id === pageId);
+                if (index !== -1) {
+                    const deletedPage = this.form.pages.splice(index, 1);
+                    if (deletedPage[0].groups.length) {
+                        for (const group of deletedPage[0].groups) {
+                            group.formFields.forEach((f) => this.deleteValuesRecursive(f));
+                            if (service) {
+                                await service.updateFields(group.formFields, this);
+                            }
+                        }
+                    }
+                }
             }
             this.listeners.forEach((l) => l.updateForm());
         }
@@ -198,7 +229,7 @@ export class FormInstance implements IFormInstance {
                 const newField = service.getNewFormField(formField);
                 fields.splice(index + 1, 0, newField);
                 this.initValues([newField]);
-                await service.updateFields(fields);
+                await service.updateFields(fields, this);
                 this.listeners.forEach((l) => l.updateForm());
             }
         }
@@ -217,6 +248,25 @@ export class FormInstance implements IFormInstance {
                 parent.children.push(f);
             });
             this.initValues(newFields);
+            this.listeners.forEach((l) => l.updateForm());
+        }
+    }
+
+    public addPage(page: FormPageConfiguration, index?: number): void {
+        if (page) {
+            if (page.groups.length) {
+                page.groups.forEach((g) => {
+                    if (g.formFields.length) {
+                        this.initStructure(g.formFields);
+                        this.initValues(g.formFields);
+                    }
+                });
+            }
+            if (!isNaN(index)) {
+                this.form.pages.splice(index, 0, page);
+            } else {
+                this.form.pages.push(page);
+            }
             this.listeners.forEach((l) => l.updateForm());
         }
     }
@@ -242,6 +292,13 @@ export class FormInstance implements IFormInstance {
         if (this.form.validation) {
             const result = await FormValidationService.getInstance().validate(formField, this.form.id);
             formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
+        }
+
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            this.form.objectType, ServiceType.FORM
+        );
+        if (service) {
+            await service.updateForm(this, this.form, formField, formFieldValue.value);
         }
 
         // TODO: not really performant
@@ -447,7 +504,7 @@ export class FormInstance implements IFormInstance {
                             this.form.objectType, ServiceType.FORM
                         );
                         if (service) {
-                            await service.updateFields(fields);
+                            await service.updateFields(fields, this);
                         }
 
                         this.listeners.forEach((l) => l.updateForm());

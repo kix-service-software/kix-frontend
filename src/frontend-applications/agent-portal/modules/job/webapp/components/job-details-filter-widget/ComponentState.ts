@@ -7,19 +7,18 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
+import { WidgetComponentState } from "../../../../base-components/webapp/core/WidgetComponentState";
+import { Label } from "../../../../base-components/webapp/core/Label";
+import { ITable } from "../../../../base-components/webapp/core/table";
 
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public prepared: boolean = false,
-        public timeLabels: Label[] = [],
-        public weekdayLabels: Label[] = [],
-        public eventLabels: Label[] = [],
-        public showTimeBased: boolean = false,
-        public showEventBased: boolean = false
+        public show: boolean = true,
+        public table: ITable = null,
+        public title: string = '',
     ) {
         super();
     }

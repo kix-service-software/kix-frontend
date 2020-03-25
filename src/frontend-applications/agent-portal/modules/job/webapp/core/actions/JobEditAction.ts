@@ -22,7 +22,7 @@ export class JobEditAction extends AbstractAction {
     ];
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Edit Job';
+        this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
     }
 

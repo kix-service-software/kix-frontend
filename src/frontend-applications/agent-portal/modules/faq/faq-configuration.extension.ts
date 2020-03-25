@@ -133,7 +133,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 "Translatable#Helptext_FAQ_Link_Category",
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(

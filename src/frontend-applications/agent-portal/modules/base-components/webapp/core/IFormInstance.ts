@@ -15,6 +15,7 @@ import { IFormInstanceListener } from "./IFormInstanceListener";
 import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
 import { FormContext } from "../../../../model/configuration/FormContext";
 import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
+import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 
 export interface IFormInstance {
 
@@ -22,7 +23,11 @@ export interface IFormInstance {
 
     removeFormField(FormFieldConfiguration: FormFieldConfiguration, parent?: FormFieldConfiguration): void;
 
+    removePages(pageIds?: string[], protectedPages?: string[]): Promise<void>;
+
     addFormField(FormFieldConfiguration: FormFieldConfiguration, fields?: FormFieldConfiguration[]): void;
+
+    addPage(page: FormPageConfiguration, index?: number): void;
 
     provideFormFieldValue<T>(FormFieldConfigurationInstanceId: string, value: T, silent?: boolean): void;
 

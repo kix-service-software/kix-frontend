@@ -25,6 +25,9 @@ import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
+import { JobTypes } from "../../model/JobTypes";
+import { TicketJobFormManager } from "./TicketJobFormManager";
+import { SyncJobFormManager } from "./SyncJobFormManager";
 
 
 export class UIModule implements IUIModule {
@@ -75,6 +78,9 @@ export class UIModule implements IUIModule {
             false, 'edit-job-dialog', ['jobs'], EditJobDialogContext
         );
         await ContextService.getInstance().registerContext(editJobDialogContext);
+
+        JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
+        JobFormService.getInstance().registerJobFormManager(JobTypes.SYNC, new SyncJobFormManager());
     }
 
 }

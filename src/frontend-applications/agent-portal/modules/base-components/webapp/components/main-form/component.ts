@@ -82,18 +82,7 @@ class FormComponent {
     private async prepareForm(): Promise<void> {
         this.state.formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.formInstance) {
-            this.state.additionalFieldControlsNeeded = false;
-            PAGES:
-            for (const page of this.state.formInstance.getForm().pages) {
-                for (const group of page.groups) {
-                    for (const field of group.formFields) {
-                        this.state.additionalFieldControlsNeeded = this.additionalFieldControlsNeeded(field);
-                        if (this.state.additionalFieldControlsNeeded) {
-                            break PAGES;
-                        }
-                    }
-                }
-            }
+            this.setNeeded();
             this.state.objectType = this.state.formInstance.getObjectType();
             this.state.isSearchContext = this.state.formInstance.getFormContext() === FormContext.SEARCH;
             WidgetService.getInstance().setWidgetType('form-group', WidgetType.GROUP);
@@ -102,10 +91,27 @@ class FormComponent {
 
             this.prepareMultiGroupHandling();
             this.state.formInstance.registerListener({
-                updateForm: () => (this as any).setStateDirty('formInstance'),
+                updateForm: () => {
+                    this.setNeeded();
+                    (this as any).setStateDirty('formInstance');
+                },
                 formValueChanged: () => { return; },
                 formListenerId: IdService.generateDateBasedId('main-form-listener')
             });
+        }
+    }
+
+    private setNeeded(): void {
+        this.state.additionalFieldControlsNeeded = false;
+        PAGES: for (const page of this.state.formInstance.getForm().pages) {
+            for (const group of page.groups) {
+                for (const field of group.formFields) {
+                    this.state.additionalFieldControlsNeeded = this.additionalFieldControlsNeeded(field);
+                    if (this.state.additionalFieldControlsNeeded) {
+                        break PAGES;
+                    }
+                }
+            }
         }
     }
 

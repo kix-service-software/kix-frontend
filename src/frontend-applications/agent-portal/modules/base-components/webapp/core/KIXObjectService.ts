@@ -282,7 +282,8 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async getTreeNodes(
         property: string, showInvalid?: boolean, invalidClickable?: boolean,
-        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions
+        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
+        objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         switch (property) {

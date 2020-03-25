@@ -19,6 +19,7 @@ import { IFormInstanceListener } from "./IFormInstanceListener";
 import { ValidationResult } from "./ValidationResult";
 import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
 import { FormContext } from "../../../../model/configuration/FormContext";
+import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 
 export class SearchFormInstance implements IFormInstance {
 
@@ -61,7 +62,15 @@ export class SearchFormInstance implements IFormInstance {
         return;
     }
 
+    public removePages(pageIds: string[]): Promise<void> {
+        return;
+    }
+
     public addFormField(formField: FormFieldConfiguration): void {
+        return;
+    }
+
+    public addPage(page: FormPageConfiguration, index?: number): void {
         return;
     }
 

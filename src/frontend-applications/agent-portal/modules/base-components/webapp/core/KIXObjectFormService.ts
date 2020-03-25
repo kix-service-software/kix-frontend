@@ -28,6 +28,7 @@ import { FormService } from "./FormService";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
 import { IdService } from "../../../../model/IdService";
+import { IFormInstance } from "./IFormInstance";
 
 export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
@@ -241,7 +242,13 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         );
     }
 
-    public async updateFields(fields: FormFieldConfiguration[]): Promise<void> {
+    public async updateForm(
+        formInstance: IFormInstance, form: FormConfiguration, formField: FormFieldConfiguration, value: any
+    ): Promise<void> {
+        return;
+    }
+
+    public async updateFields(fields: FormFieldConfiguration[], formInstance: IFormInstance): Promise<void> {
         return;
     }
 
@@ -271,9 +278,9 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                 } else {
                     let preparedValue;
                     if (forUpdate) {
-                        preparedValue = await this.prepareUpdateValue(property, value.value);
+                        preparedValue = await this.prepareUpdateValue(property, value.value, formInstance);
                     } else {
-                        preparedValue = await this.prepareCreateValue(property, value.value);
+                        preparedValue = await this.prepareCreateValue(property, value.value, formInstance);
                         if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
                             preparedValue[1] = null;
                         }
@@ -291,11 +298,15 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         return parameter;
     }
 
-    public async prepareUpdateValue(property: string, value: any): Promise<Array<[string, any]>> {
-        return await this.prepareCreateValue(property, value);
+    public async prepareUpdateValue(
+        property: string, value: any, formInstance: IFormInstance
+    ): Promise<Array<[string, any]>> {
+        return await this.prepareCreateValue(property, value, formInstance);
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, value: any, formInstance: IFormInstance
+    ): Promise<Array<[string, any]>> {
         return [[property, value]];
     }
 
