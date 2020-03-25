@@ -150,15 +150,18 @@ export class ArticleFormService extends KIXObjectFormService {
     private async getVisibleField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
+        const defaultValue = new FormFieldValue(null);
+        defaultValue.value = true;
+
         let field = new FormFieldConfiguration(
             'visible-input',
             'Translatable#Show in Customer Portal', ArticleProperty.CUSTOMER_VISIBLE, 'customer-visible-input', false,
             isTicket
                 ? 'Translatable#Helptext_Tickets_TicketCreate_CustomerVisible'
-                : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible'
+                : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible', null, defaultValue
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
