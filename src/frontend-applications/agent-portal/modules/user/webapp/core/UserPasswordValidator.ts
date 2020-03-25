@@ -30,50 +30,51 @@ export class UserPasswordValidator implements IFormFieldValidator {
 
     public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
+        const password = await formInstance.getFormFieldValueByProperty<string>(
+            PersonalSettingsProperty.USER_PASSWORD
+        );
 
-        if (formField.property === PersonalSettingsProperty.USER_PASSWORD_CONFIRM) {
-            const password = await formInstance.getFormFieldValueByProperty<string>(
-                PersonalSettingsProperty.USER_PASSWORD
-            );
-            const passwordConfirm = await formInstance.getFormFieldValueByProperty<string>(
-                PersonalSettingsProperty.USER_PASSWORD_CONFIRM
-            );
-
-            if (!this.isDefined(passwordConfirm)) {
-                const errorString = await TranslationService.translate(
-                    "Translatable#You have to confirm your password."
+        if (password && password.value) {
+            if (formField.property === PersonalSettingsProperty.USER_PASSWORD_CONFIRM) {
+                const passwordConfirm = await formInstance.getFormFieldValueByProperty<string>(
+                    PersonalSettingsProperty.USER_PASSWORD_CONFIRM
                 );
-                return new ValidationResult(ValidationSeverity.ERROR, errorString);
+
+                if (!this.isDefined(passwordConfirm)) {
+                    const errorString = await TranslationService.translate(
+                        "Translatable#You have to confirm your password."
+                    );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                }
+
+                if (passwordConfirm.value !== password.value) {
+                    const errorString = await TranslationService.translate(
+                        "Translatable#Passwords do not match."
+                    );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                }
             }
 
-            if (passwordConfirm.value !== password.value) {
-                const errorString = await TranslationService.translate(
-                    "Translatable#Passwords do not match."
+            if (formField.property === PersonalSettingsProperty.CURRENT_PASSWORD) {
+                const currentPassword = await formInstance.getFormFieldValueByProperty<string>(
+                    PersonalSettingsProperty.CURRENT_PASSWORD
                 );
-                return new ValidationResult(ValidationSeverity.ERROR, errorString);
+
+                if (!this.isDefined(currentPassword)) {
+                    const errorString = await TranslationService.translate(
+                        "Translatable#You have to confirm your current password."
+                    );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                }
+
+                if (!await this.checkCurrentPassword(currentPassword.value)) {
+                    const errorString = await TranslationService.translate(
+                        "Translatable#Your current password is wrong."
+                    );
+                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+                }
             }
         }
-
-        if (formField.property === PersonalSettingsProperty.CURRENT_PASSWORD) {
-            const currentPassword = await formInstance.getFormFieldValueByProperty<string>(
-                PersonalSettingsProperty.CURRENT_PASSWORD
-            );
-
-            if (!this.isDefined(currentPassword)) {
-                const errorString = await TranslationService.translate(
-                    "Translatable#You have to confirm your current password."
-                );
-                return new ValidationResult(ValidationSeverity.ERROR, errorString);
-            }
-
-            if (!await this.checkCurrentPassword(currentPassword.value)) {
-                const errorString = await TranslationService.translate(
-                    "Translatable#Your current password is wrong."
-                );
-                return new ValidationResult(ValidationSeverity.ERROR, errorString);
-            }
-        }
-
 
         return new ValidationResult(ValidationSeverity.OK, '');
     }
