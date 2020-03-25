@@ -6,17 +6,24 @@
  * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
  * --
  */
+.permission-form {
+    .dynamic-form-field-value {
+        grid-template-columns: @permission-dynamic-value-columns;
 
-.permission-input-container {
-    display: grid;
-    grid-template-columns: minmax(10rem, 1fr) 1fr;
-    grid-gap: @margin-small;
+        .value {
+            .permission-input-container {
+                display: grid;
+                grid-template-columns: minmax(10rem, 1fr) 1fr;
+                grid-gap: @margin-small;
 
-    .crud-checkboxes {
-        display: grid;
-        grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
-        grid-gap: @margin-small;
-        justify-items: center;
-        align-content: center;
+                .crud-checkboxes {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr 2fr;
+                    grid-gap: @margin-small;
+                    justify-items: center;
+                    align-content: center;
+                }
+            }
+        }
     }
 }
