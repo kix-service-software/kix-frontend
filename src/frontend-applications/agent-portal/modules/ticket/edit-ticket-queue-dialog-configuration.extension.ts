@@ -89,7 +89,7 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Parent Queue', QueueProperty.PARENT_ID, 'object-reference-input', false,
                 'Translatable#Helptext_Admin_Tickets_QueueCreate_ParentQueue', [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
-                new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                 new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                     new KIXObjectLoadingOptions(
                         [

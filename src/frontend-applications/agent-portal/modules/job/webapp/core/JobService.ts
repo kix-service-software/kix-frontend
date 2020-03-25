@@ -17,6 +17,9 @@ import { MacroActionType } from "../../model/MacroActionType";
 import { Job } from "../../model/Job";
 import { ExecPlan } from "../../model/ExecPlan";
 import { Macro } from "../../model/Macro";
+import { JobType } from "../../model/JobType";
+import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -32,6 +35,7 @@ export class JobService extends KIXObjectService<Job> {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.JOB
+            || kixObjectType === KIXObjectType.JOB_TYPE
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
             || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE;
@@ -42,17 +46,27 @@ export class JobService extends KIXObjectService<Job> {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
+        property: string, showInvalid?: boolean, invalidClickable?: boolean,
+        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
+        objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
         switch (property) {
+            case JobProperty.TYPE:
+                const jobTypes = await KIXObjectService.loadObjects<JobType>(
+                    KIXObjectType.JOB_TYPE, undefined, null, objectLoadingOptions, true
+                ).catch((error): JobType[] => []);
+                if (jobTypes && !!jobTypes.length) {
+                    nodes = jobTypes.map((mat) => new TreeNode(mat.Name, mat.DisplayName));
+                }
+                break;
             case JobProperty.EXEC_PLAN_EVENTS:
                 nodes = await super.getTicketArticleEventTree();
                 break;
             case JobProperty.MACRO_ACTIONS:
                 const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                    KIXObjectType.MACRO_ACTION_TYPE, undefined, null, null, true
+                    KIXObjectType.MACRO_ACTION_TYPE, undefined, null, objectLoadingOptions, true
                 ).catch((error): MacroActionType[] => []);
                 if (macroActionTypes && !!macroActionTypes.length) {
                     nodes = macroActionTypes.map((mat) => new TreeNode(mat.Name, mat.DisplayName));
@@ -61,6 +75,21 @@ export class JobService extends KIXObjectService<Job> {
             default:
         }
 
+        return nodes;
+    }
+
+    public async prepareObjectTree(
+        objects: JobType[], showInvalid?: boolean,
+        invalidClickable?: boolean, filterIds?: Array<string | number>
+    ): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        if (objects && objects.length) {
+            if (objects[0].KIXObjectType === KIXObjectType.JOB_TYPE) {
+                for (const o of objects) {
+                    nodes.push(new TreeNode(o.Name, o.DisplayName));
+                }
+            }
+        }
         return nodes;
     }
 
@@ -88,7 +117,7 @@ export class JobService extends KIXObjectService<Job> {
                 execPlans = job.ExecPlans;
             } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
                 execPlans = await KIXObjectService.loadObjects<ExecPlan>(
-                    KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, true
+                    KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, null, true
                 ).catch(() => [] as ExecPlan[]);
             }
         }
@@ -102,7 +131,7 @@ export class JobService extends KIXObjectService<Job> {
                 macros = job.Macros;
             } else if (Array.isArray(job.MacroIDs) && !!job.MacroIDs.length) {
                 macros = await KIXObjectService.loadObjects<Macro>(
-                    KIXObjectType.MACRO, job.MacroIDs, undefined, true
+                    KIXObjectType.MACRO, job.MacroIDs, undefined, null, true
                 ).catch(() => [] as Macro[]);
             }
         }

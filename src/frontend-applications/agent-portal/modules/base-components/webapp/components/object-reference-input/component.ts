@@ -91,7 +91,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     objectOption.value, null, loadingOptions ? loadingOptions.value : null
                 );
                 const structureOption = this.state.field.options.find(
-                    (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
+                    (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
                 );
 
                 const showInvalid = this.showInvalidNodes();
@@ -103,8 +103,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     nodes = await KIXObjectService.prepareObjectTree(
                         this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
                     );
-
-
                 } else {
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);
@@ -302,7 +300,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
                 if (searchValue && searchValue !== '') {
                     const structureOption = this.state.field.options.find(
-                        (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
+                        (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
                     );
                     if (structureOption && structureOption.value) {
                         nodes = await KIXObjectService.prepareObjectTree(this.objects);

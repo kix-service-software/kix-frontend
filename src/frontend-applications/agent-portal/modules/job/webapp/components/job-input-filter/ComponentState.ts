@@ -8,12 +8,12 @@
  */
 
 import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { JobFilterManager } from "../../core";
+import { AbstractDynamicFormManager } from "../../../../base-components/webapp/core/dynamic-form";
 
 export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {
 
     public constructor(
-        public manager: JobFilterManager = new JobFilterManager(),
+        public manager: AbstractDynamicFormManager = null,
         public prepared: boolean = false
     ) {
         super();

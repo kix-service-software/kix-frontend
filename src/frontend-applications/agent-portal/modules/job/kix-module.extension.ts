@@ -29,6 +29,10 @@ class Extension implements IKIXModuleExtension {
         new UIComponent(
             'job-details-exec-plans-widget', '/kix-module-job$0/webapp/components/job-details-exec-plans-widget', []
         ),
+        new UIComponent(
+            'job-details-filter-widget',
+            '/kix-module-job$0/webapp/components/job-details-filter-widget', []
+        ),
         new UIComponent('job-input-events', '/kix-module-job$0/webapp/components/job-input-events', []),
         new UIComponent('job-input-filter', '/kix-module-job$0/webapp/components/job-input-filter', []),
         new UIComponent('job-input-actions', '/kix-module-job$0/webapp/components/job-input-actions', []),

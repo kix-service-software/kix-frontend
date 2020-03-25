@@ -39,7 +39,7 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { SortUtil } from "../../../../model/SortUtil";
 import { CMDBService } from "../../../cmdb/webapp/core";
 
-export class JobFilterManager extends AbstractDynamicFormManager {
+export class TicketJobFilterManager extends AbstractDynamicFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.JOB;
 

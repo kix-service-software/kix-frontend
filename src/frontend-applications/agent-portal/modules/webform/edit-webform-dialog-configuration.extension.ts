@@ -187,7 +187,7 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -210,7 +210,7 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions([
                             new FilterCriteria(
@@ -231,7 +231,7 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_TYPE),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions([
                             new FilterCriteria(
@@ -252,7 +252,7 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions([
                             new FilterCriteria(
@@ -277,7 +277,7 @@ export class Extension implements IConfigurationExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

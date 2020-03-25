@@ -35,6 +35,7 @@ export class Extension implements IConfigurationExtension {
                 'job-details-object-info-config', 'Object Info Config', ConfigurationType.ObjectInformation,
                 KIXObjectType.JOB,
                 [
+                    JobProperty.TYPE,
                     JobProperty.NAME,
                     JobProperty.LAST_EXEC_TIME,
                     KIXObjectProperty.COMMENT,
@@ -80,20 +81,10 @@ export class Extension implements IConfigurationExtension {
         );
 
         configurations.push(
-            new TableWidgetConfiguration(
-                'job-details-filter-table-widget-config', 'Widget Config', ConfigurationType.TableWidget,
-                KIXObjectType.JOB_FILTER, ['Field', SortOrder.UP], null, null, null, false
-            )
-        );
-
-
-        configurations.push(
             new WidgetConfiguration(
                 'job-details-filter-widget', 'Table Widget', ConfigurationType.Widget,
-                'table-widget', 'Translatable#Filter', [],
-                new ConfigurationDefinition(
-                    'job-details-filter-table-widget-config', ConfigurationType.TableWidget
-                ), null, false, true, null, true
+                'job-details-filter-widget', 'Translatable#Filter', [],
+                null, null, false, true, null, true
             )
         );
 

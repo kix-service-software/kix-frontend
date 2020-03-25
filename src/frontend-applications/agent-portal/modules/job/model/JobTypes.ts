@@ -7,8 +7,11 @@
  * --
  */
 
-export abstract class KIXObjectSpecificLoadingOptions {
 
-    public id: any;
+export enum JobTypes {
+
+    TICKET = 'Ticket',
+
+    SYNC = 'Synchronisation'
 
 }

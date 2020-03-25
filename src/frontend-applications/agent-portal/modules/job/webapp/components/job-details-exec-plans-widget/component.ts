@@ -12,7 +12,7 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { JobDetailsContext } from '../../core';
+import { JobDetailsContext, JobFormService } from '../../core';
 import { Job } from '../../../model/Job';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ExecPlanTypes } from '../../../model/ExecPlanTypes';
@@ -61,11 +61,18 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async initWidget(context: JobDetailsContext): Promise<void> {
         const job = await context.getObject<Job>();
         if (job.ExecPlans) {
-            const timeExecPlan = job.ExecPlans.find((ep) => ep.Type === ExecPlanTypes.TIME_BASED);
-            await this.prepareTimeBasedPlan(timeExecPlan);
+            const manager = JobFormService.getInstance().getJobFormManager(job.Type);
+            if (manager && manager.supportPlan(ExecPlanTypes.TIME_BASED)) {
+                const timeExecPlan = job.ExecPlans.find((ep) => ep.Type === ExecPlanTypes.TIME_BASED);
+                await this.prepareTimeBasedPlan(timeExecPlan);
+                this.state.showTimeBased = true;
+            }
 
-            const eventExecPlan = job.ExecPlans.find((ep) => ep.Type === ExecPlanTypes.EVENT_BASED);
-            this.prepareEventBasedPlan(eventExecPlan);
+            if (manager && manager.supportPlan(ExecPlanTypes.EVENT_BASED)) {
+                const eventExecPlan = job.ExecPlans.find((ep) => ep.Type === ExecPlanTypes.EVENT_BASED);
+                this.prepareEventBasedPlan(eventExecPlan);
+                this.state.showEventBased = true;
+            }
         }
     }
 
