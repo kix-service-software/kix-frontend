@@ -7,13 +7,10 @@
  * --
  */
 
-import { QueueDetailsContext, EditQueueDialogContext } from "../../context";
 import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
 import { UIComponentPermission } from "../../../../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../../../model/ContextMode";
+import { QueueDialogUtil } from "../../QueueDialogUtil";
 
 export class TicketQueueEditAction extends AbstractAction {
 
@@ -27,19 +24,7 @@ export class TicketQueueEditAction extends AbstractAction {
     }
 
     public async run(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<QueueDetailsContext>(
-            QueueDetailsContext.CONTEXT_ID
-        );
-
-        if (context) {
-            const id = context.getObjectId();
-            if (id) {
-                ContextService.getInstance().setDialogContext(
-                    EditQueueDialogContext.CONTEXT_ID, KIXObjectType.QUEUE,
-                    ContextMode.EDIT_ADMIN, id
-                );
-            }
-        }
+        QueueDialogUtil.edit();
     }
 
 }

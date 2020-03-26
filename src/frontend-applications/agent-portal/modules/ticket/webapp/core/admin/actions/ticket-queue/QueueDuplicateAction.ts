@@ -7,24 +7,31 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
+import { AbstractAction } from "../../../../../../base-components/webapp/core/AbstractAction";
 import { UIComponentPermission } from "../../../../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../../../../server/model/rest/CRUD";
 import { QueueDialogUtil } from "../../QueueDialogUtil";
+import { ContextService } from "../../../../../../base-components/webapp/core/ContextService";
+import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
+import { Queue } from "../../../../../model/Queue";
 
-export class TicketQueueCreateAction extends AbstractAction {
+export class QueueDuplicateAction extends AbstractAction {
 
-    public permissions: UIComponentPermission[] = [
+    public permissions = [
         new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#New Queue';
-        this.icon = 'kix-icon-new-gear';
+        this.text = 'Translatable#Duplicate';
+        this.icon = 'kix-icon-copy';
     }
 
     public async run(event: any): Promise<void> {
-        QueueDialogUtil.create();
+        const context = ContextService.getInstance().getActiveContext();
+        const queue = await context.getObject<Queue>(KIXObjectType.QUEUE);
+        if (queue) {
+            QueueDialogUtil.duplicate(queue);
+        }
     }
 
 }

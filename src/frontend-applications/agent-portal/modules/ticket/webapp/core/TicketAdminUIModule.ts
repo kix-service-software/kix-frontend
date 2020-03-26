@@ -32,6 +32,7 @@ import { ContextDescriptor } from "../../../../model/ContextDescriptor";
 import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
+import { QueueDuplicateAction } from "./admin";
 
 export class UIModule implements IUIModule {
 
@@ -177,7 +178,6 @@ export class UIModule implements IUIModule {
 
     private async registerTicketQueuesAdmin(): Promise<void> {
 
-
         ActionFactory.getInstance().registerAction('ticket-admin-queue-create', TicketQueueCreateAction);
 
         const newQueueContext = new ContextDescriptor(
@@ -195,6 +195,8 @@ export class UIModule implements IUIModule {
             false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext
         );
         await ContextService.getInstance().registerContext(editQueueContext);
+
+        ActionFactory.getInstance().registerAction('ticket-admin-queue-duplicate', QueueDuplicateAction);
 
         const ticketQueueDetailsContextDescriptor = new ContextDescriptor(
             QueueDetailsContext.CONTEXT_ID, [KIXObjectType.QUEUE],
