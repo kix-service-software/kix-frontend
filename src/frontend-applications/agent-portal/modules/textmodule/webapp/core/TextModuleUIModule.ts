@@ -24,6 +24,7 @@ import { ContextDescriptor } from "../../../../model/ContextDescriptor";
 import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
+import { TextModuleDuplicateAction } from "./actions";
 
 export class UIModule implements IUIModule {
 
@@ -47,6 +48,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('text-module-csv-export-action', TextModuleCSVExportAction);
 
         ActionFactory.getInstance().registerAction('text-module-create', TextModuleCreateAction);
+        ActionFactory.getInstance().registerAction('text-module-duplicate', TextModuleDuplicateAction);
 
         const newTextModuleDialogContext = new ContextDescriptor(
             NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
