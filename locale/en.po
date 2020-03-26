@@ -835,9 +835,6 @@ msgstr ""
 msgid "Edit Ticket"
 msgstr ""
 
-msgid "Edit Ticket Job"
-msgstr ""
-
 msgid "Edit Translation"
 msgstr ""
 
@@ -1224,6 +1221,11 @@ msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "The job name needs to be unique."
 
 msgid "Helptext_Admin_JobCreateEdit_Time"
+msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
+
+#, fuzzy
+#| msgid "Helptext_Admin_JobCreateEdit_Time"
+msgid "Helptext_Admin_JobCreateEdit_Type"
 msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
@@ -2743,9 +2745,6 @@ msgstr ""
 msgid "New Ticket"
 msgstr ""
 
-msgid "New Ticket Job"
-msgstr ""
-
 msgid "New Tickets"
 msgstr ""
 
@@ -3732,6 +3731,9 @@ msgid "Type Data"
 msgstr ""
 
 msgid "Type Information"
+msgstr ""
+
+msgid "Type of Job"
 msgstr ""
 
 msgid "Types"
