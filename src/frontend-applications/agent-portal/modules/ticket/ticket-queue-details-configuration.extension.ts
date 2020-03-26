@@ -66,7 +66,7 @@ export class Extension implements IConfigurationExtension {
                     'ticket-admin-queue-create'
                 ],
                 [
-                    'ticket-admin-queue-edit', 'print-action'
+                    'ticket-admin-queue-edit', 'ticket-admin-queue-duplicate', 'print-action'
                 ],
                 [],
                 [

@@ -82,17 +82,14 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                 formContext
             );
 
-            if (f.property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                value = f.defaultValue ? f.defaultValue.value : null;
-            }
-
+            // TODO: move handling to this.getValue - object FormServices have to use super
             if (f.property === 'ICON') {
                 if (kixObject && formContext === FormContext.EDIT) {
                     const icon = LabelService.getInstance().getObjectIcon(kixObject);
                     if (icon instanceof ObjectIcon) {
                         value = icon;
                     }
-                } else {
+                } else if (!value) {
                     value = f.defaultValue.value;
                 }
             }
@@ -116,7 +113,21 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
     protected async getValue(
         property: string, value: any, object: KIXObject, formField: FormFieldConfiguration, formContext: FormContext
     ): Promise<any> {
-        return property === KIXObjectProperty.DYNAMIC_FIELDS ? formField.defaultValue.value : value;
+        switch (property) {
+            case KIXObjectProperty.DYNAMIC_FIELDS:
+                value = formField.defaultValue ? formField.defaultValue.value : value;
+                break;
+            case 'ICON':
+                if (object) {
+                    const icon = LabelService.getInstance().getObjectIcon(object);
+                    if (icon instanceof ObjectIcon) {
+                        value = icon;
+                    }
+                }
+                break;
+            default:
+        }
+        return value;
     }
 
     protected handleCountValues(formFields: FormFieldConfiguration[]): void {
