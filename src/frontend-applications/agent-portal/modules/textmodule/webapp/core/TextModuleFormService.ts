@@ -11,6 +11,9 @@ import { KIXObjectFormService } from "../../../../modules/base-components/webapp
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { TextModuleProperty } from "../../model/TextModuleProperty";
 import { TextModule } from "../../model/TextModule";
+import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { FormContext } from "../../../../model/configuration/FormContext";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class TextModuleFormService extends KIXObjectFormService {
 
@@ -32,11 +35,21 @@ export class TextModuleFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.TEXT_MODULE;
     }
 
-    protected async getValue(property: string, value: any, textModule: TextModule): Promise<any> {
+    protected async getValue(
+        property: string, value: any, textModule: TextModule,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
         switch (property) {
             case TextModuleProperty.KEYWORDS:
                 if (value && Array.isArray(value)) {
                     value = value.join(',');
+                }
+                break;
+            case TextModuleProperty.NAME:
+                if (formContext === FormContext.NEW && textModule) {
+                    value = await TranslationService.translate(
+                        'Translatable#Copy of {0}', [value]
+                    );
                 }
                 break;
             default:

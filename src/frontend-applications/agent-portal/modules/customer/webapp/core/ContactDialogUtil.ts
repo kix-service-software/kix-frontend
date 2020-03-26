@@ -21,20 +21,20 @@ export class ContactDialogUtil {
         );
     }
 
-    public static async edit(contactid?: string | number): Promise<void> {
-        if (!contactid) {
+    public static async edit(contactId?: string | number): Promise<void> {
+        if (!contactId) {
             const context = await ContextService.getInstance().getContext<ContactDetailsContext>(
                 ContactDetailsContext.CONTEXT_ID
             );
 
             if (context) {
-                contactid = context.getObjectId();
+                contactId = context.getObjectId();
             }
         }
 
-        if (contactid) {
+        if (contactId) {
             ContextService.getInstance().setDialogContext(
-                EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.EDIT, contactid
+                EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.EDIT, contactId
             );
         }
     }
