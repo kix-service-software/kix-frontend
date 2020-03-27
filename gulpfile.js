@@ -147,7 +147,7 @@ gulp.task('compile-themes', () => {
 
 gulp.task('copy-plugins', () => {
     return gulp
-        .src(['src/plugins/**/static/**/*', 'src/plugins/**/*.marko', 'src/plugins/**/*.less', 'src/plugins/**/*.json'])
+        .src(['src/plugins/**/*.marko', 'src/plugins/**/*.marko', 'src/plugins/**/*.less', 'src/plugins/**/*.json', 'src/plugins/**/static/**/*'])
         .pipe(gulp.dest('dist/plugins'));
 });
 
