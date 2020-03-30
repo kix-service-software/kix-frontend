@@ -2505,68 +2505,8 @@ msgstr ""
 msgid "Link Type"
 msgstr ""
 
-msgid "Load Config Item"
-msgstr "Loading Assets"
-
-msgid "Load Config Item Class"
-msgstr "Loading Asset Class"
-
-msgid "Load Config Items"
-msgstr "Loading Assets"
-
-msgid "Load Contact"
-msgstr "Loading Contact"
-
-msgid "Load Email Account"
-msgstr "Loading Email Account"
-
-msgid "Load Email Filter"
-msgstr "Loading Email Filter"
-
-msgid "Load FAQ Article"
-msgstr "Loading FAQ Article"
-
-msgid "Load FAQ Articles"
-msgstr "Loading FAQ Articles"
-
-msgid "Load FAQ Category"
-msgstr "Loading FAQ Category"
-
-msgid "Load Job"
-msgstr "Loading Job"
-
-msgid "Load Organisation"
-msgstr "Loading Organisation"
-
-msgid "Load Organisations"
-msgstr ""
-
-msgid "Load Queue"
-msgstr "Loading Team"
-
-msgid "Load Role"
-msgstr "Loading Role"
-
-msgid "Load System Address"
-msgstr "Loading System Address"
-
-msgid "Load Ticket"
-msgstr "Loading Ticket"
-
-msgid "Load Ticket Priority"
-msgstr "Loading Ticket Priority"
-
-msgid "Load Tickets"
-msgstr "Loading Tickets"
-
 msgid "Load Ticket State"
 msgstr "Loading Ticket State"
-
-msgid "Load Ticket Type"
-msgstr "Loading Ticket Type"
-
-msgid "Load User"
-msgstr "Loading User"
 
 msgid "Load Webform"
 msgstr ""
@@ -3999,6 +3939,63 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Load Config Item"
+#~ msgstr "Loading Assets"
+
+#~ msgid "Load Config Item Class"
+#~ msgstr "Loading Asset Class"
+
+#~ msgid "Load Config Items"
+#~ msgstr "Loading Assets"
+
+#~ msgid "Load Contact"
+#~ msgstr "Loading Contact"
+
+#~ msgid "Load Email Account"
+#~ msgstr "Loading Email Account"
+
+#~ msgid "Load Email Filter"
+#~ msgstr "Loading Email Filter"
+
+#~ msgid "Load FAQ Article"
+#~ msgstr "Loading FAQ Article"
+
+#~ msgid "Load FAQ Articles"
+#~ msgstr "Loading FAQ Articles"
+
+#~ msgid "Load FAQ Category"
+#~ msgstr "Loading FAQ Category"
+
+#~ msgid "Load Job"
+#~ msgstr "Loading Job"
+
+#~ msgid "Load Organisation"
+#~ msgstr "Loading Organisation"
+
+#~ msgid "Load Queue"
+#~ msgstr "Loading Team"
+
+#~ msgid "Load Role"
+#~ msgstr "Loading Role"
+
+#~ msgid "Load System Address"
+#~ msgstr "Loading System Address"
+
+#~ msgid "Load Ticket"
+#~ msgstr "Loading Ticket"
+
+#~ msgid "Load Ticket Priority"
+#~ msgstr "Loading Ticket Priority"
+
+#~ msgid "Load Tickets"
+#~ msgstr "Loading Tickets"
+
+#~ msgid "Load Ticket Type"
+#~ msgstr "Loading Ticket Type"
+
+#~ msgid "Load User"
+#~ msgstr "Loading User"
 
 #~ msgid "Helptext_Tickets_TicketCreate_Links"
 #~ msgstr "Link this ticket with an asset, a FAQ article or another ticket."

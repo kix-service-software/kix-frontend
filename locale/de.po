@@ -2639,68 +2639,8 @@ msgstr "Verknüpfen mit Ticket"
 msgid "Link Type"
 msgstr "Art der Verknüpfung"
 
-msgid "Load Config Item"
-msgstr "Lade Asset"
-
-msgid "Load Config Item Class"
-msgstr "Lade Asset-Klasse"
-
-msgid "Load Config Items"
-msgstr "Lade Assets"
-
-msgid "Load Contact"
-msgstr "Lade Kontakt"
-
-msgid "Load Email Account"
-msgstr "Lade E-Mail-Konto"
-
-msgid "Load Email Filter"
-msgstr "Lade E-Mail Filter"
-
-msgid "Load FAQ Article"
-msgstr "Lade FAQ Artikel"
-
-msgid "Load FAQ Articles"
-msgstr "Lade FAQ Artikel"
-
-msgid "Load FAQ Category"
-msgstr "Lade FAQ Kategorie"
-
-msgid "Load Job"
-msgstr "Lade Job"
-
-msgid "Load Organisation"
-msgstr "Lade Kunde"
-
-msgid "Load Organisations"
-msgstr "Lade Kunden"
-
-msgid "Load Queue"
-msgstr "Lade Team"
-
-msgid "Load Role"
-msgstr "Lade Rolle"
-
-msgid "Load System Address"
-msgstr "Lade Systemadresse"
-
-msgid "Load Ticket"
-msgstr "Lade Ticket"
-
-msgid "Load Ticket Priority"
-msgstr "Lade Ticket Priorität"
-
-msgid "Load Tickets"
-msgstr "Lade Tickets"
-
 msgid "Load Ticket State"
 msgstr "Lade Ticket Status"
-
-msgid "Load Ticket Type"
-msgstr "Lade Ticket Typ"
-
-msgid "Load User"
-msgstr "Lade Nutzer"
 
 msgid "Load Webform"
 msgstr "Lade Webformular"
@@ -4146,6 +4086,66 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Load Config Item"
+#~ msgstr "Lade Asset"
+
+#~ msgid "Load Config Item Class"
+#~ msgstr "Lade Asset-Klasse"
+
+#~ msgid "Load Config Items"
+#~ msgstr "Lade Assets"
+
+#~ msgid "Load Contact"
+#~ msgstr "Lade Kontakt"
+
+#~ msgid "Load Email Account"
+#~ msgstr "Lade E-Mail-Konto"
+
+#~ msgid "Load Email Filter"
+#~ msgstr "Lade E-Mail Filter"
+
+#~ msgid "Load FAQ Article"
+#~ msgstr "Lade FAQ Artikel"
+
+#~ msgid "Load FAQ Articles"
+#~ msgstr "Lade FAQ Artikel"
+
+#~ msgid "Load FAQ Category"
+#~ msgstr "Lade FAQ Kategorie"
+
+#~ msgid "Load Job"
+#~ msgstr "Lade Job"
+
+#~ msgid "Load Organisation"
+#~ msgstr "Lade Kunde"
+
+#~ msgid "Load Organisations"
+#~ msgstr "Lade Kunden"
+
+#~ msgid "Load Queue"
+#~ msgstr "Lade Team"
+
+#~ msgid "Load Role"
+#~ msgstr "Lade Rolle"
+
+#~ msgid "Load System Address"
+#~ msgstr "Lade Systemadresse"
+
+#~ msgid "Load Ticket"
+#~ msgstr "Lade Ticket"
+
+#~ msgid "Load Ticket Priority"
+#~ msgstr "Lade Ticket Priorität"
+
+#~ msgid "Load Tickets"
+#~ msgstr "Lade Tickets"
+
+#~ msgid "Load Ticket Type"
+#~ msgstr "Lade Ticket Typ"
+
+#~ msgid "Load User"
+#~ msgstr "Lade Nutzer"
 
 #~ msgid "Edit Ticket Job"
 #~ msgstr "Ticket Job bearbeiten"
