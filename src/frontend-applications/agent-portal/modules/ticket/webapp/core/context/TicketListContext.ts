@@ -36,20 +36,11 @@ export class TicketListContext extends Context {
         this.ticketIds = ticketIds;
         const loadingOptions = new KIXObjectLoadingOptions(null, null, 1000, ['Watchers']);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Lade Tickets' }
-            );
-        }, 500);
-
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, this.ticketIds, loadingOptions, null, false
         ).catch((error) => []);
 
-        window.clearTimeout(timeout);
-
         this.setObjectList(KIXObjectType.TICKET, tickets);
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
 }

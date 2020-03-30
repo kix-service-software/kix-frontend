@@ -16,13 +16,13 @@ import { SearchOperator } from "../../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { ServiceRegistry } from "../../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { CMDBService } from "..";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
+import { EventService } from "../../../../base-components/webapp/core/EventService";
 
 export class CMDBContext extends Context {
 
@@ -52,6 +52,7 @@ export class CMDBContext extends Context {
     }
 
     public async loadConfigItems(): Promise<void> {
+        EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
         const deploymentIds = await this.getDeploymentStateIds();
 
         const filterCriteria = [
@@ -70,21 +71,12 @@ export class CMDBContext extends Context {
 
         const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Config Items'
-            });
-        }, 500);
-
         const configItems = await KIXObjectService.loadObjects(
             KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false
         ).catch((error) => []);
 
-        window.clearTimeout(timeout);
-
         this.setObjectList(KIXObjectType.CONFIG_ITEM, configItems);
         this.setFilteredObjectList(KIXObjectType.CONFIG_ITEM, configItems);
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
     private async getDeploymentStateIds(): Promise<number[]> {

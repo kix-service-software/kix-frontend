@@ -13,7 +13,6 @@ import { ITable, IRowObject, TableValue, RowObject } from "../../../../../base-c
 import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
 import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { Ticket } from "../../../../model/Ticket";
 import { ArticleProperty } from "../../../../model/ArticleProperty";
 
 export class ArticleTableContentProvider extends TableContentProvider<Article> {
@@ -24,25 +23,25 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
     ) {
-        super(KIXObjectType.FAQ_ARTICLE, table, objectIds, loadingOptions, contextId);
+        super(KIXObjectType.ARTICLE, table, objectIds, loadingOptions, contextId);
     }
 
     public async loadData(): Promise<Array<IRowObject<Article>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
-            const ticket = await context.getObject<Ticket>();
-            if (ticket) {
-                ticket.Articles.sort((a, b) => b.ArticleID - a.ArticleID);
+            const articles = await context.getObjectList(KIXObjectType.ARTICLE);
+            if (articles) {
+                (articles as Article[]).sort((a, b) => b.ArticleID - a.ArticleID);
 
-                for (let i = 0; i < ticket.Articles.length; i++) {
-                    const a = ticket.Articles[i];
+                for (let i = 0; i < articles.length; i++) {
+                    const a = articles[i];
                     const values: TableValue[] = [];
 
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
                         if (column.property === ArticleProperty.NUMBER) {
-                            const count = ticket.Articles.length - i;
+                            const count = articles.length - i;
                             values.push(new TableValue(ArticleProperty.NUMBER, count, count.toString()));
                         } else if (column.property === ArticleProperty.ARTICLE_INFORMATION) {
                             values.push(new TableValue(ArticleProperty.ARTICLE_INFORMATION, null));
@@ -52,7 +51,7 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
                         }
                     }
 
-                    rowObjects.push(new RowObject<Article>(values, a));
+                    rowObjects.push(new RowObject<Article>(values, a as Article));
                 }
             }
         }

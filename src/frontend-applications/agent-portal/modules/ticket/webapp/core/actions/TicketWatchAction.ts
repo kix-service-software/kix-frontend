@@ -86,6 +86,8 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             }
         }
 
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.TICKET });
+
         setTimeout(async () => {
             if (successHint) {
                 const context = await ContextService.getInstance().getContext(TicketDetailsContext.CONTEXT_ID);
@@ -96,7 +98,6 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
             BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
 
         }, 1000);
     }

@@ -1,0 +1,97 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.chart-placeholder {
+    width: 100%;
+
+    .skeleton-wrapper {
+        background: #fff;
+        border: 1px solid;
+        border-color: #e5e6e9 #dfe0e4 #d0d1d5;
+        border-radius: 4px;
+        -webkit-border-radius: 4px;
+        margin: 10px 15px;
+    }
+
+    .skeleton-wrapper-inner {
+        height: 150px;
+        padding: 15px;
+        position: relative;
+    }
+
+    .skeleton-wrapper-body div {
+        -webkit-animation-duration: 1s;
+        -webkit-animation-fill-mode: forwards;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-name: placeholderSkeleton;
+        -webkit-animation-timing-function: linear;
+        background: #f6f7f8;
+        background-image: -webkit-gradient(linear, left center, right center, from(#f6f7f8), color-stop(.2, #edeef1), color-stop(.4, #f6f7f8), to(#f6f7f8));
+        background-image: -webkit-linear-gradient(left, #f6f7f8 0%, #edeef1 20%, #f6f7f8 40%, #f6f7f8 100%);
+        background-repeat: no-repeat;
+        background-size: 800px 104px;
+        height: 104px;
+        position: relative;
+    }
+
+    .skeleton-wrapper-body {
+        -webkit-animation-name: skeletonAnimate;
+        background-image: -webkit-gradient(linear, center top, center bottom, from(deg), color-stop(0, red), color-stop(.15, orange), color-stop(.3, yellow), color-stop(.45, green), color-stop(.6, blue), color-stop(.75, indigo), color-stop(.8, violet), to(red));
+        background-image: -webkit-linear-gradient(135deg, red 0%, orange 15%, yellow 30%, green 45%, blue 60%, indigo 75%, violet 80%, red 100%);
+        background-repeat: repeat;
+        background-size: 50% auto;
+    }
+
+    .skeleton-wrapper-body div {
+        position: absolute;
+        right: 15px;
+        left: 15px;
+        top: 15px;
+    }
+
+    div.skeleton-content-1,
+    div.skeleton-content-2,
+    div.skeleton-content-3 {
+        left: 15px;
+        right: 15px;
+        height: 10px;
+    }
+
+    div.skeleton-content-1 {
+        top: 100px;
+    }
+
+    div.skeleton-content-2 {
+        top: 120px;
+    }
+
+    div.skeleton-content-3 {
+        top: 140px;
+    }
+
+    @-webkit-keyframes placeholderSkeleton {
+        0% {
+            background-position: -468px 0;
+        }
+
+        100% {
+            background-position: 468px 0;
+        }
+    }
+
+    @-webkit-keyframes skeletonAnimate {
+        from {
+            background-position: top left;
+        }
+
+        to {
+            background-position: top right;
+        }
+    }
+}

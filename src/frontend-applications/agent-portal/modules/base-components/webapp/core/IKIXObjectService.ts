@@ -25,7 +25,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
     loadObjects<O extends KIXObject>(
         kixObjectType: KIXObjectType | string, objectIds: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache?: boolean
+        cache?: boolean, forceIds?: boolean
     ): Promise<O[]>;
 
     createObject(

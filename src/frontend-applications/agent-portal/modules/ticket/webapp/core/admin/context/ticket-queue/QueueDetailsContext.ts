@@ -53,12 +53,6 @@ export class QueueDetailsContext extends Context {
     private async loadQueue(changedProperties: string[] = [], cache: boolean = true): Promise<Queue> {
         const QueueId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Queue'
-            });
-        }, 500);
-
         const queues = await KIXObjectService.loadObjects<Queue>(
             KIXObjectType.QUEUE, [QueueId], null, null, cache
         ).catch((error) => {
@@ -66,15 +60,11 @@ export class QueueDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let queue: Queue;
         if (queues && queues.length) {
             queue = queues[0];
             this.objectId = queue.QueueID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return queue;
     }

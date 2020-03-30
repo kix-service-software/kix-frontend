@@ -79,7 +79,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     let organisations;
                     if (!isNaN(Number(value))) {
                         organisations = await KIXObjectService.loadObjects(
-                            KIXObjectType.ORGANISATION, [value], null, null, true
+                            KIXObjectType.ORGANISATION, [value], null, null, true, true, false
                         ).catch((error) => []);
                     }
                     displayValue = organisations && organisations.length
@@ -140,7 +140,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                         KIXObjectType.USER, [value],
                         new KIXObjectLoadingOptions(
                             null, null, 1, [UserProperty.CONTACT]
-                        ), null, true
+                        ), null, true, true, true
                     ).catch((error) => [] as User[]);
                     displayValue = users && users.length ?
                         users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;

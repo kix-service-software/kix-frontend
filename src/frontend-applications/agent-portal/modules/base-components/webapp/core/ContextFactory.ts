@@ -146,7 +146,7 @@ export class ContextFactory {
                 );
                 if (configuration) {
                     context = new descriptor.contextClass(descriptor, objectId, configuration);
-                    await context.initContext();
+                    context.initContext();
                 }
             }
 

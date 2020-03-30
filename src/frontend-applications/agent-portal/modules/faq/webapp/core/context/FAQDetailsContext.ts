@@ -60,12 +60,6 @@ export class FAQDetailsContext extends Context {
 
         const faqArticleId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load FAQ Article'
-            });
-        }, 500);
-
         const faqArticles = await KIXObjectService.loadObjects<FAQArticle>(
             KIXObjectType.FAQ_ARTICLE, [faqArticleId], loadingOptions, null, true
         ).catch((error) => {
@@ -73,14 +67,11 @@ export class FAQDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let faqArticle: FAQArticle;
         if (faqArticles && faqArticles.length) {
             faqArticle = faqArticles[0];
         }
 
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         return faqArticle;
     }
 }

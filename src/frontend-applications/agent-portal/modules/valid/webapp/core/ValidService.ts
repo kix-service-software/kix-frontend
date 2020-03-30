@@ -9,6 +9,9 @@
 
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { KIXObject } from "../../../../model/kix/KIXObject";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
 
 export class ValidService extends KIXObjectService {
 
@@ -31,6 +34,26 @@ export class ValidService extends KIXObjectService {
 
     public getLinkObjectName(): string {
         return 'Valid';
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+    ): Promise<O[]> {
+        let objects: O[];
+        let superLoad = false;
+        if (objectType === KIXObjectType.VALID_OBJECT) {
+            objects = await super.loadObjects<O>(KIXObjectType.VALID_OBJECT, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
 

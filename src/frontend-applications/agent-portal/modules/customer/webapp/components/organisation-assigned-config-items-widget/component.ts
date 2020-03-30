@@ -13,6 +13,9 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { Organisation } from '../../../model/Organisation';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { OrganisationProperty } from '../../../model/OrganisationProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 class Component {
 
@@ -52,18 +55,29 @@ class Component {
     }
 
     private async initWidget(organisation: Organisation): Promise<void> {
-        if (!organisation.AssignedConfigItems || !organisation.AssignedConfigItems.length) {
-            const groupComponent = (this as any).getComponent('organisation-assigned-config-items-widget');
-            if (groupComponent) {
-                groupComponent.setMinizedState(true);
+
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [OrganisationProperty.ASSIGNED_CONFIG_ITEMS]
+        );
+        const organisations = await KIXObjectService.loadObjects<Organisation>(
+            KIXObjectType.ORGANISATION, [organisation.ID], loadingOptions, null, true, null, true
+        );
+
+        if (organisations && organisations.length) {
+            if (!organisations[0].AssignedConfigItems || !organisations[0].AssignedConfigItems.length) {
+                const groupComponent = (this as any).getComponent('organisation-assigned-config-items-widget');
+                if (groupComponent) {
+                    groupComponent.setMinizedState(true);
+                }
             }
+
+            const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+            const count = (organisations[0].AssignedConfigItems)
+                ? ` (${organisations[0].AssignedConfigItems.length})`
+                : ' (0)';
+            this.state.title = title + count;
+            this.prepareTable(organisations[0]);
         }
-        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
-        const count = (organisation.AssignedConfigItems)
-            ? ` (${organisation.AssignedConfigItems.length})`
-            : ' (0)';
-        this.state.title = title + count;
-        this.prepareTable(organisation);
     }
 
     private async prepareTable(organisation: Organisation): Promise<void> {

@@ -69,12 +69,6 @@ export class RoleDetailsContext extends Context {
             [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS, RoleProperty.CONFIGURED_PERMISSIONS]
         );
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Role'
-            });
-        }, 500);
-
         const roles = await KIXObjectService.loadObjects<Role>(
             KIXObjectType.ROLE, [roleId], loadingOptions, null, cache
         ).catch((error) => {
@@ -82,15 +76,11 @@ export class RoleDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let role: Role;
         if (roles && roles.length) {
             role = roles[0];
             this.objectId = role.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return role;
     }

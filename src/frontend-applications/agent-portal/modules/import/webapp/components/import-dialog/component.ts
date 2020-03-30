@@ -595,7 +595,6 @@ class Component {
     public submit(): void {
         if (this.state.run) {
             DialogService.getInstance().closeMainDialog();
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
     }
 

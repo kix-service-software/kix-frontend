@@ -14,12 +14,15 @@ import { IdService } from '../../../../../model/IdService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ConfigItem } from '../../../model/ConfigItem';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
 
 class Component {
 
     public state: ComponentState;
-
     private cmdbChartConfiguration: ConfigItemChartWidgetConfiguration;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -57,6 +60,16 @@ class Component {
             this.contextFilteredObjectListChanged(
                 KIXObjectType.CONFIG_ITEM, currentContext.getFilteredObjectList(KIXObjectType.CONFIG_ITEM)
             );
+
+            this.subscriber = {
+                eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
+                eventPublished: (data: any, eventId: string) => {
+                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.CONFIG_ITEM) {
+                        this.state.loading = true;
+                    }
+                }
+            };
+            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
         }
 
         this.state.chartConfig = this.cmdbChartConfiguration.configuration.chartConfiguration;
@@ -88,6 +101,7 @@ class Component {
         this.cmdbChartConfiguration.configuration.chartConfiguration.data.labels = data[0];
         this.cmdbChartConfiguration.configuration.chartConfiguration.data.datasets = data[1];
         this.state.chartConfig = this.cmdbChartConfiguration.configuration.chartConfiguration;
+        this.state.loading = false;
     }
 
 }

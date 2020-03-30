@@ -19,7 +19,7 @@ import { ApplicationEvent } from "../../../../../modules/base-components/webapp/
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-
+import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
 
 export class TicketContext extends Context {
 
@@ -48,6 +48,7 @@ export class TicketContext extends Context {
     }
 
     private async loadTickets(): Promise<void> {
+        EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
         const stateTypeFilterCriteria = new FilterCriteria(
             TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
         );
@@ -64,17 +65,9 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(queueFilter);
         }
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Tickets'
-            });
-        }, 500);
-
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false
         ).catch((error) => []);
-
-        window.clearTimeout(timeout);
 
         this.setObjectList(KIXObjectType.TICKET, tickets);
         this.setFilteredObjectList(KIXObjectType.TICKET, tickets);

@@ -64,7 +64,6 @@ export class JobExecuteAction extends AbstractAction {
 
                 await KIXObjectService.updateObject(KIXObjectType.JOB, [[JobProperty.EXEC, true]], job.ID, false)
                     .then(() => {
-                        EventService.getInstance().publish(ApplicationEvent.REFRESH);
                         setTimeout(() => {
                             const content = new ComponentContent(
                                 'toast',

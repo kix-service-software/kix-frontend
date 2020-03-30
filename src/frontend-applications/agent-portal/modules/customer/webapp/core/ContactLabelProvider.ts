@@ -34,7 +34,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
                 if (value) {
                     const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, [value], null, null, true
+                        KIXObjectType.ORGANISATION, [value], null, null, true, true, false
                     ).catch((error) => console.log(error));
                     displayValue = primaryOrganisations && !!primaryOrganisations.length
                         ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
@@ -54,7 +54,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.ORGANISATION_IDS:
                 if (value && Array.isArray(value) && value.length) {
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, value, null, null, true
+                        KIXObjectType.ORGANISATION, value, null, null, true, true, false
                     ).catch((error) => console.log(error));
                     const organisationNames = organisations && organisations.length
                         ? organisations.map((c) => c.Name)
@@ -348,7 +348,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             } else if (contact.AssignedUserID) {
                 const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]);
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true
+                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true, true, true
                 ).catch(() => [] as User[]);
                 user = users && users.length ? users[0] : null;
             }

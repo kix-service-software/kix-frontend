@@ -14,6 +14,9 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ContactProperty } from '../../../model/ContactProperty';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 class Component {
 
@@ -54,10 +57,6 @@ class Component {
 
     private async initWidget(contact?: Contact): Promise<void> {
         this.state.contact = contact;
-        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
-        this.state.title = title
-            + (this.state.contact.OrganisationIDs && !!this.state.contact.OrganisationIDs.length ?
-                ` (${this.state.contact.OrganisationIDs.length})` : '');
         this.prepareTable();
         this.prepareActions();
     }
@@ -71,12 +70,25 @@ class Component {
     }
 
     private async prepareTable(): Promise<void> {
-        if (this.state.contact && this.state.widgetConfiguration) {
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [
+            ContactProperty.TICKET_STATS
+        ]);
+        const contacts = await KIXObjectService.loadObjects<Contact>(
+            KIXObjectType.CONTACT, [this.state.contact.ID], loadingOptions
+        );
+
+        if (contacts && contacts.length) {
             this.state.table = await TableFactoryService.getInstance().createTable(
                 'contact-assigned-organisation', KIXObjectType.ORGANISATION,
                 this.state.widgetConfiguration.configuration, this.state.contact.OrganisationIDs,
                 null, true
             );
+
+            const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+            const count = this.state.contact.OrganisationIDs && !!this.state.contact.OrganisationIDs.length
+                ? ` (${contacts[0].OrganisationIDs.length})`
+                : '';
+            this.state.title = `${title} ${count}`;
         }
     }
 

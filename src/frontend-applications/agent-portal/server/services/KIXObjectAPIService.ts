@@ -83,7 +83,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
         const responseObject = response[responseProperty];
 
-        // TODO:: Logausgabe bei falscher ResponseProperty
         objects = Array.isArray(responseObject)
             ? responseObject
             : [responseObject];

@@ -14,6 +14,9 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ContactProperty } from '../../../model/ContactProperty';
 
 class Component {
 
@@ -53,18 +56,28 @@ class Component {
     }
 
     private async initWidget(contact: Contact): Promise<void> {
-        if (!contact.AssignedConfigItems || !contact.AssignedConfigItems.length) {
-            const groupComponent = (this as any).getComponent('contact-assigned-config-items-widget');
-            if (groupComponent) {
-                groupComponent.setMinizedState(true);
+
+        const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [
+            ContactProperty.ASSIGNED_CONFIG_ITEMS
+        ]);
+        const contacts = await KIXObjectService.loadObjects<Contact>(
+            KIXObjectType.CONTACT, [contact.ID], loadingOptions
+        );
+
+        if (contacts && contacts.length) {
+            if (!contacts[0].AssignedConfigItems || !contacts[0].AssignedConfigItems.length) {
+                const groupComponent = (this as any).getComponent('contact-assigned-config-items-widget');
+                if (groupComponent) {
+                    groupComponent.setMinizedState(true);
+                }
             }
+            const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+            const count = (contacts[0].AssignedConfigItems)
+                ? ` (${contacts[0].AssignedConfigItems.length})`
+                : ' (0)';
+            this.state.title = title + count;
+            this.prepareTable(contacts[0]);
         }
-        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
-        const count = (contact.AssignedConfigItems)
-            ? ` (${contact.AssignedConfigItems.length})`
-            : ' (0)';
-        this.state.title = title + count;
-        this.prepareTable(contact);
     }
 
     private async prepareTable(contact: Contact): Promise<void> {

@@ -138,19 +138,6 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
         DialogService.getInstance().setMainDialogLoading(false);
         DialogService.getInstance().submitMainDialog();
 
-        if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
-            if (context) {
-                if (context.getDescriptor().contextType === ContextType.DIALOG) {
-                    EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                } else {
-                    context.getObject(this.objectType, true);
-                }
-            }
-        } else {
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
-        }
-
         FormService.getInstance().deleteFormInstance(this.state.formId);
         BrowserUtil.openSuccessOverlay(this.successHint);
     }

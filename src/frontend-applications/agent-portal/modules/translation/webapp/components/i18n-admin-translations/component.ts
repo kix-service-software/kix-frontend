@@ -90,7 +90,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 if (eventId === ApplicationEvent.OBJECT_UPDATED || eventId === ApplicationEvent.OBJECT_CREATED) {
-                    if (data === KIXObjectType.TRANSLATION_PATTERN) {
+                    if (data.objectType === KIXObjectType.TRANSLATION_PATTERN) {
                         this.search();
                     }
                 }

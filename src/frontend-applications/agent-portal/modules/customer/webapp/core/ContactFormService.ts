@@ -436,7 +436,7 @@ export class ContactFormService extends KIXObjectFormService {
                 new KIXObjectLoadingOptions(
                     null, null, null,
                     [UserProperty.PREFERENCES, UserProperty.ROLE_IDS]
-                ), null, true
+                ), null, true, true, true
             ).catch((error) => [] as User[]);
             user = users && users.length ? users[0] : null;
         }

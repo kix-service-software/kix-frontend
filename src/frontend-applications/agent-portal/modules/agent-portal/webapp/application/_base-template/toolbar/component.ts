@@ -49,6 +49,7 @@ class Component {
         };
 
         EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
         EventService.getInstance().subscribe(ApplicationEvent.REFRESH_TOOLBAR, this.subscriber);
     }
 
