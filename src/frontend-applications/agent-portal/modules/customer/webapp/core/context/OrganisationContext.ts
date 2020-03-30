@@ -21,6 +21,7 @@ import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { Contact } from "../../../model/Contact";
+import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
 
 export class OrganisationContext extends Context {
 
@@ -36,7 +37,7 @@ export class OrganisationContext extends Context {
 
     public async initContext(): Promise<void> {
         this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, true);
-        await this.loadOrganisations();
+        this.loadOrganisations();
     }
 
     public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
@@ -53,12 +54,7 @@ export class OrganisationContext extends Context {
     }
 
     private async loadOrganisations(): Promise<void> {
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Organisations'
-            });
-        }, 500);
-
+        EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.ORGANISATION);
         const organisations = await KIXObjectService.loadObjects(
             KIXObjectType.ORGANISATION, null, null, null, false
         ).catch((error) => []);
@@ -72,13 +68,10 @@ export class OrganisationContext extends Context {
         if (isOrganisationDepending) {
             await this.loadContacts();
         }
-
-        window.clearTimeout(timeout);
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
     public async loadContacts(): Promise<void> {
+        EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONTACT);
         const filter = [];
 
         const organisations = this.getFilteredObjectList(KIXObjectType.ORGANISATION);
@@ -95,9 +88,10 @@ export class OrganisationContext extends Context {
             }
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(filter);
+        const loadingOptions = new KIXObjectLoadingOptions(filter, null, null, [ContactProperty.USER]);
         const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null, loadingOptions);
         this.setObjectList(KIXObjectType.CONTACT, contacts);
+        EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS_FINISHED, KIXObjectType.CONTACT);
     }
 
     public reset(): void {

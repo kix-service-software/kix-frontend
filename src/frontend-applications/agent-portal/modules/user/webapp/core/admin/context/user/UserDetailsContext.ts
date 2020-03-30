@@ -70,12 +70,6 @@ export class UserDetailsContext extends Context {
             null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLE_IDS, UserProperty.CONTACT]
         );
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load User'
-            });
-        }, 500);
-
         const users = await KIXObjectService.loadObjects<User>(
             KIXObjectType.USER, [userId], loadingOptions, null, cache
         ).catch((error) => {
@@ -83,15 +77,11 @@ export class UserDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let user: User;
         if (users && users.length) {
             user = users[0];
             this.objectId = user.UserID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return user;
     }

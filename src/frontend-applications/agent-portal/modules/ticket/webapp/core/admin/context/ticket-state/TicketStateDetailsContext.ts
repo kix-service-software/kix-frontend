@@ -61,12 +61,6 @@ export class TicketStateDetailsContext extends Context {
 
         const ticketStateId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Ticket State'
-            });
-        }, 500);
-
         const ticketStates = await KIXObjectService.loadObjects<TicketState>(
             KIXObjectType.TICKET_STATE, [ticketStateId], null, null, cache
         ).catch((error) => {
@@ -74,15 +68,11 @@ export class TicketStateDetailsContext extends Context {
             return null;
         });
 
-        window.clearInterval(timeout);
-
         let ticketState: TicketState;
         if (ticketStates && ticketStates.length) {
             ticketState = ticketStates[0];
             this.objectId = ticketState.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return ticketState;
     }

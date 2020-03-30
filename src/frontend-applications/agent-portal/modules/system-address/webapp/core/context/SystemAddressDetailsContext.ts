@@ -57,12 +57,6 @@ export class SystemAddressDetailsContext extends Context {
     private async loadSystemAddress(changedProperties: string[] = [], cache: boolean = true): Promise<SystemAddress> {
         const systemAddressesId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load System Address'
-            });
-        }, 500);
-
         const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
             KIXObjectType.SYSTEM_ADDRESS, [systemAddressesId], null, null, cache
         ).catch((error) => {
@@ -70,15 +64,11 @@ export class SystemAddressDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let systemAddress: SystemAddress;
         if (systemAddresses && systemAddresses.length) {
             systemAddress = systemAddresses[0];
             this.objectId = systemAddress.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return systemAddress;
     }

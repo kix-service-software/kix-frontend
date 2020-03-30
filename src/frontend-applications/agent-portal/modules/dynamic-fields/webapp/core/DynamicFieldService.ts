@@ -46,7 +46,17 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects: O[];
-        objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        let superLoad = false;
+        if (objectType === KIXObjectType.DYNAMIC_FIELD) {
+            objects = await super.loadObjects<O>(KIXObjectType.DYNAMIC_FIELD, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+        }
 
         return objects;
     }

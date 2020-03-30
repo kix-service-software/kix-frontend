@@ -54,9 +54,9 @@ export abstract class Context {
         if (this.descriptor) {
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
                 eventSubscriberId: this.descriptor.contextId + '-update-listener',
-                eventPublished: (objectType: KIXObjectType) => {
-                    if (this.objectLists.has(objectType)) {
-                        this.objectLists.delete(objectType);
+                eventPublished: (data: any) => {
+                    if (this.objectLists.has(data.objectType)) {
+                        this.objectLists.delete(data.objectType);
                     }
                 }
             });

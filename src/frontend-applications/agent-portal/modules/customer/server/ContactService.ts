@@ -217,6 +217,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         const filterCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.FULLTEXT
                 && !this.isUserProperty(f.property)
+                && f.property !== ContactProperty.ORGANISATION_IDS
         );
 
         return filterCriteria;
@@ -225,7 +226,6 @@ export class ContactAPIService extends KIXObjectAPIService {
     protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
-                && f.property !== ContactProperty.ORGANISATION_IDS
                 && f.property !== KIXObjectProperty.VALID_ID
         );
 

@@ -141,11 +141,13 @@ class Component {
     }
 
     private async prepareTitle(): Promise<void> {
-        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
-        const objectCount = this.state.table.getRows().length;
-        this.state.tableTitle = await TranslationService.translate(
-            'Translatable#Selected {0} ({1})', [objectName, objectCount]
-        );
+        if (this.state.table) {
+            const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+            const objectCount = this.state.table.getRows().length;
+            this.state.tableTitle = await TranslationService.translate(
+                'Translatable#Selected {0} ({1})', [objectName, objectCount]
+            );
+        }
     }
 
     public async run(): Promise<void> {

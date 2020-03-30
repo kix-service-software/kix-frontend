@@ -62,12 +62,6 @@ export class WebformDetailsContext extends Context {
 
         const webformId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Webform'
-            });
-        }, 500);
-
         const ticketStates = await KIXObjectService.loadObjects<Webform>(
             KIXObjectType.WEBFORM, [webformId], null, null, cache
         ).catch((error) => {
@@ -75,15 +69,11 @@ export class WebformDetailsContext extends Context {
             return null;
         });
 
-        window.clearInterval(timeout);
-
         let webforms: Webform;
         if (ticketStates && ticketStates.length) {
             webforms = ticketStates[0];
             this.objectId = webforms.ObjectId;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return webforms;
     }

@@ -57,12 +57,6 @@ export class MailFilterDetailsContext extends Context {
     private async loadFilter(changedProperties: string[] = [], cache: boolean = true): Promise<MailFilter> {
         const mailFilterId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Email Filter'
-            });
-        }, 500);
-
         const mailFilters = await KIXObjectService.loadObjects<MailFilter>(
             KIXObjectType.MAIL_FILTER, [mailFilterId], null, null, cache
         ).catch((error) => {
@@ -70,15 +64,11 @@ export class MailFilterDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let mailFilter: MailFilter;
         if (mailFilters && mailFilters.length) {
             mailFilter = mailFilters[0];
             this.objectId = mailFilter.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return mailFilter;
     }

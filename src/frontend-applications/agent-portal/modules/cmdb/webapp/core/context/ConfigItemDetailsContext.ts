@@ -62,12 +62,6 @@ export class ConfigItemDetailsContext extends Context {
 
         const itemId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Config Item'
-            });
-        }, 500);
-
         const configItems = await KIXObjectService.loadObjects<ConfigItem>(
             KIXObjectType.CONFIG_ITEM, [itemId], loadingOptions, null, true
         ).catch((error) => {
@@ -75,16 +69,12 @@ export class ConfigItemDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let configItem: ConfigItem;
         if (configItems && configItems.length) {
             configItem = configItems[0];
+            this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, configItem.Versions);
         }
 
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
-        );
         return configItem;
     }
 

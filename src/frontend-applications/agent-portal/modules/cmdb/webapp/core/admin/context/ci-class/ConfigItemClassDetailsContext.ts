@@ -62,12 +62,6 @@ export class ConfigItemClassDetailsContext extends Context {
             null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
         );
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Config Item Class'
-            });
-        }, 500);
-
         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions
         ).catch((error) => {
@@ -75,15 +69,11 @@ export class ConfigItemClassDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let ciClass: ConfigItemClass;
         if (ciClasses && ciClasses.length) {
             ciClass = ciClasses[0];
             this.objectId = ciClass.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return ciClass;
     }

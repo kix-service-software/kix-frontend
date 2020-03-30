@@ -15,8 +15,6 @@ import { OrganisationContext } from ".";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { OrganisationProperty } from "../../../model/OrganisationProperty";
 
@@ -54,33 +52,17 @@ export class OrganisationDetailsContext extends Context {
     }
 
     private async loadOrganisation(): Promise<Organisation> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [
-            OrganisationProperty.CONTACTS, OrganisationProperty.TICKETS,
-            OrganisationProperty.TICKET_STATS, OrganisationProperty.ASSIGNED_CONFIG_ITEMS],
-        );
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Organisation' }
-            );
-        }, 500);
-
         const organisations = await KIXObjectService.loadObjects<Organisation>(
-            KIXObjectType.ORGANISATION, [this.objectId], loadingOptions, null, true
+            KIXObjectType.ORGANISATION, [this.objectId], null, null, true, undefined, true
         ).catch((error) => {
             console.error(error);
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let organisation: Organisation;
         if (organisations && organisations.length) {
             organisation = organisations[0];
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
 
         return organisation;
     }

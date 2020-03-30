@@ -6,7 +6,24 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.prepared)>
     <table-widget instanceId=input.instanceId contextType=input.contextType filterActions=state.filterActions/>
 </if>
+<else>
+    <div.table-placeholder>
+        <div class="skeleton">
+            <div class="skeleton-wrapper">
+                <div class="skeleton-wrapper-inner">
+                    <div class="skeleton-wrapper-body">
+                        <div class="skeleton-avatar"/>
+                        <div class="skeleton-author"/>
+                        <div class="skeleton-label"/>
+                        <div class="skeleton-content-1"/>
+                        <div class="skeleton-content-2"/>
+                        <div class="skeleton-content-3"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</else>

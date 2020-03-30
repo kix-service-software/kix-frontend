@@ -71,20 +71,10 @@ export class FAQContext extends Context {
             );
         }
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load FAQ Articles'
-            });
-        }, 500);
-
-
         const faqArticles = await KIXObjectService.loadObjects(
             KIXObjectType.FAQ_ARTICLE, null, loadingOptions, null, false
         ).catch((error) => []);
-        window.clearTimeout(timeout);
         this.setObjectList(KIXObjectType.FAQ_ARTICLE, faqArticles);
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
     }
 
     public reset(): void {

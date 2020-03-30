@@ -57,12 +57,6 @@ export class MailAccountDetailsContext extends Context {
     private async loadAccount(changedProperties: string[] = [], cache: boolean = true): Promise<MailAccount> {
         const mailAccountId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Email Account'
-            });
-        }, 500);
-
         const mailAccounts = await KIXObjectService.loadObjects<MailAccount>(
             KIXObjectType.MAIL_ACCOUNT, [mailAccountId], null, null, cache
         ).catch((error) => {
@@ -70,15 +64,11 @@ export class MailAccountDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let mailAccount: MailAccount;
         if (mailAccounts && mailAccounts.length) {
             mailAccount = mailAccounts[0];
             this.objectId = mailAccount.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return mailAccount;
     }

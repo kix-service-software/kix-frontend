@@ -178,7 +178,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         (o) => o.option === ObjectReferenceOptions.OBJECT
                     );
                     if (objectOption) {
-                        const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
+                        const objects = await KIXObjectService.loadObjects(
+                            objectOption.value, objectIds, null, null, null, null, true
+                        );
                         if (objects && !!objects.length) {
                             for (const object of objects) {
                                 const node = await this.createTreeNode(object);

@@ -13,8 +13,6 @@ import { Contact } from "../../../model/Contact";
 import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { ContactProperty } from "../../../model/ContactProperty";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
@@ -55,18 +53,9 @@ export class ContactDetailsContext extends Context {
     }
 
     private async loadContact(): Promise<Contact> {
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Contact' }
-            );
-        }, 500);
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
-            [
-                ContactProperty.TICKET_STATS, 'Tickets', ContactProperty.USER,
-                ContactProperty.ASSIGNED_CONFIG_ITEMS
-            ]
+            [ContactProperty.USER]
         );
 
         const contacts = await KIXObjectService.loadObjects<Contact>(
@@ -76,14 +65,11 @@ export class ContactDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let contact: Contact;
         if (contacts && contacts.length) {
             contact = contacts[0];
         }
 
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
         return contact;
     }
 

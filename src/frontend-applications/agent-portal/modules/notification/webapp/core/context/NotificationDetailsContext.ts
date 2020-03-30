@@ -56,12 +56,6 @@ export class NotificationDetailsContext extends Context {
     private async loadNotification(changedProperties: string[] = [], cache: boolean = true): Promise<Notification> {
         const notificationId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Notification ...`
-            });
-        }, 500);
-
         const notifications = await KIXObjectService.loadObjects<Notification>(
             KIXObjectType.NOTIFICATION, [notificationId], null, null, cache
         ).catch((error) => {
@@ -69,15 +63,11 @@ export class NotificationDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let notification: Notification;
         if (notifications && notifications.length) {
             notification = notifications[0];
             this.objectId = notification.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return notification;
     }

@@ -56,12 +56,6 @@ export class FAQCategoryDetailsContext extends Context {
     private async loadFAQCategory(changedProperties: string[] = [], cache: boolean = true): Promise<FAQCategory> {
         const categoryId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load FAQ Category'
-            });
-        }, 500);
-
         const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
             KIXObjectType.FAQ_CATEGORY, [categoryId], null, null, cache
         ).catch((error) => {
@@ -69,15 +63,11 @@ export class FAQCategoryDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let faqCategory: FAQCategory;
         if (faqCategories && faqCategories.length) {
             faqCategory = faqCategories[0];
             this.objectId = faqCategory.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return faqCategory;
     }

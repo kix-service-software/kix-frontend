@@ -58,12 +58,6 @@ export class JobDetailsContext extends Context {
     private async loadJob(changedProperties: string[] = [], cache: boolean = true): Promise<Job> {
         const jobId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Job'
-            });
-        }, 500);
-
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['ExecPlans', 'Macros']);
 
         const jobs = await KIXObjectService.loadObjects<Job>(
@@ -73,15 +67,11 @@ export class JobDetailsContext extends Context {
             return null;
         });
 
-        window.clearInterval(timeout);
-
         let job: Job;
         if (jobs && jobs.length) {
             job = jobs[0];
             this.objectId = job.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return job;
     }

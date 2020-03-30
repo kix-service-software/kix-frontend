@@ -82,7 +82,6 @@ class Component extends AbstractNewDialog {
                     BrowserUtil.openErrorOverlay(article.getUnsentError());
                 }
             }
-            EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
         });
     }
 

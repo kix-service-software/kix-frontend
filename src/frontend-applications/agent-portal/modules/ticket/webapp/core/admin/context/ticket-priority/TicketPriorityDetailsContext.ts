@@ -55,12 +55,6 @@ export class TicketPriorityDetailsContext extends Context {
     private async loadTicketPriority(changedProperties: string[] = [], cache: boolean = true): Promise<TicketPriority> {
         const ticketPriorityId = Number(this.objectId);
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Ticket Priority'
-            });
-        }, 500);
-
         const ticketPriorities = await KIXObjectService.loadObjects<TicketPriority>(
             KIXObjectType.TICKET_PRIORITY, [ticketPriorityId], null, null, cache
         ).catch((error) => {
@@ -68,15 +62,11 @@ export class TicketPriorityDetailsContext extends Context {
             return null;
         });
 
-        window.clearTimeout(timeout);
-
         let ticketPriority: TicketPriority;
         if (ticketPriorities && ticketPriorities.length) {
             ticketPriority = ticketPriorities[0];
             this.objectId = ticketPriority.ID;
         }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
 
         return ticketPriority;
     }

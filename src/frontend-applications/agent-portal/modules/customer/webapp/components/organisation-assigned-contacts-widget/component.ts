@@ -15,6 +15,9 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { TableFactoryService } from "../../../../base-components/webapp/core/table";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
 import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { OrganisationProperty } from "../../../model/OrganisationProperty";
 class Component {
 
     private state: ComponentState;
@@ -56,10 +59,6 @@ class Component {
 
     private async initWidget(organisation: Organisation): Promise<void> {
         this.state.organisation = organisation;
-        const title = await TranslationService.translate(this.state.widgetConfiguration.title);
-        this.state.title = title
-            + (this.state.organisation.Contacts && !!this.state.organisation.Contacts.length ?
-                ` (${this.state.organisation.Contacts.length})` : '');
         this.prepareTable();
         this.prepareActions();
     }
@@ -75,11 +74,26 @@ class Component {
     private async prepareTable(): Promise<void> {
         if (this.state.organisation && this.state.widgetConfiguration) {
 
-            const contactIds = this.state.organisation.Contacts.map((c) => typeof c === 'string' ? c : c.ID);
-            this.state.table = await TableFactoryService.getInstance().createTable(
-                'organisation-assigned-contacts', KIXObjectType.CONTACT,
-                this.state.widgetConfiguration.configuration, contactIds, null, true
+            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [
+                OrganisationProperty.CONTACTS, OrganisationProperty.TICKET_STATS
+            ]);
+            const organisations = await KIXObjectService.loadObjects<Organisation>(
+                KIXObjectType.ORGANISATION, [this.state.organisation.ID], loadingOptions, null, true, null, true
             );
+
+            if (organisations && organisations.length && organisations[0].Contacts) {
+                const contactIds = organisations[0].Contacts.map((c) => typeof c === 'string' ? c : c.ID);
+                this.state.table = await TableFactoryService.getInstance().createTable(
+                    'organisation-assigned-contacts', KIXObjectType.CONTACT,
+                    this.state.widgetConfiguration.configuration, contactIds, null, true
+                );
+            }
+
+            const title = await TranslationService.translate(this.state.widgetConfiguration.title);
+            const count = organisations[0].Contacts && !!organisations[0].Contacts.length
+                ? ` (${organisations[0].Contacts.length})`
+                : ' (0)';
+            this.state.title = `${title} ${count}`;
         }
     }
 

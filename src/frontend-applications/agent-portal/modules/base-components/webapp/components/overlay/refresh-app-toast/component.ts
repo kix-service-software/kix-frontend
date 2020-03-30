@@ -35,8 +35,6 @@ class Component {
         if (this.state.reloadApp) {
             ContextHistory.getInstance().removeBrowserListener();
             location.reload();
-        } else {
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
     }
 

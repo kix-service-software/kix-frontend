@@ -19,6 +19,8 @@ import { OrganisationProperty } from "../../model/OrganisationProperty";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -38,6 +40,29 @@ export class OrganisationService extends KIXObjectService<Organisation> {
 
     public getLinkObjectName(): string {
         return "Person";
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType | string, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds?: boolean
+    ): Promise<O[]> {
+        let objects: O[];
+        let superLoad = false;
+        if (objectType === KIXObjectType.ORGANISATION) {
+            objects = await super.loadObjects<O>(
+                KIXObjectType.ORGANISATION, forceIds ? objectIds : null, loadingOptions
+            );
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
     public determineDependendObjects(

@@ -229,11 +229,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     .then(() => {
                         this.calendar.updateSchedule(schedule.id, schedule.calendarId, changes);
                     })
-                    .catch(
-                        () => EventService.getInstance().publish(
-                            ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
-                        )
-                    );
+                    .catch(() => null);
             }
         }
     }
