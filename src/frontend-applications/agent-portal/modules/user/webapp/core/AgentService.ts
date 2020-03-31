@@ -88,7 +88,7 @@ export class AgentService extends KIXObjectService<User> {
 
         await AgentSocketClient.getInstance().setPreferences(parameter);
 
-        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, KIXObjectType.CURRENT_USER);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.CURRENT_USER });
     }
 
     public async setPreferences(preferences: Array<[string, any]>): Promise<void> {
