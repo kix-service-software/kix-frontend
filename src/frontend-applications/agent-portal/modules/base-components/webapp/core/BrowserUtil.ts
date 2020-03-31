@@ -15,6 +15,7 @@ import { ToastContent } from "./ToastContent";
 import { ConfirmOverlayContent } from "./ConfirmOverlayContent";
 import { RefreshToastSettings } from "./RefreshToastSettings";
 import { DateTimeUtil } from "./DateTimeUtil";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 
 
 export class BrowserUtil {
@@ -43,8 +44,10 @@ export class BrowserUtil {
         OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, null, false);
     }
 
-    public static openAppRefreshOverlay(message: string, reloadApp?: boolean): void {
-        const settings = new RefreshToastSettings(message, reloadApp);
+    public static openAppRefreshOverlay(
+        message: string, objectType: KIXObjectType | string, reloadApp?: boolean
+    ): void {
+        const settings = new RefreshToastSettings(message, reloadApp, objectType);
         const componentContent = new ComponentContent('refresh-app-toast', settings);
         OverlayService.getInstance().openOverlay(
             OverlayType.HINT_TOAST, null, componentContent, '', null, false, null, null, null, null, true

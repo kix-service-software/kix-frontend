@@ -7,11 +7,14 @@
  * --
  */
 
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+
 export class RefreshToastSettings {
 
     public constructor(
         public message: string,
-        public reloadApp: boolean
+        public reloadApp: boolean,
+        public objectType: KIXObjectType | string
     ) { }
 
 }
