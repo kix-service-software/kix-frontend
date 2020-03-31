@@ -29,7 +29,7 @@ export class Label {
             this.icon = LabelService.getInstance().getObjectIcon(this.object) || this.icon;
             this.text = await LabelService.getInstance().getText(this.object) || this.text;
             this.additionalText = LabelService.getInstance().getAdditionalText(this.object) || this.additionalText;
-            this.tooltip = this.text + ': ' + LabelService.getInstance().getTooltip(this.object) || this.text;
+            this.tooltip = this.text + ': ' + await LabelService.getInstance().getTooltip(this.object) || this.text;
         }
     }
 
