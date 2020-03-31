@@ -71,6 +71,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.state.lanes = context.getLanes(true);
         this.state.contentWidgets = context.getContent(true);
+        this.state.instanceId = context.getDescriptor().contextId;
     }
 
     private async prepareWidget(): Promise<void> {
