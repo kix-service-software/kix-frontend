@@ -41,7 +41,7 @@ export class DynamicField extends KIXObject {
         super(dynamicField);
         if (dynamicField) {
             this.ID = dynamicField.ID;
-            this.ObjectId = dynamicField.ObjectId;
+            this.ObjectId = this.ID;
             this.DisplayGroupID = dynamicField.DisplayGroupID;
             this.FieldType = dynamicField.FieldType;
             this.FieldTypeDisplayName = dynamicField.FieldTypeDisplayName;

@@ -21,7 +21,6 @@ import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
 import { LabelService } from "../LabelService";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 

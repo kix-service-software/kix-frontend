@@ -71,7 +71,7 @@ export class UserDetailsContext extends Context {
         );
 
         const users = await KIXObjectService.loadObjects<User>(
-            KIXObjectType.USER, [userId], loadingOptions, null, cache
+            KIXObjectType.USER, [userId], loadingOptions, null, null, cache, true
         ).catch((error) => {
             console.error(error);
             return null;

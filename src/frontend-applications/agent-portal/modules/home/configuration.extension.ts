@@ -220,7 +220,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                         FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
                     ),
                     stateTypeFilterCriteria
-                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
+                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
             ), null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
         );
         configurations.push(tableMyOpenTicketsConfiguration);
