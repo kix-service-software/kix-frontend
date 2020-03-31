@@ -84,7 +84,9 @@ class Component extends AbstractEditDialog {
                                 ? toast : 'Translatable#New Version created';
                             BrowserUtil.openSuccessOverlay(hint);
 
-                            EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, this.objectType);
+                            EventService.getInstance().publish(
+                                ApplicationEvent.OBJECT_UPDATED, { objectType: this.objectType }
+                            );
 
                             DialogService.getInstance().submitMainDialog();
                         }

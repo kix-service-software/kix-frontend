@@ -7,25 +7,21 @@
  * --
  */
 
-import {ComponentState} from './ComponentState';
-import {ConfigItem} from '../../../model/ConfigItem';
-import {KIXObjectService} from '../../../../../modules/base-components/webapp/core/KIXObjectService';
-import {Version} from '../../../model/Version';
-import {KIXObjectType} from '../../../../../model/kix/KIXObjectType';
-import {KIXObjectLoadingOptions} from '../../../../../model/KIXObjectLoadingOptions';
-import {VersionProperty} from '../../../model/VersionProperty';
-import {ConfigItemVersionLoadingOptions} from '../../../model/ConfigItemVersionLoadingOptions';
-import {PreparedData} from '../../../model/PreparedData';
-import {ConfigItemAttachment} from '../../../model/ConfigItemAttachment';
-import {BrowserUtil} from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import {LabelValueGroup} from '../../../../../model/LabelValueGroup';
-import {TranslationService} from '../../../../../modules/translation/webapp/core/TranslationService';
-import {DateTimeUtil} from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import {AttachmentLoadingOptions} from '../../../model/AttachmentLoadingOptions';
-import {FilterCriteria} from "../../../../../model/FilterCriteria";
-import {SearchOperator} from "../../../../search/model/SearchOperator";
-import {FilterDataType} from "../../../../../model/FilterDataType";
-import {FilterType} from "../../../../../model/FilterType";
+import { ComponentState } from './ComponentState';
+import { ConfigItem } from '../../../model/ConfigItem';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Version } from '../../../model/Version';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { VersionProperty } from '../../../model/VersionProperty';
+import { ConfigItemVersionLoadingOptions } from '../../../model/ConfigItemVersionLoadingOptions';
+import { PreparedData } from '../../../model/PreparedData';
+import { ConfigItemAttachment } from '../../../model/ConfigItemAttachment';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { AttachmentLoadingOptions } from '../../../model/AttachmentLoadingOptions';
 
 class Component {
 
@@ -46,15 +42,13 @@ class Component {
 
     private async loadVersion(configItem: ConfigItem): Promise<void> {
         const versions = await KIXObjectService.loadObjects<Version>(
-            KIXObjectType.CONFIG_ITEM_VERSION, null,
-            new KIXObjectLoadingOptions([new FilterCriteria(VersionProperty.VERSION_ID, SearchOperator.EQUALS,
-                FilterDataType.NUMERIC, FilterType.AND, configItem.CurrentVersion.VersionID)],
-                null, 1, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
+            KIXObjectType.CONFIG_ITEM_VERSION, configItem.CurrentVersion ? [configItem.CurrentVersion.VersionID] : null,
+            new KIXObjectLoadingOptions(undefined, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
             new ConfigItemVersionLoadingOptions(configItem.ConfigItemID)
         );
 
         if (versions && versions.length) {
-            this.state.version = versions[0];
+            this.state.version = versions[versions.length - 1];
             this.prepareVersion();
         }
     }
