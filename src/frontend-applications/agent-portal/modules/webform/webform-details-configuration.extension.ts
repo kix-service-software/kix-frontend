@@ -21,7 +21,9 @@ import { ConfigurationDefinition } from "../../model/configuration/Configuration
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return WebformDetailsContext.CONTEXT_ID;

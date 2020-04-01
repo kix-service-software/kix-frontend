@@ -14,8 +14,9 @@ import { ConfigurationType } from "../../model/configuration/ConfigurationType";
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { SearchContext } from "./webapp/core/SearchContext";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class ModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return SearchContext.CONTEXT_ID;
@@ -66,5 +67,5 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new ModuleFactoryExtension();
+    return new Extension();
 };

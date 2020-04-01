@@ -32,8 +32,9 @@ import { CRUD } from "../../../../server/model/rest/CRUD";
 import { UserProperty } from "../user/model/UserProperty";
 import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
 import { ContextMode } from "../../model/ContextMode";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class ModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return ContactDetailsContext.CONTEXT_ID;
@@ -237,5 +238,5 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new ModuleFactoryExtension();
+    return new Extension();
 };

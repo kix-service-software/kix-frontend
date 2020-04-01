@@ -25,7 +25,9 @@ import { ContextMode } from "../../model/ContextMode";
 import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
 import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return UserDetailsContext.CONTEXT_ID;

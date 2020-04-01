@@ -10,7 +10,9 @@
 import { IServiceExtension } from "../../server/extensions/IServiceExtension";
 import { MailAccountService } from "./server/MailAccountService";
 
-class Extension implements IServiceExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
         MailAccountService.getInstance();

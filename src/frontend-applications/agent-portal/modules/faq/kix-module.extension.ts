@@ -15,7 +15,9 @@ import { UIComponentPermission } from "../../model/UIComponentPermission";
 
 import { CRUD } from "../../../../server/model/rest/CRUD";
 
-class Extension implements IKIXModuleExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public applications: string[] = ['agent-portal'];
 

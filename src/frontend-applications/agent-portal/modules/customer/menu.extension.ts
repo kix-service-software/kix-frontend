@@ -12,7 +12,9 @@ import { OrganisationContext, OrganisationDetailsContext, ContactDetailsContext 
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 
-export class Extension implements IMainMenuExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IMainMenuExtension {
 
     public mainContextId: string = OrganisationContext.CONTEXT_ID;
 

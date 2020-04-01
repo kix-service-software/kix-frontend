@@ -22,14 +22,10 @@ import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { SysConfigService } from "../sysconfig/server/SysConfigService";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { TicketChartWidgetConfiguration } from "../ticket/webapp/core";
 import { TicketProperty } from "../ticket/model/TicketProperty";
 import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
 import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { KIXObjectPropertyFilter } from "../../model/KIXObjectPropertyFilter";
-import { TableFilterCriteria } from "../../model/TableFilterCriteria";
 import { KIXObjectType } from "../../model/kix/KIXObjectType";
 import { TableConfiguration } from "../../model/configuration/TableConfiguration";
 import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
@@ -38,8 +34,9 @@ import { DefaultColumnConfiguration } from "../../model/configuration/DefaultCol
 import { DataType } from "../../model/DataType";
 import { ToggleOptions } from "../base-components/webapp/core/table";
 import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class DashboardModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return HomeContext.CONTEXT_ID;
@@ -355,5 +352,5 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 }
 
 module.exports = (data, host, options) => {
-    return new DashboardModuleFactoryExtension();
+    return new Extension();
 };

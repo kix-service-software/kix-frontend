@@ -5,7 +5,9 @@ This extension can be used to provide new catogories and modules for the adminis
 Pseudo Code:
 
 ```javascript
-class Extension implements IAdminModuleExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IAdminModuleExtension {
 
                 public getAdminModules(): AdminModuleCategory[] {
                     return [

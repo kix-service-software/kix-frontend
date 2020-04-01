@@ -15,7 +15,9 @@ import { TicketStateAPIService } from "./server/TicketStateService";
 import { TicketTypeAPIService } from "./server/TicketTypeService";
 import { ChannelAPIService } from "./server/ChannelService";
 
-class Extension implements IServiceExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
         TicketAPIService.getInstance();

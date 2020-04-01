@@ -16,8 +16,9 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { CalendarConfiguration } from "./webapp/core/CalendarConfiguration";
 import { TicketProperty } from "../ticket/model/TicketProperty";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class TicketModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return CalendarContext.CONTEXT_ID;
@@ -62,5 +63,5 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new TicketModuleFactoryExtension();
+    return new Extension();
 };

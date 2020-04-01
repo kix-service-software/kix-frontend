@@ -16,7 +16,9 @@ import { ObjectIcon } from "../icon/model/ObjectIcon";
 import { LoggingService } from "../../../../server/services/LoggingService";
 
 
-class Extension implements IInitialDataExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IInitialDataExtension {
 
     public name: string = 'Agent Portal Module';
 
