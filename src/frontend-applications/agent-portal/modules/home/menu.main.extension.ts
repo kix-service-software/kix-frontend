@@ -10,8 +10,9 @@
 import { IMainMenuExtension } from "../../server/extensions/IMainMenuExtension";
 import { HomeContext } from "./webapp/core";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class Extensions implements IMainMenuExtension {
+export class Extension extends KIXExtension implements IMainMenuExtension {
 
     public mainContextId: string = HomeContext.CONTEXT_ID;
 
@@ -30,5 +31,5 @@ export class Extensions implements IMainMenuExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new Extensions();
+    return new Extension();
 };

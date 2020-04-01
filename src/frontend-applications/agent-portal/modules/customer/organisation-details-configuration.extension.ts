@@ -30,8 +30,9 @@ import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 import { UserProperty } from "../user/model/UserProperty";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class ModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return OrganisationDetailsContext.CONTEXT_ID;
@@ -219,5 +220,5 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new ModuleFactoryExtension();
+    return new Extension();
 };

@@ -26,8 +26,9 @@ import { ConfigurationDefinition } from "../../model/configuration/Configuration
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { ToggleOptions } from "../base-components/webapp/core/table";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class TicketModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return TicketListContext.CONTEXT_ID;
@@ -88,5 +89,5 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new TicketModuleFactoryExtension();
+    return new Extension();
 };

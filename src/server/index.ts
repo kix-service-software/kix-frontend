@@ -11,9 +11,8 @@
 import path = require('path');
 import { ConfigurationService } from './services/ConfigurationService';
 import { PluginService } from './services/PluginService';
-import { IFrontendServerExtension } from './model/IFrontendServerExtension';
-import { ServerExtensions } from './model/ServerExtensions';
 import { LoggingService } from './services/LoggingService';
+import { Server } from '../frontend-applications/agent-portal/server/Server';
 
 process.setMaxListeners(0);
 
@@ -30,30 +29,20 @@ class Startup {
 
         const pluginDirs = [
             'frontend-applications',
-            'frontend-applications/agent-portal/modules',
-            'plugins'
+            'frontend-applications/agent-portal/modules'
         ];
-        PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
+        await PluginService.getInstance().init(pluginDirs.map((pd) => path.join('..', pd)));
 
-        const serverExtensions = await PluginService.getInstance().getExtensions<IFrontendServerExtension>(
-            ServerExtensions.APPLICATION_SERVER
-        );
+        await Server.createClientRegistration();
 
-        LoggingService.getInstance().info(`Found ${serverExtensions.length} server extensions.`);
-
-        for (const extension of serverExtensions) {
-            LoggingService.getInstance().info(`Start Extension: ${extension.name}`);
-            const server = extension.getServer();
-            try {
-                await server.initServer();
-            } catch (error) {
-                LoggingService.getInstance().error(`Could not initialize server extension ${extension.name}`);
-                LoggingService.getInstance().error(error);
-            }
+        try {
+            await Server.getInstance().initServer();
+        } catch (error) {
+            LoggingService.getInstance().error(`Could not initialize server`);
+            LoggingService.getInstance().error(error);
         }
 
     }
-
 }
 
 const startup = new Startup();

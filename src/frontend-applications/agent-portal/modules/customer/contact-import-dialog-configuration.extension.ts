@@ -20,7 +20,9 @@ import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDial
 import { KIXObjectType } from "../../model/kix/KIXObjectType";
 import { ContextMode } from "../../model/ContextMode";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return ContactImportDialogContext.CONTEXT_ID;

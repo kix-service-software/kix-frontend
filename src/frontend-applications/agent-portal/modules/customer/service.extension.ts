@@ -11,7 +11,9 @@ import { IServiceExtension } from "../../server/extensions/IServiceExtension";
 import { ContactAPIService } from "./server/ContactService";
 import { OrganisationAPIService } from "./server/OrganisationService";
 
-class Extension implements IServiceExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
         ContactAPIService.getInstance();

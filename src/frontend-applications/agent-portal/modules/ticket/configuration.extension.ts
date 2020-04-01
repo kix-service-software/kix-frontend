@@ -45,8 +45,9 @@ import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 import { ToggleOptions } from "../base-components/webapp/core/table";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class TicketModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return TicketContext.CONTEXT_ID;
@@ -449,5 +450,5 @@ export class TicketModuleFactoryExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new TicketModuleFactoryExtension();
+    return new Extension();
 };

@@ -11,7 +11,9 @@ import { IServerRouterExtension } from "../../server/extensions/IServerRouterExt
 import { KIXIntegrationRouter } from "./server/KIXIntegrationRouter";
 import { Router } from 'express';
 
-class Extension implements IServerRouterExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServerRouterExtension {
 
     public async registerRouter(expressRouter: Router): Promise<void> {
         expressRouter.use(

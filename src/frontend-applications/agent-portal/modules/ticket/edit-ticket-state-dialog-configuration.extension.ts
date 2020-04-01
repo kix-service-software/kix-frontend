@@ -28,7 +28,9 @@ import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return EditTicketStateDialogContext.CONTEXT_ID;

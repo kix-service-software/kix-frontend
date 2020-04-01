@@ -24,7 +24,9 @@ import { FilterType } from "../../model/FilterType";
 import { NotificationProperty } from "../notification/model/NotificationProperty";
 import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
 
-class Extension implements IPersonalSettingsExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IPersonalSettingsExtension {
 
     public getPersonalSettings(): PersonalSetting[] {
         return [

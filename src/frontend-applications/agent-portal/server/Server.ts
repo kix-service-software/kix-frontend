@@ -109,41 +109,11 @@ export class Server implements IServer {
         }
 
         await this.registerStaticContent();
-        await this.createClientRegistration();
 
         const router = new ServerRouter(this.application);
         await router.initializeRoutes();
 
         this.initHttpServer();
-    }
-
-    private async createClientRegistration(): Promise<void> {
-        let poDefinitions = [];
-
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
-        if (updateTranslations) {
-            LoggingService.getInstance().info('Update translations');
-            poDefinitions = await TranslationAPIService.getInstance().getPODefinitions();
-        }
-
-        const configurations = await this.createDefaultConfigurations();
-        const createClientRegistration = new CreateClientRegistration(
-            this.serverConfig.NOTIFICATION_CLIENT_ID,
-            this.serverConfig.NOTIFICATION_URL,
-            this.serverConfig.NOTIFICATION_INTERVAL,
-            'Token ' + AuthenticationService.getInstance().getCallbackToken(),
-            poDefinitions, configurations
-        );
-
-        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
-            this.serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
-        ).catch((error): SystemInfo => {
-            LoggingService.getInstance().error(error);
-            return null;
-        });
-        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
     }
 
     public async initHttpServer(): Promise<void> {
@@ -180,7 +150,39 @@ export class Server implements IServer {
         this.application.use(express.static('../static/'));
     }
 
-    private async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
+    public static async createClientRegistration(): Promise<void> {
+        let poDefinitions = [];
+
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
+        if (updateTranslations) {
+            LoggingService.getInstance().info('Update translations');
+            poDefinitions = await TranslationAPIService.getInstance().getPODefinitions();
+        }
+
+        const configurations = await this.createDefaultConfigurations();
+
+        const backendDependencies = this.getBackendDependencies();
+
+        const createClientRegistration = new CreateClientRegistration(
+            serverConfig.NOTIFICATION_CLIENT_ID,
+            serverConfig.NOTIFICATION_URL,
+            serverConfig.NOTIFICATION_INTERVAL,
+            'Token ' + AuthenticationService.getInstance().getCallbackToken(),
+            poDefinitions, configurations, backendDependencies
+        );
+
+        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
+            serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
+        ).catch((error): SystemInfo => {
+            LoggingService.getInstance().error(error);
+            return null;
+        });
+        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
+    }
+
+    private static async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
         LoggingService.getInstance().info('Create Default Configurations');
         const extensions = await PluginService.getInstance().getExtensions<IConfigurationExtension>(
             AgentPortalExtensions.CONFIGURATION
@@ -216,8 +218,6 @@ export class Server implements IServer {
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
-            // await ModuleConfigurationService.getInstance().cleanUp(serverConfig.BACKEND_API_TOKEN);
-
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;
                 const definition: any = {
@@ -247,5 +247,25 @@ export class Server implements IServer {
 
             return sysconfigOptionDefinitions;
         }
+    }
+
+    private static getBackendDependencies(): any[] {
+        let dependencies = [];
+        const plugins = PluginService.getInstance().availablePlugins;
+        for (const plugin of plugins) {
+            dependencies = [
+                ...dependencies,
+                ...plugin[1].dependencies
+                    .filter((d) => d[0].startsWith('backend::'))
+                    .map((d) => {
+                        return {
+                            Name: d[0].replace('backend::', ''),
+                            Operator: d[1],
+                            Build: d[2]
+                        };
+                    })
+            ];
+        }
+        return dependencies;
     }
 }

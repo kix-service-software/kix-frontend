@@ -32,8 +32,9 @@ import { FormPageConfiguration } from "../../model/configuration/FormPageConfigu
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class EditConfigItemDialogModuleExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return EditConfigItemDialogContext.CONTEXT_ID;
@@ -169,5 +170,5 @@ export class EditConfigItemDialogModuleExtension implements IConfigurationExtens
 }
 
 module.exports = (data, host, options) => {
-    return new EditConfigItemDialogModuleExtension();
+    return new Extension();
 };

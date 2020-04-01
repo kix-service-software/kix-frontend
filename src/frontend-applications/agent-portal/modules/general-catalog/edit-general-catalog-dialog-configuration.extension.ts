@@ -33,7 +33,9 @@ import { FormContext } from "../../model/configuration/FormContext";
 import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return EditGeneralCatalogDialogContext.CONTEXT_ID;

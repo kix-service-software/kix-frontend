@@ -9,7 +9,9 @@
 
 import { IMarkoApplication } from "../../server/extensions/IMarkoApplication";
 
-export class Extension implements IMarkoApplication {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IMarkoApplication {
 
     public name: string = 'agent-portal';
     public path: string = 'webapp/application';

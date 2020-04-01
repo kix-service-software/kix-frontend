@@ -13,8 +13,9 @@ import { AuthenticationNamespace } from "./server/socket-namespaces/Authenticati
 import { ContextNamespace } from "./server/socket-namespaces/ContextNamespace";
 import { KIXModuleNamespace } from "./server/socket-namespaces/KIXModuleNamespace";
 import { KIXObjectNamespace } from "./server/socket-namespaces/KIXObjectNamespace";
+import { KIXExtension } from "../../server/model/KIXExtension";
 
-export class NamespaceRegistry implements ISocketNamespaceRegistryExtension {
+export class Extension extends KIXExtension implements ISocketNamespaceRegistryExtension {
 
     public getNamespaceClasses(): any[] {
         return [
@@ -29,5 +30,5 @@ export class NamespaceRegistry implements ISocketNamespaceRegistryExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new NamespaceRegistry();
+    return new Extension();
 };

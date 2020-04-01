@@ -20,8 +20,9 @@ import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class DashboardModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return OrganisationContext.CONTEXT_ID;
@@ -107,5 +108,5 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 }
 
 module.exports = (data, host, options) => {
-    return new DashboardModuleFactoryExtension();
+    return new Extension();
 };
