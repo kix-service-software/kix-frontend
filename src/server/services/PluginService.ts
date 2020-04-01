@@ -55,7 +55,12 @@ export class PluginService {
         const pluginPaths = [];
 
         const pluginsFolder = path.join(__dirname, '..', '..', 'plugins');
-        const plugins = fs.readdirSync(pluginsFolder);
+        let plugins = [];
+        try {
+            plugins = fs.readdirSync(pluginsFolder);
+        } catch (error) {
+            LoggingService.getInstance().warning('Could not read plugin folder.', error);
+        }
 
         const availablePlugins: Array<[string, string, ReleaseInfo]> = [];
 
