@@ -95,12 +95,14 @@ body>.kix-form-container>.kix-form-content {
 
 body>.kix-form-container>.kix-form-content>.kix-form-input {
     margin-bottom: 0.5rem;
+    width: 100%;
 }
 
 body>.kix-form-container>.kix-form-content>.kix-form-input>label {
     font-weight: bold;
     display: inline-block;
-    width: 25%;
+    width: 23%;
+    margin-right: 2%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -121,16 +123,16 @@ body>.kix-form-container>.kix-form-content>.kix-form-input:not(.kix-form-attachm
 
 body>.kix-form-container>.kix-form-content>.kix-form-input>label::after {
     content: ':';
-    margin-right: 0.5rem;
 }
 
 body>.kix-form-container>.kix-form-content>.kix-form-input>input {
-    width: 75%;
+    width: 74%;
 }
 
 body>.kix-form-container>.kix-form-content>.kix-form-input>textarea {
-    max-width: 75%;
-    min-width: 75%;
+    max-width: 74%;
+    min-width: 74%;
+    width: 74%;
     height: 7rem;
 }
 
@@ -150,7 +152,7 @@ body>.kix-form-container>.kix-form-content>.kix-form-input.kix-form-attachments>
     border: 1px solid silver;
     background: rgb(245, 245, 245);
     min-height: 1rem;
-    width: 75%;
+    width: 74%;
     margin: 0.5rem 0 0 25%;
     display: none;
 }
@@ -200,6 +202,7 @@ body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button {
     padding: 0;
     width: 8rem;
     box-shadow: 2px 2px 2px 0 #c6c6c6;
+    font: inherit;
 }
 
 /* kix style */
@@ -259,14 +262,14 @@ body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button>sp
 }
 
 /* kix style */
-body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span::before {
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span:first-child::before {
     top: 0.55rem;
     left: 0.25rem;
     transform: rotate(45deg);
 }
 
 /* kix style */
-body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span::after {
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:first-child>span:first-child::after {
     top: 0.55rem;
     left: 0.25rem;
     transform: rotate(-45deg);
@@ -278,7 +281,7 @@ body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:la
 }
 
 /* kix style */
-body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child>span::before {
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child>span:first-child::before {
     top: 0.75rem;
     left: 0.25rem;
     width: 0.5rem;
@@ -286,7 +289,7 @@ body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:la
 }
 
 /* kix style */
-body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child>span::after {
+body>.kix-form-container.kix-style>.kix-form-content>.kix-form-buttons>button:last-child>span:first-child::after {
     top: 0.55rem;
     left: 0.5rem;
     width: 0.8rem;
