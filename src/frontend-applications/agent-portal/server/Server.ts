@@ -164,13 +164,14 @@ export class Server implements IServer {
         const configurations = await this.createDefaultConfigurations();
 
         const backendDependencies = this.getBackendDependencies();
+        const plugins = this.getPlugins();
 
         const createClientRegistration = new CreateClientRegistration(
             serverConfig.NOTIFICATION_CLIENT_ID,
             serverConfig.NOTIFICATION_URL,
             serverConfig.NOTIFICATION_INTERVAL,
             'Token ' + AuthenticationService.getInstance().getCallbackToken(),
-            poDefinitions, configurations, backendDependencies
+            poDefinitions, configurations, backendDependencies, plugins
         );
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
@@ -267,5 +268,23 @@ export class Server implements IServer {
             ];
         }
         return dependencies;
+    }
+
+    private static getPlugins(): any[] {
+        const plugins = [];
+        const availablePlugins = PluginService.getInstance().availablePlugins;
+        for (const plugin of availablePlugins) {
+            plugins.push({
+                Name: plugin[1].product,
+                Requires: plugin[1].dependencies,
+                Description: plugin[1].product,
+                BuildNumber: plugin[1].buildNumber,
+                Version: plugin[1].version,
+                ExtendedData: {
+                    BuildDate: plugin[1].buildDate
+                }
+            });
+        }
+        return plugins;
     }
 }
