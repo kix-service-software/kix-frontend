@@ -36,6 +36,7 @@ export class JobService extends KIXObjectService<Job> {
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.JOB
             || kixObjectType === KIXObjectType.JOB_TYPE
+            || kixObjectType === KIXObjectType.JOB_RUN
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
             || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE;

@@ -192,6 +192,10 @@ export class CacheService {
             case KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN:
                 cacheKeyPrefixes.push(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
                 break;
+            case KIXObjectType.JOB:
+                cacheKeyPrefixes.push(KIXObjectType.JOB_RUN);
+                cacheKeyPrefixes.push(KIXObjectType.JOB_RUN_LOG);
+                break;
             default:
         }
 

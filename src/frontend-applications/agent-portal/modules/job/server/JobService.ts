@@ -33,6 +33,8 @@ import { Error } from "../../../../../server/model/Error";
 import { JobTypes } from "../model/JobTypes";
 import { MacroActionType } from "../model/MacroActionType";
 import { JobType } from "../model/JobType";
+import { JobRunFactory } from "./JobRunFactory";
+import { JobRun } from "../model/JobRun";
 
 export class JobAPIService extends KIXObjectAPIService {
 
@@ -47,7 +49,7 @@ export class JobAPIService extends KIXObjectAPIService {
 
     private constructor() {
         super([
-            new JobFactory(), new JobTypeFactory(),
+            new JobFactory(), new JobTypeFactory(), new JobRunFactory(),
             new ExecPlanFactory(),
             new MacroFactory(), new MacroActionTypeFactory()
         ]);
@@ -64,6 +66,7 @@ export class JobAPIService extends KIXObjectAPIService {
     public isServiceFor(kixObjectType: KIXObjectType): boolean {
         return kixObjectType === KIXObjectType.JOB
             || kixObjectType === KIXObjectType.JOB_TYPE
+            || kixObjectType === KIXObjectType.JOB_RUN
             || kixObjectType === KIXObjectType.EXEC_PLAN
             || kixObjectType === KIXObjectType.MACRO
             || kixObjectType === KIXObjectType.MACRO_ACTION_TYPE;
@@ -83,6 +86,16 @@ export class JobAPIService extends KIXObjectAPIService {
             objects = await super.load<JobType>(
                 token, KIXObjectType.JOB_TYPE, this.RESOURCE_URI_JobType, loadingOptions,
                 objectIds, 'JobType'
+            );
+        } else if (objectType === KIXObjectType.JOB_RUN) {
+            const uri = this.buildUri(
+                this.RESOURCE_URI,
+                objectLoadingOptions ? objectLoadingOptions.id : '',
+                'runs'
+            );
+            objects = await super.load<JobRun>(
+                token, KIXObjectType.JOB_RUN, uri, loadingOptions,
+                objectIds, 'JobRun'
             );
         } else if (objectType === KIXObjectType.EXEC_PLAN) {
             objects = await super.load<ExecPlan>(

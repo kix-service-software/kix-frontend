@@ -122,8 +122,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         const tabWidget = new WidgetConfiguration(
             'ticket-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
-            new ConfigurationDefinition('ticket-details-tab-widget-config', ConfigurationType.TabWidget),
-            false, true
+            new ConfigurationDefinition('ticket-details-tab-widget-config', ConfigurationType.TabWidget)
         );
         configurations.push(tabWidget);
 

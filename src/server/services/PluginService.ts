@@ -14,7 +14,6 @@ import fs = require('fs');
 import * as path from 'path';
 import { ReleaseInfoUtil } from '../ReleaseInfoUtil';
 import { ReleaseInfo } from '../../frontend-applications/agent-portal/model/ReleaseInfo';
-import { KIXExtension } from '../model/KIXExtension';
 
 const host = { debug: true };
 

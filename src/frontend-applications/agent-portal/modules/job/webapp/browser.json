@@ -8,6 +8,9 @@
         "require ./components/job-input-events",
         "require ./components/job-input-filter",
         "require ./components/new-job-dialog",
+        "require ./components/job-run-history-widget",
+        "require ./components/job-run-log-download-cell",
+        "require ./components/job-run-logs",
         "require ./core"
     ]
 }
