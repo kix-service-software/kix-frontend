@@ -739,6 +739,11 @@ msgstr "\" (Doppeltes Hochkomma)"
 msgid "Download"
 msgstr "Download"
 
+#, fuzzy
+#| msgid "Download"
+msgid "Download log"
+msgstr "Download"
+
 msgid "Duplicate"
 msgstr "Duplizieren"
 
@@ -894,6 +899,11 @@ msgstr "Anlagen zulassen"
 
 msgid "ends with"
 msgstr "endet mit"
+
+#, fuzzy
+#| msgid "Task End Time"
+msgid "End time"
+msgstr "Task Endzeitpunkt"
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
@@ -2940,6 +2950,11 @@ msgstr "Nicht mehr als 5 Dateien möglich."
 msgid "No version available"
 msgstr "Keine Version verfügbar"
 
+#, fuzzy
+#| msgid "No."
+msgid "Nr."
+msgstr "Nr."
+
 msgid "Number"
 msgstr "Nummer"
 
@@ -2962,6 +2977,11 @@ msgid "Object"
 msgstr "Objekt"
 
 msgid "Object Id"
+msgstr "Objekt ID"
+
+#, fuzzy
+#| msgid "Object Id"
+msgid "Object ID"
 msgstr "Objekt ID"
 
 msgid "Objects"
@@ -3498,6 +3518,11 @@ msgstr "Quelle"
 msgid "Split Option"
 msgstr "Trennoptionen"
 
+#, fuzzy
+#| msgid "Start Import"
+msgid "Start by"
+msgstr "Import starten"
+
 msgid "Start Import"
 msgstr "Import starten"
 
@@ -3509,6 +3534,11 @@ msgstr "Suche starten"
 
 msgid "starts with"
 msgstr "beginnt mit"
+
+#, fuzzy
+#| msgid "Task Start Time"
+msgid "Start time"
+msgstr "Task Startzeitpunkt"
 
 msgid "State"
 msgstr "Status"
