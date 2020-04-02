@@ -14,21 +14,24 @@ import { BrowserUtil } from "../BrowserUtil";
 export class TableExportUtil {
 
     public static async export(
-        table: ITable, additionalColumns: string[] = [], useDisplayString?: boolean
+        table: ITable, additionalColumns?: string[], useDisplayString?: boolean,
+        sortColumns?: boolean, allRows?: boolean, filename?: string, withDate?: boolean
     ): Promise<void> {
-        const csvString = await this.prepareCSVString(table, additionalColumns, useDisplayString);
-        const fileName = `Export${table.getObjectType() ? '_' + table.getObjectType() : ''}`;
-        BrowserUtil.downloadCSVFile(csvString, fileName);
+        const csvString = await this.prepareCSVString(table, additionalColumns, useDisplayString, sortColumns, allRows);
+        const fileName = filename || `Export${table.getObjectType() ? '_' + table.getObjectType() : ''}`;
+        BrowserUtil.downloadCSVFile(csvString, fileName, withDate);
     }
 
     private static async prepareCSVString(
-        table: ITable, additionalColumns: string[], useDisplayString: boolean = true
+        table: ITable, additionalColumns: string[] = [], useDisplayString: boolean = true,
+        sortColumns: boolean = true, allRows: boolean = false
     ): Promise<string> {
         const objectType = table.getObjectType();
         const columns = table.getColumns();
         const columnTitles: string[] = [];
 
-        const columnIds = [...columns.map((c) => c.getColumnId()), ...additionalColumns].sort();
+        const columnIds = sortColumns ? [...columns.map((c) => c.getColumnId()), ...additionalColumns].sort()
+            : [...columns.map((c) => c.getColumnId()), ...additionalColumns];
 
         for (const c of columnIds) {
             let value = c;
@@ -40,9 +43,9 @@ export class TableExportUtil {
 
         let csvString = columnTitles.join(';') + "\n";
 
-        const selectedRows = table.getSelectedRows();
+        const relevantRows = allRows ? table.getRows() : table.getSelectedRows();
 
-        for (const row of selectedRows) {
+        for (const row of relevantRows) {
             const values: string[] = [];
             for (const cId of columnIds) {
                 let displayValue = '';

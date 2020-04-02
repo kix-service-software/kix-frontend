@@ -194,9 +194,9 @@ export class BrowserUtil {
         return value;
     }
 
-    public static async downloadCSVFile(csvString: string, filename: string): Promise<void> {
+    public static async downloadCSVFile(csvString: string, filename: string, withDate: boolean = true): Promise<void> {
         const now = DateTimeUtil.getTimestampNumbersOnly(new Date(Date.now()));
-        const fileName = `${filename}_${now}.csv`;
+        const fileName = `${filename}${withDate ? '_' + now : ''}.csv`;
         if (window.navigator.msSaveOrOpenBlob) {
             const blob = new Blob([csvString], { type: 'text/csv' });
             window.navigator.msSaveBlob(blob, fileName);

@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
 import { Job } from "../../../model/Job";
-import { ITable, TableValue } from "../../../../base-components/webapp/core/table";
+import { ITable } from "../../../../base-components/webapp/core/table";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 

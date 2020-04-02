@@ -21,6 +21,8 @@ import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetC
 import { SortOrder } from "../../model/SortOrder";
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
+import { CRUD } from "../../../../server/model/rest/CRUD";
 
 import { KIXExtension } from "../../../../server/model/KIXExtension";
 
@@ -59,10 +61,20 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
 
         configurations.push(
+            new WidgetConfiguration(
+                'job-details-run-history-widget', 'Run History Widget', ConfigurationType.Widget,
+                'job-run-history-widget', 'Translatable#History', [],
+                new ConfigurationDefinition('job-details-run-history-config', ConfigurationType.Table),
+                null, false, false, null, false
+            )
+        );
+
+        configurations.push(
             new TabWidgetConfiguration(
-                'jod-details-tab-widget-config', 'Tab widget config', ConfigurationType.TabWidget,
+                'job-details-tab-widget-config', 'Tab widget config', ConfigurationType.TabWidget,
                 [
-                    'job-details-info-widget'
+                    'job-details-info-widget',
+                    'job-details-run-history-widget'
                 ]
             )
         );
@@ -71,7 +83,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'job-details-tab-widget', 'Tab widget', ConfigurationType.Widget,
                 'tab-widget', '', [],
-                new ConfigurationDefinition('jod-details-tab-widget-config', ConfigurationType.TabWidget)
+                new ConfigurationDefinition('job-details-tab-widget-config', ConfigurationType.TabWidget),
             )
         );
 
@@ -122,7 +134,11 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 ['job-create-action'], ['job-edit-action', 'job-execute-action'],
                 [],
                 [
-                    new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget')
+                    new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget'),
+                    new ConfiguredWidget(
+                        'job-details-run-history-widget', 'job-details-run-history-widget', null,
+                        [new UIComponentPermission('system/automation/jobs/*/runs', [CRUD.READ])]
+                    )
                 ]
             )
         );
