@@ -148,6 +148,7 @@ gulp.task('compile-themes', () => {
 gulp.task('copy-plugins', () => {
     return gulp
         .src([
+            'src/plugins/readme.md',
             'src/plugins/**/*.marko', 'src/plugins/**/*.marko',
             'src/plugins/**/*.less',
             'src/plugins/**/*.json',
