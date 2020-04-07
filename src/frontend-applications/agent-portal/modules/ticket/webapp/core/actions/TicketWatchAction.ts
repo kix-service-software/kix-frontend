@@ -43,18 +43,20 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
     public async setData(ticket: Ticket): Promise<void> {
         this.data = ticket;
 
-        const currentUser = await AgentService.getInstance().getCurrentUser();
-        const watcher = ticket.Watchers.find((w) => w.UserID === currentUser.UserID);
+        if (ticket && ticket.Watchers) {
+            const currentUser = await AgentService.getInstance().getCurrentUser();
+            const watcher = ticket.Watchers.find((w) => w.UserID === currentUser.UserID);
 
-        if (ticket.Watchers && watcher) {
-            this.isWatching = true;
-            this.text = 'Translatable#Unwatch';
-            this.icon = 'kix-icon-eye-off';
-            this.watcherId = watcher.ID;
-        } else {
-            this.isWatching = false;
-            this.text = 'Translatable#Watch';
-            this.icon = 'kix-icon-eye';
+            if (ticket.Watchers && watcher) {
+                this.isWatching = true;
+                this.text = 'Translatable#Unwatch';
+                this.icon = 'kix-icon-eye-off';
+                this.watcherId = watcher.ID;
+            } else {
+                this.isWatching = false;
+                this.text = 'Translatable#Watch';
+                this.icon = 'kix-icon-eye';
+            }
         }
     }
 

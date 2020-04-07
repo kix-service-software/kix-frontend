@@ -7,10 +7,12 @@
  * --
  */
 
-import { ILabelProvider } from "./ILabelProvider";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { LabelProvider } from "./LabelProvider";
+import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
+import { Label } from "./Label";
 
 export class LabelService {
 
@@ -25,33 +27,99 @@ export class LabelService {
 
     private constructor() { }
 
-    private labelProviders: Array<ILabelProvider<any>> = [];
+    private labelProviders: Array<LabelProvider<any>> = [];
 
-    public registerLabelProvider<T>(labelProvider: ILabelProvider<T>): void {
+    public registerLabelProvider<T>(labelProvider: LabelProvider<T>): void {
         this.labelProviders.push(labelProvider);
+    }
+
+    public getLabelProvider<T extends KIXObject>(object: T): LabelProvider<T> {
+        return this.labelProviders.find((lp) => lp.isLabelProviderFor(object));
+    }
+
+    public getLabelProviderForType<T extends KIXObject>(objectType: KIXObjectType | string): LabelProvider<T> {
+        return this.labelProviders.find((lp) => lp.isLabelProviderForType(objectType));
+    }
+
+    public async getDFDisplayValues(
+        objectType: KIXObjectType | string, fieldValue: DynamicFieldValue
+    ): Promise<[string[], string, string[]]> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getDFDisplayValues(fieldValue);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return labelProvider.getDFDisplayValues(fieldValue);
+        }
+        return null;
     }
 
     public getObjectIcon<T extends KIXObject>(object: T): string | ObjectIcon {
         const labelProvider = object ? this.getLabelProvider(object) : null;
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = extendedLabelProvider.getObjectIcon(object);
+                if (result) {
+                    return result;
+                }
+            }
+
             return labelProvider.getObjectIcon(object);
         }
         return null;
     }
 
-    public getObjectTypeIcon<T extends KIXObject>(objectType?: KIXObjectType | string): string | ObjectIcon {
-        const labelProvider = objectType ? this.getLabelProviderForType(objectType) : null;
+    public getObjectIconForType(objectType: KIXObjectType | string): string | ObjectIcon {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = extendedLabelProvider.getObjectIcon();
+                if (result) {
+                    return result;
+                }
+            }
+
+            return labelProvider.getObjectIcon();
+        }
+        return null;
+    }
+
+    public getObjectTypeIcon(objectType: KIXObjectType | string): string | ObjectIcon {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = extendedLabelProvider.getObjectTypeIcon();
+                if (result) {
+                    return result;
+                }
+            }
+
             return labelProvider.getObjectTypeIcon();
         }
         return null;
     }
 
-    public async getText<T extends KIXObject>(
+    public async getObjectText<T extends KIXObject>(
         object: T, id?: boolean, title?: boolean, translatable: boolean = true
     ): Promise<string> {
         const labelProvider = this.getLabelProvider(object);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getObjectText(object, id, title, translatable);
+                if (result) {
+                    return result;
+                }
+            }
+
             return await labelProvider.getObjectText(object, id, title, translatable);
         }
         return null;
@@ -59,7 +127,15 @@ export class LabelService {
 
     public getAdditionalText<T extends KIXObject>(object: T, translatable: boolean = true): string {
         const labelProvider = this.getLabelProvider(object);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = extendedLabelProvider.getObjectAdditionalText(object, translatable);
+                if (result) {
+                    return result;
+                }
+            }
+
             return labelProvider.getObjectAdditionalText(object, translatable);
         }
         return null;
@@ -69,7 +145,15 @@ export class LabelService {
         objectType: KIXObjectType | string, plural: boolean = false, translatable?: boolean
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getObjectName(plural, translatable);
+                if (result) {
+                    return result;
+                }
+            }
+
             return await labelProvider.getObjectName(plural, translatable);
         }
         return objectType;
@@ -77,7 +161,15 @@ export class LabelService {
 
     public async getTooltip<T extends KIXObject>(object: T, translatable: boolean = true): Promise<string> {
         const labelProvider = this.getLabelProvider(object);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getObjectTooltip(object, translatable);
+                if (result) {
+                    return result;
+                }
+            }
+
             return labelProvider.getObjectTooltip(object, translatable);
         }
         return null;
@@ -87,7 +179,15 @@ export class LabelService {
         property: string, objectType: KIXObjectType | string, short: boolean = false, translatable: boolean = true
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getPropertyText(property, short, translatable);
+                if (result) {
+                    return result;
+                }
+            }
+
             return await labelProvider.getPropertyText(property, short, translatable);
         }
         return null;
@@ -97,7 +197,15 @@ export class LabelService {
         property: string, objectType: KIXObjectType | string, useDisplayText?: boolean
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getExportPropertyText(property, useDisplayText);
+                if (result) {
+                    return result;
+                }
+            }
+
             return await labelProvider.getExportPropertyText(property, useDisplayText);
         }
         return null;
@@ -107,7 +215,15 @@ export class LabelService {
         property: string, objectType: KIXObjectType | string, value: any
     ): Promise<string> {
         const labelProvider = this.getLabelProviderForType(objectType);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getExportPropertyValue(property, value);
+                if (result) {
+                    return result;
+                }
+            }
+
             return await labelProvider.getExportPropertyValue(property, value);
         }
         return null;
@@ -115,38 +231,128 @@ export class LabelService {
 
     public async getPropertyIcon(property: string, objectType: KIXObjectType | string): Promise<string | ObjectIcon> {
         const labelProvider = this.getLabelProviderForType(objectType);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getPropertyIcon(property);
+                if (result) {
+                    return result;
+                }
+            }
+
             return await labelProvider.getPropertyIcon(property);
         }
         return null;
     }
 
-    public async getPropertyValueDisplayText<T extends KIXObject>(
-        object: T, property: string, defaultValue?: string, translatable: boolean = true
+    public async getDisplayText<T extends KIXObject>(
+        object: T, property: string, defaultValue?: string, translatable: boolean = true, short?: boolean
     ): Promise<string> {
         const labelProvider = this.getLabelProvider(object);
+
         if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getDisplayText(object, property, defaultValue, translatable);
+                if (result) {
+                    return result;
+                }
+            }
+
             return await labelProvider.getDisplayText(object, property, defaultValue, translatable);
         }
         return null;
     }
 
-    public async getPropertyValueDisplayIcons<T extends KIXObject>(
-        object: T, property: string, forTable?: boolean
-    ): Promise<Array<string | ObjectIcon>> {
-        const labelProvider = this.getLabelProvider(object);
+    public async getPropertyValueDisplayText(
+        objectType: KIXObjectType | string, property: string, value: string | number, translatable?: boolean
+    ): Promise<string> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
         if (labelProvider) {
-            return await labelProvider.getIcons(object, property, null, forTable);
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getPropertyValueDisplayText(
+                    property, value, translatable
+                );
+                if (result) {
+                    return result;
+                }
+            }
+
+            return await labelProvider.getPropertyValueDisplayText(property, value, translatable);
         }
         return null;
     }
 
-    public getLabelProvider<T extends KIXObject>(object: T): ILabelProvider<T> {
-        return this.labelProviders.find((lp) => lp.isLabelProviderFor(object));
+    public async getIcons<T extends KIXObject>(
+        object: T, property: string, value?: string | number, forTable?: boolean
+    ): Promise<Array<string | ObjectIcon>> {
+        const labelProvider = this.getLabelProvider(object);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getIcons(object, property, value, forTable);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return await labelProvider.getIcons(object, property, value, forTable);
+        }
+        return [];
     }
 
-    public getLabelProviderForType<T extends KIXObject>(objectType: KIXObjectType | string): ILabelProvider<T> {
-        return this.labelProviders.find((lp) => lp.isLabelProviderForType(objectType));
+    public async getIconsForType<T extends KIXObject>(
+        objectType: KIXObjectType | string, object: T, property: string, value?: string | number, forTable?: boolean
+    ): Promise<Array<string | ObjectIcon>> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = await extendedLabelProvider.getIcons(object, property, value, forTable);
+                if (result) {
+                    return result;
+                }
+            }
+
+
+            return await labelProvider.getIcons(object, property, value, forTable);
+        }
+        return [];
     }
+
+    public getDisplayTextClasses<T extends KIXObject>(object: T, property: string): string[] {
+        const labelProvider = this.getLabelProvider(object);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = extendedLabelProvider.getDisplayTextClasses(object, property);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return labelProvider.getDisplayTextClasses(object, property);
+        }
+        return [];
+    }
+
+    public async createLabelsFromDFValue(
+        objectType: KIXObjectType | string, fieldValue: DynamicFieldValue
+    ): Promise<Label[]> {
+        const labelProvider = this.getLabelProviderForType(objectType);
+
+        if (labelProvider) {
+            for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
+                const result = extendedLabelProvider.createLabelsFromDFValue(fieldValue);
+                if (result) {
+                    return result;
+                }
+            }
+
+            return labelProvider.createLabelsFromDFValue(fieldValue);
+        }
+        return null;
+    }
+
 
 }

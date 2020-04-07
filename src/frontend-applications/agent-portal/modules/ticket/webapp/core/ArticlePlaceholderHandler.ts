@@ -11,7 +11,6 @@ import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/
 import { Article } from "../../model/Article";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ArticleProperty } from "../../model/ArticleProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
@@ -31,7 +30,6 @@ export class ArticlePlaceholderHandler implements IPlaceholderHandler {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
             if (attribute && this.isKnownProperty(attribute)) {
-                const articleLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.ARTICLE);
                 if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
                     language = 'en';
                 }
@@ -46,7 +44,7 @@ export class ArticlePlaceholderHandler implements IPlaceholderHandler {
                         break;
                     case ArticleProperty.SUBJECT:
                     case ArticleProperty.BODY:
-                        result = await articleLabelProvider.getDisplayText(article, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(article, attribute, undefined, false);
                         if (optionsString && Number.isInteger(Number(optionsString))) {
                             result = result.substr(0, Number(optionsString));
                         }
@@ -56,13 +54,15 @@ export class ArticlePlaceholderHandler implements IPlaceholderHandler {
                     case ArticleProperty.TO_REALNAME:
                     case ArticleProperty.CC_REALNAME:
                     case ArticleProperty.BCC_REALNAME:
-                        result = await articleLabelProvider.getDisplayText(article, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(article, attribute, undefined, false);
                         break;
                     case ArticleProperty.FROM:
                     case ArticleProperty.TO:
                     case ArticleProperty.CC:
                     case ArticleProperty.BCC:
-                        result = await articleLabelProvider.getDisplayText(article, attribute, undefined, false, false);
+                        result = await LabelService.getInstance().getDisplayText(
+                            article, attribute, undefined, false, false
+                        );
                         result = result.toString().replace('<', '&lt;').replace('>', '&gt;');
                         break;
                     case KIXObjectProperty.CREATE_TIME:
@@ -70,7 +70,7 @@ export class ArticlePlaceholderHandler implements IPlaceholderHandler {
                         result = await DateTimeUtil.getLocalDateTimeString(article[attribute], language);
                         break;
                     default:
-                        result = await articleLabelProvider.getDisplayText(article, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(article, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
                             ? await TranslationService.translate(result.toString(), undefined, language) : '';
                 }

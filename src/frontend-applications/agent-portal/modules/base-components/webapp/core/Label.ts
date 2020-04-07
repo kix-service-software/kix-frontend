@@ -27,7 +27,7 @@ export class Label {
     public async init(): Promise<void> {
         if (this.object) {
             this.icon = LabelService.getInstance().getObjectIcon(this.object) || this.icon;
-            this.text = await LabelService.getInstance().getText(this.object) || this.text;
+            this.text = await LabelService.getInstance().getObjectText(this.object) || this.text;
             this.additionalText = LabelService.getInstance().getAdditionalText(this.object) || this.additionalText;
             this.tooltip = this.text + ': ' + await LabelService.getInstance().getTooltip(this.object) || this.text;
         }

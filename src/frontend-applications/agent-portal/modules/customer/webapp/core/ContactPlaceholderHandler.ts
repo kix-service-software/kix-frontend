@@ -31,7 +31,6 @@ export class ContactPlaceholderHandler implements IPlaceholderHandler {
         if (contact) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             if (attribute && this.isKnownProperty(attribute)) {
-                const contactLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONTACT);
                 if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
                     language = 'en';
                 }
@@ -50,14 +49,14 @@ export class ContactPlaceholderHandler implements IPlaceholderHandler {
                     case ContactProperty.TITLE:
                     case ContactProperty.STREET:
                     case ContactProperty.ZIP:
-                        result = await contactLabelProvider.getDisplayText(contact, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(contact, attribute, undefined, false);
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
                         result = await DateTimeUtil.getLocalDateTimeString(contact[attribute], language);
                         break;
                     default:
-                        result = await contactLabelProvider.getDisplayText(contact, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(contact, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
                             ? await TranslationService.translate(result.toString(), undefined, language) : '';
                 }

@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { ILabelProvider } from '../../../../../modules/base-components/webapp/core/ILabelProvider';
 import { Channel } from '../../../model/Channel';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
@@ -24,8 +23,6 @@ import { ServiceType } from '../../../../../modules/base-components/webapp/core/
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<number, ComponentState> {
-
-    private labelProvider: ILabelProvider<Channel>;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -42,7 +39,6 @@ class Component extends FormInputComponent<number, ComponentState> {
             "Translatable#No Article"
         ]);
 
-        this.labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CHANNEL);
         let channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
         channels = channels.filter((c) => c.ValidID.toString() === "1");
 
@@ -60,7 +56,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         if (this.state.channels) {
             for (const channel of this.state.channels) {
-                const name = await this.labelProvider.getDisplayText(channel, ChannelProperty.NAME);
+                const name = await LabelService.getInstance().getDisplayText(channel, ChannelProperty.NAME);
                 this.state.channelNames.push([channel.ID, name]);
             }
         }
@@ -92,10 +88,7 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public getIcon(channel: Channel): string | ObjectIcon {
-        if (this.labelProvider) {
-            return this.labelProvider.getObjectIcon(channel);
-        }
-        return null;
+        return LabelService.getInstance().getObjectIcon(channel);
     }
 
     public getDisplayText(channel: Channel): string {

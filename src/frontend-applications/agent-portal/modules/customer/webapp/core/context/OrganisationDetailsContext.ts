@@ -25,12 +25,12 @@ export class OrganisationDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return LabelService.getInstance().getText(await this.getObject<Organisation>(), short, short);
+        return LabelService.getInstance().getObjectText(await this.getObject<Organisation>(), short, short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const object = await this.getObject<Organisation>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation('kix-icon-organisation', [OrganisationContext.CONTEXT_ID], text);
     }
 

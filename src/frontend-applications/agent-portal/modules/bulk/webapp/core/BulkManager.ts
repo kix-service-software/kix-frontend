@@ -27,7 +27,6 @@ import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldFormUtil } from "../../../base-components/webapp/core/DynamicFieldFormUtil";
 import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
-import { InputFieldTypes } from "../../../base-components/webapp/core/InputFieldTypes";
 import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
@@ -48,6 +47,10 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties = [];
+
+        let validDFTypes = [];
+        this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
+
         const loadingOptions = new KIXObjectLoadingOptions(
             [
                 new FilterCriteria(
@@ -58,8 +61,13 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
                     DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                     FilterDataType.STRING, FilterType.AND,
                     [
-                        DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
-                        DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION
+                        DynamicFieldTypes.TEXT,
+                        DynamicFieldTypes.TEXT_AREA,
+                        DynamicFieldTypes.DATE,
+                        DynamicFieldTypes.DATE_TIME,
+                        DynamicFieldTypes.SELECTION,
+                        DynamicFieldTypes.CI_REFERENCE,
+                        ...validDFTypes
                     ]
                 ),
                 new FilterCriteria(
@@ -155,10 +163,6 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         )];
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes> {
-        return await this.getInputTypeForDF(property);
-    }
-
     public async isMultiselect(property: string): Promise<boolean> {
         let isMultiSelect = false;
         const dfName = KIXObjectService.getDynamicFieldName(property);
@@ -175,7 +179,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
         const dfValues = this.values.filter((v) => KIXObjectService.getDynamicFieldName(v.property));
         let validationResult: ValidationResult[] = [];
         for (const v of dfValues) {
-            const result = await DynamicFieldFormUtil.validateDFValue(
+            const result = await DynamicFieldFormUtil.getInstance().validateDFValue(
                 KIXObjectService.getDynamicFieldName(v.property), v.value
             );
             v.valid = !result.some((r) => r.severity === ValidationSeverity.ERROR);

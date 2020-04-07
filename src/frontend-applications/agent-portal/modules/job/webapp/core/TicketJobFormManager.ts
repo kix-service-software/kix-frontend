@@ -21,7 +21,7 @@ import { FormContext } from "../../../../model/configuration/FormContext";
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 
-    public filterManager = new TicketJobFilterManager();
+    public filterManager = TicketJobFilterManager.getInstance();
 
     public async getValue(property: string, value: any, job: Job, formContext: FormContext): Promise<any> {
         switch (property) {

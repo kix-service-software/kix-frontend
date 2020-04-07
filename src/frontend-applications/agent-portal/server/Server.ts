@@ -47,6 +47,8 @@ import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
 import { SystemInfo } from '../model/SystemInfo';
 import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
 import { IInitialDataExtension } from '../model/IInitialDataExtension';
+import { IFormConfigurationExtension } from './extensions/IFormConfigurationExtension';
+import { FormGroupConfiguration } from '../model/configuration/FormGroupConfiguration';
 
 export class Server implements IServer {
 
@@ -208,6 +210,7 @@ export class Server implements IServer {
                 );
 
                 formConfigurations = formConfigurations || [];
+
                 defaultConfigurations = defaultConfigurations || [];
 
                 configurations = [
@@ -216,6 +219,8 @@ export class Server implements IServer {
                     ...defaultConfigurations
                 ];
             }
+
+            await this.extendFormConfigurations(configurations);
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -260,9 +265,9 @@ export class Server implements IServer {
                     .filter((d) => d[0].startsWith('backend::'))
                     .map((d) => {
                         return {
-                            Name: d[0].replace('backend::', ''),
+                            Product: d[0].replace('backend::', ''),
                             Operator: d[1],
-                            Build: d[2]
+                            BuildNumber: Number(d[2])
                         };
                     })
             ];
@@ -270,13 +275,48 @@ export class Server implements IServer {
         return dependencies;
     }
 
+    private static async extendFormConfigurations(formConfigurations: IConfiguration[]): Promise<void> {
+        if (formConfigurations.length) {
+            const extensions = await PluginService.getInstance().getExtensions<IFormConfigurationExtension>(
+                AgentPortalExtensions.EXTENDED_FORM_CONFIGURATION
+            );
+
+            for (const formExtension of extensions) {
+                const extendedFormFields = await formExtension.getFormFieldExtensions();
+
+                for (const fieldExtension of extendedFormFields) {
+                    const configuration = formConfigurations.find((c) => c.id === fieldExtension.groupId);
+                    if (configuration) {
+                        const groupConfiguration = configuration as FormGroupConfiguration;
+                        if (!groupConfiguration.fieldConfigurationIds) {
+                            groupConfiguration.fieldConfigurationIds = [];
+                        }
+
+                        const index = groupConfiguration.fieldConfigurationIds.findIndex(
+                            (id) => id === fieldExtension.afterFieldId
+                        );
+                        if (index !== -1) {
+                            groupConfiguration.fieldConfigurationIds.splice(
+                                index + 1, 0, fieldExtension.configuration.id
+                            );
+                        } else {
+                            groupConfiguration.fieldConfigurationIds.push(fieldExtension.configuration.id);
+                        }
+
+                        formConfigurations.push(fieldExtension.configuration);
+                    }
+                }
+            }
+        }
+    }
+
     private static getPlugins(): any[] {
         const plugins = [];
         const availablePlugins = PluginService.getInstance().availablePlugins;
         for (const plugin of availablePlugins) {
             plugins.push({
-                Name: plugin[1].product,
-                Requires: plugin[1].dependencies,
+                Product: plugin[1].product,
+                Requires: plugin[1].requires,
                 Description: plugin[1].product,
                 BuildNumber: plugin[1].buildNumber,
                 Version: plugin[1].version,

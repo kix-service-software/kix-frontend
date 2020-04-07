@@ -281,7 +281,7 @@ class Component {
     private handleObjectEditError(object: KIXObject, finishedCount: number, objectCount: number): Promise<void> {
         return new Promise(async (resolve, reject) => {
             const oName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType);
-            const identifier = await LabelService.getInstance().getText(object);
+            const identifier = await LabelService.getInstance().getObjectText(object);
 
             const confirmText = await TranslationService.translate(
                 'Translatable#Changes cannot be saved. How do you want to proceed?'

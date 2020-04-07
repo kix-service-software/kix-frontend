@@ -140,16 +140,10 @@ export class TicketSearchFormManager extends SearchFormManager {
         } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
             inputType = InputFieldTypes.OBJECT_REFERENCE;
         } else {
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (dfName) {
-                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                    inputType = InputFieldTypes.OBJECT_REFERENCE;
-                }
-            }
+            inputType = super.getInputType(property);
         }
 
-        return inputType || super.getInputType(property);
+        return inputType;
     }
 
     private isDropDown(property: string): boolean {
@@ -209,6 +203,11 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
+        const result = await super.searchValues(property, searchValue, limit);
+        if (result) {
+            return result;
+        }
+
         let tree: TreeNode[];
 
         switch (property) {

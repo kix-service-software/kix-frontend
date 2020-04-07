@@ -32,8 +32,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async init(object: KIXObject): Promise<void> {
         if (object) {
-            this.state.labelProvider = LabelService.getInstance().getLabelProvider(object);
-
             if (!this.state.properties) {
                 this.state.properties = [];
                 for (const key in object) {

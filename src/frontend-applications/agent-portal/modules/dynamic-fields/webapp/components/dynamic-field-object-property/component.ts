@@ -20,19 +20,14 @@ import { RoutingConfiguration } from '../../../../../model/configuration/Routing
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
 import { RoutingService } from '../../../../base-components/webapp/core/RoutingService';
-import { ConfigItem } from '../../../../cmdb/model/ConfigItem';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { ConfigItemClassProperty } from '../../../../cmdb/model/ConfigItemClassProperty';
-import { VersionProperty } from '../../../../cmdb/model/VersionProperty';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { ConfigItemLabelProvider } from '../../../../cmdb/webapp/core';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private name: string;
     private object: KIXObject;
-    private labelProvider: ILabelProvider<any>;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -41,7 +36,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public onInput(input: any): void {
         this.name = input.name;
         this.object = input.object;
-        this.labelProvider = input.labelProvider;
         this.update();
     }
 
@@ -57,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async createDynamicFieldInfos(): Promise<void> {
-        if (this.state.field) {
+        if (this.state.field && this.object) {
             const dfValue = this.object.DynamicFields
                 ? this.object.DynamicFields.find((dfv) => dfv.Name === this.state.field.Name)
                 : null;
@@ -66,16 +60,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     this.setCheckListValues(dfValue);
                 } else {
                     if (this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                        this.state.labels = await ConfigItemLabelProvider.createCILabels(dfValue);
+                        this.state.labels = await LabelService.getInstance().createLabelsFromDFValue(
+                            this.object.KIXObjectType, dfValue
+                        );
                     } else {
-                        const value = this.labelProvider
-                            ? await this.labelProvider.getDFDisplayValues(dfValue)
-                            : dfValue;
-                        if (Array.isArray(value[0])) {
-                            this.state.labels = value[0].map(
-                                (v, i) => new Label(null, value[2][i], null, v, null, v)
+                        let labels = await LabelService.getInstance().createLabelsFromDFValue(
+                            this.object.KIXObjectType, dfValue
+                        );
+                        if (!labels) {
+                            const value = await LabelService.getInstance().getDFDisplayValues(
+                                this.object.KIXObjectType, dfValue
                             );
+                            if (Array.isArray(value[0])) {
+                                labels = value[0].map((v, i) => new Label(null, value[2][i], null, v, null, v));
+                            }
                         }
+                        this.state.labels = labels;
                     }
                 }
             }
@@ -89,12 +89,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public labelClicked(label: Label): void {
-        if (label && label.id && this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-            const routingConfig = new RoutingConfiguration(
-                'config-item-details', KIXObjectType.CONFIG_ITEM, ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
-            );
-
-            RoutingService.getInstance().routeToContext(routingConfig, label.id);
+        if (label && label.id) {
+            if (this.state.field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                const routingConfig = new RoutingConfiguration(
+                    'config-item-details', KIXObjectType.CONFIG_ITEM,
+                    ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
+                );
+                RoutingService.getInstance().routeToContext(routingConfig, label.id);
+            } else {
+                const routingConfig = new RoutingConfiguration(
+                    'ticket-details', KIXObjectType.TICKET, ContextMode.DETAILS, TicketProperty.TICKET_ID
+                );
+                RoutingService.getInstance().routeToContext(routingConfig, label.id);
+            }
         }
     }
 

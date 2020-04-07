@@ -54,8 +54,6 @@ export class ConfigItemChartFactory {
             configItems = [];
         }
 
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.CONFIG_ITEM);
-
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 'Class', SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'ITSM::Core::IncidentState'
@@ -87,7 +85,9 @@ export class ConfigItemChartFactory {
             for (const c of configItems) {
                 const incidentClass = incidentClasses.find((ic) => ic.ItemID === c.CurInciStateID);
                 if (incidentClass) {
-                    const label = await labelProvider.getPropertyValueDisplayText(property, c.ClassID);
+                    const label = await LabelService.getInstance().getPropertyValueDisplayText(
+                        KIXObjectType.CONFIG_ITEM, property, c.ClassID
+                    );
                     if (!result[0].some((l) => l === label)) {
                         result[0].push(label);
                     }
@@ -115,7 +115,9 @@ export class ConfigItemChartFactory {
             }];
             for (const c of configItems) {
                 if (c[property]) {
-                    const label = await labelProvider.getPropertyValueDisplayText(property, c[property]);
+                    const label = await LabelService.getInstance().getPropertyValueDisplayText(
+                        KIXObjectType.CONFIG_ITEM, property, c[property]
+                    );
 
                     if (!result[0].some((l) => l === label)) {
                         result[0].push(label);

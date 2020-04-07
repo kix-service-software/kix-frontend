@@ -13,7 +13,7 @@ import { NotificationFilterManager } from "../../core";
 export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {
 
     public constructor(
-        public manager: NotificationFilterManager = new NotificationFilterManager(),
+        public manager: NotificationFilterManager = NotificationFilterManager.getInstance(),
         public prepared: boolean = false
     ) {
         super();

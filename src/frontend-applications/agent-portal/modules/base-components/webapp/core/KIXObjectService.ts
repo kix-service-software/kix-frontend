@@ -46,9 +46,15 @@ import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { SortUtil } from "../../../../model/SortUtil";
 import { DataType } from "../../../../model/DataType";
-import { BrowserUtil } from "./BrowserUtil";
+import { ExtendedKIXObjectService } from "./ExtendedKIXObjectService";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
+
+    private extendedServices: ExtendedKIXObjectService[] = [];
+
+    public addExtendedService(service: ExtendedKIXObjectService): void {
+        this.extendedServices.push(service);
+    }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
 
@@ -285,7 +291,17 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<TreeNode[]> {
+        for (const extendedService of this.extendedServices) {
+            const extendedNodes = extendedService.getTreeNodes(
+                property, showInvalid, invalidClickable, filterIds, loadingOptions, objectLoadingOptions
+            );
+            if (extendedNodes) {
+                return extendedNodes;
+            }
+        }
+
         let nodes: TreeNode[] = [];
+
         switch (property) {
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
@@ -311,7 +327,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
                 nodes = [];
                 for (const vo of validObjects) {
-                    const text = await LabelService.getInstance().getText(vo);
+                    const text = await LabelService.getInstance().getObjectText(vo);
                     nodes.push(new TreeNode(Number(vo.ID), text));
                 }
                 break;
@@ -431,7 +447,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
             for (const o of objects) {
-                nodes.push(new TreeNode(o.ObjectId, await LabelService.getInstance().getText(o)));
+                nodes.push(new TreeNode(o.ObjectId, await LabelService.getInstance().getObjectText(o)));
             }
         }
         return nodes;
@@ -462,7 +478,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         for (const o of objects) {
             if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
                 const icon = await LabelService.getInstance().getObjectIcon(o);
-                const text = await LabelService.getInstance().getText(o);
+                const text = await LabelService.getInstance().getObjectText(o);
                 nodes.push(new TreeNode(
                     o.ObjectId, text, icon, undefined, undefined,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined,

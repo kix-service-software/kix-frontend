@@ -151,6 +151,9 @@ export class PluginService {
                 case '<':
                     match = currentVersion < requiredVersion;
                     break;
+                case '!':
+                    match = requiredVersion !== currentVersion;
+                    break;
                 default:
                     match = requiredVersion === currentVersion;
             }

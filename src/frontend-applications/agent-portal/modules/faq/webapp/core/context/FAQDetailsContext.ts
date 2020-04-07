@@ -28,12 +28,12 @@ export class FAQDetailsContext extends Context {
     }
 
     public async getDisplayText(short?: boolean): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<FAQArticle>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<FAQArticle>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const object = await this.getObject<FAQArticle>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation(this.getIcon(), [FAQContext.CONTEXT_ID], text);
     }
 

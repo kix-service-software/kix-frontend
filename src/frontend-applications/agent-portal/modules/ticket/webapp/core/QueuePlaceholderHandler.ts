@@ -33,7 +33,6 @@ export class QueuePlaceholderHandler implements IPlaceholderHandler {
         if (queue) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             if (attribute && this.isKnownProperty(attribute)) {
-                const queueLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.QUEUE);
                 if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
                     language = 'en';
                 }
@@ -47,7 +46,7 @@ export class QueuePlaceholderHandler implements IPlaceholderHandler {
                         break;
                     case QueueProperty.NAME:
                     case QueueProperty.FULLNAME:
-                        result = await queueLabelProvider.getDisplayText(queue, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(queue, attribute, undefined, false);
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
@@ -59,7 +58,7 @@ export class QueuePlaceholderHandler implements IPlaceholderHandler {
                         result = await this.prepareSignature(queue, ticket, attribute, language);
                         break;
                     default:
-                        result = await queueLabelProvider.getDisplayText(queue, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(queue, attribute, undefined, false);
                         result = typeof result !== 'undefined' && result !== null
                             ? await TranslationService.translate(result.toString(), undefined, language) : '';
                 }
@@ -86,8 +85,7 @@ export class QueuePlaceholderHandler implements IPlaceholderHandler {
     }
 
     private async prepareSignature(queue: Queue, ticket: Ticket, attribute: string, language: string): Promise<string> {
-        const queueLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.QUEUE);
-        let result = await queueLabelProvider.getDisplayText(queue, attribute, undefined, false);
+        let result = await LabelService.getInstance().getDisplayText(queue, attribute, undefined, false);
         const signatureRegex = PlaceholderService.getInstance().getPlaceholderRegex(
             'QUEUE', QueueProperty.SIGNATURE, false
         );

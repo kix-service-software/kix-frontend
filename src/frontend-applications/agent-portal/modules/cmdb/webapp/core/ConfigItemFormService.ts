@@ -170,7 +170,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
                     break;
                 case ConfigItemProperty.CLASS_ID:
                     if (configItem) {
-                        value = LabelService.getInstance().getPropertyValueDisplayText(configItem, property);
+                        value = LabelService.getInstance().getDisplayText(configItem, property);
                     } else {
                         const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
                             KIXObjectType.CONFIG_ITEM_CLASS, [value], null

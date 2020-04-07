@@ -29,13 +29,13 @@ export class UserDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<User>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<User>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const objectName = await TranslationService.translate('Translatable#User');
         const object = await this.getObject<User>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${text}`);
     }
 

@@ -19,15 +19,27 @@ import { KIXObjectService } from "./KIXObjectService";
 import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
-import { InputFieldTypes } from "./InputFieldTypes";
 import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
+import { InputFieldTypes } from "./InputFieldTypes";
 
 export class SearchFormManager extends AbstractDynamicFormManager {
+
     public objectType: string;
 
     public async getProperties(): Promise<Array<[string, string]>> {
+        for (const manager of this.extendedFormManager) {
+            const extendedOperations = await manager.getProperties();
+            if (extendedOperations) {
+                return extendedOperations;
+            }
+        }
+
         const properties = [];
         if (await this.checkReadPermissions('/system/dynamicfields')) {
+
+            let validDFTypes = [];
+            this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
+
             const loadingOptions = new KIXObjectLoadingOptions(
                 [
                     new FilterCriteria(
@@ -38,8 +50,13 @@ export class SearchFormManager extends AbstractDynamicFormManager {
                         DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                         FilterDataType.STRING, FilterType.AND,
                         [
-                            DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
-                            DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION, DynamicFieldTypes.CI_REFERENCE
+                            DynamicFieldTypes.TEXT,
+                            DynamicFieldTypes.TEXT_AREA,
+                            DynamicFieldTypes.DATE,
+                            DynamicFieldTypes.DATE_TIME,
+                            DynamicFieldTypes.SELECTION,
+                            DynamicFieldTypes.CI_REFERENCE,
+                            ...validDFTypes
                         ]
                     ),
                     new FilterCriteria(
@@ -63,7 +80,15 @@ export class SearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async getOperations(property: string): Promise<any[]> {
+        for (const manager of this.extendedFormManager) {
+            const extendedOperations = await manager.getOperations(property);
+            if (extendedOperations) {
+                return extendedOperations;
+            }
+        }
+
         let operations: SearchOperator[] = [];
+
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
@@ -88,25 +113,15 @@ export class SearchFormManager extends AbstractDynamicFormManager {
         return operations;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes> {
-        let inputType = InputFieldTypes.TEXT;
-        const dfName = KIXObjectService.getDynamicFieldName(property);
-        if (dfName) {
-            const field = await KIXObjectService.loadDynamicField(dfName);
-            if (field) {
-                if (field.FieldType === DynamicFieldTypes.SELECTION) {
-                    inputType = InputFieldTypes.DROPDOWN;
-                } else if (field.FieldType === DynamicFieldTypes.DATE) {
-                    inputType = InputFieldTypes.DATE;
-                } else if (field.FieldType === DynamicFieldTypes.DATE_TIME) {
-                    inputType = InputFieldTypes.DATE_TIME;
-                }
+    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+        for (const manager of this.extendedFormManager) {
+            const extendedInputTypes = await manager.getInputType(property);
+            if (extendedInputTypes) {
+                return extendedInputTypes;
             }
         }
 
-        return inputType;
+        return super.getInputType(property);
     }
-
-
 
 }
