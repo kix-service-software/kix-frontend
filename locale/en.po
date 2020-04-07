@@ -2511,12 +2511,6 @@ msgstr ""
 msgid "Link Type"
 msgstr ""
 
-msgid "Load Ticket State"
-msgstr "Loading Ticket State"
-
-msgid "Load Webform"
-msgstr ""
-
 msgid "Localisation"
 msgstr ""
 
@@ -3957,6 +3951,9 @@ msgstr ""
 
 msgid "ZIP"
 msgstr ""
+
+#~ msgid "Load Ticket State"
+#~ msgstr "Loading Ticket State"
 
 #~ msgid "Load Config Item"
 #~ msgstr "Loading Assets"

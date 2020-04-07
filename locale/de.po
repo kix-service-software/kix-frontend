@@ -2647,12 +2647,6 @@ msgstr "Verknüpfen mit Ticket"
 msgid "Link Type"
 msgstr "Art der Verknüpfung"
 
-msgid "Load Ticket State"
-msgstr "Lade Ticket Status"
-
-msgid "Load Webform"
-msgstr "Lade Webformular"
-
 msgid "Localisation"
 msgstr "Lokalisierung"
 
@@ -4114,6 +4108,12 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Load Ticket State"
+#~ msgstr "Lade Ticket Status"
+
+#~ msgid "Load Webform"
+#~ msgstr "Lade Webformular"
 
 #~ msgid "Load Config Item"
 #~ msgstr "Lade Asset"
