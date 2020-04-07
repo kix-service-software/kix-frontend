@@ -30,7 +30,7 @@ export class TicketDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<Ticket>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<Ticket>(), true, !short);
     }
 
     public async getObject<O extends KIXObject>(
@@ -75,7 +75,7 @@ export class TicketDetailsContext extends Context {
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const object = await this.getObject<Ticket>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation(this.getIcon(), [TicketContext.CONTEXT_ID], text);
     }
 

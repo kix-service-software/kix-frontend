@@ -29,6 +29,8 @@ export enum AgentPortalExtensions {
 
     INITIAL_DATA = 'kix:initial-data',
 
-    LOCALE_EXTENSION = 'kix:locale'
+    LOCALE_EXTENSION = 'kix:locale',
+
+    EXTENDED_FORM_CONFIGURATION = 'kix:exended-form-configuration'
 
 }

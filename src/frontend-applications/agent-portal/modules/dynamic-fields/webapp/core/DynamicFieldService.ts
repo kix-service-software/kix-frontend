@@ -90,7 +90,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
                 const fieldType = o.Name;
                 if (await DynamicFieldService.getInstance().getConfigSchema(fieldType)) {
 
-                    nodes.push(new TreeNode(fieldType, await LabelService.getInstance().getText(o)));
+                    nodes.push(new TreeNode(fieldType, await LabelService.getInstance().getObjectText(o)));
                 }
             }
         }

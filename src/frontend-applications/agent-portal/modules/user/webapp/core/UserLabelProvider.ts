@@ -67,12 +67,9 @@ export class UserLabelProvider extends LabelProvider<User> {
                 break;
             default:
                 if (this.isContactProperty(property)) {
-                    const contactLabelProvider = LabelService.getInstance().getLabelProviderForType(
-                        KIXObjectType.CONTACT
+                    displayValue = await LabelService.getInstance().getPropertyText(
+                        property, KIXObjectType.CONTACT, short, translatable
                     );
-                    if (contactLabelProvider) {
-                        displayValue = await contactLabelProvider.getPropertyText(property, short, translatable);
-                    }
                 } else {
                     displayValue = await super.getPropertyText(property, short, translatable);
                 }
@@ -99,14 +96,9 @@ export class UserLabelProvider extends LabelProvider<User> {
                 break;
             default:
                 if (this.isContactProperty(property)) {
-                    const contactLabelProvider = LabelService.getInstance().getLabelProviderForType(
-                        KIXObjectType.CONTACT
+                    displayValue = await LabelService.getInstance().getPropertyText(
+                        property, KIXObjectType.CONTACT, value, translatable
                     );
-                    if (contactLabelProvider) {
-                        displayValue = await contactLabelProvider.getPropertyValueDisplayText(
-                            property, value, translatable
-                        );
-                    }
                 } else {
                     displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
                 }
@@ -171,30 +163,25 @@ export class UserLabelProvider extends LabelProvider<User> {
                 break;
             default:
                 if (this.isContactProperty(property)) {
-                    const contactLabelProvider = LabelService.getInstance().getLabelProviderForType(
-                        KIXObjectType.CONTACT
-                    );
-                    if (contactLabelProvider) {
-                        let contact = user.Contact;
-                        if (!contact) {
-                            const contacts = await KIXObjectService.loadObjects<Contact>(
-                                KIXObjectType.CONTACT, null,
-                                new KIXObjectLoadingOptions(
-                                    [
-                                        new FilterCriteria(
-                                            ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
-                                            FilterDataType.NUMERIC, FilterType.AND, user.UserID
-                                        )
-                                    ]
-                                ), null, true
-                            ).catch(() => [] as Contact[]);
-                            contact = contacts && contacts.length ? contacts[0] : null;
-                        }
-                        if (contact) {
-                            displayValue = await contactLabelProvider.getDisplayText(
-                                contact, property, defaultValue, translatable
-                            );
-                        }
+                    let contact = user.Contact;
+                    if (!contact) {
+                        const contacts = await KIXObjectService.loadObjects<Contact>(
+                            KIXObjectType.CONTACT, null,
+                            new KIXObjectLoadingOptions(
+                                [
+                                    new FilterCriteria(
+                                        ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
+                                        FilterDataType.NUMERIC, FilterType.AND, user.UserID
+                                    )
+                                ]
+                            ), null, true
+                        ).catch(() => [] as Contact[]);
+                        contact = contacts && contacts.length ? contacts[0] : null;
+                    }
+                    if (contact) {
+                        displayValue = await LabelService.getInstance().getDisplayText(
+                            contact, property, defaultValue, translatable
+                        );
                     }
                 } else {
                     displayValue = await super.getDisplayText(user, property, defaultValue, translatable);

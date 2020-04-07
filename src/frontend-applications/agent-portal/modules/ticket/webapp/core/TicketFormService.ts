@@ -140,6 +140,7 @@ export class TicketFormService extends KIXObjectFormService {
                 }
                 break;
             default:
+                value = await super.getValue(property, value, ticket, formField, formContext);
         }
         return value;
     }

@@ -61,13 +61,12 @@ class Component implements IKIXObjectSearchListener {
 
         if (cache) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(cache.objectType);
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(cache.objectType);
 
             const searchLabel = await TranslationService.translate('Translatable#Search');
             if (cache.name) {
                 this.state.title = `${titleLabel}: (${searchLabel}: ${cache.name})`;
             } else {
-                const objectName = await labelProvider.getObjectName(true);
+                const objectName = await LabelService.getInstance().getObjectName(cache.objectType, true);
                 this.state.title = `${titleLabel}: ${objectName}`;
             }
             const displayCriteria: Array<[string, string, Label[]]> = [];
@@ -91,7 +90,9 @@ class Component implements IKIXObjectSearchListener {
                         const value = await searchDefinition.getDisplaySearchValue(
                             criteria.property, parameter, v, criteria.type
                         );
-                        const icons = await labelProvider.getIcons(null, criteria.property, v);
+                        const icons = await LabelService.getInstance().getIconsForType(
+                            cache.objectType, null, criteria.property, v
+                        );
                         labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
                     }
                 } else if (criteria.value instanceof KIXObject) {
@@ -103,14 +104,18 @@ class Component implements IKIXObjectSearchListener {
                     const value = await searchDefinition.getDisplaySearchValue(
                         criteria.property, parameter, criteria.value, criteria.type
                     );
-                    const icons = await labelProvider.getIcons(null, criteria.property, criteria.value);
+                    const icons = await LabelService.getInstance().getIconsForType(
+                        cache.objectType, null, criteria.property, criteria.value
+                    );
                     labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
                 }
 
                 const searchProperty = properties.find((p) => p[0] === criteria.property);
                 let displayProperty = searchProperty ? searchProperty[1] : null;
                 if (!displayProperty) {
-                    displayProperty = await labelProvider.getPropertyText(criteria.property);
+                    displayProperty = await LabelService.getInstance().getPropertyText(
+                        criteria.property, cache.objectType
+                    );
                 } else {
                     displayProperty = await TranslationService.translate(displayProperty);
                 }

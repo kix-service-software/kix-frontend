@@ -256,7 +256,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 );
 
                 if (organisations && organisations.length) {
-                    displayValue = await LabelService.getInstance().getText(organisations[0]);
+                    displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
                 }
             } else if (input.Type === 'Contact') {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
@@ -264,7 +264,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 );
 
                 if (contacts && contacts.length) {
-                    displayValue = await LabelService.getInstance().getText(contacts[0]);
+                    displayValue = await LabelService.getInstance().getObjectText(contacts[0]);
                 }
             } else if (input.Type === 'Date') {
                 displayValue = await DateTimeUtil.getLocalDateString(displayValue);

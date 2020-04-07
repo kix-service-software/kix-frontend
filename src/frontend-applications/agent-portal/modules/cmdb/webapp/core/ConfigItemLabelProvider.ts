@@ -259,7 +259,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
         return icons;
     }
 
-    public static async createCILabels(dfValue: DynamicFieldValue): Promise<Label[]> {
+    public async createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
         if (Array.isArray(dfValue.Value)) {
             const loadingOptions = new KIXObjectLoadingOptions(
                 null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
@@ -271,10 +271,10 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             const labels = [];
             for (const ci of configItems) {
                 const ciIcon = new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
-                const incidentIcons = await LabelService.getInstance().getPropertyValueDisplayIcons(
+                const incidentIcons = await LabelService.getInstance().getIcons(
                     ci, ConfigItemProperty.CUR_INCI_STATE_ID
                 );
-                const deploymentIcon = await LabelService.getInstance().getPropertyValueDisplayIcons(
+                const deploymentIcon = await LabelService.getInstance().getIcons(
                     ci, ConfigItemProperty.CUR_DEPL_STATE_ID
                 );
                 const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [

@@ -123,7 +123,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createSchedules(tickets: Ticket[]): Promise<any[]> {
         const schedules = [];
         for (const ticket of tickets) {
-            const title = await LabelService.getInstance().getText(ticket, true);
+            const title = await LabelService.getInstance().getObjectText(ticket, true);
 
             const isPending = ticket.StateType === 'pending reminder';
 

@@ -28,7 +28,7 @@ export class MailFilterDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<MailFilter>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<MailFilter>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

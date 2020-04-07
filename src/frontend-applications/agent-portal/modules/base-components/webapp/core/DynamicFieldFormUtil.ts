@@ -38,10 +38,29 @@ import { FilterType } from "../../../../model/FilterType";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
 import { KIXObjectService } from "./KIXObjectService";
+import { IDynamicFieldFormUtil } from "./IDynamicFieldFormUtil";
+import { ExtendedDynamicFieldFormUtil } from "./ExtendedDynamicFieldFormUtil";
 
-export class DynamicFieldFormUtil {
+export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
-    public static async configureDynamicFields(form: FormConfiguration): Promise<void> {
+    private static INSTANCE: DynamicFieldFormUtil;
+
+    public static getInstance(): DynamicFieldFormUtil {
+        if (!DynamicFieldFormUtil.INSTANCE) {
+            DynamicFieldFormUtil.INSTANCE = new DynamicFieldFormUtil();
+        }
+        return DynamicFieldFormUtil.INSTANCE;
+    }
+
+    private constructor() { }
+
+    private extendedUtils: ExtendedDynamicFieldFormUtil[] = [];
+
+    public addExtendedDynamicFormUtil(util: ExtendedDynamicFieldFormUtil): void {
+        this.extendedUtils.push(util);
+    }
+
+    public async configureDynamicFields(form: FormConfiguration): Promise<void> {
         for (const page of form.pages) {
             for (const group of page.groups) {
                 const dynamicFields = group.formFields.filter((ff) => {
@@ -60,7 +79,7 @@ export class DynamicFieldFormUtil {
         }
     }
 
-    private static async createDynamicFormField(field: FormFieldConfiguration): Promise<boolean> {
+    public async createDynamicFormField(field: FormFieldConfiguration): Promise<boolean> {
         let success = false;
         const nameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
         if (nameOption) {
@@ -101,6 +120,9 @@ export class DynamicFieldFormUtil {
                         this.prepareCIReferenceField(field, dynamicField);
                         break;
                     default:
+                        for (const extendedUtil of this.extendedUtils) {
+                            await extendedUtil.createDynamicFormField(field);
+                        }
                 }
 
                 success = true;
@@ -110,7 +132,7 @@ export class DynamicFieldFormUtil {
         return success;
     }
 
-    private static prepareDateField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
+    public prepareDateField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
         const date = new Date();
         let type = InputFieldTypes.DATE_TIME;
 
@@ -132,7 +154,7 @@ export class DynamicFieldFormUtil {
         field.inputComponent = 'date-time-input';
     }
 
-    private static async prepareSelectionField(
+    private async prepareSelectionField(
         field: FormFieldConfiguration, dynamicField: DynamicField
     ): Promise<void> {
         field.inputComponent = 'object-reference-input';
@@ -168,7 +190,7 @@ export class DynamicFieldFormUtil {
         field.countMin = 1;
     }
 
-    private static prepareChecklistField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
+    private prepareChecklistField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
         field.inputComponent = 'dynamic-field-checklist-input';
         field.defaultValue = new FormFieldValue(
             dynamicField.Config.DefaultValue ? JSON.parse(dynamicField.Config.DefaultValue) : null
@@ -178,7 +200,7 @@ export class DynamicFieldFormUtil {
         field.countMin = 1;
     }
 
-    private static prepareCIReferenceField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
+    private prepareCIReferenceField(field: FormFieldConfiguration, dynamicField: DynamicField): void {
         field.inputComponent = 'object-reference-input';
         const isMultiSelect = field.countMax !== null && (field.countMax < 0 || field.countMax > 1);
 
@@ -231,7 +253,7 @@ export class DynamicFieldFormUtil {
         field.countMin = 1;
     }
 
-    public static async handleDynamicFieldValues(
+    public async handleDynamicFieldValues(
         formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService
     ): Promise<void> {
         const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
@@ -256,6 +278,15 @@ export class DynamicFieldFormUtil {
             }
 
             if (dynamicField) {
+                let extendedUtilResult: boolean = false;
+                for (const util of this.extendedUtils) {
+                    extendedUtilResult = await util.setFieldValue(dynamicField, dfValue, field);
+                }
+
+                if (extendedUtilResult) {
+                    continue;
+                }
+
                 if (dynamicField.FieldType === DynamicFieldTypes.SELECTION ||
                     dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE
                 ) {
@@ -294,7 +325,7 @@ export class DynamicFieldFormUtil {
         }
     }
 
-    public static async handleDynamicField(
+    public async handleDynamicField(
         field: FormFieldConfiguration, value: FormFieldValue, parameter: Array<[string, any]>
     ): Promise<Array<[string, any]>> {
         let dfParameter = parameter.find((p) => p[0] === KIXObjectProperty.DYNAMIC_FIELDS);
@@ -338,7 +369,7 @@ export class DynamicFieldFormUtil {
         return parameter;
     }
 
-    public static async validateDFValue(dfName: string, value: any): Promise<ValidationResult[]> {
+    public async validateDFValue(dfName: string, value: any): Promise<ValidationResult[]> {
         let result = [];
         const dynamicField = await KIXObjectService.loadDynamicField(dfName);
         if (dynamicField) {
@@ -348,7 +379,7 @@ export class DynamicFieldFormUtil {
         return result;
     }
 
-    public static countValues(checklist: CheckListItem[]): [number, number] {
+    public countValues(checklist: CheckListItem[]): [number, number] {
         const value: [number, number] = [0, 0];
         for (const item of checklist) {
             if (item.input === CheckListInputType.ChecklistState) {

@@ -19,6 +19,7 @@ import { CRUD } from "../../../../../../../server/model/rest/CRUD";
 import { ValidationResult } from "../ValidationResult";
 import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
 import { KIXObjectService } from "../KIXObjectService";
+import { ExtendedDynamicFormManager } from "./ExtendedDynamicFormManager";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -35,6 +36,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public resetOperator: boolean = true;
 
     public abstract async getProperties(): Promise<Array<[string, string]>>;
+
+    protected extendedFormManager: ExtendedDynamicFormManager[] = [];
+
+    public addExtendedFormManager(manager: ExtendedDynamicFormManager): void {
+        this.extendedFormManager.push(manager);
+    }
 
     public registerListener(listenerId: string, callback: () => void): void {
         if (listenerId) {
@@ -107,14 +114,32 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string> {
-        return;
+        for (const extendedManager of this.extendedFormManager) {
+            const result = extendedManager.getObjectReferenceObjectType(property);
+            if (result) {
+                return result;
+            }
+        }
+        return null;
     }
 
     public getSpecificInput(): string {
-        return;
+        for (const extendedManager of this.extendedFormManager) {
+            const result = extendedManager.getSpecificInput();
+            if (result) {
+                return result;
+            }
+        }
+        return null;
     }
 
     public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getInputTypeOptions(property, operator);
+            if (result) {
+                return result;
+            }
+        }
         return [];
     }
 
@@ -124,10 +149,22 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
 
     public async getPropertiesPlaceholder(): Promise<string> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getPropertiesPlaceholder();
+            if (result) {
+                return result;
+            }
+        }
         return '';
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getTreeNodes(property);
+            if (result) {
+                return result;
+            }
+        }
         return [];
     }
 
@@ -136,23 +173,55 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async getOperations(property: string): Promise<any[]> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getOperations(property);
+            if (result) {
+                return result;
+            }
+        }
         return [];
     }
 
     public async getOperationsPlaceholder(): Promise<string> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getOperationsPlaceholder();
+            if (result) {
+                return result;
+            }
+        }
         return '';
     }
 
     public async getOpertationsType(property: string): Promise<DynamicFormOperationsType> {
-        return;
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getOpertationsType(property);
+            if (result) {
+                return result;
+            }
+        }
+        return null;
     }
 
     public async getOperatorDisplayText(operator: string): Promise<string> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = await extendedManager.getOperatorDisplayText(operator);
+            if (result) {
+                return result;
+            }
+        }
+
         return operator;
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        return [];
+        for (const extendedManager of this.extendedFormManager) {
+            const tree = await extendedManager.searchValues(property, searchValue, limit);
+            if (tree) {
+                return tree;
+            }
+        }
+
+        return null;
     }
 
     public getEditableValues(): ObjectPropertyValue[] {
@@ -164,7 +233,13 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public validate(): Promise<ValidationResult[]> {
-        return;
+        for (const extendedManager of this.extendedFormManager) {
+            const result = extendedManager.validate();
+            if (result) {
+                return result;
+            }
+        }
+        return null;
     }
 
     public async shouldAddEmptyField(): Promise<boolean> {
@@ -185,6 +260,13 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
+        for (const manager of this.extendedFormManager) {
+            const extendedOperations = await manager.getInputType(property);
+            if (extendedOperations) {
+                return extendedOperations;
+            }
+        }
+
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             return await this.getInputTypeForDF(property);
@@ -193,6 +275,13 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
+        for (const extendedManager of this.extendedFormManager) {
+            const result = extendedManager.isMultiselect(property);
+            if (result) {
+                return result;
+            }
+        }
+
         let isMultiSelect = false;
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {

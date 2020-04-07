@@ -33,7 +33,7 @@ export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
         const newNotification = new Notification(notification);
 
         if (newNotification.Data) {
-            const filterProperties = await new NotificationFilterManager().getProperties();
+            const filterProperties = await NotificationFilterManager.getInstance().getProperties();
             newNotification.Filter = new Map();
             for (const key in newNotification.Data) {
                 if (key && Array.isArray(newNotification.Data[key])) {

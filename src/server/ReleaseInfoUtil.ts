@@ -51,6 +51,7 @@ export class ReleaseInfoUtil {
                         releaseInfo.buildNumber = Number(releaseValue[1]);
                     } else if (releaseValue[0] === 'REQUIRES') {
                         releaseInfo.dependencies = this.parseRequirements(releaseValue[1]);
+                        releaseInfo.requires = releaseValue[1];
                     }
                 }
             });
@@ -72,7 +73,7 @@ export class ReleaseInfoUtil {
                 requirements.push([
                     matches[1] ? matches[1] : null,
                     matches[2] ? matches[2] : null,
-                    matches[3] ? matches[3] : null,
+                    matches[3] ? Number(matches[3]) : null,
                 ]);
             }
         }

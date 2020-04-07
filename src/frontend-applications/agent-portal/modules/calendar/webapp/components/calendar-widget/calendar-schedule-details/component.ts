@@ -36,15 +36,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'ticket-details', KIXObjectType.TICKET, ContextMode.DETAILS, null
         );
 
-        this.state.organisation = await LabelService.getInstance().getPropertyValueDisplayText(
+        this.state.organisation = await LabelService.getInstance().getDisplayText(
             this.state.ticket, TicketProperty.ORGANISATION_ID
         );
 
-        this.state.ticketNumber = await LabelService.getInstance().getText(
+        this.state.ticketNumber = await LabelService.getInstance().getObjectText(
             this.state.ticket, true, false
         );
 
-        const icons = await LabelService.getInstance().getPropertyValueDisplayIcons(
+        const icons = await LabelService.getInstance().getIcons(
             this.state.ticket, TicketProperty.PRIORITY_ID
         );
 

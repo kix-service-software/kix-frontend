@@ -59,7 +59,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
     }
 
     protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
-        await DynamicFieldFormUtil.configureDynamicFields(form);
+        await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
     }
 
     protected async prepareFormFieldValues(
@@ -69,7 +69,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         if (formContext === FormContext.NEW) {
             this.handleCountValues(formFields);
         } else if (formContext === FormContext.EDIT) {
-            await DynamicFieldFormUtil.handleDynamicFieldValues(formFields, kixObject, this);
+            await DynamicFieldFormUtil.getInstance().handleDynamicFieldValues(formFields, kixObject, this);
         }
 
         for (const f of formFields) {
@@ -285,7 +285,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
             if (value && typeof value.value !== 'undefined' && property) {
                 if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
-                    parameter = await DynamicFieldFormUtil.handleDynamicField(field, value, parameter);
+                    parameter = await DynamicFieldFormUtil.getInstance().handleDynamicField(field, value, parameter);
                 } else {
                     let preparedValue;
                     if (forUpdate) {

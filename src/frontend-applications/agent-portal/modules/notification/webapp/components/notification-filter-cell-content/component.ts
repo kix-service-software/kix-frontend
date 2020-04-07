@@ -22,7 +22,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onInput(input: any): Promise<void> {
         if (input.cell) {
             const propertyCell = (input.cell as ICell).getRow().getCell(NotificationFilterTableProperty.FIELD);
-            const inputType = propertyCell ? await new NotificationFilterManager().getInputType(
+            const inputType = propertyCell ? await NotificationFilterManager.getInstance().getInputType(
                 propertyCell.getValue().objectValue
             ) : null;
             this.state.isLabelCell = inputType === InputFieldTypes.DROPDOWN

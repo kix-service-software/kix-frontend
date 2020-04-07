@@ -21,6 +21,8 @@ export enum DynamicFieldTypes {
 
     CHECK_LIST = 'CheckList',
 
-    CI_REFERENCE = 'ITSMConfigItemReference'
+    CI_REFERENCE = 'ITSMConfigItemReference',
+
+    TICKET_REFERENCE = 'TicketReference'
 
 }

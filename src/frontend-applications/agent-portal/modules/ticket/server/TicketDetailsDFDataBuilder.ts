@@ -122,7 +122,7 @@ export class TicketDetailsDFDataBuilder {
         ) {
             for (const v of fieldValue.Value) {
                 const checklist = JSON.parse(v);
-                const counts = DynamicFieldFormUtil.countValues(checklist);
+                const counts = DynamicFieldFormUtil.getInstance().countValues(checklist);
                 values.push(`${counts[0]}/${counts[1]}`);
             }
         }

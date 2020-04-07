@@ -61,7 +61,7 @@ export class TableExportUtil {
                     }
                 } else {
                     if (useDisplayString) {
-                        displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+                        displayValue = await LabelService.getInstance().getDisplayText(
                             row.getRowObject().getObject(), cId
                         );
                     } else {

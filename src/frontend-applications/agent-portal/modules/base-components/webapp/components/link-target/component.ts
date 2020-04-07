@@ -71,7 +71,7 @@ class Component {
             const objects = await KIXObjectService.loadObjects(configuration.objectType, [objectId]);
 
             if (objects && !!objects.length) {
-                configuration.title = await LabelService.getInstance().getText(objects[0]);
+                configuration.title = await LabelService.getInstance().getObjectText(objects[0]);
             }
         }
 

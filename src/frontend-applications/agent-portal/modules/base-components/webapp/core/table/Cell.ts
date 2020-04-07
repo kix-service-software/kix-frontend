@@ -58,19 +58,17 @@ export class Cell implements ICell {
             const translatable = columnConfiguration ? columnConfiguration.translatable : true;
 
             if (object) {
-                value = await LabelService.getInstance().getPropertyValueDisplayText(
+                value = await LabelService.getInstance().getDisplayText(
                     object, this.tableValue.property, null, translatable
                 );
             } else {
                 const objectType = this.getRow().getTable().getObjectType();
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
-                if (labelProvider) {
-                    value = await labelProvider.getPropertyValueDisplayText(
-                        this.tableValue.property,
-                        this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
-                        translatable
-                    );
-                }
+                value = await LabelService.getInstance().getPropertyValueDisplayText(
+                    objectType,
+                    this.tableValue.property,
+                    this.tableValue.objectValue ? this.tableValue.objectValue.toString() : null,
+                    translatable
+                );
             }
             this.getValue().displayValue = value;
 

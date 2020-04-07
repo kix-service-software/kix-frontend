@@ -152,8 +152,8 @@ class Component {
                 (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
             );
             if (linkObject) {
-                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getText(o, true, false);
-                linkObject.title = await LabelService.getInstance().getText(o, false, true);
+                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getObjectText(o, true, false);
+                linkObject.title = await LabelService.getInstance().getObjectText(o, false, true);
             }
         }
     }
@@ -228,12 +228,8 @@ class Component {
     }
 
     public async openAddLinkDialog(): Promise<void> {
-        let dialogTitle = await TranslationService.translate('Translatable#Linked Objects');
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.mainObject.KIXObjectType);
-        if (labelProvider) {
-            const objectName = await labelProvider.getObjectName();
-            dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
-        }
+        const objectName = await LabelService.getInstance().getObjectName(this.mainObject.KIXObjectType);
+        const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
 
         const linkDescriptions = this.linkDescriptions.filter((ld) => !this.deleteLinkObjects
             .some((dlo) =>
@@ -271,9 +267,11 @@ class Component {
                     ObjectId: 'NEW-' + ld.linkableObject.KIXObjectType + '-' +
                         ld.linkableObject.ObjectId + '-' + ld.linkTypeDescription.linkType.TypeID,
                     linkedObjectKey: ld.linkableObject.ObjectId,
-                    linkedObjectDisplayId: await LabelService.getInstance().getText(ld.linkableObject, true, false),
+                    linkedObjectDisplayId: await LabelService.getInstance().getObjectText(
+                        ld.linkableObject, true, false
+                    ),
                     linkedObjectType: ld.linkableObject.KIXObjectType,
-                    title: await LabelService.getInstance().getText(ld.linkableObject, false, true),
+                    title: await LabelService.getInstance().getObjectText(ld.linkableObject, false, true),
                     linkedAs: ld.linkTypeDescription.asSource ?
                         ld.linkTypeDescription.linkType.SourceName : ld.linkTypeDescription.linkType.TargetName,
                     linkType: ld.linkTypeDescription.linkType,

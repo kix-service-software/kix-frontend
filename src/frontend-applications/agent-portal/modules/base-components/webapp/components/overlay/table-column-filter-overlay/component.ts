@@ -80,15 +80,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const filterValues = this.column.getFilterValues();
         const nodes: TreeNode[] = [];
         for (const fv of filterValues) {
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
-            let label = `${fv[0]} (${fv[1]})`;
-            let icon: string | ObjectIcon;
-            if (labelProvider) {
-                const displayValue = await labelProvider.getPropertyValueDisplayText(this.column.getColumnId(), fv[0]);
-                label = `${displayValue} (${fv[1]})`;
-                const icons = await labelProvider.getIcons(null, this.column.getColumnId(), fv[0]);
-                icon = icons && icons.length ? icons[0] : null;
-            }
+            const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+                objectType, this.column.getColumnId(), fv[0]
+            );
+            const label = `${displayValue} (${fv[1]})`;
+            const icons = await LabelService.getInstance().getIconsForType(
+                objectType, null, this.column.getColumnId(), fv[0]
+            );
+            const icon = icons && icons.length ? icons[0] : null;
 
             const node = new TreeNode(fv[0], label, icon, null);
 

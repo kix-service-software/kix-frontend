@@ -15,14 +15,34 @@ import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 import { DynamicFieldValue } from "../../model/DynamicFieldValue";
 import { CheckListItem } from "./CheckListItem";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
+import { ExtendedDynamicFieldPlaceHolderHandler } from "./ExtendedDynamicFieldPlaceHolderHandler";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 
 export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler {
 
-    public handlerId: string = 'DynamicFieldValuePlaceholderHandler';
-    private objectStrings = [];
 
-    public isHandlerFor(objectString: string): boolean {
-        return this.objectStrings.some((os) => os === objectString);
+    private static INSTANCE: DynamicFieldValuePlaceholderHandler;
+
+    public static getInstance(): DynamicFieldValuePlaceholderHandler {
+        if (!DynamicFieldValuePlaceholderHandler.INSTANCE) {
+            DynamicFieldValuePlaceholderHandler.INSTANCE = new DynamicFieldValuePlaceholderHandler();
+        }
+        return DynamicFieldValuePlaceholderHandler.INSTANCE;
+    }
+
+    private constructor() { }
+
+    private extendedPlaceholderHandler: ExtendedDynamicFieldPlaceHolderHandler[] = [];
+
+    public handlerId: string = 'DynamicFieldValuePlaceholderHandler';
+    private objectTypes = [KIXObjectType.DYNAMIC_FIELD];
+
+    public addExtendedPlaceholderHandler(handler: ExtendedDynamicFieldPlaceHolderHandler): void {
+        this.extendedPlaceholderHandler.push(handler);
+    }
+
+    public isHandlerFor(objectType: KIXObjectType | string): boolean {
+        return this.objectTypes.some((os) => os === objectType);
     }
 
     public async replace(placeholder: string, object?: KIXObject, language?: string): Promise<string> {
@@ -38,13 +58,15 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     }
 
     public async replaceDFValue(object: KIXObject, optionString: string): Promise<string> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.replaceDFValue(object, optionString);
+            if (value) {
+                return value;
+            }
+        }
+
         let result = '';
         if (object && Array.isArray(object.DynamicFields)) {
-            // TODO: currently not necessary/possible
-            // if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
-            //     language = 'en';
-            // }
-
             if (optionString) {
                 let dfName = optionString;
                 let dfValueOptions = '';
@@ -66,6 +88,13 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     private async getDFDisplayValue(
         object: KIXObject, dfValue: DynamicFieldValue, dfOptions: string = ''
     ): Promise<string> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.getDFDisplayValue(object, dfValue, dfOptions);
+            if (value) {
+                return value;
+            }
+        }
+
         let result = '';
         if (!dfValue.Value) {
             dfValue.Value = [];
@@ -85,6 +114,13 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     }
 
     private async handleKey(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.handleKey(object, dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
         const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
         let result: string = '';
         if (
@@ -104,6 +140,13 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     }
 
     private async handleValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.handleValue(object, dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
         let result: string = dfValue.DisplayValue ? dfValue.DisplayValue : '';
         if (!result) {
             const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
@@ -113,28 +156,9 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
                 if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     result = this.getChecklistStringValue(dfValue);
                 } else {
-                    const labelProvider = LabelService.getInstance().getLabelProvider(object);
-                    if (labelProvider) {
-                        const values = await labelProvider.getDFDisplayValues(dfValue);
-                        result = values ? values[1] : Array.isArray(dfValue.Value) ?
-                            dfValue.Value.join(separator) : [dfValue.Value].join(separator);
-                    }
-                }
-            }
-        }
-        return result;
-    }
-
-    private async handleShortValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
-        let result: string = dfValue.DisplayValueShort ? dfValue.DisplayValueShort : '';
-        if (!result) {
-            const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
-            if (dynamicField) {
-                const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
-                    dynamicField.Config.ItemSeparator : ', ';
-                const labelProvider = LabelService.getInstance().getLabelProvider(object);
-                if (labelProvider) {
-                    const values = await labelProvider.getDFDisplayValues(dfValue);
+                    const values = await LabelService.getInstance().getDFDisplayValues(
+                        object.KIXObjectType, dfValue
+                    );
                     result = values ? values[1] : Array.isArray(dfValue.Value) ?
                         dfValue.Value.join(separator) : [dfValue.Value].join(separator);
                 }
@@ -143,7 +167,36 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
         return result;
     }
 
+    private async handleShortValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.handleShortValue(object, dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
+        let result: string = dfValue.DisplayValueShort ? dfValue.DisplayValueShort : '';
+        if (!result) {
+            const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
+            if (dynamicField) {
+                const separator = dynamicField.Config && dynamicField.Config.ItemSeparator ?
+                    dynamicField.Config.ItemSeparator : ', ';
+                const values = await LabelService.getInstance().getDFDisplayValues(object.KIXObjectType, dfValue);
+                result = values ? values[1] : Array.isArray(dfValue.Value) ?
+                    dfValue.Value.join(separator) : [dfValue.Value].join(separator);
+            }
+        }
+        return result;
+    }
+
     private async handleHTMLValue(object: KIXObject, dfValue: DynamicFieldValue): Promise<string> {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = await extendedHandler.handleHTMLValue(object, dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
         let result: string = dfValue.DisplayValueHTML ? dfValue.DisplayValueHTML : '';
         if (!result) {
             const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
@@ -157,6 +210,13 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     }
 
     private getChecklistStringValue(dfValue: DynamicFieldValue): string {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = extendedHandler.getChecklistStringValue(dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
         let result = `${dfValue.Name}</br >`;
         for (const v of dfValue.Value) {
             const checklist: CheckListItem[] = JSON.parse(v);
@@ -173,6 +233,13 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
     }
 
     private getChecklistHTMLValue(dfValue: DynamicFieldValue): string {
+        for (const extendedHandler of this.extendedPlaceholderHandler) {
+            const value = extendedHandler.getChecklistHTMLValue(dfValue);
+            if (value) {
+                return value;
+            }
+        }
+
         let result = `<h3>${dfValue.Name}</h3>`;
         for (const v of dfValue.Value) {
             const checklist: CheckListItem[] = JSON.parse(v);

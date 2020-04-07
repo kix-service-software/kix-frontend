@@ -27,7 +27,7 @@ export class FAQCategoryDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<FAQCategory>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<FAQCategory>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {

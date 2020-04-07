@@ -138,7 +138,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     const displayTexts = [];
                     if (users && !!users.length) {
                         for (const user of users) {
-                            const text = await LabelService.getInstance().getText(user);
+                            const text = await LabelService.getInstance().getObjectText(user);
                             displayTexts.push(text);
                         }
                     }
@@ -154,7 +154,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     const displayTexts = [];
                     if (roles && !!roles.length) {
                         for (const role of roles) {
-                            const text = await LabelService.getInstance().getText(role);
+                            const text = await LabelService.getInstance().getObjectText(role);
                             displayTexts.push(text);
                         }
                     }
@@ -316,7 +316,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     const displayTexts = [];
                     if (users && !!users.length) {
                         for (const user of users) {
-                            const text = await LabelService.getInstance().getText(user);
+                            const text = await LabelService.getInstance().getObjectText(user);
                             displayTexts.push(text);
                         }
                     }
@@ -331,7 +331,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     const displayTexts = [];
                     if (roles && !!roles.length) {
                         for (const role of roles) {
-                            const text = await LabelService.getInstance().getText(role);
+                            const text = await LabelService.getInstance().getObjectText(role);
                             displayTexts.push(text);
                         }
                     }

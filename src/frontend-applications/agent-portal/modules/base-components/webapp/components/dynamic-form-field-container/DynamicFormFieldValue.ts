@@ -20,6 +20,7 @@ import { KIXModulesService } from "../../../../../modules/base-components/webapp
 import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { LabelProvider } from "../../core/LabelProvider";
 
 export class DynamicFormFieldValue {
 
@@ -259,10 +260,9 @@ export class DynamicFormFieldValue {
                 let label;
                 let icon;
                 if (objects && objects.length) {
-                    const labelProvider = LabelService.getInstance().getLabelProviderForType(this.value.objectType);
                     for (const object of objects) {
-                        label = await labelProvider.getObjectText(object);
-                        icon = labelProvider.getObjectTypeIcon();
+                        label = await LabelService.getInstance().getObjectText(object);
+                        icon = LabelService.getInstance().getObjectTypeIcon(object.KIXObjectType);
                         currentValues.push(new TreeNode(object.ObjectId, label, icon));
                     }
                 }

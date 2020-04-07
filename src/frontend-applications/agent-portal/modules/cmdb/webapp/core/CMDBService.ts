@@ -170,7 +170,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 nodes = [];
                 for (const c of classes) {
                     const icon = LabelService.getInstance().getObjectIcon(c);
-                    const text = await LabelService.getInstance().getText(c);
+                    const text = await LabelService.getInstance().getObjectText(c);
                     nodes.push(
                         new TreeNode(
                             c.ID, text, icon,
@@ -199,7 +199,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 );
 
                 for (const i of items) {
-                    const text = await LabelService.getInstance().getText(i);
+                    const text = await LabelService.getInstance().getObjectText(i);
                     nodes.push(new TreeNode(
                         i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
                         undefined, undefined, undefined,

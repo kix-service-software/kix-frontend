@@ -19,7 +19,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         if (input.checklist) {
-            const values = DynamicFieldFormUtil.countValues(input.checklist);
+            const values = DynamicFieldFormUtil.getInstance().countValues(input.checklist);
             this.state.progressValue = values[0];
             this.state.progressMax = values[1];
         }

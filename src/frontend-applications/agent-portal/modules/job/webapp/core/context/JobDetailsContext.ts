@@ -27,7 +27,7 @@ export class JobDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<Job>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<Job>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
