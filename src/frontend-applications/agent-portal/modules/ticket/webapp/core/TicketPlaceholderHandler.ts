@@ -126,7 +126,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                                 null, null, null, null, ['Preferences']
                             );
                             const users = await KIXObjectService.loadObjects<User>(
-                                KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true
+                                KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true, true, true
                             ).catch((error) => [] as User[]);
                             if (users && !!users.length) {
                                 result = await UserPlaceholderHandler.prototype.replace(
@@ -142,7 +142,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                                 null, null, null, null, ['Preferences']
                             );
                             const users = await KIXObjectService.loadObjects<User>(
-                                KIXObjectType.USER, [ticket.ResponsibleID], loadingOptions, null, true
+                                KIXObjectType.USER, [ticket.ResponsibleID], loadingOptions, null, true, true, true
                             ).catch((error) => [] as User[]);
                             if (users && !!users.length) {
                                 result = await UserPlaceholderHandler.prototype.replace(

@@ -180,7 +180,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
                         KIXObjectType.USER, [value],
                         new KIXObjectLoadingOptions(
                             null, null, null, [UserProperty.CONTACT]
-                        ), null, true
+                        ), null, true, true, true
                     ).catch((error) => [] as User[]);
                     displayValue = users && users.length ?
                         users[0].Contact ? users[0].Contact.Fullname : users[0].UserLogin : value;

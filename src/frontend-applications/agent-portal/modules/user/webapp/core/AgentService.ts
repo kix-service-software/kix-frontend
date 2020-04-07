@@ -37,7 +37,7 @@ export class AgentService extends KIXObjectService<User> {
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true, forceIds?: boolean
+        cache: boolean = true, forceIds: boolean = true
     ): Promise<O[]> {
         let objects: O[];
         let superLoad = false;

@@ -23,12 +23,14 @@ import { CMDBService } from "..";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
 import { EventService } from "../../../../base-components/webapp/core/EventService";
+import { VersionProperty } from "../../../model/VersionProperty";
 
 export class CMDBContext extends Context {
 
     public static CONTEXT_ID: string = 'cmdb';
 
     public currentCIClass: ConfigItemClass;
+    public filterValue: string;
 
     public getIcon(): string {
         return 'kix-icon-cmdb';
@@ -39,37 +41,66 @@ export class CMDBContext extends Context {
         return title;
     }
 
-    public async setCIClass(ciClass: ConfigItemClass): Promise<void> {
+    public setCIClass(ciClass: ConfigItemClass): void {
         if (ciClass) {
             if (!this.currentCIClass || ciClass.ID !== this.currentCIClass.ID) {
                 this.currentCIClass = ciClass;
-                await this.loadConfigItems();
+                this.loadConfigItems();
             }
         } else if (this.currentCIClass || typeof this.currentCIClass === 'undefined') {
             this.currentCIClass = null;
-            await this.loadConfigItems();
+            this.loadConfigItems();
         }
+    }
+
+    public setFilterValue(filterValue: string): void {
+        this.filterValue = filterValue;
+        this.loadConfigItems();
     }
 
     public async loadConfigItems(): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
-        const deploymentIds = await this.getDeploymentStateIds();
 
-        const filterCriteria = [
+        const loadingOptions = new KIXObjectLoadingOptions([], null, null, []);
+
+        const deploymentIds = await this.getDeploymentStateIds();
+        loadingOptions.filter.push(
             new FilterCriteria(
                 ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC,
                 FilterType.AND, deploymentIds
             )
-        ];
+        );
 
         if (this.currentCIClass) {
-            filterCriteria.push(new FilterCriteria(
+            loadingOptions.filter.push(new FilterCriteria(
                 ConfigItemProperty.CLASS_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
                 FilterType.AND, this.currentCIClass.ID
             ));
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(filterCriteria);
+        if (this.filterValue) {
+            loadingOptions.filter.push(new FilterCriteria(
+                ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
+            ));
+            loadingOptions.filter.push(new FilterCriteria(
+                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
+            ));
+            loadingOptions.includes.push(ConfigItemProperty.CURRENT_VERSION);
+        }
+
+        if (!this.filterValue && !this.currentCIClass) {
+            const incidentStates = await CMDBService.getInstance().getAffactedIncidentStates();
+            if (incidentStates && incidentStates.length) {
+                loadingOptions.filter.push(new FilterCriteria(
+                    'InciStateIDs', SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND,
+                    incidentStates.map((s) => s.ItemID)
+                ));
+            }
+            loadingOptions.sortOrder = 'ConfigItem.ChangeTime:datetime';
+        }
 
         const configItems = await KIXObjectService.loadObjects(
             KIXObjectType.CONFIG_ITEM, null, loadingOptions, null, false
@@ -94,6 +125,7 @@ export class CMDBContext extends Context {
     public reset(): void {
         super.reset();
         this.currentCIClass = null;
+        this.filterValue = null;
         this.loadConfigItems();
     }
 

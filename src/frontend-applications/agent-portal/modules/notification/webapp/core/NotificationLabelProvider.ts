@@ -133,7 +133,7 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_RECIPIENT_AGENTS:
                 if (value && Array.isArray(value)) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, value, null, null, true
+                        KIXObjectType.USER, value, null, null, true, true, true
                     ).catch((error) => [] as User[]);
                     const displayTexts = [];
                     if (users && !!users.length) {
@@ -311,7 +311,7 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_RECIPIENT_AGENTS:
                 if (value && Array.isArray(value)) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, value, null, null, true
+                        KIXObjectType.USER, value, null, null, true, true, true
                     ).catch((error) => [] as User[]);
                     const displayTexts = [];
                     if (users && !!users.length) {

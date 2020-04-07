@@ -12,7 +12,6 @@ import { TranslationService } from "../../../../../modules/translation/webapp/co
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { FilterCriteria } from "../../../../../model/FilterCriteria";
 import { ContactProperty } from "../../../model/ContactProperty";
@@ -22,10 +21,19 @@ import { FilterType } from "../../../../../model/FilterType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { Contact } from "../../../model/Contact";
 import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
+import { OrganisationService } from "../OrganisationService";
+import { ContactService } from "../ContactService";
 
 export class OrganisationContext extends Context {
 
     public static CONTEXT_ID: string = 'organisations';
+
+    public filterValue: string;
+
+    public setFilterValue(filterValue: string): void {
+        this.filterValue = filterValue;
+        this.loadOrganisations();
+    }
 
     public getIcon(): string {
         return 'kix-icon-organisation';
@@ -37,7 +45,6 @@ export class OrganisationContext extends Context {
 
     public async initContext(): Promise<void> {
         this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, true);
-        this.loadOrganisations();
     }
 
     public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
@@ -54,48 +61,59 @@ export class OrganisationContext extends Context {
     }
 
     private async loadOrganisations(): Promise<void> {
-        EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.ORGANISATION);
-        const organisations = await KIXObjectService.loadObjects(
-            KIXObjectType.ORGANISATION, null, null, null, false
-        ).catch((error) => []);
+        if (this.filterValue) {
+            EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.ORGANISATION);
 
-        this.setObjectList(KIXObjectType.ORGANISATION, organisations);
-        super.setFilteredObjectList(KIXObjectType.ORGANISATION, organisations);
+            const filter = await OrganisationService.getInstance().prepareFullTextFilter(this.filterValue);
+            const loadingOptions = new KIXObjectLoadingOptions(filter);
 
-        const isOrganisationDepending = this.getAdditionalInformation(
-            OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
-        );
-        if (isOrganisationDepending) {
-            await this.loadContacts();
+            const organisations = await KIXObjectService.loadObjects(
+                KIXObjectType.ORGANISATION, null, loadingOptions, null, false
+            ).catch((error) => []);
+
+            this.setObjectList(KIXObjectType.ORGANISATION, organisations);
+            super.setFilteredObjectList(KIXObjectType.ORGANISATION, organisations);
+
+            this.loadContacts();
+        } else {
+            this.setObjectList(KIXObjectType.ORGANISATION, []);
+            this.setObjectList(KIXObjectType.CONTACT, []);
         }
+
     }
 
     public async loadContacts(): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONTACT);
-        const filter = [];
 
         const organisations = this.getFilteredObjectList(KIXObjectType.ORGANISATION);
         const isOrganisationDepending = this.getAdditionalInformation(
             OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
         );
-        if (organisations && isOrganisationDepending) {
+
+        let contacts = [];
+        const loadingOptions = new KIXObjectLoadingOptions([], null, null, [ContactProperty.USER]);
+        if (organisations && organisations.length && isOrganisationDepending) {
             const organisationIds = organisations.map((o) => Number(o.ObjectId));
             if (organisationIds && organisationIds.length) {
-                filter.push(new FilterCriteria(
+                loadingOptions.filter.push(new FilterCriteria(
                     ContactProperty.ORGANISATION_IDS, SearchOperator.IN,
                     FilterDataType.NUMERIC, FilterType.AND, organisationIds
                 ));
             }
+            contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null, loadingOptions);
+        } else if (!isOrganisationDepending && this.filterValue) {
+            const filter = await ContactService.getInstance().prepareFullTextFilter(this.filterValue);
+            loadingOptions.filter = filter;
+            contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null, loadingOptions);
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(filter, null, null, [ContactProperty.USER]);
-        const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null, loadingOptions);
         this.setObjectList(KIXObjectType.CONTACT, contacts);
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS_FINISHED, KIXObjectType.CONTACT);
     }
 
     public reset(): void {
         super.reset();
+        this.filterValue = null;
         this.initContext();
     }
 
