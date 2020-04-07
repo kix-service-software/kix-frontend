@@ -20,6 +20,8 @@ export interface ILabelProvider<T> {
 
     isLabelProviderForType(objectType: KIXObjectType | string): boolean;
 
+    isLabelProviderForDFType(dfFieldType: string): boolean;
+
     getObjectText(object: T, id?: boolean, title?: boolean, translatable?: boolean): Promise<string>;
 
     getObjectName(plural?: boolean, translatable?: boolean): Promise<string>;

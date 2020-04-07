@@ -52,6 +52,15 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
         return objectType === this.kixObjectType;
     }
 
+    public isLabelProviderForDFType(dfFieldType: string): boolean {
+        for (const extendedLabelProvider of this.getExtendedLabelProvider()) {
+            if (extendedLabelProvider.isLabelProviderForDFType(dfFieldType)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public async getObjectText(object: T, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
         return object.toString();
     }

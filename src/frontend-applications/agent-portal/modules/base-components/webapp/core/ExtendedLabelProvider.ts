@@ -26,6 +26,10 @@ export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> imp
         return null;
     }
 
+    public isLabelProviderForDFType(dfFieldType: string): boolean {
+        return null;
+    }
+
     public getObjectText(object: T, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
         return null;
     }
