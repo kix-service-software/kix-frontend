@@ -20,28 +20,10 @@ import { EventService } from "../../../../../modules/base-components/webapp/core
 import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { TicketProperty } from "../../../model/TicketProperty";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { ContextDescriptor } from "../../../../../model/ContextDescriptor";
-import { ContextConfiguration } from "../../../../../model/configuration/ContextConfiguration";
 
 export class TicketDetailsContext extends Context {
 
     public static CONTEXT_ID = 'ticket-details';
-
-    public constructor(
-        protected descriptor: ContextDescriptor,
-        protected objectId: string | number = null,
-        protected configuration: ContextConfiguration = null
-    ) {
-        super(descriptor, objectId, configuration);
-        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
-            eventSubscriberId: 'TicketDetailsContext',
-            eventPublished: (data, eventId: string) => {
-                if (data.objectType === KIXObjectType.TICKET) {
-                    this.getObject(undefined, true);
-                }
-            }
-        });
-    }
 
     public getIcon(): string {
         return 'kix-icon-ticket';

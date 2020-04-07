@@ -98,8 +98,9 @@ export class CacheService {
             if (namespace[0] === 'CMDB') {
                 cacheKeyPrefixes.push(namespace[1]);
             } else if (namespace[0] === 'FAQ') {
-                cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_VOTE);
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
@@ -128,6 +129,9 @@ export class CacheService {
                 break;
             case KIXObjectType.FAQ_ARTICLE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
+                break;
+            case KIXObjectType.FAQ_CATEGORY:
+                cacheKeyPrefixes.push(KIXObjectType.OBJECT_ICON);
                 break;
             case KIXObjectType.CONFIG_ITEM:
             case KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION:

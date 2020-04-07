@@ -14,7 +14,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public headCode: string = '',
-        public buttonCode: string = ''
+        public buttonCode: string = '',
+        public loading: boolean = true
     ) {
         super();
     }

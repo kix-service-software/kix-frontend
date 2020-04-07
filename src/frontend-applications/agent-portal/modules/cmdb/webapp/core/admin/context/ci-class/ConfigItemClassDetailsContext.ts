@@ -16,8 +16,6 @@ import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class ConfigItemClassDetailsContext extends Context {
@@ -56,23 +54,25 @@ export class ConfigItemClassDetailsContext extends Context {
     }
 
     private async loadCIClass(): Promise<ConfigItemClass> {
-        const ciClassId = Number(this.objectId);
-
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
-        );
-
-        const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
         let ciClass: ConfigItemClass;
-        if (ciClasses && ciClasses.length) {
-            ciClass = ciClasses[0];
-            this.objectId = ciClass.ID;
+        if (this.objectId) {
+            const ciClassId = Number(this.objectId);
+
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
+            );
+
+            const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
+                KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions
+            ).catch((error) => {
+                console.error(error);
+                return null;
+            });
+
+            if (ciClasses && ciClasses.length) {
+                ciClass = ciClasses[0];
+                this.objectId = ciClass.ID;
+            }
         }
 
         return ciClass;

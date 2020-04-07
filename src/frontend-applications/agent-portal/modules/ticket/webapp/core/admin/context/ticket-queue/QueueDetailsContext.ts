@@ -14,8 +14,6 @@ import { BreadcrumbInformation } from "../../../../../../../model/BreadcrumbInfo
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class QueueDetailsContext extends Context {

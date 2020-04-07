@@ -15,8 +15,6 @@ import { TranslationService } from "../../../../translation/webapp/core/Translat
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 

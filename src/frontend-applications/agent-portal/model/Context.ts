@@ -55,8 +55,17 @@ export abstract class Context {
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
                 eventSubscriberId: this.descriptor.contextId + '-update-listener',
                 eventPublished: (data: any) => {
-                    if (this.objectLists.has(data.objectType)) {
-                        this.objectLists.delete(data.objectType);
+                    if (data && data.objectType) {
+                        if (this.objectLists.has(data.objectType)) {
+                            this.objectLists.delete(data.objectType);
+                        }
+                        if (
+                            this.descriptor.contextMode === ContextMode.DETAILS
+                            && Array.isArray(this.descriptor.kixObjectTypes)
+                            && this.descriptor.kixObjectTypes.some((t) => t === data.objectType)
+                        ) {
+                            this.getObject(data.objectType, true);
+                        }
                     }
                 }
             });

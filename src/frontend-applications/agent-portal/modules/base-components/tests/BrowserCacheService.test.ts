@@ -143,7 +143,7 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQArticle');
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.FAQ_CATEGORY)).exist;
@@ -153,7 +153,7 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQVote');
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.FAQ_ARTICLE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.FAQ_VOTE)).exist;
@@ -163,7 +163,7 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix('FAQ.FAQCategory');
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(2);
+                expect(prefixes.length).equals(4);
 
                 expect(prefixes.find((p) => p === KIXObjectType.FAQ_CATEGORY)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.OBJECT_ICON)).exist;

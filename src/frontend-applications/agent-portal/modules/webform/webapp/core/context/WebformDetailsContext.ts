@@ -15,8 +15,6 @@ import { TranslationService } from "../../../../translation/webapp/core/Translat
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class WebformDetailsContext extends Context {
@@ -44,7 +42,7 @@ export class WebformDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.WEBFORM, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadTicketState(changedProperties) as any;
+        const object = await this.loadWebform(changedProperties) as any;
 
         if (reload) {
             this.listeners.forEach(
@@ -55,27 +53,23 @@ export class WebformDetailsContext extends Context {
         return object;
     }
 
-    private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<Webform> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Webform' }
-        );
-
+    private async loadWebform(changedProperties: string[] = [], cache: boolean = true): Promise<Webform> {
         const webformId = Number(this.objectId);
 
-        const ticketStates = await KIXObjectService.loadObjects<Webform>(
+        const webforms = await KIXObjectService.loadObjects<Webform>(
             KIXObjectType.WEBFORM, [webformId], null, null, cache
         ).catch((error) => {
             console.error(error);
             return null;
         });
 
-        let webforms: Webform;
-        if (ticketStates && ticketStates.length) {
-            webforms = ticketStates[0];
-            this.objectId = webforms.ObjectId;
+        let webform: Webform;
+        if (webforms && webforms.length) {
+            webform = webforms[0];
+            this.objectId = webform.ObjectId;
         }
 
-        return webforms;
+        return webform;
     }
 
 }
