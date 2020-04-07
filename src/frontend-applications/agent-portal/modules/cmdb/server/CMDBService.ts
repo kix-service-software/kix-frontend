@@ -318,7 +318,21 @@ export class CMDBAPIService extends KIXObjectAPIService {
         throw new Error('', "Method not implemented.");
     }
 
+    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return criteria.filter((c) =>
+            c.property !== ConfigItemProperty.CUR_INCI_STATE_ID &&
+            c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
+            c.property !== ConfigItemProperty.CONFIG_ITEM_ID &&
+            c.property !== 'InciStateIDs'
+        );
+    }
+
     protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return [];
+        return criteria.filter((c) =>
+            c.property !== ConfigItemProperty.NUMBER &&
+            c.property !== ConfigItemProperty.CLASS_ID &&
+            !c.property.startsWith('Data') &&
+            !c.property.startsWith('CurrentVersion')
+        );
     }
 }

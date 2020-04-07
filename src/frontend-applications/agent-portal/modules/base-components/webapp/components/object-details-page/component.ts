@@ -45,11 +45,15 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'object-details-page',
-            contextChanged: (contextId: string, context: Context, contextType: ContextType) => {
+            contextChanged: async (contextId: string, context: Context, contextType: ContextType) => {
                 if (contextType === ContextType.MAIN) {
+                    this.state.loading = true;
                     this.prepareConfigurations();
-                    this.prepareWidget();
-                    this.prepareActions();
+                    await this.prepareWidget();
+                    await this.prepareActions();
+                    setTimeout(() => {
+                        this.state.loading = false;
+                    }, 20);
                 }
             },
             contextRegistered: () => null

@@ -141,6 +141,21 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return catalogItems;
     }
 
+    public async getAffactedIncidentStates(): Promise<GeneralCatalogItem[]> {
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'ITSM::Core::IncidentState'),
+            new FilterCriteria('Functionality', SearchOperator.IN, FilterDataType.STRING,
+                FilterType.AND, ['warning', 'incident'])
+        ]);
+
+        const catalogItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
+            KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
+        );
+
+        return catalogItems;
+    }
+
     public async getTreeNodes(
         property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {

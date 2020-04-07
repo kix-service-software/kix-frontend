@@ -21,7 +21,6 @@ import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOp
 import { AgentService } from "../../../../user/webapp/core/AgentService";
 import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 import { KIXModulesService } from "../../../../base-components/webapp/core/KIXModulesService";
-import { ApplicationEvent } from "../../../../base-components/webapp/core/ApplicationEvent";
 import { EventService } from "../../../../base-components/webapp/core/EventService";
 import { DateTimeUtil } from "../../../../base-components/webapp/core/DateTimeUtil";
 import { ContextService } from "../../../../base-components/webapp/core/ContextService";

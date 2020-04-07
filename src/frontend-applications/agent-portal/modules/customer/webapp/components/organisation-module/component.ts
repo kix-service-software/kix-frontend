@@ -10,8 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { OrganisationContext } from '../../core';
-import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
-import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component {
 
@@ -26,11 +25,31 @@ class Component {
             OrganisationContext.CONTEXT_ID
         );
         this.state.contentWidgets = context.getContent();
+
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Search",
+            "Translatable#Help"
+        ]);
+
+        this.state.placeholder = await TranslationService.translate(
+            'Translatable#Please enter a search term for a organisation.'
+        );
     }
 
-    public getTemplate(widget: ConfiguredWidget): any {
-        return KIXModulesService.getComponentTemplate(widget.configuration.widgetId);
+    public keyUp(event: any): void {
+        this.state.filterValue = event.target.value;
+        if (event.key === 'Enter') {
+            this.search();
+        }
     }
+
+    public async search(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<OrganisationContext>(
+            OrganisationContext.CONTEXT_ID
+        );
+        context.setFilterValue(this.state.filterValue);
+    }
+
 }
 
 module.exports = Component;

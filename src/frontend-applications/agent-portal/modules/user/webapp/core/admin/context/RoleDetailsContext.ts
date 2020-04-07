@@ -46,7 +46,9 @@ export class RoleDetailsContext extends Context {
         const role = await this.loadRole(changedProperties);
 
         if (role && role.UserIDs && role.UserIDs.length > 0) {
-            const users = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, role.UserIDs);
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, role.UserIDs, null, null, null, true, true
+            );
             this.setObjectList(KIXObjectType.USER, users, true);
         }
 

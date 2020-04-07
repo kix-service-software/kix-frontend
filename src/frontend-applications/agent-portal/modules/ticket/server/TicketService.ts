@@ -413,6 +413,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             (f) => f.operator !== SearchOperator.NOT_EQUALS
                 && f.property !== KIXObjectProperty.CREATE_BY
                 && f.property !== KIXObjectProperty.CHANGE_BY
+                && f.property !== TicketProperty.STATE
                 && f.property !== SearchProperty.FULLTEXT
         );
 
@@ -453,28 +454,28 @@ export class TicketAPIService extends KIXObjectAPIService {
     private getFulltextSearch(fulltextFilter: FilterCriteria): FilterCriteria[] {
         return [
             new FilterCriteria(
-                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.TITLE, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.TITLE, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.BODY, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.BODY, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.FROM, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.FROM, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.TO, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.TO, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.CC, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.CC, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             )
         ];
     }
