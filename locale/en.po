@@ -2075,6 +2075,11 @@ msgstr ""
 "Then choose the text modules you want to use in the context menu. You can "
 "narrow down the key word selection manually by entering more text."
 
+#, fuzzy
+#| msgid "Helptext_Tickets_Link_State"
+msgid "Helptext_Ticket_Dashboard_Search"
+msgstr "Search for tickets with the chosen state."
+
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
 "Choose if you want to save the ticket description only internally (Note) or "
@@ -2886,6 +2891,9 @@ msgstr ""
 msgid "Overall"
 msgstr ""
 
+msgid "Overview"
+msgstr ""
+
 msgid "Overview Config Items"
 msgstr "Overview Assets"
 
@@ -2980,6 +2988,9 @@ msgid "Plan End"
 msgstr ""
 
 msgid "Please enter a search term."
+msgstr ""
+
+msgid "Please enter a search term for a organisation."
 msgstr ""
 
 msgid "Please select a contact"
@@ -3319,6 +3330,9 @@ msgid "Set Value"
 msgstr ""
 
 msgid "Show all"
+msgstr ""
+
+msgid "Show Backlog"
 msgstr ""
 
 msgid "Show in agent preferences"

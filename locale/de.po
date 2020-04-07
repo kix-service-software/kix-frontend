@@ -2199,6 +2199,11 @@ msgstr ""
 "gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
 "Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
 
+#, fuzzy
+#| msgid "Helptext_Tickets_Link_State"
+msgid "Helptext_Ticket_Dashboard_Search"
+msgstr "Suchen Sie nach Tickets mit dem gewählten Status."
+
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
 
@@ -3026,6 +3031,11 @@ msgstr "Sonstiges"
 msgid "Overall"
 msgstr "Gesamt"
 
+#, fuzzy
+#| msgid "Overview FAQ"
+msgid "Overview"
+msgstr "Übersicht FAQ"
+
 msgid "Overview Config Items"
 msgstr "Übersicht Assets"
 
@@ -3121,6 +3131,11 @@ msgid "Plan End"
 msgstr "Plan Ende"
 
 msgid "Please enter a search term."
+msgstr "Bitte geben Sie einen Suchbegriff ein."
+
+#, fuzzy
+#| msgid "Please enter a search term."
+msgid "Please enter a search term for a organisation."
 msgstr "Bitte geben Sie einen Suchbegriff ein."
 
 msgid "Please select a contact"
@@ -3465,6 +3480,11 @@ msgid "Set Value"
 msgstr "Wert setzen"
 
 msgid "Show all"
+msgstr "Alle anzeigen"
+
+#, fuzzy
+#| msgid "Show all"
+msgid "Show Backlog"
 msgstr "Alle anzeigen"
 
 msgid "Show in agent preferences"
