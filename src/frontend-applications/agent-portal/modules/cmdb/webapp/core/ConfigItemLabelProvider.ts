@@ -24,10 +24,15 @@ import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldVal
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
 import { Label } from "../../../base-components/webapp/core/Label";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
+
+    public isLabelProviderForDFType(dfFieldType: string): boolean {
+        return dfFieldType === DynamicFieldTypes.CI_REFERENCE || super.isLabelProviderForDFType(dfFieldType);
+    }
 
     public async getPropertyValueDisplayText(
         property: string, value: any = '', translatable: boolean = true
@@ -260,38 +265,46 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     }
 
     public async createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
-        if (Array.isArray(dfValue.Value)) {
-            const loadingOptions = new KIXObjectLoadingOptions(
-                null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
-            );
-            const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-                KIXObjectType.CONFIG_ITEM, dfValue.Value, loadingOptions
-            ).catch((): ConfigItem[] => []);
+        const dynamicField = dfValue && dfValue.ID ? await KIXObjectService.loadDynamicField(
+            dfValue.Name ? dfValue.Name : null,
+            dfValue.ID ? Number(dfValue.ID) : null
+        ) : null;
 
-            const labels = [];
-            for (const ci of configItems) {
-                const ciIcon = new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
-                const incidentIcons = await LabelService.getInstance().getIcons(
-                    ci, ConfigItemProperty.CUR_INCI_STATE_ID
+        if (dynamicField && dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+            if (Array.isArray(dfValue.Value)) {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
                 );
-                const deploymentIcon = await LabelService.getInstance().getIcons(
-                    ci, ConfigItemProperty.CUR_DEPL_STATE_ID
-                );
-                const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
-                    ...incidentIcons, ...deploymentIcon
-                ],
-                    {
-                        title: 'Translatable#Asset',
-                        content: 'config-item-info',
-                        instanceId: 'config-item-info',
-                        data: { configItem: ci },
-                        large: true
-                    }
-                );
-                labels.push(label);
+                const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                    KIXObjectType.CONFIG_ITEM, dfValue.Value, loadingOptions
+                ).catch((): ConfigItem[] => []);
+
+                const labels = [];
+                for (const ci of configItems) {
+                    const ciIcon = new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
+                    const incidentIcons = await LabelService.getInstance().getIcons(
+                        ci, ConfigItemProperty.CUR_INCI_STATE_ID
+                    );
+                    const deploymentIcon = await LabelService.getInstance().getIcons(
+                        ci, ConfigItemProperty.CUR_DEPL_STATE_ID
+                    );
+                    const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
+                        ...incidentIcons, ...deploymentIcon
+                    ],
+                        {
+                            title: 'Translatable#Asset',
+                            content: 'config-item-info',
+                            instanceId: 'config-item-info',
+                            data: { configItem: ci },
+                            large: true
+                        }
+                    );
+                    labels.push(label);
+                }
+
+                return labels;
             }
-
-            return labels;
         }
+        return null;
     }
 }

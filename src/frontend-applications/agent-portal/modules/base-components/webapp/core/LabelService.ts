@@ -13,6 +13,7 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { LabelProvider } from "./LabelProvider";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
 import { Label } from "./Label";
+import { KIXObjectService } from "./KIXObjectService";
 
 export class LabelService {
 
@@ -339,7 +340,7 @@ export class LabelService {
     public async createLabelsFromDFValue(
         objectType: KIXObjectType | string, fieldValue: DynamicFieldValue
     ): Promise<Label[]> {
-        const labelProvider = this.getLabelProviderForType(objectType);
+        const labelProvider = await this.getLabelProviderForDFValue(fieldValue);
 
         if (labelProvider) {
             for (const extendedLabelProvider of labelProvider.getExtendedLabelProvider()) {
@@ -352,6 +353,19 @@ export class LabelService {
             return labelProvider.createLabelsFromDFValue(fieldValue);
         }
         return null;
+    }
+
+    private async getLabelProviderForDFValue<T extends KIXObject>(
+        fieldValue: DynamicFieldValue
+    ): Promise<LabelProvider<T>> {
+        const dynamicField = fieldValue && fieldValue.ID ? await KIXObjectService.loadDynamicField(
+            fieldValue.Name ? fieldValue.Name : null,
+            fieldValue.ID ? Number(fieldValue.ID) : null
+        ) : null;
+        if (dynamicField) {
+            return this.labelProviders.find((lp) => lp.isLabelProviderForDFType(dynamicField.FieldType));
+        }
+        return;
     }
 
 
