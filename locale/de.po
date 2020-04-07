@@ -2628,9 +2628,6 @@ msgstr "Verknüpfte Objekte ({0})"
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
 
-msgid "Link Objects"
-msgstr "Objekte verknüpfen"
-
 msgid "Links"
 msgstr "Verknüpfungen"
 
@@ -4128,6 +4125,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Link Objects"
+#~ msgstr "Objekte verknüpfen"
 
 #~ msgid "Load Ticket State"
 #~ msgstr "Lade Ticket Status"

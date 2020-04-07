@@ -2492,9 +2492,6 @@ msgstr ""
 msgid "Link FAQ with"
 msgstr ""
 
-msgid "Link Objects"
-msgstr ""
-
 msgid "Links"
 msgstr ""
 
