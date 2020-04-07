@@ -64,19 +64,23 @@ export class ArticleFormService extends KIXObjectFormService {
     protected async getValue(property: string, value: any, ticket?: Ticket): Promise<any> {
         switch (property) {
             case ArticleProperty.CHANNEL_ID:
-                if (ticket) {
-                    const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-                    if (dialogContext) {
-                        const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
-                        if (isReplyDialog) {
-                            const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-                            if (referencedArticleId && ticket) {
-                                const referencedArticle = ticket.Articles.find(
-                                    (a) => a.ArticleID === referencedArticleId
-                                );
-                                if (referencedArticle) {
-                                    value = referencedArticle.ChannelID;
-                                }
+                const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                if (dialogContext) {
+                    const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
+                    if (isReplyDialog) {
+                        const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+                        if (!ticket) {
+                            const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                            if (mainContext) {
+                                ticket = await mainContext.getObject<Ticket>(KIXObjectType.TICKET);
+                            }
+                        }
+                        if (referencedArticleId && ticket) {
+                            const referencedArticle = ticket.Articles.find(
+                                (a) => a.ArticleID === referencedArticleId
+                            );
+                            if (referencedArticle) {
+                                value = referencedArticle.ChannelID;
                             }
                         }
                     }
