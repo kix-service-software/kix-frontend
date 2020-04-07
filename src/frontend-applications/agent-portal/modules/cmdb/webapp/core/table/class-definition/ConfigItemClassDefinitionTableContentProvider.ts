@@ -26,7 +26,8 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
     ) {
-        super(KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, table, objectIds, loadingOptions, contextId);
+        // use class type not definition type for class version updates (objectChanged)
+        super(KIXObjectType.CONFIG_ITEM_CLASS, table, objectIds, loadingOptions, contextId);
     }
 
     public async loadData(): Promise<Array<IRowObject<ConfigItemClassDefinition>>> {

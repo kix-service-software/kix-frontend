@@ -25,7 +25,6 @@ class Component {
     private contextListenerId: string = null;
 
     public labelProvider: FAQLabelProvider = new FAQLabelProvider();
-    public properties;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -38,7 +37,6 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.labelProvider = new FAQLabelProvider();
-        this.properties = FAQArticleProperty;
 
         const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;

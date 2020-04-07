@@ -14,8 +14,6 @@ import { BreadcrumbInformation } from "../../../../../../../model/BreadcrumbInfo
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { TranslationService } from "../../../../../../../modules/translation/webapp/core/TranslationService";
 import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
@@ -54,19 +52,21 @@ export class FAQCategoryDetailsContext extends Context {
     }
 
     private async loadFAQCategory(changedProperties: string[] = [], cache: boolean = true): Promise<FAQCategory> {
-        const categoryId = Number(this.objectId);
-
-        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-            KIXObjectType.FAQ_CATEGORY, [categoryId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
         let faqCategory: FAQCategory;
-        if (faqCategories && faqCategories.length) {
-            faqCategory = faqCategories[0];
-            this.objectId = faqCategory.ID;
+        if (this.objectId) {
+            const categoryId = Number(this.objectId);
+
+            const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
+                KIXObjectType.FAQ_CATEGORY, [categoryId], null, null, cache
+            ).catch((error) => {
+                console.error(error);
+                return null;
+            });
+
+            if (faqCategories && faqCategories.length) {
+                faqCategory = faqCategories[0];
+                this.objectId = faqCategory.ID;
+            }
         }
 
         return faqCategory;

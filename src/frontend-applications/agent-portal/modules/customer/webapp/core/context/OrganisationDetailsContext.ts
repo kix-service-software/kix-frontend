@@ -14,9 +14,7 @@ import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformatio
 import { OrganisationContext } from ".";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { OrganisationProperty } from "../../../model/OrganisationProperty";
 
 export class OrganisationDetailsContext extends Context {
 

@@ -15,8 +15,6 @@ import { TranslationService } from "../../../../../../../modules/translation/web
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class TicketStateDetailsContext extends Context {
@@ -55,10 +53,6 @@ export class TicketStateDetailsContext extends Context {
     }
 
     private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<TicketState> {
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Ticket State' }
-        );
-
         const ticketStateId = Number(this.objectId);
 
         const ticketStates = await KIXObjectService.loadObjects<TicketState>(

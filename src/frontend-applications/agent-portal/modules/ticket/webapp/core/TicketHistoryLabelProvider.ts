@@ -13,8 +13,6 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { TicketHistoryProperty } from "../../model/TicketHistoryProperty";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 
 export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {

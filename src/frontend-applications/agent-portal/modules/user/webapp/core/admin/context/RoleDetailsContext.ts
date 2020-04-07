@@ -16,8 +16,6 @@ import { KIXObject } from "../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
 import { RoleProperty } from "../../../../model/RoleProperty";
-import { EventService } from "../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
 import { KIXObjectService } from "../../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { User } from "../../../../model/User";
