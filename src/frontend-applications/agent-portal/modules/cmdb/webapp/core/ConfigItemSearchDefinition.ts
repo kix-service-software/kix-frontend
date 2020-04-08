@@ -87,17 +87,17 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             switch (searchCriteria.property) {
                 case SearchProperty.FULLTEXT:
                     newCriteria.push(new FilterCriteria(
-                        ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
-                        FilterDataType.STRING, FilterType.OR, searchCriteria.value
+                        ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
                     ));
                     newCriteria.push(new FilterCriteria(
-                        'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
-                        FilterDataType.STRING, FilterType.OR, searchCriteria.value
+                        VersionProperty.NAME, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
                     ));
                     break;
                 case VersionProperty.NAME:
                     newCriteria.push(new FilterCriteria(
-                        'CurrentVersion.' + VersionProperty.NAME, searchCriteria.operator,
+                        VersionProperty.NAME, searchCriteria.operator,
                         searchCriteria.type, searchCriteria.filterType, searchCriteria.value
                     ));
                     break;
