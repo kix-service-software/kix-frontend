@@ -127,24 +127,26 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     }
 
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
+        searchValue = `*${searchValue}*`;
+
         return [
             new FilterCriteria(
-                OrganisationProperty.NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.NUMBER, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.NAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.URL, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.URL, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.STREET, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.STREET, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.COUNTRY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.COUNTRY, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.ZIP, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.ZIP, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
     }
