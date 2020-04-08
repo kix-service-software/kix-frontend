@@ -21,7 +21,7 @@ export class JobType extends KIXObject {
 
     public DisplayName: string;
 
-    public Type: JobTypes;
+    public Type: JobTypes | string;
 
     public constructor(jobType?: JobType) {
         super(jobType);
@@ -29,7 +29,7 @@ export class JobType extends KIXObject {
             this.ObjectId = jobType.Name;
             this.Name = jobType.Name;
             this.DisplayName = jobType.DisplayName;
-            this.Type = JobTypes[jobType.Name.toLocaleUpperCase()];
+            this.Type = jobType.Name;
         }
     }
 

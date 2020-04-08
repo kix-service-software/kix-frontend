@@ -84,7 +84,7 @@ class Component extends FormInputComponent<{}, ComponentState> {
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
         const type = typeValue && typeValue.value ? typeValue.value : null;
 
-        const jobFormManager = JobFormService.getInstance().getJobFormManager(JobTypes[type.toLocaleUpperCase()]);
+        const jobFormManager = JobFormService.getInstance().getJobFormManager(type);
 
         this.state.manager = jobFormManager ? jobFormManager.filterManager : null;
         if (this.state.manager) {
