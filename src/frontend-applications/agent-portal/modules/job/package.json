@@ -26,6 +26,11 @@
             "edit-job-dialog-configuration": {
                 "module": "edit-job-dialog-configuration.extension"
             }
+        },
+        "kix:initial-data": {
+            "kix-job-form-cleanup": {
+                "module": "initial-data-cleanup-job-form.extension"
+            }
         }
     }
 }
