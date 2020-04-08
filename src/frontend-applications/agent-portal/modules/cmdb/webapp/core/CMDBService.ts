@@ -252,7 +252,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                VersionProperty.NAME, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
