@@ -12,7 +12,7 @@ import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 
 export class SystemAddress extends KIXObject {
 
-    public KIXObjectType: KIXObjectType;
+    public KIXObjectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
     public ObjectId: string | number;
 
