@@ -91,20 +91,35 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                         FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
                     ));
                     newCriteria.push(new FilterCriteria(
-                        VersionProperty.NAME, SearchOperator.LIKE,
+                        ConfigItemProperty.NAME, SearchOperator.LIKE,
                         FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
                     ));
                     break;
-                case VersionProperty.NAME:
+                case ConfigItemProperty.NAME:
                     newCriteria.push(new FilterCriteria(
-                        VersionProperty.NAME, searchCriteria.operator,
+                        ConfigItemProperty.NAME, searchCriteria.operator,
+                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
+                    ));
+                    break;
+                case ConfigItemProperty.CLASS_ID:
+                    newCriteria.push(new FilterCriteria(
+                        'ClassIDs', searchCriteria.operator,
+                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
+                    ));
+                    break;
+                case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                    newCriteria.push(new FilterCriteria(
+                        'DeplStateIDs', searchCriteria.operator,
+                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
+                    ));
+                    break;
+                case ConfigItemProperty.CUR_INCI_STATE_ID:
+                    newCriteria.push(new FilterCriteria(
+                        'InciStateIDs', searchCriteria.operator,
                         searchCriteria.type, searchCriteria.filterType, searchCriteria.value
                     ));
                     break;
                 case VersionProperty.NUMBER:
-                case ConfigItemProperty.CLASS_ID:
-                case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                case ConfigItemProperty.CUR_INCI_STATE_ID:
                 case KIXObjectProperty.CHANGE_BY:
                 case KIXObjectProperty.CREATE_BY:
                     newCriteria.push(searchCriteria);
@@ -158,12 +173,12 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 break;
             case SearchProperty.FULLTEXT:
                 criteria.push(new FilterCriteria(
-                    ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
-                    FilterDataType.STRING, FilterType.OR, value
+                    ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `*${value}*`
                 ));
                 criteria.push(new FilterCriteria(
-                    'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
-                    FilterDataType.STRING, FilterType.OR, value
+                    ConfigItemProperty.NAME, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `*${value}*`
                 ));
                 break;
             default:

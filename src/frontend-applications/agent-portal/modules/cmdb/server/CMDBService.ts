@@ -309,7 +309,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
             c.property !== ConfigItemProperty.CONFIG_ITEM_ID &&
             c.property !== ConfigItemProperty.NUMBER &&
-            c.property !== VersionProperty.NAME &&
+            c.property !== ConfigItemProperty.NAME &&
             c.property !== 'InciStateIDs' &&
             c.property !== 'DeplStateIDs' &&
             c.property !== 'ClassIDs'
