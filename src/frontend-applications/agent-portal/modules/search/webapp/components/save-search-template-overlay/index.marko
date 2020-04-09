@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.form.search-template-form>
     <div.form-field.show-object() title=state.translations["Translatable#Search"]>
         <div.field-label>
@@ -16,7 +15,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
         <div.field-icon/>
         <div.field-input>
-            <form-list loadNodes=state.loadNodes nodesChanged("nodesChanged")/>
+            <form-list placeholder="Translatable#Save new search" loadNodes=state.loadNodes nodesChanged("nodesChanged")/>
         </div>
     </div>
     <div.form-field.show-object() title=state.translations["Translatable#Title"]>
