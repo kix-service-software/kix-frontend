@@ -46,10 +46,7 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
                     return i.ObjectID.toString() === objectId && i.Object === objectLoadingOptions.object;
                 }
             );
-
-            if (icon) {
-                return [icon as any];
-            }
+            icons = icon ? [icon as any] : [];
         } else if (objectIds && objectIds.length) {
             icons = icons.filter((i) => objectIds.some((oid) => oid === i.ID));
         }
