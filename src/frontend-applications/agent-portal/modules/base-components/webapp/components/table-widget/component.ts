@@ -208,11 +208,12 @@ class Component {
                 settings.tableConfiguration, null, contextId, true, true, settings.shortTable, false, !settings.cache
             );
 
-            if (table && settings.sort) {
-                table.sort(settings.sort[0], settings.sort[1]);
+            if (table) {
+                if (settings.sort) {
+                    table.sort(settings.sort[0], settings.sort[1]);
+                }
+                await table.initialize();
             }
-
-            await table.initialize();
 
             this.state.table = table;
             this.state.loading = false;
