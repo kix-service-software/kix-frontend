@@ -193,11 +193,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     new ConfiguredWidget(
                         'organisation-details-assigned-tickets-widget', 'organisation-details-assigned-tickets-widget',
                         null, [new UIComponentPermission('tickets', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
-                        'organisation-details-assigned-config-items-widget123456',
-                        'organisation-details-assigned-config-items-widget',
-                        null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
                     )
                 ],
                 [],

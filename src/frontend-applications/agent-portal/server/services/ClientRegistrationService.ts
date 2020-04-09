@@ -72,8 +72,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
                 null
             );
 
-        LoggingService.getInstance().info('ClientRegistration response:');
-        LoggingService.getInstance().error('', response);
+        LoggingService.getInstance().info('ClientRegistration response', response);
 
         return response.SystemInfo;
     }

@@ -185,7 +185,7 @@ export class Server implements IServer {
         });
 
         ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
-        LoggingService.getInstance().info('ClientRegsitration created.');
+        LoggingService.getInstance().info('ClientRegistration created.');
     }
 
     private static async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
