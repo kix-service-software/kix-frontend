@@ -16,7 +16,6 @@ import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class JobDetailsContext extends Context {
 
@@ -54,23 +53,8 @@ export class JobDetailsContext extends Context {
     }
 
     private async loadJob(changedProperties: string[] = [], cache: boolean = true): Promise<Job> {
-        const jobId = Number(this.objectId);
-
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['ExecPlans', 'Macros']);
 
-        const jobs = await KIXObjectService.loadObjects<Job>(
-            KIXObjectType.JOB, [jobId], loadingOptions, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let job: Job;
-        if (jobs && jobs.length) {
-            job = jobs[0];
-            this.objectId = job.ID;
-        }
-
-        return job;
+        return await this.loadDetailsObject<Job>(KIXObjectType.JOB, loadingOptions, null, true, cache);
     }
 }

@@ -16,7 +16,6 @@ import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { VersionProperty } from "../../../model/VersionProperty";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class ConfigItemDetailsContext extends Context {
 
@@ -58,22 +57,7 @@ export class ConfigItemDetailsContext extends Context {
             ['Links']
         );
 
-        const itemId = Number(this.objectId);
-
-        const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-            KIXObjectType.CONFIG_ITEM, [itemId], loadingOptions, null, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let configItem: ConfigItem;
-        if (configItems && configItems.length) {
-            configItem = configItems[0];
-            this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, configItem.Versions);
-        }
-
-        return configItem;
+        return await this.loadDetailsObject<ConfigItem>(KIXObjectType.CONFIG_ITEM, loadingOptions);
     }
 
 }

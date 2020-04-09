@@ -25,6 +25,8 @@ import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
 import { EventService } from "../modules/base-components/webapp/core/EventService";
 import { ApplicationEvent } from "../modules/base-components/webapp/core/ApplicationEvent";
 import { ClientStorageService } from "../modules/base-components/webapp/core/ClientStorageService";
+import { KIXObjectLoadingOptions } from "./KIXObjectLoadingOptions";
+import { KIXObjectSpecificLoadingOptions } from "./KIXObjectSpecificLoadingOptions";
 
 export abstract class Context {
 
@@ -414,6 +416,32 @@ export abstract class Context {
 
     public async reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
         return;
+    }
+
+    protected async loadDetailsObject<T extends KIXObject>(
+        objectType: KIXObjectType | string, loadingOptions: KIXObjectLoadingOptions = null,
+        objectSpecificLoadingOptions: KIXObjectSpecificLoadingOptions = null,
+        silent: boolean = true, cache?: boolean, forceIds?: boolean
+    ): Promise<T> {
+        let object: T;
+
+        if (this.objectId) {
+            const objectId = Number(this.objectId);
+
+            const objects = await KIXObjectService.loadObjects<T>(
+                objectType, [objectId], loadingOptions, objectSpecificLoadingOptions, silent, cache, forceIds
+            ).catch((error) => {
+                console.error(error);
+                return null;
+            });
+
+            if (objects && objects.length) {
+                object = objects[0];
+                this.objectId = object.ObjectId;
+            }
+        }
+
+        return object;
     }
 
 }

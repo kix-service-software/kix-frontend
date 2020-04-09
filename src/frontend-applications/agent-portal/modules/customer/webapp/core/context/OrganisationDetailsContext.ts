@@ -14,7 +14,6 @@ import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformatio
 import { OrganisationContext } from ".";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class OrganisationDetailsContext extends Context {
 
@@ -39,7 +38,7 @@ export class OrganisationDetailsContext extends Context {
     ): Promise<O> {
         let object;
         if (objectType === KIXObjectType.ORGANISATION) {
-            object = await this.loadOrganisation() as any;
+            object = await this.loadDetailsObject<O>(KIXObjectType.ORGANISATION, null, null, true, undefined, true);
 
             if (reload) {
                 this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.ORGANISATION));
@@ -49,19 +48,4 @@ export class OrganisationDetailsContext extends Context {
         return object;
     }
 
-    private async loadOrganisation(): Promise<Organisation> {
-        const organisations = await KIXObjectService.loadObjects<Organisation>(
-            KIXObjectType.ORGANISATION, [this.objectId], null, null, true, undefined, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let organisation: Organisation;
-        if (organisations && organisations.length) {
-            organisation = organisations[0];
-        }
-
-        return organisation;
-    }
 }

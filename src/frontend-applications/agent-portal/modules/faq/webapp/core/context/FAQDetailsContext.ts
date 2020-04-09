@@ -15,9 +15,6 @@ import { FAQContext } from "./FAQContext";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class FAQDetailsContext extends Context {
 
@@ -58,20 +55,6 @@ export class FAQDetailsContext extends Context {
             ['Links']
         );
 
-        const faqArticleId = Number(this.objectId);
-
-        const faqArticles = await KIXObjectService.loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [faqArticleId], loadingOptions, null, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let faqArticle: FAQArticle;
-        if (faqArticles && faqArticles.length) {
-            faqArticle = faqArticles[0];
-        }
-
-        return faqArticle;
+        return await this.loadDetailsObject<FAQArticle>(KIXObjectType.FAQ_ARTICLE, loadingOptions);
     }
 }
