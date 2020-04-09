@@ -38,7 +38,7 @@ export class ComponentState {
                                 ImportExportTemplateProperty.OBJECT, SearchOperator.EQUALS, FilterDataType.STRING,
                                 FilterType.AND, 'ITSMConfigItem'
                             )
-                        ], undefined, undefined,
+                        ], null, undefined,
                         [ImportExportTemplateProperty.RUNS, ImportExportTemplateProperty.OBJECT_DATA]
                     ),
                     null, null, [], true, false, null, null,
