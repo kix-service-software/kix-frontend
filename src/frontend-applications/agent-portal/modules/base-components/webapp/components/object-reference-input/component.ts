@@ -30,6 +30,7 @@ import { UIUtil } from '../../core/UIUtil';
 import { IdService } from '../../../../../model/IdService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -284,6 +285,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     loadingOptions.filter = [
                         ...loadingOptions.filter.map((f) => {
                             if (f.value === SearchProperty.SEARCH_VALUE) {
+                                if (f.operator === SearchOperator.LIKE) {
+                                    searchValue = `*${searchValue}*`;
+                                }
                                 return new FilterCriteria(f.property, f.operator, f.type, f.filterType, searchValue);
                             } else {
                                 return f;
@@ -336,7 +340,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
                 tooltip = (tooltip && tooltip !== text) ? text + ": " + tooltip : text;
                 return new TreeNode(
-                    o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon, undefined, undefined,
+                    o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId} `, icon, undefined, undefined,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined,
                     typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable,
                     tooltip, undefined, undefined, undefined,

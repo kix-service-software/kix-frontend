@@ -61,7 +61,7 @@ export class CMDBContext extends Context {
     public async loadConfigItems(): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
 
-        const loadingOptions = new KIXObjectLoadingOptions([], null, null, [ConfigItemProperty.CURRENT_VERSION]);
+        const loadingOptions = new KIXObjectLoadingOptions([]);
 
         const deploymentIds = await this.getDeploymentStateIds();
         loadingOptions.filter.push(
@@ -84,7 +84,7 @@ export class CMDBContext extends Context {
                 FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
             ));
             loadingOptions.filter.push(new FilterCriteria(
-                VersionProperty.NAME, SearchOperator.LIKE,
+                ConfigItemProperty.NAME, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
             ));
         }
