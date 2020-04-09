@@ -34,7 +34,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
             try {
                 const fs = require('fs');
                 const image = fs.readFileSync(
-                    __dirname + '/../../static/img/kix-cloud-logo.png',
+                    __dirname + '/../../static/img/kix-logo.png',
                     { encoding: 'base64' }
                 );
                 const logo = new ObjectIcon('agent-portal-logo', 'agent-portal-logo', 'image/png', image);
