@@ -15,7 +15,6 @@ import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { ContactProperty } from "../../../model/ContactProperty";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { OrganisationContext } from "./OrganisationContext";
 
 export class ContactDetailsContext extends Context {
@@ -58,19 +57,7 @@ export class ContactDetailsContext extends Context {
             [ContactProperty.USER]
         );
 
-        const contacts = await KIXObjectService.loadObjects<Contact>(
-            KIXObjectType.CONTACT, [this.objectId], loadingOptions, null, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let contact: Contact;
-        if (contacts && contacts.length) {
-            contact = contacts[0];
-        }
-
-        return contact;
+        return await this.loadDetailsObject<Contact>(KIXObjectType.CONTACT, loadingOptions);
     }
 
 }

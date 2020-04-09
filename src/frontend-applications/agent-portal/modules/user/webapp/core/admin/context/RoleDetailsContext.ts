@@ -17,8 +17,8 @@ import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
 import { RoleProperty } from "../../../../model/RoleProperty";
 import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { User } from "../../../../model/User";
+import { KIXObjectService } from "../../../../../base-components/webapp/core/KIXObjectService";
 
 
 export class RoleDetailsContext extends Context {
@@ -62,27 +62,12 @@ export class RoleDetailsContext extends Context {
     }
 
     private async loadRole(changedProperties: string[] = [], cache: boolean = true): Promise<Role> {
-        const roleId = Number(this.objectId);
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS, RoleProperty.CONFIGURED_PERMISSIONS]
         );
 
-        const roles = await KIXObjectService.loadObjects<Role>(
-            KIXObjectType.ROLE, [roleId], loadingOptions, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let role: Role;
-        if (roles && roles.length) {
-            role = roles[0];
-            this.objectId = role.ID;
-        }
-
-        return role;
+        return await this.loadDetailsObject<Role>(KIXObjectType.ROLE, loadingOptions);
     }
 
 }

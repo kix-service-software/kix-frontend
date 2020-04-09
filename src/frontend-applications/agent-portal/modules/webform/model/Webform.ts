@@ -98,4 +98,8 @@ export class Webform extends KIXObject<Webform> {
             this.ValidID = ValidID;
         }
     }
+
+    public getIdPropertyName(): string {
+        return 'ObjectId';
+    }
 }

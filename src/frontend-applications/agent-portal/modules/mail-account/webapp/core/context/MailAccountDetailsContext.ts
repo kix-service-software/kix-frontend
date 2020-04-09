@@ -15,7 +15,6 @@ import { TranslationService } from "../../../../../modules/translation/webapp/co
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class MailAccountDetailsContext extends Context {
 
@@ -41,7 +40,7 @@ export class MailAccountDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadAccount(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.MAIL_ACCOUNT);
 
         if (reload) {
             this.listeners.forEach(
@@ -50,25 +49,6 @@ export class MailAccountDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadAccount(changedProperties: string[] = [], cache: boolean = true): Promise<MailAccount> {
-        const mailAccountId = Number(this.objectId);
-
-        const mailAccounts = await KIXObjectService.loadObjects<MailAccount>(
-            KIXObjectType.MAIL_ACCOUNT, [mailAccountId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let mailAccount: MailAccount;
-        if (mailAccounts && mailAccounts.length) {
-            mailAccount = mailAccounts[0];
-            this.objectId = mailAccount.ID;
-        }
-
-        return mailAccount;
     }
 
 }

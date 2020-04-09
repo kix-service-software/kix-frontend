@@ -15,7 +15,6 @@ import { TranslationService } from "../../../../../../../modules/translation/web
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class TicketPriorityDetailsContext extends Context {
 
@@ -39,7 +38,7 @@ export class TicketPriorityDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadTicketPriority(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.TICKET_PRIORITY);
 
         if (reload) {
             this.listeners.forEach(
@@ -48,25 +47,6 @@ export class TicketPriorityDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadTicketPriority(changedProperties: string[] = [], cache: boolean = true): Promise<TicketPriority> {
-        const ticketPriorityId = Number(this.objectId);
-
-        const ticketPriorities = await KIXObjectService.loadObjects<TicketPriority>(
-            KIXObjectType.TICKET_PRIORITY, [ticketPriorityId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let ticketPriority: TicketPriority;
-        if (ticketPriorities && ticketPriorities.length) {
-            ticketPriority = ticketPriorities[0];
-            this.objectId = ticketPriority.ID;
-        }
-
-        return ticketPriority;
     }
 
 }

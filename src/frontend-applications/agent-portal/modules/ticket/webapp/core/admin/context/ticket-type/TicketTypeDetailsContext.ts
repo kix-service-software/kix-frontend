@@ -15,7 +15,6 @@ import { TranslationService } from "../../../../../../../modules/translation/web
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class TicketTypeDetailsContext extends Context {
 
@@ -40,7 +39,7 @@ export class TicketTypeDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.TICKET_TYPE, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadTicketType(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.TICKET_TYPE);
 
         if (reload) {
             this.listeners.forEach(
@@ -49,25 +48,6 @@ export class TicketTypeDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadTicketType(changedProperties: string[] = [], cache: boolean = true): Promise<TicketType> {
-        const ticketTypeId = Number(this.objectId);
-
-        const ticketTypes = await KIXObjectService.loadObjects<TicketType>(
-            KIXObjectType.TICKET_TYPE, [ticketTypeId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let ticketType: TicketType;
-        if (ticketTypes && ticketTypes.length) {
-            ticketType = ticketTypes[0];
-            this.objectId = ticketType.ID;
-        }
-
-        return ticketType;
     }
 
 }

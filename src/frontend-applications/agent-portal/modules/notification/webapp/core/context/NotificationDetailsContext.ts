@@ -14,7 +14,6 @@ import { TranslationService } from "../../../../../modules/translation/webapp/co
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Notification } from "../../../model/Notification";
 
 export class NotificationDetailsContext extends Context {
@@ -40,7 +39,7 @@ export class NotificationDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.NOTIFICATION, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadNotification(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.NOTIFICATION);
 
         if (reload) {
             this.listeners.forEach(
@@ -49,25 +48,6 @@ export class NotificationDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadNotification(changedProperties: string[] = [], cache: boolean = true): Promise<Notification> {
-        const notificationId = Number(this.objectId);
-
-        const notifications = await KIXObjectService.loadObjects<Notification>(
-            KIXObjectType.NOTIFICATION, [notificationId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let notification: Notification;
-        if (notifications && notifications.length) {
-            notification = notifications[0];
-            this.objectId = notification.ID;
-        }
-
-        return notification;
     }
 
 }

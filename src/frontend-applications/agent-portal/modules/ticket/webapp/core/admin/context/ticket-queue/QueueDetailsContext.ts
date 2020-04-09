@@ -14,7 +14,6 @@ import { BreadcrumbInformation } from "../../../../../../../model/BreadcrumbInfo
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class QueueDetailsContext extends Context {
 
@@ -37,7 +36,7 @@ export class QueueDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.QUEUE, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadQueue(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.QUEUE);
 
         if (reload) {
             this.listeners.forEach(
@@ -46,25 +45,6 @@ export class QueueDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadQueue(changedProperties: string[] = [], cache: boolean = true): Promise<Queue> {
-        const QueueId = Number(this.objectId);
-
-        const queues = await KIXObjectService.loadObjects<Queue>(
-            KIXObjectType.QUEUE, [QueueId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let queue: Queue;
-        if (queues && queues.length) {
-            queue = queues[0];
-            this.objectId = queue.QueueID;
-        }
-
-        return queue;
     }
 
 }
