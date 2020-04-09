@@ -206,7 +206,7 @@ export class AbstractJobFormManager implements IJobFormManager {
             'job-form-group-actions', 'Translatable#Actions',
             undefined, undefined, [actionsField], true
         );
-        await this.prepareMacroActionFields(actionsField, actionGroup);
+        await this.prepareMacroActionFields(actionsField, actionGroup, formContext);
 
         return new FormPageConfiguration(
             this.actionPageId, 'Translatable#Actions',
@@ -215,9 +215,9 @@ export class AbstractJobFormManager implements IJobFormManager {
     }
 
     protected async prepareMacroActionFields(
-        field: FormFieldConfiguration, group: FormGroupConfiguration
+        field: FormFieldConfiguration, group: FormGroupConfiguration, formContext: FormContext
     ): Promise<void> {
-        if (this.job) {
+        if (this.job && formContext === FormContext.EDIT) {
             const macros: Macro[] = await JobService.getMacrosOfJob(this.job);
             if (macros && macros.length && macros[0].Actions && macros[0].Actions.length) {
                 const macro = macros[0];

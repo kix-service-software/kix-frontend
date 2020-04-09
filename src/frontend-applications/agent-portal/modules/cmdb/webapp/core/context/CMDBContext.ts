@@ -23,7 +23,6 @@ import { CMDBService } from "..";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
 import { EventService } from "../../../../base-components/webapp/core/EventService";
-import { VersionProperty } from "../../../model/VersionProperty";
 
 export class CMDBContext extends Context {
 
