@@ -55,10 +55,10 @@ class Component {
         this.bookmarks = BookmarkService.getInstance().getBookmarks();
         for (const b of this.bookmarks) {
             if (await AuthenticationSocketClient.getInstance().checkPermissions(b.permissions)) {
-                const bookmarkTooltip = await TranslationService.translate(b.title);
-                availableBookmarks.push(new TreeNode('bookmark-' + b.title, b.title, b.icon, undefined, undefined,
+                const bookmarkTitle = await TranslationService.translate(b.title);
+                availableBookmarks.push(new TreeNode('bookmark-' + b.title, bookmarkTitle, b.icon, undefined, undefined,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-                    bookmarkTooltip));
+                    bookmarkTitle));
             }
         }
         availableBookmarks.sort((a, b) => SortUtil.compareString(a, b, SortOrder.UP));
