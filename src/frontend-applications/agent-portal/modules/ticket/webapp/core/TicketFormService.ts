@@ -117,7 +117,7 @@ export class TicketFormService extends KIXObjectFormService {
                 if (formContext === FormContext.NEW) {
                     value = ticket ? ticket.ContactID : null;
                     if (!value) {
-                        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                        const context = ContextService.getInstance().getActiveContext();
                         const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
                         value = contact ? contact.ID : null;
                     }
@@ -127,7 +127,7 @@ export class TicketFormService extends KIXObjectFormService {
                 if (formContext === FormContext.NEW) {
                     value = ticket ? ticket.OrganisationID : null;
                     if (!value) {
-                        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                        const context = ContextService.getInstance().getActiveContext();
                         const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
                         value = organisation ? organisation.ID : null;
                     }
@@ -140,7 +140,11 @@ export class TicketFormService extends KIXObjectFormService {
                 }
                 break;
             default:
-                value = await super.getValue(property, value, ticket, formField, formContext);
+                if (formContext === FormContext.EDIT) {
+                    value = await super.getValue(property, value, ticket, formField, formContext);
+                } else {
+                    value = formField.defaultValue ? formField.defaultValue.value : null;
+                }
         }
         return value;
     }
