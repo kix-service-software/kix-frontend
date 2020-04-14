@@ -38,13 +38,19 @@ export class ConfigItemDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false
     ): Promise<O> {
-        const object = await this.loadConfigItem() as any;
+        const object = await this.loadConfigItem();
+
+        if (object) {
+            this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, object.Versions);
+        }
+
+
         if (reload) {
             this.listeners.forEach(
                 (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
             );
         }
-        return object;
+        return object as any;
     }
 
     private async loadConfigItem(): Promise<ConfigItem> {
