@@ -73,9 +73,14 @@ export class TemplateImportAction extends AbstractAction {
             const importFile: any = Array.from(uploadInput.files)[0];
             if (importFile) {
                 document.body.removeChild(uploadInput);
-                const fileError = await AttachmentUtil.checkFile(
-                    importFile, ['application/vnd.ms-excel', 'text/plain', 'text/csv']
+                let fileError = await AttachmentUtil.checkFile(
+                    importFile, ['application/vnd.ms-excel', 'text/plain', 'text/csv', '']
                 );
+                if (!fileError && importFile.name.match(new RegExp('^.+\..+$'))) {
+                    if (!importFile.name.match(new RegExp('\.(csv|txt)$'))) {
+                        fileError = AttachmentError.INVALID_MIMETYPE;
+                    }
+                }
                 if (!fileError) {
                     const fileContent = await BrowserUtil.readFile(importFile);
                     this.executeImport(fileContent, templateId);
