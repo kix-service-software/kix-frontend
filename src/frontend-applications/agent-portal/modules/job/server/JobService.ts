@@ -106,14 +106,16 @@ export class JobAPIService extends KIXObjectAPIService {
                 token, KIXObjectType.MACRO, this.RESOURCE_URI_Macro, loadingOptions, objectIds, 'Macro'
             );
         } else if (objectType === KIXObjectType.MACRO_ACTION_TYPE) {
-            const uri = this.buildUri(
-                'system', 'automation', 'macros', 'types',
-                objectLoadingOptions ? objectLoadingOptions.id : '',
-                'actiontypes'
-            );
-            objects = await super.load<MacroActionType>(
-                token, KIXObjectType.MACRO_ACTION_TYPE, uri, loadingOptions, objectIds, 'MacroActionType'
-            );
+            if (objectLoadingOptions) {
+                const uri = this.buildUri(
+                    'system', 'automation', 'macros', 'types',
+                    objectLoadingOptions.id,
+                    'actiontypes'
+                );
+                objects = await super.load<MacroActionType>(
+                    token, KIXObjectType.MACRO_ACTION_TYPE, uri, loadingOptions, objectIds, 'MacroActionType'
+                );
+            }
         }
 
         return objects;
