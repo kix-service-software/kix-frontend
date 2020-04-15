@@ -105,7 +105,8 @@ class Component {
                                 this.state.table.filter();
                             }
 
-                            this.state.loading = false;
+
+                            setTimeout(() => this.state.loading = false, 100);
                         } else {
                             if (eventId === TableEvent.TABLE_READY) {
                                 this.state.filterCount = this.state.table.isFiltered()

@@ -62,10 +62,13 @@ export class TicketDetailsContext extends Context {
 
         if (reload && objectType === KIXObjectType.TICKET) {
             setTimeout(() => {
+                if (ticket) {
+                    this.setObjectList(KIXObjectType.ARTICLE, ticket.Articles);
+                }
                 this.listeners.forEach(
                     (l) => l.objectChanged(Number(this.objectId), ticket, KIXObjectType.TICKET, changedProperties)
                 );
-            }, 20);
+            }, 100);
         }
 
         return object;
@@ -88,10 +91,6 @@ export class TicketDetailsContext extends Context {
         );
 
         const ticket: Ticket = await this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
-        if (ticket) {
-            this.setObjectList(KIXObjectType.ARTICLE, ticket.Articles);
-        }
-
         return ticket;
     }
 
