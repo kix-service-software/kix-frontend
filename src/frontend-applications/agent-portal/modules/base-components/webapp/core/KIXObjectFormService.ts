@@ -379,4 +379,25 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         }
         return foundField;
     }
+
+    public resetChildrenOnEmpty(formField: FormFieldConfiguration): void {
+        if (formField.children) {
+            const children = [];
+            for (const child of formField.children) {
+                const existingChildren = children.filter((c) => c.property === child.property);
+                if (
+                    !!!existingChildren.length
+                    || typeof child.countDefault !== 'number'
+                    || child.countDefault > existingChildren.length
+                ) {
+                    this.resetChildrenOnEmpty(child);
+                    if (typeof child.countDefault === 'number' && child.countDefault === 0) {
+                        child.empty = true;
+                    }
+                    children.push(child);
+                }
+            }
+            formField.children = children;
+        }
+    }
 }

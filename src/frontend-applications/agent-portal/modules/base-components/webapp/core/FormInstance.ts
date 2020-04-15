@@ -168,6 +168,19 @@ export class FormInstance implements IFormInstance {
         }
     }
 
+    public setFieldEmptyState(formField: FormFieldConfiguration, empty: boolean = true): void {
+        formField.empty = empty;
+        if (empty) {
+            this.deleteValuesRecursive(formField);
+            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+                this.form.objectType, ServiceType.FORM
+            );
+            if (service) {
+                service.resetChildrenOnEmpty(formField);
+            }
+        }
+    }
+
     public async removePages(pageIds: string[], protectedPages?: string[]): Promise<void> {
         if (!pageIds) {
             pageIds = this.form.pages.map((p) => p.id);
@@ -239,6 +252,9 @@ export class FormInstance implements IFormInstance {
         parent: FormFieldConfiguration, newFields: FormFieldConfiguration[], clearChildren: boolean = false
     ): void {
         if (parent) {
+            if (!parent.children) {
+                parent.children = [];
+            }
             if (clearChildren) {
                 parent.children.forEach((c) => this.deleteValuesRecursive(c));
                 parent.children = [];

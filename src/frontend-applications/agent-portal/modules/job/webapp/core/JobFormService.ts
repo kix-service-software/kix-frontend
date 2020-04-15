@@ -128,7 +128,11 @@ export class JobFormService extends KIXObjectFormService {
 
     public getNewFormField(f: FormFieldConfiguration, parent?: FormFieldConfiguration): FormFieldConfiguration {
         const field = super.getNewFormField(f, parent, false);
-        field.hint = field.defaultHint;
+        if (field.property === JobProperty.MACRO_ACTIONS) {
+            field.defaultValue = null;
+            field.hint = field.defaultHint;
+            field.children = [];
+        }
         return field;
     }
 
@@ -212,6 +216,14 @@ export class JobFormService extends KIXObjectFormService {
 
         if (manager) {
             manager.updateFields(fields);
+        }
+    }
+
+    public resetChildrenOnEmpty(formField: FormFieldConfiguration): void {
+        if (formField.property === JobProperty.MACRO_ACTIONS) {
+            formField.children = [];
+        } else {
+            super.resetChildrenOnEmpty(formField);
         }
     }
 }
