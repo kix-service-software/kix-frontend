@@ -40,12 +40,10 @@ export class ConfigItemDetailsContext extends Context {
     ): Promise<O> {
         const object = await this.loadConfigItem();
 
-        if (object) {
-            this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, object.Versions);
-        }
-
-
         if (reload) {
+            if (object) {
+                this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, object.Versions);
+            }
             this.listeners.forEach(
                 (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
             );
