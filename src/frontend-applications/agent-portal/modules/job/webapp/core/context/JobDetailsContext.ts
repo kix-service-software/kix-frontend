@@ -15,10 +15,7 @@ import { TranslationService } from "../../../../translation/webapp/core/Translat
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class JobDetailsContext extends Context {
 
@@ -29,7 +26,7 @@ export class JobDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<Job>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<Job>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -56,33 +53,8 @@ export class JobDetailsContext extends Context {
     }
 
     private async loadJob(changedProperties: string[] = [], cache: boolean = true): Promise<Job> {
-        const jobId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Job'
-            });
-        }, 500);
-
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['ExecPlans', 'Macros']);
 
-        const jobs = await KIXObjectService.loadObjects<Job>(
-            KIXObjectType.JOB, [jobId], loadingOptions, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearInterval(timeout);
-
-        let job: Job;
-        if (jobs && jobs.length) {
-            job = jobs[0];
-            this.objectId = job.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return job;
+        return await this.loadDetailsObject<Job>(KIXObjectType.JOB, loadingOptions, null, true, cache);
     }
 }

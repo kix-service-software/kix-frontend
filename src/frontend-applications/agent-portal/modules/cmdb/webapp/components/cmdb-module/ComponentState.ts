@@ -8,11 +8,16 @@
  */
 
 import { ConfiguredWidget } from "../../../../../model/configuration/ConfiguredWidget";
+import { AbstractComponentState } from "../../../../base-components/webapp/core/AbstractComponentState";
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public contentWidgets: ConfiguredWidget[] = []
-    ) { }
+        public contentWidgets: ConfiguredWidget[] = [],
+        public filterValue: string = null,
+        public placeholder: string = 'Please enter a search term.'
+    ) {
+        super();
+    }
 
 }

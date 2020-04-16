@@ -18,6 +18,9 @@ import { ServiceType } from '../../../../modules/base-components/webapp/core/Ser
 import { IKIXObjectFormService } from '../../../../modules/base-components/webapp/core/IKIXObjectFormService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -29,6 +32,27 @@ export class AgentService extends KIXObjectService<User> {
         }
 
         return AgentService.INSTANCE;
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType | string, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds: boolean = true
+    ): Promise<O[]> {
+        let objects: O[];
+        let superLoad = false;
+        if (objectType === KIXObjectType.USER) {
+            objects = await super.loadObjects<O>(KIXObjectType.USER, forceIds ? objectIds : null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
     public getLinkObjectName(): string {
@@ -64,7 +88,7 @@ export class AgentService extends KIXObjectService<User> {
 
         await AgentSocketClient.getInstance().setPreferences(parameter);
 
-        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, KIXObjectType.CURRENT_USER);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.CURRENT_USER });
     }
 
     public async setPreferences(preferences: Array<[string, any]>): Promise<void> {

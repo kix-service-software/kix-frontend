@@ -25,7 +25,7 @@ export class LinkUtil {
         const links = mainObject && mainObject.Links ? mainObject.Links : [];
 
         const linkTypes = await KIXObjectService.loadObjects<LinkType>(
-            KIXObjectType.LINK_TYPE, null, null, false
+            KIXObjectType.LINK_TYPE, null, null, null, false
         );
 
         return links.map((l) => {
@@ -188,11 +188,7 @@ export class LinkUtil {
             }
 
             if (linkableObjectType && !partners.some((p) => p[1] === linkableObjectType)) {
-                let objectName = linkableObjectType;
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(linkableObjectType);
-                if (labelProvider) {
-                    objectName = await labelProvider.getObjectName();
-                }
+                const objectName = await LabelService.getInstance().getObjectName(linkableObjectType);
 
                 const service = ServiceRegistry.getServiceInstance(linkableObjectType);
                 if (service) {

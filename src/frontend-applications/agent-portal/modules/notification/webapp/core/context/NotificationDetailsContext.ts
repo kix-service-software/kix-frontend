@@ -14,9 +14,6 @@ import { TranslationService } from "../../../../../modules/translation/webapp/co
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Notification } from "../../../model/Notification";
 
 export class NotificationDetailsContext extends Context {
@@ -28,7 +25,7 @@ export class NotificationDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<Notification>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<Notification>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -42,7 +39,7 @@ export class NotificationDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.NOTIFICATION, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadNotification(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.NOTIFICATION);
 
         if (reload) {
             this.listeners.forEach(
@@ -51,35 +48,6 @@ export class NotificationDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadNotification(changedProperties: string[] = [], cache: boolean = true): Promise<Notification> {
-        const notificationId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: `Translatable#Load Notification ...`
-            });
-        }, 500);
-
-        const notifications = await KIXObjectService.loadObjects<Notification>(
-            KIXObjectType.NOTIFICATION, [notificationId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let notification: Notification;
-        if (notifications && notifications.length) {
-            notification = notifications[0];
-            this.objectId = notification.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return notification;
     }
 
 }

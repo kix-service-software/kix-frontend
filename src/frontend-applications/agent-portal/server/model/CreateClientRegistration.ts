@@ -20,7 +20,9 @@ export class CreateClientRegistration extends RequestObject {
         public NotificationInterval: number,
         public Authorization: string = null,
         public Translations: PODefinition[] = [],
-        public SysConfigOptionDefinitions: SysConfigOptionDefinition[] = []
+        public SysConfigOptionDefinitions: SysConfigOptionDefinition[] = [],
+        public Requires: any[] = [],
+        public Plugins: any[] = []
     ) {
         super();
     }

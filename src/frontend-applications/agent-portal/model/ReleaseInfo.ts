@@ -17,7 +17,9 @@ export class ReleaseInfo {
         public buildDate?: string,
         public buildHost?: string,
         public buildNumber?: number,
-        public backendSystemInfo?: SystemInfo
+        public dependencies?: Array<[string, string, string]>,
+        public backendSystemInfo?: SystemInfo,
+        public requires?: string
     ) {
 
     }

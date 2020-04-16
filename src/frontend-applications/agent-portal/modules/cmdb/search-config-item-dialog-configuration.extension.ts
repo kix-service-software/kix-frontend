@@ -25,10 +25,10 @@ import { SearchForm } from "../../modules/base-components/webapp/core/SearchForm
 import { FormContext } from "../../model/configuration/FormContext";
 import { SearchProperty } from "../search/model/SearchProperty";
 import { ConfigItemProperty } from "./model/ConfigItemProperty";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class ModuleExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return ConfigItemSearchContext.CONTEXT_ID;
@@ -101,5 +101,5 @@ export class ModuleExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new ModuleExtension();
+    return new Extension();
 };

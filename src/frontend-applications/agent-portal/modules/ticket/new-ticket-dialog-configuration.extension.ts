@@ -43,9 +43,9 @@ import { ContactProperty } from "../customer/model/ContactProperty";
 import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
 import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-
-export class NewTicketDialogModuleExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return NewTicketDialogContext.CONTEXT_ID;
@@ -240,7 +240,7 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -367,5 +367,5 @@ export class NewTicketDialogModuleExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new NewTicketDialogModuleExtension();
+    return new Extension();
 };

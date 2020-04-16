@@ -30,8 +30,9 @@ import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
 import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
 import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class TicketDetailsModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return 'ticket-details';
@@ -121,8 +122,7 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
         const tabWidget = new WidgetConfiguration(
             'ticket-details-tab-widget', 'Tab Widget', ConfigurationType.Widget,
             'tab-widget', '', [],
-            new ConfigurationDefinition('ticket-details-tab-widget-config', ConfigurationType.TabWidget),
-            false, true
+            new ConfigurationDefinition('ticket-details-tab-widget-config', ConfigurationType.TabWidget)
         );
         configurations.push(tabWidget);
 
@@ -379,5 +379,5 @@ export class TicketDetailsModuleFactoryExtension implements IConfigurationExtens
 }
 
 module.exports = (data, host, options) => {
-    return new TicketDetailsModuleFactoryExtension();
+    return new Extension();
 };

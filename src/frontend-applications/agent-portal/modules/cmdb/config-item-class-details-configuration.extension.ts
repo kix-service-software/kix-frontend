@@ -24,7 +24,9 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { ToggleOptions } from "../base-components/webapp/core/table";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return 'config-item-class-details';

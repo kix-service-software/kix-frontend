@@ -9,6 +9,7 @@
 
 import { IPlaceholderHandler } from "./IPlaceholderHandler";
 import { KIXObject } from "../../../../model/kix/KIXObject";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 
 export class PlaceholderService {
 
@@ -70,8 +71,9 @@ export class PlaceholderService {
         return text;
     }
 
-    public getHandler(objectString: string): IPlaceholderHandler {
-        return this.placeholderHandler.find((ph) => ph.isHandlerFor(objectString));
+    public getHandler<T extends IPlaceholderHandler = IPlaceholderHandler>(objectType: KIXObjectType | string): T {
+        const handler = this.placeholderHandler.find((ph) => ph.isHandlerFor(objectType));
+        return handler as T;
     }
 
     public getPlaceholderRegex(

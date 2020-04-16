@@ -78,7 +78,7 @@ export class ChannelLabelProvider extends LabelProvider<Channel> {
     public async getObjectText(
         channel: Channel, id?: boolean, title?: boolean, translatable: boolean = true
     ): Promise<string> {
-        return translatable ? await TranslationService.translate('Translatable#Channel') : 'Channel';
+        return translatable ? await TranslationService.translate(channel.Name) : channel.Name;
     }
 
     public getObjectAdditionalText(channel: Channel): string {

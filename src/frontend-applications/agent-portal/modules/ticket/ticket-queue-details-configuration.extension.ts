@@ -18,7 +18,9 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { QueueDetailsContext } from "./webapp/core";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return 'ticket-queue-details';
@@ -66,7 +68,7 @@ export class Extension implements IConfigurationExtension {
                     'ticket-admin-queue-create'
                 ],
                 [
-                    'ticket-admin-queue-edit', 'print-action'
+                    'ticket-admin-queue-edit', 'ticket-admin-queue-duplicate', 'print-action'
                 ],
                 [],
                 [

@@ -46,8 +46,15 @@ import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { SortUtil } from "../../../../model/SortUtil";
 import { DataType } from "../../../../model/DataType";
+import { ExtendedKIXObjectService } from "./ExtendedKIXObjectService";
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
+
+    private extendedServices: ExtendedKIXObjectService[] = [];
+
+    public addExtendedService(service: ExtendedKIXObjectService): void {
+        this.extendedServices.push(service);
+    }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
 
@@ -63,16 +70,16 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false,
-        cache: boolean = true
+        cache: boolean = true, forceIds: boolean = false
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
         if (service) {
             objects = await service.loadObjects(
-                objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache
+                objectType, objectIds ? [...objectIds] : null, loadingOptions, objectLoadingOptions, cache, forceIds
             ).catch((error: Error) => {
                 if (!silent) {
-                    // FIXME: Publish event to show an error dialog
+                    // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
                             title: `Error load object (${objectType}):`,
@@ -95,7 +102,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
-        cache: boolean = true
+        cache: boolean = true, forceIds?: boolean
     ): Promise<O[]> {
         let objects = [];
         if (objectIds) {
@@ -123,7 +130,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             objectType, parameter, createOptions, cacheKeyPrefix
         ).catch(async (error: Error) => {
             if (catchError) {
-                // FIXME: Publish event to show an error dialog
+                // TODO: Publish event to show an error dialog
                 const content = new ComponentContent('list-with-title',
                     {
                         title: `Translatable#Error on create:`,
@@ -185,7 +192,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const updatedObjectId = await service.updateObject(objectType, parameter, objectId, cacheKeyPrefix)
             .catch((error: Error) => {
                 if (catchError) {
-                    // FIXME: Publish event to show an error dialog
+                    // TODO: Publish event to show an error dialog
                     const content = new ComponentContent('list-with-title',
                         {
                             title: `Translatable#Error on update:`,
@@ -254,7 +261,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 });
         }
         if (!!errors.length) {
-            // FIXME: Publish event to show an error dialog
+            // TODO: Publish event to show an error dialog
             const content = new ComponentContent('list-with-title',
                 {
                     title: `Fehler beim Löschen (${objectType}):`,
@@ -281,9 +288,20 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async getTreeNodes(
         property: string, showInvalid?: boolean, invalidClickable?: boolean,
-        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions
+        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
+        objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<TreeNode[]> {
+        for (const extendedService of this.extendedServices) {
+            const extendedNodes = extendedService.getTreeNodes(
+                property, showInvalid, invalidClickable, filterIds, loadingOptions, objectLoadingOptions
+            );
+            if (extendedNodes) {
+                return extendedNodes;
+            }
+        }
+
         let nodes: TreeNode[] = [];
+
         switch (property) {
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
@@ -309,7 +327,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 const validObjects = await KIXObjectService.loadObjects<ValidObject>(KIXObjectType.VALID_OBJECT);
                 nodes = [];
                 for (const vo of validObjects) {
-                    const text = await LabelService.getInstance().getText(vo);
+                    const text = await LabelService.getInstance().getObjectText(vo);
                     nodes.push(new TreeNode(Number(vo.ID), text));
                 }
                 break;
@@ -429,7 +447,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         const nodes: TreeNode[] = [];
         if (objects && !!objects.length) {
             for (const o of objects) {
-                nodes.push(new TreeNode(o.ObjectId, await LabelService.getInstance().getText(o)));
+                nodes.push(new TreeNode(o.ObjectId, await LabelService.getInstance().getObjectText(o)));
             }
         }
         return nodes;
@@ -460,7 +478,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         for (const o of objects) {
             if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
                 const icon = await LabelService.getInstance().getObjectIcon(o);
-                const text = await LabelService.getInstance().getText(o);
+                const text = await LabelService.getInstance().getObjectText(o);
                 nodes.push(new TreeNode(
                     o.ObjectId, text, icon, undefined, undefined,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined,
@@ -495,7 +513,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static getDynamicFieldName(property: string): string {
         let name: string;
-        if (KIXObjectService.isDynamicFieldProperty(property)) {
+        if (property && KIXObjectService.isDynamicFieldProperty(property)) {
             name = property.replace(/^DynamicFields?\.(.+)/, '$1');
         }
         return name;

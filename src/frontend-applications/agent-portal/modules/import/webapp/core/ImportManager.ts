@@ -198,6 +198,6 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
     }
 
     public async getIdentifierText(object: KIXObject): Promise<string> {
-        return await LabelService.getInstance().getText(object);
+        return await LabelService.getInstance().getObjectText(object);
     }
 }

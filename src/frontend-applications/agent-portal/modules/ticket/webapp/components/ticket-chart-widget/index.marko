@@ -6,13 +6,17 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget instanceId=state.instanceId title=state.title>
-    <@content>
-        <div.chart-container>
-            <if(state.chartConfig)>
-                <chart config=state.chartConfig/>
-            </if>
-        </div>
-    </@content>
-</widget>
+<if(state.loading)>
+    <chart-placeholder/>
+</if>
+<else>
+    <widget instanceId=state.instanceId title=state.title>
+        <@content>
+            <div.chart-container>
+                <if(state.chartConfig)>
+                    <chart config=state.chartConfig/>
+                </if>
+            </div>
+        </@content>
+    </widget>
+</else>

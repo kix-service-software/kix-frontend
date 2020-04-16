@@ -18,13 +18,14 @@ import {
 } from "../../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType";
 import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
 import { PermissionType } from "../../../model/PermissionType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
 
 export class PermissionManager extends AbstractDynamicFormManager {
 
     public objectType: KIXObjectType | string = KIXObjectType.PERMISSION_TYPE;
 
     public uniqueProperties: boolean = false;
+
+    public resetOperator: boolean = false;
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
         return 'SPECIFIC';

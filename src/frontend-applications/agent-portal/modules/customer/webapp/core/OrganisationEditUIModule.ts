@@ -19,6 +19,7 @@ import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
 import { ImportService } from "../../../import/webapp/core";
+import { OrganisationDuplicateAction } from "./actions/OrganisationDuplicateAction";
 
 export class UIModule implements IUIModule {
 
@@ -63,6 +64,7 @@ export class UIModule implements IUIModule {
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('organisation-create-action', OrganisationCreateAction);
         ActionFactory.getInstance().registerAction('organisation-edit-action', OrganisationEditAction);
+        ActionFactory.getInstance().registerAction('organisation-duplicate-action', OrganisationDuplicateAction);
     }
 
 }

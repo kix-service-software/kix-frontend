@@ -15,18 +15,25 @@ import { IFormInstanceListener } from "./IFormInstanceListener";
 import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
 import { FormContext } from "../../../../model/configuration/FormContext";
 import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
+import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
 
 export interface IFormInstance {
 
     provideFormField(newFormFieldConfiguration: FormFieldConfiguration): Promise<void>;
 
-    removeFormField(FormFieldConfiguration: FormFieldConfiguration, parent?: FormFieldConfiguration): void;
+    removeFormField(formFieldConfiguration: FormFieldConfiguration, parent?: FormFieldConfiguration): void;
 
-    addFormField(FormFieldConfiguration: FormFieldConfiguration, fields?: FormFieldConfiguration[]): void;
+    removePages(pageIds?: string[], protectedPages?: string[]): Promise<void>;
 
-    provideFormFieldValue<T>(FormFieldConfigurationInstanceId: string, value: T, silent?: boolean): void;
+    addFormField(formFieldConfiguration: FormFieldConfiguration, fields?: FormFieldConfiguration[]): void;
 
-    getFormFieldValue<T>(FormFieldConfigurationInstanceId: string): FormFieldValue<T>;
+    setFieldEmptyState(formFieldConfiguration: FormFieldConfiguration, empty?: boolean): void;
+
+    addPage(page: FormPageConfiguration, index?: number): void;
+
+    provideFormFieldValue<T>(formFieldConfigurationInstanceId: string, value: T, silent?: boolean): void;
+
+    getFormFieldValue<T>(formFieldConfigurationInstanceId: string): FormFieldValue<T>;
 
     getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>>;
 
@@ -34,7 +41,7 @@ export interface IFormInstance {
 
     getAllFormFieldValues(): Map<string, FormFieldValue<any>>;
 
-    getFormField(FormFieldConfigurationInstanceId: string): Promise<FormFieldConfiguration>;
+    getFormField(formFieldConfigurationInstanceId: string): Promise<FormFieldConfiguration>;
 
     hasValues(): boolean;
 

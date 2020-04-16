@@ -26,7 +26,7 @@ const expect = chai.expect;
 describe('Placeholder replacement for dynamic field values', () => {
 
     let object: KIXObject;
-    let dFValuePlaceholderHandler: DynamicFieldValuePlaceholderHandler = new DynamicFieldValuePlaceholderHandler();
+    let dFValuePlaceholderHandler: DynamicFieldValuePlaceholderHandler = DynamicFieldValuePlaceholderHandler.getInstance();
     let testDFValues: DynamicFieldValue[];
     let orgFuntion;
     let sepatator: string = '###';

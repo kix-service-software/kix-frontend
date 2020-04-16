@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketContext } from '../../core';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component {
 
@@ -22,9 +23,24 @@ class Component {
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
         this.state.contentWidgets = context.getContent();
-        if (!context.queueId) {
-            context.setQueue(null);
+        this.state.translations = await TranslationService.createTranslationObject([
+            "Translatable#Search",
+            "Translatable#Help"
+        ]);
+
+        this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
+    }
+
+    public keyUp(event: any): void {
+        this.state.filterValue = event.target.value;
+        if (event.key === 'Enter') {
+            this.search();
         }
+    }
+
+    public async search(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
+        context.setFilterValue(this.state.filterValue);
     }
 
 }

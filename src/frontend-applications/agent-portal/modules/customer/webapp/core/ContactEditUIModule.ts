@@ -20,6 +20,7 @@ import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
 import { ImportService } from "../../../import/webapp/core/ImportService";
+import { ContactDuplicateAction } from "./actions/ContactDuplicateAction";
 
 export class UIModule implements IUIModule {
 
@@ -62,6 +63,7 @@ export class UIModule implements IUIModule {
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-create-action', ContactCreateAction);
         ActionFactory.getInstance().registerAction('contact-edit-action', ContactEditAction);
+        ActionFactory.getInstance().registerAction('contact-duplicate-action', ContactDuplicateAction);
     }
 
 }

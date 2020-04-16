@@ -13,9 +13,14 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 class Component {
 
     private state: ComponentState;
+    private keyUpEventFunction: () => {};
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+        if (input.before) {
+            this.keyUpEventFunction = this.keyUp.bind(this);
+            document.body.addEventListener('keyup', this.keyUpEventFunction, false);
+        }
     }
 
     public onInput(input: any): void {
@@ -26,31 +31,35 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.prepareTranslations();
-        document.addEventListener('keyup', this.keyUp.bind(this), false);
     }
 
     public onDestroy(): void {
-        document.removeEventListener('keyup', this.keyUp.bind(this), false);
+        if (this.keyUpEventFunction) {
+            document.body.removeEventListener('keyup', this.keyUpEventFunction, false);
+        }
     }
 
     public keyUp(event: any): void {
-        if (this.state.pages && this.state.pages.length > 1) {
-            if ((event.key === 'ArrowRight' || event.key === 'ArrowLeft') && event.ctrlKey) {
-                if (event.key === 'ArrowRight') {
-                    this.showPage(this.state.activePageIndex + 1);
-                } else {
-                    this.showPage(this.state.activePageIndex - 1);
-                }
+        if (
+            this.state.pages && this.state.pages.length > 1
+            && (event.key === 'ArrowRight' || event.key === 'ArrowLeft')
+            && event.ctrlKey
+        ) {
+            if (event.key === 'ArrowRight') {
+                this.showPage(this.state.activePageIndex + 1);
+            } else {
+                this.showPage(this.state.activePageIndex - 1);
             }
         }
     }
 
     private async prepareTranslations(): Promise<void> {
-        if (this.state.pages) {
+        if (this.state.pages && this.state.pages.length) {
             this.state.translations = await TranslationService.createTranslationObject([
                 'Translatable#Next', 'Translatable#Previous',
                 ...this.state.pages.map((p) => p.name)
             ]);
+            this.state.prepared = true;
         }
     }
 

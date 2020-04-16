@@ -126,12 +126,17 @@ export class TicketAPIService extends KIXObjectAPIService {
             const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
             const contactId = this.getParameterValue(parameter, TicketProperty.CONTACT_ID);
 
+            let organisationId = this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID);
+            if (isNaN(organisationId)) {
+                organisationId = null;
+            }
+
             const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId, contactId);
 
             const createTicket = new CreateTicket(
                 this.getParameterValue(parameter, TicketProperty.TITLE),
                 this.getParameterValue(parameter, TicketProperty.CONTACT_ID),
-                this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID),
+                organisationId,
                 this.getParameterValue(parameter, TicketProperty.STATE_ID),
                 this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
                 queueId,
@@ -408,6 +413,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             (f) => f.operator !== SearchOperator.NOT_EQUALS
                 && f.property !== KIXObjectProperty.CREATE_BY
                 && f.property !== KIXObjectProperty.CHANGE_BY
+                && f.property !== TicketProperty.STATE
                 && f.property !== SearchProperty.FULLTEXT
         );
 
@@ -418,7 +424,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             createdCriteria.property = KIXObjectProperty.CREATE_TIME;
         }
 
-        const changedCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
+        const changedCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CHANGED);
         if (changedCriteria) {
             changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
         }
@@ -448,28 +454,28 @@ export class TicketAPIService extends KIXObjectAPIService {
     private getFulltextSearch(fulltextFilter: FilterCriteria): FilterCriteria[] {
         return [
             new FilterCriteria(
-                TicketProperty.TICKET_NUMBER, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.TICKET_NUMBER, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.TITLE, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.TITLE, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.BODY, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.BODY, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.FROM, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.FROM, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.TO, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.TO, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.CC, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, fulltextFilter.value
+                TicketProperty.CC, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             )
         ];
     }

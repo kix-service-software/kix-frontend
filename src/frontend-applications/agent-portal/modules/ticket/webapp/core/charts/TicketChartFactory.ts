@@ -51,13 +51,14 @@ export class TicketChartFactory {
     }
 
     private async preparePropertyCountData(property: TicketProperty, tickets: Ticket[]): Promise<Map<string, number>> {
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
-        const data = await this.initMap(property, labelProvider);
+        const data = await this.initMap(property);
 
         const ids = tickets.map((t) => t[property]);
 
         for (const id of ids) {
-            const label = await labelProvider.getPropertyValueDisplayText(property, id);
+            const label = await LabelService.getInstance().getPropertyValueDisplayText(
+                KIXObjectType.TICKET, property, id
+            );
             if (!data.has(label)) {
                 data.set(label, 0);
             }
@@ -68,7 +69,7 @@ export class TicketChartFactory {
         return data;
     }
 
-    private async initMap(property: TicketProperty, labelProvider: ILabelProvider<any>): Promise<Map<string, number>> {
+    private async initMap(property: TicketProperty): Promise<Map<string, number>> {
         const map = new Map<string, number>();
         let objectType: KIXObjectType;
         let filter = [];
@@ -104,7 +105,9 @@ export class TicketChartFactory {
         const objects = await KIXObjectService.loadObjects(objectType, null, new KIXObjectLoadingOptions(filter));
 
         for (const o of objects) {
-            const label = await labelProvider.getPropertyValueDisplayText(property, o.ObjectId);
+            const label = await LabelService.getInstance().getPropertyValueDisplayText(
+                KIXObjectType.TICKET, property, o.ObjectId
+            );
             map.set(label, 0);
         }
         return map;

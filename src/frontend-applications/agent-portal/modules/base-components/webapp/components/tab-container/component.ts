@@ -37,8 +37,7 @@ class TabLaneComponent implements IEventSubscriber {
     private tabTitles: Map<string, string>;
     private hideSidebar: boolean;
 
-    private keyListenerElement: any;
-    private keyListener: any;
+    private keyDownEventFunction: () => {};
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.tabWidgets);
@@ -103,11 +102,8 @@ class TabLaneComponent implements IEventSubscriber {
         }
 
         if (this.state.contextType === ContextType.DIALOG) {
-            this.keyListenerElement = (this as any).getEl();
-            if (this.keyListenerElement) {
-                this.keyListener = this.keydown.bind(this);
-                this.keyListenerElement.addEventListener('keydown', this.keyListener, false);
-            }
+            this.keyDownEventFunction = this.keydown.bind(this);
+            document.body.addEventListener('keydown', this.keyDownEventFunction, false);
         }
 
         this.state.prepared = true;
@@ -124,8 +120,8 @@ class TabLaneComponent implements IEventSubscriber {
         ContextService.getInstance().unregisterListener(this.contextServiceListenerId);
         window.removeEventListener('resize', this.hideSidebarIfNeeded.bind(this), false);
 
-        if (this.state.contextType === ContextType.DIALOG && this.keyListenerElement) {
-            this.keyListenerElement.removeEventListener('keydown', this.keydown.bind(this), false);
+        if (this.state.contextType === ContextType.DIALOG && this.keyDownEventFunction) {
+            document.body.removeEventListener('keydown', this.keyDownEventFunction, false);
         }
     }
 
@@ -227,7 +223,11 @@ class TabLaneComponent implements IEventSubscriber {
     }
 
     public keydown(event: any): void {
-        if ((event.key === 'ArrowUp' || event.key === 'ArrowDown') && event.ctrlKey) {
+        if (
+            this.state.tabWidgets && this.state.tabWidgets.length > 1
+            && (event.key === 'ArrowUp' || event.key === 'ArrowDown')
+            && event.ctrlKey
+        ) {
             const index = this.state.tabWidgets.findIndex((tw) => tw.instanceId === this.state.activeTab.instanceId);
             let nextTab: WidgetConfiguration;
 

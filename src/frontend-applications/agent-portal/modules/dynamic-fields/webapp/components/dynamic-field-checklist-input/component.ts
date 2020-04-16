@@ -46,7 +46,7 @@ class Component extends FormInputComponent<CheckListItem[], ComponentState> {
     }
 
     private setProgressValues(): void {
-        const values = DynamicFieldFormUtil.countValues(this.state.checklist);
+        const values = DynamicFieldFormUtil.getInstance().countValues(this.state.checklist);
         this.state.progressValue = values[0];
         this.state.progressMax = values[1];
     }

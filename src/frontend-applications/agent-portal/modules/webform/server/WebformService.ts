@@ -29,8 +29,6 @@ import { TranslationAPIService } from "../../translation/server/TranslationServi
 
 import addrparser = require('address-rfc2822');
 import { SysConfigAccessLevel } from "../../sysconfig/model/SysConfigAccessLevel";
-import { UserService } from "../../user/server/UserService";
-import { User } from "../../user/model/User";
 
 export class WebformService {
 

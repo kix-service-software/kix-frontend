@@ -115,6 +115,7 @@ class Component {
     public onDestroy(): void {
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().unsubscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
         TableFactoryService.getInstance().destroyTable('edit-linked-objects-dialog');
     }
 
@@ -130,7 +131,6 @@ class Component {
             }
         });
         await this.prepareLinkedObjects(linkedObjectIds);
-        await this.initPredefinedFilter();
     }
 
     private async prepareLinkedObjects(linkedObjectIds: Map<KIXObjectType | string, string[]>): Promise<void> {
@@ -152,29 +152,9 @@ class Component {
                 (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
             );
             if (linkObject) {
-                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getText(o, true, false);
-                linkObject.title = await LabelService.getInstance().getText(o, false, true);
+                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getObjectText(o, true, false);
+                linkObject.title = await LabelService.getInstance().getObjectText(o, false, true);
             }
-        }
-    }
-
-    private async initPredefinedFilter(): Promise<void> {
-        if (this.mainObject) {
-            const linkPartners = await LinkUtil.getPossibleLinkPartners(this.mainObject.KIXObjectType);
-
-            linkPartners.forEach((lp) => {
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(lp[1]);
-                const icon = labelProvider ? labelProvider.getObjectIcon(null) : null;
-                this.state.predefinedTableFilter.push(
-                    new KIXObjectPropertyFilter(lp[0].toString(), [
-                        new TableFilterCriteria(
-                            LinkObjectProperty.LINKED_OBJECT_TYPE,
-                            SearchOperator.EQUALS,
-                            lp[1].toString()
-                        )
-                    ], icon),
-                );
-            });
         }
     }
 
@@ -223,12 +203,16 @@ class Component {
                         this.state.table.setRowObjectValueState(this.newLinkObjects, ValueState.HIGHLIGHT_SUCCESS);
                         this.highlightDeletedRows();
                     }
+                    if (eventId === TableEvent.TABLE_FILTERED) {
+                        this.state.linkObjectCount = this.state.table.getRows().length;
+                    }
                 }
             }
         };
 
         EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.tableSubscriber);
+        EventService.getInstance().subscribe(TableEvent.TABLE_FILTERED, this.tableSubscriber);
 
         this.state.table = table;
     }
@@ -244,12 +228,8 @@ class Component {
     }
 
     public async openAddLinkDialog(): Promise<void> {
-        let dialogTitle = await TranslationService.translate('Translatable#Linked Objects');
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.mainObject.KIXObjectType);
-        if (labelProvider) {
-            const objectName = await labelProvider.getObjectName();
-            dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
-        }
+        const objectName = await LabelService.getInstance().getObjectName(this.mainObject.KIXObjectType);
+        const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
 
         const linkDescriptions = this.linkDescriptions.filter((ld) => !this.deleteLinkObjects
             .some((dlo) =>
@@ -287,9 +267,11 @@ class Component {
                     ObjectId: 'NEW-' + ld.linkableObject.KIXObjectType + '-' +
                         ld.linkableObject.ObjectId + '-' + ld.linkTypeDescription.linkType.TypeID,
                     linkedObjectKey: ld.linkableObject.ObjectId,
-                    linkedObjectDisplayId: await LabelService.getInstance().getText(ld.linkableObject, true, false),
+                    linkedObjectDisplayId: await LabelService.getInstance().getObjectText(
+                        ld.linkableObject, true, false
+                    ),
                     linkedObjectType: ld.linkableObject.KIXObjectType,
-                    title: await LabelService.getInstance().getText(ld.linkableObject, false, true),
+                    title: await LabelService.getInstance().getObjectText(ld.linkableObject, false, true),
                     linkedAs: ld.linkTypeDescription.asSource ?
                         ld.linkTypeDescription.linkType.SourceName : ld.linkTypeDescription.linkType.TargetName,
                     linkType: ld.linkTypeDescription.linkType,

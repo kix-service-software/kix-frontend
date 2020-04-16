@@ -10,6 +10,9 @@
 import { IUIModule } from "../../../../model/IUIModule";
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { ObjectIconService } from "./ObjectIconService";
+import { FactoryService } from "../../../base-components/webapp/core/FactoryService";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { ObjectIconBrowserFactory } from "./ObjectIconBrowserFactory";
 
 export class UIModule implements IUIModule {
 
@@ -23,6 +26,7 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ObjectIconService.getInstance());
+        FactoryService.getInstance().registerFactory(KIXObjectType.OBJECT_ICON, ObjectIconBrowserFactory.getInstance());
     }
 
 }

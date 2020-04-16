@@ -100,8 +100,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 FilterDataType.STRING, FilterType.AND, ciClassNames
             ),
             new FilterCriteria(
-                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.AND, searchValue
+                ConfigItemProperty.NAME, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.AND, `*${searchValue}*`
             )
         ], null, limit);
 
@@ -141,6 +141,21 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         return catalogItems;
     }
 
+    public async getAffactedIncidentStates(): Promise<GeneralCatalogItem[]> {
+        const loadingOptions = new KIXObjectLoadingOptions([
+            new FilterCriteria('Class', SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, 'ITSM::Core::IncidentState'),
+            new FilterCriteria('Functionality', SearchOperator.IN, FilterDataType.STRING,
+                FilterType.AND, ['warning', 'incident'])
+        ]);
+
+        const catalogItems = await KIXObjectService.loadObjects<GeneralCatalogItem>(
+            KIXObjectType.GENERAL_CATALOG_ITEM, null, loadingOptions
+        );
+
+        return catalogItems;
+    }
+
     public async getTreeNodes(
         property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
@@ -155,7 +170,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 nodes = [];
                 for (const c of classes) {
                     const icon = LabelService.getInstance().getObjectIcon(c);
-                    const text = await LabelService.getInstance().getText(c);
+                    const text = await LabelService.getInstance().getObjectText(c);
                     nodes.push(
                         new TreeNode(
                             c.ID, text, icon,
@@ -184,7 +199,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 );
 
                 for (const i of items) {
-                    const text = await LabelService.getInstance().getText(i);
+                    const text = await LabelService.getInstance().getObjectText(i);
                     nodes.push(new TreeNode(
                         i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
                         undefined, undefined, undefined,
@@ -237,7 +252,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                ConfigItemProperty.NAME, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];

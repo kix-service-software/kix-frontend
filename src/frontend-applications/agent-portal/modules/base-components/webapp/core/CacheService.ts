@@ -103,7 +103,9 @@ export class BrowserCacheService {
             if (namespace[0] === 'CMDB') {
                 cacheKeyPrefixes.push(namespace[1]);
             } else if (namespace[0] === 'FAQ') {
-                cacheKeyPrefixes.push(namespace[1]);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_CATEGORY);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);
+                cacheKeyPrefixes.push(KIXObjectType.FAQ_VOTE);
             } else {
                 cacheKeyPrefixes.push(namespace[0]);
             }
@@ -203,6 +205,10 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN:
                 cacheKeyPrefixes.push(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
+                break;
+            case KIXObjectType.JOB:
+                cacheKeyPrefixes.push(KIXObjectType.JOB_RUN);
+                cacheKeyPrefixes.push(KIXObjectType.JOB_RUN_LOG);
                 break;
             default:
         }

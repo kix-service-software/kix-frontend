@@ -11,7 +11,9 @@ import { IMainMenuExtension } from "../../server/extensions/IMainMenuExtension";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { AdminContext } from "./webapp/core/AdminContext";
 
-export class Extension implements IMainMenuExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IMainMenuExtension {
 
     public mainContextId: string = AdminContext.CONTEXT_ID;
 

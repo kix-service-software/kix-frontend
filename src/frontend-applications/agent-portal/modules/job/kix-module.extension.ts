@@ -10,7 +10,9 @@
 import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
 import { UIComponent } from "../../model/UIComponent";
 
-class Extension implements IKIXModuleExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public applications: string[] = ['agent-portal'];
 
@@ -29,11 +31,20 @@ class Extension implements IKIXModuleExtension {
         new UIComponent(
             'job-details-exec-plans-widget', '/kix-module-job$0/webapp/components/job-details-exec-plans-widget', []
         ),
+        new UIComponent(
+            'job-details-filter-widget',
+            '/kix-module-job$0/webapp/components/job-details-filter-widget', []
+        ),
         new UIComponent('job-input-events', '/kix-module-job$0/webapp/components/job-input-events', []),
         new UIComponent('job-input-filter', '/kix-module-job$0/webapp/components/job-input-filter', []),
         new UIComponent('job-input-actions', '/kix-module-job$0/webapp/components/job-input-actions', []),
         new UIComponent('new-job-dialog', '/kix-module-job$0/webapp/components/new-job-dialog', []),
-        new UIComponent('edit-job-dialog', '/kix-module-job$0/webapp/components/edit-job-dialog', [])
+        new UIComponent('edit-job-dialog', '/kix-module-job$0/webapp/components/edit-job-dialog', []),
+        new UIComponent('job-run-history-widget', '/kix-module-job$0/webapp/components/job-run-history-widget', []),
+        new UIComponent(
+            'job-run-log-download-cell', '/kix-module-job$0/webapp/components/job-run-log-download-cell', []
+        ),
+        new UIComponent('job-run-logs', '/kix-module-job$0/webapp/components/job-run-logs', [])
     ];
 
     public webDependencies: string[] = [

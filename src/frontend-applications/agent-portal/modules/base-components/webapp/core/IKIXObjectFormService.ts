@@ -13,6 +13,9 @@ import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
 import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
 import { KIXObject } from "../../../../model/kix/KIXObject";
+import { SearchFormInstance } from "./SearchFormInstance";
+import { IFormInstance } from "./IFormInstance";
+import { FormContext } from "../../../../model/configuration/FormContext";
 
 export interface IKIXObjectFormService extends IKIXService {
 
@@ -24,22 +27,30 @@ export interface IKIXObjectFormService extends IKIXService {
         formField: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren?: boolean
     ): FormFieldConfiguration;
 
-    updateFields(fields: FormFieldConfiguration[]): Promise<void>;
+    updateForm(
+        formInstance: IFormInstance | SearchFormInstance,
+        form: FormConfiguration, formField: FormFieldConfiguration, value: any
+    ): Promise<void>;
+
+    updateFields(fields: FormFieldConfiguration[], formInstance: IFormInstance): Promise<void>;
 
     prepareFormFields(
         formId: string, forUpdate?: boolean, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>>;
 
-    prepareUpdateValue(property: string, value: any): Promise<Array<[string, any]>>;
+    prepareUpdateValue(property: string, value: any, formInstance: IFormInstance): Promise<Array<[string, any]>>;
 
-    prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>>;
+    prepareCreateValue(property: string, value: any, formInstance: IFormInstance): Promise<Array<[string, any]>>;
 
     postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext
     ): Promise<Array<[string, any]>>;
 
     preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>>;
 
     prepareCreateParameter(object: KIXObject): Array<[string, any]>;
+
+    resetChildrenOnEmpty(formField: FormFieldConfiguration): void;
 
 }

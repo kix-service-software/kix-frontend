@@ -15,9 +15,6 @@ import { TranslationService } from "../../../../../modules/translation/webapp/co
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class SystemAddressDetailsContext extends Context {
 
@@ -28,7 +25,7 @@ export class SystemAddressDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<SystemAddress>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<SystemAddress>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -43,7 +40,7 @@ export class SystemAddressDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadSystemAddress(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.SYSTEM_ADDRESS);
 
         if (reload) {
             this.listeners.forEach(
@@ -52,35 +49,6 @@ export class SystemAddressDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadSystemAddress(changedProperties: string[] = [], cache: boolean = true): Promise<SystemAddress> {
-        const systemAddressesId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load System Address'
-            });
-        }, 500);
-
-        const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
-            KIXObjectType.SYSTEM_ADDRESS, [systemAddressesId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let systemAddress: SystemAddress;
-        if (systemAddresses && systemAddresses.length) {
-            systemAddress = systemAddresses[0];
-            this.objectId = systemAddress.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return systemAddress;
     }
 
 }

@@ -13,6 +13,7 @@
         "./webapp/components/main-form",
         "./webapp/components/standard-table-NEW",
         "./webapp/components/tree",
-        "./webapp/components/overlay"
+        "./webapp/components/overlay",
+        "./webapp/components/placeholder"
     ]
 }

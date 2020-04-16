@@ -34,7 +34,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.PRIMARY_ORGANISATION_ID:
                 if (value) {
                     const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, [value], null, null, true
+                        KIXObjectType.ORGANISATION, [value], null, null, true, true, false
                     ).catch((error) => console.log(error));
                     displayValue = primaryOrganisations && !!primaryOrganisations.length
                         ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
@@ -54,7 +54,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             case ContactProperty.ORGANISATION_IDS:
                 if (value && Array.isArray(value) && value.length) {
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, value, null, null, true
+                        KIXObjectType.ORGANISATION, value, null, null, true, true, false
                     ).catch((error) => console.log(error));
                     const organisationNames = organisations && organisations.length
                         ? organisations.map((c) => c.Name)
@@ -64,12 +64,9 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             default:
                 if (this.isUserProperty(property)) {
-                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
-                    if (userLabelProvider) {
-                        displayValue = await userLabelProvider.getPropertyValueDisplayText(
-                            property, value, translatable
-                        );
-                    }
+                    displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+                        KIXObjectType.USER, property, value, translatable
+                    );
                 } else {
                     displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
                 }
@@ -147,10 +144,9 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             default:
                 if (this.isUserProperty(property)) {
-                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
-                    if (userLabelProvider) {
-                        displayValue = await userLabelProvider.getPropertyText(property, short, translatable);
-                    }
+                    displayValue = await LabelService.getInstance().getPropertyText(
+                        property, KIXObjectType.USER, short, translatable
+                    );
                 } else {
                     displayValue = await super.getPropertyText(property, short, translatable);
                 }
@@ -249,16 +245,13 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 break;
             default:
                 if (this.isUserProperty(property)) {
-                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
-                    if (userLabelProvider) {
-                        const user = await this.getUserByContact(
-                            contact, property !== PersonalSettingsProperty.USER_LANGUAGE
+                    const user = await this.getUserByContact(
+                        contact, property !== PersonalSettingsProperty.USER_LANGUAGE
+                    );
+                    if (user) {
+                        displayValue = await LabelService.getInstance().getDisplayText(
+                            user, property, defaultValue, translatable
                         );
-                        if (user) {
-                            displayValue = await userLabelProvider.getDisplayText(
-                                user, property, defaultValue, translatable
-                            );
-                        }
                     }
                 } else {
                     displayValue = await super.getDisplayText(contact, property, defaultValue, translatable);
@@ -325,14 +318,11 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         switch (property) {
             default:
                 if (this.isUserProperty(property)) {
-                    const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
-                    if (userLabelProvider) {
-                        const user = await this.getUserByContact(contact);
-                        if (user) {
-                            icons = await userLabelProvider.getIcons(
-                                user, property, value
-                            );
-                        }
+                    const user = await this.getUserByContact(contact);
+                    if (user) {
+                        icons = await LabelService.getInstance().getIcons(
+                            user, property, value
+                        );
                     }
                 }
         }
@@ -348,7 +338,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
             } else if (contact.AssignedUserID) {
                 const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [UserProperty.PREFERENCES]);
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true
+                    KIXObjectType.USER, [contact.AssignedUserID], loadingOptions, null, true, true, true
                 ).catch(() => [] as User[]);
                 user = users && users.length ? users[0] : null;
             }

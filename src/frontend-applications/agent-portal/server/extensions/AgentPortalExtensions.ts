@@ -27,6 +27,10 @@ export enum AgentPortalExtensions {
 
     MARKO_APPLICATION = 'kix:agent-portal:marko-application',
 
-    INITIAL_DATA = 'kix:initial-data'
+    INITIAL_DATA = 'kix:initial-data',
+
+    LOCALE_EXTENSION = 'kix:locale',
+
+    EXTENDED_FORM_CONFIGURATION = 'kix:exended-form-configuration'
 
 }

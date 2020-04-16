@@ -9,7 +9,7 @@
 
 import { TranslationAPIService } from "../../modules/translation/server/TranslationService";
 
-export class DateTimeUtil {
+export class DateTimeAPIUtil {
 
     public static async getLocalDateString(token: string, value: any, language?: string): Promise<string> {
         let string = '';
@@ -74,15 +74,15 @@ export class DateTimeUtil {
     }
 
     public static getKIXDateTimeString(date: Date): string {
-        return `${DateTimeUtil.getKIXDateString(date)} ${DateTimeUtil.getKIXTimeString(date, false)}`;
+        return `${DateTimeAPIUtil.getKIXDateString(date)} ${DateTimeAPIUtil.getKIXTimeString(date, false)}`;
     }
 
     public static getKIXDateString(date: Date): string {
         let kixDateString;
         if (date) {
             const year = date.getFullYear();
-            const month = DateTimeUtil.padZero(date.getMonth() + 1);
-            const day = DateTimeUtil.padZero(date.getDate());
+            const month = DateTimeAPIUtil.padZero(date.getMonth() + 1);
+            const day = DateTimeAPIUtil.padZero(date.getDate());
             kixDateString = `${year}-${month}-${day}`;
         }
         return kixDateString;
@@ -91,9 +91,9 @@ export class DateTimeUtil {
     public static getKIXTimeString(date: Date, short: boolean = true): string {
         let kixTimeString;
         if (date) {
-            const hours = DateTimeUtil.padZero(date.getHours());
-            const minutes = DateTimeUtil.padZero(date.getMinutes());
-            const seconds = DateTimeUtil.padZero(date.getSeconds());
+            const hours = DateTimeAPIUtil.padZero(date.getHours());
+            const minutes = DateTimeAPIUtil.padZero(date.getMinutes());
+            const seconds = DateTimeAPIUtil.padZero(date.getSeconds());
             kixTimeString = `${hours}:${minutes}`;
             if (!short) {
                 kixTimeString += `:${seconds}`;
@@ -105,11 +105,11 @@ export class DateTimeUtil {
     public static getTimestampNumbersOnly(date: Date, withSeconds?: boolean): string {
         if (date) {
             const year = date.getFullYear();
-            const month = DateTimeUtil.padZero(date.getMonth() + 1);
-            const day = DateTimeUtil.padZero(date.getDate());
-            const hours = DateTimeUtil.padZero(date.getHours());
-            const minutes = DateTimeUtil.padZero(date.getMinutes());
-            const seconds = DateTimeUtil.padZero(date.getSeconds());
+            const month = DateTimeAPIUtil.padZero(date.getMonth() + 1);
+            const day = DateTimeAPIUtil.padZero(date.getDate());
+            const hours = DateTimeAPIUtil.padZero(date.getHours());
+            const minutes = DateTimeAPIUtil.padZero(date.getMinutes());
+            const seconds = DateTimeAPIUtil.padZero(date.getSeconds());
             return `${year}${month}${day}${hours}${minutes}${withSeconds ? seconds : ''}`;
         }
 
@@ -125,14 +125,14 @@ export class DateTimeUtil {
     public static getTimeByMillisec(millisec: number): string {
 
         let seconds: string = (millisec / 1000).toFixed(0);
-        let minutes: string = DateTimeUtil.padZero(Math.floor(Number(seconds) / 60));
+        let minutes: string = DateTimeAPIUtil.padZero(Math.floor(Number(seconds) / 60));
         let hours: string = '';
 
         if (Number(minutes) > 59) {
-            hours = DateTimeUtil.padZero(Math.floor(Number(minutes) / 60));
-            minutes = DateTimeUtil.padZero((Number(minutes) - (Number(hours) * 60)));
+            hours = DateTimeAPIUtil.padZero(Math.floor(Number(minutes) / 60));
+            minutes = DateTimeAPIUtil.padZero((Number(minutes) - (Number(hours) * 60)));
         }
-        seconds = DateTimeUtil.padZero(Math.floor(Number(seconds) % 60));
+        seconds = DateTimeAPIUtil.padZero(Math.floor(Number(seconds) % 60));
 
         if (hours === '') {
             hours = '00';

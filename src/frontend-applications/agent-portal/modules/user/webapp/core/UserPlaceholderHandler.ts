@@ -39,7 +39,6 @@ export class UserPlaceholderHandler implements IPlaceholderHandler {
         if (user) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             if (attribute && this.isKnownProperty(attribute)) {
-                const userLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.USER);
                 if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
                     language = 'en';
                 }
@@ -55,14 +54,18 @@ export class UserPlaceholderHandler implements IPlaceholderHandler {
                     case ContactProperty.COMMENT:
                     case UserProperty.USER_COMMENT:
                     case ContactProperty.TITLE:
-                        result = await userLabelProvider.getDisplayText(user, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(
+                            user, attribute, undefined, false
+                        );
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
                         result = await DateTimeUtil.getLocalDateTimeString(user[attribute], language);
                         break;
                     default:
-                        result = await userLabelProvider.getDisplayText(user, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(
+                            user, attribute, undefined, false
+                        );
                         result = typeof result !== 'undefined' && result !== null
                             ? await TranslationService.translate(result.toString(), undefined, language) : '';
                 }

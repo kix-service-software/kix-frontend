@@ -75,7 +75,7 @@ class Component extends FormInputComponent<number, ComponentState> {
                     if (organisations && organisations.length) {
                         const organisation = organisations[0];
 
-                        const displayValue = await LabelService.getInstance().getText(organisation);
+                        const displayValue = await LabelService.getInstance().getObjectText(organisation);
 
                         const currentNode = new TreeNode(organisation.ObjectId, displayValue, 'kix-icon-man-bubble');
                         nodes = [currentNode];
@@ -135,7 +135,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         const nodes = [];
         for (const o of this.organisations) {
-            const displayValue = await LabelService.getInstance().getText(o);
+            const displayValue = await LabelService.getInstance().getObjectText(o);
             nodes.push(new TreeNode(o.ID, displayValue, 'kix-icon-man-house'));
         }
 

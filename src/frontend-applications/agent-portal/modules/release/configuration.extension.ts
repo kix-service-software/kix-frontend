@@ -17,8 +17,9 @@ import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
 import { ReleaseContext } from "./webapp/core/ReleaseContext";
 import { SliderWidgetConfiguration } from "./model/SliderWidgetConfiguration";
 import { SliderContent } from "./model/SliderContent";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class DashboardModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return ReleaseContext.CONTEXT_ID;
@@ -104,5 +105,5 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 }
 
 module.exports = (data, host, options) => {
-    return new DashboardModuleFactoryExtension();
+    return new Extension();
 };

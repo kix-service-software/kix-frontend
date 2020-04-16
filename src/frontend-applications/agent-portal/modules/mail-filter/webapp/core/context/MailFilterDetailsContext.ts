@@ -15,9 +15,6 @@ import { TranslationService } from "../../../../../modules/translation/webapp/co
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class MailFilterDetailsContext extends Context {
 
@@ -28,7 +25,7 @@ export class MailFilterDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<MailFilter>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<MailFilter>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -43,7 +40,7 @@ export class MailFilterDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.MAIL_FILTER, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadFilter(changedProperties) as any;
+        const object = await this.loadDetailsObject(KIXObjectType.MAIL_FILTER) as any;
 
         if (reload) {
             this.listeners.forEach(
@@ -52,35 +49,6 @@ export class MailFilterDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadFilter(changedProperties: string[] = [], cache: boolean = true): Promise<MailFilter> {
-        const mailFilterId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Email Filter'
-            });
-        }, 500);
-
-        const mailFilters = await KIXObjectService.loadObjects<MailFilter>(
-            KIXObjectType.MAIL_FILTER, [mailFilterId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let mailFilter: MailFilter;
-        if (mailFilters && mailFilters.length) {
-            mailFilter = mailFilters[0];
-            this.objectId = mailFilter.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return mailFilter;
     }
 
 }

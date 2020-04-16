@@ -6,14 +6,13 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget
-    instanceId=state.instanceId
-    contextType="MAIN"
-    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
-    actions=state.actions>
-    <@content>
-        <if(state.faqArticle && state.inlineContent)>
+<if(state.faqArticle && state.inlineContent)>
+    <widget
+        instanceId=state.instanceId
+        contextType="MAIN"
+        title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+        actions=state.actions>
+        <@content>
             <div.faq-article-content-container>
                 <div>
                     <widget instanceId="faq-article-group" title=state.translations["Translatable#Symptom"]>
@@ -64,6 +63,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     </div>
                 </div>
             </div>
-        </if>
-    </@content>
-</widget>
+        </@content>
+    </widget>
+</if>
+<else>
+    <table-placeholder/>
+</else>

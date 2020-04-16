@@ -8,9 +8,24 @@
  */
 
 import { Context } from "../../../../../model/Context";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
 
 export class NewOrganisationDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-organisation-dialog-context';
+
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType = KIXObjectType.ORGANISATION, reload: boolean = false, changedProperties?: string[]
+    ): Promise<O> {
+        let object;
+        const objectId = this.getObjectId();
+        if (objectId) {
+            const objects = await KIXObjectService.loadObjects(objectType, [objectId]);
+            object = objects && objects.length ? objects[0] : null;
+        }
+        return object;
+    }
 
 }

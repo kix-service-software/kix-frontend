@@ -6,18 +6,19 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.permissionManager)>
-    <div.permission-form-container>
-        <div.permission-description-container>
-            <div.crud-description>
-                <span title=state.createTitle>${state.createTitle}</span>
-                <span title=state.readTitle>${state.readTitle}</span>
-                <span title=state.updateTitle>${state.updateTitle}</span>
-                <span title=state.deleteTitle>${state.deleteTitle}</span>
-                <span title=state.denyTitle>${state.denyTitle}</span>
+    <div.permission-form>
+        <div.permission-form-container>
+            <div.permission-description-container>
+                <div.crud-description>
+                    <span title=state.createTitle>${state.createTitle[0]}</span>
+                    <span title=state.readTitle>${state.readTitle[0]}</span>
+                    <span title=state.updateTitle>${state.updateTitle[0]}</span>
+                    <span title=state.deleteTitle>${state.deleteTitle[0]}</span>
+                    <span title=state.denyTitle>${state.denyTitle}</span>
+                </div>
             </div>
         </div>
+        <dynamic-form-field-container manager=state.permissionManager/>
     </div>
-    <dynamic-form-field-container manager=state.permissionManager/>
 </if>

@@ -13,7 +13,9 @@ import { ContextConfiguration } from "../../model/configuration/ContextConfigura
 import { ConfigurationType } from "../../model/configuration/ConfigurationType";
 import { LinkObjectDialogContext } from "./webapp/core/context/LinkObjectDialogContext";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return LinkObjectDialogContext.CONTEXT_ID;

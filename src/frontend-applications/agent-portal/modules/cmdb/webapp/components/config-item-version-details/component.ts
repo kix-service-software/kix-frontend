@@ -42,13 +42,13 @@ class Component {
 
     private async loadVersion(configItem: ConfigItem): Promise<void> {
         const versions = await KIXObjectService.loadObjects<Version>(
-            KIXObjectType.CONFIG_ITEM_VERSION, null,
-            new KIXObjectLoadingOptions(null, null, 1, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
+            KIXObjectType.CONFIG_ITEM_VERSION, configItem.CurrentVersion ? [configItem.CurrentVersion.VersionID] : null,
+            new KIXObjectLoadingOptions(undefined, null, null, [VersionProperty.DATA, VersionProperty.PREPARED_DATA]),
             new ConfigItemVersionLoadingOptions(configItem.ConfigItemID)
         );
 
         if (versions && versions.length) {
-            this.state.version = versions[0];
+            this.state.version = versions[versions.length - 1];
             this.prepareVersion();
         }
     }

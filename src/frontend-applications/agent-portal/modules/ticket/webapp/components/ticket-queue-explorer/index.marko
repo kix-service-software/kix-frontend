@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.ticket-queue-explorer>
     <widget
         instanceId=state.instanceId
@@ -18,7 +17,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             <span.show-all class={
                 active: !state.activeNode
             } on-click("showAll")>
-                <translation-string pattern="Translatable#Show all"/>
+                <translation-string pattern="Translatable#Show Backlog"/>
             </span>
             <if(state.nodes)>
                 <tree tree=state.nodes activeNode=state.activeNode on-nodeClicked("activeNodeChanged")/>

@@ -66,6 +66,20 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
 
             criteria = [...criteria, ...this.getFulltextCriteria(value as string)];
         }
+
+        const customerVisibleIndex = criteria.findIndex((c) => c.property === FAQArticleProperty.CUSTOMER_VISIBLE);
+        if (customerVisibleIndex !== -1) {
+            const value = criteria[customerVisibleIndex].value;
+            if (Array.isArray(value) && value.length) {
+                criteria.splice(customerVisibleIndex, 1);
+                criteria.push(
+                    new FilterCriteria(
+                        FAQArticleProperty.CUSTOMER_VISIBLE, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, value[0]
+                    )
+                );
+            }
+        }
         return criteria;
     }
 

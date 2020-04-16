@@ -17,7 +17,9 @@ export class ComponentState extends WidgetComponentState {
         public prepared: boolean = false,
         public timeLabels: Label[] = [],
         public weekdayLabels: Label[] = [],
-        public eventLabels: Label[] = []
+        public eventLabels: Label[] = [],
+        public showTimeBased: boolean = false,
+        public showEventBased: boolean = false
     ) {
         super();
     }

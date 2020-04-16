@@ -214,7 +214,7 @@ export class WebformFormService extends KIXObjectFormService {
         if (value) {
             if (property === WebformProperty.USER_LOGIN) {
                 const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [value], null, null, true
+                    KIXObjectType.USER, [value], null, null, true, true, true
                 ).catch((error) => [] as User[]);
                 value = users && !!users.length ? users[0].UserLogin : value;
             }

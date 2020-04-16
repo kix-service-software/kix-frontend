@@ -17,6 +17,7 @@ import { QueueProperty } from "../../../model/QueueProperty";
 import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
 import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
 import { IdService } from "../../../../../model/IdService";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 
 export class QueueFormService extends KIXObjectFormService {
 
@@ -36,6 +37,25 @@ export class QueueFormService extends KIXObjectFormService {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.QUEUE;
+    }
+
+    protected async getValue(
+        property: string, value: any, queue: Queue,
+        formField: FormFieldConfiguration, formContext: FormContext
+    ): Promise<any> {
+        switch (property) {
+            case QueueProperty.NAME:
+                if (formContext === FormContext.NEW && queue) {
+                    value = await TranslationService.translate(
+                        'Translatable#Copy of {0}', [value]
+                    );
+                }
+                break;
+            default:
+                value = super.getValue(property, value, queue, formField, formContext);
+        }
+
+        return value;
     }
 
     protected async postPrepareForm(

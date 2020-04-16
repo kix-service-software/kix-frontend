@@ -29,10 +29,10 @@ export class ReleaseInfoUtil {
         this.systemInfo = systemInfo;
     }
 
-    public async getReleaseInfo(): Promise<ReleaseInfo> {
+    public async getReleaseInfo(releaseFile: string = './RELEASE'): Promise<ReleaseInfo> {
         return new Promise<ReleaseInfo>((resolve, reject) => {
             const reader = require('readline').createInterface({
-                input: require('fs').createReadStream('./RELEASE')
+                input: require('fs').createReadStream(releaseFile)
             });
 
             const releaseInfo = new ReleaseInfo();
@@ -49,6 +49,9 @@ export class ReleaseInfoUtil {
                         releaseInfo.buildHost = releaseValue[1];
                     } else if (releaseValue[0] === 'BUILDNUMBER') {
                         releaseInfo.buildNumber = Number(releaseValue[1]);
+                    } else if (releaseValue[0] === 'REQUIRES') {
+                        releaseInfo.dependencies = this.parseRequirements(releaseValue[1]);
+                        releaseInfo.requires = releaseValue[1];
                     }
                 }
             });
@@ -58,6 +61,24 @@ export class ReleaseInfoUtil {
                 resolve(releaseInfo);
             });
         });
+    }
+
+    private parseRequirements(requirementsDefinition: string): Array<[string, string, string]> {
+        const requirements = [];
+
+        if (requirementsDefinition) {
+            const requirmentsList = requirementsDefinition.trim().split(',').map((s) => s.trim());
+            for (const requirement of requirmentsList) {
+                const matches = requirement.match(/([\w, ::]+)(?:\((>|<|=)?(\d+)\))?/);
+                requirements.push([
+                    matches[1] ? matches[1] : null,
+                    matches[2] ? matches[2] : null,
+                    matches[3] ? Number(matches[3]) : null,
+                ]);
+            }
+        }
+
+        return requirements;
     }
 
 }

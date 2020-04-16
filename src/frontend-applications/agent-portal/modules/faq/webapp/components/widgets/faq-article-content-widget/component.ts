@@ -84,8 +84,7 @@ class Component {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
             this.state.inlineContent = await FAQService.getInstance().getFAQArticleInlineContent(faqArticle);
 
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.FAQ_ARTICLE);
-            this.stars = await labelProvider.getIcons(faqArticle, FAQArticleProperty.VOTES);
+            this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.VOTES);
             this.rating = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
             this.prepareActions();
         }

@@ -71,31 +71,14 @@ export class ContextService {
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
+            await this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
+
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-                await context.setObjectId(objectId);
+                context.setObjectId(objectId);
             }
 
-            const state = new BrowserHistoryState(contextId, objectId);
-            const displayText = await context.getDisplayText();
-
-            const routingConfiguration = new RoutingConfiguration(
-                contextId, null, null, null
-            );
-            const url = await RoutingService.getInstance().buildUrl(routingConfiguration, objectId);
-
-            if (addHistory && oldContext && window && window.history) {
-                window.history.pushState(state, displayText, '/' + url);
-                await ContextHistory.getInstance().addHistoryEntry(oldContext);
-            } else if (replaceHistory) {
-                window.history.replaceState(state, displayText, '/' + url);
-            }
             DialogService.getInstance().closeMainDialog();
             this.activeMainContext = context;
-
-            if (document) {
-                const documentTitle = await context.getDisplayText();
-                document.title = documentTitle;
-            }
 
             RoutingService.getInstance().routeTo(
                 'base-router', context.getDescriptor().componentId, { objectId: context.getObjectId(), history }
@@ -106,6 +89,30 @@ export class ContextService {
                     context.getDescriptor().contextId, context, context.getDescriptor().contextType, history, oldContext
                 )
             );
+        }
+    }
+
+    private async setDocumentHistory(
+        addHistory: boolean, replaceHistory: boolean, oldContext: Context, context: Context, objectId: string | number
+    ): Promise<void> {
+        const state = new BrowserHistoryState(context.getDescriptor().contextId, objectId);
+        const displayText = await context.getDisplayText();
+
+        const routingConfiguration = new RoutingConfiguration(
+            context.getDescriptor().contextId, null, null, null
+        );
+        const url = await RoutingService.getInstance().buildUrl(routingConfiguration, objectId);
+
+        if (addHistory && oldContext && window && window.history) {
+            window.history.pushState(state, displayText, '/' + url);
+            ContextHistory.getInstance().addHistoryEntry(oldContext);
+        } else if (replaceHistory) {
+            window.history.replaceState(state, displayText, '/' + url);
+        }
+
+        if (document) {
+            const documentTitle = displayText;
+            document.title = documentTitle;
         }
     }
 

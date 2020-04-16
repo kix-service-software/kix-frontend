@@ -33,6 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (currentNode) {
                 currentNode.selected = true;
                 this.currentSearch = currentNode.id;
+                this.state.name = currentNode.label;
             } else {
                 this.currentSearch = null;
             }

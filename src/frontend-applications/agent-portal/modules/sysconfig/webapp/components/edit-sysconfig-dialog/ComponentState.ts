@@ -11,7 +11,9 @@ import { AbstractComponentState } from "../../../../../modules/base-components/w
 
 export class ComponentState extends AbstractComponentState {
 
-    public constructor() {
+    public constructor(
+        public reset: boolean = true
+    ) {
         super();
     }
 

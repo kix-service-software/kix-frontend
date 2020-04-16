@@ -21,8 +21,12 @@ import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetC
 import { SortOrder } from "../../model/SortOrder";
 import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
+import { UIComponentPermission } from "../../model/UIComponentPermission";
+import { CRUD } from "../../../../server/model/rest/CRUD";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return 'job-details';
@@ -35,6 +39,7 @@ export class Extension implements IConfigurationExtension {
                 'job-details-object-info-config', 'Object Info Config', ConfigurationType.ObjectInformation,
                 KIXObjectType.JOB,
                 [
+                    JobProperty.TYPE,
                     JobProperty.NAME,
                     JobProperty.LAST_EXEC_TIME,
                     KIXObjectProperty.COMMENT,
@@ -56,10 +61,20 @@ export class Extension implements IConfigurationExtension {
         );
 
         configurations.push(
+            new WidgetConfiguration(
+                'job-details-run-history-widget', 'Run History Widget', ConfigurationType.Widget,
+                'job-run-history-widget', 'Translatable#History', [],
+                new ConfigurationDefinition('job-details-run-history-config', ConfigurationType.Table),
+                null, false, false, null, false
+            )
+        );
+
+        configurations.push(
             new TabWidgetConfiguration(
-                'jod-details-tab-widget-config', 'Tab widget config', ConfigurationType.TabWidget,
+                'job-details-tab-widget-config', 'Tab widget config', ConfigurationType.TabWidget,
                 [
-                    'job-details-info-widget'
+                    'job-details-info-widget',
+                    'job-details-run-history-widget'
                 ]
             )
         );
@@ -68,7 +83,7 @@ export class Extension implements IConfigurationExtension {
             new WidgetConfiguration(
                 'job-details-tab-widget', 'Tab widget', ConfigurationType.Widget,
                 'tab-widget', '', [],
-                new ConfigurationDefinition('jod-details-tab-widget-config', ConfigurationType.TabWidget)
+                new ConfigurationDefinition('job-details-tab-widget-config', ConfigurationType.TabWidget),
             )
         );
 
@@ -80,20 +95,10 @@ export class Extension implements IConfigurationExtension {
         );
 
         configurations.push(
-            new TableWidgetConfiguration(
-                'job-details-filter-table-widget-config', 'Widget Config', ConfigurationType.TableWidget,
-                KIXObjectType.JOB_FILTER, ['Field', SortOrder.UP], null, null, null, false
-            )
-        );
-
-
-        configurations.push(
             new WidgetConfiguration(
                 'job-details-filter-widget', 'Table Widget', ConfigurationType.Widget,
-                'table-widget', 'Translatable#Filter', [],
-                new ConfigurationDefinition(
-                    'job-details-filter-table-widget-config', ConfigurationType.TableWidget
-                ), null, false, true, null, true
+                'job-details-filter-widget', 'Translatable#Filter', [],
+                null, null, false, true, null, true
             )
         );
 
@@ -129,7 +134,11 @@ export class Extension implements IConfigurationExtension {
                 ['job-create-action'], ['job-edit-action', 'job-execute-action'],
                 [],
                 [
-                    new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget')
+                    new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget'),
+                    new ConfiguredWidget(
+                        'job-details-run-history-widget', 'job-details-run-history-widget', null,
+                        [new UIComponentPermission('system/automation/jobs/*/runs', [CRUD.READ])]
+                    )
                 ]
             )
         );

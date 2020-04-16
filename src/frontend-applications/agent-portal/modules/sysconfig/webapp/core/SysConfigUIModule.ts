@@ -26,6 +26,7 @@ import { SysConfigTableCSSHandler } from "./table";
 import { ActionFactory } from "../../../base-components/webapp/core/ActionFactory";
 import { SysconfigTableResetAction } from "./SysconfigTableResetAction";
 import { ReloadConfigurationCacheAction } from './ReloadConfigurationCacheAction';
+import { SysconfigEditAction } from './SysconfigEditAction';
 
 export class UIModule implements IUIModule {
 
@@ -60,6 +61,7 @@ export class UIModule implements IUIModule {
         );
         await ContextService.getInstance().registerContext(editSysConfigDialogContext);
 
+        ActionFactory.getInstance().registerAction('sysconfig-edit-action', SysconfigEditAction);
         ActionFactory.getInstance().registerAction('sysconfig-reset-action', SysconfigTableResetAction);
         ActionFactory.getInstance().registerAction('activate-configuration', ReloadConfigurationCacheAction);
     }

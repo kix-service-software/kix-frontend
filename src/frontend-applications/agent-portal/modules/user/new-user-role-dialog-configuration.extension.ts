@@ -32,7 +32,9 @@ import { TreeNode } from "../base-components/webapp/core/tree";
 import { RoleUsageContextTypes } from "./model/RoleUsageContextTypes";
 import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return NewUserRoleDialogContext.CONTEXT_ID;

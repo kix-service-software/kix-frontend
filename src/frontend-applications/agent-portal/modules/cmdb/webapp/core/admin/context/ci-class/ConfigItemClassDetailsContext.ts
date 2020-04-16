@@ -16,9 +16,6 @@ import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class ConfigItemClassDetailsContext extends Context {
 
@@ -29,7 +26,7 @@ export class ConfigItemClassDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<ConfigItemClass>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<ConfigItemClass>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -56,36 +53,13 @@ export class ConfigItemClassDetailsContext extends Context {
     }
 
     private async loadCIClass(): Promise<ConfigItemClass> {
-        const ciClassId = Number(this.objectId);
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, ['CurrentDefinition', 'Definitions', 'ConfiguredPermissions']
         );
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Config Item Class'
-            });
-        }, 500);
-
-        const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
-            KIXObjectType.CONFIG_ITEM_CLASS, [ciClassId], loadingOptions
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let ciClass: ConfigItemClass;
-        if (ciClasses && ciClasses.length) {
-            ciClass = ciClasses[0];
-            this.objectId = ciClass.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return ciClass;
+        return await this.loadDetailsObject<ConfigItemClass>(
+            KIXObjectType.CONFIG_ITEM_CLASS, loadingOptions
+        );
     }
 
 }

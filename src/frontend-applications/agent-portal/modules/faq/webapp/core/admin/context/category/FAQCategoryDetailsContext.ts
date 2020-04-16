@@ -14,11 +14,7 @@ import { BreadcrumbInformation } from "../../../../../../../model/BreadcrumbInfo
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { TranslationService } from "../../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-
 
 export class FAQCategoryDetailsContext extends Context {
 
@@ -29,7 +25,7 @@ export class FAQCategoryDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<FAQCategory>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<FAQCategory>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -42,7 +38,7 @@ export class FAQCategoryDetailsContext extends Context {
         objectType: KIXObjectType | string = KIXObjectType.FAQ_CATEGORY,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadFAQCategory(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.FAQ_CATEGORY);
 
         if (reload) {
             this.listeners.forEach(
@@ -51,35 +47,6 @@ export class FAQCategoryDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadFAQCategory(changedProperties: string[] = [], cache: boolean = true): Promise<FAQCategory> {
-        const categoryId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load FAQ Category'
-            });
-        }, 500);
-
-        const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-            KIXObjectType.FAQ_CATEGORY, [categoryId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let faqCategory: FAQCategory;
-        if (faqCategories && faqCategories.length) {
-            faqCategory = faqCategories[0];
-            this.objectId = faqCategory.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return faqCategory;
     }
 
 }

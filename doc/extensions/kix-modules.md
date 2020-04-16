@@ -4,7 +4,9 @@ This extension can be used to register ui components (marko) which should be del
 
 Pseudo Code:
 ```javascript
-class Extension implements IKIXModuleExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IKIXModuleExtension {
 
                 public initComponentId: string = 'my-module-component';
 

@@ -1,0 +1,1 @@
+Plugin directory for KIX plugins.

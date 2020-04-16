@@ -22,7 +22,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
             'table-widget', 'Translatable#Ticket: Priorities',
             [
-                'ticket-admin-priority-create', 'csv-export-action'
+                'ticket-admin-priority-create', 'ticket-admin-priority-table-delete', 'csv-export-action'
             ], null,
             new TableWidgetConfiguration(
                 null, null, null,

@@ -16,8 +16,6 @@ import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
 import { UserProperty } from "../../../../../model/UserProperty";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { TranslationService } from "../../../../../../../modules/translation/webapp/core/TranslationService";
 import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { Role } from "../../../../../model/Role";
@@ -31,13 +29,13 @@ export class UserDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<User>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<User>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const objectName = await TranslationService.translate('Translatable#User');
         const object = await this.getObject<User>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], `${objectName}: ${text}`);
     }
 
@@ -64,36 +62,11 @@ export class UserDetailsContext extends Context {
     }
 
     private async loadUser(changedProperties: string[] = [], cache: boolean = true): Promise<User> {
-        const userId = Number(this.objectId);
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLE_IDS, UserProperty.CONTACT]
         );
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load User'
-            });
-        }, 500);
-
-        const users = await KIXObjectService.loadObjects<User>(
-            KIXObjectType.USER, [userId], loadingOptions, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let user: User;
-        if (users && users.length) {
-            user = users[0];
-            this.objectId = user.UserID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return user;
+        return await this.loadDetailsObject<User>(KIXObjectType.USER, loadingOptions, null, true, cache, true);
     }
 
 }

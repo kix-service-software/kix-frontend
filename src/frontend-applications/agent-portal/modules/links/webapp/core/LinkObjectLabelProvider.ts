@@ -27,10 +27,7 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
 
         switch (property) {
             case LinkObjectProperty.LINKED_OBJECT_TYPE:
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(value as KIXObjectType);
-                if (labelProvider) {
-                    displayValue = await labelProvider.getObjectName(null);
-                }
+                displayValue = await LabelService.getInstance().getObjectName(value as KIXObjectType);
                 break;
             default:
                 displayValue = value;
@@ -122,13 +119,10 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
 
     public async getIcons(object: LinkObject, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
-        if (property === LinkObjectProperty.LINKED_OBJECT_TYPE) {
-            const labelProvider = LabelService.getInstance().getLabelProviderForType(object.linkedObjectType);
-            if (labelProvider) {
-                const icon = labelProvider.getObjectIcon(object);
-                if (icon) {
-                    icons.push(icon);
-                }
+        if (object && property === LinkObjectProperty.LINKED_OBJECT_TYPE) {
+            const icon = LabelService.getInstance().getObjectIcon(object);
+            if (icon) {
+                icons.push(icon);
             }
         }
         return icons;

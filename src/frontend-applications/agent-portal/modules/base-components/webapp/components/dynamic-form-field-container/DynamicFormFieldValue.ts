@@ -20,6 +20,7 @@ import { KIXModulesService } from "../../../../../modules/base-components/webapp
 import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { LabelProvider } from "../../core/LabelProvider";
 
 export class DynamicFormFieldValue {
 
@@ -128,9 +129,13 @@ export class DynamicFormFieldValue {
 
         if (update) {
             this.value.objectType = null;
-            this.value.operator = null;
-            this.operationTreeHandler.setSelection(this.operationTreeHandler.getSelectedNodes(), false, true, true);
-            this.operationTreeHandler.setTree([]);
+
+            if (this.manager.resetOperator) {
+                this.value.operator = null;
+                this.operationTreeHandler.setSelection(this.operationTreeHandler.getSelectedNodes(), false, true, true);
+                this.operationTreeHandler.setTree([]);
+            }
+
             this.value.value = null;
             this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
             this.valueTreeHandler.setTree([]);
@@ -145,7 +150,7 @@ export class DynamicFormFieldValue {
 
     public async setPropertyTree(): Promise<void> {
         const properties = await this.manager.getProperties();
-        // FIXME: Its not needed to check unique here, because getProperties() should return only available properties.
+        // TODO: Its not needed to check unique here, because getProperties() should return only available properties.
         // The manager should make the decision
         const unique = this.manager.uniqueProperties;
         const nodes: TreeNode[] = [];
@@ -159,7 +164,7 @@ export class DynamicFormFieldValue {
                     )
                     && !await this.manager.isHiddenProperty(p[0])
                 ) {
-                    // FIXME: the manager should return TreeNode[], e.g. to handle specific labels and icons
+                    // TODO: the manager should return TreeNode[], e.g. to handle specific labels and icons
                     nodes.push(new TreeNode(p[0], p[1]));
                 }
             }
@@ -255,10 +260,9 @@ export class DynamicFormFieldValue {
                 let label;
                 let icon;
                 if (objects && objects.length) {
-                    const labelProvider = LabelService.getInstance().getLabelProviderForType(this.value.objectType);
                     for (const object of objects) {
-                        label = await labelProvider.getObjectText(object);
-                        icon = labelProvider.getObjectTypeIcon();
+                        label = await LabelService.getInstance().getObjectText(object);
+                        icon = LabelService.getInstance().getObjectTypeIcon(object.KIXObjectType);
                         currentValues.push(new TreeNode(object.ObjectId, label, icon));
                     }
                 }

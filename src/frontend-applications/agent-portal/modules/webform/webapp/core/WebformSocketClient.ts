@@ -19,6 +19,9 @@ import { SocketEvent } from "../../../../modules/base-components/webapp/core/Soc
 import { SocketErrorResponse } from "../../../../modules/base-components/webapp/core/SocketErrorResponse";
 import { SaveWebformRequest } from "../../model/SaveWebformRequest";
 import { CreateObjectResponse } from "../../../../modules/base-components/webapp/core/CreateObjectResponse";
+import { EventService } from "../../../base-components/webapp/core/EventService";
+import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 
 export class WebformSocketClient extends SocketClient {
 
@@ -92,6 +95,9 @@ export class WebformSocketClient extends SocketClient {
             this.socket.on(WebformEvent.WEBFORM_SAVED, async (result: CreateObjectResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
+                    EventService.getInstance().publish(
+                        ApplicationEvent.OBJECT_UPDATED, { objectType: KIXObjectType.WEBFORM }
+                    );
                     resolve(result.result);
                 }
             });

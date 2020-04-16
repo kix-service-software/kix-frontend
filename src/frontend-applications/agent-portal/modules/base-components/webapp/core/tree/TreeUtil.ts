@@ -59,17 +59,19 @@ export class TreeUtil {
         }
     }
 
-    private static setNodesVisible(node: TreeNode[], visible: boolean = true): void {
-        node.forEach((n) => {
-            n.visible = visible;
-            if (!visible) {
-                n.navigationNode = false;
-            }
+    private static setNodesVisible(nodes: TreeNode[], visible: boolean = true): void {
+        if (nodes) {
+            nodes.forEach((n) => {
+                n.visible = visible;
+                if (!visible) {
+                    n.navigationNode = false;
+                }
 
-            if (n.children && n.children.length) {
-                TreeUtil.setNodesVisible(n.children, visible);
-            }
-        });
+                if (n.children && n.children.length) {
+                    TreeUtil.setNodesVisible(n.children, visible);
+                }
+            });
+        }
     }
 
     private static removeNodeLinks(tree: TreeNode[]): void {
@@ -166,35 +168,39 @@ export class TreeUtil {
     }
 
     private static setNodeFlags(tree: TreeNode[], parent?: TreeNode): void {
-        tree.forEach((n) => {
-            if (!n.flags) {
-                n.flags = [n.label];
-            } else if (!n.flags.some((f) => f === n.label)) {
-                n.flags.push(n.label);
-            }
+        if (tree) {
+            tree.forEach((n) => {
+                if (!n.flags) {
+                    n.flags = [n.label];
+                } else if (!n.flags.some((f) => f === n.label)) {
+                    n.flags.push(n.label);
+                }
 
-            if (parent && parent.flags) {
-                parent.flags.forEach((f) => n.flags.push(f));
-            }
+                if (parent && parent.flags) {
+                    parent.flags.forEach((f) => n.flags.push(f));
+                }
 
-            if (n.children && n.children.length) {
-                TreeUtil.setNodeFlags(n.children, n);
-            }
-        });
+                if (n.children && n.children.length) {
+                    TreeUtil.setNodeFlags(n.children, n);
+                }
+            });
+        }
     }
 
     public static getSelectedNodes(tree: TreeNode[]): TreeNode[] {
         let nodes = [];
 
-        tree.forEach((n) => {
-            if (n.selected) {
-                nodes.push(n);
-            }
+        if (tree) {
+            tree.forEach((n) => {
+                if (n.selected) {
+                    nodes.push(n);
+                }
 
-            if (n.children && n.children.length) {
-                nodes = [...nodes, ...TreeUtil.getSelectedNodes(n.children)];
-            }
-        });
+                if (n.children && n.children.length) {
+                    nodes = [...nodes, ...TreeUtil.getSelectedNodes(n.children)];
+                }
+            });
+        }
 
         return nodes;
     }
@@ -202,15 +208,17 @@ export class TreeUtil {
     public static getVisibleNodes(tree: TreeNode[], filterValue: string): TreeNode[] {
         let nodes = [];
 
-        tree.forEach((n) => {
-            if (n.visible) {
-                nodes.push(n);
-            }
+        if (tree) {
+            tree.forEach((n) => {
+                if (n.visible) {
+                    nodes.push(n);
+                }
 
-            if (TreeUtil.hasChildrenToShow(n, filterValue)) {
-                nodes = [...nodes, ...TreeUtil.getVisibleNodes(n.children, filterValue)];
-            }
-        });
+                if (TreeUtil.hasChildrenToShow(n, filterValue)) {
+                    nodes = [...nodes, ...TreeUtil.getVisibleNodes(n.children, filterValue)];
+                }
+            });
+        }
 
         return nodes;
     }

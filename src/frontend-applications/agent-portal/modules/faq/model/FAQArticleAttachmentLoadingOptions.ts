@@ -7,11 +7,15 @@
  * --
  */
 
-export class FAQArticleAttachmentLoadingOptions {
+import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
+
+export class FAQArticleAttachmentLoadingOptions extends KIXObjectSpecificLoadingOptions {
 
     public constructor(
         public faqArticleId: number,
         public attachmentId: number
-    ) { }
+    ) {
+        super();
+    }
 
 }

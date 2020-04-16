@@ -7,7 +7,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <header>
-    <img#logo alt="KIX Cloud" src="/static/img/kix-cloud-logo.png"/>
+    <if(state.logoIcon)>
+        <img#logo src=("data:" + state.logoIcon.ContentType + ";base64," + state.logoIcon.Content)/>
+    </if>
+    <else>
+        <img#logo src="/static/img/kix-cloud-logo.png"/>
+    </else>
     <div>
         <if(state.allowNew)>
             <a href="?new" on-click("openDialog")>

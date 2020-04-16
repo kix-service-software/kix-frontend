@@ -8,3 +8,4 @@
  */
 
 export { TextModuleCreateAction } from './TextModuleCreateAction';
+export { TextModuleDuplicateAction } from './TextModuleDuplicateAction';

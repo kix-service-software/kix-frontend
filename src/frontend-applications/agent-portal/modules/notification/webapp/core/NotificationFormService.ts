@@ -96,7 +96,7 @@ export class NotificationFormService extends KIXObjectFormService {
     ): Promise<any> {
         switch (property) {
             case NotificationProperty.DATA_FILTER:
-                if (notification.Filter) {
+                if (notification && notification.Filter) {
                     const articleProperty = [
                         ArticleProperty.SENDER_TYPE_ID, ArticleProperty.CHANNEL_ID, ArticleProperty.TO,
                         ArticleProperty.CC, ArticleProperty.FROM, ArticleProperty.SUBJECT, ArticleProperty.BODY

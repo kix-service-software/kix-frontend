@@ -13,8 +13,9 @@ import { AdminModule } from "../admin/model/AdminModule";
 import { KIXObjectType } from "../../model/kix/KIXObjectType";
 import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-class Extension implements IAdminModuleExtension {
+class Extension extends KIXExtension implements IAdminModuleExtension {
 
     public getAdminModules(): AdminModuleCategory[] {
         return [

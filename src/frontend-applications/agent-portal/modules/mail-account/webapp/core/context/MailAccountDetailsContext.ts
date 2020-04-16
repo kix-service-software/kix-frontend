@@ -15,9 +15,6 @@ import { TranslationService } from "../../../../../modules/translation/webapp/co
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class MailAccountDetailsContext extends Context {
 
@@ -28,7 +25,7 @@ export class MailAccountDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<MailAccount>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<MailAccount>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -43,7 +40,7 @@ export class MailAccountDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadAccount(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.MAIL_ACCOUNT);
 
         if (reload) {
             this.listeners.forEach(
@@ -52,35 +49,6 @@ export class MailAccountDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadAccount(changedProperties: string[] = [], cache: boolean = true): Promise<MailAccount> {
-        const mailAccountId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Email Account'
-            });
-        }, 500);
-
-        const mailAccounts = await KIXObjectService.loadObjects<MailAccount>(
-            KIXObjectType.MAIL_ACCOUNT, [mailAccountId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let mailAccount: MailAccount;
-        if (mailAccounts && mailAccounts.length) {
-            mailAccount = mailAccounts[0];
-            this.objectId = mailAccount.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return mailAccount;
     }
 
 }

@@ -40,8 +40,7 @@ class Component {
                 bulkManager.reset(false);
                 this.state.bulkManager = bulkManager;
 
-                const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
-                const objectName = await labelProvider.getObjectName(true);
+                const objectName = await LabelService.getInstance().getObjectName(objectType, true);
 
                 const title = await TranslationService.translate('Translatable#Edit {0}', [objectName]);
 

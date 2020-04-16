@@ -35,12 +35,12 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
         }
 
         const rowObjects = [];
-        if (object && object.ConfiguredPermissions) {
+        if (object) {
             let permissions = [];
 
             if (this.objectType === KIXObjectType.ROLE_PERMISSION) {
                 permissions = (object as Role).Permissions;
-            } else {
+            } else if (object.ConfiguredPermissions) {
                 permissions = this.objectType === KIXObjectType.PERMISSION_DEPENDING_OBJECTS
                     ? object.ConfiguredPermissions.DependingObjects
                     : object.ConfiguredPermissions.Assigned;

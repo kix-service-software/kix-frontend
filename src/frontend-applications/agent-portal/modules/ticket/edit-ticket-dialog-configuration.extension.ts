@@ -43,8 +43,9 @@ import { OrganisationProperty } from "../customer/model/OrganisationProperty";
 import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
 import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
 import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class EditTicketDialogModuleExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return EditTicketDialogContext.CONTEXT_ID;
@@ -249,7 +250,7 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -416,5 +417,5 @@ export class EditTicketDialogModuleExtension implements IConfigurationExtension 
 }
 
 module.exports = (data, host, options) => {
-    return new EditTicketDialogModuleExtension();
+    return new Extension();
 };

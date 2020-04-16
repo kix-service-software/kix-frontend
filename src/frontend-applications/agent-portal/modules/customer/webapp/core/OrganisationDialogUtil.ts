@@ -11,6 +11,7 @@ import { ContextService } from "../../../../modules/base-components/webapp/core/
 import { NewOrganisationDialogContext, OrganisationDetailsContext, EditOrganisationDialogContext } from ".";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContextMode } from "../../../../model/ContextMode";
+import { Organisation } from "../../model/Organisation";
 
 export class OrganisationDialogUtil {
 
@@ -37,4 +38,11 @@ export class OrganisationDialogUtil {
             );
         }
     }
+
+    public static async duplicate(organisation: Organisation): Promise<void> {
+        ContextService.getInstance().setDialogContext(
+            NewOrganisationDialogContext.CONTEXT_ID, KIXObjectType.ORGANISATION, ContextMode.CREATE, organisation.ID
+        );
+    }
+
 }

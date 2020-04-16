@@ -6,33 +6,32 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget instanceId=state.instanceId title=state.title actions=state.actions icon=state.icon>
-    <@header-content>
-        <for|componentId| of=state.headerTitleComponents>
-            <${component.getTemplate(componentId)}/>
-        </for>
-    </@header-content>
-    <@headerFilter>
-        <if(state.showFilter)>
-            <filter
-                filterCount=state.filterCount
-                predefinedFilter=state.predefinedTableFilter
-                predefinedFilterPlaceholder=state.filterPlaceHolder
-                disabled=state.isFiltering
-                on-filter("filter")
-                key="table-widget-filter"/>
-        </if>
-        <if(input.filterActions)>
-            <action-list list=input.filterActions instanceId=state.instanceId displayText=false/>
-        </if>
-    </@headerFilter>
-    <@content>
-        <if(state.table)>
+<if(!state.loading)>
+    <widget instanceId=state.instanceId title=state.title actions=state.actions icon=state.icon>
+        <@header-content>
+            <for|componentId| of=state.headerTitleComponents>
+                <${component.getTemplate(componentId)}/>
+            </for>
+        </@header-content>
+        <@headerFilter>
+            <if(state.showFilter)>
+                <filter
+                    filterCount=state.filterCount
+                    predefinedFilter=state.predefinedTableFilter
+                    predefinedFilterPlaceholder=state.filterPlaceHolder
+                    disabled=state.isFiltering
+                    on-filter("filter")
+                    key="table-widget-filter"/>
+            </if>
+            <if(input.filterActions)>
+                <action-list list=input.filterActions instanceId=state.instanceId displayText=false/>
+            </if>
+        </@headerFilter>
+        <@content>
             <standard-table-NEW table=state.table key=state.table.getTableId()/>
-        </if>
-        <else>
-            <loading-spinner/>
-        </else>
-    </@content>
-</widget>
+        </@content>
+    </widget>
+</if>
+<else>
+    <table-placeholder/>
+</else>

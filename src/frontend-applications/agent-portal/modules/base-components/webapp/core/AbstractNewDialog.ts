@@ -164,8 +164,6 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             DialogService.getInstance().submitMainDialog();
             if (this.routingConfiguration) {
                 RoutingService.getInstance().routeToContext(this.routingConfiguration, objectId);
-            } else {
-                EventService.getInstance().publish(ApplicationEvent.REFRESH);
             }
         }
 

@@ -19,6 +19,8 @@ import { OrganisationProperty } from "../../model/OrganisationProperty";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -38,6 +40,29 @@ export class OrganisationService extends KIXObjectService<Organisation> {
 
     public getLinkObjectName(): string {
         return "Person";
+    }
+
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType | string, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds?: boolean
+    ): Promise<O[]> {
+        let objects: O[];
+        let superLoad = false;
+        if (objectType === KIXObjectType.ORGANISATION) {
+            objects = await super.loadObjects<O>(
+                KIXObjectType.ORGANISATION, forceIds ? objectIds : null, loadingOptions
+            );
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
+
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+        }
+
+        return objects;
     }
 
     public determineDependendObjects(
@@ -102,24 +127,26 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     }
 
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
+        searchValue = `*${searchValue}*`;
+
         return [
             new FilterCriteria(
-                OrganisationProperty.NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.NUMBER, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.NAME, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.URL, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.URL, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.STREET, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.STREET, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.COUNTRY, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.COUNTRY, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                OrganisationProperty.ZIP, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+                OrganisationProperty.ZIP, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
     }

@@ -62,7 +62,7 @@ describe('DynamicFieldFormUtil', () => {
                 );
             }
             form = createForm(fields);
-            await DynamicFieldFormUtil.configureDynamicFields(form);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
         });
 
         it('should contain only form fields based on valid dynamic fields', () => {
@@ -101,7 +101,7 @@ describe('DynamicFieldFormUtil', () => {
             };
 
             form = createForm([field]);
-            await DynamicFieldFormUtil.configureDynamicFields(form);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
         });
 
         it('the form should contain the field', () => {
@@ -163,7 +163,7 @@ describe('DynamicFieldFormUtil', () => {
             };
 
             form = createForm([field]);
-            await DynamicFieldFormUtil.configureDynamicFields(form);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
         });
 
         it('the form should contain the field', () => {
@@ -225,7 +225,7 @@ describe('DynamicFieldFormUtil', () => {
             };
 
             form = createForm([field]);
-            await DynamicFieldFormUtil.configureDynamicFields(form);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
         });
 
         it('the form should contain the field', () => {
@@ -315,7 +315,7 @@ describe('DynamicFieldFormUtil', () => {
             };
 
             form = createForm([field]);
-            await DynamicFieldFormUtil.configureDynamicFields(form);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
         });
 
         it('the form should contain the field', () => {
@@ -395,7 +395,7 @@ describe('DynamicFieldFormUtil', () => {
             };
 
             form = createForm([field]);
-            await DynamicFieldFormUtil.configureDynamicFields(form);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
         });
 
         it('the form should contain the field', () => {
@@ -481,7 +481,7 @@ describe('DynamicFieldFormUtil', () => {
             };
 
             form = createForm([field]);
-            await DynamicFieldFormUtil.configureDynamicFields(form);
+            await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
         });
 
         it('the form should contain the field', () => {

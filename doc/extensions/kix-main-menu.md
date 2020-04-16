@@ -5,7 +5,9 @@ This extension point can be used to add a new main menu entry in the web applica
 Pseudo Implementation
 
 ```javascript
-                    export class Extension implements IMainMenuExtension {
+                    import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IMainMenuExtension {
 
                         public mainContextId: string = 'ExampleContextID';
 

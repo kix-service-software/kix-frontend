@@ -141,11 +141,13 @@ class Component {
     }
 
     private async prepareTitle(): Promise<void> {
-        const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
-        const objectCount = this.state.bulkManager.objects.length;
-        this.state.tableTitle = await TranslationService.translate(
-            'Translatable#Selected {0} ({1})', [objectName, objectCount]
-        );
+        if (this.state.table) {
+            const objectName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType, true);
+            const objectCount = this.state.table.getRows().length;
+            this.state.tableTitle = await TranslationService.translate(
+                'Translatable#Selected {0} ({1})', [objectName, objectCount]
+            );
+        }
     }
 
     public async run(): Promise<void> {
@@ -255,6 +257,7 @@ class Component {
             this.state.bulkManager.objectType, idsToLoad, null, null, false
         );
         context.setObjectList(this.state.bulkManager.objectType, newObjects);
+        this.prepareTitle();
     }
 
     private async setLoadingInformation(
@@ -278,7 +281,7 @@ class Component {
     private handleObjectEditError(object: KIXObject, finishedCount: number, objectCount: number): Promise<void> {
         return new Promise(async (resolve, reject) => {
             const oName = await LabelService.getInstance().getObjectName(this.state.bulkManager.objectType);
-            const identifier = await LabelService.getInstance().getText(object);
+            const identifier = await LabelService.getInstance().getObjectText(object);
 
             const confirmText = await TranslationService.translate(
                 'Translatable#Changes cannot be saved. How do you want to proceed?'

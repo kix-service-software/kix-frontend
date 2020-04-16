@@ -46,7 +46,6 @@ import { OverlayService } from "../../../../../modules/base-components/webapp/co
 import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
 import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
 import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { Error } from "../../../../../../../server/model/Error";
 
 class Component {
@@ -595,7 +594,6 @@ class Component {
     public submit(): void {
         if (this.state.run) {
             DialogService.getInstance().closeMainDialog();
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
     }
 
