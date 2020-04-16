@@ -446,7 +446,7 @@ export class JobAPIService extends KIXObjectAPIService {
                 const jobMacro = job.Macros && !!job.Macros.length ? job.Macros[0] : null;
                 const macroParameter: Array<[string, any]> = [
                     [MacroProperty.NAME, `Macro for Job "${newJobName}"`],
-                    [MacroProperty.TYPE, 'Ticket'],
+                    [MacroProperty.TYPE, jobMacro.Type],
                     [KIXObjectProperty.COMMENT, `Macro for Job "${newJobName}"`]
                 ];
                 if (jobMacro) {
