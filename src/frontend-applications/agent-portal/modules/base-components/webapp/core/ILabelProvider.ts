@@ -10,6 +10,7 @@
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
+import { Label } from "./Label";
 
 export interface ILabelProvider<T> {
 
@@ -18,6 +19,8 @@ export interface ILabelProvider<T> {
     isLabelProviderFor(object: T): boolean;
 
     isLabelProviderForType(objectType: KIXObjectType | string): boolean;
+
+    isLabelProviderForDFType(dfFieldType: string): boolean;
 
     getObjectText(object: T, id?: boolean, title?: boolean, translatable?: boolean): Promise<string>;
 
@@ -56,5 +59,7 @@ export interface ILabelProvider<T> {
     canShow(property: string, object: T): boolean;
 
     getDFDisplayValues(fieldValue: DynamicFieldValue): Promise<[string[], string, string[]]>;
+
+    createLabelsFromDFValue(fieldValue: DynamicFieldValue): Promise<Label[]>;
 
 }

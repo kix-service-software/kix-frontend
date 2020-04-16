@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-03-16 07:06+0000\n"
+"PO-Revision-Date: 2020-04-14 09:25+0000\n"
 "Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -212,6 +212,9 @@ msgstr "Artikel wurde erfolgreich angelegt."
 msgid "Article Text"
 msgstr "Artikelinhalt"
 
+msgid "Asset"
+msgstr "Asset"
+
 msgid "Assets"
 msgstr "Assets"
 
@@ -226,6 +229,9 @@ msgstr "Zugeordneter Agent"
 
 msgid "Assigned Agents"
 msgstr "Zugeordnete Agenten"
+
+msgid "Assigned Assets"
+msgstr "Zugeordnete Assets"
 
 msgid "Assigned Contacts"
 msgstr "Zugeordnete Kontakte"
@@ -536,6 +542,9 @@ msgstr "enthält"
 msgid "Context"
 msgstr "Kontext"
 
+msgid "Copy of {0}"
+msgstr "Kopie von {0}"
+
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
@@ -660,10 +669,10 @@ msgid "Customer Dashboard"
 msgstr "Kunden Dashboard"
 
 msgid "Customer Login"
-msgstr "Kundenlogin"
+msgstr "Self Service Login"
 
 msgid "Customer Portal"
-msgstr "Kundenportal"
+msgstr "Self Service Portal"
 
 msgid "CW"
 msgstr "KW"
@@ -727,6 +736,12 @@ msgstr "\" (Doppeltes Hochkomma)"
 
 msgid "Download"
 msgstr "Download"
+
+msgid "Download log"
+msgstr "Log herunterladen"
+
+msgid "Duplicate"
+msgstr "Duplizieren"
 
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
@@ -833,9 +848,6 @@ msgstr "Textbausteine bearbeiten"
 msgid "Edit Ticket"
 msgstr "Ticket bearbeiten"
 
-msgid "Edit Ticket Job"
-msgstr "Ticket Job bearbeiten"
-
 msgid "Edit Translation"
 msgstr "Übersetzung bearbeiten"
 
@@ -883,6 +895,9 @@ msgstr "Anlagen zulassen"
 
 msgid "ends with"
 msgstr "endet mit"
+
+msgid "End time"
+msgstr "Endzeitpunkt"
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
@@ -1130,8 +1145,8 @@ msgstr ""
 msgid "Helptext_Admin_DynamicFieldCreate_CustomerVisible"
 msgstr ""
 "Mit Setzen des Hakens bestimmen Sie, ob der am Ticket hinterlegte Wert des "
-"dynamischen Feldes ebenso wie das Ticket im Kundenportal angezeigt werden "
-"soll."
+"dynamischen Feldes ebenso wie das Ticket im Self Service Portal angezeigt "
+"werden soll."
 
 msgid "Helptext_Admin_DynamicFieldCreate_FieldType"
 msgstr "Wählen Sie aus, welche Art von dynamischen Feld Sie anlegen wollen."
@@ -1240,6 +1255,13 @@ msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "Der Name des Jobs muss eindeutig sein."
 
 msgid "Helptext_Admin_JobCreateEdit_Time"
+msgstr ""
+"Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
+"Mehrfachauswahl möglich."
+
+#, fuzzy
+#| msgid "Helptext_Admin_JobCreateEdit_Time"
+msgid "Helptext_Admin_JobCreateEdit_Type"
 msgstr ""
 "Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
 "Mehrfachauswahl möglich."
@@ -1748,7 +1770,7 @@ msgstr ""
 msgid "Helptext_Admin_Users_RoleCreate_UsageContext"
 msgstr ""
 "Legen Sie fest, ob die Rolle für Agenten im Agentenportal genutzt werden "
-"soll, oder für Kontakte im Kundenportal."
+"soll, oder für Kontakte im Self Service Portal."
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
 msgstr "Es werden nur gültige Agenten angezeigt."
@@ -1944,7 +1966,7 @@ msgid "Helptext_Customers_ContactCreate_Validity"
 msgstr ""
 "Der Kontakt kann im System nur verwendet werden, wenn er „gültig“ gesetzt "
 "ist. Wird ein Kontakt ungültig gesetzt, der auch Zugang zum Agentenportal "
-"und/oder Kundenportal hat, werden diese Zugänge auch ungültig."
+"und/oder Self Service Portal hat, werden diese Zugänge auch ungültig."
 
 msgid "Helptext_Customers_ContactCreate_Zip"
 msgstr ""
@@ -2028,7 +2050,7 @@ msgstr ""
 msgid "Helptext_FAQ_ArticleCreate_CustomerVisible"
 msgstr ""
 "Wenn dieser Haken gesetzt ist, ist dieser FAQ Artikel auch für Nutzer des "
-"Kundenportals sichtbar."
+"Self Service Portal sichtbar."
 
 msgid "Helptext_FAQ_ArticleCreate_Language"
 msgstr "Geben sie die Sprache an, in der der FAQ-Artikel verfasst ist."
@@ -2171,6 +2193,12 @@ msgstr ""
 "gewünschten Textbaustein aus. Sie können die Auswahl anhand der "
 "Schlüsselworte manuell einschränken, in dem sie weiteren Text eingeben."
 
+msgid "Helptext_Ticket_Dashboard_Search"
+msgstr ""
+"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", \""
+"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
+"möglich."
+
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
 
@@ -2186,8 +2214,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
 msgstr ""
-"Wählen Sie aus, ob der folgende Artikel im Kundenportal angezeigt wird. "
-"Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
+"Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
+"wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
 "Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
 "des Kunden dieses Tickets zugeordnet ist,  wird der Haken automatisch "
 "gesetzt und kann nicht entfernt werden."
@@ -2276,8 +2304,8 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr ""
-"Wählen Sie aus, ob der folgende Artikel im Kundenportal angezeigt wird. "
-"Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
+"Wählen Sie aus, ob der folgende Artikel im Self Service Portal angezeigt "
+"wird. Haben Sie oben den Kanal \"E-Mail\" gewählt und in einem der folgenden "
 "Empfänger-Felder (An, Cc oder Bcc) eine Adresse gewählt, die einem Kontakt "
 "des Kunden dieses Tickets zugeordnet ist,  wird der Haken automatisch "
 "gesetzt und kann nicht entfernt werden."
@@ -2354,10 +2382,10 @@ msgstr "Fassen Sie das Thema des Tickets kurz zusammen."
 msgid "Helptext_Users_UserCreateEdit_Access"
 msgstr ""
 "Legen Sie fest, ob der Kontakt die Möglichkeit bekommt, sich im "
-"Agentenportal (= Kontakt wird auch ein Agent) und/oder im Kundenportal "
-"anzumelden. Je nach Auswahl werden weitere Eingabefelder geladen. Wurde der "
-"Zugang für ein Portal einmal gewährt und danach wieder entfernt, wird der "
-"entsprechende Portal-Nutzer auf \"ungültig\" gesetzt."
+"Agentenportal (= Kontakt wird auch ein Agent) und/oder im Self Service "
+"Portal anzumelden. Je nach Auswahl werden weitere Eingabefelder geladen. "
+"Wurde der Zugang für ein Portal einmal gewährt und danach wieder entfernt, "
+"wird der entsprechende Portal-Nutzer auf \"ungültig\" gesetzt."
 
 msgid "Helptext_Users_UserCreateEdit_Roles"
 msgstr ""
@@ -2595,9 +2623,6 @@ msgstr "Verknüpfte Objekte ({0})"
 msgid "Link FAQ with"
 msgstr "FAQ verknüpfen mit"
 
-msgid "Link Objects"
-msgstr "Objekte verknüpfen"
-
 msgid "Links"
 msgstr "Verknüpfungen"
 
@@ -2618,72 +2643,6 @@ msgstr "Verknüpfen mit Ticket"
 
 msgid "Link Type"
 msgstr "Art der Verknüpfung"
-
-msgid "Load Config Item"
-msgstr "Lade Asset"
-
-msgid "Load Config Item Class"
-msgstr "Lade Asset-Klasse"
-
-msgid "Load Config Items"
-msgstr "Lade Assets"
-
-msgid "Load Contact"
-msgstr "Lade Kontakt"
-
-msgid "Load Email Account"
-msgstr "Lade E-Mail-Konto"
-
-msgid "Load Email Filter"
-msgstr "Lade E-Mail Filter"
-
-msgid "Load FAQ Article"
-msgstr "Lade FAQ Artikel"
-
-msgid "Load FAQ Articles"
-msgstr "Lade FAQ Artikel"
-
-msgid "Load FAQ Category"
-msgstr "Lade FAQ Kategorie"
-
-msgid "Load Job"
-msgstr "Lade Job"
-
-msgid "Load Organisation"
-msgstr "Lade Kunde"
-
-msgid "Load Organisations"
-msgstr "Lade Kunden"
-
-msgid "Load Queue"
-msgstr "Lade Team"
-
-msgid "Load Role"
-msgstr "Lade Rolle"
-
-msgid "Load System Address"
-msgstr "Lade Systemadresse"
-
-msgid "Load Ticket"
-msgstr "Lade Ticket"
-
-msgid "Load Ticket Priority"
-msgstr "Lade Ticket Priorität"
-
-msgid "Load Tickets"
-msgstr "Lade Tickets"
-
-msgid "Load Ticket State"
-msgstr "Lade Ticket Status"
-
-msgid "Load Ticket Type"
-msgstr "Lade Ticket Typ"
-
-msgid "Load User"
-msgstr "Lade Nutzer"
-
-msgid "Load Webform"
-msgstr "Lade Webformular"
 
 msgid "Localisation"
 msgstr "Lokalisierung"
@@ -2859,9 +2818,6 @@ msgstr "Neues Textmodul"
 msgid "New Ticket"
 msgstr "Neues Ticket"
 
-msgid "New Ticket Job"
-msgstr "Neuer Ticket Job"
-
 msgid "New Tickets"
 msgstr "Neue Tickets"
 
@@ -2985,6 +2941,11 @@ msgstr "Nicht mehr als 5 Dateien möglich."
 msgid "No version available"
 msgstr "Keine Version verfügbar"
 
+#, fuzzy
+#| msgid "No."
+msgid "Nr."
+msgstr "Nr."
+
 msgid "Number"
 msgstr "Nummer"
 
@@ -3008,6 +2969,9 @@ msgstr "Objekt"
 
 msgid "Object Id"
 msgstr "Objekt ID"
+
+msgid "Object ID"
+msgstr "Objekt-ID"
 
 msgid "Objects"
 msgstr "Objekte"
@@ -3056,6 +3020,9 @@ msgstr "Sonstiges"
 
 msgid "Overall"
 msgstr "Gesamt"
+
+msgid "Overview"
+msgstr "Übersicht"
 
 msgid "Overview Config Items"
 msgstr "Übersicht Assets"
@@ -3153,6 +3120,9 @@ msgstr "Plan Ende"
 
 msgid "Please enter a search term."
 msgstr "Bitte geben Sie einen Suchbegriff ein."
+
+msgid "Please enter a search term for a organisation."
+msgstr "Bitte geben Sie einen Suchbegriff für einen Kunden ein."
 
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
@@ -3293,7 +3263,7 @@ msgid "Refresh Page"
 msgstr "Seite neu laden"
 
 msgid "Reload Agent Portal Configurations"
-msgstr "Lade Frontend-Konfigurationen neu"
+msgstr "Frontend-Konfigurationen neu laden"
 
 msgid "Reload Frontend Configurations"
 msgstr "Lade Frontend-Konfigurationen neu"
@@ -3498,11 +3468,14 @@ msgstr "Wert setzen"
 msgid "Show all"
 msgstr "Alle anzeigen"
 
+msgid "Show Backlog"
+msgstr "Backlog anzeigen"
+
 msgid "Show in agent preferences"
 msgstr "Anzeige Agenteneinstellung"
 
 msgid "Show in Customer Portal"
-msgstr "Im Kundenportal anzeigen"
+msgstr "Im Self Service Portal anzeigen"
 
 msgid "Show title in form"
 msgstr "Titel im Formular anzeigen"
@@ -3543,6 +3516,9 @@ msgstr "Quelle"
 msgid "Split Option"
 msgstr "Trennoptionen"
 
+msgid "Start by"
+msgstr "gestartet von"
+
 msgid "Start Import"
 msgstr "Import starten"
 
@@ -3554,6 +3530,9 @@ msgstr "Suche starten"
 
 msgid "starts with"
 msgstr "beginnt mit"
+
+msgid "Start time"
+msgstr "Startzeitpunkt"
 
 msgid "State"
 msgstr "Status"
@@ -3613,7 +3592,7 @@ msgid "Switch"
 msgstr "Tauschen"
 
 msgid "Switch to customer portal."
-msgstr "Wechsel ins Kundenportal."
+msgstr "Wechsel ins Self Service Portal."
 
 msgid "Symptom"
 msgstr "Symptom"
@@ -3862,6 +3841,9 @@ msgstr "Typdaten"
 
 msgid "Type Information"
 msgstr "Typ-Informationen"
+
+msgid "Type of Job"
+msgstr "Job Typ"
 
 msgid "Types"
 msgstr "Typen"
@@ -4126,6 +4108,81 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Link Objects"
+#~ msgstr "Objekte verknüpfen"
+
+#~ msgid "Load Ticket State"
+#~ msgstr "Lade Ticket Status"
+
+#~ msgid "Load Webform"
+#~ msgstr "Lade Webformular"
+
+#~ msgid "Load Config Item"
+#~ msgstr "Lade Asset"
+
+#~ msgid "Load Config Item Class"
+#~ msgstr "Lade Asset-Klasse"
+
+#~ msgid "Load Config Items"
+#~ msgstr "Lade Assets"
+
+#~ msgid "Load Contact"
+#~ msgstr "Lade Kontakt"
+
+#~ msgid "Load Email Account"
+#~ msgstr "Lade E-Mail-Konto"
+
+#~ msgid "Load Email Filter"
+#~ msgstr "Lade E-Mail Filter"
+
+#~ msgid "Load FAQ Article"
+#~ msgstr "Lade FAQ Artikel"
+
+#~ msgid "Load FAQ Articles"
+#~ msgstr "Lade FAQ Artikel"
+
+#~ msgid "Load FAQ Category"
+#~ msgstr "Lade FAQ Kategorie"
+
+#~ msgid "Load Job"
+#~ msgstr "Lade Job"
+
+#~ msgid "Load Organisation"
+#~ msgstr "Lade Kunde"
+
+#~ msgid "Load Organisations"
+#~ msgstr "Lade Kunden"
+
+#~ msgid "Load Queue"
+#~ msgstr "Lade Team"
+
+#~ msgid "Load Role"
+#~ msgstr "Lade Rolle"
+
+#~ msgid "Load System Address"
+#~ msgstr "Lade Systemadresse"
+
+#~ msgid "Load Ticket"
+#~ msgstr "Lade Ticket"
+
+#~ msgid "Load Ticket Priority"
+#~ msgstr "Lade Ticket Priorität"
+
+#~ msgid "Load Tickets"
+#~ msgstr "Lade Tickets"
+
+#~ msgid "Load Ticket Type"
+#~ msgstr "Lade Ticket Typ"
+
+#~ msgid "Load User"
+#~ msgstr "Lade Nutzer"
+
+#~ msgid "Edit Ticket Job"
+#~ msgstr "Ticket Job bearbeiten"
+
+#~ msgid "New Ticket Job"
+#~ msgstr "Neuer Ticket Job"
 
 #~ msgid "Agent Information"
 #~ msgstr "Agenten-Informationen"
@@ -5174,9 +5231,6 @@ msgstr "PLZ"
 
 #~ msgid "Assigned Text Modules"
 #~ msgstr "Zuordnung zu Textbausteinen"
-
-#~ msgid "Duplicate"
-#~ msgstr "Duplizieren"
 
 #~ msgid "Organisation Details"
 #~ msgstr "Kundendetails"

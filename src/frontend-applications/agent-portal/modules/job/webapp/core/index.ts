@@ -12,7 +12,6 @@ export * from './context';
 export * from './table';
 
 export { JobBrowserFactory } from './JobBrowserFactory';
-export { JobFilterManager } from './JobFilterManager';
 export { JobFormService } from './JobFormService';
 export { JobLabelProvider } from './JobLabelProvider';
 export { JobService } from './JobService';

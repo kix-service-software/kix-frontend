@@ -19,13 +19,15 @@ import { ApplicationEvent } from "../../../../../modules/base-components/webapp/
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-
+import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
+import { SearchProperty } from "../../../../search/model/SearchProperty";
 
 export class TicketContext extends Context {
 
     public static CONTEXT_ID: string = 'tickets';
 
     public queueId: number;
+    public filtervalue: string;
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -35,25 +37,28 @@ export class TicketContext extends Context {
         return 'Ticket Dashboard';
     }
 
-    public async setQueue(queueId: number): Promise<void> {
+    public setQueue(queueId: number): void {
         if (queueId) {
             if (queueId !== this.queueId) {
                 this.queueId = queueId;
-                await this.loadTickets();
+                this.loadTickets();
             }
         } else if (this.queueId || typeof this.queueId === 'undefined') {
             this.queueId = null;
-            await this.loadTickets();
+            this.loadTickets();
         }
     }
 
+    public setFilterValue(filterValue: string): void {
+        this.filtervalue = filterValue;
+        this.loadTickets();
+    }
+
     private async loadTickets(): Promise<void> {
-        const stateTypeFilterCriteria = new FilterCriteria(
-            TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
-        );
+        EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            [stateTypeFilterCriteria], null, 1000, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
+            [], null, null, [TicketProperty.STATE, TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
         );
 
         if (this.queueId) {
@@ -64,17 +69,32 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(queueFilter);
         }
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Tickets'
-            });
-        }, 500);
+        if (this.filtervalue) {
+            const fulltextFilter = new FilterCriteria(
+                SearchProperty.FULLTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
+                FilterType.AND, this.filtervalue
+            );
+            loadingOptions.filter.push(fulltextFilter);
+        }
+
+        if (!this.filtervalue && !this.queueId) {
+            loadingOptions.limit = 30;
+            loadingOptions.sortOrder = '-Ticket.Age:numeric';
+            loadingOptions.filter.push(new FilterCriteria(
+                TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+            ));
+            loadingOptions.filter.push(new FilterCriteria(
+                TicketProperty.STATE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'new'
+            ));
+        } else {
+            loadingOptions.filter.push(new FilterCriteria(
+                TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Open'
+            ));
+        }
 
         const tickets = await KIXObjectService.loadObjects(
             KIXObjectType.TICKET, null, loadingOptions, null, false
         ).catch((error) => []);
-
-        window.clearTimeout(timeout);
 
         this.setObjectList(KIXObjectType.TICKET, tickets);
         this.setFilteredObjectList(KIXObjectType.TICKET, tickets);
@@ -85,7 +105,7 @@ export class TicketContext extends Context {
     public reset(): void {
         super.reset();
         this.queueId = null;
-        this.loadTickets();
+        this.filtervalue = null;
     }
 
     public reloadObjectList(objectType: KIXObjectType): Promise<void> {

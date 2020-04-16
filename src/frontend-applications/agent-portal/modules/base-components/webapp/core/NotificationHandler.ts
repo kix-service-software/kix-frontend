@@ -46,31 +46,41 @@ export class NotificationHandler {
             .some((roleId) => user.RoleIDs.some((rid) => rid === roleId));
 
         if (userIsAffacted) {
-            BrowserUtil.openAppRefreshOverlay('Translatable#Your Permissions have been updated.', true);
+            BrowserUtil.openAppRefreshOverlay('Translatable#Your Permissions have been updated.', null, true);
         }
     }
 
     private static checkForDataUpdate(context: Context, events: ObjectUpdatedEventData[]): void {
         if (!context.getAdditionalInformation(AdditionalContextInformation.DONT_SHOW_UPDATE_NOTIFICATION)) {
             let showRefreshNotification = false;
+            let notifiactionObjectType: KIXObjectType | string;
+
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
                 showRefreshNotification = events.some((e) => {
                     const objectType = this.getObjectType(e.Namespace);
                     const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
                     const eventObjectId = e.ObjectID.split('::');
                     const isObject = eventObjectId[0] === context.getObjectId().toString();
-                    return isObjectType && isObject;
+                    if (isObjectType && isObject) {
+                        notifiactionObjectType = objectType;
+                        return true;
+                    }
+                    return false;
                 });
             } else if (context.getDescriptor().contextMode === ContextMode.DASHBOARD) {
                 showRefreshNotification = events.some((e) => {
                     const objectType = this.getObjectType(e.Namespace);
                     const isObjectType = context.getDescriptor().kixObjectTypes.some((ot) => ot === objectType);
-                    return isObjectType;
+                    if (isObjectType) {
+                        notifiactionObjectType = objectType;
+                        return true;
+                    }
+                    return false;
                 });
             }
 
             if (showRefreshNotification) {
-                BrowserUtil.openAppRefreshOverlay('Translatable#Data has been updated.');
+                BrowserUtil.openAppRefreshOverlay('Translatable#Data has been updated.', notifiactionObjectType);
             }
         }
     }

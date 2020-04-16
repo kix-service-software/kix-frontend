@@ -14,10 +14,6 @@ import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformatio
 import { OrganisationContext } from ".";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class OrganisationDetailsContext extends Context {
 
@@ -28,54 +24,28 @@ export class OrganisationDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return LabelService.getInstance().getText(await this.getObject<Organisation>(), short, short);
+        return LabelService.getInstance().getObjectText(await this.getObject<Organisation>(), short, short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const object = await this.getObject<Organisation>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation('kix-icon-organisation', [OrganisationContext.CONTEXT_ID], text);
     }
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.ORGANISATION, reload: boolean = false
     ): Promise<O> {
-        const object = await this.loadOrganisation() as any;
+        let object;
+        if (objectType === KIXObjectType.ORGANISATION) {
+            object = await this.loadDetailsObject<O>(KIXObjectType.ORGANISATION, null, null, true, undefined, true);
 
-        if (reload) {
-            this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.ORGANISATION));
+            if (reload) {
+                this.listeners.forEach((l) => l.objectChanged(this.getObjectId(), object, KIXObjectType.ORGANISATION));
+            }
         }
 
         return object;
     }
 
-    private async loadOrganisation(): Promise<Organisation> {
-        const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['Contacts', 'Tickets', 'TicketStats'],
-        );
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(
-                ApplicationEvent.APP_LOADING, { loading: true, hint: 'Translatable#Load Organisation' }
-            );
-        }, 500);
-
-        const organisations = await KIXObjectService.loadObjects<Organisation>(
-            KIXObjectType.ORGANISATION, [this.objectId], loadingOptions, null, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let organisation: Organisation;
-        if (organisations && organisations.length) {
-            organisation = organisations[0];
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-
-        return organisation;
-    }
 }

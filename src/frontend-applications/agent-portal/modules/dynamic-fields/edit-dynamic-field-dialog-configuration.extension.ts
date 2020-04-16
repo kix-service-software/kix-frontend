@@ -29,7 +29,9 @@ import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { EditDynamicFieldDialogContext } from './webapp/core/EditDynamicFieldDialogContext';
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return EditDynamicFieldDialogContext.CONTEXT_ID;
@@ -86,7 +88,7 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Helptext_Admin_DynamicFieldCreate_FieldType',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.DYNAMIC_FIELD_TYPE),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                 ], null, null, null, null, null, null, null, null, null, null, null, null, true
             )
         );

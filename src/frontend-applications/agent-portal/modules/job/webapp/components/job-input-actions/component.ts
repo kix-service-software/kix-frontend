@@ -23,6 +23,8 @@ import { FormInstance } from "../../../../../modules/base-components/webapp/core
 import { SortUtil } from "../../../../../model/SortUtil";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { MacroActionType } from "../../../model/MacroActionType";
+import { JobType } from "../../../model/JobType";
+import { KIXObjectSpecificLoadingOptions } from "../../../../../model/KIXObjectSpecificLoadingOptions";
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -144,8 +146,12 @@ class Component extends FormInputComponent<string, ComponentState> {
 
             if (formService && formInstance) {
                 if (this.currentAction) {
+
+                    const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
+
                     const childFields = await formService.getFormFieldsForAction(
-                        this.currentAction.id, this.state.field.instanceId
+                        this.currentAction.id, this.state.field.instanceId,
+                        typeValue ? typeValue.value : null
                     );
                     formInstance.addNewFormField(this.state.field, childFields, true);
                 } else {
@@ -166,10 +172,14 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async getNodes(unique: boolean = false): Promise<TreeNode[]> {
-        let nodes = await JobService.getInstance().getTreeNodes(
-            JobProperty.MACRO_ACTIONS
-        );
         const formInstance = await FormService.getInstance().getFormInstance<FormInstance>(this.state.formId);
+
+        const typeValue = await formInstance.getFormFieldValueByProperty(JobProperty.TYPE);
+        const type = typeValue ? typeValue.value : null;
+        let nodes = await JobService.getInstance().getTreeNodes(
+            JobProperty.MACRO_ACTIONS, null, null, null, null, { id: type }
+        );
+
         if (unique && formInstance) {
             const fields = await formInstance.getFields(this.state.field);
             if (fields && fields.length > 1) {

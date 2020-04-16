@@ -30,7 +30,9 @@ import { ModuleConfigurationService } from "../../server/services/configuration"
 import { TextModuleProperty } from "./model/TextModuleProperty";
 
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return EditTextModuleDialogContext.CONTEXT_ID;

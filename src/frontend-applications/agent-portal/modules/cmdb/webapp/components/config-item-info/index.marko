@@ -6,17 +6,15 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.configItem)>
     <div.ci-label-container>
-        <object-property-label object=state.configItem property="Name" labelProvider=component.labelProvider/>
-        <object-property-label object=state.configItem property="Number" labelProvider=component.labelProvider/>
-        <object-property-label object=state.configItem property="CurDeplStateID" labelProvider=component.labelProvider/>
-        <object-property-label
-            object=state.configItem
-            property="CurInciStateID"
-            labelProvider=component.labelProvider
-            showIcon=true/>
+        <object-property-label object=state.configItem property="Name" labelProvider=state.labelProvider/>
+        <object-property-label object=state.configItem property="Number" labelProvider=state.labelProvider/>
+        <object-property-label object=state.configItem property="CurDeplStateID" labelProvider=state.labelProvider showIcon=true/>
+        <object-property-label object=state.configItem property="CurInciStateID" labelProvider=state.labelProvider showIcon=true/>
+        <div.version-details>
+            <${component.getVersionTemplate()} configItem=state.configItem/>
+        </div>
     </div>
 </if>
 <else>

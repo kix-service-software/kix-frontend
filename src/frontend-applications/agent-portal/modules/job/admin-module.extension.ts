@@ -15,7 +15,9 @@ import { UIComponentPermission } from "../../model/UIComponentPermission";
 import { CRUD } from "../../../../server/model/rest/CRUD";
 
 
-class Extension implements IAdminModuleExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IAdminModuleExtension {
 
     public getAdminModules(): AdminModuleCategory[] {
         return [

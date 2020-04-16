@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2020-03-12 14:24+0000\n"
+"PO-Revision-Date: 2020-03-31 14:48+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -204,6 +204,9 @@ msgstr ""
 msgid "Article Text"
 msgstr ""
 
+msgid "Asset"
+msgstr ""
+
 msgid "Assets"
 msgstr ""
 
@@ -218,6 +221,9 @@ msgstr ""
 
 msgid "Assigned Agents"
 msgstr ""
+
+msgid "Assigned Assets"
+msgstr "Assigned Assets"
 
 msgid "Assigned Contacts"
 msgstr ""
@@ -524,6 +530,9 @@ msgstr ""
 msgid "Context"
 msgstr ""
 
+msgid "Copy of {0}"
+msgstr ""
+
 msgid "Could not handle request."
 msgstr ""
 
@@ -648,10 +657,10 @@ msgid "Customer Dashboard"
 msgstr ""
 
 msgid "Customer Login"
-msgstr ""
+msgstr "Self Service Login"
 
 msgid "Customer Portal"
-msgstr ""
+msgstr "Self Service Portal"
 
 msgid "CW"
 msgstr ""
@@ -714,6 +723,12 @@ msgid "DOUBLE_QUOTES"
 msgstr "\" (Double Quotes)"
 
 msgid "Download"
+msgstr ""
+
+msgid "Download log"
+msgstr ""
+
+msgid "Duplicate"
 msgstr ""
 
 msgid "Dynamic Field"
@@ -821,9 +836,6 @@ msgstr ""
 msgid "Edit Ticket"
 msgstr ""
 
-msgid "Edit Ticket Job"
-msgstr ""
-
 msgid "Edit Translation"
 msgstr ""
 
@@ -871,6 +883,11 @@ msgstr ""
 
 msgid "ends with"
 msgstr ""
+
+#, fuzzy
+#| msgid "Closing time"
+msgid "End time"
+msgstr "Closed at"
 
 msgid "Enter search value"
 msgstr ""
@@ -1113,7 +1130,7 @@ msgstr ""
 msgid "Helptext_Admin_DynamicFieldCreate_CustomerVisible"
 msgstr ""
 "By checking this box you decide if a ticket's dynamic field value will be "
-"shown with the ticket in the customer portal."
+"shown with the ticket in the Self Service Portal."
 
 msgid "Helptext_Admin_DynamicFieldCreate_FieldType"
 msgstr "Choose which type of dynamic field you want to create."
@@ -1210,6 +1227,11 @@ msgid "Helptext_Admin_JobCreateEdit_Name"
 msgstr "The job name needs to be unique."
 
 msgid "Helptext_Admin_JobCreateEdit_Time"
+msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
+
+#, fuzzy
+#| msgid "Helptext_Admin_JobCreateEdit_Time"
+msgid "Helptext_Admin_JobCreateEdit_Type"
 msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
@@ -1668,7 +1690,7 @@ msgstr ""
 msgid "Helptext_Admin_Users_RoleCreate_UsageContext"
 msgstr ""
 "Set the role context: will this role be used for agents in the agent portal "
-"or for contacts in the customer portal."
+"or for contacts in the Self Service Portal."
 
 msgid "Helptext_Admin_Users_RoleCreate_User"
 msgstr "Only valid agents are available."
@@ -1841,8 +1863,8 @@ msgstr ""
 msgid "Helptext_Customers_ContactCreate_Validity"
 msgstr ""
 "Contacts can only be used if they are set “valid”. If a contact has access "
-"to agent portal and/or customer portal and is set \"invalid\" this accesses "
-"will be \"invalid\", too."
+"to agent portal and/or Self Service Portal and is set \"invalid\" this "
+"accesses will be \"invalid\", too."
 
 msgid "Helptext_Customers_ContactCreate_Zip"
 msgstr ""
@@ -1917,7 +1939,7 @@ msgstr "Insert additional information for the FAQ article."
 msgid "Helptext_FAQ_ArticleCreate_CustomerVisible"
 msgstr ""
 "If this checkbox is checked, this FAQ article is also visible for users of "
-"the customer portal."
+"the Self Service Portal."
 
 msgid "Helptext_FAQ_ArticleCreate_Language"
 msgstr "Insert the FAQ article language."
@@ -2053,6 +2075,11 @@ msgstr ""
 "Then choose the text modules you want to use in the context menu. You can "
 "narrow down the key word selection manually by entering more text."
 
+#, fuzzy
+#| msgid "Helptext_Tickets_Link_State"
+msgid "Helptext_Ticket_Dashboard_Search"
+msgstr "Search for tickets with the chosen state."
+
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
 "Choose if you want to save the ticket description only internally (Note) or "
@@ -2070,10 +2097,10 @@ msgstr ""
 
 msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
 msgstr ""
-"Choose if the following article is shown in the customer portal. If \"Email"
-"\" is choosen as chanal above, and one of the following form fields (To, Cc, "
-"Bcc) contains an adresss conected to the tickets customer, the checkbox will "
-"be set automatically and cannot be removed."
+"Choose if the following article is shown in the Self Service Portal. If "
+"\"Email\" is choosen as chanal above, and one of the following form fields "
+"(To, Cc, Bcc) contains an adresss conected to the tickets customer, the "
+"checkbox will be set automatically and cannot be removed."
 
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
 msgstr "Briefly summarize the article topic."
@@ -2156,10 +2183,10 @@ msgstr ""
 
 msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr ""
-"Choose if the following article is shown in the customer portal. If \"Email"
-"\" is choosen as chanal above, and one of the following form fields (To, Cc, "
-"Bcc) contains an adresss conected to the tickets customer, the checkbox will "
-"be set automatically and cannot be removed."
+"Choose if the following article is shown in the Self Service Portal. If "
+"\"Email\" is choosen as chanal above, and one of the following form fields "
+"(To, Cc, Bcc) contains an adresss conected to the tickets customer, the "
+"checkbox will be set automatically and cannot be removed."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
 msgstr ""
@@ -2226,8 +2253,8 @@ msgstr "Briefly summarzie the ticket topic."
 
 msgid "Helptext_Users_UserCreateEdit_Access"
 msgstr ""
-"Set if the contact will be allowed to login to the agent portal (= the "
-"contact also becomes an agent) and/or the customer portal. According to "
+"Set if the contact will be allowed to login to the Agent Portal (= the "
+"contact also becomes an agent) and/or the Self Service Portal. According to "
 "selection, further form fields will be loaded. If an access to one of the "
 "portals was set once and is removed later, the relevant portal user will be "
 "set \"invalid\"."
@@ -2465,9 +2492,6 @@ msgstr ""
 msgid "Link FAQ with"
 msgstr ""
 
-msgid "Link Objects"
-msgstr ""
-
 msgid "Links"
 msgstr ""
 
@@ -2487,72 +2511,6 @@ msgid "Link to ticket"
 msgstr ""
 
 msgid "Link Type"
-msgstr ""
-
-msgid "Load Config Item"
-msgstr "Loading Assets"
-
-msgid "Load Config Item Class"
-msgstr "Loading Asset Class"
-
-msgid "Load Config Items"
-msgstr "Loading Assets"
-
-msgid "Load Contact"
-msgstr "Loading Contact"
-
-msgid "Load Email Account"
-msgstr "Loading Email Account"
-
-msgid "Load Email Filter"
-msgstr "Loading Email Filter"
-
-msgid "Load FAQ Article"
-msgstr "Loading FAQ Article"
-
-msgid "Load FAQ Articles"
-msgstr "Loading FAQ Articles"
-
-msgid "Load FAQ Category"
-msgstr "Loading FAQ Category"
-
-msgid "Load Job"
-msgstr "Loading Job"
-
-msgid "Load Organisation"
-msgstr "Loading Organisation"
-
-msgid "Load Organisations"
-msgstr ""
-
-msgid "Load Queue"
-msgstr "Loading Team"
-
-msgid "Load Role"
-msgstr "Loading Role"
-
-msgid "Load System Address"
-msgstr "Loading System Address"
-
-msgid "Load Ticket"
-msgstr "Loading Ticket"
-
-msgid "Load Ticket Priority"
-msgstr "Loading Ticket Priority"
-
-msgid "Load Tickets"
-msgstr "Loading Tickets"
-
-msgid "Load Ticket State"
-msgstr "Loading Ticket State"
-
-msgid "Load Ticket Type"
-msgstr "Loading Ticket Type"
-
-msgid "Load User"
-msgstr "Loading User"
-
-msgid "Load Webform"
 msgstr ""
 
 msgid "Localisation"
@@ -2729,9 +2687,6 @@ msgstr ""
 msgid "New Ticket"
 msgstr ""
 
-msgid "New Ticket Job"
-msgstr ""
-
 msgid "New Tickets"
 msgstr ""
 
@@ -2855,6 +2810,9 @@ msgstr ""
 msgid "No version available"
 msgstr ""
 
+msgid "Nr."
+msgstr ""
+
 msgid "Number"
 msgstr ""
 
@@ -2877,6 +2835,9 @@ msgid "Object"
 msgstr ""
 
 msgid "Object Id"
+msgstr ""
+
+msgid "Object ID"
 msgstr ""
 
 msgid "Objects"
@@ -2925,6 +2886,9 @@ msgid "Other"
 msgstr ""
 
 msgid "Overall"
+msgstr ""
+
+msgid "Overview"
 msgstr ""
 
 msgid "Overview Config Items"
@@ -3021,6 +2985,9 @@ msgid "Plan End"
 msgstr ""
 
 msgid "Please enter a search term."
+msgstr ""
+
+msgid "Please enter a search term for a organisation."
 msgstr ""
 
 msgid "Please select a contact"
@@ -3362,11 +3329,14 @@ msgstr ""
 msgid "Show all"
 msgstr ""
 
+msgid "Show Backlog"
+msgstr ""
+
 msgid "Show in agent preferences"
 msgstr ""
 
 msgid "Show in Customer Portal"
-msgstr ""
+msgstr "Show in Self Service Portal"
 
 msgid "Show title in form"
 msgstr ""
@@ -3407,6 +3377,9 @@ msgstr ""
 msgid "Split Option"
 msgstr ""
 
+msgid "Start by"
+msgstr ""
+
 msgid "Start Import"
 msgstr ""
 
@@ -3417,6 +3390,9 @@ msgid "Start search"
 msgstr ""
 
 msgid "starts with"
+msgstr ""
+
+msgid "Start time"
 msgstr ""
 
 msgid "State"
@@ -3477,7 +3453,7 @@ msgid "Switch"
 msgstr ""
 
 msgid "Switch to customer portal."
-msgstr ""
+msgstr "Switch to Self Service Portal."
 
 msgid "Symptom"
 msgstr ""
@@ -3718,6 +3694,9 @@ msgid "Type Data"
 msgstr ""
 
 msgid "Type Information"
+msgstr ""
+
+msgid "Type of Job"
 msgstr ""
 
 msgid "Types"
@@ -3984,6 +3963,66 @@ msgstr ""
 msgid "ZIP"
 msgstr ""
 
+#~ msgid "Load Ticket State"
+#~ msgstr "Loading Ticket State"
+
+#~ msgid "Load Config Item"
+#~ msgstr "Loading Assets"
+
+#~ msgid "Load Config Item Class"
+#~ msgstr "Loading Asset Class"
+
+#~ msgid "Load Config Items"
+#~ msgstr "Loading Assets"
+
+#~ msgid "Load Contact"
+#~ msgstr "Loading Contact"
+
+#~ msgid "Load Email Account"
+#~ msgstr "Loading Email Account"
+
+#~ msgid "Load Email Filter"
+#~ msgstr "Loading Email Filter"
+
+#~ msgid "Load FAQ Article"
+#~ msgstr "Loading FAQ Article"
+
+#~ msgid "Load FAQ Articles"
+#~ msgstr "Loading FAQ Articles"
+
+#~ msgid "Load FAQ Category"
+#~ msgstr "Loading FAQ Category"
+
+#~ msgid "Load Job"
+#~ msgstr "Loading Job"
+
+#~ msgid "Load Organisation"
+#~ msgstr "Loading Organisation"
+
+#~ msgid "Load Queue"
+#~ msgstr "Loading Team"
+
+#~ msgid "Load Role"
+#~ msgstr "Loading Role"
+
+#~ msgid "Load System Address"
+#~ msgstr "Loading System Address"
+
+#~ msgid "Load Ticket"
+#~ msgstr "Loading Ticket"
+
+#~ msgid "Load Ticket Priority"
+#~ msgstr "Loading Ticket Priority"
+
+#~ msgid "Load Tickets"
+#~ msgstr "Loading Tickets"
+
+#~ msgid "Load Ticket Type"
+#~ msgstr "Loading Ticket Type"
+
+#~ msgid "Load User"
+#~ msgstr "Loading User"
+
 #~ msgid "Helptext_Tickets_TicketCreate_Links"
 #~ msgstr "Link this ticket with an asset, a FAQ article or another ticket."
 
@@ -4030,9 +4069,6 @@ msgstr ""
 
 #~ msgid "Helptext_Customers_ContactCreate_Login"
 #~ msgstr "The login name needs to be unique and cannot be changed afterwards."
-
-#~ msgid "Assigned Queues"
-#~ msgstr "Assigned Teams"
 
 #~ msgid "Acions"
 #~ msgstr "Actions"
@@ -4343,9 +4379,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Serach for assets with the same number or part of the same number (min. 1 "
 #~ "character)."
-
-#~ msgid "Closing time"
-#~ msgstr "Closed at"
 
 #~ msgid "Config Item class. Can not be changed."
 #~ msgstr "Asset Class. Can not be changed."

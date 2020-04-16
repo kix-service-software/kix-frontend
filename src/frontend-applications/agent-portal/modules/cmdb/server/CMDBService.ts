@@ -42,6 +42,7 @@ import { ConfigItemFactory } from "./ConfigItemFactory";
 import { ConfigItemImageFactory } from "./ConfigItemImageFactory";
 import { Error } from "../../../../../server/model/Error";
 import { AttachmentLoadingOptions } from "../model/AttachmentLoadingOptions";
+import { VersionProperty } from "../model/VersionProperty";
 
 export class CMDBAPIService extends KIXObjectAPIService {
 
@@ -93,15 +94,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
         switch (objectType) {
             case KIXObjectType.CONFIG_ITEM:
-                if (!loadingOptions) {
-                    loadingOptions = new KIXObjectLoadingOptions(
-                        null, null, null, [ConfigItemProperty.CURRENT_VERSION]
-                    );
-                } else if (loadingOptions.includes) {
-                    loadingOptions.includes.push(ConfigItemProperty.CURRENT_VERSION);
-                } else {
-                    loadingOptions.includes = [ConfigItemProperty.CURRENT_VERSION];
-                }
                 objects = await this.getConfigItems(token, objectIds, loadingOptions);
                 break;
             case KIXObjectType.CONFIG_ITEM_VERSION:
@@ -138,13 +130,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
         token: string, configItemIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions
     ): Promise<ConfigItem[]> {
         loadingOptions = loadingOptions || new KIXObjectLoadingOptions();
-        if (loadingOptions.includes && !!loadingOptions.includes.length) {
-            if (!loadingOptions.includes.some((i) => i === ConfigItemProperty.CURRENT_VERSION)) {
-                loadingOptions.includes = [...loadingOptions.includes, ConfigItemProperty.CURRENT_VERSION];
-            }
-        } else {
-            loadingOptions.includes = [ConfigItemProperty.CURRENT_VERSION];
-        }
 
         const query = this.prepareQuery(loadingOptions);
 
@@ -302,10 +287,10 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
             const configItemId = response.ConfigItemID;
 
-            await this.createLinks(
-                token, clientRequestId, Number(configItemId),
-                this.getParameterValue(parameter, ConfigItemProperty.LINKS)
-            );
+            const links = this.getParameterValue(parameter, ConfigItemProperty.LINKS);
+            if (links && links.length) {
+                await this.createLinks(token, clientRequestId, Number(configItemId), links);
+            }
 
             return configItemId;
         }
@@ -318,7 +303,24 @@ export class CMDBAPIService extends KIXObjectAPIService {
         throw new Error('', "Method not implemented.");
     }
 
+    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return criteria.filter((c) =>
+            c.property !== ConfigItemProperty.CUR_INCI_STATE_ID &&
+            c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
+            c.property !== ConfigItemProperty.CONFIG_ITEM_ID &&
+            c.property !== ConfigItemProperty.NUMBER &&
+            c.property !== ConfigItemProperty.NAME &&
+            c.property !== 'InciStateIDs' &&
+            c.property !== 'DeplStateIDs' &&
+            c.property !== 'ClassIDs'
+        );
+    }
+
     protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return [];
+        return criteria.filter((c) =>
+            c.property !== ConfigItemProperty.CLASS_ID &&
+            !c.property.startsWith('Data') &&
+            !c.property.startsWith('CurrentVersion')
+        );
     }
 }

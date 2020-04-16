@@ -15,9 +15,6 @@ import { FAQContext } from "./FAQContext";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class FAQDetailsContext extends Context {
 
@@ -28,12 +25,12 @@ export class FAQDetailsContext extends Context {
     }
 
     public async getDisplayText(short?: boolean): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<FAQArticle>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<FAQArticle>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const object = await this.getObject<FAQArticle>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation(this.getIcon(), [FAQContext.CONTEXT_ID], text);
     }
 
@@ -58,29 +55,6 @@ export class FAQDetailsContext extends Context {
             ['Links']
         );
 
-        const faqArticleId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load FAQ Article'
-            });
-        }, 500);
-
-        const faqArticles = await KIXObjectService.loadObjects<FAQArticle>(
-            KIXObjectType.FAQ_ARTICLE, [faqArticleId], loadingOptions, null, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let faqArticle: FAQArticle;
-        if (faqArticles && faqArticles.length) {
-            faqArticle = faqArticles[0];
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-        return faqArticle;
+        return await this.loadDetailsObject<FAQArticle>(KIXObjectType.FAQ_ARTICLE, loadingOptions);
     }
 }

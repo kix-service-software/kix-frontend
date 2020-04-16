@@ -19,17 +19,17 @@ import { AuthenticationSocketClient } from "../../../../modules/base-components/
 import { UIComponentPermission } from "../../../../model/UIComponentPermission";
 import { CRUD } from "../../../../../../server/model/rest/CRUD";
 import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { IDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form/IDynamicFormManager";
 import { SearchOperator } from "../../model/SearchOperator";
 import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
 import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
 import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 import { TableFactoryService } from "../../../base-components/webapp/core/table";
+import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form";
 
 export abstract class SearchDefinition {
 
-    public formManager: IDynamicFormManager;
+    public formManager: AbstractDynamicFormManager;
 
     public constructor(public objectType: KIXObjectType | string) { }
 
@@ -46,8 +46,7 @@ export abstract class SearchDefinition {
     public async getDisplaySearchValue(
         property: string, parameter: Array<[string, any]>, value: any, type: FilterDataType
     ): Promise<string> {
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
-        return await labelProvider.getPropertyValueDisplayText(property, value);
+        return await LabelService.getInstance().getPropertyValueDisplayText(this.objectType, property, value);
     }
 
     public async searchValues(
@@ -74,8 +73,9 @@ export abstract class SearchDefinition {
         });
 
         for (const c of filteredCriteria) {
-            if (KIXObjectService.isDynamicFieldProperty(c.property)) {
-                const field = await KIXObjectService.loadDynamicField(c.property);
+            const dfName = KIXObjectService.getDynamicFieldName(c.property);
+            if (dfName) {
+                const field = await KIXObjectService.loadDynamicField(dfName);
                 if (field) {
                     if (field.FieldType === DynamicFieldTypes.DATE) {
                         c.type = FilterDataType.DATE;

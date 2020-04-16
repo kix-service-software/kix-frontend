@@ -69,9 +69,17 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
     }
 
     public async getObjectText(
-        ciClass: ConfigItemClass, id: boolean = true, name: boolean = true, translatable?: boolean
+        ciClass: ConfigItemClass, id: boolean = true, name: boolean = true, translatable: boolean = true
     ): Promise<string> {
-        return ciClass.Name;
+        let displayValue = ciClass.Name;
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

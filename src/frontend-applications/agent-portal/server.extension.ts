@@ -10,8 +10,9 @@
 import { Server } from "./server/Server";
 import { IFrontendServerExtension } from "../../server/model/IFrontendServerExtension";
 import { IServer } from "../../server/model/IServer";
+import { KIXExtension } from "../../server/model/KIXExtension";
 
-export class Extension implements IFrontendServerExtension {
+class Extension extends KIXExtension implements IFrontendServerExtension {
 
     public name: string = 'Agent Portal Server';
 

@@ -29,7 +29,9 @@ import { FormPageConfiguration } from "../../model/configuration/FormPageConfigu
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
 import { FormContext } from "../../model/configuration/FormContext";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return NewContactDialogContext.CONTEXT_ID;

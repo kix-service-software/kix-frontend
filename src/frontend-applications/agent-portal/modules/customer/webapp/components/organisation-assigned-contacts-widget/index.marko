@@ -6,16 +6,18 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
-<widget instanceId=state.instanceId title=state.title contentActions=state.actions>
-    <@content>
-        <div.assigned-contacts-container>
-            <if(state.table)>
+<if(state.table)>
+    <widget instanceId=state.instanceId title=state.title contentActions=state.actions>
+        <@content>
+            <div.assigned-contacts-container>
                 <div.contact-filter>
                     <filter filterCount=state.filterCount on-filter("filter")/>
                 </div>
                 <standard-table-NEW table=state.table/>
-            </if>
-        </div>
-    </@content>
-</widget>
+            </div>
+        </@content>
+    </widget>
+</if>
+<else>
+    <table-placeholder/>
+</else>

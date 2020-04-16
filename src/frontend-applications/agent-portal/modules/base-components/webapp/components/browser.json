@@ -51,6 +51,8 @@
         "require ./overlay/toast",
         "require ./overlay-icon",
         "require ./quick-search",
+        "require ./placeholder/table-placeholder",
+        "require ./placeholder/chart-placeholder",
         "require ./referenced-objects-widget",
         "require ./rich-text-input",
         "require ./router-outlet",

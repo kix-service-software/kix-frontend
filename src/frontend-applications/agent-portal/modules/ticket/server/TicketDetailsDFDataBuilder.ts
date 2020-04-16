@@ -16,7 +16,7 @@ import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
 import { ConfigItemProperty } from "../../cmdb/model/ConfigItemProperty";
 import { DynamicFieldAPIService } from "../../dynamic-fields/server/DynamicFieldService";
-import { DateTimeUtil } from "../../../server/services/DateTimeUtil";
+import { DateTimeAPIUtil } from "../../../server/services/DateTimeAPIUtil";
 import { TranslationAPIService } from "../../translation/server/TranslationService";
 import { CMDBAPIService } from "../../cmdb/server/CMDBService";
 
@@ -68,18 +68,18 @@ export class TicketDetailsDFDataBuilder {
             const valuesPromises = [];
             for (const v of fieldValue.Value) {
                 if (field.FieldType === DynamicFieldTypes.DATE) {
-                    valuesPromises.push(DateTimeUtil.getLocalDateString(token, v));
+                    valuesPromises.push(DateTimeAPIUtil.getLocalDateString(token, v));
                 } else {
-                    valuesPromises.push(DateTimeUtil.getLocalDateTimeString(token, v));
+                    valuesPromises.push(DateTimeAPIUtil.getLocalDateTimeString(token, v));
                 }
             }
             values = await Promise.all<string>(valuesPromises);
         } else {
             let v: string;
             if (field.FieldType === DynamicFieldTypes.DATE) {
-                v = await DateTimeUtil.getLocalDateString(token, fieldValue.DisplayValue);
+                v = await DateTimeAPIUtil.getLocalDateString(token, fieldValue.DisplayValue);
             } else {
-                v = await DateTimeUtil.getLocalDateTimeString(token, fieldValue.DisplayValue);
+                v = await DateTimeAPIUtil.getLocalDateTimeString(token, fieldValue.DisplayValue);
             }
             values = [v];
         }
@@ -122,7 +122,7 @@ export class TicketDetailsDFDataBuilder {
         ) {
             for (const v of fieldValue.Value) {
                 const checklist = JSON.parse(v);
-                const counts = DynamicFieldFormUtil.countValues(checklist);
+                const counts = DynamicFieldFormUtil.getInstance().countValues(checklist);
                 values.push(`${counts[0]}/${counts[1]}`);
             }
         }

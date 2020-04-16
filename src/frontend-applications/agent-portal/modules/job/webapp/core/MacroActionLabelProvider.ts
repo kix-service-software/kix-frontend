@@ -16,6 +16,7 @@ import { TranslationService } from "../../../translation/webapp/core/Translation
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { MacroActionType } from "../../model/MacroActionType";
+import { Macro } from "../../model/Macro";
 
 export class MacroActionLabelProvider extends LabelProvider {
 
@@ -56,7 +57,29 @@ export class MacroActionLabelProvider extends LabelProvider {
     public async getDisplayText(
         macroAction: MacroAction, property: string, value?: string, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = await this.getPropertyValueDisplayText(property, macroAction[property], translatable);
+        let displayValue: string;
+        switch (property) {
+            case MacroActionProperty.TYPE:
+                if (value && macroAction) {
+                    const macros = await KIXObjectService.loadObjects<Macro>(
+                        KIXObjectType.MACRO, [macroAction.MacroID]
+                    );
+
+                    if (macros && macros.length) {
+                        const type = macros[0].Type;
+                        const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
+                            KIXObjectType.MACRO_ACTION_TYPE, [value], null, { id: type }, true
+                        ).catch((error): MacroActionType[] => []);
+                        if (macroActionTypes && !!macroActionTypes.length) {
+                            displayValue = macroActionTypes[0].DisplayName;
+                        }
+                    }
+                }
+                break;
+            default:
+                displayValue = await this.getPropertyValueDisplayText(property, macroAction[property], translatable);
+
+        }
 
         if (displayValue) {
             displayValue = await TranslationService.translate(
@@ -76,16 +99,6 @@ export class MacroActionLabelProvider extends LabelProvider {
                 displayValue = value && value === 2
                     ? await TranslationService.translate('Translatable#Yes')
                     : await TranslationService.translate('Translatable#No');
-                break;
-            case MacroActionProperty.TYPE:
-                if (value) {
-                    const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                        KIXObjectType.MACRO_ACTION_TYPE, [value], null, null, true
-                    ).catch((error): MacroActionType[] => []);
-                    if (macroActionTypes && !!macroActionTypes.length) {
-                        displayValue = macroActionTypes[0].DisplayName;
-                    }
-                }
                 break;
 
             default:

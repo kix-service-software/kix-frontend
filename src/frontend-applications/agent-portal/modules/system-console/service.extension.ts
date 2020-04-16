@@ -10,7 +10,9 @@
 import { IServiceExtension } from "../../server/extensions/IServiceExtension";
 import { ConsoleCommandService } from "./server/ConsoleCommandService";
 
-class Extension implements IServiceExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
         ConsoleCommandService.getInstance();

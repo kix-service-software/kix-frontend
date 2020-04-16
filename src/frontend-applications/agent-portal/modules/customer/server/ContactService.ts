@@ -217,19 +217,24 @@ export class ContactAPIService extends KIXObjectAPIService {
         const filterCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.FULLTEXT
                 && !this.isUserProperty(f.property)
+                && f.property !== ContactProperty.ORGANISATION_IDS
         );
 
         return filterCriteria;
     }
 
     protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const filterCriteria = criteria.filter(
+        const searchCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
-                && f.property !== ContactProperty.ORGANISATION_IDS
                 && f.property !== KIXObjectProperty.VALID_ID
         );
 
-        return filterCriteria;
+        const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);
+        if (loginProperty) {
+            loginProperty.property = 'Login';
+        }
+
+        return searchCriteria;
     }
 
     private isUserProperty(property: string): boolean {

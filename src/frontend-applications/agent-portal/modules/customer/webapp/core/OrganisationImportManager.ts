@@ -67,7 +67,6 @@ export class OrganisationImportManager extends ImportManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
         const attributes = [
             OrganisationProperty.NAME,
             OrganisationProperty.URL,
@@ -79,7 +78,7 @@ export class OrganisationImportManager extends ImportManager {
             KIXObjectProperty.VALID_ID
         ];
         for (const attribute of attributes) {
-            const label = await labelProvider.getPropertyText(attribute);
+            const label = await LabelService.getInstance().getPropertyText(attribute, this.objectType);
             properties.push([attribute, label]);
         }
 

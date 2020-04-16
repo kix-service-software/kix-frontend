@@ -52,7 +52,7 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(DynamicFieldService.getInstance());
         ServiceRegistry.registerServiceInstance(DynamicFieldFormService.getInstance());
 
-        PlaceholderService.getInstance().registerPlaceholderHandler(new DynamicFieldValuePlaceholderHandler());
+        PlaceholderService.getInstance().registerPlaceholderHandler(DynamicFieldValuePlaceholderHandler.getInstance());
 
         FactoryService.getInstance().registerFactory(
             KIXObjectType.DYNAMIC_FIELD, DynamicFieldBrowserFactory.getInstance()

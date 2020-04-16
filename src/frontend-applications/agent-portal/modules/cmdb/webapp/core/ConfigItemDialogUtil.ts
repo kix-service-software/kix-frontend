@@ -35,6 +35,19 @@ export class ConfigItemDialogUtil {
         }
     }
 
+    public static async duplicate(configItem: ConfigItem): Promise<void> {
+        const newContext = await ContextService.getInstance().getContext<NewConfigItemDialogContext>(
+            NewConfigItemDialogContext.CONTEXT_ID
+        );
+
+        newContext.setAdditionalInformation('CI_CLASS_ID', configItem.ClassID);
+
+        ContextService.getInstance().setDialogContext(
+            NewConfigItemDialogContext.CONTEXT_ID, KIXObjectType.CONFIG_ITEM,
+            ContextMode.CREATE, configItem.ConfigItemID
+        );
+    }
+
     private static async  getConfigItemId(): Promise<number> {
         let configItemId: number;
 
@@ -62,7 +75,6 @@ export class ConfigItemDialogUtil {
                 editContext.setAdditionalInformation('CI_CLASS_ID', configItem.ClassID);
             }
         }
-
     }
 
 }

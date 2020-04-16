@@ -13,6 +13,7 @@ import { Macro } from "./Macro";
 import { ArticleProperty } from "../../ticket/model/ArticleProperty";
 import { ExecPlan } from "./ExecPlan";
 import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
+import { JobTypes } from "./JobTypes";
 
 export class Job extends KIXObject {
 
@@ -24,7 +25,7 @@ export class Job extends KIXObject {
 
     public Name: string;
 
-    public Type: string;
+    public Type: JobTypes;
 
     public LastExecutionTime: string;
 
@@ -36,7 +37,7 @@ export class Job extends KIXObject {
 
     public ExecPlans: ExecPlan[];
 
-    public Filter: {};
+    public Filter: any;
 
     public constructor(job?: Job) {
         super(job);

@@ -99,7 +99,6 @@ export class ContactImportManager extends ImportManager {
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [];
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
         const attributes = [
             ContactProperty.PRIMARY_ORGANISATION_ID,
             ContactProperty.FIRSTNAME,
@@ -117,7 +116,7 @@ export class ContactImportManager extends ImportManager {
             KIXObjectProperty.VALID_ID
         ];
         for (const attribute of attributes) {
-            const label = await labelProvider.getPropertyText(attribute);
+            const label = await LabelService.getInstance().getPropertyText(attribute, this.objectType);
             properties.push([attribute, label]);
         }
 
@@ -150,7 +149,7 @@ export class ContactImportManager extends ImportManager {
                     );
 
                     for (const o of organisations) {
-                        const displayValue = await LabelService.getInstance().getText(o);
+                        const displayValue = await LabelService.getInstance().getObjectText(o);
                         nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(o.KIXObjectType, o.ID)));
                     }
                 }

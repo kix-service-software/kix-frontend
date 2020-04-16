@@ -43,6 +43,8 @@ export class Organisation extends KIXObject<Organisation> {
 
     public TicketStats: TicketStats;
 
+    public AssignedConfigItems: number[];
+
     public constructor(organisation?: Organisation) {
         super(organisation);
 
@@ -67,6 +69,8 @@ export class Organisation extends KIXObject<Organisation> {
             this.Tickets = organisation.Tickets
                 ? organisation.Tickets.map((t) => new Ticket(t))
                 : [];
+
+            this.AssignedConfigItems = organisation.AssignedConfigItems ? organisation.AssignedConfigItems : [];
         }
     }
 

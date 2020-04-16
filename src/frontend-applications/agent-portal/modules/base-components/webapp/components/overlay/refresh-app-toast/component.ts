@@ -15,10 +15,13 @@ import { EventService } from '../../../../../../modules/base-components/webapp/c
 import { ContextService } from '../../../core/ContextService';
 import { ContextType } from '../../../../../../model/ContextType';
 import { AdditionalContextInformation } from '../../../core/AdditionalContextInformation';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 
 class Component {
 
     private state: ComponentState;
+
+    private objectType: KIXObjectType | string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -27,6 +30,7 @@ class Component {
     public onInput(input: RefreshToastSettings) {
         this.state.message = input.message;
         this.state.reloadApp = input.reloadApp;
+        this.objectType = input.objectType;
     }
 
     public refreshClicked(event: any): void {
@@ -36,8 +40,11 @@ class Component {
             ContextHistory.getInstance().removeBrowserListener();
             location.reload();
         } else {
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
+            EventService.getInstance().publish(
+                ApplicationEvent.OBJECT_UPDATED, { objectType: this.objectType }
+            );
         }
+        EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
     }
 
     public dontShowClicked(event: any): void {

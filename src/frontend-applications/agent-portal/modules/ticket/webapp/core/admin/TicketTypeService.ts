@@ -49,7 +49,7 @@ export class TicketTypeService extends KIXObjectService<TicketType> {
         }
 
         if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
         }
 
         return objects;

@@ -126,7 +126,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                                 null, null, null, null, ['Preferences']
                             );
                             const users = await KIXObjectService.loadObjects<User>(
-                                KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true
+                                KIXObjectType.USER, [ticket.OwnerID], loadingOptions, null, true, true, true
                             ).catch((error) => [] as User[]);
                             if (users && !!users.length) {
                                 result = await UserPlaceholderHandler.prototype.replace(
@@ -142,7 +142,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                                 null, null, null, null, ['Preferences']
                             );
                             const users = await KIXObjectService.loadObjects<User>(
-                                KIXObjectType.USER, [ticket.ResponsibleID], loadingOptions, null, true
+                                KIXObjectType.USER, [ticket.ResponsibleID], loadingOptions, null, true, true, true
                             ).catch((error) => [] as User[]);
                             if (users && !!users.length) {
                                 result = await UserPlaceholderHandler.prototype.replace(
@@ -192,9 +192,8 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
         if (
             PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) && DynamicFieldValuePlaceholderHandler
         ) {
-            result = await DynamicFieldValuePlaceholderHandler.prototype.replaceDFValue(ticket, optionsString);
+            result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(ticket, optionsString);
         } else if (this.isKnownProperty(attribute)) {
-            const ticketLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
             switch (attribute) {
                 case TicketProperty.STATE_ID:
                 case TicketProperty.QUEUE_ID:
@@ -254,7 +253,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                 case TicketProperty.BODY:
                     break;
                 default:
-                    result = await ticketLabelProvider.getDisplayText(ticket, attribute, undefined, false);
+                    result = await LabelService.getInstance().getDisplayText(ticket, attribute, undefined, false);
                     result = typeof result !== 'undefined' && result !== null
                         ? await TranslationService.translate(result.toString(), undefined, language) : '';
             }

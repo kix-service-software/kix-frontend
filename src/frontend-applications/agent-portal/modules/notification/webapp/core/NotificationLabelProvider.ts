@@ -133,12 +133,12 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_RECIPIENT_AGENTS:
                 if (value && Array.isArray(value)) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, value, null, null, true
+                        KIXObjectType.USER, value, null, null, true, true, true
                     ).catch((error) => [] as User[]);
                     const displayTexts = [];
                     if (users && !!users.length) {
                         for (const user of users) {
-                            const text = await LabelService.getInstance().getText(user);
+                            const text = await LabelService.getInstance().getObjectText(user);
                             displayTexts.push(text);
                         }
                     }
@@ -154,7 +154,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     const displayTexts = [];
                     if (roles && !!roles.length) {
                         for (const role of roles) {
-                            const text = await LabelService.getInstance().getText(role);
+                            const text = await LabelService.getInstance().getObjectText(role);
                             displayTexts.push(text);
                         }
                     }
@@ -311,12 +311,12 @@ export class NotificationLabelProvider extends LabelProvider {
             case NotificationProperty.DATA_RECIPIENT_AGENTS:
                 if (value && Array.isArray(value)) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, value, null, null, true
+                        KIXObjectType.USER, value, null, null, true, true, true
                     ).catch((error) => [] as User[]);
                     const displayTexts = [];
                     if (users && !!users.length) {
                         for (const user of users) {
-                            const text = await LabelService.getInstance().getText(user);
+                            const text = await LabelService.getInstance().getObjectText(user);
                             displayTexts.push(text);
                         }
                     }
@@ -331,7 +331,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     const displayTexts = [];
                     if (roles && !!roles.length) {
                         for (const role of roles) {
-                            const text = await LabelService.getInstance().getText(role);
+                            const text = await LabelService.getInstance().getObjectText(role);
                             displayTexts.push(text);
                         }
                     }

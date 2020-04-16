@@ -32,7 +32,9 @@ import { ModuleConfigurationService } from "../../server/services/configuration"
 import { FormContext } from "../../model/configuration/FormContext";
 import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return NewNotificationDialogContext.CONTEXT_ID;

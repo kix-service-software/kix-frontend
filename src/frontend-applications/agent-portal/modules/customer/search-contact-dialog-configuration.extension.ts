@@ -28,8 +28,9 @@ import { ContactProperty } from "./model/ContactProperty";
 import { ConfigurationService } from "../../../../server/services/ConfigurationService";
 import { ModuleConfigurationService } from "../../server/services/configuration";
 import { UserProperty } from "../user/model/UserProperty";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class ModuleExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return ContactSearchContext.CONTEXT_ID;
@@ -103,5 +104,5 @@ export class ModuleExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new ModuleExtension();
+    return new Extension();
 };

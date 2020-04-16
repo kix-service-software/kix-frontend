@@ -18,7 +18,7 @@ export class DynamicFieldValue {
     public DisplayValueHTML: string;
     public DisplayValueShort: string;
 
-    public constructor(value: DynamicFieldValue) {
+    public constructor(value?: DynamicFieldValue) {
         if (value) {
             this.ID = value.ID;
             this.Name = value.Name;

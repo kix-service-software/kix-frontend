@@ -27,7 +27,6 @@ import { ComponentContent } from "./ComponentContent";
 import { OverlayService } from "./OverlayService";
 import { OverlayType } from "./OverlayType";
 import { Error } from "../../../../../../server/model/Error";
-import { AbstractNewDialog } from "./AbstractNewDialog";
 
 export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 
@@ -138,19 +137,6 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
         DialogService.getInstance().setMainDialogLoading(false);
         DialogService.getInstance().submitMainDialog();
-
-        if (this.contextId) {
-            const context = await ContextService.getInstance().getContext(this.contextId);
-            if (context) {
-                if (context.getDescriptor().contextType === ContextType.DIALOG) {
-                    EventService.getInstance().publish(ApplicationEvent.REFRESH);
-                } else {
-                    context.getObject(this.objectType, true);
-                }
-            }
-        } else {
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
-        }
 
         FormService.getInstance().deleteFormInstance(this.state.formId);
         BrowserUtil.openSuccessOverlay(this.successHint);

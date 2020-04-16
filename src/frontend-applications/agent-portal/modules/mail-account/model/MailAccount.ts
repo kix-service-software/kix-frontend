@@ -12,7 +12,7 @@ import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 
 export class MailAccount extends KIXObject {
 
-    public KIXObjectType: KIXObjectType;
+    public KIXObjectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT;
 
     public ObjectId: string | number;
 

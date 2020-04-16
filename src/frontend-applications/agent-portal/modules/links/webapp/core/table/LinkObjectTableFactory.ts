@@ -43,7 +43,7 @@ export class LinkObjectTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(null, null, null,
-                LinkObjectProperty.LINKED_OBJECT_TYPE, true, true, true, true, 200, true, true
+                LinkObjectProperty.LINKED_OBJECT_TYPE, true, true, true, true, 200, true, true, true
             ),
             new DefaultColumnConfiguration(null, null, null,
                 LinkObjectProperty.LINKED_OBJECT_DISPLAY_ID, true, false, true, true, 200, true, true

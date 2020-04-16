@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { CMDBService, NewConfigItemDialogContext, ConfigItemDetailsContext } from '../../core';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
@@ -31,20 +31,22 @@ import { ComponentContent } from '../../../../../modules/base-components/webapp/
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { Error } from '../../../../../../../server/model/Error';
+import { ContextType } from '../../../../../model/ContextType';
+import { ConfigItem } from '../../../model/ConfigItem';
 
 class Component {
 
     private state: ComponentState;
 
-    private classId: string;
+    private classId: number;
 
     public onCreate(): void {
         this.state = new ComponentState();
         this.state.loadNodes = this.load.bind(this);
     }
 
-    private async load(): Promise<TreeNode[]> {
-        return await CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
+    private load(): Promise<TreeNode[]> {
+        return CMDBService.getInstance().getTreeNodes(ConfigItemProperty.CLASS_ID);
     }
 
     public async onMount(): Promise<void> {
@@ -56,6 +58,27 @@ class Component {
 
         const hint = await TranslationService.translate('Translatable#Helptext_CMDB_ConfigItemCreate_Class');
         this.state.hint = hint.startsWith('Helptext_') ? null : hint;
+
+        const context = ContextService.getInstance().getActiveContext();
+        if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+            const configItem = await context.getObject<ConfigItem>(KIXObjectType.CONFIG_ITEM);
+            if (configItem) {
+                this.state.hasObject = true;
+                context.setAdditionalInformation('CI_CLASS_ID', configItem.ClassID);
+                this.classId = configItem.ClassID;
+                this.state.prepared = true;
+
+                setTimeout(() => {
+                    const treeHandler = TreeService.getInstance().getTreeHandler('new-ci-class-form-list');
+                    if (treeHandler && this.state.hasObject) {
+                        let nodes = treeHandler.getTree();
+                        nodes = nodes.filter((n) => n.id === this.classId);
+                        treeHandler.setTree(nodes);
+                        treeHandler.setSelection(nodes, true, true, true);
+                    }
+                }, 500);
+            }
+        }
     }
 
     public async onDestroy(): Promise<void> {
@@ -120,7 +143,7 @@ class Component {
         }
     }
 
-    private async getCIClass(classId: string): Promise<ConfigItemClass> {
+    private async getCIClass(classId: number): Promise<ConfigItemClass> {
         const classes = await KIXObjectService.loadObjects<ConfigItemClass>(
             KIXObjectType.CONFIG_ITEM_CLASS, [classId],
             new KIXObjectLoadingOptions(

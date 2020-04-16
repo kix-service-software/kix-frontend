@@ -21,6 +21,7 @@ import { TableHeaderHeight } from '../../../../../model/configuration/TableHeade
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { IdService } from '../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -76,7 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
         );
         const table = await TableFactoryService.getInstance().createTable(
-            'user-assigned-roles', KIXObjectType.ROLE, tableConfiguration, null,
+            IdService.generateDateBasedId('user-assigned-roles-'), KIXObjectType.ROLE, tableConfiguration, null,
             UserDetailsContext.CONTEXT_ID, true, undefined, false, true, true
         );
         this.state.table = table;

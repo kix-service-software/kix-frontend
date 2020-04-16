@@ -15,9 +15,6 @@ import { TranslationService } from "../../../../../../../modules/translation/web
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class TicketTypeDetailsContext extends Context {
 
@@ -28,7 +25,7 @@ export class TicketTypeDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<TicketType>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<TicketType>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -42,7 +39,7 @@ export class TicketTypeDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.TICKET_TYPE, reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadTicketType(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.TICKET_TYPE);
 
         if (reload) {
             this.listeners.forEach(
@@ -51,35 +48,6 @@ export class TicketTypeDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadTicketType(changedProperties: string[] = [], cache: boolean = true): Promise<TicketType> {
-        const ticketTypeId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Ticket Type'
-            });
-        }, 500);
-
-        const ticketTypes = await KIXObjectService.loadObjects<TicketType>(
-            KIXObjectType.TICKET_TYPE, [ticketTypeId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let ticketType: TicketType;
-        if (ticketTypes && ticketTypes.length) {
-            ticketType = ticketTypes[0];
-            this.objectId = ticketType.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return ticketType;
     }
 
 }

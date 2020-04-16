@@ -8,28 +8,26 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { IContextServiceListener } from '../../../../../../modules/base-components/webapp/core/IContextServiceListener';
-import { IdService } from '../../../../../../model/IdService';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextHistoryEntry } from '../../../../../../modules/base-components/webapp/core/ContextHistoryEntry';
-import { Context } from '../../../../../../model/Context';
-import { ContextType } from '../../../../../../model/ContextType';
 import { ContextDescriptor } from '../../../../../../model/ContextDescriptor';
 import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { ContextUIEvent } from '../../../../../base-components/webapp/core/ContextUIEvent';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { IdService } from '../../../../../../model/IdService';
 
-class Component implements IContextServiceListener {
+class Component {
 
     public state: ComponentState;
-    public constexServiceListenerId: string;
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.constexServiceListenerId = IdService.generateDateBasedId('back-to-');
     }
 
     public onMount(): void {
-        ContextService.getInstance().registerListener(this);
-
         document.addEventListener('click', (event: any) => {
             if (!this.state.minimized) {
                 if (this.state.keepShow) {
@@ -39,10 +37,21 @@ class Component implements IContextServiceListener {
                 }
             }
         }, false);
+
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('back-to'),
+            eventPublished: (data: any, eventId: string) => {
+                if (eventId === ContextUIEvent.HISTORY_CHANGED) {
+                    this.state.history = ContextService.getInstance().getHistory();
+                }
+            }
+        };
+
+        EventService.getInstance().subscribe(ContextUIEvent.HISTORY_CHANGED, this.subscriber);
     }
 
     public onDestroy(): void {
-        ContextService.getInstance().unregisterListener(this.constexServiceListenerId);
+        EventService.getInstance().unsubscribe(ContextUIEvent.HISTORY_CHANGED, this.subscriber);
     }
 
     public listClicked(): void {
@@ -56,10 +65,6 @@ class Component implements IContextServiceListener {
 
     public navigate(entry: ContextHistoryEntry): void {
         this.toggleList();
-    }
-
-    public contextChanged(contextId: string, context: Context, type: ContextType): void {
-        this.state.history = ContextService.getInstance().getHistory();
     }
 
     public contextRegistered(descriptor: ContextDescriptor): void {

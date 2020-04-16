@@ -10,7 +10,9 @@
 import { IServiceExtension } from "../../server/extensions/IServiceExtension";
 import { LogFileService } from "./server/LogFileService";
 
-class Extension implements IServiceExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
         LogFileService.getInstance();

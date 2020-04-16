@@ -15,11 +15,13 @@ import { FormFieldValue } from '../../../../../model/configuration/FormFieldValu
 import { JobProperty } from '../../../model/JobProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
-import { JobService } from '../../core';
+import { JobService, JobFormService } from '../../core';
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { JobType } from '../../../model/JobType';
+import { JobTypes } from '../../../model/JobTypes';
 
 class Component extends FormInputComponent<{}, ComponentState> {
 
@@ -37,15 +39,20 @@ class Component extends FormInputComponent<{}, ComponentState> {
     public async onMount(): Promise<void> {
         this.listenerId = 'job-input-filter-manager-listener';
         await super.onMount();
-        this.state.manager.init();
+
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        await this.setManager();
         await this.setCurrentNode();
 
-        const form = await FormService.getInstance().getFormInstance(this.state.formId);
-        form.registerListener({
+
+        formInstance.registerListener({
             formListenerId: 'job-input-filter',
             updateForm: () => { return; },
             formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>) => {
-                if (formField.property === JobProperty.EXEC_PLAN_EVENTS) {
+                if (formField.property === JobProperty.TYPE) {
+                    this.setManager();
+                    await this.setCurrentNode();
+                } else if (formField.property === JobProperty.EXEC_PLAN_EVENTS) {
                     const context = ContextService.getInstance().getActiveContext();
                     if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
                         const selectedEvents = context.getAdditionalInformation(JobProperty.EXEC_PLAN_EVENTS);
@@ -69,25 +76,38 @@ class Component extends FormInputComponent<{}, ComponentState> {
             }
         });
 
-        this.state.manager.registerListener(this.listenerId, () => {
-            if (this.formTimeout) {
-                clearTimeout(this.formTimeout);
-            }
-            this.formTimeout = setTimeout(async () => {
-                const filterValues = {};
-                if (this.state.manager.hasDefinedValues()) {
-                    const values = this.state.manager.getEditableValues();
-                    values.forEach((v) => {
-                        if (v.value !== null) {
-                            filterValues[v.property] = v.value;
-                        }
-                    });
-                }
-                super.provideValue(filterValues, true);
-            }, 200);
-        });
-
         this.state.prepared = true;
+    }
+
+    private async setManager(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
+        const type = typeValue && typeValue.value ? typeValue.value : null;
+
+        const jobFormManager = JobFormService.getInstance().getJobFormManager(type);
+
+        this.state.manager = jobFormManager ? jobFormManager.filterManager : null;
+        if (this.state.manager) {
+            this.state.manager.init();
+
+            this.state.manager.registerListener(this.listenerId, () => {
+                if (this.formTimeout) {
+                    clearTimeout(this.formTimeout);
+                }
+                this.formTimeout = setTimeout(async () => {
+                    const filterValues = {};
+                    if (this.state.manager.hasDefinedValues()) {
+                        const values = this.state.manager.getEditableValues();
+                        values.forEach((v) => {
+                            if (v.value !== null) {
+                                filterValues[v.property] = v.value;
+                            }
+                        });
+                    }
+                    super.provideValue(filterValues, true);
+                }, 200);
+            });
+        }
     }
 
     private async addRequiredArticleProperties(): Promise<void> {
@@ -145,6 +165,7 @@ class Component extends FormInputComponent<{}, ComponentState> {
         if (
             this.state.defaultValue && this.state.defaultValue.value
             && typeof this.state.defaultValue.value === 'object'
+            && this.state.manager
         ) {
             for (const property in this.state.defaultValue.value) {
                 if (property) {

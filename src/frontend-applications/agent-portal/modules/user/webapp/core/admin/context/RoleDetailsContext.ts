@@ -16,11 +16,9 @@ import { KIXObject } from "../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
 import { RoleProperty } from "../../../../model/RoleProperty";
-import { EventService } from "../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../../modules/base-components/webapp/core/KIXObjectService";
 import { User } from "../../../../model/User";
+import { KIXObjectService } from "../../../../../base-components/webapp/core/KIXObjectService";
 
 
 export class RoleDetailsContext extends Context {
@@ -32,7 +30,7 @@ export class RoleDetailsContext extends Context {
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<Role>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<Role>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
@@ -48,7 +46,9 @@ export class RoleDetailsContext extends Context {
         const role = await this.loadRole(changedProperties);
 
         if (role && role.UserIDs && role.UserIDs.length > 0) {
-            const users = await KIXObjectService.loadObjects<User>(KIXObjectType.USER, role.UserIDs);
+            const users = await KIXObjectService.loadObjects<User>(
+                KIXObjectType.USER, role.UserIDs, null, null, null, true, true
+            );
             this.setObjectList(KIXObjectType.USER, users, true);
         }
 
@@ -62,37 +62,12 @@ export class RoleDetailsContext extends Context {
     }
 
     private async loadRole(changedProperties: string[] = [], cache: boolean = true): Promise<Role> {
-        const roleId = Number(this.objectId);
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null,
             [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS, RoleProperty.CONFIGURED_PERMISSIONS]
         );
 
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Role'
-            });
-        }, 500);
-
-        const roles = await KIXObjectService.loadObjects<Role>(
-            KIXObjectType.ROLE, [roleId], loadingOptions, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let role: Role;
-        if (roles && roles.length) {
-            role = roles[0];
-            this.objectId = role.ID;
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false, hint: '' });
-
-        return role;
+        return await this.loadDetailsObject<Role>(KIXObjectType.ROLE, loadingOptions);
     }
 
 }

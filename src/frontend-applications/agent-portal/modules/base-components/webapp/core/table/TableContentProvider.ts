@@ -21,7 +21,6 @@ import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
 import { LabelService } from "../LabelService";
 import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -165,13 +164,13 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         const showIcons = column ? column.showIcon : true;
         const translatable = column ? column.translatable : true;
 
-        const displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+        const displayValue = await LabelService.getInstance().getDisplayText(
             object, property, object[property], translatable
         );
 
         let icons = [];
         if (showIcons) {
-            icons = await LabelService.getInstance().getPropertyValueDisplayIcons(object, property, true);
+            icons = await LabelService.getInstance().getIcons(object, property, null, true);
         }
 
         return new TableValue(property, object[property], displayValue, undefined, icons);
@@ -182,10 +181,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             for (const dfv of object[KIXObjectProperty.DYNAMIC_FIELDS] as DynamicFieldValue[]) {
                 let dfValue: [string[], string, string[]];
 
-                const labelProvider = LabelService.getInstance().getLabelProvider(object);
-                if (labelProvider) {
-                    dfValue = await labelProvider.getDFDisplayValues(dfv);
-                }
+                dfValue = await LabelService.getInstance().getDFDisplayValues(object.KIXObjectType, dfv);
 
                 values.push(new TableValue(
                     `${KIXObjectProperty.DYNAMIC_FIELDS}.${dfv.Name}`,

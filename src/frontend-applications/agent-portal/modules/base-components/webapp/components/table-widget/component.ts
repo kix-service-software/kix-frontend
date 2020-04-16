@@ -23,6 +23,7 @@ import { ActionFactory } from "../../../../../modules/base-components/webapp/cor
 import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
 import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { ContextUIEvent } from "../../core/ContextUIEvent";
 
 class Component {
 
@@ -82,9 +83,19 @@ class Component {
 
             this.subscriber = {
                 eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                eventPublished: async (data: TableEventData, eventId: string) => {
+                eventPublished: async (data: any, eventId: string) => {
+                    if (
+                        this.state.table &&
+                        eventId === ContextUIEvent.RELOAD_OBJECTS &&
+                        data === this.state.table.getObjectType()
+                    ) {
+                        this.state.loading = true;
+                    }
+
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
-                        if (eventId === TableEvent.RELOADED) {
+                        if (eventId === TableEvent.RELOAD) {
+                            this.state.loading = true;
+                        } else if (eventId === TableEvent.RELOADED) {
                             if (settings && settings.resetFilterOnReload) {
                                 const filterComponent = (this as any).getComponent('table-widget-filter');
                                 if (filterComponent) {
@@ -93,6 +104,9 @@ class Component {
                             } else {
                                 this.state.table.filter();
                             }
+
+
+                            setTimeout(() => this.state.loading = false, 100);
                         } else {
                             if (eventId === TableEvent.TABLE_READY) {
                                 this.state.filterCount = this.state.table.isFiltered()
@@ -110,6 +124,8 @@ class Component {
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);
+            EventService.getInstance().subscribe(TableEvent.RELOAD, this.subscriber);
+            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
             this.prepareHeader();
             this.prepareTable().then(() => this.prepareTitle());
@@ -147,6 +163,8 @@ class Component {
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
+        EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
+        EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
         TableFactoryService.getInstance().destroyTable(`table-widget-${this.state.instanceId}`);
     }
 
@@ -191,13 +209,15 @@ class Component {
                 settings.tableConfiguration, null, contextId, true, true, settings.shortTable, false, !settings.cache
             );
 
-            if (table && settings.sort) {
-                table.sort(settings.sort[0], settings.sort[1]);
+            if (table) {
+                if (settings.sort) {
+                    table.sort(settings.sort[0], settings.sort[1]);
+                }
+                await table.initialize();
             }
 
-            await table.initialize();
-
             this.state.table = table;
+            this.state.loading = false;
         }
     }
 

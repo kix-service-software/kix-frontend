@@ -11,7 +11,9 @@ import { IServiceExtension } from "../../server/extensions/IServiceExtension";
 import { CMDBAPIService } from "./server/CMDBService";
 import { ConfigItemAPIClassService } from "./server/ConfigItemClassService";
 
-class Extension implements IServiceExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
         CMDBAPIService.getInstance();

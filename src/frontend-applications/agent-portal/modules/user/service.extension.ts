@@ -11,7 +11,9 @@ import { IServiceExtension } from "../../server/extensions/IServiceExtension";
 import { UserService } from "./server/UserService";
 import { RoleService } from "./server/RoleService";
 
-class Extension implements IServiceExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IServiceExtension {
 
     public async initServices(): Promise<void> {
         UserService.getInstance();

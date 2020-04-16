@@ -13,7 +13,6 @@ import { ITable, IRowObject, TableValue, RowObject } from "../../../../../base-c
 import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
 import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
 import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { ConfigItem } from "../../../../model/ConfigItem";
 import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
 import { DateTimeUtil } from "../../../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { VersionProperty } from "../../../../model/VersionProperty";
@@ -33,19 +32,19 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
-            const configItem = await context.getObject<ConfigItem>();
-            if (configItem) {
+            const versions = await context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
+            if (versions) {
                 const translatedCurrentVersion = await TranslationService.translate('Translatable#current');
                 const translatedCreated = await TranslationService.translate('Translatable#created');
                 const translatedVersion = await TranslationService.translate('Translatable#Version');
 
-                configItem.Versions.sort((a, b) => b.VersionID - a.VersionID);
+                (versions as Version[]).sort((a, b) => b.VersionID - a.VersionID);
 
-                for (let i = 0; i < configItem.Versions.length; i++) {
+                for (let i = 0; i < versions.length; i++) {
                     const values: TableValue[] = [];
-                    const v = configItem.Versions[i];
+                    const v = versions[i] as Version;
 
-                    const versionNumber = (configItem.Versions.length - i);
+                    const versionNumber = (versions.length - i);
                     const createTime = await DateTimeUtil.getLocalDateTimeString(v.Definition.CreateTime);
                     const currentVersion = v.isCurrentVersion ? '(' + translatedCurrentVersion + ')' : '';
                     const currentVersionString = `${versionNumber} ${currentVersion}`;

@@ -28,7 +28,7 @@ import { OrganisationAPIService } from "../../customer/server/OrganisationServic
 import { ContactAPIService } from "../../customer/server/ContactService";
 import { UserService } from "../../user/server/UserService";
 import { TranslationAPIService } from "../../translation/server/TranslationService";
-import { DateTimeUtil } from "../../../server/services/DateTimeUtil";
+import { DateTimeAPIUtil } from "../../../server/services/DateTimeAPIUtil";
 import { SysConfigOption } from "../../sysconfig/model/SysConfigOption";
 import { SysConfigService } from "../../sysconfig/server/SysConfigService";
 import { SysConfigKey } from "../../sysconfig/model/SysConfigKey";
@@ -145,7 +145,7 @@ export class TicketDetailsDataBuilder {
             preparedArticle.properties.push([ccProperty, article.Cc]);
 
             const createTimeProperty = await this.getPropertyText(token, KIXObjectProperty.CREATE_TIME);
-            const createTime = await DateTimeUtil.getLocalDateTimeString(token, article.CreateTime);
+            const createTime = await DateTimeAPIUtil.getLocalDateTimeString(token, article.CreateTime);
             preparedArticle.properties.push([createTimeProperty, createTime]);
 
             const prepareContent = await this.getPreparedArticleBodyContent(token, article);
@@ -221,7 +221,7 @@ export class TicketDetailsDataBuilder {
             case TicketProperty.UPDATE_TIME_DESTINATION_DATE:
             case TicketProperty.SOLUTION_TIME_DESTINATION_DATE:
                 if (value) {
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(token, displayValue);
+                    displayValue = await DateTimeAPIUtil.getLocalDateTimeString(token, displayValue);
                 }
                 break;
             case TicketProperty.ESCALATION_RESPONSE_TIME:
@@ -233,7 +233,7 @@ export class TicketDetailsDataBuilder {
             case TicketProperty.SOLUTION_TIME_DESTINATION_TIME:
             case TicketProperty.CREATED_TIME_UNIX:
                 if (displayValue) {
-                    displayValue = await DateTimeUtil.getLocalDateTimeString(token, Number(displayValue) * 1000);
+                    displayValue = await DateTimeAPIUtil.getLocalDateTimeString(token, Number(displayValue) * 1000);
                 }
                 break;
             case TicketProperty.LOCK_ID:
@@ -256,7 +256,7 @@ export class TicketDetailsDataBuilder {
                 break;
             case TicketProperty.AGE:
                 if (value) {
-                    displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue));
+                    displayValue = DateTimeAPIUtil.calculateTimeInterval(Number(displayValue));
                 }
                 break;
             case TicketProperty.ESCALATION_TIME_WORKING_TIME:
@@ -268,7 +268,7 @@ export class TicketDetailsDataBuilder {
             case TicketProperty.SOLUTION_TIME_WORKING_TIME:
             case TicketProperty.SOLUTION_TIME:
                 if (value) {
-                    displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue) * 1000);
+                    displayValue = DateTimeAPIUtil.calculateTimeInterval(Number(displayValue) * 1000);
                 }
                 break;
             case TicketProperty.FIRST_RESPONSE_TIME_ESCALATION:

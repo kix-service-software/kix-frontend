@@ -2,6 +2,7 @@
     "dependencies": [
         "require ./components/contact-assigned-organisations-widget",
         "require ./components/contact-assigned-tickets-widget",
+        "require ./components/contact-assigned-config-items-widget",
         "require ./components/contact-list-widget",
         "require ./components/create-new-ticket-cell",
         "require ./components/customer-label",
@@ -11,6 +12,7 @@
         "require ./components/new-organisation-dialog",
         "require ./components/organisation-assigned-contacts-widget",
         "require ./components/organisation-assigned-tickets-widget",
+        "require ./components/organisation-assigned-config-items-widget",
         "require ./components/organisation-module",
         "require ./components/search-contact-dialog",
         "require ./components/search-organisation-dialog",

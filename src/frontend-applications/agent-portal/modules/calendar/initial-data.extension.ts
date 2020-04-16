@@ -20,7 +20,9 @@ import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
 import { DynamicField } from "../dynamic-fields/model/DynamicField";
 import { LoggingService } from "../../../../server/services/LoggingService";
 
-class Extension implements IInitialDataExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IInitialDataExtension {
 
     public name: string = 'Calendar Module';
 

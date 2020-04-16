@@ -24,7 +24,9 @@ import { FilterType } from "../../model/FilterType";
 import { NotificationProperty } from "../notification/model/NotificationProperty";
 import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
 
-class Extension implements IPersonalSettingsExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IPersonalSettingsExtension {
 
     public getPersonalSettings(): PersonalSetting[] {
         return [
@@ -76,7 +78,7 @@ class Extension implements IPersonalSettingsExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.QUEUE),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -100,7 +102,7 @@ class Extension implements IPersonalSettingsExtension {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.NOTIFICATION),
 
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, false),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, false),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

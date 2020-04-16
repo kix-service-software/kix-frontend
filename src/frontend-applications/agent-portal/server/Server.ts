@@ -47,6 +47,8 @@ import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
 import { SystemInfo } from '../model/SystemInfo';
 import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
 import { IInitialDataExtension } from '../model/IInitialDataExtension';
+import { IFormConfigurationExtension } from './extensions/IFormConfigurationExtension';
+import { FormGroupConfiguration } from '../model/configuration/FormGroupConfiguration';
 
 export class Server implements IServer {
 
@@ -109,41 +111,11 @@ export class Server implements IServer {
         }
 
         await this.registerStaticContent();
-        await this.createClientRegistration();
 
         const router = new ServerRouter(this.application);
         await router.initializeRoutes();
 
         this.initHttpServer();
-    }
-
-    private async createClientRegistration(): Promise<void> {
-        let poDefinitions = [];
-
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
-        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
-        if (updateTranslations) {
-            LoggingService.getInstance().info('Update translations');
-            poDefinitions = await TranslationAPIService.getInstance().getPODefinitions();
-        }
-
-        const configurations = await this.createDefaultConfigurations();
-        const createClientRegistration = new CreateClientRegistration(
-            this.serverConfig.NOTIFICATION_CLIENT_ID,
-            this.serverConfig.NOTIFICATION_URL,
-            this.serverConfig.NOTIFICATION_INTERVAL,
-            'Token ' + AuthenticationService.getInstance().getCallbackToken(),
-            poDefinitions, configurations
-        );
-
-        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
-            this.serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
-        ).catch((error): SystemInfo => {
-            LoggingService.getInstance().error(error);
-            return null;
-        });
-        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
     }
 
     public async initHttpServer(): Promise<void> {
@@ -180,7 +152,43 @@ export class Server implements IServer {
         this.application.use(express.static('../static/'));
     }
 
-    private async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
+    public static async createClientRegistration(): Promise<void> {
+        LoggingService.getInstance().info('Create ClientRegsitration');
+        let poDefinitions = [];
+
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+
+        const updateTranslations = serverConfig.UPDATE_TRANSLATIONS;
+        if (updateTranslations) {
+            LoggingService.getInstance().info('Update translations');
+            poDefinitions = await TranslationAPIService.getInstance().getPODefinitions();
+        }
+
+        const configurations = await this.createDefaultConfigurations();
+
+        const backendDependencies = this.getBackendDependencies();
+        const plugins = this.getPlugins();
+
+        const createClientRegistration = new CreateClientRegistration(
+            serverConfig.NOTIFICATION_CLIENT_ID,
+            serverConfig.NOTIFICATION_URL,
+            serverConfig.NOTIFICATION_INTERVAL,
+            'Token ' + AuthenticationService.getInstance().getCallbackToken(),
+            poDefinitions, configurations, backendDependencies, plugins
+        );
+
+        const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
+            serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
+        ).catch((error): SystemInfo => {
+            LoggingService.getInstance().error(error);
+            return null;
+        });
+
+        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
+        LoggingService.getInstance().info('ClientRegistration created.');
+    }
+
+    private static async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {
         LoggingService.getInstance().info('Create Default Configurations');
         const extensions = await PluginService.getInstance().getExtensions<IConfigurationExtension>(
             AgentPortalExtensions.CONFIGURATION
@@ -205,6 +213,7 @@ export class Server implements IServer {
                 );
 
                 formConfigurations = formConfigurations || [];
+
                 defaultConfigurations = defaultConfigurations || [];
 
                 configurations = [
@@ -214,9 +223,9 @@ export class Server implements IServer {
                 ];
             }
 
-            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+            await this.extendFormConfigurations(configurations);
 
-            // await ModuleConfigurationService.getInstance().cleanUp(serverConfig.BACKEND_API_TOKEN);
+            const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
             const sysconfigOptionDefinitions = configurations.map((c) => {
                 const name = c.name ? c.name : c.id;
@@ -247,5 +256,78 @@ export class Server implements IServer {
 
             return sysconfigOptionDefinitions;
         }
+    }
+
+    private static getBackendDependencies(): any[] {
+        let dependencies = [];
+        const plugins = PluginService.getInstance().availablePlugins;
+        for (const plugin of plugins) {
+            dependencies = [
+                ...dependencies,
+                ...plugin[1].dependencies
+                    .filter((d) => d[0].startsWith('backend::'))
+                    .map((d) => {
+                        return {
+                            Product: d[0].replace('backend::', ''),
+                            Operator: d[1],
+                            BuildNumber: Number(d[2])
+                        };
+                    })
+            ];
+        }
+        return dependencies;
+    }
+
+    private static async extendFormConfigurations(formConfigurations: IConfiguration[]): Promise<void> {
+        if (formConfigurations.length) {
+            const extensions = await PluginService.getInstance().getExtensions<IFormConfigurationExtension>(
+                AgentPortalExtensions.EXTENDED_FORM_CONFIGURATION
+            );
+
+            for (const formExtension of extensions) {
+                const extendedFormFields = await formExtension.getFormFieldExtensions();
+
+                for (const fieldExtension of extendedFormFields) {
+                    const configuration = formConfigurations.find((c) => c.id === fieldExtension.groupId);
+                    if (configuration) {
+                        const groupConfiguration = configuration as FormGroupConfiguration;
+                        if (!groupConfiguration.fieldConfigurationIds) {
+                            groupConfiguration.fieldConfigurationIds = [];
+                        }
+
+                        const index = groupConfiguration.fieldConfigurationIds.findIndex(
+                            (id) => id === fieldExtension.afterFieldId
+                        );
+                        if (index !== -1) {
+                            groupConfiguration.fieldConfigurationIds.splice(
+                                index + 1, 0, fieldExtension.configuration.id
+                            );
+                        } else {
+                            groupConfiguration.fieldConfigurationIds.push(fieldExtension.configuration.id);
+                        }
+
+                        formConfigurations.push(fieldExtension.configuration);
+                    }
+                }
+            }
+        }
+    }
+
+    private static getPlugins(): any[] {
+        const plugins = [];
+        const availablePlugins = PluginService.getInstance().availablePlugins;
+        for (const plugin of availablePlugins) {
+            plugins.push({
+                Product: plugin[1].product,
+                Requires: plugin[1].requires,
+                Description: plugin[1].product,
+                BuildNumber: plugin[1].buildNumber,
+                Version: plugin[1].version,
+                ExtendedData: {
+                    BuildDate: plugin[1].buildDate
+                }
+            });
+        }
+        return plugins;
     }
 }

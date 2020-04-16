@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
-import { IdService } from '../../../../../model/IdService';
 import { TicketLabelProvider, TicketDetailsContext, TicketService } from '../../core';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Ticket } from '../../../model/Ticket';
@@ -23,17 +22,19 @@ import {
 } from '../../../../../model/configuration/ObjectInformationWidgetConfiguration';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { Context } from '../../../../../model/Context';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component {
 
     private state: ComponentState;
-    private contextListernerId: string;
+    private subscriber: IEventSubscriber;
 
     private routingConfigurations: Array<[string, RoutingConfiguration]>;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
-        this.contextListernerId = IdService.generateDateBasedId('ticket-info-');
     }
 
     public onInput(input: any): void {
@@ -49,26 +50,30 @@ class Component {
 
         this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
 
-        context.registerListener(this.contextListernerId, {
-            sidebarToggled: () => { (this as any).setStateDirty('ticket'); },
-            explorerBarToggled: () => { (this as any).setStateDirty('ticket'); },
-            objectListChanged: () => { return; },
-            filteredObjectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; },
-            objectChanged: async (ticketId: string, ticket: Ticket, type: KIXObjectType) => {
-                if (type === KIXObjectType.TICKET) {
-                    this.initWidget(ticket);
+        this.subscriber = {
+            eventSubscriberId: 'ticket-info-widget',
+            eventPublished: (data, eventId: string) => {
+                if (data.objectType === KIXObjectType.TICKET) {
+                    this.initWidget();
                 }
-            },
-            additionalInformationChanged: () => { return; }
-        });
+            }
+        };
 
-        await this.initWidget(await context.getObject<Ticket>());
-        this.state.prepared = true;
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+
+        this.initWidget();
     }
 
-    private async initWidget(ticket: Ticket): Promise<void> {
-        this.state.ticket = ticket;
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+    }
+
+    private async initWidget(): Promise<void> {
+        this.state.prepared = false;
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
+        this.state.ticket = await context.getObject<Ticket>();
 
         let properties = [];
 
@@ -90,10 +95,6 @@ class Component {
                 properties = properties.filter((p) => p !== TicketProperty.TIME_UNITS);
             }
 
-            const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-                TicketDetailsContext.CONTEXT_ID
-            );
-
             if (properties.some((p) => p === TicketProperty.ORGANISATION_ID)) {
                 this.initOrganisation(context);
             }
@@ -107,6 +108,8 @@ class Component {
         this.state.properties = properties;
 
         this.setActions();
+
+        this.state.prepared = true;
     }
 
     private async setActions(): Promise<void> {

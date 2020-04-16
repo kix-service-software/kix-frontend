@@ -25,7 +25,14 @@ import { ContextType } from "../../../../model/ContextType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
 import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-
+import { JobTypes } from "../../model/JobTypes";
+import { TicketJobFormManager } from "./TicketJobFormManager";
+import { SyncJobFormManager } from "./SyncJobFormManager";
+import { JobRunHistoryTableFactory } from "./table/JobRunHistoryTableFactory";
+import { JobRunLabelProvider } from "./JobRunLabelProvider";
+import { JobRunBrowserFactory } from "./JobRunBrowserFactory";
+import { JobRunLogLabelProvider } from "./JobRunLogLabelProvider";
+import { JobRunLogTableFactory } from "./table/JobRunLogTableFactory";
 
 export class UIModule implements IUIModule {
 
@@ -37,19 +44,23 @@ export class UIModule implements IUIModule {
         throw new Error("Method not implemented.");
     }
 
-
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(JobService.getInstance());
         ServiceRegistry.registerServiceInstance(JobFormService.getInstance());
 
         FactoryService.getInstance().registerFactory(KIXObjectType.JOB, JobBrowserFactory.getInstance());
+        FactoryService.getInstance().registerFactory(KIXObjectType.JOB_RUN, JobRunBrowserFactory.getInstance());
 
         LabelService.getInstance().registerLabelProvider(new JobLabelProvider());
         LabelService.getInstance().registerLabelProvider(new MacroActionLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new JobRunLabelProvider());
+        LabelService.getInstance().registerLabelProvider(new JobRunLogLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new JobTableFactory());
         TableFactoryService.getInstance().registerFactory(new JobFilterTableFactory());
         TableFactoryService.getInstance().registerFactory(new MacroActionTableFactory());
+        TableFactoryService.getInstance().registerFactory(new JobRunHistoryTableFactory());
+        TableFactoryService.getInstance().registerFactory(new JobRunLogTableFactory());
 
         const jobDetailsContext = new ContextDescriptor(
             JobDetailsContext.CONTEXT_ID, [KIXObjectType.JOB],
@@ -75,6 +86,9 @@ export class UIModule implements IUIModule {
             false, 'edit-job-dialog', ['jobs'], EditJobDialogContext
         );
         await ContextService.getInstance().registerContext(editJobDialogContext);
+
+        JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
+        JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());
     }
 
 }

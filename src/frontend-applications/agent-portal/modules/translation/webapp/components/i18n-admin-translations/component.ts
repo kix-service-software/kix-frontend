@@ -90,7 +90,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 }
 
                 if (eventId === ApplicationEvent.OBJECT_UPDATED || eventId === ApplicationEvent.OBJECT_CREATED) {
-                    if (data === KIXObjectType.TRANSLATION_PATTERN) {
+                    if (data.objectType === KIXObjectType.TRANSLATION_PATTERN) {
                         this.search();
                     }
                 }
@@ -136,9 +136,7 @@ class TranslationPatternContentProvider extends TableContentProvider {
             ];
 
             const loadingOptions = new KIXObjectLoadingOptions(
-                filter, null, null,
-                // FIXME: to not include with TranslationPatternProperty.LANGUAGES - it takes very long
-                [TranslationPatternProperty.AVAILABLE_LANGUAGES]
+                filter, null, null, [TranslationPatternProperty.AVAILABLE_LANGUAGES]
             );
 
             const pattern = await KIXObjectService.loadObjects<TranslationPattern>(

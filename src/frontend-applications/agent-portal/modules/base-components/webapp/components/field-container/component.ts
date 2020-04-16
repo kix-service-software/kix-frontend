@@ -89,8 +89,7 @@ class FieldContainerComponent {
 
         const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         if (propertyFields.length === 1) {
-            this.setFieldsEmpty(field, true);
-            formInstance.provideFormFieldValue(field.instanceId, null);
+            formInstance.setFieldEmptyState(field, true);
         } else {
             formInstance.removeFormField(field);
         }
@@ -134,20 +133,13 @@ class FieldContainerComponent {
     }
 
     public async addField(field: FormFieldConfiguration): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         if (field.empty) {
-            this.setFieldsEmpty(field, false);
+            formInstance.setFieldEmptyState(field, false);
         } else {
-            const formInstance = await FormService.getInstance().getFormInstance(this.formId);
             formInstance.addFormField(field);
         }
         (this as any).setStateDirty('fields');
-    }
-
-    private setFieldsEmpty(field: FormFieldConfiguration, empty: boolean): void {
-        field.empty = empty;
-        if (field.children) {
-            field.children.forEach((f) => this.setFieldsEmpty(f, empty));
-        }
     }
 
     public async dragStart(fieldInstanceId: string) {

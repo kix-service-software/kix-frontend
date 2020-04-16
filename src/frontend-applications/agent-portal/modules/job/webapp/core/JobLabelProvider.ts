@@ -18,13 +18,15 @@ import { KIXObjectService } from "../../../../modules/base-components/webapp/cor
 import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
 import { ExecPlan } from "../../model/ExecPlan";
 import { JobService } from ".";
+import { JobType } from "../../model/JobType";
+import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 
 export class JobLabelProvider extends LabelProvider {
 
     public kixObjectType: KIXObjectType = KIXObjectType.JOB;
 
-    public isLabelProviderFor(notification: Job): boolean {
-        return notification instanceof Job;
+    public isLabelProviderFor(job: Job): boolean {
+        return job instanceof Job;
     }
 
     public async getObjectText(
@@ -76,6 +78,19 @@ export class JobLabelProvider extends LabelProvider {
                 if (value) {
                     displayValue = translatable ?
                         await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
+                }
+                break;
+            case JobProperty.TYPE:
+                if (value) {
+                    const jobTypes = await KIXObjectService.loadObjects<JobType>(
+                        KIXObjectType.JOB_TYPE, undefined, undefined, undefined, true
+                    ).catch(() => [] as JobType[]);
+                    if (jobTypes && jobTypes.length) {
+                        const type = jobTypes.find((t) => t.Name === value);
+                        if (type) {
+                            displayValue = type.DisplayName;
+                        }
+                    }
                 }
                 break;
             default:
@@ -152,6 +167,40 @@ export class JobLabelProvider extends LabelProvider {
         }
 
         return displayValue ? displayValue.toString() : '';
+    }
+
+    public async getIcons(job: Job, property: string, value?: string | number): Promise<Array<string | ObjectIcon>> {
+        const icons = [];
+        if (property === JobProperty.HAS_TRIGGER_EVENTS || property === JobProperty.HAS_TRIGGER_TIMES) {
+            let execPlans: ExecPlan[] = [];
+            if (Array.isArray(job.ExecPlans) && !!job.ExecPlans.length) {
+                execPlans = job.ExecPlans;
+            } else if (Array.isArray(job.ExecPlanIDs) && !!job.ExecPlanIDs.length) {
+                execPlans = await KIXObjectService.loadObjects<ExecPlan>(
+                    KIXObjectType.EXEC_PLAN, job.ExecPlanIDs, undefined, null, true
+                ).catch(() => [] as ExecPlan[]);
+            }
+
+
+            if (property === JobProperty.HAS_TRIGGER_EVENTS) {
+                const hasEvents: boolean = execPlans && !!execPlans.length && execPlans.some(
+                    (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length
+                );
+                if (hasEvents) {
+                    icons.push('kix-icon-close');
+                }
+            } else if (property === JobProperty.HAS_TRIGGER_TIMES) {
+                const hasTimes: boolean = execPlans && !!execPlans.length && execPlans.some(
+                    (ep) => ep.Parameters
+                        && Array.isArray(ep.Parameters.Weekday) && !!ep.Parameters.Weekday.length
+                        && Array.isArray(ep.Parameters.Time) && !!ep.Parameters.Time.length
+                );
+                if (hasTimes) {
+                    icons.push('kix-icon-close');
+                }
+            }
+        }
+        return icons;
     }
 
 }

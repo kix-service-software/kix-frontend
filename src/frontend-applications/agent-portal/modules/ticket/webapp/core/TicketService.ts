@@ -79,7 +79,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         if (objectIds && !superLoad) {
-            objects = objects.filter((c) => objectIds.some((oid) => c.ObjectId === oid));
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
         }
 
         return objects;
@@ -121,8 +121,6 @@ export class TicketService extends KIXObjectService<Ticket> {
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
 
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
-
         switch (property) {
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
@@ -137,8 +135,10 @@ export class TicketService extends KIXObjectService<Ticket> {
                     types = types.filter((t) => t.ValidID === 1);
                 }
                 for (const t of types) {
-                    const icons = await labelProvider.getIcons(null, property, t.ID);
-                    const text = await LabelService.getInstance().getText(t);
+                    const icons = await LabelService.getInstance().getIconsForType(
+                        KIXObjectType.TICKET, t, property, t.ID
+                    );
+                    const text = await LabelService.getInstance().getObjectText(t);
                     nodes.push(new TreeNode(
                         t.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,
@@ -154,8 +154,10 @@ export class TicketService extends KIXObjectService<Ticket> {
                     priorities = priorities.filter((p) => p.ValidID === 1);
                 }
                 for (const p of priorities) {
-                    const icons = await labelProvider.getIcons(null, property, p.ID);
-                    const text = await LabelService.getInstance().getText(p);
+                    const icons = await LabelService.getInstance().getIconsForType(
+                        KIXObjectType.TICKET, null, property, p.ID
+                    );
+                    const text = await LabelService.getInstance().getObjectText(p);
                     nodes.push(new TreeNode(
                         p.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,
@@ -171,8 +173,10 @@ export class TicketService extends KIXObjectService<Ticket> {
                     states = states.filter((s) => s.ValidID === 1);
                 }
                 for (const s of states) {
-                    const icons = await labelProvider.getIcons(null, property, s.ID);
-                    const text = await LabelService.getInstance().getText(s);
+                    const icons = await LabelService.getInstance().getIconsForType(
+                        KIXObjectType.TICKET, null, property, s.ID
+                    );
+                    const text = await LabelService.getInstance().getObjectText(s);
                     nodes.push(new TreeNode(
                         s.ID, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,
@@ -222,8 +226,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                 ).catch(() => [] as Channel[]);
 
                 for (const c of channels) {
-                    const name = await LabelService.getInstance().getPropertyValueDisplayText(c, ChannelProperty.NAME);
-                    const icons = await LabelService.getInstance().getPropertyValueDisplayIcons(c, ChannelProperty.ID);
+                    const name = await LabelService.getInstance().getDisplayText(c, ChannelProperty.NAME);
+                    const icons = await LabelService.getInstance().getIcons(c, ChannelProperty.ID);
                     nodes.push(new TreeNode(
                         c.ID, name, icons && icons.length ? icons[0] : null, undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,

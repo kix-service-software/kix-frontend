@@ -77,7 +77,13 @@ export enum KIXObjectType {
 
     JOB = 'Job',
 
+    JOB_TYPE = 'JobType',
+
     JOB_FILTER = 'JOB_FILTER',
+
+    JOB_RUN = 'JobRun',
+
+    JOB_RUN_LOG = 'JobRunLog',
 
     LINK = 'Link',
 

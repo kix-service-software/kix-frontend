@@ -18,17 +18,20 @@ const expect = chai.expect;
 describe('Plugin Service Service', () => {
 
     describe('Register and load a Extension.', () => {
-        it('Should register a plugin in the plugin manager.', async () => {
+        before(() => {
             PluginService.getInstance().pluginManager.register('test:extension', 'MyPlugin', (data, host, options) => {
                 return {
-                    id: "MyPlugin"
+                    pluginId: "KIXStart"
                 };
             });
+        });
+
+        it('Should register a plugin in the plugin manager.', async () => {
 
             const extensions = await PluginService.getInstance().getExtensions<any>('test:extension');
 
             expect(extensions).not.empty;
-            expect(extensions[0].id).equal("MyPlugin");
+            expect(extensions[0].pluginId).equal("KIXStart");
         });
     });
 });

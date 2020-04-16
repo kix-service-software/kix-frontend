@@ -10,11 +10,8 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ContextConfiguration } from '../../../../../model/configuration/ContextConfiguration';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
-import { ContextMode } from '../../../../../model/ContextMode';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
@@ -22,115 +19,93 @@ import { ActionFactory } from '../../../../../modules/base-components/webapp/cor
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
 import { Context } from '../../../../../model/Context';
-
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private configuration: ContextConfiguration;
-
-    private object: KIXObject;
-
-    private context: Context;
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public async onMount(): Promise<void> {
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        this.contextChanged(null, context, ContextType.MAIN, null, null);
-        ContextService.getInstance().registerListener({
-            constexServiceListenerId: 'object-details-component',
-            contextChanged: this.contextChanged.bind(this),
-            contextRegistered: () => { return; }
-        });
-
-        context.registerListener(this.state.instanceId, {
-            additionalInformationChanged: () => { return; },
-            explorerBarToggled: () => { return; },
-            filteredObjectListChanged: () => { return; },
-            objectChanged: () => this.initWidget(this.context),
-            objectListChanged: () => { return; },
-            scrollInformationChanged: () => { return; },
-            sidebarToggled: () => { return; }
-        });
-
-    }
-
-    private async contextChanged(
-        contextId: string, context: Context, type: ContextType, history: boolean, oldContext: Context
-    ): Promise<void> {
-        if (type === ContextType.MAIN && context.getDescriptor().contextMode === ContextMode.DETAILS) {
-            this.context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-
-            if (this.context.getDescriptor().contextMode !== ContextMode.DETAILS) {
-                this.state.error = 'No details context available.';
-                this.state.loading = false;
-            } else {
-                this.state.loading = true;
-                this.state.instanceId = this.context.getDescriptor().contextId;
-                await this.initWidget(this.context);
-
-                context.registerListener(this.state.instanceId, {
-                    additionalInformationChanged: () => { return; },
-                    explorerBarToggled: () => { return; },
-                    filteredObjectListChanged: () => { return; },
-                    objectChanged: () => this.initWidget(this.context),
-                    objectListChanged: () => { return; },
-                    scrollInformationChanged: () => { return; },
-                    sidebarToggled: () => { return; }
-                });
+        this.subscriber = {
+            eventSubscriberId: 'object-details',
+            eventPublished: (data: any, eventId: string) => {
+                const currentContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                if (data.objectType === currentContext.getDescriptor().kixObjectTypes[0]) {
+                    this.prepareWidget();
+                    this.prepareActions();
+                }
             }
-        }
+        };
+        EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+
+        ContextService.getInstance().registerListener({
+            constexServiceListenerId: 'object-details-page',
+            contextChanged: async (contextId: string, context: Context, contextType: ContextType) => {
+                if (contextType === ContextType.MAIN) {
+                    this.state.loading = true;
+                    this.prepareConfigurations();
+                    await this.prepareWidget();
+                    await this.prepareActions();
+                    setTimeout(() => {
+                        this.state.loading = false;
+                    }, 20);
+                }
+            },
+            contextRegistered: () => null
+        });
+
+        this.prepareConfigurations();
+        await this.prepareWidget();
+        await this.prepareActions();
+        this.state.loading = false;
     }
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
-        ContextService.getInstance().unregisterListener('object-details-component');
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
+        ContextService.getInstance().unregisterListener('object-details-page');
     }
 
-    private async initWidget(context: Context, object?: KIXObject): Promise<void> {
+    private prepareConfigurations(): void {
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        this.state.lanes = context.getLanes(true);
+        this.state.contentWidgets = context.getContent(true);
+        this.state.instanceId = context.getDescriptor().contextId;
+    }
+
+    private async prepareWidget(): Promise<void> {
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.state.error = null;
-        this.state.loading = true;
 
-        const loadingTimeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: true, hint: '' });
-        }, 500);
+        const object = await context.getObject().catch((error) => null);
 
-        this.object = object ? object : await context.getObject().catch((error) => null);
-
-        if (!this.object) {
+        if (!object) {
             this.state.error = await TranslationService.translate(
                 'Translatable#No object with ID {0} available.', [context.getObjectId()]
             );
         } else {
             this.state.title = await context.getDisplayText();
         }
-
-        this.configuration = context.getConfiguration();
-        this.state.lanes = context.getLanes(true);
-        this.state.contentWidgets = context.getContent(true);
-
-        await this.prepareActions();
-
-        setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-            window.clearTimeout(loadingTimeout);
-            this.state.loading = false;
-        }, 500);
     }
 
     private async prepareActions(): Promise<void> {
-        const config = this.configuration;
+        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const config = context.getConfiguration();
+        const object = await context.getObject().catch((error) => null);
+
         this.state.actions = [];
-        if (config && this.object) {
+        if (config && object) {
             this.state.actions = await ActionFactory.getInstance().generateActions(
-                config.actions, this.object
+                config.actions, object
             );
 
             const generalActions = await ActionFactory.getInstance().generateActions(
-                config.generalActions, this.object
+                config.generalActions, object
             );
 
             WidgetService.getInstance().registerActions(this.state.instanceId, generalActions);

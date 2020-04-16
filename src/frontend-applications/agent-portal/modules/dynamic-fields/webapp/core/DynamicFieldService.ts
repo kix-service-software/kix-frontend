@@ -46,9 +46,19 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<O[]> {
         let objects: O[];
-        objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        let superLoad = false;
+        if (objectType === KIXObjectType.DYNAMIC_FIELD) {
+            objects = await super.loadObjects<O>(KIXObjectType.DYNAMIC_FIELD, null, loadingOptions);
+        } else {
+            superLoad = true;
+            objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);
+        }
 
-        return objects;
+        if (objectIds && !superLoad) {
+            objects = objects.filter((c) => objectIds.map((id) => Number(id)).some((oid) => c.ObjectId === oid));
+        }
+
+        return objects as any[];
     }
 
     public registerConfigSchema(id: string, schema: any): void {
@@ -80,7 +90,7 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
                 const fieldType = o.Name;
                 if (await DynamicFieldService.getInstance().getConfigSchema(fieldType)) {
 
-                    nodes.push(new TreeNode(fieldType, await LabelService.getInstance().getText(o)));
+                    nodes.push(new TreeNode(fieldType, await LabelService.getInstance().getObjectText(o)));
                 }
             }
         }

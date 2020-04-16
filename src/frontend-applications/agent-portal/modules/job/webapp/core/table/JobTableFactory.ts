@@ -48,6 +48,7 @@ export class JobTableFactory extends TableFactory {
         tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
     ): TableConfiguration {
         const tableColumns = [
+            this.getDefaultColumnConfiguration(JobProperty.TYPE),
             this.getDefaultColumnConfiguration(JobProperty.NAME),
             this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_EVENTS),
             this.getDefaultColumnConfiguration(JobProperty.HAS_TRIGGER_TIMES),

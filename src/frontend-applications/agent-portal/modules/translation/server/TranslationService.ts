@@ -24,6 +24,9 @@ import { ConfigurationService } from "../../../../../server/services/Configurati
 import { IdService } from "../../../model/IdService";
 import { Error } from "../../../../../server/model/Error";
 import { UserService } from "../../user/server/UserService";
+import { PluginService } from "../../../../../server/services/PluginService";
+import { AgentPortalExtensions } from "../../../server/extensions/AgentPortalExtensions";
+import { ILocaleExtension } from "../../../model/ILocaleExtension";
 
 export class TranslationAPIService extends KIXObjectAPIService {
 
@@ -192,7 +195,7 @@ export class TranslationAPIService extends KIXObjectAPIService {
         const localeFolder = './locale';
         const fs = require('fs');
 
-        const poDefinitions: PODefinition[] = [];
+        let poDefinitions: PODefinition[] = [];
 
         const files: string[] = fs.readdirSync(localeFolder);
         if (files) {
@@ -203,6 +206,18 @@ export class TranslationAPIService extends KIXObjectAPIService {
                     const base64 = Buffer.from(content, 'utf8').toString('base64');
                     poDefinitions.push(new PODefinition(base64, file.replace('.po', '')));
                 });
+        }
+
+        const localeExtensions = await PluginService.getInstance().getExtensions<ILocaleExtension>(
+            AgentPortalExtensions.LOCALE_EXTENSION
+        );
+
+        for (const extension of localeExtensions) {
+            const definitions = await extension.getPODefinitions();
+            poDefinitions = [
+                ...poDefinitions,
+                ...definitions
+            ];
         }
 
         return poDefinitions;

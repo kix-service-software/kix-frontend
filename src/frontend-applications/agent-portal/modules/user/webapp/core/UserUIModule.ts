@@ -96,7 +96,7 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
 
         const userDetailsContextDescriptor = new ContextDescriptor(
-            UserDetailsContext.CONTEXT_ID, [KIXObjectType.USER],
+            UserDetailsContext.CONTEXT_ID, [KIXObjectType.USER, KIXObjectType.CONTACT],
             ContextType.MAIN, ContextMode.DETAILS,
             true, 'object-details-page', ['users'], UserDetailsContext
         );

@@ -62,8 +62,8 @@ export class TicketBulkManager extends BulkManager {
         return operations;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes> {
-        let inputFieldType = InputFieldTypes.TEXT;
+    public async getInputType(property: string): Promise<InputFieldTypes | string> {
+        let inputFieldType: InputFieldTypes | string = InputFieldTypes.TEXT;
         const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
         const ticketDefinition = objectDefinitions.find((od) => od.Object === this.objectType);
         if (ticketDefinition) {
@@ -95,19 +95,51 @@ export class TicketBulkManager extends BulkManager {
     }
 
     public async getProperties(): Promise<Array<[string, string]>> {
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(this.objectType);
         let properties: Array<[string, string]> = [
-            [TicketProperty.CONTACT_ID, await labelProvider.getPropertyText(TicketProperty.CONTACT_ID)],
-            [TicketProperty.ORGANISATION_ID, await labelProvider.getPropertyText(TicketProperty.ORGANISATION_ID)],
-            [TicketProperty.LOCK_ID, await labelProvider.getPropertyText(TicketProperty.LOCK_ID)],
-            [TicketProperty.OWNER_ID, await labelProvider.getPropertyText(TicketProperty.OWNER_ID)],
-            [TicketProperty.PRIORITY_ID, await labelProvider.getPropertyText(TicketProperty.PRIORITY_ID)],
-            [TicketProperty.QUEUE_ID, await labelProvider.getPropertyText(TicketProperty.QUEUE_ID)],
-            [TicketProperty.RESPONSIBLE_ID, await labelProvider.getPropertyText(TicketProperty.RESPONSIBLE_ID)],
-            [TicketProperty.STATE_ID, await labelProvider.getPropertyText(TicketProperty.STATE_ID)],
-            [TicketProperty.PENDING_TIME, await labelProvider.getPropertyText(TicketProperty.PENDING_TIME)],
-            [TicketProperty.TITLE, await labelProvider.getPropertyText(TicketProperty.TITLE)],
-            [TicketProperty.TYPE_ID, await labelProvider.getPropertyText(TicketProperty.TYPE_ID)],
+            [
+                TicketProperty.CONTACT_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.CONTACT_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.ORGANISATION_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.ORGANISATION_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.LOCK_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.LOCK_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.OWNER_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.OWNER_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.PRIORITY_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.PRIORITY_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.QUEUE_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.QUEUE_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.RESPONSIBLE_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.RESPONSIBLE_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.STATE_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.STATE_ID, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.PENDING_TIME,
+                await LabelService.getInstance().getPropertyText(TicketProperty.PENDING_TIME, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.TITLE,
+                await LabelService.getInstance().getPropertyText(TicketProperty.TITLE, KIXObjectType.TICKET)
+            ],
+            [
+                TicketProperty.TYPE_ID,
+                await LabelService.getInstance().getPropertyText(TicketProperty.TYPE_ID, KIXObjectType.TICKET)
+            ],
         ];
 
         const superProperties = await super.getProperties();
@@ -134,15 +166,14 @@ export class TicketBulkManager extends BulkManager {
                     );
 
                     for (const c of contacts) {
-                        const displayValue = await LabelService.getInstance().getText(c);
+                        const displayValue = await LabelService.getInstance().getObjectText(c);
                         nodes.push(new TreeNode(c.ObjectId, displayValue, new ObjectIcon(c.KIXObjectType, c.ObjectId)));
                     }
                 }
                 return nodes;
             default:
+                return super.searchValues(property, searchValue, limit);
         }
-
-        return [];
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
@@ -157,7 +188,7 @@ export class TicketBulkManager extends BulkManager {
                         undefined, undefined, true
                     ).catch(() => []);
                     if (organisations && !!organisations.length) {
-                        const displayValue = await LabelService.getInstance().getText(organisations[0]);
+                        const displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
                         nodes.push(new TreeNode(
                             organisations[0].ID, displayValue,
                             new ObjectIcon(KIXObjectType.ORGANISATION, organisations[0].ID)

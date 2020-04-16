@@ -52,7 +52,7 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
                 let user = contact.User;
                 if (!user && contact.AssignedUserID) {
                     const users = await KIXObjectService.loadObjects<User>(
-                        KIXObjectType.USER, [contact.AssignedUserID], null, null, true
+                        KIXObjectType.USER, [contact.AssignedUserID], null, null, true, true, true
                     ).catch(() => [] as User[]);
                     user = users && users.length ? users[0] : null;
                 }

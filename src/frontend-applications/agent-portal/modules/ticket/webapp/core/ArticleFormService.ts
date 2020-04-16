@@ -64,19 +64,23 @@ export class ArticleFormService extends KIXObjectFormService {
     protected async getValue(property: string, value: any, ticket?: Ticket): Promise<any> {
         switch (property) {
             case ArticleProperty.CHANNEL_ID:
-                if (ticket) {
-                    const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-                    if (dialogContext) {
-                        const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
-                        if (isReplyDialog) {
-                            const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-                            if (referencedArticleId && ticket) {
-                                const referencedArticle = ticket.Articles.find(
-                                    (a) => a.ArticleID === referencedArticleId
-                                );
-                                if (referencedArticle) {
-                                    value = referencedArticle.ChannelID;
-                                }
+                const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                if (dialogContext) {
+                    const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
+                    if (isReplyDialog) {
+                        const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+                        if (!ticket) {
+                            const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                            if (mainContext) {
+                                ticket = await mainContext.getObject<Ticket>(KIXObjectType.TICKET);
+                            }
+                        }
+                        if (referencedArticleId && ticket) {
+                            const referencedArticle = ticket.Articles.find(
+                                (a) => a.ArticleID === referencedArticleId
+                            );
+                            if (referencedArticle) {
+                                value = referencedArticle.ChannelID;
                             }
                         }
                     }
@@ -150,15 +154,18 @@ export class ArticleFormService extends KIXObjectFormService {
     private async getVisibleField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
+        const defaultValue = new FormFieldValue(null);
+        defaultValue.value = true;
+
         let field = new FormFieldConfiguration(
             'visible-input',
             'Translatable#Show in Customer Portal', ArticleProperty.CUSTOMER_VISIBLE, 'customer-visible-input', false,
             isTicket
                 ? 'Translatable#Helptext_Tickets_TicketCreate_CustomerVisible'
-                : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible'
+                : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible', null, defaultValue
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
+            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
@@ -351,7 +358,7 @@ export class ArticleFormService extends KIXObjectFormService {
         if (Array.isArray(value)) {
             value = value.filter((a) => a.Disposition !== 'inline');
             if (!!value.length) {
-                // FIXME: not very performant (maybe some reference attachment id)
+                // TODO: not very performant (maybe some reference attachment id)
                 const referencedArticle = await this.getReferencedArticle();
                 for (const attachment of value) {
                     const attachmentWithContent = await TicketService.getInstance().loadArticleAttachment(

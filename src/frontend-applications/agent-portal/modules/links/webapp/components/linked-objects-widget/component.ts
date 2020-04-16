@@ -127,8 +127,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 (lo) => lo.linkedObjectType === o.KIXObjectType && lo.linkedObjectKey === o.ObjectId.toString()
             );
             if (linkObject) {
-                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getText(o, true, false);
-                linkObject.title = await LabelService.getInstance().getText(o, false, true);
+                linkObject.linkedObjectDisplayId = await LabelService.getInstance().getObjectText(o, true, false);
+                linkObject.title = await LabelService.getInstance().getObjectText(o, false, true);
             }
         }
 

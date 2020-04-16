@@ -81,7 +81,6 @@ export class Component {
 
             const context = await ContextService.getInstance().getContext(FAQDetailsContext.CONTEXT_ID);
             await context.getObject(KIXObjectType.FAQ_ARTICLE, true);
-            EventService.getInstance().publish(ApplicationEvent.REFRESH);
         }
     }
 

@@ -54,12 +54,6 @@ export class ApplicationRouter extends KIXRouter {
         await this.handleRoute(req, res);
     }
 
-
-    public getRoot(req: Request, res: Response): void {
-        const defaultRoute = ConfigurationService.getInstance().getServerConfiguration().DEFAULT_MODULE_ID;
-        res.redirect(defaultRoute);
-    }
-
     protected initialize(): void {
         this.router.get(
             "/",

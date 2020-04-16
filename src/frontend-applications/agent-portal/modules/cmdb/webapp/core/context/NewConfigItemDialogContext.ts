@@ -8,9 +8,34 @@
  */
 
 import { Context } from "../../../../../model/Context";
+import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { VersionProperty } from "../../../model/VersionProperty";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
 
 export class NewConfigItemDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-config-item-dialog-context';
+
+    public async getObject<O extends KIXObject>(
+        objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false, changedProperties?: string[]
+    ): Promise<O> {
+        let object;
+        const objectId = this.getObjectId();
+        if (objectId) {
+            const loadingOptions = new KIXObjectLoadingOptions(
+                null, null, null,
+                [
+                    ConfigItemProperty.CURRENT_VERSION, VersionProperty.DEFINITION,
+                    VersionProperty.DATA, VersionProperty.PREPARED_DATA
+                ]
+            );
+            const objects = await KIXObjectService.loadObjects(objectType, [objectId], loadingOptions);
+            object = objects && objects.length ? objects[0] : null;
+        }
+        return object;
+    }
 
 }

@@ -9,12 +9,11 @@
 
 import { ComponentState } from './ComponentState';
 import { ConfigItemLabelProvider } from '../../core';
+import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 
 class Component {
 
     private state: ComponentState;
-
-    public labelProvider: ConfigItemLabelProvider;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -25,10 +24,11 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.labelProvider = new ConfigItemLabelProvider();
-        const icons = await this.labelProvider.getIcons(this.state.configItem, "CurInciStateID");
-        this.state.icon = icons && icons.length ? icons[0] : null;
         this.state.loading = false;
+    }
+
+    public getVersionTemplate(): any {
+        return KIXModulesService.getComponentTemplate('config-item-version-details');
     }
 
 }

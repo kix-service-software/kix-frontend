@@ -11,6 +11,7 @@ import { ContextService } from "../../../../modules/base-components/webapp/core/
 import { NewContactDialogContext, ContactDetailsContext, EditContactDialogContext } from ".";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContextMode } from "../../../../model/ContextMode";
+import { Contact } from "../../model/Contact";
 
 export class ContactDialogUtil {
 
@@ -20,22 +21,28 @@ export class ContactDialogUtil {
         );
     }
 
-    public static async edit(contactid?: string | number): Promise<void> {
-        if (!contactid) {
+    public static async edit(contactId?: string | number): Promise<void> {
+        if (!contactId) {
             const context = await ContextService.getInstance().getContext<ContactDetailsContext>(
                 ContactDetailsContext.CONTEXT_ID
             );
 
             if (context) {
-                contactid = context.getObjectId();
+                contactId = context.getObjectId();
             }
         }
 
-        if (contactid) {
+        if (contactId) {
             ContextService.getInstance().setDialogContext(
-                EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.EDIT, contactid
+                EditContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.EDIT, contactId
             );
         }
+    }
+
+    public static async duplicate(contact: Contact): Promise<void> {
+        ContextService.getInstance().setDialogContext(
+            NewContactDialogContext.CONTEXT_ID, KIXObjectType.CONTACT, ContextMode.CREATE, contact.ID
+        );
     }
 
 }

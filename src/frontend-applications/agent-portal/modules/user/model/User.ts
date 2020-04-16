@@ -45,7 +45,7 @@ export class User extends KIXObject<User> {
             this.RoleIDs = user.RoleIDs ? user.RoleIDs : [];
             this.IsAgent = user.IsAgent;
             this.IsCustomer = user.IsCustomer;
-            this.Contact = user.Contact;
+            this.Contact = user.Contact ? new Contact(user.Contact) : null;
 
             if (this.Tickets) {
                 this.Tickets.Owned = this.Tickets.Owned.map((t) => Number(t));
@@ -56,5 +56,9 @@ export class User extends KIXObject<User> {
                 this.Tickets.WatchedAndUnseen = this.Tickets.WatchedAndUnseen.map((t) => Number(t));
             }
         }
+    }
+
+    public getIdPropertyName(): string {
+        return 'UserID';
     }
 }

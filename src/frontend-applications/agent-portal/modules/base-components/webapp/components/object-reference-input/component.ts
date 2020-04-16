@@ -30,6 +30,7 @@ import { UIUtil } from '../../core/UIUtil';
 import { IdService } from '../../../../../model/IdService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -91,7 +92,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     objectOption.value, null, loadingOptions ? loadingOptions.value : null
                 );
                 const structureOption = this.state.field.options.find(
-                    (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
+                    (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
                 );
 
                 const showInvalid = this.showInvalidNodes();
@@ -103,8 +104,6 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     nodes = await KIXObjectService.prepareObjectTree(
                         this.objects, showInvalid, invalidClickable, objectId ? [objectId] : null
                     );
-
-
                 } else {
                     for (const o of this.objects) {
                         const node = await this.createTreeNode(o);
@@ -180,7 +179,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                         (o) => o.option === ObjectReferenceOptions.OBJECT
                     );
                     if (objectOption) {
-                        const objects = await KIXObjectService.loadObjects(objectOption.value, objectIds);
+                        const objects = await KIXObjectService.loadObjects(
+                            objectOption.value, objectIds, null, null, null, null, true
+                        );
                         if (objects && !!objects.length) {
                             for (const object of objects) {
                                 const node = await this.createTreeNode(object);
@@ -284,6 +285,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     loadingOptions.filter = [
                         ...loadingOptions.filter.map((f) => {
                             if (f.value === SearchProperty.SEARCH_VALUE) {
+                                if (f.operator === SearchOperator.LIKE) {
+                                    searchValue = `*${searchValue}*`;
+                                }
                                 return new FilterCriteria(f.property, f.operator, f.type, f.filterType, searchValue);
                             } else {
                                 return f;
@@ -302,7 +306,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
                 if (searchValue && searchValue !== '') {
                     const structureOption = this.state.field.options.find(
-                        (o) => o.option === ObjectReferenceOptions.AS_STRUCTURE
+                        (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
                     );
                     if (structureOption && structureOption.value) {
                         nodes = await KIXObjectService.prepareObjectTree(this.objects);
@@ -330,13 +334,13 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             // typeof o.ValidID === 'undefined' - needed for objects without ValidID like ValidObject
             if (typeof o.ValidID === 'undefined' || o.ValidID === 1 || showInvalid) {
                 const invalidClickable = this.areInvalidClickable();
-                const text = await LabelService.getInstance().getText(o);
+                const text = await LabelService.getInstance().getObjectText(o);
                 const icon = LabelService.getInstance().getObjectIcon(o);
                 let tooltip = await LabelService.getInstance().getTooltip(o);
 
                 tooltip = (tooltip && tooltip !== text) ? text + ": " + tooltip : text;
                 return new TreeNode(
-                    o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId}`, icon, undefined, undefined,
+                    o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId} `, icon, undefined, undefined,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined,
                     typeof o.ValidID === 'undefined' || o.ValidID === 1 || invalidClickable,
                     tooltip, undefined, undefined, undefined,

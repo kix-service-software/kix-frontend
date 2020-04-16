@@ -136,7 +136,6 @@ export class TicketSocketClient extends SocketClient {
                 if (result.requestId === requestId) {
                     BrowserCacheService.getInstance().deleteKeys(KIXObjectType.CURRENT_USER);
                     BrowserCacheService.getInstance().deleteKeys(KIXObjectType.TICKET);
-                    EventService.getInstance().publish(ApplicationEvent.REFRESH_TOOLBAR);
                     window.clearTimeout(timeout);
                     resolve();
                 }

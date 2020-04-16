@@ -13,6 +13,8 @@ export enum ContactProperty {
 
     ASSIGNED_USER_ID = 'AssignedUserID',
 
+    ASSIGNED_CONFIG_ITEMS = 'AssignedConfigItems',
+
     FIRSTNAME = 'Firstname',
 
     LASTNAME = 'Lastname',

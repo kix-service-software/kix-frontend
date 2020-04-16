@@ -8,11 +8,15 @@
  */
 
 import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
+import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { TextModuleDialogUtil } from "../TextModuleDialogUtil";
 
 export class TextModuleCreateAction extends AbstractAction {
+
+    public permissions = [
+        new UIComponentPermission('system/textmodules', [CRUD.CREATE])
+    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#New Text Module';
@@ -20,10 +24,7 @@ export class TextModuleCreateAction extends AbstractAction {
     }
 
     public async run(event: any): Promise<void> {
-        ContextService.getInstance().setDialogContext(
-            null, KIXObjectType.TEXT_MODULE, ContextMode.CREATE_ADMIN, null, true,
-            'Translatable#Ticket'
-        );
+        TextModuleDialogUtil.create();
     }
 
 }

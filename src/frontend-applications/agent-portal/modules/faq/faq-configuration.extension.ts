@@ -39,10 +39,10 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { ModuleConfigurationService } from '../../server/services/configuration';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
-export class DashboardModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return FAQContext.CONTEXT_ID;
@@ -133,7 +133,7 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
                 "Translatable#Helptext_FAQ_Link_Category",
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
@@ -202,5 +202,5 @@ export class DashboardModuleFactoryExtension implements IConfigurationExtension 
 }
 
 module.exports = (data, host, options) => {
-    return new DashboardModuleFactoryExtension();
+    return new Extension();
 };

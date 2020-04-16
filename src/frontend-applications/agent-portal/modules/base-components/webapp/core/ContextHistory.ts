@@ -15,6 +15,8 @@ import { RoutingService } from "./RoutingService";
 import { ContextType } from "../../../../model/ContextType";
 import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
 import { Context } from "../../../../model/Context";
+import { EventService } from "./EventService";
+import { ContextUIEvent } from "./ContextUIEvent";
 
 export class ContextHistory {
 
@@ -86,6 +88,7 @@ export class ContextHistory {
                 );
                 this.contextHistory.push(newEntry);
             }
+            EventService.getInstance().publish(ContextUIEvent.HISTORY_CHANGED);
         }
     }
 

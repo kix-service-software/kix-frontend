@@ -48,12 +48,8 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const objectType = formInstance.getObjectType();
 
-        let dialogTitle = await TranslationService.translate('Translatable#Link Objects');
-        const labelProvider = LabelService.getInstance().getLabelProviderForType(objectType);
-        if (labelProvider) {
-            const objectName = await labelProvider.getObjectName();
-            dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
-        }
+        const objectName = await LabelService.getInstance().getObjectName(objectType);
+        const dialogTitle = await TranslationService.translate('Translatable#link {0}', [objectName]);
 
         const resultListenerId = 'result-listener-link-' + objectType + IdService.generateDateBasedId();
         DialogService.getInstance().openOverlayDialog(

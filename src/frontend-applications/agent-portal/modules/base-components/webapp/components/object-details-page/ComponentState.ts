@@ -17,9 +17,8 @@ export class ComponentState {
         public lanes: ConfiguredWidget[] = [],
         public contentWidgets: ConfiguredWidget[] = [],
         public actions: AbstractAction[] = [],
-        public loading: boolean = true,
-        public hasError: boolean = false,
         public error: any = null,
-        public title: string = ''
+        public title: string = '',
+        public loading: boolean = true
     ) { }
 }

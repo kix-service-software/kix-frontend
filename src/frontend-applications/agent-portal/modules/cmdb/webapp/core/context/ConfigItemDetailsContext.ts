@@ -16,9 +16,6 @@ import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { VersionProperty } from "../../../model/VersionProperty";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class ConfigItemDetailsContext extends Context {
 
@@ -29,25 +26,29 @@ export class ConfigItemDetailsContext extends Context {
     }
 
     public async getDisplayText(short?: boolean): Promise<string> {
-        return await LabelService.getInstance().getText(await this.getObject<ConfigItem>(), true, !short);
+        return await LabelService.getInstance().getObjectText(await this.getObject<ConfigItem>(), true, !short);
     }
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const object = await this.getObject<ConfigItem>();
-        const text = await LabelService.getInstance().getText(object);
+        const text = await LabelService.getInstance().getObjectText(object);
         return new BreadcrumbInformation(this.getIcon(), [CMDBContext.CONTEXT_ID], text);
     }
 
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false
     ): Promise<O> {
-        const object = await this.loadConfigItem() as any;
+        const object = await this.loadConfigItem();
+
         if (reload) {
+            if (object) {
+                this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, object.Versions);
+            }
             this.listeners.forEach(
                 (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
             );
         }
-        return object;
+        return object as any;
     }
 
     private async loadConfigItem(): Promise<ConfigItem> {
@@ -60,32 +61,7 @@ export class ConfigItemDetailsContext extends Context {
             ['Links']
         );
 
-        const itemId = Number(this.objectId);
-
-        const timeout = window.setTimeout(() => {
-            EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
-                loading: true, hint: 'Translatable#Load Config Item'
-            });
-        }, 500);
-
-        const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-            KIXObjectType.CONFIG_ITEM, [itemId], loadingOptions, null, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        window.clearTimeout(timeout);
-
-        let configItem: ConfigItem;
-        if (configItems && configItems.length) {
-            configItem = configItems[0];
-        }
-
-        EventService.getInstance().publish(
-            ApplicationEvent.APP_LOADING, { loading: false, hint: '' }
-        );
-        return configItem;
+        return await this.loadDetailsObject<ConfigItem>(KIXObjectType.CONFIG_ITEM, loadingOptions);
     }
 
 }

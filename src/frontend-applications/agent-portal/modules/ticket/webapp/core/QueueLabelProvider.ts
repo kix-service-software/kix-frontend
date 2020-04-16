@@ -130,7 +130,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
                         KIXObjectType.SYSTEM_ADDRESS, [value], null, null, true
                     ).catch((error) => [] as SystemAddress[]);
                     displayValue = systemAddresses && !!systemAddresses.length ?
-                        await LabelService.getInstance().getText(systemAddresses[0]) : value;
+                        await LabelService.getInstance().getObjectText(systemAddresses[0]) : value;
                 }
                 break;
             case QueueProperty.FOLLOW_UP_ID:
@@ -157,7 +157,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
                         KIXObjectType.QUEUE, [value], null, null, true
                     ).catch((error) => [] as Queue[]);
                     displayValue = parentQueue && !!parentQueue.length ?
-                        await LabelService.getInstance().getText(parentQueue[0], true, false) : value;
+                        await LabelService.getInstance().getObjectText(parentQueue[0], true, false) : value;
                 }
                 break;
             default:

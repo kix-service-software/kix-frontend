@@ -87,24 +87,39 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             switch (searchCriteria.property) {
                 case SearchProperty.FULLTEXT:
                     newCriteria.push(new FilterCriteria(
-                        ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
-                        FilterDataType.STRING, FilterType.OR, searchCriteria.value
+                        ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
                     ));
                     newCriteria.push(new FilterCriteria(
-                        'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
-                        FilterDataType.STRING, FilterType.OR, searchCriteria.value
+                        ConfigItemProperty.NAME, SearchOperator.LIKE,
+                        FilterDataType.STRING, FilterType.OR, `*${searchCriteria.value}*`
                     ));
                     break;
-                case VersionProperty.NAME:
+                case ConfigItemProperty.NAME:
                     newCriteria.push(new FilterCriteria(
-                        'CurrentVersion.' + VersionProperty.NAME, searchCriteria.operator,
+                        ConfigItemProperty.NAME, searchCriteria.operator,
+                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
+                    ));
+                    break;
+                case ConfigItemProperty.CLASS_ID:
+                    newCriteria.push(new FilterCriteria(
+                        'ClassIDs', searchCriteria.operator,
+                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
+                    ));
+                    break;
+                case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                    newCriteria.push(new FilterCriteria(
+                        'DeplStateIDs', searchCriteria.operator,
+                        searchCriteria.type, searchCriteria.filterType, searchCriteria.value
+                    ));
+                    break;
+                case ConfigItemProperty.CUR_INCI_STATE_ID:
+                    newCriteria.push(new FilterCriteria(
+                        'InciStateIDs', searchCriteria.operator,
                         searchCriteria.type, searchCriteria.filterType, searchCriteria.value
                     ));
                     break;
                 case VersionProperty.NUMBER:
-                case ConfigItemProperty.CLASS_ID:
-                case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                case ConfigItemProperty.CUR_INCI_STATE_ID:
                 case KIXObjectProperty.CHANGE_BY:
                 case KIXObjectProperty.CREATE_BY:
                     newCriteria.push(searchCriteria);
@@ -158,12 +173,12 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 break;
             case SearchProperty.FULLTEXT:
                 criteria.push(new FilterCriteria(
-                    ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
-                    FilterDataType.STRING, FilterType.OR, value
+                    ConfigItemProperty.NUMBER, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `*${value}*`
                 ));
                 criteria.push(new FilterCriteria(
-                    'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
-                    FilterDataType.STRING, FilterType.OR, value
+                    ConfigItemProperty.NAME, SearchOperator.LIKE,
+                    FilterDataType.STRING, FilterType.OR, `*${value}*`
                 ));
                 break;
             default:
@@ -256,7 +271,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 );
 
                 if (organisations && organisations.length) {
-                    displayValue = await LabelService.getInstance().getText(organisations[0]);
+                    displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
                 }
             } else if (input.Type === 'Contact') {
                 const contacts = await KIXObjectService.loadObjects<Contact>(
@@ -264,7 +279,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 );
 
                 if (contacts && contacts.length) {
-                    displayValue = await LabelService.getInstance().getText(contacts[0]);
+                    displayValue = await LabelService.getInstance().getObjectText(contacts[0]);
                 }
             } else if (input.Type === 'Date') {
                 displayValue = await DateTimeUtil.getLocalDateString(displayValue);

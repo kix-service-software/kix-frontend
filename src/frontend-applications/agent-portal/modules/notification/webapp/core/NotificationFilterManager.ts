@@ -44,6 +44,20 @@ import { CMDBService } from "../../../cmdb/webapp/core";
 
 export class NotificationFilterManager extends AbstractDynamicFormManager {
 
+
+    private static INSTANCE: NotificationFilterManager;
+
+    public static getInstance(): NotificationFilterManager {
+        if (!NotificationFilterManager.INSTANCE) {
+            NotificationFilterManager.INSTANCE = new NotificationFilterManager();
+        }
+        return NotificationFilterManager.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
+
     public objectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
     public async getOpertationsType(property: string): Promise<DynamicFormOperationsType> {
@@ -89,6 +103,9 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
 
         const dynamicPoperties = [];
         if (await this.checkReadPermissions('system/dynamicfields')) {
+            let validDFTypes = [];
+            this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
+
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, null,
                 new KIXObjectLoadingOptions(
@@ -101,8 +118,13 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
                             DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                             FilterDataType.STRING, FilterType.AND,
                             [
-                                DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
-                                DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION, DynamicFieldTypes.CI_REFERENCE
+                                DynamicFieldTypes.TEXT,
+                                DynamicFieldTypes.TEXT_AREA,
+                                DynamicFieldTypes.DATE,
+                                DynamicFieldTypes.DATE_TIME,
+                                DynamicFieldTypes.SELECTION,
+                                DynamicFieldTypes.CI_REFERENCE,
+                                ...validDFTypes
                             ]
                         )
                     ]
@@ -204,6 +226,11 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
+        const result = await super.searchValues(property, searchValue, limit);
+        if (result) {
+            return result;
+        }
+
         let tree: TreeNode[];
 
         switch (property) {

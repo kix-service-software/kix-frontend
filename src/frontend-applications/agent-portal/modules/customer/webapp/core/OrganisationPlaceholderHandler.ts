@@ -11,7 +11,6 @@ import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/
 import { Organisation } from "../../model/Organisation";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { OrganisationProperty } from "../../model/OrganisationProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
@@ -30,7 +29,6 @@ export class OrganisationPlaceholderHandler implements IPlaceholderHandler {
         if (organisation) {
             const attribute: string = PlaceholderService.getInstance().getAttributeString(placeholder);
             if (attribute && this.isKnownProperty(attribute)) {
-                const orgLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.ORGANISATION);
                 if (!PlaceholderService.getInstance().translatePlaceholder(placeholder)) {
                     language = 'en';
                 }
@@ -45,14 +43,18 @@ export class OrganisationPlaceholderHandler implements IPlaceholderHandler {
                     case OrganisationProperty.COMMENT:
                     case OrganisationProperty.STREET:
                     case OrganisationProperty.ZIP:
-                        result = await orgLabelProvider.getDisplayText(organisation, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(
+                            organisation, attribute, undefined, false
+                        );
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:
                         result = await DateTimeUtil.getLocalDateTimeString(organisation[attribute], language);
                         break;
                     default:
-                        result = await orgLabelProvider.getDisplayText(organisation, attribute, undefined, false);
+                        result = await LabelService.getInstance().getDisplayText(
+                            organisation, attribute, undefined, false
+                        );
                         result = typeof result !== 'undefined' && result !== null
                             ? await TranslationService.translate(result.toString(), undefined, language) : '';
                 }

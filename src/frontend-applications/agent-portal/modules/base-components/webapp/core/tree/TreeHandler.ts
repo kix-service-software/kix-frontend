@@ -182,7 +182,7 @@ export class TreeHandler {
     }
 
     public getTree(): TreeNode[] {
-        return this.tree;
+        return this.tree || [];
     }
 
     public setSelection(
@@ -250,16 +250,18 @@ export class TreeHandler {
     public getSelection(tree: TreeNode[]): TreeNode[] {
         let selection: TreeNode[] = [];
 
-        tree.forEach((n) => {
-            if (n.selected) {
-                selection.push(n);
-            }
+        if (tree) {
+            tree.forEach((n) => {
+                if (n.selected) {
+                    selection.push(n);
+                }
 
-            if (n.children && n.children.length) {
-                selection = [...selection, ...this.getSelection(n.children)];
-            }
+                if (n.children && n.children.length) {
+                    selection = [...selection, ...this.getSelection(n.children)];
+                }
 
-        });
+            });
+        }
 
         return selection;
     }

@@ -24,6 +24,8 @@ export class ConfigItem extends KIXObject<ConfigItem> {
 
     public ConfigItemID: number;
 
+    public Name: string;
+
     public ChangeBy: number;
 
     public ChangeTime: string;
@@ -53,7 +55,6 @@ export class ConfigItem extends KIXObject<ConfigItem> {
 
     public createdBy: User;
     public changedBy: User;
-    public Name: string;
 
     public Versions: Version[];
     public Images: ConfigItemImage[];
@@ -64,6 +65,7 @@ export class ConfigItem extends KIXObject<ConfigItem> {
         if (configItem) {
             this.ConfigItemID = Number(configItem.ConfigItemID);
             this.ObjectId = this.ConfigItemID;
+            this.Name = configItem.Name;
             this.ChangeBy = configItem.ChangeBy;
             this.ChangeTime = configItem.ChangeTime;
             this.Class = configItem.Class;
@@ -83,8 +85,6 @@ export class ConfigItem extends KIXObject<ConfigItem> {
 
             this.createdBy = configItem.createdBy;
             this.changedBy = configItem.changedBy;
-
-            this.Name = configItem.Name;
 
             this.Links = configItem.Links ? configItem.Links.map((l) => new Link(l)) : [];
             this.Images = configItem.Images ? configItem.Images.map((i) => new ConfigItemImage(i)) : [];

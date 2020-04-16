@@ -17,6 +17,9 @@ import { FormFieldValue } from "../../../../../model/configuration/FormFieldValu
 import { TicketProperty } from "../../../model/TicketProperty";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
+import { Ticket } from "../../../model/Ticket";
 
 export class NewTicketDialogContext extends Context implements IFormInstanceListener {
 
@@ -50,7 +53,18 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
 
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
         let object;
-        if (kixObjectType === KIXObjectType.ORGANISATION) {
+        if (kixObjectType === KIXObjectType.TICKET) {
+            const ticketId = this.getObjectId();
+            if (ticketId) {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, [TicketProperty.LINK, KIXObjectProperty.DYNAMIC_FIELDS]
+                );
+                const objects = await KIXObjectService.loadObjects<Ticket>(
+                    KIXObjectType.TICKET, [ticketId], loadingOptions
+                );
+                object = objects && objects.length ? objects[0] : null;
+            }
+        } else if (kixObjectType === KIXObjectType.ORGANISATION) {
             object = this.organisation;
         } else if (kixObjectType === KIXObjectType.CONTACT) {
             object = this.contact;

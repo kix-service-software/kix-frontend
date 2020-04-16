@@ -8,12 +8,13 @@
  */
 
 import { KIXObject } from "../../../../model/kix/KIXObject";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 
 export interface IPlaceholderHandler {
 
     handlerId: string;
 
-    isHandlerFor(objectString: string): boolean;
+    isHandlerFor(objectType: KIXObjectType | string): boolean;
 
     replace(placeholder: string, object?: KIXObject, language?: string): Promise<string>;
 

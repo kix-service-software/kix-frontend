@@ -74,6 +74,10 @@ export class KIXObjectSocketClient extends SocketClient {
             if (!requestPromise) {
                 requestPromise = this.createRequestPromise<T>(request, timeout);
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
+
+                requestPromise.catch((error) => {
+                    BrowserCacheService.getInstance().delete(cacheKey, kixObjectType);
+                });
             }
             return requestPromise;
         }
@@ -124,7 +128,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        EventService.getInstance().publish(ApplicationEvent.OBJECT_CREATED, objectType);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_CREATED, { objectType, objectId: response.result });
 
         return response.result;
     }
@@ -147,7 +151,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, objectType);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType, objectId });
         return response.objectId;
     }
 
@@ -169,7 +173,7 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        EventService.getInstance().publish(ApplicationEvent.OBJECT_DELETED, objectType);
+        EventService.getInstance().publish(ApplicationEvent.OBJECT_DELETED, { objectType, objectId });
     }
 
     private async sendRequest<T extends ISocketResponse>(

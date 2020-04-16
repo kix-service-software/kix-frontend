@@ -111,7 +111,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async createTreeNode(contact: Contact): Promise<TreeNode> {
-        const displayValue = await LabelService.getInstance().getText(contact);
+        const displayValue = await LabelService.getInstance().getObjectText(contact);
         return new TreeNode(
             contact.Email, displayValue, 'kix-icon-man-bubble', null, null, null,
             null, null, null, null, undefined, undefined, undefined,

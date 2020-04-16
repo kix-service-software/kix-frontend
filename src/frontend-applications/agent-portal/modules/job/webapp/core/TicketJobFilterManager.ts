@@ -7,9 +7,8 @@
  * --
  */
 
-import {
-    AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
+// tslint:disable:max-line-length
+import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { DynamicFormOperationsType } from "../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType";
 import { TicketProperty } from "../../../ticket/model/TicketProperty";
@@ -38,8 +37,22 @@ import { TranslationService } from "../../../translation/webapp/core/Translation
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { SortUtil } from "../../../../model/SortUtil";
 import { CMDBService } from "../../../cmdb/webapp/core";
+// tslint:enable
 
-export class JobFilterManager extends AbstractDynamicFormManager {
+export class TicketJobFilterManager extends AbstractDynamicFormManager {
+
+    private static INSTANCE: TicketJobFilterManager;
+
+    public static getInstance(): TicketJobFilterManager {
+        if (!TicketJobFilterManager.INSTANCE) {
+            TicketJobFilterManager.INSTANCE = new TicketJobFilterManager();
+        }
+        return TicketJobFilterManager.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+    }
 
     public objectType: KIXObjectType = KIXObjectType.JOB;
 
@@ -86,20 +99,28 @@ export class JobFilterManager extends AbstractDynamicFormManager {
 
         const dynamicPoperties = [];
         if (await this.checkReadPermissions('system/dynamicfields')) {
+            let validDFTypes = [];
+            this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
+
             const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, null,
                 new KIXObjectLoadingOptions(
                     [
                         new FilterCriteria(
                             DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                            FilterType.AND, 'Ticket'
+                            FilterType.AND, KIXObjectType.TICKET
                         ),
                         new FilterCriteria(
                             DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
                             FilterDataType.STRING, FilterType.AND,
                             [
-                                DynamicFieldTypes.TEXT, DynamicFieldTypes.TEXT_AREA, DynamicFieldTypes.DATE,
-                                DynamicFieldTypes.DATE_TIME, DynamicFieldTypes.SELECTION, DynamicFieldTypes.CI_REFERENCE
+                                DynamicFieldTypes.TEXT,
+                                DynamicFieldTypes.TEXT_AREA,
+                                DynamicFieldTypes.DATE,
+                                DynamicFieldTypes.DATE_TIME,
+                                DynamicFieldTypes.SELECTION,
+                                DynamicFieldTypes.CI_REFERENCE,
+                                ...validDFTypes
                             ]
                         )
                     ]
@@ -142,13 +163,14 @@ export class JobFilterManager extends AbstractDynamicFormManager {
         }
     }
 
-    public async getObjectReferenceObjectType(property: string): Promise<KIXObjectType> {
+    public async getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string> {
         switch (property) {
             case TicketProperty.ORGANISATION_ID:
                 return KIXObjectType.ORGANISATION;
             case TicketProperty.CONTACT_ID:
                 return KIXObjectType.CONTACT;
             default:
+                return super.getObjectReferenceObjectType(property);
         }
     }
 
@@ -201,6 +223,11 @@ export class JobFilterManager extends AbstractDynamicFormManager {
     }
 
     public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
+        const result = await super.searchValues(property, searchValue, limit);
+        if (result) {
+            return result;
+        }
+
         let tree: TreeNode[];
 
         switch (property) {

@@ -32,8 +32,9 @@ import { CRUD } from "../../../../server/model/rest/CRUD";
 import { UserProperty } from "../user/model/UserProperty";
 import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
 import { ContextMode } from "../../model/ContextMode";
+import { KIXExtension } from "../../../../server/model/KIXExtension";
 
-export class ModuleFactoryExtension implements IConfigurationExtension {
+export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return ContactDetailsContext.CONTEXT_ID;
@@ -173,6 +174,17 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
         );
         configurations.push(assignedOrganisationsLane);
 
+        const assignedConfigItemsLane = new WidgetConfiguration(
+            'contact-details-assigned-config-items-widget', 'Assigned Assets', ConfigurationType.Widget,
+            'contact-assigned-config-items-widget', 'Translatable#Assigned Assets',
+            [], null, new TableConfiguration(
+                null, null, ConfigurationType.Table,
+                KIXObjectType.CONFIG_ITEM, null, null, null, null, null, null, null, null,
+                TableHeaderHeight.SMALL, TableRowHeight.SMALL
+            ), false, true, null, false
+        );
+        configurations.push(assignedConfigItemsLane);
+
         const assignedTicketsLane = new WidgetConfiguration(
             'contact-details-assigned-tickets-widget', 'Assigned Tickets', ConfigurationType.Widget,
             'contact-assigned-tickets-widget', 'Translatable#Overview Tickets',
@@ -193,6 +205,11 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                         null, [new UIComponentPermission('organisations', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
+                        'contact-details-assigned-config-items-widget',
+                        'contact-details-assigned-config-items-widget',
+                        null, [new UIComponentPermission('cmdb/configitems', [CRUD.READ])]
+                    ),
+                    new ConfiguredWidget(
                         'contact-details-assigned-tickets-widget', 'contact-details-assigned-tickets-widget', null,
                         [new UIComponentPermission('tickets', [CRUD.READ])]
                     )
@@ -202,8 +219,8 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
                     'contact-create-action'
                 ],
                 [
-                    'contact-edit-action', 'organisation-create-action', 'ticket-create-action',
-                    'config-item-create-action', 'print-action'
+                    'contact-edit-action', 'contact-duplicate-action', 'organisation-create-action',
+                    'ticket-create-action', 'config-item-create-action', 'print-action'
                 ],
                 [],
                 [
@@ -221,5 +238,5 @@ export class ModuleFactoryExtension implements IConfigurationExtension {
 }
 
 module.exports = (data, host, options) => {
-    return new ModuleFactoryExtension();
+    return new Extension();
 };

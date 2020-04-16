@@ -35,7 +35,9 @@ import { ConfigurationService } from '../../../../server/services/ConfigurationS
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration';
 
-export class Extension implements IConfigurationExtension {
+import { KIXExtension } from "../../../../server/model/KIXExtension";
+
+class Extension extends KIXExtension implements IConfigurationExtension {
 
     public getModuleId(): string {
         return NewFAQArticleDialogContext.CONTEXT_ID;
@@ -84,7 +86,7 @@ export class Extension implements IConfigurationExtension {
                 'Translatable#Helptext_FAQ_ArticleCreate_Category',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
-                    new FormFieldOption(ObjectReferenceOptions.AS_STRUCTURE, true),
+                    new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

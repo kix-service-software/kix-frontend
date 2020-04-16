@@ -90,7 +90,9 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
     public async getOperations(property: string): Promise<any[]> {
         let operations: SearchOperator[] = [];
 
-        if (property === SearchProperty.FULLTEXT) {
+        if (property === FAQArticleProperty.CUSTOMER_VISIBLE) {
+            operations = [SearchOperator.EQUALS];
+        } else if (property === SearchProperty.FULLTEXT) {
             operations = [SearchOperator.CONTAINS];
         } else if (this.isDropDown(property)) {
             operations = [SearchOperator.IN];
@@ -134,7 +136,7 @@ export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        return true;
+        return property !== FAQArticleProperty.CUSTOMER_VISIBLE;
     }
 
     public async getInputComponents(): Promise<Map<string, string>> {

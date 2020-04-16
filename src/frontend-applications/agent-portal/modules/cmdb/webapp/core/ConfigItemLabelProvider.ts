@@ -20,10 +20,19 @@ import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
 import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
 import { ObjectIcon } from "../../../icon/model/ObjectIcon";
 import { VersionProperty } from "../../model/VersionProperty";
+import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
+import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { LabelService } from "../../../base-components/webapp/core/LabelService";
+import { Label } from "../../../base-components/webapp/core/Label";
+import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
     public kixObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
+
+    public isLabelProviderForDFType(dfFieldType: string): boolean {
+        return dfFieldType === DynamicFieldTypes.CI_REFERENCE || super.isLabelProviderForDFType(dfFieldType);
+    }
 
     public async getPropertyValueDisplayText(
         property: string, value: any = '', translatable: boolean = true
@@ -148,8 +157,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = configItem.changedBy ? configItem.createdBy.Contact ?
                     configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.ChangeBy;
                 break;
-            case VersionProperty.NAME:
-                displayValue = configItem.CurrentVersion ? configItem.CurrentVersion.Name : property;
+            case ConfigItemProperty.NAME:
+                displayValue = configItem.Name;
                 break;
             case ConfigItemProperty.NUMBER:
                 displayValue = configItem.Number ?
@@ -203,8 +212,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
                 returnString = `${configItemHook}${configItem.Number}`;
             }
-            if (name && configItem.CurrentVersion && configItem.CurrentVersion.Name) {
-                returnString += (id ? ' - ' : '') + configItem.CurrentVersion.Name;
+            if (name) {
+                returnString += (id ? ' - ' : '') + configItem.Name;
             }
         } else {
             returnString = await this.getObjectName(false);
@@ -253,5 +262,49 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             default:
         }
         return icons;
+    }
+
+    public async createLabelsFromDFValue(dfValue: DynamicFieldValue): Promise<Label[]> {
+        const dynamicField = dfValue && dfValue.ID ? await KIXObjectService.loadDynamicField(
+            dfValue.Name ? dfValue.Name : null,
+            dfValue.ID ? Number(dfValue.ID) : null
+        ) : null;
+
+        if (dynamicField && dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+            if (Array.isArray(dfValue.Value)) {
+                const loadingOptions = new KIXObjectLoadingOptions(
+                    null, null, null, [ConfigItemProperty.CURRENT_VERSION, VersionProperty.PREPARED_DATA]
+                );
+                const configItems = await KIXObjectService.loadObjects<ConfigItem>(
+                    KIXObjectType.CONFIG_ITEM, dfValue.Value, loadingOptions
+                ).catch((): ConfigItem[] => []);
+
+                const labels = [];
+                for (const ci of configItems) {
+                    const ciIcon = new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
+                    const incidentIcons = await LabelService.getInstance().getIcons(
+                        ci, ConfigItemProperty.CUR_INCI_STATE_ID
+                    );
+                    const deploymentIcon = await LabelService.getInstance().getIcons(
+                        ci, ConfigItemProperty.CUR_DEPL_STATE_ID
+                    );
+                    const label = new Label(ci, ci.ConfigItemID, ciIcon, ci.Name, null, ci.Name, true, [
+                        ...incidentIcons, ...deploymentIcon
+                    ],
+                        {
+                            title: 'Translatable#Asset',
+                            content: 'config-item-info',
+                            instanceId: 'config-item-info',
+                            data: { configItem: ci },
+                            large: true
+                        }
+                    );
+                    labels.push(label);
+                }
+
+                return labels;
+            }
+        }
+        return null;
     }
 }

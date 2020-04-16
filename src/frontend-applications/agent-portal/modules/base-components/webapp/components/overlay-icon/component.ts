@@ -55,6 +55,10 @@ class Component {
     }
 
     public showOverlay(event: any) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
         if (!this.state.show) {
             OverlayService.getInstance().openOverlay(
                 this.isHintOverlay ? OverlayType.HINT : OverlayType.INFO,
