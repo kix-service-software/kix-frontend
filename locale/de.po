@@ -1920,6 +1920,22 @@ msgstr "Suchen Sie nach Assets mit diesem Name oder Teilen des Namens."
 msgid "Helptext_CMDB_ConfigItem_Link_Number"
 msgstr "Suchen Sie nach Assets mit dieser Nummer oder Teilen der Nummer."
 
+#, fuzzy
+#| msgid "Helptext_Ticket_Dashboard_Search"
+msgid "Helptext_CMDB_Dashboard_Search"
+msgstr ""
+"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", "
+"\"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
+"möglich."
+
+#, fuzzy
+#| msgid "Helptext_Ticket_Dashboard_Search"
+msgid "Helptext_Customer_Dashboard_Search"
+msgstr ""
+"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", "
+"\"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
+"möglich."
+
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
@@ -2195,8 +2211,8 @@ msgstr ""
 
 msgid "Helptext_Ticket_Dashboard_Search"
 msgstr ""
-"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", \""
-"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
+"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", "
+"\"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
 "möglich."
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
@@ -3377,6 +3393,11 @@ msgstr "Samstag"
 
 msgid "Save"
 msgstr "Speichern"
+
+#, fuzzy
+#| msgid "Save Search"
+msgid "Save new search"
+msgstr "Suche speichern"
 
 msgid "Save Search"
 msgstr "Suche speichern"

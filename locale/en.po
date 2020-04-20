@@ -1819,6 +1819,22 @@ msgstr "Search for assets with this name or parts of this name."
 msgid "Helptext_CMDB_ConfigItem_Link_Number"
 msgstr "Search for assets with this number or a part of the number."
 
+#, fuzzy
+#| msgid "Helptext_Ticket_Dashboard_Search"
+msgid "Helptext_CMDB_Dashboard_Search"
+msgstr ""
+"Searchable are the following Ticket properties: \"Ticket#\", \"Title\", "
+"\"Article Content\", \"To\", \"From\", \"Cc\". It is possible to use "
+"Wildcards (*)."
+
+#, fuzzy
+#| msgid "Helptext_Ticket_Dashboard_Search"
+msgid "Helptext_Customer_Dashboard_Search"
+msgstr ""
+"Searchable are the following Ticket properties: \"Ticket#\", \"Title\", "
+"\"Article Content\", \"To\", \"From\", \"Cc\". It is possible to use "
+"Wildcards (*)."
+
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
@@ -2077,9 +2093,9 @@ msgstr ""
 
 msgid "Helptext_Ticket_Dashboard_Search"
 msgstr ""
-"Searchable are the following Ticket properties: \"Ticket#\", \"Title\", \""
-"Article Content\", \"To\", \"From\", \"Cc\". It is possible to use Wildcards "
-"(*)."
+"Searchable are the following Ticket properties: \"Ticket#\", \"Title\", "
+"\"Article Content\", \"To\", \"From\", \"Cc\". It is possible to use "
+"Wildcards (*)."
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
@@ -3238,6 +3254,9 @@ msgid "Saturday"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Save new search"
 msgstr ""
 
 msgid "Save Search"
