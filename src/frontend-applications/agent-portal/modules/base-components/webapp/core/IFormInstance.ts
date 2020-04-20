@@ -21,17 +21,19 @@ export interface IFormInstance {
 
     provideFormField(newFormFieldConfiguration: FormFieldConfiguration): Promise<void>;
 
-    removeFormField(FormFieldConfiguration: FormFieldConfiguration, parent?: FormFieldConfiguration): void;
+    removeFormField(formFieldConfiguration: FormFieldConfiguration, parent?: FormFieldConfiguration): void;
 
     removePages(pageIds?: string[], protectedPages?: string[]): Promise<void>;
 
-    addFormField(FormFieldConfiguration: FormFieldConfiguration, fields?: FormFieldConfiguration[]): void;
+    addFormField(formFieldConfiguration: FormFieldConfiguration, fields?: FormFieldConfiguration[]): void;
+
+    setFieldEmptyState(formFieldConfiguration: FormFieldConfiguration, empty?: boolean): void;
 
     addPage(page: FormPageConfiguration, index?: number): void;
 
-    provideFormFieldValue<T>(FormFieldConfigurationInstanceId: string, value: T, silent?: boolean): void;
+    provideFormFieldValue<T>(formFieldConfigurationInstanceId: string, value: T, silent?: boolean): void;
 
-    getFormFieldValue<T>(FormFieldConfigurationInstanceId: string): FormFieldValue<T>;
+    getFormFieldValue<T>(formFieldConfigurationInstanceId: string): FormFieldValue<T>;
 
     getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>>;
 
@@ -39,7 +41,7 @@ export interface IFormInstance {
 
     getAllFormFieldValues(): Map<string, FormFieldValue<any>>;
 
-    getFormField(FormFieldConfigurationInstanceId: string): Promise<FormFieldConfiguration>;
+    getFormField(formFieldConfigurationInstanceId: string): Promise<FormFieldConfiguration>;
 
     hasValues(): boolean;
 

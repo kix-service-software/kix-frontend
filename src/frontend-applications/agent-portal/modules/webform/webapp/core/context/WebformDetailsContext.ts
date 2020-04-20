@@ -15,7 +15,6 @@ import { TranslationService } from "../../../../translation/webapp/core/Translat
 import { AdminContext } from "../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class WebformDetailsContext extends Context {
 
@@ -42,7 +41,7 @@ export class WebformDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.WEBFORM, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadWebform(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.WEBFORM);
 
         if (reload) {
             this.listeners.forEach(
@@ -51,25 +50,6 @@ export class WebformDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadWebform(changedProperties: string[] = [], cache: boolean = true): Promise<Webform> {
-        const webformId = Number(this.objectId);
-
-        const webforms = await KIXObjectService.loadObjects<Webform>(
-            KIXObjectType.WEBFORM, [webformId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let webform: Webform;
-        if (webforms && webforms.length) {
-            webform = webforms[0];
-            this.objectId = webform.ObjectId;
-        }
-
-        return webform;
     }
 
 }

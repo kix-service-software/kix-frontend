@@ -105,7 +105,8 @@ class Component {
                                 this.state.table.filter();
                             }
 
-                            this.state.loading = false;
+
+                            setTimeout(() => this.state.loading = false, 100);
                         } else {
                             if (eventId === TableEvent.TABLE_READY) {
                                 this.state.filterCount = this.state.table.isFiltered()
@@ -208,11 +209,12 @@ class Component {
                 settings.tableConfiguration, null, contextId, true, true, settings.shortTable, false, !settings.cache
             );
 
-            if (table && settings.sort) {
-                table.sort(settings.sort[0], settings.sort[1]);
+            if (table) {
+                if (settings.sort) {
+                    table.sort(settings.sort[0], settings.sort[1]);
+                }
+                await table.initialize();
             }
-
-            await table.initialize();
 
             this.state.table = table;
             this.state.loading = false;

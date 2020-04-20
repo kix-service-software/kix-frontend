@@ -44,9 +44,9 @@ export class JobFormService extends KIXObjectFormService {
         super();
     }
 
-    private jobFormManager: Map<JobTypes, IJobFormManager> = new Map();
+    private jobFormManager: Map<JobTypes | string, IJobFormManager> = new Map();
 
-    public getJobFormManager(type: JobTypes): IJobFormManager {
+    public getJobFormManager(type: JobTypes | string): IJobFormManager {
         return this.jobFormManager.get(type);
     }
 
@@ -59,6 +59,7 @@ export class JobFormService extends KIXObjectFormService {
     }
 
     protected async prePrepareForm(form: FormConfiguration, job: Job): Promise<void> {
+        form.pages = [];
         form.pages.push(AbstractJobFormManager.getJobPage(form.formContext));
 
         if (form.pages.length && job && form.formContext === FormContext.EDIT) {
@@ -127,7 +128,11 @@ export class JobFormService extends KIXObjectFormService {
 
     public getNewFormField(f: FormFieldConfiguration, parent?: FormFieldConfiguration): FormFieldConfiguration {
         const field = super.getNewFormField(f, parent, false);
-        field.hint = field.defaultHint;
+        if (field.property === JobProperty.MACRO_ACTIONS) {
+            field.defaultValue = null;
+            field.hint = field.defaultHint;
+            field.children = [];
+        }
         return field;
     }
 
@@ -135,7 +140,7 @@ export class JobFormService extends KIXObjectFormService {
         property: string, value: any, formInstance: FormInstance
     ): Promise<Array<[string, any]>> {
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-        const manager = this.getJobFormManager(typeValue ? JobTypes[typeValue.value.toLocaleUpperCase()] : null);
+        const manager = this.getJobFormManager(typeValue ? typeValue.value : null);
         if (manager) {
             return manager.prepareCreateValue(property, value);
         }
@@ -198,7 +203,7 @@ export class JobFormService extends KIXObjectFormService {
     ): Promise<FormFieldConfiguration[]> {
         let formFields = [];
         if (type) {
-            const manager = this.getJobFormManager(JobTypes[type.toLocaleUpperCase()]);
+            const manager = this.getJobFormManager(type);
             formFields = await manager.getFormFieldsForAction(actionType, actionFieldInstanceId, type, action);
         }
         return formFields;
@@ -206,11 +211,19 @@ export class JobFormService extends KIXObjectFormService {
 
     public async updateFields(fields: FormFieldConfiguration[], formInstance: IFormInstance): Promise<void> {
         const typeValue = await formInstance.getFormFieldValueByProperty<string>(JobProperty.TYPE);
-        const type = typeValue && typeValue.value ? JobTypes[typeValue.value.toLocaleUpperCase()] : null;
+        const type = typeValue && typeValue.value ? typeValue.value : null;
         const manager = this.getJobFormManager(type);
 
         if (manager) {
             manager.updateFields(fields);
+        }
+    }
+
+    public resetChildrenOnEmpty(formField: FormFieldConfiguration): void {
+        if (formField.property === JobProperty.MACRO_ACTIONS) {
+            formField.children = [];
+        } else {
+            super.resetChildrenOnEmpty(formField);
         }
     }
 }

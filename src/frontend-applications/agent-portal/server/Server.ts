@@ -153,6 +153,7 @@ export class Server implements IServer {
     }
 
     public static async createClientRegistration(): Promise<void> {
+        LoggingService.getInstance().info('Create ClientRegsitration');
         let poDefinitions = [];
 
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -182,7 +183,9 @@ export class Server implements IServer {
             LoggingService.getInstance().error(error);
             return null;
         });
+
         ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
+        LoggingService.getInstance().info('ClientRegistration created.');
     }
 
     private static async createDefaultConfigurations(): Promise<SysConfigOptionDefinition[]> {

@@ -16,8 +16,6 @@ import { KIXObjectService } from "../../../../../modules/base-components/webapp/
 import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
 import { TicketContext } from "./TicketContext";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
 import { TicketProperty } from "../../../model/TicketProperty";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 
@@ -64,10 +62,13 @@ export class TicketDetailsContext extends Context {
 
         if (reload && objectType === KIXObjectType.TICKET) {
             setTimeout(() => {
+                if (ticket) {
+                    this.setObjectList(KIXObjectType.ARTICLE, ticket.Articles);
+                }
                 this.listeners.forEach(
                     (l) => l.objectChanged(Number(this.objectId), ticket, KIXObjectType.TICKET, changedProperties)
                 );
-            }, 20);
+            }, 100);
         }
 
         return object;
@@ -89,36 +90,7 @@ export class TicketDetailsContext extends Context {
             [KIXObjectProperty.LINKS]
         );
 
-        const ticketId = Number(this.objectId);
-        this.objectId = ticketId;
-
-        const tickets: Ticket[] = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, [ticketId], loadingOptions, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let ticket: Ticket;
-        if (tickets && tickets.length) {
-            ticket = tickets[0];
-            // TODO: in eigenen "Notification" Service auslagern
-            if (!ticket || ticket.OrganisationID !== tickets[0].OrganisationID) {
-                this.listeners.forEach((l) => l.objectChanged(
-                    tickets[0].OrganisationID, null, KIXObjectType.ORGANISATION
-                ));
-            }
-            if (!ticket || ticket.ContactID !== tickets[0].ContactID) {
-                this.listeners.forEach((l) => l.objectChanged(
-                    tickets[0].ContactID, null, KIXObjectType.CONTACT
-                ));
-            }
-
-            this.setObjectList(KIXObjectType.ARTICLE, ticket.Articles);
-        }
-
-        EventService.getInstance().publish(ApplicationEvent.APP_LOADING, { loading: false });
-
+        const ticket: Ticket = await this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
         return ticket;
     }
 

@@ -88,7 +88,7 @@ export class UIModule implements IUIModule {
         await ContextService.getInstance().registerContext(editJobDialogContext);
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
-        JobFormService.getInstance().registerJobFormManager(JobTypes.SYNC, new SyncJobFormManager());
+        JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());
     }
 
 }

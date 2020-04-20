@@ -62,6 +62,10 @@ export class SearchFormInstance implements IFormInstance {
         return;
     }
 
+    public setFieldEmptyState(formField: FormFieldConfiguration, empty?: boolean): void {
+        return;
+    }
+
     public removePages(pageIds: string[]): Promise<void> {
         return;
     }

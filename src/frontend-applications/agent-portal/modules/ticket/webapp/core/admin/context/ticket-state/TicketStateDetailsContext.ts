@@ -15,7 +15,6 @@ import { TranslationService } from "../../../../../../../modules/translation/web
 import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class TicketStateDetailsContext extends Context {
 
@@ -41,7 +40,7 @@ export class TicketStateDetailsContext extends Context {
         objectType: KIXObjectType = KIXObjectType.TICKET_STATE, reload: boolean = false,
         changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadTicketState(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.TICKET_STATE);
 
         if (reload) {
             this.listeners.forEach(
@@ -50,25 +49,6 @@ export class TicketStateDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadTicketState(changedProperties: string[] = [], cache: boolean = true): Promise<TicketState> {
-        const ticketStateId = Number(this.objectId);
-
-        const ticketStates = await KIXObjectService.loadObjects<TicketState>(
-            KIXObjectType.TICKET_STATE, [ticketStateId], null, null, cache
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let ticketState: TicketState;
-        if (ticketStates && ticketStates.length) {
-            ticketState = ticketStates[0];
-            this.objectId = ticketState.ID;
-        }
-
-        return ticketState;
     }
 
 }

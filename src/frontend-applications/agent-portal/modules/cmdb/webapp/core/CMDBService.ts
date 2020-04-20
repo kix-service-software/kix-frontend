@@ -100,8 +100,8 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 FilterDataType.STRING, FilterType.AND, ciClassNames
             ),
             new FilterCriteria(
-                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.AND, searchValue
+                ConfigItemProperty.NAME, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.AND, `*${searchValue}*`
             )
         ], null, limit);
 
@@ -252,7 +252,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
-                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                ConfigItemProperty.NAME, SearchOperator.CONTAINS,
                 FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];

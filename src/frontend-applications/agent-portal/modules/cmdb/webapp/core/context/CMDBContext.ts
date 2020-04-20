@@ -23,7 +23,6 @@ import { CMDBService } from "..";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
 import { EventService } from "../../../../base-components/webapp/core/EventService";
-import { VersionProperty } from "../../../model/VersionProperty";
 
 export class CMDBContext extends Context {
 
@@ -61,20 +60,20 @@ export class CMDBContext extends Context {
     public async loadConfigItems(): Promise<void> {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.CONFIG_ITEM);
 
-        const loadingOptions = new KIXObjectLoadingOptions([], null, null, []);
+        const loadingOptions = new KIXObjectLoadingOptions([]);
 
         const deploymentIds = await this.getDeploymentStateIds();
         loadingOptions.filter.push(
             new FilterCriteria(
-                ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN, FilterDataType.NUMERIC,
+                'DeplStateIDs', SearchOperator.IN, FilterDataType.NUMERIC,
                 FilterType.AND, deploymentIds
             )
         );
 
         if (this.currentCIClass) {
             loadingOptions.filter.push(new FilterCriteria(
-                ConfigItemProperty.CLASS_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                FilterType.AND, this.currentCIClass.ID
+                'ClassIDs', SearchOperator.IN, FilterDataType.NUMERIC,
+                FilterType.AND, [this.currentCIClass.ID]
             ));
         }
 
@@ -84,10 +83,9 @@ export class CMDBContext extends Context {
                 FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
             ));
             loadingOptions.filter.push(new FilterCriteria(
-                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.LIKE,
+                ConfigItemProperty.NAME, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${this.filterValue}*`
             ));
-            loadingOptions.includes.push(ConfigItemProperty.CURRENT_VERSION);
         }
 
         if (!this.filterValue && !this.currentCIClass) {

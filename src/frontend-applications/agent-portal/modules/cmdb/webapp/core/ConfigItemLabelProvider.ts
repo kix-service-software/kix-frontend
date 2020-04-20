@@ -157,8 +157,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 displayValue = configItem.changedBy ? configItem.createdBy.Contact ?
                     configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.ChangeBy;
                 break;
-            case VersionProperty.NAME:
-                displayValue = configItem.CurrentVersion ? configItem.CurrentVersion.Name : property;
+            case ConfigItemProperty.NAME:
+                displayValue = configItem.Name;
                 break;
             case ConfigItemProperty.NUMBER:
                 displayValue = configItem.Number ?
@@ -212,8 +212,8 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
                 returnString = `${configItemHook}${configItem.Number}`;
             }
-            if (name && configItem.CurrentVersion && configItem.CurrentVersion.Name) {
-                returnString += (id ? ' - ' : '') + configItem.CurrentVersion.Name;
+            if (name) {
+                returnString += (id ? ' - ' : '') + configItem.Name;
             }
         } else {
             returnString = await this.getObjectName(false);

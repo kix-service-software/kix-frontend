@@ -50,7 +50,7 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
+        this.state.prepared = true;
     }
 
     public setCurrentNode(nodes: TreeNode[]): void {

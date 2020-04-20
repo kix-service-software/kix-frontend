@@ -51,4 +51,6 @@ export interface IKIXObjectFormService extends IKIXService {
 
     prepareCreateParameter(object: KIXObject): Array<[string, any]>;
 
+    resetChildrenOnEmpty(formField: FormFieldConfiguration): void;
+
 }

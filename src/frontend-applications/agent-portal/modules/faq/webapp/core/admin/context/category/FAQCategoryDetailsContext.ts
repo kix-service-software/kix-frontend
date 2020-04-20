@@ -15,8 +15,6 @@ import { AdminContext } from "../../../../../../admin/webapp/core";
 import { KIXObject } from "../../../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
 import { TranslationService } from "../../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-
 
 export class FAQCategoryDetailsContext extends Context {
 
@@ -40,7 +38,7 @@ export class FAQCategoryDetailsContext extends Context {
         objectType: KIXObjectType | string = KIXObjectType.FAQ_CATEGORY,
         reload: boolean = false, changedProperties: string[] = []
     ): Promise<O> {
-        const object = await this.loadFAQCategory(changedProperties) as any;
+        const object = await this.loadDetailsObject<O>(KIXObjectType.FAQ_CATEGORY);
 
         if (reload) {
             this.listeners.forEach(
@@ -49,27 +47,6 @@ export class FAQCategoryDetailsContext extends Context {
         }
 
         return object;
-    }
-
-    private async loadFAQCategory(changedProperties: string[] = [], cache: boolean = true): Promise<FAQCategory> {
-        let faqCategory: FAQCategory;
-        if (this.objectId) {
-            const categoryId = Number(this.objectId);
-
-            const faqCategories = await KIXObjectService.loadObjects<FAQCategory>(
-                KIXObjectType.FAQ_CATEGORY, [categoryId], null, null, cache
-            ).catch((error) => {
-                console.error(error);
-                return null;
-            });
-
-            if (faqCategories && faqCategories.length) {
-                faqCategory = faqCategories[0];
-                this.objectId = faqCategory.ID;
-            }
-        }
-
-        return faqCategory;
     }
 
 }

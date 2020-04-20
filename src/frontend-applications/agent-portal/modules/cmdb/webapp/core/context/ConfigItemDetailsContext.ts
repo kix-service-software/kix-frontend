@@ -16,7 +16,6 @@ import { KIXObject } from "../../../../../model/kix/KIXObject";
 import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
 import { VersionProperty } from "../../../model/VersionProperty";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
 
 export class ConfigItemDetailsContext extends Context {
 
@@ -39,13 +38,17 @@ export class ConfigItemDetailsContext extends Context {
     public async getObject<O extends KIXObject>(
         objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM, reload: boolean = false
     ): Promise<O> {
-        const object = await this.loadConfigItem() as any;
+        const object = await this.loadConfigItem();
+
         if (reload) {
+            if (object) {
+                this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, object.Versions);
+            }
             this.listeners.forEach(
                 (l) => l.objectChanged(Number(this.objectId), object, KIXObjectType.CONFIG_ITEM)
             );
         }
-        return object;
+        return object as any;
     }
 
     private async loadConfigItem(): Promise<ConfigItem> {
@@ -58,22 +61,7 @@ export class ConfigItemDetailsContext extends Context {
             ['Links']
         );
 
-        const itemId = Number(this.objectId);
-
-        const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-            KIXObjectType.CONFIG_ITEM, [itemId], loadingOptions, null, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let configItem: ConfigItem;
-        if (configItems && configItems.length) {
-            configItem = configItems[0];
-            this.setObjectList(KIXObjectType.CONFIG_ITEM_VERSION, configItem.Versions);
-        }
-
-        return configItem;
+        return await this.loadDetailsObject<ConfigItem>(KIXObjectType.CONFIG_ITEM, loadingOptions);
     }
 
 }

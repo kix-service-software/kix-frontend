@@ -32,15 +32,22 @@ import { AbstractDynamicFormManager } from "../../../base-components/webapp/core
 import { FormContext } from "../../../../model/configuration/FormContext";
 import { ObjectReferenceOptions } from "../../../base-components/webapp/core/ObjectReferenceOptions";
 import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { ExtendedJobFormManager } from "./ExtendedJobFormManager";
 
 export class AbstractJobFormManager implements IJobFormManager {
 
     public filterManager: AbstractDynamicFormManager;
 
+    private extendedJobFormManager: ExtendedJobFormManager[] = [];
+
     public job: Job = null;
     protected execPageId: string = 'job-form-page-execution-plan';
     protected filterPageId: string = 'job-form-page-filters';
     protected actionPageId: string = 'job-form-page-actions';
+
+    public addExtendedJobFormManager(manager: ExtendedJobFormManager) {
+        this.extendedJobFormManager.push(manager);
+    }
 
     public reset(): void {
         if (this.filterManager) {
@@ -203,10 +210,10 @@ export class AbstractJobFormManager implements IJobFormManager {
             undefined, 1, 200, 0
         );
         const actionGroup = new FormGroupConfiguration(
-            'job-new-form-group-actions', 'Translatable#Actions',
+            'job-form-group-actions', 'Translatable#Actions',
             undefined, undefined, [actionsField], true
         );
-        await this.prepareMacroActionFields(actionsField, actionGroup);
+        await this.prepareMacroActionFields(actionsField, actionGroup, formContext);
 
         return new FormPageConfiguration(
             this.actionPageId, 'Translatable#Actions',
@@ -215,9 +222,9 @@ export class AbstractJobFormManager implements IJobFormManager {
     }
 
     protected async prepareMacroActionFields(
-        field: FormFieldConfiguration, group: FormGroupConfiguration
+        field: FormFieldConfiguration, group: FormGroupConfiguration, formContext: FormContext
     ): Promise<void> {
-        if (this.job) {
+        if (this.job && formContext === FormContext.EDIT) {
             const macros: Macro[] = await JobService.getMacrosOfJob(this.job);
             if (macros && macros.length && macros[0].Actions && macros[0].Actions.length) {
                 const macro = macros[0];
@@ -276,7 +283,7 @@ export class AbstractJobFormManager implements IJobFormManager {
     }
 
     public async getFormFieldsForAction(
-        actionType: string, actionFieldInstanceId: string, type: string, action?: MacroAction
+        actionType: string, actionFieldInstanceId: string, jobType: string, action?: MacroAction
     ): Promise<FormFieldConfiguration[]> {
         const fields: FormFieldConfiguration[] = [];
         if (!actionFieldInstanceId) {
@@ -284,7 +291,7 @@ export class AbstractJobFormManager implements IJobFormManager {
         } else {
             if (actionType) {
                 const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                    KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, { id: type }, true
+                    KIXObjectType.MACRO_ACTION_TYPE, [actionType], null, { id: jobType }, true
                 ).catch((error): MacroActionType[] => []);
                 if (macroActionTypes && !!macroActionTypes.length) {
                     for (const optionName in macroActionTypes[0].Options) {
@@ -292,7 +299,7 @@ export class AbstractJobFormManager implements IJobFormManager {
                             const option = macroActionTypes[0].Options[optionName] as MacroActionTypeOption;
                             if (option) {
                                 const actionPropertyField = this.getActionOptionField(
-                                    action, option, actionType, actionFieldInstanceId
+                                    action, option, actionType, actionFieldInstanceId, jobType
                                 );
 
                                 // special instance id to distinguish between the actions
@@ -316,13 +323,25 @@ export class AbstractJobFormManager implements IJobFormManager {
         return fields;
     }
 
-    private getActionOptionField(
-        action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string
-    ) {
+    public getActionOptionField(
+        action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
+        jobType: string
+    ): FormFieldConfiguration {
+        for (const extendedManager of this.extendedJobFormManager) {
+            const result = extendedManager.getActionOptionField(
+                action, option, actionType, actionFieldInstanceId, jobType
+            );
+
+            if (result) {
+                return result;
+            }
+        }
+
         let defaultValue;
         if (action && action.Parameters) {
             defaultValue = action.Parameters[option.Name];
         }
+
         const inputType = (actionType === 'ArticleCreate' || actionType === 'TicketCreate')
             && option.Name === 'Body' ? 'rich-text-input' : null;
         return new FormFieldConfiguration(

@@ -78,11 +78,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
     public async getObjectText(
         translation: TranslationPattern, id?: boolean, title?: boolean, translatable: boolean = true
     ): Promise<string> {
-        let displayValue = 'Translatable#Translation';
-        if (translatable) {
-            displayValue = await TranslationService.translate(displayValue);
-        }
-        return `${displayValue}: ${translation.Value}`;
+        return translation.Value;
     }
 
     public getObjectAdditionalText(translation: TranslationPattern): string {

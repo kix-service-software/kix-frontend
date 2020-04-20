@@ -33,7 +33,7 @@ export class ComponentState {
                     null, null, undefined, KIXObjectType.USER,
                     new KIXObjectLoadingOptions(
                         null, null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
-                    ), undefined, undefined, [], true, false, null, null,
+                    ), null, undefined, [], true, false, null, null,
                     TableHeaderHeight.LARGE, TableRowHeight.LARGE
                 )
             ), false, false,

@@ -71,7 +71,7 @@ export class ContextService {
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
-            this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
+            await this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
 
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
                 context.setObjectId(objectId);
@@ -111,7 +111,7 @@ export class ContextService {
         }
 
         if (document) {
-            const documentTitle = await context.getDisplayText();
+            const documentTitle = displayText;
             document.title = documentTitle;
         }
     }

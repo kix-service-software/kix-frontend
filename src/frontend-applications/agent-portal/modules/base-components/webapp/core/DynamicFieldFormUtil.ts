@@ -206,11 +206,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
         const filter = [
             new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
+                ConfigItemProperty.NUMBER, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
             ),
             new FilterCriteria(
-                'CurrentVersion.' + VersionProperty.NAME, SearchOperator.CONTAINS,
+                ConfigItemProperty.NAME, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, SearchProperty.SEARCH_VALUE
             )
         ];

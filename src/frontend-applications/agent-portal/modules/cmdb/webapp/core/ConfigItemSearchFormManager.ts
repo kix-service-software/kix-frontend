@@ -46,7 +46,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
-            [VersionProperty.NAME, null],
+            [ConfigItemProperty.NAME, null],
             [VersionProperty.NUMBER, null],
             [KIXObjectProperty.CHANGE_TIME, null]
         ];
@@ -117,7 +117,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
 
         if (property === SearchProperty.FULLTEXT) {
             operations = [SearchOperator.CONTAINS];
-        } else if (property === VersionProperty.NAME || property === VersionProperty.NUMBER) {
+        } else if (property === ConfigItemProperty.NAME || property === VersionProperty.NUMBER) {
             operations = stringOperators;
         } else if (this.isDropDown(property)) {
             operations = numberOperators;

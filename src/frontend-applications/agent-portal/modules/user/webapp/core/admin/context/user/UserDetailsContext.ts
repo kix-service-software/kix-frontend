@@ -62,26 +62,11 @@ export class UserDetailsContext extends Context {
     }
 
     private async loadUser(changedProperties: string[] = [], cache: boolean = true): Promise<User> {
-        const userId = Number(this.objectId);
-
         const loadingOptions = new KIXObjectLoadingOptions(
             null, null, null, [UserProperty.PREFERENCES, UserProperty.ROLE_IDS, UserProperty.CONTACT]
         );
 
-        const users = await KIXObjectService.loadObjects<User>(
-            KIXObjectType.USER, [userId], loadingOptions, null, null, cache, true
-        ).catch((error) => {
-            console.error(error);
-            return null;
-        });
-
-        let user: User;
-        if (users && users.length) {
-            user = users[0];
-            this.objectId = user.UserID;
-        }
-
-        return user;
+        return await this.loadDetailsObject<User>(KIXObjectType.USER, loadingOptions, null, true, cache, true);
     }
 
 }
