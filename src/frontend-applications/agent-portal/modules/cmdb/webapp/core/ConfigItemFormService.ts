@@ -326,7 +326,8 @@ export class ConfigItemFormService extends KIXObjectFormService {
                 value = preparedData.Value;
                 break;
             default:
-                value = preparedData.DisplayValue;
+                value = preparedData.DisplayValue ? preparedData.DisplayValue
+                    : preparedData.Value ? preparedData.Value.toString() : null;
         }
         return value;
     }
