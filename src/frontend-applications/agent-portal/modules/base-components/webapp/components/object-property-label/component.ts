@@ -45,7 +45,10 @@ export class ObjectPropertyLabelComponent<T> {
 
     private async preparePropertyName(): Promise<void> {
         if (this.property) {
-            const name = await LabelService.getInstance().getPropertyText(this.property, this.object.KIXObjectType);
+            let name = await LabelService.getInstance().getPropertyText(this.property, this.object.KIXObjectType);
+            if (name === null) {
+                name = this.property;
+            }
             this.state.propertyName = name;
         }
     }
@@ -62,8 +65,12 @@ export class ObjectPropertyLabelComponent<T> {
     }
 
     private async getPropertyDisplayText(): Promise<string> {
-        if (this.property) {
-            return await LabelService.getInstance().getDisplayText(this.object, this.property);
+        if (this.object && this.property) {
+            let displayText = await LabelService.getInstance().getDisplayText(this.object, this.property);
+            if (displayText === null) {
+                displayText = this.object[this.property];
+            }
+            return displayText;
         }
         return this.property;
     }
