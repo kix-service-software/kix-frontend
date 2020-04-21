@@ -1,5 +1,5 @@
 ### Indruction
-The framework provides the possibility to provide functionality via plugins and with the help of extension points. One Plugin can contain several extension point. 
+The framework provides the possibility to provide functionality via plugins with the help of extension points. One Plugin can contain several extension point implementations. 
 
 A extension point describes a specific interface which one is needed to be implemented by the extension.
 
@@ -23,7 +23,7 @@ The RELEASE file defines the current state and the requirements of the plugin. T
 
 | Property    | Value                              | Example                             |
 | ----------- | ---------------------------------- | ----------------------------------- |
-| PRODUCT     | Name of th plugin                  | KIXPro                              |
+| PRODUCT     | Name of th plugin                  | MyPlugin                            |
 | VERSION     | String which describes the version | 1 or V1                             |
 | BUILDDATE   | String with the date of build      | Fri, 17 Apr 2020 07:30:54 +0200     |
 | BUILDNUMBER | The build number of the version    | 1, 3354                             |
@@ -34,14 +34,14 @@ Following syntax is supported for the REQUIRES dependencies:
 * **framework** *(the frontend it self)*
 * **framework(>1)** *(the frontend must be available in the specified version)*
 * **pluginname** *(only the name of the depending plugin; plugin must be available)*
-* **pluginname(>1)** *(the name of the depending plugin with a version requirement; plugin must be available in the specified version; supported operators: >,<,=,!)*
+* **pluginname(>1)** *(the name of the depending plugin with a version requirement; plugin must be available in the specified version; supported operators: >, <, =, !)*
 * **backend** *(the KIX backend)*
 * **backend::pluginname** *(this plugin must be available in KIX backend)*
 * **backend::pluginname(>1)** *(this plugin must be available in the specified version in KIX backend)*
 
 Example:
 ```
-PRODUCT = KIXPro
+PRODUCT = MyPlugin
 VERSION = 1
 BUILDDATE = Fri, 17 Apr 2020 07:30:54 +0200
 BUILDNUMBER = 12
@@ -54,17 +54,14 @@ This file contains the name of the plugin. This is important for bundling the we
 Example:
 ```
 {
-    "name": "KIXPro"
+    "name": "MyPlugin"
 }
 ```
 
 #### locale
 This folder should contain the po files for the translations if the plugin provide new translations.
 
-Exmaple:
-
-* de.po
-* en.po
+To provide this translation files to KIX you have to register on extension point `kix:locale` and implement the extension interface `ILocaleExtension`.
 
 #### [module]
 A module contains implementations for a specific context or topic (e.g. ticket, cmdb, faq, maintenance, calendar).
