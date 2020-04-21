@@ -179,12 +179,15 @@ export class Server implements IServer {
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
             serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
-        ).catch((error): SystemInfo => {
+        ).catch((error) => {
             LoggingService.getInstance().error(error);
-            return null;
+            LoggingService.getInstance().error(
+                'Failed to register frontent server at backend (ClientRegistration). See errors above.'
+            );
+            process.exit(1);
         });
 
-        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
+        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo as SystemInfo);
         LoggingService.getInstance().info('ClientRegistration created.');
     }
 
