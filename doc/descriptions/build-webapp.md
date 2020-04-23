@@ -3,11 +3,13 @@ After frontend server is started the web application for the agent portal is bui
 
 The web application is implemented with the [marko](https://markojs.com/) framework und and is bundled with the help of the framework [Lasso.js](https://github.com/lasso-js/lasso).
 
+### Extension Implementation
+
 To add components or other static files to the bundling process it is required to register on extension point `kix:modules` and implement a extension interface `IKIXModuleExtension`.
 
 The extension requires to implement a property `webDependencies`. This property is an array of paths to folder where a `browser.json`-file is contained.
 
-Example: 
+#### Example
 ``` javascript
 class Extension /*...*/ {
 // ...
@@ -18,6 +20,7 @@ public webDependencies: string[] = [
 }
 ```
 
+### Dependencies with browser.json
 These paths are inserted into the main `browser.json` of the application and will be loaded by `Lasso.js` while bundling the app.
 
 The content of the `browser.json` contains the following:

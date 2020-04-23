@@ -20,6 +20,9 @@
       {% include "./styles.css" %}
       {% include "./plugins/json-browse.css" %}
     </style>
+
+    <link rel="stylesheet" href="_raml2html_template/plugins/prism.css">
+    <script type="text/javascript" src="_raml2html_template/plugins/prism.js"></script>
   </head>
 
   <body data-spy="scroll" data-target="#sidebar">
@@ -50,6 +53,7 @@
           </div>
 
           <div class="chapter">
+          <h2 id="resources"><a href="#resources">Extensions</a></h2>
             {% for resource in resources %}
               <div class="panel panel-default resource">
                 <div class="panel-heading">
@@ -78,7 +82,7 @@
           <div id="sidebar" class="hidden-print affix" role="complementary">
             <ul class="nav nav-pills nav-stacked">
               {% for resource in resources %}
-                <li><a href="#{{ resource.uniqueId}}">{% if resource.displayName %}{{ resource.displayName }}{% else %}{{ resource.relativeUri }}{% endif %}</a></li>
+                <li><a class="nav-resource" href="#{{ resource.uniqueId}}">{% if resource.displayName %}{{ resource.displayName }}{% else %}{{ resource.relativeUri }}{% endif %}</a></li>
               {% endfor %}
             </ul>
           </div>

@@ -11,4 +11,6 @@ export abstract class KIXExtension {
 
     public pluginId: string = 'KIXStart';
 
+    public external: boolean = true;
+
 }
