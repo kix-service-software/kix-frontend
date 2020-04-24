@@ -89,6 +89,7 @@ class Component extends FormInputComponent<{}, ComponentState> {
         this.state.manager = jobFormManager ? jobFormManager.filterManager : null;
         if (this.state.manager) {
             this.state.manager.init();
+            this.state.manager.reset(false);
 
             this.state.manager.registerListener(this.listenerId, () => {
                 if (this.formTimeout) {
