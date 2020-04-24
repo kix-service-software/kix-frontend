@@ -11,58 +11,61 @@ On the otherside the context needs a configuration which pretend which component
 * others
 * dialogs
 
-### Implementation - ConfiguredWidget
-This list are arrays of type `ConfiguredWidget` or for dialogs type of `ConfiguredDialogWidget`.
-
-| parameter       | description                                                                                                     | exmaple                       |
-| --------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| instanceId      | The id of the concrete instance for usage of this widget                                                        | `home-dashboard-notes-widget` |
-| configurationId | The id of the referenced configuration                                                                          | `home-dashboard-notes-widget` |
-| configuration?  | The configuration if not referenced by id                                                                       | Object: `{ ... }`             |
-| permissions     | Permissions for the widget. If the user has insufficient rights the widget ist filtered out on context loading. |                               |
+A context has to be registered with a `ContextDescriptor` in the application via a `UIModule` (see [Init Components](#init-components)).
 
 ```typescript
-export class ConfiguredWidget {
+ContextService.getInstance().registerContext(new ContextDescriptor(/* ... */);
+```
+
+#### ContextDescriptor
+| parameter      | description                                                                             | exmaple                |
+| -------------- | --------------------------------------------------------------------------------------- | ---------------------- |
+| contextId      | The id of the context (same as the configurationId of the context configuration)        | `ticket-details`       |
+| kixObjectTypes | An array of supported object types for the context                                      | `['Ticket']`           |
+| contextType    | The `ContextType` of the context                                                        | `MAIN`                 |
+| contextMode    | The `ContextMode` of the context                                                        | `DETAILS`              |
+| componentId    | The id (tag name) of the main context component                                         | `object-details`       |
+| urlPaths       | An array with relativ paths for the context. Required to join a context via browser url | `['tickets']`          |
+| contextClass   | The constructor of the context class implementation                                     | `TicketDetailsContext` |
+
+```typescript
+export class ContextDescriptor {
+
     public constructor(
-        public instanceId: string,
-        public configurationId: string, 
-        public configuration?: WidgetConfiguration, 
-        public permissions: UIComponentPermission[] = [] 
+        public contextId: string,
+        public kixObjectTypes: Array<KIXObjectType | string>,
+        public contextType: ContextType,
+        public contextMode: ContextMode,
+        public componentId: string,
+        public urlPaths: string[],
+        public contextClass: new (
+            descriptor: ContextDescriptor, objectId: string | number, configuration: ContextConfiguration
+        ) => Context
     ) { }
+
+    public isContextFor(kixObjectType: KIXObjectType | string): boolean {
+        return this.kixObjectTypes.some((t) => t === kixObjectType);
+    }
+
 }
 ```
 
-### Exmplae Configuration (Home Dashboard)
+##### Exmaple
 ```typescript
-new ContextConfiguration(
-    this.getModuleId(), this.getModuleId(), ConfigurationType.Context,
-    this.getModuleId(),
-    [
-        new ConfiguredWidget('home-dashboard-notes-widget', 'home-dashboard-notes-widget') // Sidebar
-    ],
-    [], [],
-    [ // Content
-        new ConfiguredWidget(
-            'home-dashboard-ticket-chart-widget-priorities',
-            'home-dashboard-ticket-chart-widget-priorities',
-            null, [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-        ),
-        new ConfiguredWidget(
-            'home-dashboard-ticket-chart-widget-states', 'home-dashboard-ticket-chart-widget-states', null,
-            [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-        ),
-        new ConfiguredWidget(
-            'home-dashboard-ticket-chart-widget-new', 'home-dashboard-ticket-chart-widget-new', null,
-            [new UIComponentPermission('tickets', [CRUD.READ])], WidgetSize.SMALL
-        ),
-        new ConfiguredWidget(
-            'home-dashboard-myOpenTickets-widget', 'home-dashboard-myOpenTickets-widget', null,
-            [new UIComponentPermission('tickets', [CRUD.READ])]
-        ),
-        new ConfiguredWidget(
-            'home-dashboard-new-tickets-widget', 'home-dashboard-new-tickets-widget', null,
-            [new UIComponentPermission('tickets', [CRUD.READ])]
-        )
-    ]
-)
+const ticketDetailsContextDescriptor = new ContextDescriptor(
+        TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
+        ContextType.MAIN, ContextMode.DETAILS,
+        true, 'object-details-page', ['tickets'], TicketDetailsContext
+    );
+    await ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 ```
+
+### Functionality
+
+If a page should be shown in the agent portal the context is always the required base for it. The application loads the context and its configuration from the configuration cache The component which is defined in the `ContextDescriptor` is loaded and included in the web application content area. After the configuration is loaded the context get initialized and the context is now responsible to load objects or execute other needed functionality. 
+
+Components can register a listener on the context to get notified about changes to update theirself.
+
+The main application reacts on the context changing and updates the main template. The explorer and the sidebar also reacts on this change and load the components from the context configuration.
+
+![Context](static/ticket-details.png)

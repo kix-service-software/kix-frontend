@@ -1,4 +1,3 @@
-# kix:modules
 A KIX module represents a UI module which contains all the references for the UI components and businesslogic for a specific context. To register a new module you have to register and implement the extension point. A plugin can contain multiple `kix:modules` extensions.
 
 Exmaple:
@@ -120,8 +119,8 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerServiceInstance(MyObjectFormService.getInstance());
 
-        await ContextService.getInstance().registerContext(new ContextDescriptor(/* ... */););
-        await ContextService.getInstance().registerContext(new ContextDescriptor(/* ... */););
+        ContextService.getInstance().registerContext(new ContextDescriptor(/* ... */);
+        ContextService.getInstance().registerContext(new ContextDescriptor(/* ... */);
 
         ActionFactory.getInstance().registerAction('my-object-create-action', MyObjectCreateAction);
         // ...
