@@ -1,3 +1,44 @@
+The `ContextConfiguration` is specific implementation of `IConfiguration` (see: [Implementation - IConfiguration](#implementation-iconfiguration)).
+
+| parameter      | description | exmaple |
+| -------------- | ----------- | ------- |
+| id             |             |         |
+| name           |             |         |
+| type           |             |         |
+| contextId      |             |         |
+| sidebars       |             |         |
+| explorer       |             |         |
+| lanes          |             |         |
+| content        |             |         |
+| generalActions |             |         |
+| actions        |             |         |
+| overlays       |             |         |
+| others         |             |         |
+| dialogs        |             |         |
+
+```typescript
+export class ContextConfiguration implements IConfiguration {
+
+    public constructor(
+        public id: string,
+        public name: string,
+        public type: string | ConfigurationType,
+        public contextId: string,
+        public sidebars: ConfiguredWidget[] = [],
+        public explorer: ConfiguredWidget[] = [],
+        public lanes: ConfiguredWidget[] = [],
+        public content: ConfiguredWidget[] = [],
+        public generalActions: string[] = [],
+        public actions: string[] = [],
+        public overlays: ConfiguredWidget[] = [],
+        public others: ConfiguredWidget[] = [],
+        public dialogs: ConfiguredDialogWidget[] = []
+    ) { }
+
+}
+```
+
+
 ### Implementation - ConfiguredWidget
 This list are arrays of type `ConfiguredWidget` or for dialogs type of `ConfiguredDialogWidget`.
 

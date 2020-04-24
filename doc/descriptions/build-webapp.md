@@ -1,4 +1,4 @@
-### Indruction
+### Introduction
 After frontend server is started the web application for the agent portal is build. In this process all components and static files are collected and bundled to a web application.
 
 The web application is implemented with the [marko](https://markojs.com/) framework und and is bundled with the help of the framework [Lasso.js](https://github.com/lasso-js/lasso).
@@ -14,7 +14,7 @@ The extension requires to implement a property `webDependencies`. This property 
 class Extension /*...*/ {
 // ...
 public webDependencies: string[] = [
-        './icon/webapp'
+        './sysconfig/webapp'
 ];
 // ...
 }
@@ -22,6 +22,8 @@ public webDependencies: string[] = [
 
 ### Dependencies with browser.json
 These paths are inserted into the main `browser.json` of the application and will be loaded by `Lasso.js` while bundling the app.
+
+![browser.json](static/module-structure-webapp.png)
 
 The content of the `browser.json` contains the following:
 ```json
@@ -67,6 +69,8 @@ Example:
         "../../../../modules/job/webapp",
         "../../../../modules/kanban/webapp",
         "../../../../modules/links/webapp",
+        ...
+        "../../../../modules/sysconfig/webapp",
         ...
     ]
 }

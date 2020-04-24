@@ -9,6 +9,8 @@ Its recommended to use a multi file component implementation which means that yo
 * ComponentState.ts (the state class for the component)
 * style.less (component specific styling)
 
+![component structure](static/component-structure.png)
+
 For detailed information see: https://markojs.com/docs/class-components/#multi-file-components
 
 ### Behavior and Lifecycle

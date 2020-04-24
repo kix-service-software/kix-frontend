@@ -74,3 +74,5 @@ The following structure of a module is recommended:
 * **webapp** *(implementation for the agent portal wep application)*
 * **package.json** *(defines the name of the module and the list of extensions)*
 * ***[...extension.ts]*** *(a specific extension implementation)*
+
+![Module Structure](static/module-structure.png)

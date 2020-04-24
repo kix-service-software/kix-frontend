@@ -24,7 +24,7 @@ export enum ConfigurationType {
 ```
 Each configuration type has specific options to configure. To add new configurations you have to register and implement a extension for the extension point `kix:configuration` (see: [Extensions Configuration](#kix_configuration)).
 
-### Implementation
+### Implementation - IConfiguration
 A configuration class has to implement the interface `IConfiguration`.
 
 | parameter                   | description                                                                                       | exmaple                       |
