@@ -118,13 +118,19 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     private async setFieldHint(): Promise<void> {
         if (this.currentAction) {
-            const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
-                KIXObjectType.MACRO_ACTION_TYPE, undefined, null, null, true
-            ).catch((error): MacroActionType[] => []);
-            if (macroActionTypes && !!macroActionTypes.length) {
-                const type = macroActionTypes.find((t) => t.Name === this.currentAction.id);
-                if (type) {
-                    this.state.field.hint = type.Description;
+            const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+            if (formInstance) {
+                const jobType = await formInstance.getFormFieldValueByProperty(JobProperty.TYPE);
+                if (jobType && jobType.value) {
+                    const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
+                        KIXObjectType.MACRO_ACTION_TYPE, [this.currentAction.id], null, { id: jobType.value }, true
+                    ).catch((error): MacroActionType[] => []);
+                    if (macroActionTypes && !!macroActionTypes.length) {
+                        const type = macroActionTypes.find((t) => t.Name === this.currentAction.id);
+                        if (type) {
+                            this.state.field.hint = type.Description;
+                        }
+                    }
                 }
             }
         } else {
