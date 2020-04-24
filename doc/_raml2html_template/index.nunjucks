@@ -21,8 +21,8 @@
       {% include "./plugins/json-browse.css" %}
     </style>
 
-    <link rel="stylesheet" href="_raml2html_template/plugins/prism.css">
-    <script type="text/javascript" src="_raml2html_template/plugins/prism.js"></script>
+    <link rel="stylesheet" href="static/prism.css">
+    <script type="text/javascript" src="static/prism.js"></script>
   </head>
 
   <body data-spy="scroll" data-target="#sidebar">
