@@ -25,6 +25,8 @@ import { DeleteObjectResponse } from "../../modules/base-components/webapp/core/
 import { PermissionError } from "../../modules/user/model/PermissionError";
 import { Error } from "../../../../server/model/Error";
 
+import cookie = require('cookie');
+
 export class KIXObjectNamespace extends SocketNameSpace {
 
     private static INSTANCE: KIXObjectNamespace;
@@ -51,14 +53,16 @@ export class KIXObjectNamespace extends SocketNameSpace {
         this.registerEventHandler(client, KIXObjectEvent.DELETE_OBJECT, this.deleteObject.bind(this));
     }
 
-    private loadObjects(data: LoadObjectsRequest): Promise<SocketResponse> {
+    private loadObjects(data: LoadObjectsRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
 
         return new Promise<SocketResponse>((resolve, reject) => {
             const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
             if (service) {
 
                 service.loadObjects(
-                    data.token, data.clientRequestId, data.objectType, data.objectIds,
+                    token, data.clientRequestId, data.objectType, data.objectIds,
                     data.loadingOptions, data.objectLoadingOptions
                 ).then((objects: any[]) => {
                     resolve(
@@ -90,13 +94,18 @@ export class KIXObjectNamespace extends SocketNameSpace {
 
     }
 
-    private async createObject(data: CreateObjectRequest): Promise<SocketResponse<CreateObjectResponse>> {
+    private async createObject(
+        data: CreateObjectRequest, client: SocketIO.Socket
+    ): Promise<SocketResponse<CreateObjectResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         let response;
 
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             await service.createObject(
-                data.token, data.clientRequestId, data.objectType, data.parameter, data.createOptions, data.objectType
+                token, data.clientRequestId, data.objectType, data.parameter, data.createOptions, data.objectType
             ).then((id) => {
                 response = new SocketResponse(
                     KIXObjectEvent.CREATE_OBJECT_FINISHED, new CreateObjectResponse(data.requestId, id)
@@ -119,13 +128,18 @@ export class KIXObjectNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async updateObject(data: UpdateObjectRequest): Promise<SocketResponse<UpdateObjectResponse>> {
+    private async updateObject(
+        data: UpdateObjectRequest, client: SocketIO.Socket
+    ): Promise<SocketResponse<UpdateObjectResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         let response;
 
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             await service.updateObject(
-                data.token, data.clientRequestId, data.objectType, data.parameter,
+                token, data.clientRequestId, data.objectType, data.parameter,
                 data.objectId, data.updateOptions, data.objectType
             ).then((id) => {
                 response = new SocketResponse(
@@ -148,13 +162,18 @@ export class KIXObjectNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async deleteObject(data: DeleteObjectRequest): Promise<SocketResponse<DeleteObjectResponse>> {
+    private async deleteObject(
+        data: DeleteObjectRequest, client: SocketIO.Socket
+    ): Promise<SocketResponse<DeleteObjectResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         let response;
 
         const service = KIXObjectServiceRegistry.getServiceInstance(data.objectType);
         if (service) {
             await service.deleteObject(
-                data.token, data.clientRequestId, data.objectType, data.objectId, data.deleteOptions, data.objectType
+                token, data.clientRequestId, data.objectType, data.objectId, data.deleteOptions, data.objectType
             ).then(() => {
                 response = new SocketResponse(
                     KIXObjectEvent.DELETE_OBJECT_FINISHED, new DeleteObjectResponse(data.requestId)

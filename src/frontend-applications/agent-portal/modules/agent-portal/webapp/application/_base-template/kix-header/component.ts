@@ -89,7 +89,7 @@ class Component {
 
     public async logout(): Promise<void> {
         ContextHistory.getInstance().removeBrowserListener();
-        await AuthenticationSocketClient.getInstance().logout();
+        window.location.replace('/auth/logout');
     }
 
 }

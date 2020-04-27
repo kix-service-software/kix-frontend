@@ -12,7 +12,6 @@ import { ISocketRequest } from "./ISocketRequest";
 export class LoadFormConfigurationRequest implements ISocketRequest {
 
     public constructor(
-        public token: string,
         public requestId: string,
         public clientRequestId: string,
         public formId: string

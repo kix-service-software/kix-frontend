@@ -12,7 +12,6 @@ import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISo
 export class SaveNotesRequest implements ISocketRequest {
 
     public constructor(
-        public token: string,
         public requestId: string,
         public clientRequestId: string,
         public contextId: string,

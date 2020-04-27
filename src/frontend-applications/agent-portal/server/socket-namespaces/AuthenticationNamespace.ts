@@ -19,6 +19,8 @@ import { SocketErrorResponse } from "../../modules/base-components/webapp/core/S
 import { PermissionCheckRequest } from "../../modules/base-components/webapp/core/PermissionCheckRequest";
 import { PermissionService } from "../services/PermissionService";
 
+import cookie = require('cookie');
+
 export class AuthenticationNamespace extends SocketNameSpace {
 
     private static INSTANCE: AuthenticationNamespace;
@@ -52,15 +54,15 @@ export class AuthenticationNamespace extends SocketNameSpace {
         this.registerEventHandler(client, AuthenticationEvent.PERMISSION_CHECK, this.checkPermissions.bind(this));
     }
 
-    private async login(data: LoginRequest): Promise<SocketResponse> {
+    private async login(data: LoginRequest, client: SocketIO.Socket): Promise<SocketResponse> {
         const response = await AuthenticationService.getInstance()
-            .login(data.userName, data.password, data.clientRequestId)
-            .then((token: string) =>
-                new SocketResponse(
+            .login(data.userName, data.password, data.clientRequestId, client.handshake.address)
+            .then((token: string) => {
+                return new SocketResponse(
                     AuthenticationEvent.AUTHORIZED,
                     new AuthenticationResult(token, data.requestId, data.redirectUrl)
-                )
-            ).catch((error: Error) =>
+                );
+            }).catch((error: Error) =>
                 new SocketResponse(
                     AuthenticationEvent.UNAUTHORIZED,
                     new AuthenticationResult(null, data.requestId, '/', 'Unauthorized')
@@ -70,37 +72,49 @@ export class AuthenticationNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async logout(data: ISocketRequest): Promise<SocketResponse> {
-        const response = await AuthenticationService.getInstance().logout(data.token)
-            .then(() =>
-                new SocketResponse(
+    private async logout(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const response = await AuthenticationService.getInstance().logout(token)
+            .then(() => {
+                const tokenCookie = cookie.serialize('token', '', { expires: new Date() });
+                client.handshake.headers.cookie = tokenCookie;
+                return new SocketResponse(
                     AuthenticationEvent.UNAUTHORIZED, new AuthenticationResult(null, data.requestId)
-                )
+                );
+            }
             )
             .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
         return response;
     }
 
-    private async validateToken(data: ISocketRequest): Promise<SocketResponse> {
-        const response = AuthenticationService.getInstance().validateToken(data.token)
+    private async validateToken(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const response = AuthenticationService.getInstance().validateToken(token, client.handshake.address)
             .then((valid) => {
                 let event = AuthenticationEvent.UNAUTHORIZED;
                 if (valid) {
                     event = AuthenticationEvent.AUTHORIZED;
                 }
-                return new SocketResponse(event, new AuthenticationResult(data.token, data.requestId));
+                return new SocketResponse(event, new AuthenticationResult(token, data.requestId));
             })
             .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
         return response;
     }
 
-    private async checkPermissions(data: PermissionCheckRequest): Promise<SocketResponse> {
+    private async checkPermissions(data: PermissionCheckRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client && client.handshake ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         return new Promise<SocketResponse>(async (resolve, reject) => {
             let event = AuthenticationEvent.PERMISSION_CHECK_SUCCESS;
 
-            const allowed = await PermissionService.getInstance().checkPermissions(data.token, data.permissions)
+            const allowed = await PermissionService.getInstance().checkPermissions(token, data.permissions)
                 .catch(() => false);
 
             if (!allowed) {

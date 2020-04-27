@@ -23,6 +23,7 @@ import { IFrontendServerExtension } from '../../../../server/model/IFrontendServ
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
+import { AuthenticationService } from '../services/AuthenticationService';
 
 export class AuthenticationRouter extends KIXRouter {
 
@@ -41,6 +42,7 @@ export class AuthenticationRouter extends KIXRouter {
 
     protected initialize(): void {
         this.router.get("/", this.login.bind(this));
+        this.router.get("/logout", this.logout.bind(this));
     }
 
     public getContextId(): string {
@@ -49,6 +51,14 @@ export class AuthenticationRouter extends KIXRouter {
 
     public getBaseRoute(): string {
         return "/auth";
+    }
+
+    public async logout(req: Request, res: Response): Promise<void> {
+        const token: string = req.cookies.token;
+        await AuthenticationService.getInstance().logout(token).catch(() => null);
+
+        res.clearCookie('token');
+        res.redirect('/login?logout=true');
     }
 
     public async login(req: Request, res: Response): Promise<void> {

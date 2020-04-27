@@ -41,10 +41,9 @@ export class SearchSocketClient extends SocketClient {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-            const token = ClientStorageService.getToken();
 
             const request = new SaveSearchRequest(
-                token, requestId, ClientStorageService.getClientRequestId(), search, existingName
+                requestId, ClientStorageService.getClientRequestId(), search, existingName
             );
 
             const timeout = window.setTimeout(() => {
@@ -74,8 +73,6 @@ export class SearchSocketClient extends SocketClient {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<SearchCache[]>((resolve, reject) => {
 
-            const token = ClientStorageService.getToken();
-
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + SearchEvent.LOAD_SEARCH);
             }, socketTimeout);
@@ -98,7 +95,6 @@ export class SearchSocketClient extends SocketClient {
             });
 
             const request: ISocketRequest = {
-                token,
                 clientRequestId: ClientStorageService.getClientRequestId(),
                 requestId
             };
@@ -111,8 +107,6 @@ export class SearchSocketClient extends SocketClient {
     public async deleteSearch(name: string): Promise<void> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
-
-            const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + SearchEvent.DELETE_SEARCH);
@@ -135,7 +129,7 @@ export class SearchSocketClient extends SocketClient {
                 }
             });
 
-            const request = new DeleteSearchRequest(token, requestId, ClientStorageService.getClientRequestId(), name);
+            const request = new DeleteSearchRequest(requestId, ClientStorageService.getClientRequestId(), name);
             this.socket.emit(SearchEvent.DELETE_SEARCH, request);
         });
     }

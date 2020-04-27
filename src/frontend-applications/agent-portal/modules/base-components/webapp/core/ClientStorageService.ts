@@ -41,23 +41,6 @@ export class ClientStorageService {
         return socketUrl;
     }
 
-    public static getToken(): string {
-        const token = ClientStorageService.getCookie('token');
-        if (typeof window !== 'undefined') {
-            if (!token || token === "") {
-                window.location.replace('/auth');
-            }
-        }
-
-        return token;
-    }
-
-    public static destroyToken(): void {
-        if (typeof document !== 'undefined') {
-            document.cookie = "token=; expires=" + new Date();
-        }
-    }
-
     public static getCookie(name: string): string {
         if (typeof document !== 'undefined') {
             const nameEQ = name + "=";

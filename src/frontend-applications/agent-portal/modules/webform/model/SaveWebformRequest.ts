@@ -13,7 +13,6 @@ import { Webform } from "./Webform";
 export class SaveWebformRequest implements ISocketRequest {
 
     public constructor(
-        public token: string,
         public requestId: string,
         public clientRequestId: string,
         public webform: Webform,

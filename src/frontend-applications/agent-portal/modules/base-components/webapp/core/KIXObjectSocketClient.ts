@@ -58,11 +58,10 @@ export class KIXObjectSocketClient extends SocketClient {
         loadingOptions: KIXObjectLoadingOptions = null, objectLoadingOptions: KIXObjectSpecificLoadingOptions = null,
         cache: boolean = true, timeout?: number
     ): Promise<T[]> {
-        const token = ClientStorageService.getToken();
         const requestId = IdService.generateDateBasedId();
 
         const request = new LoadObjectsRequest(
-            token, requestId, ClientStorageService.getClientRequestId(),
+            requestId, ClientStorageService.getClientRequestId(),
             kixObjectType, objectIds, loadingOptions, objectLoadingOptions
         );
 
@@ -115,11 +114,10 @@ export class KIXObjectSocketClient extends SocketClient {
         createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const token = ClientStorageService.getToken();
         const requestId = IdService.generateDateBasedId();
 
         const request = new CreateObjectRequest(
-            token, requestId, ClientStorageService.getClientRequestId(), objectType, parameter, createOptions
+            requestId, ClientStorageService.getClientRequestId(), objectType, parameter, createOptions
         );
 
         const response = await this.sendRequest<CreateObjectResponse>(
@@ -138,11 +136,10 @@ export class KIXObjectSocketClient extends SocketClient {
         objectId: number | string, updateOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const token = ClientStorageService.getToken();
         const requestId = IdService.generateDateBasedId();
 
         const request = new UpdateObjectRequest(
-            token, requestId, ClientStorageService.getClientRequestId(), objectType, parameter, objectId, updateOptions
+            requestId, ClientStorageService.getClientRequestId(), objectType, parameter, objectId, updateOptions
         );
 
         const response = await this.sendRequest<UpdateObjectResponse>(
@@ -160,11 +157,10 @@ export class KIXObjectSocketClient extends SocketClient {
         cacheKeyPrefix: string = objectType
     ): Promise<any> {
 
-        const token = ClientStorageService.getToken();
         const requestId = IdService.generateDateBasedId();
 
         const request = new DeleteObjectRequest(
-            token, requestId, ClientStorageService.getClientRequestId(), objectType, objectId, deleteOptions
+            requestId, ClientStorageService.getClientRequestId(), objectType, objectId, deleteOptions
         );
 
         await this.sendRequest<DeleteObjectResponse>(

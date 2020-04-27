@@ -37,6 +37,8 @@ import { ISocketResponse } from "../../modules/base-components/webapp/core/ISock
 import { ISocketRequest } from "../../modules/base-components/webapp/core/ISocketRequest";
 import { LoggingService } from "../../../../server/services/LoggingService";
 
+import cookie = require('cookie');
+
 export class ContextNamespace extends SocketNameSpace {
 
     private static INSTANCE: ContextNamespace;
@@ -132,8 +134,11 @@ export class ContextNamespace extends SocketNameSpace {
     }
 
     protected async loadContextConfiguration(
-        data: LoadContextConfigurationRequest
-    ): Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
+        data: LoadContextConfigurationRequest, client: SocketIO.Socket)
+        : Promise<SocketResponse<LoadContextConfigurationResponse<any> | SocketErrorResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         let configuration = await CacheService.getInstance().get(data.contextId, 'ContextConfiguration');
 
         if (!configuration) {
@@ -148,7 +153,7 @@ export class ContextNamespace extends SocketNameSpace {
         }
 
         configuration = await PermissionService.getInstance().filterContextConfiguration(
-            data.token, configuration as ContextConfiguration
+            token, configuration as ContextConfiguration
         ).catch(() => configuration);
 
         const response = new LoadContextConfigurationResponse(data.requestId, configuration as ContextConfiguration);

@@ -120,7 +120,7 @@ export class WebformService {
 
                 const token = await AuthenticationService.getInstance().login(
                     form.userLogin, form.webformUserPassword,
-                    IdService.generateDateBasedId('web-form-login'), false
+                    IdService.generateDateBasedId('web-form-login'), 'WebformService', false
                 ).catch((error) => null);
 
                 if (token) {
