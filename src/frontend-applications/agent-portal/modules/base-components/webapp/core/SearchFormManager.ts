@@ -20,7 +20,6 @@ import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
 import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { InputFieldTypes } from "./InputFieldTypes";
 
 export class SearchFormManager extends AbstractDynamicFormManager {
 
@@ -111,17 +110,6 @@ export class SearchFormManager extends AbstractDynamicFormManager {
             }
         }
         return operations;
-    }
-
-    public async getInputType(property: string): Promise<InputFieldTypes | string> {
-        for (const manager of this.extendedFormManager) {
-            const extendedInputTypes = await manager.getInputType(property);
-            if (extendedInputTypes) {
-                return extendedInputTypes;
-            }
-        }
-
-        return super.getInputType(property);
     }
 
 }
