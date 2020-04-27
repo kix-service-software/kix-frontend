@@ -292,7 +292,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<TreeNode[]> {
         for (const extendedService of this.extendedServices) {
-            const extendedNodes = extendedService.getTreeNodes(
+            const extendedNodes = await extendedService.getTreeNodes(
                 property, showInvalid, invalidClickable, filterIds, loadingOptions, objectLoadingOptions
             );
             if (extendedNodes) {

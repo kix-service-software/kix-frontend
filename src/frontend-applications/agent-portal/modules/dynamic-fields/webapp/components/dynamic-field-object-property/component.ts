@@ -96,7 +96,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
                 );
                 RoutingService.getInstance().routeToContext(routingConfig, label.id);
-            } else {
+            } else if (this.state.field.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
                 const routingConfig = new RoutingConfiguration(
                     'ticket-details', KIXObjectType.TICKET, ContextMode.DETAILS, TicketProperty.TICKET_ID
                 );

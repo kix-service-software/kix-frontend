@@ -49,6 +49,7 @@ import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
 import { IInitialDataExtension } from '../model/IInitialDataExtension';
 import { IFormConfigurationExtension } from './extensions/IFormConfigurationExtension';
 import { FormGroupConfiguration } from '../model/configuration/FormGroupConfiguration';
+import { IModifyConfigurationExtension } from './extensions/IModifyConfigurationExtension';
 
 export class Server implements IServer {
 
@@ -227,6 +228,7 @@ export class Server implements IServer {
             }
 
             await this.extendFormConfigurations(configurations);
+            await this.handleConfigurationExtensions(configurations);
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -312,6 +314,18 @@ export class Server implements IServer {
                         formConfigurations.push(fieldExtension.configuration);
                     }
                 }
+            }
+        }
+    }
+
+    private static async handleConfigurationExtensions(configurations: IConfiguration[]): Promise<void> {
+        if (configurations.length) {
+            const extensions = await PluginService.getInstance().getExtensions<IModifyConfigurationExtension>(
+                AgentPortalExtensions.MODIFY_CONFIGURATION
+            );
+
+            for (const extension of extensions) {
+                await extension.modifyConfigurations(configurations);
             }
         }
     }
