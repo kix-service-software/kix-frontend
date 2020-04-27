@@ -17,6 +17,9 @@ import { SocketAuthenticationError } from '../../modules/base-components/webapp/
 import { UserLogin } from '../../modules/user/model/UserLogin';
 import { UserType } from '../../modules/user/model/UserType';
 
+import jwt = require('jsonwebtoken');
+import cookie = require('cookie');
+
 export class AuthenticationService {
 
     private static INSTANCE: AuthenticationService;
@@ -28,13 +31,20 @@ export class AuthenticationService {
         return AuthenticationService.INSTANCE;
     }
 
-    private frontendTokenCache: Map<string, string> = new Map();
-
     private backendCallbackToken: string;
 
-    private constructor(private tokenKey = 'kix18-webfrontend-token-key') {
-        const jwt = require('jsonwebtoken');
-        this.backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenKey);
+    private tokenSecret: string;
+
+    private constructor() {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        this.tokenSecret = config.FRONTEND_TOKEN_SECRET;
+
+        this.backendCallbackToken = jwt.sign({ name: 'backen-callback', created: Date.now() }, this.tokenSecret);
+    }
+
+    private createToken(userLogin: string, backendToken: string, remoteAddress: string): string {
+        const token = jwt.sign({ userLogin, remoteAddress, backendToken, created: Date.now() }, this.tokenSecret);
+        return token;
     }
 
     public getBackendToken(token: string): string {
@@ -43,7 +53,35 @@ export class AuthenticationService {
             return token;
         }
 
-        return this.frontendTokenCache.get(token);
+        const decoded = this.decodeToken(token);
+        return decoded && decoded.backendToken ? decoded.backendToken : null;
+    }
+
+    private decodeToken(token: string): FrontendToken {
+        return jwt.decode(token, this.tokenSecret);
+    }
+
+    public async validateToken(token: string, remoteAddress: string): Promise<boolean> {
+        const config = ConfigurationService.getInstance().getServerConfiguration();
+        if (config.CHECK_TOKEN_ORIGIN) {
+            const decodedToken = this.decodeToken(token);
+            if (decodedToken.remoteAddress !== remoteAddress) {
+                return false;
+            }
+        }
+
+        return new Promise<boolean>((resolve, reject) => {
+            HttpService.getInstance().get<SessionResponse>(
+                'session', {}, token, null, null, false
+            ).then((response: SessionResponse) => {
+                resolve(
+                    typeof response !== 'undefined' && response !== null &&
+                    typeof response.Session !== 'undefined' && response.Session !== null
+                );
+            }).catch((error) => {
+                resolve(false);
+            });
+        });
     }
 
     public getCallbackToken(): string {
@@ -53,8 +91,18 @@ export class AuthenticationService {
     public async isAuthenticated(req: Request, res: Response, next: () => void): Promise<void> {
         const token: string = req.cookies.token;
         if (token) {
-            this.validateToken(token).then((valid) => {
-                valid ? next() : AuthenticationRouter.getInstance().login(req, res);
+            const remoteAddress = req.headers['x-forwarded-for'] ||
+                req.connection.remoteAddress ||
+                req.socket.remoteAddress ||
+                (req.connection.socket ? req.connection.socket.remoteAddress : null);
+
+            this.validateToken(token, remoteAddress).then((valid) => {
+                if (valid) {
+                    res.cookie('token', token, { httpOnly: true });
+                    next();
+                } else {
+                    AuthenticationRouter.getInstance().login(req, res);
+                }
             }).catch((error) => {
                 AuthenticationRouter.getInstance().login(req, res);
             });
@@ -79,67 +127,40 @@ export class AuthenticationService {
     }
 
     public async isSocketAuthenticated(socket: SocketIO.Socket, next: (err?: any) => void): Promise<void> {
-        if (socket.handshake.query) {
-            const token = socket.handshake.query.Token;
-            if (token) {
-                this.validateToken(token)
-                    .then((valid) => valid ? next() : next(new SocketAuthenticationError('Invalid Token!')))
-                    .catch(() => new SocketAuthenticationError('Error validating token!'));
+        const parsedCookie = cookie.parse(socket.handshake.headers.cookie);
+        const token = parsedCookie.token;
+        if (token) {
+            this.validateToken(token, socket.handshake.address)
+                .then((valid) => valid ? next() : next(new SocketAuthenticationError('Invalid Token!')))
+                .catch(() => next(new SocketAuthenticationError('Error validating token!')));
 
-            } else {
-                next(new SocketAuthenticationError('Invalid Token!'));
-            }
         } else {
-            next(new SocketAuthenticationError('Missing Token!'));
+            next(new SocketAuthenticationError('Invalid Token!'));
         }
     }
 
     public async login(
-        user: string, password: string, clientRequestId: string, fakeLogin?: boolean
+        user: string, password: string, clientRequestId: string, remoteAddress: string, fakeLogin?: boolean
     ): Promise<string> {
         const userLogin = new UserLogin(user, password, UserType.AGENT);
         const response = await HttpService.getInstance().post<LoginResponse>(
             'auth', userLogin, null, clientRequestId, undefined, false
         );
-        const token = fakeLogin ? response.Token : this.createToken(user, response.Token);
+        const token = fakeLogin ? response.Token : this.createToken(user, response.Token, remoteAddress);
         return token;
     }
 
     public async logout(token: string): Promise<boolean> {
-        if (this.frontendTokenCache.has(token)) {
-            const backendToken = this.frontendTokenCache.get(token);
-            await HttpService.getInstance().delete(['session'], backendToken, null).catch((error) => {
-                // do nothing
-            });
-            this.frontendTokenCache.delete(token);
-        }
+        const backendToken = this.getBackendToken(token);
+        await HttpService.getInstance().delete(['session'], backendToken, null).catch((error) => null);
         return true;
     }
+}
 
-    public async validateToken(token: string): Promise<boolean> {
-        if (this.frontendTokenCache.has(token)) {
-            return new Promise<boolean>((resolve, reject) => {
-                HttpService.getInstance().get<SessionResponse>(
-                    'session', {}, token, null, null, false
-                ).then((response: SessionResponse) => {
-                    resolve(
-                        typeof response !== 'undefined' && response !== null &&
-                        typeof response.Session !== 'undefined' && response.Session !== null
-                    );
-                }).catch(() => {
-                    this.frontendTokenCache.delete(token);
-                    resolve(false);
-                });
-            });
-        } else {
-            return false;
-        }
-    }
-
-    private createToken(userLogin: string, backendToken: string): string {
-        const jwt = require('jsonwebtoken');
-        const token = jwt.sign({ userLogin, created: Date.now() }, this.tokenKey);
-        this.frontendTokenCache.set(token, backendToken);
-        return token;
-    }
+// tslint:disable-next-line: max-classes-per-file
+class FrontendToken {
+    public userLogin: string;
+    public remoteAddress: string;
+    public backendToken: string;
+    public created: number;
 }

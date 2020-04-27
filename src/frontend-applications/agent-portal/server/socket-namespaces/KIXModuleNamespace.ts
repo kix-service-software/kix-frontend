@@ -19,7 +19,6 @@ import { SocketErrorResponse } from "../../modules/base-components/webapp/core/S
 import { LoadFormConfigurationsRequest } from "../../modules/base-components/webapp/core/LoadFormConfigurationsRequest";
 import { ModuleConfigurationService } from "../services/configuration";
 import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
 import { FormConfigurationResolver } from "../services/configuration/FormConfigurationResolver";
 import { LoggingService } from "../../../../server/services/LoggingService";
 import {
@@ -45,10 +44,10 @@ import { FilterType } from "../../model/FilterType";
 import { SysConfigService } from "../../modules/sysconfig/server/SysConfigService";
 import { SysConfigOption } from "../../modules/sysconfig/model/SysConfigOption";
 import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextConfigurationResolver } from "../services/configuration/ContextConfigurationResolver";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
 import { CacheService } from "../services/cache";
 import { ISocketResponse } from "../../modules/base-components/webapp/core/ISocketResponse";
+
+import cookie = require('cookie');
 
 export class KIXModuleNamespace extends SocketNameSpace {
 
@@ -154,13 +153,16 @@ export class KIXModuleNamespace extends SocketNameSpace {
         return this.rebuildPromise;
     }
 
-    private async loadModules(data: LoadKIXModulesRequest): Promise<SocketResponse> {
+    private async loadModules(data: LoadKIXModulesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         const response = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
             AgentPortalExtensions.MODULES
         ).then(async (modules) => {
             const createPromises: Array<Promise<IKIXModuleExtension>> = [];
             for (const uiModule of modules) {
-                createPromises.push(KIXModuleFactory.getInstance().create(data.token, uiModule));
+                createPromises.push(KIXModuleFactory.getInstance().create(token, uiModule));
             }
 
             const uiModules = await Promise.all(createPromises);
@@ -209,8 +211,11 @@ export class KIXModuleNamespace extends SocketNameSpace {
         );
     }
 
-    private async loadObjectDefinitions(data: ISocketRequest): Promise<SocketResponse> {
-        const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(data.token)
+    private async loadObjectDefinitions(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const objectDefinitions = await ObjectDefinitionService.getInstance().getObjectDefinitions(token)
             .catch(() => []);
 
         return new SocketResponse(

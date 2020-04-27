@@ -14,7 +14,6 @@ import { KIXObjectSpecificDeleteOptions } from "../../../../model/KIXObjectSpeci
 export class DeleteObjectRequest implements ISocketRequest {
 
     public constructor(
-        public token: string,
         public requestId: string,
         public clientRequestId: string,
         public objectType: KIXObjectType | string,

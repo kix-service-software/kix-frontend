@@ -19,6 +19,10 @@ export interface IServerConfiguration {
 
     FRONTEND_URL: string;
 
+    FRONTEND_TOKEN_SECRET: string;
+
+    CHECK_TOKEN_ORIGIN: boolean;
+
     NOTIFICATION_URL: string;
 
     NOTIFICATION_INTERVAL: number;

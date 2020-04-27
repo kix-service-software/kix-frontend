@@ -71,7 +71,6 @@ export class AdministrationSocketClient extends SocketClient {
             });
 
             const request: ISocketRequest = {
-                token: ClientStorageService.getToken(),
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId()
             };

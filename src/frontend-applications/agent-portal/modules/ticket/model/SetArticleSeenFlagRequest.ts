@@ -12,7 +12,6 @@ import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISo
 export class SetArticleSeenFlagRequest implements ISocketRequest {
 
     public constructor(
-        public token: string,
         public requestId: string,
         public clientRequestId: string,
         public ticketId: number,

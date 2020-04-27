@@ -15,7 +15,6 @@ import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpec
 export class LoadObjectsRequest implements ISocketRequest {
 
     public constructor(
-        public token: string,
         public requestId: string,
         public clientRequestId: string,
         public objectType: KIXObjectType | string,

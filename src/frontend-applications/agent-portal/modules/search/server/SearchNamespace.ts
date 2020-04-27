@@ -21,6 +21,8 @@ import { LoadSearchResponse } from "../model/LoadSearchResponse";
 import { DeleteSearchRequest } from "../model/DeleteSearchRequest";
 import { ISocketResponse } from "../../../modules/base-components/webapp/core/ISocketResponse";
 
+import cookie = require('cookie');
+
 export class SearchNamespace extends SocketNameSpace {
 
     private static INSTANCE: SearchNamespace;
@@ -46,8 +48,11 @@ export class SearchNamespace extends SocketNameSpace {
         this.registerEventHandler(client, SearchEvent.DELETE_SEARCH, this.deleteSearch.bind(this));
     }
 
-    private async saveSearch(data: SaveSearchRequest): Promise<SocketResponse> {
-        const user = await UserService.getInstance().getUserByToken(data.token)
+    private async saveSearch(data: SaveSearchRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token)
             .catch((): User => null);
 
         if (user && data.search) {
@@ -66,7 +71,7 @@ export class SearchNamespace extends SocketNameSpace {
             searchConfig[data.search.name] = data.search;
 
             const value = JSON.stringify(searchConfig);
-            await UserService.getInstance().setPreferences(data.token, 'SearchNamespace', [[preferenceId, value]]);
+            await UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
 
             return new SocketResponse(SearchEvent.SAVE_SEARCH_FINISHED, { requestId: data.requestId });
         } else {
@@ -76,8 +81,11 @@ export class SearchNamespace extends SocketNameSpace {
         }
     }
 
-    private async loadSearch(data: ISocketRequest): Promise<SocketResponse> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
+    private async loadSearch(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token);
         if (user) {
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
@@ -99,8 +107,11 @@ export class SearchNamespace extends SocketNameSpace {
         }
     }
 
-    private async deleteSearch(data: DeleteSearchRequest): Promise<SocketResponse> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
+    private async deleteSearch(data: DeleteSearchRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token);
         if (user) {
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const preferenceId = serverConfig.NOTIFICATION_CLIENT_ID + 'searchprofiles';
@@ -112,7 +123,7 @@ export class SearchNamespace extends SocketNameSpace {
                 if (data.name && search[data.name]) {
                     delete search[data.name];
                     const value = JSON.stringify(search);
-                    UserService.getInstance().setPreferences(data.token, 'SearchNamespace', [[preferenceId, value]]);
+                    UserService.getInstance().setPreferences(token, 'SearchNamespace', [[preferenceId, value]]);
                 }
             }
 

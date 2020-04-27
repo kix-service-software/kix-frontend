@@ -52,7 +52,7 @@ describe('AuthenticationNamespace', () => {
                 new UIComponentPermission('organisations', [CRUD.READ]),
                 new UIComponentPermission('contacts', [CRUD.READ])
             ];
-            const request = new PermissionCheckRequest('token1234', 'rquestId', 'clientId', permissions);
+            const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
 
 
             it('the should be positiv', async () => {
@@ -68,7 +68,7 @@ describe('AuthenticationNamespace', () => {
                 new UIComponentPermission('organisations', [CRUD.READ]),
                 new UIComponentPermission('contacts', [CRUD.READ])
             ];
-            const request = new PermissionCheckRequest('token1234', 'rquestId', 'clientId', permissions);
+            const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
 
 
             it('the should be positiv', async () => {

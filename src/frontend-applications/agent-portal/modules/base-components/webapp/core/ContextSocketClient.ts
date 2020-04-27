@@ -41,7 +41,6 @@ export class ContextSocketClient extends SocketClient {
         return new Promise<ContextConfiguration>((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
-            const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + ContextEvent.LOAD_CONTEXT_CONFIGURATION);
@@ -58,7 +57,7 @@ export class ContextSocketClient extends SocketClient {
 
             this.socket.emit(
                 ContextEvent.LOAD_CONTEXT_CONFIGURATION, new LoadContextConfigurationRequest(
-                    token, requestId, ClientStorageService.getClientRequestId(), contextId
+                    requestId, ClientStorageService.getClientRequestId(), contextId
                 )
             );
 
@@ -77,7 +76,6 @@ export class ContextSocketClient extends SocketClient {
         return new Promise<ContextConfiguration[]>((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
-            const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + ContextEvent.LOAD_CONTEXT_CONFIGURATIONS);
@@ -93,7 +91,6 @@ export class ContextSocketClient extends SocketClient {
             );
 
             const request: ISocketRequest = {
-                token,
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
@@ -114,7 +111,6 @@ export class ContextSocketClient extends SocketClient {
         return new Promise<void>((resolve, reject) => {
 
             const requestId = IdService.generateDateBasedId();
-            const token = ClientStorageService.getToken();
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + ContextEvent.REBUILD_CONFIG);
@@ -138,7 +134,6 @@ export class ContextSocketClient extends SocketClient {
             });
 
             const request: ISocketRequest = {
-                token,
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
