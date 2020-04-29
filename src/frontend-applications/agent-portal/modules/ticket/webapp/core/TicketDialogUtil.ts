@@ -13,6 +13,7 @@ import { ContextService } from "../../../../modules/base-components/webapp/core/
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContextMode } from "../../../../model/ContextMode";
 import { Ticket } from "../../model/Ticket";
+import { Contact } from "../../../customer/model/Contact";
 
 
 export class TicketDialogUtil {
@@ -21,15 +22,24 @@ export class TicketDialogUtil {
         const context = ContextService.getInstance().getActiveContext();
 
         let ticketId: number;
-        if (context && context.getDescriptor().contextId === TicketDetailsContext.CONTEXT_ID) {
+        const additionalInformation = [];
+
+        if (context) {
             const ticket = await context.getObject<Ticket>(KIXObjectType.TICKET);
             if (ticket) {
                 ticketId = ticket.TicketID;
             }
+
+            const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+            if (contact) {
+                additionalInformation.push([KIXObjectType.CONTACT, contact]);
+            }
         }
 
-        ContextService.getInstance().setDialogContext(
-            NewTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.CREATE, ticketId
+        await ContextService.getInstance().setDialogContext(
+            NewTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.CREATE, ticketId,
+            undefined, undefined, undefined, undefined, undefined, undefined,
+            additionalInformation
         );
     }
 
