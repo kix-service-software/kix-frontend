@@ -71,11 +71,12 @@ export class ContextService {
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
-            await this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
 
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
                 context.setObjectId(objectId);
             }
+
+            this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
 
             DialogService.getInstance().closeMainDialog();
             this.activeMainContext = context;
