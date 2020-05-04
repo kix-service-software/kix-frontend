@@ -66,6 +66,7 @@ export class AuthenticationRouter extends KIXRouter {
             res.redirect('/static/html/unsupported-browser/index.html');
         } else {
 
+            res.clearCookie('token');
             const applications = await PluginService.getInstance().getExtensions<IMarkoApplication>(
                 AgentPortalExtensions.MARKO_APPLICATION
             );

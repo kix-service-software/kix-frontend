@@ -101,12 +101,15 @@ export class AuthenticationService {
                     res.cookie('token', token, { httpOnly: true });
                     next();
                 } else {
+                    res.clearCookie('token');
                     AuthenticationRouter.getInstance().login(req, res);
                 }
             }).catch((error) => {
+                res.clearCookie('token');
                 AuthenticationRouter.getInstance().login(req, res);
             });
         } else {
+            res.clearCookie('token');
             AuthenticationRouter.getInstance().login(req, res);
         }
     }
