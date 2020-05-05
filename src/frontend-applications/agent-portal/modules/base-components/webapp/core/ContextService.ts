@@ -142,7 +142,9 @@ export class ContextService {
         }
 
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
-            this.handleDialogContext(context, oldContext, formId, objectType, deleteForm, title, icon, singleTab);
+            this.handleDialogContext(
+                context, oldContext, formId, objectType, deleteForm, title, icon, singleTab, objectId
+            );
         }
 
         return context;
@@ -150,7 +152,7 @@ export class ContextService {
 
     private async handleDialogContext(
         context: Context, oldContext: Context, formId: string, objectType: KIXObjectType | string,
-        deleteForm: boolean, title: string, icon: ObjectIcon | string, singleTab: boolean
+        deleteForm: boolean, title: string, icon: ObjectIcon | string, singleTab: boolean, objectId?: string | number
     ): Promise<void> {
         this.activeDialogContext = context;
         this.activeContextType = ContextType.DIALOG;
@@ -159,7 +161,9 @@ export class ContextService {
             formId = await context.getFormId(context.getDescriptor().contextMode, objectType, context.getObjectId());
         }
 
-        if (context.getObjectId()) {
+        if (objectId) {
+            await context.setObjectId(objectId);
+        } else if (context.getObjectId()) {
             await context.setObjectId(context.getObjectId());
         }
 
