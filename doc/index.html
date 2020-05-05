@@ -527,10 +527,6 @@ pre code {
   font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
   font-size: 95%;
 }
-
-img {
-  max-width: 900px;
-}
       /* Syntax highlighting for JSON objects */
 .json-body {
     margin: 10px 20px;
@@ -601,7 +597,7 @@ img {
     text-decoration: underline;
   }
   
-    </style><link rel="stylesheet" href="static/prism.css"><script type="text/javascript" src="static/prism.js"></script></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>KIX - Frontend Server</h1><h2></h2><div class="chapter"><h2 id="agent_portal"><a href="#agent_portal">Agent Portal</a></h2><p>The KIX Agent Portal contains a application framework, web server (REST-API) and web application in once. The server (based on <a href="https://nodejs.org">NodeJS</a>) provides a web server instance (<a href="https://expressjs.com/de/">express</a>) for http communication. Over the http default route (<code>http://&lt;fqdn&gt;:&lt;port&gt;/</code>) the web server delivers the basic web application. The web application itself is a single page application (<a href="https://en.wikipedia.org/wiki/Single-page_application">SPA</a>) and uses sockets (<a href="https://socket.io/">Socket.io</a>) to communicate with the frontend server.</p></div><div class="chapter"><h2 id="modularization___plugins"><a href="#modularization___plugins">Modularization - Plugins</a></h2><h3 id="indruction">Indruction</h3><p>The framework provides the possibility to provide functionality via plugins with the help of extension points. One Plugin can contain several extension point implementations.</p><p>A extension point describes a specific interface which one is needed to be implemented by the extension.</p><h3 id="structure-of-a-plugin">Structure of a Plugin</h3><ul><li><b>src</b></li><ul><li>package.json</li><li>RELEASE</li><li>locale</li><li><i>[module]</i></li><br></ul><li>README.md</li><li><i>(other files to organise the plugin, e.g. ci/cd definitions, ide configurations)</i></li></ul><p>The <strong>src</strong> folder contains the main implementation of the plugin.</p><h4 id="release-file">RELEASE File</h4><p>The RELEASE file defines the current state and the requirements of the plugin. This file is evaluated at frontend server startup and checks the dependencies from the REQUIRES field. If dependencies could not be resolved the plugin will not be available in the software.</p><table class="table"><thead><tr><th>Property</th><th>Value</th><th>Example</th></tr></thead><tbody><tr><td>PRODUCT</td><td>Name of th plugin</td><td>MyPlugin</td></tr><tr><td>VERSION</td><td>String which describes the version</td><td>1 or V1</td></tr><tr><td>BUILDDATE</td><td>String with the date of build</td><td>Fri, 17 Apr 2020 07:30:54 +0200</td></tr><tr><td>BUILDNUMBER</td><td>The build number of the version</td><td>1, 3354</td></tr><tr><td>REQUIRES</td><td>Dependencies for the plugin</td><td>framework(&gt;3), backend::Maintenance</td></tr></tbody></table><p><strong>REQUIRES</strong> Following syntax is supported for the REQUIRES dependencies:</p><ul><li><strong>framework</strong> <em>(the frontend it self)</em></li><li><strong>framework(&gt;1)</strong> <em>(the frontend must be available in the specified version)</em></li><li><strong>pluginname</strong> <em>(only the name of the depending plugin; plugin must be available)</em></li><li><strong>pluginname(&gt;1)</strong> <em>(the name of the depending plugin with a version requirement; plugin must be available in the specified version; supported operators: &gt;, &lt;, =, !)</em></li><li><strong>backend</strong> <em>(the KIX backend)</em></li><li><strong>backend::pluginname</strong> <em>(this plugin must be available in KIX backend)</em></li><li><strong>backend::pluginname(&gt;1)</strong> <em>(this plugin must be available in the specified version in KIX backend)</em></li></ul><p>Example:</p><pre><code>PRODUCT = MyPlugin
+    </style><link rel="stylesheet" href="static/prism.css"><link rel="stylesheet" href="static/style.css"><script type="text/javascript" src="static/prism.js"></script></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>KIX - Frontend Server</h1><h2></h2><div class="chapter"><h2 id="agent_portal"><a href="#agent_portal">Agent Portal</a></h2><p>The KIX Agent Portal contains a application framework, web server (REST-API) and web application in once. The server (based on <a href="https://nodejs.org">NodeJS</a>) provides a web server instance (<a href="https://expressjs.com/de/">express</a>) for http communication. Over the http default route (<code>http://&lt;fqdn&gt;:&lt;port&gt;/</code>) the web server delivers the basic web application. The web application itself is a single page application (<a href="https://en.wikipedia.org/wiki/Single-page_application">SPA</a>) and uses sockets (<a href="https://socket.io/">Socket.io</a>) to communicate with the frontend server.</p></div><div class="chapter"><h2 id="modularization___plugins"><a href="#modularization___plugins">Modularization - Plugins</a></h2><h3 id="indruction">Indruction</h3><p>The framework provides the possibility to provide functionality via plugins with the help of extension points. One Plugin can contain several extension point implementations.</p><p>A extension point describes a specific interface which one is needed to be implemented by the extension.</p><h3 id="structure-of-a-plugin">Structure of a Plugin</h3><ul><li><b>src</b></li><ul><li>package.json</li><li>RELEASE</li><li>locale</li><li><i>[module]</i></li><br></ul><li>README.md</li><li><i>(other files to organise the plugin, e.g. ci/cd definitions, ide configurations)</i></li></ul><p>The <strong>src</strong> folder contains the main implementation of the plugin.</p><h4 id="release-file">RELEASE File</h4><p>The RELEASE file defines the current state and the requirements of the plugin. This file is evaluated at frontend server startup and checks the dependencies from the REQUIRES field. If dependencies could not be resolved the plugin will not be available in the software.</p><table class="table"><thead><tr><th>Property</th><th>Value</th><th>Example</th></tr></thead><tbody><tr><td>PRODUCT</td><td>Name of th plugin</td><td>MyPlugin</td></tr><tr><td>VERSION</td><td>String which describes the version</td><td>1 or V1</td></tr><tr><td>BUILDDATE</td><td>String with the date of build</td><td>Fri, 17 Apr 2020 07:30:54 +0200</td></tr><tr><td>BUILDNUMBER</td><td>The build number of the version</td><td>1, 3354</td></tr><tr><td>REQUIRES</td><td>Dependencies for the plugin</td><td>framework(&gt;3), backend::Maintenance</td></tr></tbody></table><p><strong>REQUIRES</strong> Following syntax is supported for the REQUIRES dependencies:</p><ul><li><strong>framework</strong> <em>(the frontend it self)</em></li><li><strong>framework(&gt;1)</strong> <em>(the frontend must be available in the specified version)</em></li><li><strong>pluginname</strong> <em>(only the name of the depending plugin; plugin must be available)</em></li><li><strong>pluginname(&gt;1)</strong> <em>(the name of the depending plugin with a version requirement; plugin must be available in the specified version; supported operators: &gt;, &lt;, =, !)</em></li><li><strong>backend</strong> <em>(the KIX backend)</em></li><li><strong>backend::pluginname</strong> <em>(this plugin must be available in KIX backend)</em></li><li><strong>backend::pluginname(&gt;1)</strong> <em>(this plugin must be available in the specified version in KIX backend)</em></li></ul><p>Example:</p><pre><code>PRODUCT = MyPlugin
 VERSION = 1
 BUILDDATE = Fri, 17 Apr 2020 07:30:54 +0200
 BUILDNUMBER = 12
@@ -780,15 +776,126 @@ public configuration?: WidgetConfiguration,
 public permissions: UIComponentPermission[] = [] 
 ) { }
 }
-</code></pre></div><div class="chapter"><h2 id="form_configuration"><a href="#form_configuration">Form Configuration</a></h2></div><div class="chapter"><h2 id="extendedkixobjectservice"><a href="#extendedkixobjectservice">ExtendedKIXObjectService</a></h2><p><strong><em>Webapplication</em></strong></p><h3 id="implementation">Implementation</h3><pre><code class="lang-typescript">export class MyObjectService extends ExtendedKIXObjectService {
+</code></pre></div><div class="chapter"><h2 id="form_configuration"><a href="#form_configuration">Form Configuration</a></h2></div><div class="chapter"><h2 id="extendedkixobjectservice"><a href="#extendedkixobjectservice">ExtendedKIXObjectService</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedKIXObjectService</code> implements the interface <code>IKIXObjectService</code> and has an default implementation for each method of the interface. The methods itself do not execute anything and always return <strong>null</strong>. You can overwrite a needed method and return a value which is required for you extension.</p><pre><code class="lang-typescript">export class MyObjectService extends ExtendedKIXObjectService {
 // ...
 }
-</code></pre><h3 id="registration">Registration</h3><pre><code class="lang-typescript">TicketService.getInstance().addExtendedService(new MyObjectService());
-</code></pre></div><div class="chapter"><h2 id="kixobjectfactory"><a href="#kixobjectfactory">KIXObjectFactory</a></h2><p>Can not resolve extensions/KIXObjectFactory.md</p></div><div class="chapter"><h2 id="extendedlabelprovider"><a href="#extendedlabelprovider">ExtendedLabelProvider</a></h2><p>Can not resolve extensions/ExtendedLabelProvider.md</p></div><div class="chapter"><h2 id="extendedtablefactory"><a href="#extendedtablefactory">ExtendedTableFactory</a></h2><p>Can not resolve extensions/ExtendedTableFactory.md</p></div><div class="chapter"><h2 id="extendeddynamicformmanager"><a href="#extendeddynamicformmanager">ExtendedDynamicFormManager</a></h2><p>Can not resolve extensions/ExtendedDynamicFormManager.md</p></div><div class="chapter"><h2 id="extendedconfigitemformfactory"><a href="#extendedconfigitemformfactory">ExtendedConfigItemFormFactory</a></h2><p>Can not resolve extensions/ExtendedConfigItemFormFactory.md</p></div><div class="chapter"><h2 id="extendedkixobjectservice"><a href="#extendedkixobjectservice">ExtendedKIXObjectService</a></h2><p><strong><em>Webapplication</em></strong></p><h3 id="implementation">Implementation</h3><pre><code class="lang-typescript">export class MyObjectService extends ExtendedKIXObjectService {
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">TicketService.getInstance().addExtendedService(new MyObjectService());
+</code></pre><h3 id="example">Example</h3><p>In this example the <code>getTreeNodes()</code> method is overwritten and has a specific implementation for a specific property. If its another property the method returns <strong>null</strong> and the default is used.</p><pre><code class="lang-typescript">export class MyObjectService extends ExtendedKIXObjectService {
+
+public async getTreeNodes(
+property: string, showInvalid?: boolean, invalidClickable?: boolean,
+filterIds?: Array&lt;string | number&gt;, loadingOptions?: KIXObjectLoadingOptions,
+objectLoadingOptions?: KIXObjectSpecificLoadingOptions
+): Promise&lt;TreeNode[]&gt; {
+let nodes: TreeNode[];
+
+if (property === &#39;MyObjectProperty&#39;) {
+nodes = [
+new TreeNode(&#39;my-object-property&#39;, &#39;My Object Property&#39;)
+];
+}
+
+return nodes;
+}
+
+}
+</code></pre></div><div class="chapter"><h2 id="kixobjectfactory"><a href="#kixobjectfactory">KIXObjectFactory</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><p>This extension can be used to extend the model. You can provide an additional object constructor which is executed if an new instance of the model is created.</p><h3 id="implementation">Implementation</h3><p>It is required to implement <code>class</code> which has an public constructor and extends the base object.</p><pre><code class="lang-typescript">export class ExtendedTicket extends Ticket {
+
+public extendedProperty: string;
+
+public constructor(ticket: Ticket) {
+super(ticket);
+if (ticket) {
+// optional: additional property handling for this object
+}
+}
+
+}
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the constructor in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">TicketBrowserFactory.getInstance().registerObjectConstructor(ExtendedTicket);
+</code></pre></div><div class="chapter"><h2 id="extendedlabelprovider"><a href="#extendedlabelprovider">ExtendedLabelProvider</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedLabelProvider</code> implements the interface <code>ILabelProvider</code> and has an default implementation for each method of the interface. The methods itself do not execute anything and always return <strong>null</strong>. You can overwrite a needed method and return a value which is required for you extension.</p><pre><code class="lang-typescript">export class ExtendedTicketLabelProvider extends ExtendedLabelProvider {
 // ...
 }
-</code></pre><h3 id="registration">Registration</h3><pre><code class="lang-typescript">TicketService.getInstance().addExtendedService(new MyObjectService());
-</code></pre></div><div class="chapter"><h2 id="extendeddynamicfieldformutil"><a href="#extendeddynamicfieldformutil">ExtendedDynamicFieldFormUtil</a></h2><p>Can not resolve extensions/ExtendedDynamicFieldFormUtil.md</p></div><div class="chapter"><h2 id="extendeddynamicfieldplaceholderhandler"><a href="#extendeddynamicfieldplaceholderhandler">ExtendedDynamicFieldPlaceHolderHandler</a></h2><p>Can not resolve extensions/ExtendedDynamicFieldPlaceHolderHandler.md</p></div><div class="chapter"><h2 id="extendedjobformmanager"><a href="#extendedjobformmanager">ExtendedJobFormManager</a></h2><p>Can not resolve extensions/ExtendedJobFormManager.md</p></div></div><div class="chapter"><h2 id="resources"><a href="#resources">Extensions & Components</a></h2><div class="panel panel-default resource"><div class="panel-heading"><h3 id="kix_modules" class="panel-title">kix:modules</h3></div><div class="panel-body"><div class="top-resource-description"><p>A KIX module represents a UI module which contains all the references for the UI components and businesslogic for a specific context. To register a new module you have to register and implement the extension point. A plugin can contain multiple <code>kix:modules</code> extensions.</p><p>Exmaple:</p><ul><li>Object Read Module (defines components &amp; logic to display objects in the UI, e.g. tables, detail pages, label provider, services, search)</li><li>Object Edit Module (defines components &amp; logic to create or edit the object via UI, e.g. edit dialog, new dialog, bulk action)</li></ul><h2 id="registration">Registration</h2><pre><code class="lang-json">{
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">const ticketLabelProvider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.TICKET);
+if (ticketLabelProvider) {
+ticketLabelProvider.addExtendedLabelProvider(new ExtendedTicketLabelProvider());
+}
+</code></pre><h3 id="example">Example</h3><p>In this example the <code>getPropertyText()</code> method is overwritten and has a specific implementation for specific properties to provide a different display value. If its another property the method returns <strong>null</strong> and the default is used.</p><pre><code class="lang-typescript">export class MyObjectService extends ExtendedKIXObjectService {
+
+public async getPropertyText(property: string, short?: boolean, translatable?: boolean): Promise&lt;string&gt; {
+let displayValue;
+
+switch (property) {
+case TicketProperty.TICKET_NUMBER:
+displayValue = &#39;T#-Number&#39;
+break;
+case TicketProperty.QUEUE_ID:
+displayValue = &#39;Department&#39;
+break;
+default:
+}
+
+return displayValue;
+}
+
+}
+</code></pre></div><div class="chapter"><h2 id="extendedtablefactory"><a href="#extendedtablefactory">ExtendedTableFactory</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><p>With this extension its possible to modify given table configurations from the TableFactory.</p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedTableFactory</code> provides the method <code>modifiyTableConfiguation</code>.</p><pre><code class="lang-typescript">export class ExtendedTicketTableFactory extends ExtendedTableFactory {
+// ...
+}
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">const tableFactory = TableFactoryService.getInstance().getTableFactory&lt;TicketTableFactory&gt;(
+KIXObjectType.TICKET
+);
+if (tableFactory) {
+tableFactory.addExtendedTableFactory(new ExtendedTicketTableFactory());
+}
+</code></pre><h3 id="example">Example</h3><p>In this example the <code>modifiyTableConfiguation()</code> method is overwritten and adds a new column before the given columns.</p><pre><code class="lang-typescript">export class ExtendedTicketTableFactory extends ExtendedTableFactory {
+
+public async modifiyTableConfiguation(
+tableConfiguration: TableConfiguration, useDefaultColumns: boolean
+): Promise&lt;void&gt; {
+if (useDefaultColumns) {
+tableConfiguration.tableColumns = [
+new DefaultColumnConfiguration(
+    null, null, null, &#39;MyProperty&#39;, true, false, true, false, 135, true, true
+),
+...tableConfiguration.tableColumns
+];
+}
+}
+
+}
+</code></pre></div><div class="chapter"><h2 id="extendeddynamicformmanager"><a href="#extendeddynamicformmanager">ExtendedDynamicFormManager</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><p>With this extension its possible to add specif handling for dynamic form. A dynamic form is used in different ui components, e.g. search dialog, filter for notifications, bulk dialog.</p><p><strong><em>Filter in Job dialog</em></strong></p><p><img src="static/dynamic-form-01.png" alt="Job"></p><p><strong><em>Filter in Notification dialog</em></strong></p><p><img src="static/dynamic-form-02.png" alt="Notification"></p><p><strong><em>Search Criteria in Search dialog</em></strong></p><p><img src="static/dynamic-form-03.png" alt="Search"></p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedDynamicFormManager</code> implements the interface <code>IDynamicFormManager</code> and has an default implementation for each method of the interface. The methods itself do not execute anything and always return <strong>null</strong>. You can overwrite a needed method and return a value which is required for you extension.</p><pre><code class="lang-typescript">export class ExtendedTicketDynamicFormManager extends ExtendedDynamicFormManager {
+// ...
+}
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">// search
+const ticketSearchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
+if (ticketSearchDefinition &amp;&amp; ticketSearchDefinition.formManager) {
+ticketSearchDefinition.formManager.addExtendedFormManager(new KIXProTicketDynamicFormManager());
+}
+
+// notification
+NotificationFilterManager.getInstance().addExtendedFormManager(new KIXProTicketDynamicFormManager());
+
+// job
+TicketJobFilterManager.getInstance().addExtendedFormManager(new KIXProTicketDynamicFormManager());
+
+// bulk
+const bulkManager = BulkService.getInstance().getBulkManager(KIXObjectType.TICKET);
+if (bulkManager) {
+bulkManager.addExtendedFormManager(new KIXProTicketDynamicFormManager());
+}
+</code></pre><h3 id="example">Example</h3><p>In this example the <code>getOperations()</code> method is overwritten and adds a specific search operator for the property ticket number otherwise it returns <strong>null</strong> and the default is used.</p><pre><code class="lang-typescript">export class ExtendedTicketDynamicFormManager extends ExtendedDynamicFormManager {
+
+public async getOperations(property: string): Promise&lt;string[]&gt; {
+const operations: string[];
+if(property === TicketProperty.TICKET_NUMBER) {
+operations= [SearchOperator.LIKE];
+}
+
+return operations;
+}
+
+}
+</code></pre></div><div class="chapter"><h2 id="extendedconfigitemformfactory"><a href="#extendedconfigitemformfactory">ExtendedConfigItemFormFactory</a></h2><p>Can not resolve extensions/ExtendedConfigItemFormFactory.md</p></div><div class="chapter"><h2 id="extendeddynamicfieldformutil"><a href="#extendeddynamicfieldformutil">ExtendedDynamicFieldFormUtil</a></h2><p>Can not resolve extensions/ExtendedDynamicFieldFormUtil.md</p></div><div class="chapter"><h2 id="extendeddynamicfieldplaceholderhandler"><a href="#extendeddynamicfieldplaceholderhandler">ExtendedDynamicFieldPlaceHolderHandler</a></h2><p>Can not resolve extensions/ExtendedDynamicFieldPlaceHolderHandler.md</p></div><div class="chapter"><h2 id="extendedjobformmanager"><a href="#extendedjobformmanager">ExtendedJobFormManager</a></h2><p>Can not resolve extensions/ExtendedJobFormManager.md</p></div></div><div class="chapter"><h2 id="resources"><a href="#resources">Extensions & Components</a></h2><div class="panel panel-default resource"><div class="panel-heading"><h3 id="kix_modules" class="panel-title">kix:modules</h3></div><div class="panel-body"><div class="top-resource-description"><p>A KIX module represents a UI module which contains all the references for the UI components and businesslogic for a specific context. To register a new module you have to register and implement the extension point. A plugin can contain multiple <code>kix:modules</code> extensions.</p><p>Exmaple:</p><ul><li>Object Read Module (defines components &amp; logic to display objects in the UI, e.g. tables, detail pages, label provider, services, search)</li><li>Object Edit Module (defines components &amp; logic to create or edit the object via UI, e.g. edit dialog, new dialog, bulk action)</li></ul><h2 id="registration">Registration</h2><pre><code class="lang-json">{
 "name": "My-Plugin",
 "extensions": {
 "kix:modules": {
