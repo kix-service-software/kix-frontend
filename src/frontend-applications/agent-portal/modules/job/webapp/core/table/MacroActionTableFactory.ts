@@ -78,7 +78,7 @@ export class MacroActionTableFactory extends TableFactory {
                 {
                     flat: false
                 },
-                'Parameters'
+                'preparedParameters'
             );
         }
 

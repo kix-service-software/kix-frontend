@@ -15,6 +15,10 @@ import { ContextService } from "../../../../../modules/base-components/webapp/co
 import { JobDetailsContext } from "..";
 import { Job } from "../../../model/Job";
 import { MacroAction } from "../../../model/MacroAction";
+import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { MacroActionType } from "../../../model/MacroActionType";
+import { MacroActionTypeOption } from "../../../model/MacroActionTypeOption";
+import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
 
 export class MacroActionTableContentProvider extends TableContentProvider<any> {
 
@@ -33,7 +37,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
 
         const rowObjectPromises: Array<Promise<RowObject<MacroAction>>> = [];
         if (job && job.Macros && job.Macros.length) {
-            const actions = job.Macros[0].Actions;
+            const actions = [...job.Macros[0].Actions];
 
             for (const o of actions) {
                 rowObjectPromises.push(new Promise<RowObject<MacroAction>>(async (resolve, reject) => {
@@ -48,6 +52,9 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
                             values.push(value);
                         }
                     }
+
+                    o["preparedParameters"] = await this.getPreparedParameters(o, job.Macros[0].Type);
+
                     await this.prepareSpecificValues(values, o);
 
                     resolve(new RowObject<MacroAction>(values, o));
@@ -57,5 +64,27 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
 
         const rowObjects = await Promise.all(rowObjectPromises);
         return rowObjects;
+    }
+
+    private async getPreparedParameters(o: MacroAction, macroType: string) {
+        let preparedParameters: {} = {};
+        const actionTypes = await KIXObjectService.loadObjects<MacroActionType>(
+            KIXObjectType.MACRO_ACTION_TYPE, [o.Type], undefined, { id: macroType }, true
+        ).catch(() => [] as MacroActionType[]);
+
+        if (actionTypes && actionTypes[0]) {
+            for (const parameter in o.Parameters) {
+                if (actionTypes[0].Options[parameter]) {
+                    const option = actionTypes[0].Options[parameter] as MacroActionTypeOption;
+                    if (option) {
+                        const translated = await TranslationService.translate(option.Label);
+                        preparedParameters[translated] = o.Parameters[parameter];
+                    }
+                }
+            }
+        } else {
+            preparedParameters = o.Parameters;
+        }
+        return preparedParameters;
     }
 }
