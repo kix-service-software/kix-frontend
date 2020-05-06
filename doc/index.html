@@ -895,7 +895,95 @@ return operations;
 }
 
 }
-</code></pre></div><div class="chapter"><h2 id="extendedconfigitemformfactory"><a href="#extendedconfigitemformfactory">ExtendedConfigItemFormFactory</a></h2><p>Can not resolve extensions/ExtendedConfigItemFormFactory.md</p></div><div class="chapter"><h2 id="extendeddynamicfieldformutil"><a href="#extendeddynamicfieldformutil">ExtendedDynamicFieldFormUtil</a></h2><p>Can not resolve extensions/ExtendedDynamicFieldFormUtil.md</p></div><div class="chapter"><h2 id="extendeddynamicfieldplaceholderhandler"><a href="#extendeddynamicfieldplaceholderhandler">ExtendedDynamicFieldPlaceHolderHandler</a></h2><p>Can not resolve extensions/ExtendedDynamicFieldPlaceHolderHandler.md</p></div><div class="chapter"><h2 id="extendedjobformmanager"><a href="#extendedjobformmanager">ExtendedJobFormManager</a></h2><p>Can not resolve extensions/ExtendedJobFormManager.md</p></div></div><div class="chapter"><h2 id="resources"><a href="#resources">Extensions & Components</a></h2><div class="panel panel-default resource"><div class="panel-heading"><h3 id="kix_modules" class="panel-title">kix:modules</h3></div><div class="panel-body"><div class="top-resource-description"><p>A KIX module represents a UI module which contains all the references for the UI components and businesslogic for a specific context. To register a new module you have to register and implement the extension point. A plugin can contain multiple <code>kix:modules</code> extensions.</p><p>Exmaple:</p><ul><li>Object Read Module (defines components &amp; logic to display objects in the UI, e.g. tables, detail pages, label provider, services, search)</li><li>Object Edit Module (defines components &amp; logic to create or edit the object via UI, e.g. edit dialog, new dialog, bulk action)</li></ul><h2 id="registration">Registration</h2><pre><code class="lang-json">{
+</code></pre></div><div class="chapter"><h2 id="extendedconfigitemformfactory"><a href="#extendedconfigitemformfactory">ExtendedConfigItemFormFactory</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedConfigItemFormFactory</code> provides the method <code>getFormField()</code> to handle specific config item class attributes for the form.</p><pre><code class="lang-typescript">export class MyExtendedConfigItemFormFactory extends ExtendedConfigItemFormFactory {
+// ...
+}
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">ConfigItemFormFactory.getInstance().addExtendedConfigItemFormFactory(new MyExtendedConfigItemFormFactory());
+</code></pre><h3 id="example">Example</h3><p>In this example a Config Item Class contains a attribute with a new type <code>MyConfigItemAttribute</code>. For this type a specific input is needed.</p><pre><code class="lang-typescript">export class MyExtendedConfigItemFormFactory extends ExtendedConfigItemFormFactory {
+
+public getFormField(
+ad: AttributeDefinition, parentInstanceId?: string, parent?: FormFieldConfiguration
+): FormFieldConfiguration {
+let formField: FormFieldConfiguration;
+
+if (ad.Input.Type === &#39;MyConfigItemAttribute&#39;) {
+formField = new FormFieldConfiguration(ad.Key, ad.Name, ad.Key, &#39;object-reference-input&#39;, ad.Input.Required, null,
+[
+    new FormFieldOption(ObjectReferenceOptions.OBJECT, &#39;MyObject&#39;),
+    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false),
+    new FormFieldOption(FormFieldOptions.INPUT_FIELD_TYPE, InputFieldTypes.OBJECT_REFERENCE)
+],
+null, null, null, parentInstanceId, ad.CountDefault, ad.CountMax, ad.CountMin,
+ad.Input.MaxLength, ad.Input.RegEx, ad.Input.RegExErrorMessage
+);
+}
+
+return formField;
+}
+
+}
+</code></pre></div><div class="chapter"><h2 id="extendeddynamicfieldformutil"><a href="#extendeddynamicfieldformutil">ExtendedDynamicFieldFormUtil</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedDynamicFieldFormUtil</code> implements the interface <code>IDynamicFieldFormUtil</code> and has an default implementation for each method of the interface. The methods itself do not execute anything and always return <strong>null</strong>. You can overwrite a needed method and return a value which is required for you extension.</p><pre><code class="lang-typescript">export class MyDynamicFieldFormUtil extends ExtendedDynamicFieldFormUtil {
+// ...
+}
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">DynamicFieldFormUtil.getInstance().addExtendedDynamicFormUtil(new MyDynamicFieldFormUtil());
+</code></pre></div><div class="chapter"><h2 id="extendeddynamicfieldplaceholderhandler"><a href="#extendeddynamicfieldplaceholderhandler">ExtendedDynamicFieldPlaceHolderHandler</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><p>With this extension its possible to handle specific KIX placeholder for dynamic fields.</p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedDynamicFieldPlaceHolderHandler</code> implements the interface <code>IPlaceholderHandler</code> and has an default implementation for each method of the interface. The methods itself do not execute anything and always return <strong>null</strong>. You can overwrite a needed method and return a value which is required for you extension.</p><pre><code class="lang-typescript">export class MyExtendedDynamicFieldPlaceHolderHandler extends ExtendedDynamicFieldPlaceHolderHandler {
+// ...
+}
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">const placeholderHandler = PlaceholderService.getInstance().getHandler&lt;DynamicFieldValuePlaceholderHandler&gt;(
+KIXObjectType.DYNAMIC_FIELD
+);
+if (placeholderHandler) {
+placeholderHandler.addExtendedPlaceholderHandler(new MyExtendedPlaceholderHandler());
+}
+</code></pre><h3 id="example">Example</h3><pre><code class="lang-typescript">export class MyDynamicFieldPlaceholderHandler extends ExtendedDynamicFieldPlaceHolderHandler {
+
+public async handleKey(object: KIXObject, dfValue: DynamicFieldValue): Promise&lt;string&gt; {
+const dynamicField = await KIXObjectService.loadDynamicField(dfValue.Name);
+let result: string;
+
+if (dynamicField &amp;&amp; dynamicField.FieldType === &#39;MyDynamicFieldType&#39;) {
+const separator = dynamicField.Config &amp;&amp; dynamicField.Config.ItemSeparator ?
+dynamicField.Config.ItemSeparator : &#39;, &#39;;
+result = Array.isArray(dfValue.Value) ? dfValue.Value.join(separator) : [dfValue.Value].join(separator);
+}
+
+return result;
+}
+
+}
+</code></pre></div><div class="chapter"><h2 id="extendedjobformmanager"><a href="#extendedjobformmanager">ExtendedJobFormManager</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><p>With this extension its possible to handle specific KIX placeholder for dynamic fields.</p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedJobFormManager</code> implements the interface <code>IJobFormManager</code> and has an default implementation for each method of the interface. The methods itself do not execute anything and always return <strong>null</strong>. You can overwrite a needed method and return a value which is required for you extension.</p><pre><code class="lang-typescript">export class MyExtendedJobFormManager extends ExtendedJobFormManager {
+// ...
+}
+</code></pre><h3 id="registration">Registration</h3><p><strong><em>Register the service in the <a href="#init-components">UIModule</a></em></strong></p><pre><code class="lang-typescript">const manager = JobFormService.getInstance().getJobFormManager(JobTypes.SYNCHRONISATION);
+if (manager) {
+(manager as AbstractJobFormManager).addExtendedJobFormManager(new MyExtendedJobFormManager());
+}
+</code></pre><h3 id="example">Example</h3><p>This example provides a specific <code>FormFieldConfiguration</code> for an action parameter.</p><pre><code class="lang-typescript">export class MyExtendedJobFormManager extends ExtendedJobFormManager {
+
+public getActionOptionField(
+action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
+jobType: string
+) {
+if (jobType === &#39;MyJobType&#39;) {
+if (option.Name === &#39;Description&#39;) {
+let defaultValue: FormFieldValue;
+if (action &amp;&amp; action.Parameters) {
+    defaultValue = new FormFieldValue(action.Parameters[option.Name]);
+}
+return new FormFieldConfiguration(
+    `job-action-${actionType}-${option.Name}`, option.Label,
+    `ACTION###${actionFieldInstanceId}###${option.Name}`,
+    &#39;text-area-input&#39;, Boolean(option.Required), option.Description, undefined,
+    defaultValue
+);
+}
+}
+
+return null;
+}
+
+}
+</code></pre></div></div><div class="chapter"><h2 id="resources"><a href="#resources">Extensions & Components</a></h2><div class="panel panel-default resource"><div class="panel-heading"><h3 id="kix_modules" class="panel-title">kix:modules</h3></div><div class="panel-body"><div class="top-resource-description"><p>A KIX module represents a UI module which contains all the references for the UI components and businesslogic for a specific context. To register a new module you have to register and implement the extension point. A plugin can contain multiple <code>kix:modules</code> extensions.</p><p>Exmaple:</p><ul><li>Object Read Module (defines components &amp; logic to display objects in the UI, e.g. tables, detail pages, label provider, services, search)</li><li>Object Edit Module (defines components &amp; logic to create or edit the object via UI, e.g. edit dialog, new dialog, bulk action)</li></ul><h2 id="registration">Registration</h2><pre><code class="lang-json">{
 "name": "My-Plugin",
 "extensions": {
 "kix:modules": {
