@@ -926,9 +926,6 @@ msgstr "Fehler beim Hinzufügen des Bildes:"
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
 
-msgid "Escalation time"
-msgstr "Eskalationszeit"
-
 msgid "Event"
 msgstr "Event"
 
@@ -1927,12 +1924,12 @@ msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
 "Wenn die Tabellen abhängig sind, wird nur nach Kunden gesucht. Ist die "
 "Abhängigkeit aufgelöst, wird nach Kunden und Kontakten gesucht. Durchsuchbar "
-"sind die Kunden-Eigenschaften \"KNR\", \"Name\", \"URL\", \"Straße\", \"PLZ\""
-", \"Stadt\" und \"Land\" und die Kontakt-Eigenschaften \"Nutzername\", \"E-"
-"Mail\", \"Vorname\", \"Nachname\", \"Titel\", \"Telefon\", \"Fax\", \"Mobil\""
-", \"Straße\", \"Stadt\", \"Land\". Verwendung von Wildcards (*) ist möglich. "
-"Die Nutzung weiterer Sonderzeichen ist im FAQ Artikel \"Wie suche ich in KIX "
-"18\" zu finden."
+"sind die Kunden-Eigenschaften \"KNR\", \"Name\", \"URL\", \"Straße\", \"PLZ"
+"\", \"Stadt\" und \"Land\" und die Kontakt-Eigenschaften \"Nutzername\", \"E-"
+"Mail\", \"Vorname\", \"Nachname\", \"Titel\", \"Telefon\", \"Fax\", \"Mobil"
+"\", \"Straße\", \"Stadt\", \"Land\". Verwendung von Wildcards (*) ist "
+"möglich. Die Nutzung weiterer Sonderzeichen ist im FAQ Artikel \"Wie suche "
+"ich in KIX 18\" zu finden."
 
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
@@ -3334,9 +3331,6 @@ msgstr "Daten zurücksetzen"
 msgid "Reset to Default"
 msgstr "Auf Standard zurücksetzen"
 
-msgid "Response time"
-msgstr "Reaktionszeit"
-
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
@@ -3513,14 +3507,8 @@ msgstr "Größe"
 msgid "Skip"
 msgstr "Überspringen"
 
-msgid "SLA"
-msgstr "SLA"
-
 msgid "Solution"
 msgstr "Lösung"
-
-msgid "Solution time"
-msgstr "Lösungszeit"
 
 msgid "Sort"
 msgstr "Sortieren"
@@ -3968,9 +3956,6 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Ticket"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update time"
-msgstr "Aktualisierung wird durchgeführt"
-
 msgid "Update Translation"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -4123,6 +4108,21 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Escalation time"
+#~ msgstr "Eskalationszeit"
+
+#~ msgid "Response time"
+#~ msgstr "Reaktionszeit"
+
+#~ msgid "SLA"
+#~ msgstr "SLA"
+
+#~ msgid "Solution time"
+#~ msgstr "Lösungszeit"
+
+#~ msgid "Update time"
+#~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Link Objects"
 #~ msgstr "Objekte verknüpfen"

@@ -914,9 +914,6 @@ msgstr ""
 msgid "Escalated Tickets"
 msgstr ""
 
-msgid "Escalation time"
-msgstr ""
-
 msgid "Event"
 msgstr ""
 
@@ -1228,7 +1225,8 @@ msgid "Helptext_Admin_JobCreateEdit_Time"
 msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
 
 msgid "Helptext_Admin_JobCreateEdit_Type"
-msgstr "Choose the purpose for the job. The form will be completed accordingly."
+msgstr ""
+"Choose the purpose for the job. The form will be completed accordingly."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
 msgstr ""
@@ -1824,11 +1822,11 @@ msgid "Helptext_Customer_Dashboard_Search"
 msgstr ""
 "If the tables are dependend, only Organisations are searchable. If the "
 "dependency is removed, Organisations and Contacts are searchable. The "
-"following Organisation attributes are considered: \"CNO\", \"Name\", \"URL\""
-", \"Street\", \"ZIP\", \"City\" and \"Country\". The following Contact "
+"following Organisation attributes are considered: \"CNO\", \"Name\", \"URL"
+"\", \"Street\", \"ZIP\", \"City\" and \"Country\". The following Contact "
 "attributes are considered: \"Login Name\", \"Email\", \"First Name\", \"Last "
-"Name\", \"Title\", \"Phone\", \"Fax\", \"Mobile\", \"Street\", \"City\", \""
-"County\". It is possible to use Wildcards (*). See FAQ article \"How to "
+"Name\", \"Title\", \"Phone\", \"Fax\", \"Mobile\", \"Street\", \"City\", "
+"\"County\". It is possible to use Wildcards (*). See FAQ article \"How to "
 "search in KIX 18\" for further use of special characters."
 
 msgid "Helptext_Customers_ContactCreate_City"
@@ -3198,9 +3196,6 @@ msgstr ""
 msgid "Reset to Default"
 msgstr ""
 
-msgid "Response time"
-msgstr ""
-
 msgid "Responsible"
 msgstr ""
 
@@ -3375,13 +3370,7 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-msgid "SLA"
-msgstr ""
-
 msgid "Solution"
-msgstr ""
-
-msgid "Solution time"
 msgstr ""
 
 msgid "Sort"
@@ -3821,9 +3810,6 @@ msgid "Update Text Module"
 msgstr ""
 
 msgid "Update Ticket"
-msgstr ""
-
-msgid "Update time"
 msgstr ""
 
 msgid "Update Translation"
