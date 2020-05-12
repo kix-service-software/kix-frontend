@@ -35,7 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (!this.state.properties) {
                 this.state.properties = [];
                 for (const key in object) {
-                    if (object[key]) {
+                    if (object[key] !== undefined) {
                         this.state.properties.push(key);
                     }
                 }

@@ -178,8 +178,10 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             const objectType = this.state.row.getTable().getObjectType();
             const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
-                const classes = await cssHandler.getRowCSSClasses(object);
-                classes.forEach((c) => stateClass.push(c));
+                for (const handler of cssHandler) {
+                    const classes = await handler.getRowCSSClasses(object);
+                    classes.forEach((c) => stateClass.push(c));
+                }
             }
 
             const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();

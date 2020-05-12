@@ -28,8 +28,8 @@ import { InputFieldTypes } from "../../../../modules/base-components/webapp/core
 import { isArray } from "util";
 import { ConfigItemProperty } from "../../model/ConfigItemProperty";
 import { SearchProperty } from "../../../search/model/SearchProperty";
-import { VersionProperty } from "../../model/VersionProperty";
 import { IdService } from "../../../../model/IdService";
+import { ExtendedConfigItemFormFactory } from "./ExtendedConfigItemFormFactory";
 
 export class ConfigItemFormFactory {
 
@@ -43,6 +43,12 @@ export class ConfigItemFormFactory {
     }
 
     private constructor() { }
+
+    private extendedConfigItemFormFactories: ExtendedConfigItemFormFactory[] = [];
+
+    public addExtendedConfigItemFormFactory(factory: ExtendedConfigItemFormFactory): void {
+        this.extendedConfigItemFormFactories.push(factory);
+    }
 
     public async addCIClassAttributesToForm(form: FormConfiguration, classId: number): Promise<void> {
         if (form.pages[0] && form.pages[0].groups[0] && classId) {
@@ -72,30 +78,40 @@ export class ConfigItemFormFactory {
         if (typeof ad.CountDefault === 'undefined' || ad.CountDefault === null) {
             ad.CountDefault = 1;
         }
-        if (ad.Input.Type === 'GeneralCatalog') {
-            formField = this.getGeneralCatalogField(ad, parentInstanceId);
-        } else if (ad.Input.Type === 'Text') {
-            formField = this.getTextField(ad, parentInstanceId);
-        } else if (ad.Input.Type === 'TextArea') {
-            formField = this.getTextAreaField(ad, parentInstanceId);
-        } else if (ad.Input.Type === 'Contact') {
-            formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.CONTACT);
-        } else if (ad.Input.Type === 'Organisation') {
-            formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.ORGANISATION);
-        } else if (ad.Input.Type === 'CIClassReference') {
-            formField = this.getCIClassReferenceField(ad, parentInstanceId);
-        } else if (ad.Input.Type === 'Date') {
-            formField = this.getDateField(ad, parentInstanceId);
-        } else if (ad.Input.Type === 'DateTime') {
-            formField = this.getDateTimeField(ad, parentInstanceId);
-        } else if (ad.Input.Type === 'Attachment') {
-            formField = this.getAttachmentFormField(ad, parentInstanceId);
-        } else if (ad.Input.Type === 'Dummy') {
-            formField = this.getDefaultFormField(ad, parentInstanceId, true);
-            formField.empty = true;
-            formField.asStructure = true;
-        } else {
-            formField = this.getDefaultFormField(ad, parentInstanceId);
+
+        for (const extendedFactory of this.extendedConfigItemFormFactories) {
+            formField = extendedFactory.getFormField(ad, parentInstanceId, parent);
+            if (formField) {
+                break;
+            }
+        }
+
+        if (!formField) {
+            if (ad.Input.Type === 'GeneralCatalog') {
+                formField = this.getGeneralCatalogField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'Text') {
+                formField = this.getTextField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'TextArea') {
+                formField = this.getTextAreaField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'Contact') {
+                formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.CONTACT);
+            } else if (ad.Input.Type === 'Organisation') {
+                formField = this.getObjectReferenceField(ad, parentInstanceId, KIXObjectType.ORGANISATION);
+            } else if (ad.Input.Type === 'CIClassReference') {
+                formField = this.getCIClassReferenceField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'Date') {
+                formField = this.getDateField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'DateTime') {
+                formField = this.getDateTimeField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'Attachment') {
+                formField = this.getAttachmentFormField(ad, parentInstanceId);
+            } else if (ad.Input.Type === 'Dummy') {
+                formField = this.getDefaultFormField(ad, parentInstanceId, true);
+                formField.empty = true;
+                formField.asStructure = true;
+            } else {
+                formField = this.getDefaultFormField(ad, parentInstanceId);
+            }
         }
 
         if (formField.countDefault === 0 || (parent && !parent.asStructure && parent.empty)) {

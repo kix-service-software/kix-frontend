@@ -27,27 +27,15 @@ import { SearchOperator } from "../../search/model/SearchOperator";
 import { FilterDataType } from "../../../model/FilterDataType";
 import { CreateTicketArticleOptions } from "../model/CreateTicketArticleOptions";
 import { ArticleLoadingOptions } from "../model/ArticleLoadingOptions";
-import { CreateTicket } from "./api/CreateTicket";
-import { CreateTicketResponse } from "./api/CreateTicketResponse";
-import { CreateTicketRequest } from "./api/CreateTicketRequest";
-import { CreateArticleResponse } from "./api/CreateArticleResponse";
-import { CreateArticleRequest } from "./api/CreateArticleRequest";
 import { CreateTicketWatcherOptions } from "../model/CreateTicketWatcherOptions";
-import { UpdateTicket } from "./api/UpdateTicket";
-import { UpdateTicketResponse } from "./api/UpdateTicketResponse";
-import { UpdateTicketRequest } from "./api/UpdateTicketRequest";
-import { CreateArticle } from "./api/CreateArticle";
-import { CreateAttachment } from "./api/CreateAttachment";
-import { ArticleAttachmentResponse } from "./api/ArticleAttachmentResponse";
 import { Error } from "../../../../../server/model/Error";
-import { CreateWatcher } from "./api/CreateWatcher";
-import { CreateWatcherResponse } from "./api/CreateWatcherResponse";
-import { CreateWatcherRequest } from "./api/CreateWatcherRequest";
 import { SenderTypeFactory } from "./SenderTypeFactory";
 import { ArticleFactory } from "./ArticleFactory";
 import { LockFactory } from "./LockFactory";
 import { SearchProperty } from "../../search/model/SearchProperty";
 import { FilterType } from "../../../model/FilterType";
+import { Ticket } from "../model/Ticket";
+import { RequestObject } from "../../../../../server/model/rest/RequestObject";
 
 export class TicketAPIService extends KIXObjectAPIService {
 
@@ -126,60 +114,52 @@ export class TicketAPIService extends KIXObjectAPIService {
             const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
             const contactId = this.getParameterValue(parameter, TicketProperty.CONTACT_ID);
 
-            let organisationId = this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID);
-            if (isNaN(organisationId)) {
-                organisationId = null;
+            const orgParameter = parameter.find((p) => p[0] === TicketProperty.ORGANISATION_ID);
+            if (orgParameter && isNaN(orgParameter[1])) {
+                orgParameter[1] = null;
             }
 
-            const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId, contactId);
-
-            const createTicket = new CreateTicket(
-                this.getParameterValue(parameter, TicketProperty.TITLE),
-                this.getParameterValue(parameter, TicketProperty.CONTACT_ID),
-                organisationId,
-                this.getParameterValue(parameter, TicketProperty.STATE_ID),
-                this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
-                queueId,
-                null,
-                this.getParameterValue(parameter, TicketProperty.TYPE_ID),
-                this.getParameterValue(parameter, TicketProperty.SERVICE_ID),
-                this.getParameterValue(parameter, TicketProperty.SLA_ID),
-                this.getParameterValue(parameter, TicketProperty.OWNER_ID),
-                this.getParameterValue(parameter, TicketProperty.RESPONSIBLE_ID),
-                this.getParameterValue(parameter, TicketProperty.PENDING_TIME),
-                [createArticle],
-                this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS)
+            const articleParameter = await this.prepareArticleData(
+                token, clientRequestId, parameter, queueId, contactId
             );
+            parameter.push([TicketProperty.ARTICLES, articleParameter ? [new RequestObject(articleParameter)] : null]);
 
-            const response = await this.sendCreateRequest<CreateTicketResponse, CreateTicketRequest>(
-                token, clientRequestId, this.RESOURCE_URI, new CreateTicketRequest(createTicket), this.objectType
+            const ticketId = await super.executeUpdateOrCreateRequest<number>(
+                token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.TICKET, 'TicketID', true
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
 
             await this.createLinks(
-                token, clientRequestId, response.TicketID, this.getParameterValue(parameter, TicketProperty.LINK)
+                token, clientRequestId, ticketId, this.getParameterValue(parameter, TicketProperty.LINK)
             );
 
-            return response.TicketID;
+            return ticketId;
         } else if (objectType === KIXObjectType.ARTICLE) {
             const options = createOptions as CreateTicketArticleOptions;
 
             let queueId;
-            const tickets = await super.load(
+            const tickets = await super.load<Ticket>(
                 token, KIXObjectType.TICKET, this.RESOURCE_URI, null, [options.ticketId], KIXObjectType.TICKET
             );
             if (tickets && tickets.length) {
                 queueId = tickets[0].QueueID;
             }
 
-            const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
-            const uri = this.buildUri(this.RESOURCE_URI, options.ticketId, 'articles');
-            const response = await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
-                token, clientRequestId, uri, new CreateArticleRequest(createArticle), KIXObjectType.ARTICLE
-            );
-            return response.ArticleID;
+            const articleParameter = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
+            if (articleParameter) {
+                const articleUri = this.buildUri(this.RESOURCE_URI, tickets[0].TicketID, 'articles');
+                const articleId = await super.executeUpdateOrCreateRequest<number>(
+                    token, clientRequestId, articleParameter, articleUri, KIXObjectType.ARTICLE, 'ArticleID', true
+                ).catch((error: Error) => {
+                    LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                    throw new Error(error.Code, error.Message);
+                });
+
+                return articleId;
+            }
+            return null;
         } else if (objectType === KIXObjectType.WATCHER) {
             const watcherOptions = createOptions as CreateTicketWatcherOptions;
             return this.addWatcher(token, clientRequestId, watcherOptions.ticketId, watcherOptions.userId);
@@ -199,105 +179,113 @@ export class TicketAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
 
-        const createArticle = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
-
-        const updateTicket = new UpdateTicket(
-            this.getParameterValue(parameter, TicketProperty.TITLE),
-            this.getParameterValue(parameter, TicketProperty.CONTACT_ID),
-            this.getParameterValue(parameter, TicketProperty.ORGANISATION_ID),
-            this.getParameterValue(parameter, TicketProperty.STATE_ID),
-            this.getParameterValue(parameter, TicketProperty.PRIORITY_ID),
-            queueId,
-            this.getParameterValue(parameter, TicketProperty.LOCK_ID),
-            this.getParameterValue(parameter, TicketProperty.TYPE_ID),
-            this.getParameterValue(parameter, TicketProperty.SERVICE_ID),
-            this.getParameterValue(parameter, TicketProperty.SLA_ID),
-            this.getParameterValue(parameter, TicketProperty.OWNER_ID),
-            this.getParameterValue(parameter, TicketProperty.RESPONSIBLE_ID),
-            this.getParameterValue(parameter, TicketProperty.PENDING_TIME),
-            this.getParameterValue(parameter, KIXObjectProperty.DYNAMIC_FIELDS),
-            this.getParameterValue(parameter, TicketProperty.STATE)
-        );
-
-        const response = await this.sendUpdateRequest<UpdateTicketResponse, UpdateTicketRequest>(
-            token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId), new UpdateTicketRequest(updateTicket),
-            this.objectType
-        ).catch((error) => {
+        const uri = this.buildUri(this.RESOURCE_URI, objectId);
+        const ticketId = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, uri, this.objectType, 'TicketID'
+        ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        if (createArticle) {
-            await this.sendCreateRequest<CreateArticleResponse, CreateArticleRequest>(
-                token, clientRequestId, this.buildUri(this.RESOURCE_URI, objectId, 'articles'),
-                new CreateArticleRequest(createArticle), this.objectType
-            ).catch((error) => {
+        const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
+        const articleParameter = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
+        if (articleParameter) {
+            const articleUri = this.buildUri(this.RESOURCE_URI, objectId, 'articles');
+            await super.executeUpdateOrCreateRequest<number>(
+                token, clientRequestId, articleParameter, articleUri, KIXObjectType.ARTICLE, 'ArticleID', true
+            ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
         }
 
-        return response.TicketID;
+        return ticketId;
     }
 
     private async prepareArticleData(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, queueId: number, contactId?: number
-    ): Promise<CreateArticle> {
-        const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
-
-        let senderType = this.getParameterValue(parameter, ArticleProperty.SENDER_TYPE_ID);
-        if (!senderType) {
-            senderType = 1;
-        }
-
-        let from = this.getParameterValue(parameter, ArticleProperty.FROM);
-        if (!from) {
-            const user = await UserService.getInstance().getUserByToken(token);
-            from = user.Contact ? user.Contact.Email : null;
-        }
+    ): Promise<Array<[string, any]>> {
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
         const subject = this.getParameterValue(parameter, ArticleProperty.SUBJECT);
         const body = this.getParameterValue(parameter, ArticleProperty.BODY);
-        const customerVisible = this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE);
-        let to = this.getParameterValue(parameter, ArticleProperty.TO);
-        if (!to && contactId && senderType !== 3) {
-            if (!isNaN(contactId)) {
-                const contacts = await super.load(
-                    token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact'
-                );
-                if (contacts && contacts.length) {
-                    to = contacts[0].Email;
-                }
-            } else {
-                to = contactId;
-            }
-        }
-        const cc = this.getParameterValue(parameter, ArticleProperty.CC);
-        const bcc = this.getParameterValue(parameter, ArticleProperty.BCC);
 
-        let createArticle: CreateArticle;
+        let articleParameter: Array<[string, any]>;
         if (channelId && subject && body) {
-            createArticle = new CreateArticle(
-                subject, body, 'text/html; charset=utf8', 'text/html', 'utf8',
-                channelId, senderType, null, from, null, null, null, null, null, null, null,
-                attachments.length ? attachments : null,
-                customerVisible !== undefined ? customerVisible : false,
-                to, cc, bcc,
-                this.getParameterValue(parameter, ArticleProperty.REFERENCED_ARTICLE_ID),
-                this.getParameterValue(parameter, ArticleProperty.EXEC_REPLY),
-                this.getParameterValue(parameter, ArticleProperty.EXEC_FORWARD)
+            let from = this.getParameterValue(parameter, ArticleProperty.FROM);
+            if (!from) {
+                const user = await UserService.getInstance().getUserByToken(token);
+                from = user.Contact ? user.Contact.Email : null;
+            }
+
+            let senderType = this.getParameterValue(parameter, ArticleProperty.SENDER_TYPE_ID);
+            if (!senderType) {
+                senderType = 1;
+            }
+
+            let to = this.getParameterValue(parameter, ArticleProperty.TO);
+            if (!to && contactId && senderType !== 3) {
+                if (!isNaN(contactId)) {
+                    const contacts = await super.load(
+                        token, KIXObjectType.CONTACT, 'contacts', null, [contactId], 'Contact'
+                    );
+                    if (contacts && contacts.length) {
+                        to = contacts[0].Email;
+                    }
+                } else {
+                    to = contactId;
+                }
+            }
+
+            articleParameter = [];
+            articleParameter.push([ArticleProperty.CHANNEL_ID, channelId]);
+            articleParameter.push([ArticleProperty.SUBJECT, subject]);
+            articleParameter.push([ArticleProperty.BODY, body]);
+            articleParameter.push([ArticleProperty.SENDER_TYPE_ID, senderType]);
+            articleParameter.push([ArticleProperty.FROM, from]);
+            articleParameter.push([ArticleProperty.TO, to]);
+            articleParameter.push([ArticleProperty.CC, this.getParameterValue(parameter, ArticleProperty.CC)]);
+            articleParameter.push([ArticleProperty.BCC, this.getParameterValue(parameter, ArticleProperty.BCC)]);
+            articleParameter.push([
+                ArticleProperty.CUSTOMER_VISIBLE, this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE)]
             );
+
+            const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
+            articleParameter.push(
+                [ArticleProperty.ATTACHMENTS, attachments.length ? attachments : null]
+            );
+
+            articleParameter.push([
+                ArticleProperty.REFERENCED_ARTICLE_ID,
+                this.getParameterValue(parameter, ArticleProperty.REFERENCED_ARTICLE_ID)
+            ]);
+            articleParameter.push([
+                ArticleProperty.EXEC_REPLY, this.getParameterValue(parameter, ArticleProperty.EXEC_REPLY)
+            ]);
+            articleParameter.push([
+                ArticleProperty.EXEC_FORWARD, this.getParameterValue(parameter, ArticleProperty.EXEC_FORWARD)
+            ]);
+
+            articleParameter.push([ArticleProperty.CONTENT_TYPE, 'text/html; charset=utf8']);
+            articleParameter.push([ArticleProperty.MIME_TYPE, 'text/html']);
+            articleParameter.push([ArticleProperty.CHARSET, 'utf8']);
         }
-        return createArticle;
+        return articleParameter;
     }
 
-    private createAttachments(attachments: Attachment[]): CreateAttachment[] {
+    private createAttachments(attachments: Attachment[]): RequestObject[] {
         const result = [];
         if (attachments) {
-            attachments.forEach((a) => result.push(new CreateAttachment(a.Content, a.ContentType, a.Filename)));
+            attachments.forEach(
+                (a) => result.push(
+                    new RequestObject([
+                        ['Content', a.Content],
+                        ['ContentType', a.ContentType],
+                        ['Filename', a.Filename]
+                    ])
+                )
+            );
         }
         return result;
     }
@@ -310,10 +298,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', attachmentId
         );
 
-        const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri, {
+        const response = await this.getObjectByUri(token, uri, {
             include: 'Content'
         });
-        return response.Attachment;
+        return response['Attachment'];
     }
 
     public async loadArticleZipAttachment(token: string, ticketId: number, articleId: number): Promise<Attachment> {
@@ -321,10 +309,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             this.RESOURCE_URI, ticketId, 'articles', articleId, 'attachments', 'zip'
         );
 
-        const response = await this.getObjectByUri<ArticleAttachmentResponse>(token, uri, {
+        const response = await this.getObjectByUri(token, uri, {
             include: 'Content'
         });
-        return response.Attachment;
+        return response['Attachment'];
     }
 
     public async setArticleSeenFlag(
@@ -367,14 +355,21 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async addWatcher(token: string, clientRequestId: string, ticketId: number, userId: number): Promise<number> {
         const uri = this.buildUri('watchers');
-        const createWatcher = new CreateWatcher(userId, "Ticket", ticketId);
-        const response = await this.sendCreateRequest<CreateWatcherResponse, CreateWatcherRequest>(
-            token, clientRequestId, uri, new CreateWatcherRequest(createWatcher), this.objectType
-        ).catch((error) => {
+
+        const parameter: Array<[string, any]> = [
+            ['UserID', userId],
+            ['Object', KIXObjectType.TICKET],
+            ['ObjectID', ticketId]
+        ];
+
+        const watcherId = await super.executeUpdateOrCreateRequest<number>(
+            token, clientRequestId, parameter, uri, KIXObjectType.WATCHER, 'WatcherID', true
+        ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
-        return response.WatcherID;
+
+        return watcherId;
     }
 
     public async removeWatcher(
@@ -385,16 +380,24 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        let filterCriteria = criteria.filter(
-            (f) => f.property !== TicketProperty.STATE_TYPE
-                && f.property !== TicketProperty.CREATED
-                && f.property !== KIXObjectProperty.CREATE_TIME
-                && f.property !== TicketProperty.CHANGED
-                && f.property !== TicketProperty.CLOSE_TIME
-                && f.property !== TicketProperty.LAST_CHANGE_TIME
-                && f.property !== KIXObjectProperty.CHANGE_TIME
-                && f.property !== SearchProperty.FULLTEXT
-        );
+        const filterProperties = [
+            TicketProperty.TICKET_NUMBER,
+            TicketProperty.TITLE,
+            TicketProperty.PENDING_TIME,
+            TicketProperty.ORGANISATION_ID,
+            TicketProperty.CONTACT_ID,
+            TicketProperty.TYPE_ID,
+            TicketProperty.STATE_ID,
+            TicketProperty.QUEUE_ID,
+            TicketProperty.PRIORITY_ID,
+            TicketProperty.LOCK_ID,
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID,
+            KIXObjectProperty.CREATE_BY,
+            KIXObjectProperty.CHANGE_BY
+        ];
+
+        let filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
 
         const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
 
@@ -409,12 +412,27 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const searchProperties = [
+            TicketProperty.TICKET_NUMBER,
+            TicketProperty.TITLE,
+            TicketProperty.CREATED,
+            TicketProperty.CLOSE_TIME,
+            TicketProperty.CHANGED,
+            TicketProperty.PENDING_TIME,
+            TicketProperty.LAST_CHANGE_TIME,
+            TicketProperty.ORGANISATION_ID,
+            TicketProperty.CONTACT_ID,
+            TicketProperty.TYPE_ID,
+            TicketProperty.STATE_ID,
+            TicketProperty.QUEUE_ID,
+            TicketProperty.PRIORITY_ID,
+            TicketProperty.LOCK_ID,
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID
+        ];
+
         const searchCriteria = criteria.filter(
-            (f) => f.operator !== SearchOperator.NOT_EQUALS
-                && f.property !== KIXObjectProperty.CREATE_BY
-                && f.property !== KIXObjectProperty.CHANGE_BY
-                && f.property !== TicketProperty.STATE
-                && f.property !== SearchProperty.FULLTEXT
+            (f) => searchProperties.some((sp) => sp === f.property) && f.operator !== SearchOperator.NOT_EQUALS
         );
 
         await this.setUserID(searchCriteria, token);

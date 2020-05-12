@@ -106,8 +106,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const objectType = cell.getRow().getTable().getObjectType();
             const cssHandler = TableCSSHandlerRegistry.getObjectCSSHandler(objectType);
             if (cssHandler) {
-                const valueClasses = await cssHandler.getValueCSSClasses(object, cell.getValue());
-                valueClasses.forEach((c) => classes.push(c));
+                for (const handler of cssHandler) {
+                    const valueClasses = await handler.getValueCSSClasses(object, cell.getValue());
+                    valueClasses.forEach((c) => classes.push(c));
+                }
             }
 
             const commonHandler = TableCSSHandlerRegistry.getCommonCSSHandler();

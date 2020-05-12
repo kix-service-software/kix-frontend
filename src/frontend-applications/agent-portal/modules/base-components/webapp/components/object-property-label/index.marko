@@ -20,7 +20,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         </div>
     </else>
     <div.info>
-        <if(input.info && state.propertyDisplayText)>
+        <if(input.info && state.propertyDisplayText !== null)>
             <${input.info}/>
         </if>
     </div>
@@ -28,7 +28,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
         <if(input.value)>
             <${input.value}/>
         </if>
-        <else-if(state.propertyDisplayText)>
+        <else-if(state.propertyDisplayText !== null)>
             <link-target routingConfiguration=input.routingConfiguration objectId=input.objectId>
                 <@content>
                     <if(state.hasText)>

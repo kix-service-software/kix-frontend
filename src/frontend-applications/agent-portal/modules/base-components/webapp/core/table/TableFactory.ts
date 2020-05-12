@@ -18,10 +18,17 @@ import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
 import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
 import { DataType } from "../../../../../model/DataType";
 import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { ExtendedTableFactory } from "./ExtendedTableFactory";
 
 export abstract class TableFactory implements ITableFactory {
 
     public abstract objectType: KIXObjectType | string;
+
+    protected extendedTableFactories: ExtendedTableFactory[] = [];
+
+    public addExtendedTableFactory(factory: ExtendedTableFactory): void {
+        this.extendedTableFactories.push(factory);
+    }
 
     public isFactoryFor(objectType: KIXObjectType | string): boolean {
         return objectType === this.objectType;

@@ -12,7 +12,6 @@ import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
 import { TicketProperty } from "../../model/TicketProperty";
 import { PropertyOperator } from "../../../../modules/base-components/webapp/core/PropertyOperator";
 import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { KIXModulesSocketClient } from "../../../../modules/base-components/webapp/core/KIXModulesSocketClient";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
 import { SortUtil } from "../../../../model/SortUtil";
 import { TreeNode } from "../../../base-components/webapp/core/tree";
@@ -64,31 +63,26 @@ export class TicketBulkManager extends BulkManager {
 
     public async getInputType(property: string): Promise<InputFieldTypes | string> {
         let inputFieldType: InputFieldTypes | string = InputFieldTypes.TEXT;
-        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
-        const ticketDefinition = objectDefinitions.find((od) => od.Object === this.objectType);
-        if (ticketDefinition) {
-            switch (property) {
-                case TicketProperty.CONTACT_ID:
-                    inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
-                    break;
-                case TicketProperty.QUEUE_ID:
-                case TicketProperty.STATE_ID:
-                case TicketProperty.TYPE_ID:
-                case TicketProperty.PRIORITY_ID:
-                case TicketProperty.SERVICE_ID:
-                case TicketProperty.SLA_ID:
-                case TicketProperty.RESPONSIBLE_ID:
-                case TicketProperty.OWNER_ID:
-                case TicketProperty.LOCK_ID:
-                case TicketProperty.ORGANISATION_ID:
-                    inputFieldType = InputFieldTypes.DROPDOWN;
-                    break;
-                case TicketProperty.PENDING_TIME:
-                    inputFieldType = InputFieldTypes.DATE_TIME;
-                    break;
-                default:
-                    inputFieldType = await super.getInputType(property);
-            }
+        switch (property) {
+            case TicketProperty.CONTACT_ID:
+                inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
+                break;
+            case TicketProperty.QUEUE_ID:
+            case TicketProperty.STATE_ID:
+            case TicketProperty.TYPE_ID:
+            case TicketProperty.PRIORITY_ID:
+            case TicketProperty.SERVICE_ID:
+            case TicketProperty.RESPONSIBLE_ID:
+            case TicketProperty.OWNER_ID:
+            case TicketProperty.LOCK_ID:
+            case TicketProperty.ORGANISATION_ID:
+                inputFieldType = InputFieldTypes.DROPDOWN;
+                break;
+            case TicketProperty.PENDING_TIME:
+                inputFieldType = InputFieldTypes.DATE_TIME;
+                break;
+            default:
+                inputFieldType = await super.getInputType(property);
         }
 
         return inputFieldType;

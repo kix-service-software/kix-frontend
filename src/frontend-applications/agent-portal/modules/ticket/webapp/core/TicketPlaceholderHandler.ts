@@ -203,7 +203,6 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                 case TicketProperty.CONTACT_ID:
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.TYPE_ID:
-                case TicketProperty.SLA_ID:
                 case TicketProperty.SERVICE_ID:
                 case TicketProperty.RESPONSIBLE_ID:
                 case TicketProperty.TICKET_ID:
@@ -212,19 +211,8 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                 case TicketProperty.CREATED:
                 case TicketProperty.CHANGED:
                 case TicketProperty.PENDING_TIME:
-                case TicketProperty.ESCALATION_DESTINATION_DATE:
-                case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_DATE:
-                case TicketProperty.UPDATE_TIME_DESTINATION_DATE:
-                case TicketProperty.SOLUTION_TIME_DESTINATION_DATE:
                     result = await DateTimeUtil.getLocalDateTimeString(ticket[attribute], language);
                     break;
-                case TicketProperty.ESCALATION_RESPONSE_TIME:
-                case TicketProperty.ESCALATION_UPDATE_TIME:
-                case TicketProperty.ESCALATION_SOLUTION_TIME:
-                case TicketProperty.ESCALATION_DESTINATION_TIME:
-                case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_TIME:
-                case TicketProperty.UPDATE_TIME_DESTINATION_TIME:
-                case TicketProperty.SOLUTION_TIME_DESTINATION_TIME:
                 case TicketProperty.CREATED_TIME_UNIX:
                     if (Number.isInteger(Number(ticket[attribute]))) {
                         result = await DateTimeUtil.getLocalDateTimeString(Number(ticket[attribute]) * 1000, language);

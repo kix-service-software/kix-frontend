@@ -24,7 +24,7 @@ export class TableCSSHandlerRegistry {
     private constructor() { }
 
     private commonHandler: ITableCSSHandler[] = [];
-    private objectHandler: Map<KIXObjectType | string, ITableCSSHandler<any>> = new Map();
+    private objectHandler: Map<KIXObjectType | string, Array<ITableCSSHandler<any>>> = new Map();
 
     public registerCommonCSSHandler(handler: ITableCSSHandler): void {
         this.commonHandler.push(handler);
@@ -32,15 +32,17 @@ export class TableCSSHandlerRegistry {
 
     public registerObjectCSSHandler<T>(objectType: KIXObjectType | string, handler: ITableCSSHandler<T>): void {
         if (!this.objectHandler.has(objectType)) {
-            this.objectHandler.set(objectType, handler);
+            this.objectHandler.set(objectType, []);
         }
+
+        this.objectHandler.get(objectType).push(handler);
     }
 
     public static getCommonCSSHandler(): ITableCSSHandler[] {
         return TableCSSHandlerRegistry.getInstance().commonHandler;
     }
 
-    public static getObjectCSSHandler<T>(objectType: KIXObjectType | string): ITableCSSHandler<T> {
+    public static getObjectCSSHandler<T>(objectType: KIXObjectType | string): Array<ITableCSSHandler<T>> {
         return TableCSSHandlerRegistry.getInstance().objectHandler.get(objectType);
     }
 
