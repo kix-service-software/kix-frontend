@@ -12,7 +12,8 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
-import { TicketReadUIModule, TicketContext, TicketDetailsContext, TicketSearchContext, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketBrowserFactory, TicketHistoryBrowserFactory, ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService, TicketTableFactory } from '../webapp/core';
+import { TicketReadUIModule, TicketContext, TicketDetailsContext, TicketSearchContext, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketBrowserFactory, TicketHistoryBrowserFactory, ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService } from '../webapp/core';
+import { TicketTableFactory } from '../webapp/core/table/TicketTableFactory'
 import { TicketPlaceholderHandler } from '../webapp/core/TicketPlaceholderHandler';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { PlaceholderService } from '../../base-components/webapp/core/PlaceholderService';
@@ -285,15 +286,19 @@ describe('TicketReadUIModule', () => {
             });
 
             it('Should register the TicketTableCSSHandler', () => {
-                const factory = TableCSSHandlerRegistry.getObjectCSSHandler(KIXObjectType.TICKET);
-                expect(factory).exist;
-                expect(factory).instanceof(TicketTableCSSHandler);
+                const handler = TableCSSHandlerRegistry.getObjectCSSHandler(KIXObjectType.TICKET);
+                expect(handler).exist;
+                expect(handler).an('array');
+                expect(handler.length).equals(1);
+                expect(handler[0]).instanceof(TicketTableCSSHandler);
             });
 
             it('Should register the ArticleTableCSSHandler', () => {
-                const factory = TableCSSHandlerRegistry.getObjectCSSHandler(KIXObjectType.ARTICLE);
-                expect(factory).exist;
-                expect(factory).instanceof(ArticleTableCSSHandler);
+                const handler = TableCSSHandlerRegistry.getObjectCSSHandler(KIXObjectType.ARTICLE);
+                expect(handler).exist;
+                expect(handler).an('array');
+                expect(handler.length).equals(1);
+                expect(handler[0]).instanceof(ArticleTableCSSHandler);
             });
 
         });

@@ -271,7 +271,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         if (dfName) {
             return await this.getInputTypeForDF(property);
         }
-        return;
+
+        return InputFieldTypes.TEXT;
     }
 
     public async isMultiselect(property: string): Promise<boolean> {

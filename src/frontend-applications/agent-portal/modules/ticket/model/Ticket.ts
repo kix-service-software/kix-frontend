@@ -16,6 +16,7 @@ import { ArticleProperty } from "./ArticleProperty";
 import { DataType } from "../../../model/DataType";
 import { SortOrder } from "../../../model/SortOrder";
 import { Watcher } from "./Watcher";
+import { Link } from "../../links/model/Link";
 
 export class Ticket extends KIXObject<Ticket> {
 
@@ -136,61 +137,20 @@ export class Ticket extends KIXObject<Ticket> {
         if (ticket) {
             this.TicketID = Number(ticket.TicketID);
             this.ObjectId = this.TicketID;
-            this.TicketNumber = ticket.TicketNumber;
-            this.Title = ticket.Title;
-            this.StateID = ticket.StateID;
-            this.StateType = ticket.StateType;
-            this.PriorityID = ticket.PriorityID;
-            this.LockID = ticket.LockID;
-            this.QueueID = ticket.QueueID;
-            this.OrganisationID = ticket.OrganisationID;
-            this.ContactID = ticket.ContactID;
-            this.OwnerID = ticket.OwnerID;
-            this.TypeID = ticket.TypeID;
-
-            this.ResponsibleID = ticket.ResponsibleID;
-            this.Age = ticket.Age;
-            this.Created = ticket.Created;
-            this.CreateTimeUnix = ticket.CreateTimeUnix;
-            this.Changed = ticket.Changed;
-            this.ArchiveFlag = ticket.ArchiveFlag;
-            this.PendingTime = ticket.PendingTime;
-            this.PendingTimeUnix = ticket.PendingTimeUnix;
-            this.TimeUnits = ticket.TimeUnits;
-            this.EscalationResponseTime = ticket.EscalationResponseTime;
-            this.EscalationUpdateTime = ticket.EscalationUpdateTime;
-            this.EscalationSolutionTime = ticket.EscalationSolutionTime;
-            this.EscalationDestinationIn = ticket.EscalationDestinationIn;
-            this.EscalationDestinationTime = ticket.EscalationDestinationTime;
-            this.EscalationDestinationDate = ticket.EscalationDestinationDate;
-            this.EscalationTimeWorkingTime = ticket.EscalationTimeWorkingTime;
-            this.EscalationTime = ticket.EscalationTime;
-            this.FirstResponseTimeEscalation = ticket.FirstResponseTimeNotification;
-            this.FirstResponseTimeNotification = ticket.FirstResponseTimeNotification;
-            this.FirstResponseTimeDestinationTime = ticket.FirstResponseTimeDestinationTime;
-            this.FirstResponseTimeDestinationDate = ticket.FirstResponseTimeDestinationDate;
-            this.FirstResponseTimeWorkingTime = ticket.FirstResponseTimeWorkingTime;
-            this.FirstResponseTime = ticket.FirstResponseTime;
-            this.UpdateTimeEscalation = ticket.UpdateTimeEscalation;
-            this.UpdateTimeNotification = ticket.UpdateTimeNotification;
-            this.UpdateTimeDestinationTime = ticket.UpdateTimeDestinationTime;
-            this.UpdateTimeDestinationDate = ticket.UpdateTimeDestinationDate;
-            this.UpdateTimeWorkingTime = ticket.UpdateTimeWorkingTime;
-            this.UpdateTime = ticket.UpdateTime;
-            this.SolutionTimeEscalation = ticket.SolutionTimeEscalation;
-            this.SolutionTimeNotification = ticket.SolutionTimeNotification;
-            this.SolutionTimeDestinationTime = ticket.SolutionTimeDestinationTime;
-            this.SolutionTimeDestinationDate = ticket.SolutionTimeDestinationDate;
-            this.SolutionTimeWorkingTime = ticket.SolutionTimeWorkingTime;
-            this.SolutionTime = ticket.SolutionTime;
-
-            this.LinkTypeName = ticket.LinkTypeName;
-            this.Watchers = ticket.Watchers;
             this.Unseen = Number(ticket.Unseen);
+            this.Articles = ticket.Articles
+                ? ticket.Articles.map((a) => new Article(a))
+                : [];
 
-            this.Articles = ticket.Articles;
-            this.Links = ticket.Links;
-            this.History = ticket.History;
+            this.Links = ticket.Links
+                ? ticket.Links.map((l) => new Link(l))
+                : [];
+
+            this.History = ticket.History
+                ? ticket.History.map((th) => new TicketHistory(th))
+                : [];
+
+            this.History.sort((a, b) => b.HistoryID - a.HistoryID);
         }
 
     }

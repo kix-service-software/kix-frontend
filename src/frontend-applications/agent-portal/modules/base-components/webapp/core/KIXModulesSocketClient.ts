@@ -18,7 +18,6 @@ import { LoadFormConfigurationsRequest } from "./LoadFormConfigurationsRequest";
 import { LoadFormConfigurationsResponse } from "./LoadFormConfigurationsResponse";
 import { LoadReleaseInfoResponse } from "./LoadReleaseInfoResponse";
 import { ISocketRequest } from "./ISocketRequest";
-import { LoadObjectDefinitionsResponse } from "./LoadObjectDefinitionsResponse";
 import { LoadFormConfigurationRequest } from "./LoadFormConfigurationRequest";
 import { LoadFormConfigurationResponse } from "./LoadFormConfigurationResponse";
 import { IKIXModuleExtension } from "../../../../model/IKIXModuleExtension";
@@ -27,7 +26,6 @@ import { FormContext } from "../../../../model/configuration/FormContext";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
 import { ReleaseInfo } from "../../../../model/ReleaseInfo";
-import { ObjectDefinition } from "../../../../model/kix/ObjectDefinition";
 import { ISocketResponse } from "./ISocketResponse";
 
 export class KIXModulesSocketClient extends SocketClient {
@@ -175,41 +173,6 @@ export class KIXModulesSocketClient extends SocketClient {
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
             this.socket.emit(KIXModulesEvent.LOAD_RELEASE_INFO, request);
-        });
-    }
-
-    public async loadObjectDefinitions(): Promise<ObjectDefinition[]> {
-        const socketTimeout = ClientStorageService.getSocketTimeout();
-        return new Promise<ObjectDefinition[]>((resolve, reject) => {
-            const requestId = IdService.generateDateBasedId();
-
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + KIXModulesEvent.LOAD_OBJECT_DEFINITIONS);
-            }, socketTimeout);
-
-            this.socket.on(
-                KIXModulesEvent.LOAD_OBJECT_DEFINITIONS_FINISHED,
-                (result: LoadObjectDefinitionsResponse) => {
-                    if (requestId === result.requestId) {
-                        window.clearTimeout(timeout);
-                        resolve(result.objectDefinitions);
-                    }
-                }
-            );
-
-            this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
-                if (error.requestId === requestId) {
-                    window.clearTimeout(timeout);
-                    console.error(error.error);
-                    reject(error.error);
-                }
-            });
-
-            const request: ISocketRequest = {
-                requestId,
-                clientRequestId: ClientStorageService.getClientRequestId()
-            };
-            this.socket.emit(KIXModulesEvent.LOAD_OBJECT_DEFINITIONS, request);
         });
     }
 

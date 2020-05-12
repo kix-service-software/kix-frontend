@@ -26,14 +26,15 @@ export class SearchFormManager extends AbstractDynamicFormManager {
     public objectType: string;
 
     public async getProperties(): Promise<Array<[string, string]>> {
+        let properties = [];
+
         for (const manager of this.extendedFormManager) {
-            const extendedOperations = await manager.getProperties();
-            if (extendedOperations) {
-                return extendedOperations;
+            const extendedProperties = await manager.getProperties();
+            if (extendedProperties) {
+                properties = [...properties, ...extendedProperties];
             }
         }
 
-        const properties = [];
         if (await this.checkReadPermissions('/system/dynamicfields')) {
 
             let validDFTypes = [];
@@ -75,18 +76,18 @@ export class SearchFormManager extends AbstractDynamicFormManager {
             }
         }
 
-        return properties;
+        return properties.filter((p, index) => properties.indexOf(p) === index);
     }
 
-    public async getOperations(property: string): Promise<any[]> {
+    public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
+        let operations: Array<string | SearchOperator> = [];
+
         for (const manager of this.extendedFormManager) {
             const extendedOperations = await manager.getOperations(property);
             if (extendedOperations) {
-                return extendedOperations;
+                operations = [...operations, ...extendedOperations];
             }
         }
-
-        let operations: SearchOperator[] = [];
 
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
@@ -109,7 +110,8 @@ export class SearchFormManager extends AbstractDynamicFormManager {
                 }
             }
         }
-        return operations;
+
+        return operations.filter((o, index) => operations.indexOf(o) === index);
     }
 
 }

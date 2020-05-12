@@ -14,12 +14,13 @@ import {
     TicketPriorityService, QueueService, TicketFormService, ArticleFormService, PendingTimeValidator,
     EmailRecipientValidator, TicketSearchDefinition, TicketHistoryLabelProvider, TicketTypeLabelProvider,
     TicketPriorityLabelProvider, TicketStateLabelProvider, TicketStateTypeLabelProvider, QueueLabelProvider,
-    TicketTableFactory, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler,
+    TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler,
     TicketBrowserFactory, TicketHistoryBrowserFactory, ArticleBrowserFactory, TicketTypeBrowserFactory,
     TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, QueueBrowserFactory,
     FollowUpTypeBrowserFactory, ArticleZipAttachmentDownloadAction, TicketSearchAction, ShowUserTicketsAction,
     TicketWatchAction, TicketLockAction, TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext
 } from ".";
+import { TicketTableFactory } from './table/TicketTableFactory';
 import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
 import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
 import { SearchService } from "../../../search/webapp/core";
