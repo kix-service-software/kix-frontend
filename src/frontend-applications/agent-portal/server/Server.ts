@@ -50,6 +50,7 @@ import { IInitialDataExtension } from '../model/IInitialDataExtension';
 import { IFormConfigurationExtension } from './extensions/IFormConfigurationExtension';
 import { FormGroupConfiguration } from '../model/configuration/FormGroupConfiguration';
 import { IModifyConfigurationExtension } from './extensions/IModifyConfigurationExtension';
+import { MigrationService } from '../migrations/MigrationService';
 
 export class Server implements IServer {
 
@@ -79,12 +80,20 @@ export class Server implements IServer {
             await extension.initServices();
         }
 
+        const success = await MigrationService.getInstance().startMigration();
+        if (!success) {
+            LoggingService.getInstance().error('Startup failed. Could not migrate!');
+            process.exit(1);
+        }
+
         const initialDataExtensions = await PluginService.getInstance().getExtensions<IInitialDataExtension>(
             AgentPortalExtensions.INITIAL_DATA
         );
         LoggingService.getInstance().info(`Create initial data (${initialDataExtensions.length} extensions)`);
         for (const extension of initialDataExtensions) {
-            await extension.createData();
+            await extension.createData().catch((e) => {
+                LoggingService.getInstance().error(`Error creating inital data: ${extension.name}.`, e);
+            });
         }
 
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();

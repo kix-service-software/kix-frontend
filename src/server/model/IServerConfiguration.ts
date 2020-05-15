@@ -51,4 +51,6 @@ export interface IServerConfiguration {
 
     REDIS_CACHE_HOST: string;
 
+    INSTALLED_BUILD: number;
+
 }
