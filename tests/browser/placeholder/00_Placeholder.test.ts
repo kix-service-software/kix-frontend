@@ -13,7 +13,9 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { PlaceholderService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/PlaceholderService';
 import { IPlaceholderHandler } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IPlaceholderHandler';
+import { AbstractPlaceholderHandler } from "../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/AbstractPlaceholderHandler";
 import { KIXObject } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObject';
+import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -33,10 +35,12 @@ describe('Placeholder replacement', () => {
 
     describe('General placeholder handling', () => {
         const text = `Text with placeholder 1: ${placeholder_1} and placeholder 3: ${translationPlaceholder} and some invalid placeholders ${invalidPlaceholder} and ${invalidPlaceholder_2} and ${invalidPlaceholder_3} and another valid placeholder: ${placeholder_2}.`;
-        let testHandler;
+        let testHandler: TestPlaceholderHandler;
+        let testHandler2: TestPlaceholderHandlerSecond;
 
         before(() => {
             testHandler = new TestPlaceholderHandler();
+            testHandler2 = new TestPlaceholderHandlerSecond();
         });
 
         it('Should extract correct placeholder', () => {
@@ -63,19 +67,26 @@ describe('Placeholder replacement', () => {
         });
 
         it('Should register handler', () => {
+            PlaceholderService.getInstance().registerPlaceholderHandler(testHandler2);
             PlaceholderService.getInstance().registerPlaceholderHandler(testHandler);
             expect(Array.isArray(PlaceholderService.getInstance()['placeholderHandler'])).is.true;
-            expect(PlaceholderService.getInstance()['placeholderHandler'].length).equal(1);
+            expect(PlaceholderService.getInstance()['placeholderHandler'].length).equal(2);
         });
 
-        it('Should return correct handler', () => {
-            expect(Array.isArray(PlaceholderService.getInstance()['placeholderHandler'])).is.true;
-            expect(PlaceholderService.getInstance()['placeholderHandler'].length).equal(1);
-
-            const handler: IPlaceholderHandler = PlaceholderService.getInstance()['getHandler']('TESTHANDLER');
+        it('Should return correct handler by object string', () => {
+            const handler: IPlaceholderHandler = PlaceholderService.getInstance().getHandler('TESTHANDLER');
 
             expect(handler).exist;
-            expect(handler instanceof TestPlaceholderHandler, 'Handler is not expected handler.').is.true;
+            expect(handler instanceof TestPlaceholderHandler, 'Handler is not expected handler - wrong instance.').is.true;
+            expect(handler.handlerId, 'Handler is not expected handler - wrong id.').equal(testHandler.handlerId);
+        });
+
+        it('Should return correct handler by object type', () => {
+            const handler: IPlaceholderHandler = PlaceholderService.getInstance().getHandlerByObjectType(KIXObjectType.TICKET);
+
+            expect(handler).exist;
+            expect(handler instanceof TestPlaceholderHandlerSecond, 'Handler is not expected handler - wrong instance.').is.true;
+            expect(handler.handlerId, 'Handler is not expected handler - wrong id.').equal(testHandler2.handlerId);
         });
 
         it('Should correctly replace placeholders', async () => {
@@ -118,6 +129,9 @@ describe('Placeholder replacement', () => {
         it('Should unregister handler', () => {
             PlaceholderService.getInstance().unregisterPlaceholderHandler(testHandler.handlerId);
             expect(Array.isArray(PlaceholderService.getInstance()['placeholderHandler'])).is.true;
+            expect(PlaceholderService.getInstance()['placeholderHandler'].length).equal(1);
+            PlaceholderService.getInstance().unregisterPlaceholderHandler(testHandler2.handlerId);
+            expect(Array.isArray(PlaceholderService.getInstance()['placeholderHandler'])).is.true;
             expect(PlaceholderService.getInstance()['placeholderHandler'].length).equal(0);
         });
 
@@ -125,13 +139,13 @@ describe('Placeholder replacement', () => {
 
 });
 
-class TestPlaceholderHandler implements IPlaceholderHandler {
+class TestPlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'test-handler';
+    public handlerId: string = '123-test-handler';
 
-    public isHandlerFor(objectString: string): boolean {
-        return objectString === 'TESTHANDLER';
-    }
+    protected objectStrings: string[] = [
+        'TESTHANDLER'
+    ];
 
     public async replace(placeholder: string, object: KIXObject): Promise<string> {
         switch (placeholder) {
@@ -143,5 +157,18 @@ class TestPlaceholderHandler implements IPlaceholderHandler {
                 return value_3
             default:
         }
+    }
+}
+
+class TestPlaceholderHandlerSecond extends AbstractPlaceholderHandler {
+
+    public handlerId: string = '321-test-handler';
+
+    protected objectStrings: string[] = [
+        'TESTHANDLER'
+    ];
+
+    public isHandlerForObjectType(objectType: KIXObjectType): boolean {
+        return objectType === KIXObjectType.TICKET;
     }
 }

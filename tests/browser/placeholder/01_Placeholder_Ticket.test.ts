@@ -333,18 +333,6 @@ class someTestFunctions {
         ticket.CreateTimeUnix = 1559198730;
         ticket.TimeUnits = 120;
 
-        ticket.EscalationResponseTime = 1559980800;
-        ticket.EscalationUpdateTime = 1560067200;
-        ticket.EscalationSolutionTime = 1560153600;
-        ticket.EscalationDestinationTime = 1560240000;
-        ticket.EscalationDestinationDate = '2019-06-11 10:00:00';
-        ticket.FirstResponseTimeDestinationTime = 1560326400;
-        ticket.FirstResponseTimeDestinationDate = '2019-06-12 10:00:00';
-        ticket.UpdateTimeDestinationTime = 1560412800;
-        ticket.UpdateTimeDestinationDate = '2019-06-13 10:00:00';
-        ticket.SolutionTimeDestinationTime = 1560499200;
-        ticket.SolutionTimeDestinationDate = '2019-06-14 10:00:00';
-
         ticket.DynamicFields = [
             new DynamicFieldValue(
                 {

@@ -49,20 +49,20 @@ export class DateTimeUtil {
         return string;
     }
 
-    public static calculateTimeInterval(ageInMilliseconds: number): string {
+    public static calculateTimeInterval(seconds: number): string {
         let isNegative = false;
-        if (ageInMilliseconds < 0) {
+        if (seconds < 0) {
             isNegative = true;
-            ageInMilliseconds = ageInMilliseconds * -1;
+            seconds = seconds * -1;
         }
-        let ageResult = ageInMilliseconds + 'ms';
+        let ageResult = seconds + 's';
 
         const hoursInSeconds = 60 * 60;
         const daysInSeconds = 24 * hoursInSeconds;
 
-        const days = Math.floor(ageInMilliseconds / daysInSeconds);
-        const hours = Math.floor((ageInMilliseconds - (days * daysInSeconds)) / hoursInSeconds);
-        const minutes = Math.round((ageInMilliseconds - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
+        const days = Math.floor(seconds / daysInSeconds);
+        const hours = Math.floor((seconds - (days * daysInSeconds)) / hoursInSeconds);
+        const minutes = Math.round((seconds - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
 
         if (days === 0) {
             ageResult = hours + 'h ' + minutes + 'm';

@@ -28,6 +28,10 @@ describe('ExtendedLabelProvider', () => {
         ticketLabelProvider.addExtendedLabelProvider(new ExtendedTestLabelProvider())
     });
 
+    after(() => {
+        LabelService.getInstance()['labelProviders'] = []
+    })
+
     describe('Overwrite Object Icon', () => {
         it('Should return overwritten icon for object Ticket from getObjectIcon()', async () => {
             const ticket = new Ticket();

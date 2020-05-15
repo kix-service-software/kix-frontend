@@ -50,58 +50,6 @@ export class Ticket extends KIXObject<Ticket> {
 
     public TimeUnits: number;
 
-    public EscalationResponseTime: number;
-
-    public EscalationUpdateTime: number;
-
-    public EscalationSolutionTime: number;
-
-    public EscalationDestinationIn: string;
-
-    public EscalationDestinationTime: number;
-
-    public EscalationDestinationDate: string;
-
-    public EscalationTimeWorkingTime: number;
-
-    public EscalationTime: number;
-
-    public FirstResponseTimeEscalation: boolean;
-
-    public FirstResponseTimeNotification: boolean;
-
-    public FirstResponseTimeDestinationTime: number;
-
-    public FirstResponseTimeDestinationDate: string;
-
-    public FirstResponseTimeWorkingTime: number;
-
-    public FirstResponseTime: number;
-
-    public UpdateTimeEscalation: boolean;
-
-    public UpdateTimeNotification: boolean;
-
-    public UpdateTimeDestinationTime: number;
-
-    public UpdateTimeDestinationDate: string;
-
-    public UpdateTimeWorkingTime: number;
-
-    public UpdateTime: number;
-
-    public SolutionTimeEscalation: boolean;
-
-    public SolutionTimeNotification: boolean;
-
-    public SolutionTimeDestinationTime: number;
-
-    public SolutionTimeDestinationDate: string;
-
-    public SolutionTimeWorkingTime: number;
-
-    public SolutionTime: number;
-
     public Unseen: number;
 
     // Object References

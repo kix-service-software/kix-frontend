@@ -53,6 +53,7 @@ describe('Placeholder replacement for user', () => {
 
     after(() => {
         AgentService.getInstance().getCurrentUser = orgFunction;
+        LabelService.getInstance()['labelProviders'] = [];
         (TranslationService.getInstance() as any).translations = null;
     });
 

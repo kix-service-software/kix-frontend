@@ -13,7 +13,7 @@ import { DataType } from './DataType';
 export class SortUtil {
 
     public static sortObjects<T>(
-        objects: T[], property: string, dataType: DataType, sortOrder: SortOrder = SortOrder.UP
+        objects: T[], property: string, dataType: DataType = DataType.STRING, sortOrder: SortOrder = SortOrder.UP
     ): T[] {
         if (objects && objects.length) {
             objects.sort((a, b) => SortUtil.compareObjects(a, b, property, dataType, sortOrder));
