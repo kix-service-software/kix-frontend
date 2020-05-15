@@ -7,24 +7,23 @@
  * --
  */
 
-import { IInitialDataExtension } from "../../model/IInitialDataExtension";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
-import { SysConfigService } from "../sysconfig/server/SysConfigService";
-import { ReleaseInfoUtil } from "../../../../server/ReleaseInfoUtil";
-import { LoggingService } from "../../../../server/services/LoggingService";
+import { IMigration } from "./IMigration";
+import { ReleaseInfoUtil } from "../../../server/ReleaseInfoUtil";
+import { LoggingService } from "../../../server/services/LoggingService";
+import { ConfigurationService } from "../../../server/services/ConfigurationService";
+import { SysConfigService } from "../modules/sysconfig/server/SysConfigService";
+import { KIXObjectType } from "../model/kix/KIXObjectType";
 
-class Extension extends KIXExtension implements IInitialDataExtension {
+class Migration implements IMigration {
 
-    public name: string = 'Job Migration 3364';
+    public buildNumber: number = 3364;
 
-    public async createData(): Promise<void> {
+    public name: string = '3364 - cleanup job form config';
+
+    public async migrate(): Promise<Error | void> {
 
         const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
         if (releaseInfo.buildNumber >= 3364) {
-
-            LoggingService.getInstance().info(`Migrate Job Form (Build: ${releaseInfo.buildNumber})`);
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -85,6 +84,4 @@ class Extension extends KIXExtension implements IInitialDataExtension {
 
 }
 
-module.exports = (data, host, options) => {
-    return new Extension();
-};
+module.exports = new Migration();
