@@ -42,7 +42,10 @@ describe('Placeholder replacement for contact', () => {
         (TranslationService.getInstance() as any).translations = {};
     });
 
-    after(() => (TranslationService.getInstance() as any).translations = null);
+    after(() => {
+        LabelService.getInstance()['labelProviders'] = [];
+        (TranslationService.getInstance() as any).translations = null;
+    });
 
     describe('Replace simple contact attribute placeholder.', async () => {
 

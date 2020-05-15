@@ -7,7 +7,6 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
 import { Organisation } from "../../model/Organisation";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
@@ -15,14 +14,11 @@ import { OrganisationProperty } from "../../model/OrganisationProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class OrganisationPlaceholderHandler implements IPlaceholderHandler {
+export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'OrganisationPlaceholderHandler';
-
-    public isHandlerFor(objectString: string): boolean {
-        return false;
-    }
+    public handlerId: string = '250-OrganisationPlaceholderHandler';
 
     public async replace(placeholder: string, organisation?: Organisation, language: string = 'en'): Promise<string> {
         let result = '';

@@ -44,7 +44,7 @@ export abstract class KIXObject<T = any> {
         this.displayValues = [];
         if (object) {
             for (const key in object) {
-                if (object[key]) {
+                if (typeof object[key] !== 'undefined') {
                     this[key] = object[key];
                 }
             }

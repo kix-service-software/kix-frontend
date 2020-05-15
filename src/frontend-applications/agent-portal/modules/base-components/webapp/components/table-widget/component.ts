@@ -61,7 +61,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.filterPlaceHolder = await TranslationService.translate(this.state.filterPlaceHolder);
+        this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext(this.contextType);
 

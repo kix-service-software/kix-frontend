@@ -11,10 +11,14 @@ import { IPlaceholderHandler } from "../../../base-components/webapp/core/IPlace
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { DynamicFieldValue } from "../../model/DynamicFieldValue";
 
-export class ExtendedDynamicFieldPlaceHolderHandler implements IPlaceholderHandler {
+export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandler {
     public handlerId: string;
 
     public isHandlerFor(objectString: string): boolean {
+        return null;
+    }
+
+    public isHandlerForObjectType(objectType: string): boolean {
         return null;
     }
 

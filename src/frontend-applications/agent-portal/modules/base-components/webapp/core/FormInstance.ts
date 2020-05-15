@@ -20,7 +20,6 @@ import { FormValidationService } from "./FormValidationService";
 import { ValidationSeverity } from "./ValidationSeverity";
 import { ContextService } from "./ContextService";
 import { ContextType } from "../../../../model/ContextType";
-import { KIXObjectFormService } from "./KIXObjectFormService";
 import { FactoryService } from "./FactoryService";
 import { AdditionalContextInformation } from "./AdditionalContextInformation";
 import { ValidationResult } from "./ValidationResult";
@@ -315,22 +314,22 @@ export class FormInstance implements IFormInstance {
         );
         if (service) {
             await service.updateForm(this, this.form, formField, formFieldValue.value);
-        }
 
-        // TODO: not really performant
-        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-        if (dialogContext) {
-            const newObject = {};
-            const params = await KIXObjectFormService.prototype.prepareFormFields(this.form.id);
-            params.forEach((p) => {
-                if (p[1] !== undefined) {
-                    newObject[p[0]] = p[1];
-                }
-            });
+            // TODO: not really performant
+            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (dialogContext) {
+                const newObject = {};
+                const params = await service.prepareFormFields(this.form.id);
+                params.forEach((p) => {
+                    if (p[1] !== undefined) {
+                        newObject[p[0]] = p[1];
+                    }
+                });
 
-            const formObject = await FactoryService.getInstance().create<any>(this.form.objectType, newObject);
+                const formObject = await FactoryService.getInstance().create<any>(this.form.objectType, newObject);
 
-            dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
+                dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
+            }
         }
 
         if (!silent) {

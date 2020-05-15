@@ -14,7 +14,9 @@ export interface IPlaceholderHandler {
 
     handlerId: string;
 
-    isHandlerFor(objectType: KIXObjectType | string): boolean;
+    isHandlerFor(placeholderString: string): boolean;
+
+    isHandlerForObjectType(objectType: KIXObjectType | string): boolean;
 
     replace(placeholder: string, object?: KIXObject, language?: string): Promise<string>;
 

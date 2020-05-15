@@ -23,7 +23,7 @@ export class ComponentState extends WidgetComponentState {
         public icon: string | ObjectIcon = null,
         public filterCount: number = null,
         public headerTitleComponents: string[] = [],
-        public filterPlaceHolder: string = 'Translatable#All Objects',
+        public filterPlaceholder: string = 'Translatable#All Objects',
         public showFilter: boolean = true,
         public isFiltering: boolean = false,
         public loading: boolean = true
