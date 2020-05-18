@@ -22,7 +22,8 @@ export class Label {
         public tooltip?: string,
         public showUnknownIcon: boolean = false,
         public additionalIcons: Array<ObjectIcon | string> = [],
-        public infoOverlay: any = null
+        public infoOverlay: any = null,
+        public classes: string[] = []
     ) { }
     public async init(): Promise<void> {
         if (this.object) {
