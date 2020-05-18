@@ -82,6 +82,12 @@ export abstract class TableFactory implements ITableFactory {
     }
 
     public getColumnFilterValues<T extends KIXObject = any>(rows: IRow[], column: IColumn): Array<[T, number]> {
+        for (const extendedFactory of this.extendedTableFactories) {
+            const extendedValues = extendedFactory.getColumnFilterValues(rows, column);
+            if (extendedValues) {
+                return extendedValues;
+            }
+        }
         return TableFactory.getColumnFilterValues(rows, column);
     }
 
