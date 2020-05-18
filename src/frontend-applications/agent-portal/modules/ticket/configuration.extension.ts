@@ -228,12 +228,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const tableConfig = new TableConfiguration(
             'ticket-dashboard-table-config', 'Ticket Dashboard Table COnfiguration', ConfigurationType.Table,
-            KIXObjectType.TICKET, new KIXObjectLoadingOptions(
-                [new FilterCriteria(
-                    TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING,
-                    FilterType.AND, 'Open'
-                )], 'Ticket.-Age:numeric', 1000
-            ),
+            KIXObjectType.TICKET, null,
             null, null, [], true, true,
             new ToggleOptions('ticket-article-details', 'article', [], true),
             null, TableHeaderHeight.LARGE, TableRowHeight.LARGE

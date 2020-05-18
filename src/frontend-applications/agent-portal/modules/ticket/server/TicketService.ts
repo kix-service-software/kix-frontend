@@ -393,6 +393,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.LOCK_ID,
             TicketProperty.OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.STATE,
             KIXObjectProperty.CREATE_BY,
             KIXObjectProperty.CHANGE_BY
         ];
