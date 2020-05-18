@@ -320,6 +320,10 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                     } else if (field.countMin === 0 && !dfValue.length) {
                         field.empty = true;
                     }
+                } else if (typeof dfValue !== 'undefined') {
+                    field.defaultValue = new FormFieldValue(dfValue);
+                } else {
+                    field.defaultValue = new FormFieldValue(null);
                 }
             }
         }
