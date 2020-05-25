@@ -8,9 +8,14 @@
  */
 
 import { Context } from "../../../../model/Context";
+import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 
 export class BulkDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'bulk-dialog-context';
+
+    public deleteObjectList(objectType: KIXObjectType | string): void {
+        return;
+    }
 
 }
