@@ -30,14 +30,20 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onInput(input: any): void {
-        this.state.row = input.row;
-        if (this.state.row) {
-            this.toggleOptions = this.state.row.getTable().getTableConfiguration().toggleOptions;
-            if (this.toggleOptions) {
-                this.setToggleActions();
+        this.state.loading = true;
+
+        setTimeout(() => {
+            this.state.row = input.row;
+            if (this.state.row) {
+                this.toggleOptions = this.state.row.getTable().getTableConfiguration().toggleOptions;
+                if (this.toggleOptions) {
+                    this.setToggleActions();
+                }
+                this.setWidth();
             }
-            this.setWidth();
-        }
+
+            this.state.loading = false;
+        }, 10);
     }
 
     public async onMount(): Promise<void> {
