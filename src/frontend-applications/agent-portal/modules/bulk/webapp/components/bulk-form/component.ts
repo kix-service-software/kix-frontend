@@ -101,8 +101,7 @@ class Component {
 
                 const table = await TableFactoryService.getInstance().createTable(
                     `bulk-form-list-${this.state.bulkManager.objectType}`, this.state.bulkManager.objectType,
-                    configuration, null, BulkDialogContext.CONTEXT_ID,
-                    true, null, true
+                    configuration, null, BulkDialogContext.CONTEXT_ID, true, null, true
                 );
 
                 await this.prepareTitle();
