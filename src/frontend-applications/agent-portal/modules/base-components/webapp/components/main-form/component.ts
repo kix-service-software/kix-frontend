@@ -116,7 +116,9 @@ class FormComponent {
     }
 
     private additionalFieldControlsNeeded(field: FormFieldConfiguration): boolean {
-        let needed = field.countMax > 1 || field.countDefault < field.countMax;
+        let needed = field.countMax > 1
+            || field.countDefault < field.countMax
+            || (!field.countMax && !field.countDefault);
         if (!needed && field.children) {
             for (const child of field.children) {
                 needed = this.additionalFieldControlsNeeded(child);
