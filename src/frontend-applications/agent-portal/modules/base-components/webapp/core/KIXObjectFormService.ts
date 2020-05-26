@@ -69,11 +69,18 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         if (formContext === FormContext.NEW) {
             this.handleCountValues(formFields);
         } else if (formContext === FormContext.EDIT) {
-            await DynamicFieldFormUtil.getInstance().handleDynamicFieldValues(formFields, kixObject, this);
+            await DynamicFieldFormUtil.getInstance().handleDynamicFieldValues(
+                formFields, kixObject, this, formFieldValues
+            );
         }
 
         for (const f of formFields) {
             let formFieldValue: FormFieldValue;
+
+            if (formFieldValues.has(f.instanceId)) {
+                continue;
+            }
+
             let value = await this.getValue(
                 f.property,
                 kixObject ? kixObject[f.property] : (f.defaultValue ? f.defaultValue.value : null),
