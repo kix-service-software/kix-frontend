@@ -312,9 +312,11 @@ export class ContactFormService extends KIXObjectFormService {
                 if (typeof value === 'object') {
                     value = value[OrganisationProperty.ID];
                 }
+                parameter.push([ContactProperty.PRIMARY_ORGANISATION_ID, value]);
                 parameter.push([ContactProperty.ORGANISATION_IDS, [value]]);
+            } else if (!property.match(/_CONTAINER/)) {
+                parameter.push([property, value]);
             }
-            parameter.push([property, value]);
         }
 
         return parameter;
@@ -359,6 +361,7 @@ export class ContactFormService extends KIXObjectFormService {
 
             notificationParameter[1] = JSON.stringify(notificationPreference);
         }
+
         return parameter;
     }
 
@@ -403,6 +406,7 @@ export class ContactFormService extends KIXObjectFormService {
                         }
                     }
                 }
+                break;
             case PersonalSettingsProperty.MY_QUEUES:
                 if (formContext === FormContext.EDIT) {
                     if (user && user.Preferences) {
@@ -416,7 +420,6 @@ export class ContactFormService extends KIXObjectFormService {
                     }
                 }
                 break;
-
             case PersonalSettingsProperty.NOTIFICATIONS:
                 if (formContext === FormContext.EDIT) {
                     const notificationValue = await this.getNotificationValue(this.assignedUserId);
