@@ -21,7 +21,8 @@ export interface IDynamicFieldFormUtil {
     configureDynamicFields(form: FormConfiguration): Promise<void>;
 
     handleDynamicFieldValues(
-        formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService
+        formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService,
+        formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void>;
 
     handleDynamicField(
