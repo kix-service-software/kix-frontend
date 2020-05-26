@@ -107,7 +107,7 @@ export class ModuleConfigurationService {
                 [SysConfigOptionDefinitionProperty.NAME, configuration.id],
                 [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
                 [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
-                [SysConfigOptionDefinitionProperty.CONTEXT, serverConfig.NOTIFICATION_CLIENT_ID],
+                [SysConfigOptionDefinitionProperty.CONTEXT, 'kix18-web-frontend'],
                 [SysConfigOptionDefinitionProperty.CONTEXT_METADATA, configuration.type],
                 [SysConfigOptionDefinitionProperty.TYPE, 'String']
             ],
@@ -128,7 +128,7 @@ export class ModuleConfigurationService {
                 [SysConfigOptionDefinitionProperty.NAME, configuration.id],
                 [SysConfigOptionDefinitionProperty.DESCRIPTION, name],
                 [SysConfigOptionDefinitionProperty.DEFAULT, JSON.stringify(configuration)],
-                [SysConfigOptionDefinitionProperty.CONTEXT, serverConfig.NOTIFICATION_CLIENT_ID],
+                [SysConfigOptionDefinitionProperty.CONTEXT, 'kix18-web-frontend'],
                 [SysConfigOptionDefinitionProperty.CONTEXT_METADATA, configuration.type],
                 [SysConfigOptionDefinitionProperty.TYPE, 'String'],
                 [SysConfigOptionDefinitionProperty.IS_REQUIRED, 0]
@@ -210,7 +210,7 @@ export class ModuleConfigurationService {
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 SysConfigOptionDefinitionProperty.CONTEXT, SearchOperator.EQUALS,
-                FilterDataType.STRING, FilterType.AND, serverConfig.NOTIFICATION_CLIENT_ID
+                FilterDataType.STRING, FilterType.AND, 'kix18-web-fontend'
             )
         ]);
 
