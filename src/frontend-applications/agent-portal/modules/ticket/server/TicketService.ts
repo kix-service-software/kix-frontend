@@ -429,7 +429,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.PRIORITY_ID,
             TicketProperty.LOCK_ID,
             TicketProperty.OWNER_ID,
-            TicketProperty.RESPONSIBLE_ID
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.STATE_TYPE
         ];
 
         const searchCriteria = criteria.filter(
