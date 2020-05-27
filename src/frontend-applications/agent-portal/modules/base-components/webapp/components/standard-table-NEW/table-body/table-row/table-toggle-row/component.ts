@@ -18,6 +18,7 @@ import { EventService } from '../../../../../../../../modules/base-components/we
 import { BrowserUtil } from '../../../../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ActionFactory } from '../../../../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXModulesService } from '../../../../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { IdService } from '../../../../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -49,7 +50,8 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public async onMount(): Promise<void> {
         this.setWidth();
         const context = ContextService.getInstance().getActiveContext();
-        context.registerListener((this.state.row.getRowId() + '-toggle'), {
+        const listenerId = this.state.row ? this.state.row.getRowId() : IdService.generateDateBasedId();
+        context.registerListener((listenerId + '-toggle'), {
             sidebarToggled: () => { this.setWidth(); },
             explorerBarToggled: () => { this.setWidth(); },
             objectChanged: () => { return; },
@@ -59,7 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             additionalInformationChanged: () => { return; }
         });
         window.addEventListener("resize", this.setWidth.bind(this), false);
-        this.eventSubscriberId = this.state.row.getTable().getTableId() + '-' + this.state.row.getRowId();
+        this.eventSubscriberId = listenerId;
         EventService.getInstance().subscribe(TableEvent.REFRESH, this);
 
         await this.setToggleActions();
