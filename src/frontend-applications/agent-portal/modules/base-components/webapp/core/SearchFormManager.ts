@@ -20,6 +20,7 @@ import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
 import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export class SearchFormManager extends AbstractDynamicFormManager {
 
@@ -71,7 +72,8 @@ export class SearchFormManager extends AbstractDynamicFormManager {
 
             if (fields) {
                 for (const field of fields) {
-                    properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, field.Label]);
+                    const translated = await TranslationService.translate(field.Label);
+                    properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
                 }
             }
         }

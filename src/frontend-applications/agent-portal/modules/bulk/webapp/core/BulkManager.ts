@@ -28,6 +28,7 @@ import { DynamicFieldFormUtil } from "../../../base-components/webapp/core/Dynam
 import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
 import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
 import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
+import { TranslationService } from "../../../translation/webapp/core/TranslationService";
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 
@@ -48,41 +49,44 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties = [];
 
-        let validDFTypes = [];
-        this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
+        if (await this.checkReadPermissions('/system/dynamicfields')) {
+            let validDFTypes = [];
+            this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
 
-        const loadingOptions = new KIXObjectLoadingOptions(
-            [
-                new FilterCriteria(
-                    DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS,
-                    FilterDataType.STRING, FilterType.AND, this.objectType
-                ),
-                new FilterCriteria(
-                    DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
-                    FilterDataType.STRING, FilterType.AND,
-                    [
-                        DynamicFieldTypes.TEXT,
-                        DynamicFieldTypes.TEXT_AREA,
-                        DynamicFieldTypes.DATE,
-                        DynamicFieldTypes.DATE_TIME,
-                        DynamicFieldTypes.SELECTION,
-                        DynamicFieldTypes.CI_REFERENCE,
-                        ...validDFTypes
-                    ]
-                ),
-                new FilterCriteria(
-                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
-                    FilterDataType.NUMERIC, FilterType.AND, 1
-                )
-            ]
-        );
-        const fields = await KIXObjectService.loadObjects<DynamicField>(
-            KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-        );
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, this.objectType
+                    ),
+                    new FilterCriteria(
+                        DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
+                        FilterDataType.STRING, FilterType.AND,
+                        [
+                            DynamicFieldTypes.TEXT,
+                            DynamicFieldTypes.TEXT_AREA,
+                            DynamicFieldTypes.DATE,
+                            DynamicFieldTypes.DATE_TIME,
+                            DynamicFieldTypes.SELECTION,
+                            DynamicFieldTypes.CI_REFERENCE,
+                            ...validDFTypes
+                        ]
+                    ),
+                    new FilterCriteria(
+                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, 1
+                    )
+                ]
+            );
+            const fields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+            );
 
-        if (fields) {
-            for (const field of fields) {
-                properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, field.Label]);
+            if (fields) {
+                for (const field of fields) {
+                    const translated = await TranslationService.translate(field.Label);
+                    properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
+                }
             }
         }
 
