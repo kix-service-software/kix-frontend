@@ -168,7 +168,7 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        return property !== TicketProperty.LOCK_ID || super.isMultiselect(property);
+        return super.isMultiselect(property) || property !== TicketProperty.LOCK_ID;
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {

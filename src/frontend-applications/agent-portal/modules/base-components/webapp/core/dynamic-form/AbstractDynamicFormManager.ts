@@ -278,7 +278,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public async isMultiselect(property: string): Promise<boolean> {
         for (const extendedManager of this.extendedFormManager) {
             const result = extendedManager.isMultiselect(property);
-            if (result) {
+            if (result !== undefined && result !== null) {
                 return result;
             }
         }
