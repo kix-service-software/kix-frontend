@@ -388,7 +388,7 @@ export class DynamicFormFieldValue {
     }
 
     public async doAutocompleteSearch(limit: number, searchValue: string): Promise<TreeNode[]> {
-        return this.manager.searchValues(this.value.property, searchValue, limit);
+        return this.manager.searchValues(this.value.property, searchValue, limit) || [];
     }
 
 }
