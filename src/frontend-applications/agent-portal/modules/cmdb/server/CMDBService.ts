@@ -305,8 +305,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
 
     protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria.filter((c) =>
-            c.property !== ConfigItemProperty.CUR_INCI_STATE_ID &&
-            c.property !== ConfigItemProperty.CUR_DEPL_STATE_ID &&
             c.property !== ConfigItemProperty.CONFIG_ITEM_ID &&
             c.property !== ConfigItemProperty.NUMBER &&
             c.property !== ConfigItemProperty.NAME &&
@@ -317,10 +315,34 @@ export class CMDBAPIService extends KIXObjectAPIService {
     }
 
     protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return criteria.filter((c) =>
-            c.property !== ConfigItemProperty.CLASS_ID &&
+        const newCriteria = criteria.filter((c) =>
             !c.property.startsWith('Data') &&
             !c.property.startsWith('CurrentVersion')
         );
+
+        for (const searchCriteria of newCriteria) {
+            switch (searchCriteria.property) {
+                case ConfigItemProperty.CLASS_ID:
+                    searchCriteria.property = 'ClassIDs';
+                    searchCriteria.operator = SearchOperator.IN;
+                    searchCriteria.value = Array.isArray(searchCriteria.value)
+                        ? searchCriteria.value : [searchCriteria.value as number];
+                    break;
+                case ConfigItemProperty.CUR_DEPL_STATE_ID:
+                    searchCriteria.property = 'DeplStateIDs';
+                    searchCriteria.operator = SearchOperator.IN;
+                    searchCriteria.value = Array.isArray(searchCriteria.value)
+                        ? searchCriteria.value : [searchCriteria.value as number];
+                    break;
+                case ConfigItemProperty.CUR_INCI_STATE_ID:
+                    searchCriteria.property = 'InciStateIDs';
+                    searchCriteria.operator = SearchOperator.IN;
+                    searchCriteria.value = Array.isArray(searchCriteria.value)
+                        ? searchCriteria.value : [searchCriteria.value as number];
+                    break;
+                default:
+            }
+        }
+        return newCriteria;
     }
 }
