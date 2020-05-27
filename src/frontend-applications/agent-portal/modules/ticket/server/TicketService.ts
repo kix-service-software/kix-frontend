@@ -395,7 +395,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.STATE,
             KIXObjectProperty.CREATE_BY,
-            KIXObjectProperty.CHANGE_BY
+            KIXObjectProperty.CHANGE_BY,
+            TicketProperty.TICKET_ID
         ];
 
         let filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
