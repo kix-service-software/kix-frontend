@@ -13,6 +13,17 @@ export class InlineContent {
         public contentId: string,
         public content: string,
         public contentType: string
-    ) { }
+    ) {
+        this.prepareContentType();
+    }
+
+    public prepareContentType(): void {
+        if (this.contentType && this.contentType.indexOf(';') !== -1) {
+            const attributes = this.contentType.split(';');
+            if (attributes.length) {
+                this.contentType = attributes[0].trim();
+            }
+        }
+    }
 
 }
