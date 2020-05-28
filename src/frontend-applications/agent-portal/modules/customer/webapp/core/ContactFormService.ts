@@ -41,6 +41,8 @@ import { PersonalSettingsFormService } from "../../../user/webapp/core";
 import { ServiceType } from "../../../base-components/webapp/core/ServiceType";
 import { Contact } from "../../model/Contact";
 import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
+import { Role } from "../../../user/model/Role";
+import { RoleProperty } from "../../../user/model/RoleProperty";
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -185,10 +187,13 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async addLoginField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+        const value = formInstance
+            ? await formInstance.getFormFieldValueByProperty(UserProperty.USER_LOGIN)
+            : null;
         return new FormFieldConfiguration(
             'contact-form-field-login',
             'Translatable#Login Name', UserProperty.USER_LOGIN, null, true,
-            'Translatable#Helptext_User_UserCreateEdit_Login'
+            'Translatable#Helptext_User_UserCreateEdit_Login', null, value
         );
     }
 
@@ -208,6 +213,29 @@ export class ContactFormService extends KIXObjectFormService {
         accesses: string[], formInstance?: IFormInstance
     ): Promise<FormFieldConfiguration> {
         if (accesses && accesses.some((a) => a === UserProperty.IS_AGENT)) {
+            let value = formInstance
+                ? await formInstance.getFormFieldValueByProperty(UserProperty.ROLE_IDS)
+                : null;
+
+            if (accesses.some((a) => a === UserProperty.IS_CUSTOMER)) {
+                const loadingOptions = new KIXObjectLoadingOptions([
+                    new FilterCriteria(
+                        RoleProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'Customer'
+                    )
+                ]);
+
+                const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, null, loadingOptions);
+                if (roles && roles.length) {
+                    if (value && Array.isArray(value.value)) {
+                        if (!value.value.some((id) => id === roles[0].ID)) {
+                            value.value.push(roles[0].ID);
+                        }
+                    } else {
+                        value = new FormFieldValue(roles[0].ID);
+                    }
+                }
+            }
+
             const roleField = new FormFieldConfiguration(
                 'contact-form-field-user-roles',
                 'Translatable#Roles', UserProperty.ROLE_IDS, 'object-reference-input', false,
@@ -216,7 +244,7 @@ export class ContactFormService extends KIXObjectFormService {
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.ROLE),
                     new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
                     new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
-                ]
+                ], value
             );
             return new FormFieldConfiguration(
                 'contact-form-field-roles-container', 'Translatable#Role Assignment', 'ROLES_CONTAINER', null,
@@ -248,14 +276,20 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async getLanguageField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+        const value = formInstance
+            ? await formInstance.getFormFieldValueByProperty(UserProperty.USER_LANGUAGE)
+            : null;
         const languageField = new FormFieldConfiguration(
             'contact-form-field-user-language', 'Translatable#Language', PersonalSettingsProperty.USER_LANGUAGE,
-            'language-input', true, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserLanguage'
+            'language-input', true, 'Translatable#Helptext_User_UserCreateEdit_Preferences_UserLanguage', null, value
         );
         return languageField;
     }
 
     private async getQueueField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+        const value = formInstance
+            ? await formInstance.getFormFieldValueByProperty(UserProperty.MY_QUEUES)
+            : null;
         const queueField = new FormFieldConfiguration(
             'contact-form-field-user-queues', 'Translatable#My Queues', PersonalSettingsProperty.MY_QUEUES,
             'object-reference-input', false, 'Translatable#Helptext_User_UserCreateEdit_Preferences_MyQueues',
@@ -272,12 +306,15 @@ export class ContactFormService extends KIXObjectFormService {
                     undefined, undefined, [QueueProperty.SUB_QUEUES], [QueueProperty.SUB_QUEUES])
                 ),
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
-            ]
+            ], value
         );
         return queueField;
     }
 
     private async getNotifiactionField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+        const value = formInstance
+            ? await formInstance.getFormFieldValueByProperty(UserProperty.NOTIFICATIONS)
+            : null;
         return new FormFieldConfiguration(
             'contact-form-field-user-notifications', 'Translatable#Notifications for Tickets',
             PersonalSettingsProperty.NOTIFICATIONS,
@@ -296,7 +333,7 @@ export class ContactFormService extends KIXObjectFormService {
                     ])
                 ),
                 new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
-            ]
+            ], value
         );
     }
 
@@ -309,9 +346,6 @@ export class ContactFormService extends KIXObjectFormService {
             parameter.push([UserProperty.IS_CUSTOMER, isCustomer]);
         } else {
             if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-                if (typeof value === 'object') {
-                    value = value[OrganisationProperty.ID];
-                }
                 parameter.push([ContactProperty.PRIMARY_ORGANISATION_ID, value]);
                 parameter.push([ContactProperty.ORGANISATION_IDS, [value]]);
             } else if (!property.match(/_CONTAINER/)) {
