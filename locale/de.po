@@ -310,9 +310,6 @@ msgstr "Sammelaktion"
 msgid "Button with 3 points = Here you can find further actions"
 msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
 
-msgid "Calendar"
-msgstr "Kalender"
-
 msgid "Cancel"
 msgstr "Abbrechen"
 
@@ -4108,6 +4105,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Calendar"
+#~ msgstr "Kalender"
 
 #~ msgid "Escalation time"
 #~ msgstr "Eskalationszeit"
