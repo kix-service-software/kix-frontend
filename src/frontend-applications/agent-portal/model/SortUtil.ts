@@ -81,9 +81,9 @@ export class SortUtil {
 
     public static compareDate(a: string, b: string, sortOrder: SortOrder = SortOrder.UP): number {
         let sort = 0;
-        if (a === undefined) {
+        if (a === undefined || a === '') {
             sort = -1;
-        } else if (b === undefined) {
+        } else if (b === undefined || b === '') {
             sort = 1;
         } else {
             const DateA: Date = new Date(a);
