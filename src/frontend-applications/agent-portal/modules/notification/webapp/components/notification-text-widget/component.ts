@@ -24,7 +24,6 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private contextListenerId: string;
-    private labels: Map<string, Label[]>;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -96,6 +95,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     }
                 }
             }
+
+            (this as any).setStateDirty('messageGroups');
         }
     }
 }
