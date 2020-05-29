@@ -23,7 +23,8 @@ class Component {
 
     public async onMount(): Promise<void> {
         const context = (await ContextService.getInstance().getContext(FAQContext.CONTEXT_ID) as FAQContext);
-        this.state.contentWidgets = context.getContent();
+        const widgets = context.getContent();
+        this.state.contentWidgets = widgets ? widgets.filter((w) => Boolean(w.configuration)) : [];
         if (!context.faqCategory) {
             context.setFAQCategory(null);
         }

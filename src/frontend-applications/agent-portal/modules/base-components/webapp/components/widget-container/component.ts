@@ -21,7 +21,7 @@ class Component {
     }
 
     public onInput(input: ComponentState): void {
-        this.state.widgets = input.widgets;
+        this.state.widgets = input.widgets ? input.widgets.filter((w) => Boolean(w.configuration)) : [];
     }
 
     public getTemplate(widget: ConfiguredWidget): any {
