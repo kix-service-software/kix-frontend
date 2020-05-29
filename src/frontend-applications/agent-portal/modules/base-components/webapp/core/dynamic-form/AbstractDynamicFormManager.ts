@@ -235,7 +235,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             }
         }
 
-        return [];
+        return null;
     }
 
     public getEditableValues(): ObjectPropertyValue[] {
