@@ -291,8 +291,12 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                     dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE
                 ) {
                     formFieldValues.set(field.instanceId, new FormFieldValue(dfValue));
-                } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST && dfValue && dfValue[0]) {
-                    field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
+                } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
+                    if (dfValue && dfValue[0]) {
+                        field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
+                    } else {
+                        field.defaultValue = new FormFieldValue(JSON.parse(dynamicField.Config.DefaultValue));
+                    }
                 } else if (dfValue && Array.isArray(dfValue)) {
                     for (let i = 0; i < dfValue.length; i++) {
                         if (i === 0) {
