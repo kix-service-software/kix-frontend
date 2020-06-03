@@ -150,7 +150,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     public async setCurrentNode(nodes?: TreeNode[], value?: any, update: boolean = true): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const defaultValue = value ? value : formInstance.getFormFieldValue<number>(this.state.field.instanceId);
-        if (defaultValue && defaultValue.value) {
+        if (defaultValue && typeof defaultValue.value !== 'undefined' && defaultValue.value !== null) {
             const objectIds: any[] = Array.isArray(defaultValue.value)
                 ? defaultValue.value : [defaultValue.value];
 
