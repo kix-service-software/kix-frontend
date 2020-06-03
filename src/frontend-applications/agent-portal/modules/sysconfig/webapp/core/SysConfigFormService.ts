@@ -25,6 +25,7 @@ import { FormGroupConfiguration } from "../../../../model/configuration/FormGrou
 import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
 import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
 import { ObjectReferenceOptions } from "../../../base-components/webapp/core/ObjectReferenceOptions";
+import { SysConfigOption } from "../../model/SysConfigOption";
 
 export class SysConfigFormService extends KIXObjectFormService {
 
@@ -148,16 +149,16 @@ export class SysConfigFormService extends KIXObjectFormService {
         property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
     ): Promise<any> {
         if (sysConfig) {
-            value = this.handleSingleSysconfigKey(property, value, sysConfig, formField);
+            value = await this.handleSingleSysconfigKey(property, value, sysConfig, formField);
         } else {
             value = await this.handleSysconfigListValue(property, value, formField);
         }
         return value;
     }
 
-    private handleSingleSysconfigKey(
+    private async handleSingleSysconfigKey(
         property: string, value: any, sysConfig: SysConfigOptionDefinition, formField: FormFieldConfiguration
-    ): any {
+    ): Promise<any> {
         switch (property) {
             case SysConfigOptionDefinitionProperty.SETTING:
                 if (value && Array.isArray(value)) {
@@ -172,6 +173,14 @@ export class SysConfigFormService extends KIXObjectFormService {
             case SysConfigOptionDefinitionProperty.VALUE:
                 if (sysConfig.IsModified !== 1) {
                     value = sysConfig.Default;
+                } else {
+                    const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                        KIXObjectType.SYS_CONFIG_OPTION, [sysConfig.Name]
+                    );
+
+                    if (options && options.length) {
+                        value = options[0].Value;
+                    }
                 }
 
                 if (typeof value !== 'string' && typeof value !== 'number') {
@@ -209,7 +218,7 @@ export class SysConfigFormService extends KIXObjectFormService {
             );
 
             const sysConfig = sysconfigKeys.find((sk: SysConfigOptionDefinition) => sk.Name === option.value);
-            value = this.handleSingleSysconfigKey(
+            value = await this.handleSingleSysconfigKey(
                 property, sysConfig[property], sysConfig as SysConfigOptionDefinition, formField
             );
         }
