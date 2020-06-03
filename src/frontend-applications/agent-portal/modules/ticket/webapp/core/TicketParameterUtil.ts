@@ -43,7 +43,9 @@ export class TicketParameterUtil {
                     parameter.push([ArticleProperty.SUBJECT, value]);
                 }
             } else if (property === ArticleProperty.SUBJECT) {
-                parameter.push([TicketProperty.TITLE, value]);
+                if (!forUpdate) {
+                    parameter.push([TicketProperty.TITLE, value]);
+                }
                 parameter.push([ArticleProperty.SUBJECT, value]);
             } else if (property === ArticleProperty.ATTACHMENTS) {
                 if (value) {
