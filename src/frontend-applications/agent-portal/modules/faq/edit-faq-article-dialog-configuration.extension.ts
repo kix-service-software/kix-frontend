@@ -32,9 +32,7 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { ModuleConfigurationService } from '../../server/services/configuration';
-
 import { KIXExtension } from "../../../../server/model/KIXExtension";
 
 class Extension extends KIXExtension implements IConfigurationExtension {
@@ -133,13 +131,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(
             new FormFieldConfiguration(
-                'faq-article-edit-form-field-links',
-                'Link FAQ with', FAQArticleProperty.LINK, 'link-input', false,
-                'Translatable#Helptext_FAQ_ArticleCreate_Links'
-            )
-        );
-        configurations.push(
-            new FormFieldConfiguration(
                 'faq-article-edit-form-field-symptom',
                 'Translatable#Symptom', FAQArticleProperty.FIELD_1, 'rich-text-input', false,
                 'Translatable#Helptext_FAQ_ArticleCreate_Symptom'
@@ -188,7 +179,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     'faq-article-edit-form-field-language',
                     'faq-article-edit-form-field-tags',
                     'faq-article-edit-form-field-attachments',
-                    'faq-article-edit-form-field-links',
                     'faq-article-edit-form-field-symptom',
                     'faq-article-edit-form-field-cause',
                     'faq-article-edit-form-field-solution',

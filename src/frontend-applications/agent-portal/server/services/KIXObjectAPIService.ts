@@ -31,6 +31,7 @@ import { CreateLinkDescription } from "../../modules/links/server/api/CreateLink
 import { CreateLink } from "../../modules/links/server/api/CreateLink";
 import { CreateLinkRequest } from "../../modules/links/server/api/CreateLinkRequest";
 import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
+import { ExtendedKIXObjectAPIService } from "./ExtendedKIXObjectAPIService";
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -42,11 +43,17 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected enableSearchQuery: boolean = true;
 
+    protected extendedServices: ExtendedKIXObjectAPIService[] = [];
+
     public constructor(factories: IObjectFactory[] = []) {
         factories.forEach((f) => ObjectFactoryService.registerFactory(f));
     }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
+
+    public addExtendedService(service: ExtendedKIXObjectAPIService): void {
+        this.extendedServices.push(service);
+    }
 
     public async loadObjects<O extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, objectIds: Array<number | string>,
@@ -151,8 +158,17 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                 query = { ...query, sort: loadingOptions.sortOrder };
             }
 
+
+            let additionalIncludes = [];
+            this.extendedServices.forEach(
+                (s) => additionalIncludes = [...additionalIncludes, ...s.getAdditionalIncludes()]
+            );
+
             if (loadingOptions.includes) {
+                loadingOptions.includes = [...loadingOptions.includes, ...additionalIncludes];
                 query = { ...query, include: loadingOptions.includes.join(',') };
+            } else {
+                loadingOptions.includes = additionalIncludes;
             }
 
             if (loadingOptions.expands) {
@@ -357,7 +373,12 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
 
-        const filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token);
+        let filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token);
+        for (const service of this.extendedServices) {
+            const extendedCriteria = await service.prepareAPIFilter(nonDynamicFieldCriteria, token);
+            filterCriteria = [...filterCriteria, ...extendedCriteria];
+        }
+
         if (filterCriteria && filterCriteria.length) {
             const apiFilter = {};
             apiFilter[objectProperty] = this.prepareObjectFilter(filterCriteria);
@@ -365,6 +386,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
+        for (const service of this.extendedServices) {
+            const extendedCriteria = await service.prepareAPISearch(nonDynamicFieldCriteria, token);
+            searchCriteria = [...searchCriteria, ...extendedCriteria];
+        }
         const dynamicFieldCriteria = criteria.filter(
             (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );

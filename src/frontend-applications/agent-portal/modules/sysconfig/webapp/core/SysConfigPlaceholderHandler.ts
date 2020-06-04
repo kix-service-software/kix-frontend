@@ -7,7 +7,6 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
 import { KIXObject } from "../../../../model/kix/KIXObject";
 import { SysConfigOptionDefinition } from "../../model/SysConfigOptionDefinition";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
@@ -15,14 +14,14 @@ import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { SysConfigOptionType } from "../../model/SysConfigOptionType";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class SysConfigPlaceholderHandler implements IPlaceholderHandler {
+export class SysConfigPlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'SysConfigPlaceholderHandler';
-
-    public isHandlerFor(objectString: string): boolean {
-        return objectString === 'CONFIG';
-    }
+    public handlerId: string = '010-SysConfigPlaceholderHandler';
+    protected objectStrings: string[] = [
+        'CONFIG'
+    ];
 
     public async replace(placeholder: string, object?: KIXObject, language: string = 'en'): Promise<string> {
         let result = '';

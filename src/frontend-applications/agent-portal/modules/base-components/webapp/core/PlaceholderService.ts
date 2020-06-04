@@ -9,6 +9,7 @@
 
 import { IPlaceholderHandler } from "./IPlaceholderHandler";
 import { KIXObject } from "../../../../model/kix/KIXObject";
+import { SortUtil } from "../../../../model/SortUtil";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 
 export class PlaceholderService {
@@ -60,7 +61,7 @@ export class PlaceholderService {
         for (const placeholder of placeholders) {
             if (!replacedPlaceholders.has(placeholder)) {
                 const objectString = this.getObjectString(placeholder);
-                const handler = objectString ? this.getHandler(objectString) : null;
+                const handler = objectString ? this.getHandler(placeholder) : null;
                 let replaceString = handler ? await handler.replace(placeholder, object, language) : '';
                 replaceString = typeof replaceString === 'undefined' || replaceString === null ? '' : replaceString;
                 replacedPlaceholders.set(placeholder, replaceString);
@@ -71,8 +72,19 @@ export class PlaceholderService {
         return text;
     }
 
-    public getHandler<T extends IPlaceholderHandler = IPlaceholderHandler>(objectType: KIXObjectType | string): T {
-        const handler = this.placeholderHandler.find((ph) => ph.isHandlerFor(objectType));
+    public getHandler<T extends IPlaceholderHandler = IPlaceholderHandler>(placeholder: string): T {
+        const handler = SortUtil.sortObjects(this.placeholderHandler, 'handlerId').find(
+            (ph) => ph.isHandlerFor(placeholder)
+        );
+        return handler as T;
+    }
+
+    public getHandlerByObjectType<T extends IPlaceholderHandler = IPlaceholderHandler>(
+        objectType: KIXObjectType | string
+    ): T {
+        const handler = this.placeholderHandler.find(
+            (ph) => ph.isHandlerForObjectType(objectType)
+        );
         return handler as T;
     }
 
@@ -80,17 +92,17 @@ export class PlaceholderService {
         objectString: string = '(.+?)', attributeString: string = '(.+)', single: boolean = true
     ): RegExp {
         return new RegExp(
-            `${single ? '^' : ''}(<|&lt;)(TR_)?KIX_${objectString}_${attributeString}(>|&gt;)${single ? '$' : ''}`,
+            `${single ? '^' : ''}(?:<|&lt;)(?:TR_)?KIX_${objectString}_${attributeString}(>|&gt;)${single ? '$' : ''}`,
             'g'
         );
     }
 
     public getObjectString(placeholder: string): string {
-        return placeholder.replace(this.getPlaceholderRegex(), '$3');
+        return placeholder.replace(this.getPlaceholderRegex(), '$1');
     }
 
     public getAttributeString(placeholder: string): string {
-        let attribute = placeholder.replace(this.getPlaceholderRegex(), '$4');
+        let attribute = placeholder.replace(this.getPlaceholderRegex(), '$2');
         if (attribute.match(/.+_.+/)) {
             attribute = attribute.replace(/^(.+?)_.+$/, '$1');
         }
@@ -98,7 +110,7 @@ export class PlaceholderService {
     }
 
     public getOptionsString(placeholder: string): string {
-        const attribute = placeholder.replace(this.getPlaceholderRegex(), '$4');
+        const attribute = placeholder.replace(this.getPlaceholderRegex(), '$2');
         let optionsString = '';
         if (attribute.match(/.+_.+/)) {
             optionsString = attribute.replace(/^.+?_(.+)$/, '$1');

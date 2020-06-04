@@ -89,13 +89,11 @@ export class AuthenticationSocketClient extends SocketClient {
             this.authenticationSocket.on(AuthenticationEvent.UNAUTHORIZED, (result: AuthenticationResult) => {
                 if (result.requestId === requestId) {
                     window.clearTimeout(timeout);
-                    ClientStorageService.destroyToken();
                     resolve(true);
                 }
             });
 
             const request: ISocketRequest = {
-                token: ClientStorageService.getToken(),
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId(),
             };
@@ -128,7 +126,6 @@ export class AuthenticationSocketClient extends SocketClient {
             });
 
             const request: ISocketRequest = {
-                token: ClientStorageService.getToken(),
                 requestId,
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
@@ -176,7 +173,6 @@ export class AuthenticationSocketClient extends SocketClient {
                 });
 
             const request = new PermissionCheckRequest(
-                ClientStorageService.getToken(),
                 requestId,
                 ClientStorageService.getClientRequestId(),
                 permissions

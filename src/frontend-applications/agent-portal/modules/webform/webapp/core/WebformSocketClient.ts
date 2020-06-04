@@ -43,10 +43,8 @@ export class WebformSocketClient extends SocketClient {
     public async loadWebforms(): Promise<Webform[]> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Webform[]>((resolve, reject) => {
-            const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request: ISocketRequest = {
-                token,
                 clientRequestId: ClientStorageService.getClientRequestId(),
                 requestId
             };
@@ -82,10 +80,9 @@ export class WebformSocketClient extends SocketClient {
     public async createUpdateWebform(webform: Webform, formId?: number): Promise<number> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<number>((resolve, reject) => {
-            const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
             const request = new SaveWebformRequest(
-                token, requestId, ClientStorageService.getClientRequestId(), webform, formId
+                requestId, ClientStorageService.getClientRequestId(), webform, formId
             );
 
             const timeout = window.setTimeout(() => {

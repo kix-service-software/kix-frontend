@@ -13,7 +13,6 @@ import { SearchCache } from "./SearchCache";
 export class SaveSearchRequest implements ISocketRequest {
 
     public constructor(
-        public token: string,
         public requestId: string,
         public clientRequestId: string,
         public search: SearchCache,

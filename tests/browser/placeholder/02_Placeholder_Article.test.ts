@@ -359,28 +359,28 @@ class someTestFunctions {
         customerArticle.Subject = 'customer article';
         customerArticle.Body = 'This is a customer article';
         customerArticle.SenderTypeID = 2;
-        customerArticle.SenderType = 'customer';
+        customerArticle.SenderType = 'external';
         customerArticle.ArticleID = 2;
 
         const customerArticle2 = new Article();
         customerArticle2.Subject = 'customer article 2';
         customerArticle2.Body = 'This is a customer article 2';
         customerArticle2.SenderTypeID = 2;
-        customerArticle2.SenderType = 'customer';
+        customerArticle2.SenderType = 'external';
         customerArticle2.ArticleID = 4;
 
         const customerArticle3 = new Article();
         customerArticle3.Subject = 'customer article 3';
         customerArticle3.Body = 'This is a customer article 3';
         customerArticle3.SenderTypeID = 2;
-        customerArticle3.SenderType = 'customer';
+        customerArticle3.SenderType = 'external';
         customerArticle3.ArticleID = 6;
 
         const lastCustomerArticle = new Article();
         lastCustomerArticle.Subject = 'last customer article';
         lastCustomerArticle.Body = 'This is the last customer article';
         lastCustomerArticle.SenderTypeID = 2;
-        lastCustomerArticle.SenderType = 'customer';
+        lastCustomerArticle.SenderType = 'external';
         lastCustomerArticle.ArticleID = 8;
 
         ticket.Articles = [

@@ -49,6 +49,8 @@ import { SysConfigKey } from '../modules/sysconfig/model/SysConfigKey';
 import { IInitialDataExtension } from '../model/IInitialDataExtension';
 import { IFormConfigurationExtension } from './extensions/IFormConfigurationExtension';
 import { FormGroupConfiguration } from '../model/configuration/FormGroupConfiguration';
+import { IModifyConfigurationExtension } from './extensions/IModifyConfigurationExtension';
+import { MigrationService } from '../migrations/MigrationService';
 
 export class Server implements IServer {
 
@@ -78,12 +80,20 @@ export class Server implements IServer {
             await extension.initServices();
         }
 
+        const success = await MigrationService.getInstance().startMigration();
+        if (!success) {
+            LoggingService.getInstance().error('Startup failed. Could not migrate!');
+            process.exit(1);
+        }
+
         const initialDataExtensions = await PluginService.getInstance().getExtensions<IInitialDataExtension>(
             AgentPortalExtensions.INITIAL_DATA
         );
         LoggingService.getInstance().info(`Create initial data (${initialDataExtensions.length} extensions)`);
         for (const extension of initialDataExtensions) {
-            await extension.createData();
+            await extension.createData().catch((e) => {
+                LoggingService.getInstance().error(`Error creating inital data: ${extension.name}.`, e);
+            });
         }
 
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -179,12 +189,15 @@ export class Server implements IServer {
 
         const systemInfo = await ClientRegistrationService.getInstance().createClientRegistration(
             serverConfig.BACKEND_API_TOKEN, null, createClientRegistration
-        ).catch((error): SystemInfo => {
+        ).catch((error) => {
             LoggingService.getInstance().error(error);
-            return null;
+            LoggingService.getInstance().error(
+                'Failed to register frontent server at backend (ClientRegistration). See errors above.'
+            );
+            process.exit(1);
         });
 
-        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo);
+        ReleaseInfoUtil.getInstance().setSysteminfo(systemInfo as SystemInfo);
         LoggingService.getInstance().info('ClientRegistration created.');
     }
 
@@ -224,6 +237,7 @@ export class Server implements IServer {
             }
 
             await this.extendFormConfigurations(configurations);
+            await this.handleConfigurationExtensions(configurations);
 
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -234,7 +248,7 @@ export class Server implements IServer {
                     Name: c.id,
                     Description: name,
                     Default: JSON.stringify(c),
-                    Context: serverConfig.NOTIFICATION_CLIENT_ID,
+                    Context: 'kix18-web-frontend',
                     ContextMetadata: c.type,
                     Type: 'String',
                     IsRequired: 0
@@ -309,6 +323,18 @@ export class Server implements IServer {
                         formConfigurations.push(fieldExtension.configuration);
                     }
                 }
+            }
+        }
+    }
+
+    private static async handleConfigurationExtensions(configurations: IConfiguration[]): Promise<void> {
+        if (configurations.length) {
+            const extensions = await PluginService.getInstance().getExtensions<IModifyConfigurationExtension>(
+                AgentPortalExtensions.MODIFY_CONFIGURATION
+            );
+
+            for (const extension of extensions) {
+                await extension.modifyConfigurations(configurations);
             }
         }
     }

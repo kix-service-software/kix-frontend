@@ -19,6 +19,8 @@ import { SaveNotesRequest } from "../model/SaveNotesRequest";
 import { SocketEvent } from "../../../modules/base-components/webapp/core/SocketEvent";
 import { SocketErrorResponse } from "../../../modules/base-components/webapp/core/SocketErrorResponse";
 
+import cookie = require('cookie');
+
 export class NotesNamespace extends SocketNameSpace {
 
     private static INSTANCE: NotesNamespace;
@@ -43,8 +45,13 @@ export class NotesNamespace extends SocketNameSpace {
         this.registerEventHandler(client, NotesEvent.SAVE_NOTES, this.saveNotes.bind(this));
     }
 
-    private async loadNotes(data: ISocketRequest): Promise<SocketResponse<LoadNotesResponse>> {
-        const user = await UserService.getInstance().getUserByToken(data.token).catch((): User => null);
+    private async loadNotes(
+        data: ISocketRequest, client: SocketIO.Socket
+    ): Promise<SocketResponse<LoadNotesResponse>> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token).catch((): User => null);
 
         let notes = {};
         if (user) {
@@ -62,9 +69,12 @@ export class NotesNamespace extends SocketNameSpace {
         return new SocketResponse(NotesEvent.NOTES_LOADED, response);
     }
 
-    private async saveNotes(data: SaveNotesRequest): Promise<SocketResponse> {
-        if (data.token) {
-            const user = await UserService.getInstance().getUserByToken(data.token)
+    private async saveNotes(data: SaveNotesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        if (token) {
+            const user = await UserService.getInstance().getUserByToken(token)
                 .catch((): User => null);
 
             if (user) {
@@ -80,7 +90,7 @@ export class NotesNamespace extends SocketNameSpace {
                 notesConfig[data.contextId] = data.notes;
                 const value = JSON.stringify(notesConfig);
 
-                UserService.getInstance().setPreferences(data.token, 'NotesNamespace', [[preferenceId, value]])
+                UserService.getInstance().setPreferences(token, 'NotesNamespace', [[preferenceId, value]])
                     .catch((error: Error) => {
                         return new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error));
                     });

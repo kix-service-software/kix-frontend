@@ -13,7 +13,7 @@ import { DataType } from './DataType';
 export class SortUtil {
 
     public static sortObjects<T>(
-        objects: T[], property: string, dataType: DataType, sortOrder: SortOrder = SortOrder.UP
+        objects: T[], property: string, dataType: DataType = DataType.STRING, sortOrder: SortOrder = SortOrder.UP
     ): T[] {
         if (objects && objects.length) {
             objects.sort((a, b) => SortUtil.compareObjects(a, b, property, dataType, sortOrder));
@@ -81,9 +81,9 @@ export class SortUtil {
 
     public static compareDate(a: string, b: string, sortOrder: SortOrder = SortOrder.UP): number {
         let sort = 0;
-        if (a === undefined) {
+        if (a === undefined || a === '') {
             sort = -1;
-        } else if (b === undefined) {
+        } else if (b === undefined || b === '') {
             sort = 1;
         } else {
             const DateA: Date = new Date(a);

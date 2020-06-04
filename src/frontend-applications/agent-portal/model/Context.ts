@@ -39,8 +39,8 @@ export abstract class Context {
     private dialogSubscriberId: string = null;
     private additionalInformation: Map<string, any> = new Map();
 
-    private objectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
-    private filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
+    protected objectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
+    protected filteredObjectLists: Map<KIXObjectType | string, KIXObject[]> = new Map();
 
     private scrollInormation: [KIXObjectType | string, string | number] = null;
 
@@ -59,7 +59,7 @@ export abstract class Context {
                 eventPublished: (data: any) => {
                     if (data && data.objectType) {
                         if (this.objectLists.has(data.objectType)) {
-                            this.objectLists.delete(data.objectType);
+                            this.deleteObjectList(data.objectType);
                         }
                         if (
                             this.descriptor.contextMode === ContextMode.DETAILS
@@ -165,7 +165,7 @@ export abstract class Context {
         }
     }
 
-    public deleteObjectList(objectType: KIXObjectType | string) {
+    public deleteObjectList(objectType: KIXObjectType | string): void {
         if (this.objectLists.has(objectType)) {
             this.objectLists.delete(objectType);
             this.listeners.forEach((l) => l.objectListChanged(objectType, []));

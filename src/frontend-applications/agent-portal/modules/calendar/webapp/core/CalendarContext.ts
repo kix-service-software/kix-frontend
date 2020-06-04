@@ -20,7 +20,7 @@ export class CalendarContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return await TranslationService.translate("Translatable#Calendar");
+        return await TranslationService.translate("Translatable#Personal Ticket Calendar");
     }
 
 }

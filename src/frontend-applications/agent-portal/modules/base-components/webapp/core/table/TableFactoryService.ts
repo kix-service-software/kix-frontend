@@ -89,8 +89,9 @@ export class TableFactoryService {
         this.factories.push(factory);
     }
 
-    public getTableFactory(objectType: KIXObjectType | string): ITableFactory {
-        return this.factories.find((f) => f.isFactoryFor(objectType));
+    public getTableFactory<T extends ITableFactory>(objectType: KIXObjectType | string): T {
+        const factory = this.factories.find((f) => f.isFactoryFor(objectType));
+        return factory as T;
     }
 
     public async createTable(

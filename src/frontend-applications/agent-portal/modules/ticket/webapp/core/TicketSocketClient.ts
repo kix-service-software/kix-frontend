@@ -20,9 +20,7 @@ import { LoadArticleAttachmentResponse } from "../../model/LoadArticleAttachment
 import { LoadArticleZipAttachmentRequest } from "../../model/LoadArticleZipAttachmentRequest";
 import { SetArticleSeenFlagRequest } from "../../model/SetArticleSeenFlagRequest";
 import { BrowserCacheService } from "../../../../modules/base-components/webapp/core/CacheService";
-import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../base-components/webapp/core/EventService";
 
 export class TicketSocketClient extends SocketClient {
 
@@ -58,9 +56,8 @@ export class TicketSocketClient extends SocketClient {
         const socketTimeout = ClientStorageService.getSocketTimeout();
 
         const requestPromise = new Promise<Attachment>((resolve, reject) => {
-            const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
-            const request = new LoadArticleAttachmentRequest(token, requestId, ticketId, articleId, attachmentId);
+            const request = new LoadArticleAttachmentRequest(requestId, ticketId, articleId, attachmentId);
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ATTACHMENT);
@@ -69,7 +66,7 @@ export class TicketSocketClient extends SocketClient {
             this.socket.on(TicketEvent.ARTICLE_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
-                    resolve(result.attachment);
+                    resolve(new Attachment(result.attachment));
                 }
             });
 
@@ -92,9 +89,8 @@ export class TicketSocketClient extends SocketClient {
     public async loadArticleZipAttachment(ticketId: number, articleId: number): Promise<Attachment> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<Attachment>((resolve, reject) => {
-            const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
-            const request = new LoadArticleZipAttachmentRequest(token, requestId, ticketId, articleId);
+            const request = new LoadArticleZipAttachmentRequest(requestId, ticketId, articleId);
 
             const timeout = window.setTimeout(() => {
                 reject('Timeout: ' + TicketEvent.LOAD_ARTICLE_ZIP_ATTACHMENT);
@@ -123,9 +119,8 @@ export class TicketSocketClient extends SocketClient {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<void>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-            const token = ClientStorageService.getToken();
             const request = new SetArticleSeenFlagRequest(
-                token, requestId, ClientStorageService.getClientRequestId(), ticketId, articleId
+                requestId, ClientStorageService.getClientRequestId(), ticketId, articleId
             );
 
             const timeout = window.setTimeout(() => {

@@ -85,7 +85,9 @@ export class RoutingService {
                         context.getDescriptor().contextMode, objectId, undefined, history, false, true
                     );
                 } else {
-                    BrowserUtil.openAccessDeniedOverlay();
+                    if (contextUrl !== 'login') {
+                        BrowserUtil.openAccessDeniedOverlay();
+                    }
                     await this.setHomeContext();
                 }
             } else {

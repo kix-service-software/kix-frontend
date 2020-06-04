@@ -147,7 +147,9 @@ describe('CMDBReadUIModule', () => {
             it('should register the css handler for postproductive config items', () => {
                 const handler = TableCSSHandlerRegistry.getObjectCSSHandler(KIXObjectType.CONFIG_ITEM);
                 expect(handler).exist;
-                expect(handler).instanceof(PostproductivCSSHandler);
+                expect(handler).an('array');
+                expect(handler.length).equals(1);
+                expect(handler[0]).instanceof(PostproductivCSSHandler);
             });
 
             it('should register the dashboard context for ConfigItem', () => {

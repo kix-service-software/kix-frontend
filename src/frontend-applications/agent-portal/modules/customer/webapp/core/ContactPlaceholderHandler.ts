@@ -7,24 +7,19 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
 import { Contact } from "../../model/Contact";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { ContactProperty } from "../../model/ContactProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { UserProperty } from "../../../user/model/UserProperty";
+import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class ContactPlaceholderHandler implements IPlaceholderHandler {
+export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'ContactPlaceholderHandler';
-
-    public isHandlerFor(objectString: string): boolean {
-        return false;
-    }
+    public handlerId: string = '200-ContactPlaceholderHandler';
 
     public async replace(placeholder: string, contact?: Contact, language: string = 'en'): Promise<string> {
         let result = '';

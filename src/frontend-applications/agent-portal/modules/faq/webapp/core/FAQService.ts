@@ -9,9 +9,6 @@
 
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXModulesSocketClient } from "../../../../modules/base-components/webapp/core/KIXModulesSocketClient";
-import { ObjectDefinitionSearchAttribute } from "../../../../model/kix/ObjectDefinitionSearchAttribute";
-import { DataType } from "../../../../model/DataType";
 import { SearchOperator } from "../../../search/model/SearchOperator";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { FilterType } from "../../../../model/FilterType";
@@ -70,25 +67,35 @@ export class FAQService extends KIXObjectService {
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
-        const filter: FilterCriteria[] = [];
-
-        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
-        let attributes: ObjectDefinitionSearchAttribute[] = [];
-        const faqDefinition = objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-        if (faqDefinition) {
-            attributes = faqDefinition.SearchAttributes;
-        }
-
-        attributes.forEach((sa) => {
-            if (sa.Datatype === DataType.STRING) {
-                filter.push(
-                    new FilterCriteria(
-                        sa.CorrespondingAttribute, SearchOperator.CONTAINS,
-                        FilterDataType.STRING, FilterType.OR, searchValue
-                    )
-                );
-            }
-        });
+        const filter: FilterCriteria[] = [
+            new FilterCriteria(
+                FAQArticleProperty.NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.FIELD_1, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.FIELD_2, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.FIELD_3, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.FIELD_4, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.FIELD_5, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
+                FAQArticleProperty.FIELD_6, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
+            )
+        ];
 
         return filter;
     }
@@ -97,13 +104,6 @@ export class FAQService extends KIXObjectService {
         property: string, showInvalid?: boolean, invalidClickable?: boolean, filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
-
-        const objectDefinitions = await KIXModulesSocketClient.getInstance().loadObjectDefinitions();
-        let attributes: ObjectDefinitionSearchAttribute[] = [];
-        const faqDefinition = objectDefinitions.find((od) => od.Object === KIXObjectType.FAQ_ARTICLE);
-        if (faqDefinition) {
-            attributes = faqDefinition.SearchAttributes;
-        }
 
         switch (property) {
             case FAQArticleProperty.CATEGORY_ID:
@@ -121,9 +121,6 @@ export class FAQService extends KIXObjectService {
                     faqCategories, showInvalid, invalidClickable,
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
-                break;
-            case FAQArticleProperty.APPROVED:
-                nodes = this.preparePossibleValueTree(attributes, FAQArticleProperty.APPROVED);
                 break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(
@@ -211,30 +208,6 @@ export class FAQService extends KIXObjectService {
             }
         }
         return hasValidDescendants;
-    }
-
-
-    private preparePossibleValueTree(
-        faqSearchAttributes: ObjectDefinitionSearchAttribute[],
-        attributeName: FAQArticleProperty
-    ): TreeNode[] {
-        let nodes: TreeNode[] = [];
-        if (faqSearchAttributes) {
-            const attribute = faqSearchAttributes.find(
-                (sa) => sa.CorrespondingAttribute === attributeName
-            );
-            if (attribute && attribute.PossibleValues.length) {
-                nodes = attribute.PossibleValues.map((value: string | number) => {
-                    const treeNode = new TreeNode(
-                        value, value.toString(),
-                        new ObjectIcon(FAQCategoryProperty.ID, attributeName),
-                        null,
-                    );
-                    return treeNode;
-                });
-            }
-        }
-        return nodes;
     }
 
     public determineDependendObjects(

@@ -120,7 +120,7 @@ export class WebformService {
 
                 const token = await AuthenticationService.getInstance().login(
                     form.userLogin, form.webformUserPassword,
-                    IdService.generateDateBasedId('web-form-login'), false
+                    IdService.generateDateBasedId('web-form-login'), 'WebformService', false
                 ).catch((error) => null);
 
                 if (token) {
@@ -174,7 +174,6 @@ export class WebformService {
     private prepareParameter(request: CreateWebformTicketRequest, form: Webform): Array<[string, any]> {
         const from = request.name && !request.email.match(/.+ <.+>/)
             ? `${request.name} <${request.email}>` : request.email;
-        const attachments = this.prepareFiles(request.files);
         const parameter: Array<[string, any]> = [
             [TicketProperty.TITLE, request.subject],
             [TicketProperty.CONTACT_ID, request.email],
@@ -187,10 +186,13 @@ export class WebformService {
             [ArticleProperty.FROM, from],
             [ArticleProperty.SUBJECT, request.subject],
             [ArticleProperty.BODY, request.message],
-            [ArticleProperty.ATTACHMENTS, attachments],
             [ArticleProperty.SENDER_TYPE_ID, 3],
             [ArticleProperty.CHANNEL_ID, 1],
         ];
+        const attachments = this.prepareFiles(request.files);
+        if (attachments.length) {
+            parameter.push([ArticleProperty.ATTACHMENTS, attachments]);
+        }
         return parameter;
     }
 

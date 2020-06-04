@@ -22,6 +22,8 @@ import { SocketErrorResponse } from "../../../modules/base-components/webapp/cor
 import { MenuEntry } from "../../../model/MenuEntry";
 import { PermissionService } from "../../../server/services/PermissionService";
 
+import cookie = require('cookie');
+
 export class MainMenuNamespace extends SocketNameSpace {
 
     private static INSTANCE: MainMenuNamespace;
@@ -45,28 +47,29 @@ export class MainMenuNamespace extends SocketNameSpace {
         this.registerEventHandler(client, MainMenuEvent.LOAD_MENU_ENTRIES, this.loadMenuEntries.bind(this));
     }
 
-    private async loadMenuEntries(data: MainMenuEntriesRequest): Promise<SocketResponse> {
+    private async loadMenuEntries(data: MainMenuEntriesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
 
         const extensions = await PluginService.getInstance().getExtensions<IMainMenuExtension>(
             AgentPortalExtensions.MAIN_MENU
         ).catch(() => []);
 
         let configuration = await ModuleConfigurationService.getInstance().loadConfiguration<MainMenuConfiguration>(
-            data.token, 'application-main-menu'
+            token, 'application-main-menu'
         );
 
         if (!configuration) {
-            configuration = await this.createDefaultConfiguration(data.token, extensions)
-                .catch(() => null);
+            configuration = await this.createDefaultConfiguration(token, extensions).catch(() => null);
         }
 
         if (configuration) {
             const primaryEntries = await this.getMenuEntries(
-                data.token, extensions, configuration.primaryMenuEntryConfigurations
+                token, extensions, configuration.primaryMenuEntryConfigurations
             ).catch(() => []);
 
             const secondaryEntries = await this.getMenuEntries(
-                data.token, extensions, configuration.secondaryMenuEntryConfigurations
+                token, extensions, configuration.secondaryMenuEntryConfigurations
             ).catch(() => []);
 
             const response = new MainMenuEntriesResponse(

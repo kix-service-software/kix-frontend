@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2020-03-31 14:48+0000\n"
+"PO-Revision-Date: 2020-05-26 14:50+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -298,9 +298,6 @@ msgid "Bulk Action"
 msgstr ""
 
 msgid "Button with 3 points = Here you can find further actions"
-msgstr ""
-
-msgid "Calendar"
 msgstr ""
 
 msgid "Cancel"
@@ -884,10 +881,8 @@ msgstr ""
 msgid "ends with"
 msgstr ""
 
-#, fuzzy
-#| msgid "Closing time"
 msgid "End time"
-msgstr "Closed at"
+msgstr "End Time"
 
 msgid "Enter search value"
 msgstr ""
@@ -914,9 +909,6 @@ msgid "Error while adding the image:"
 msgstr ""
 
 msgid "Escalated Tickets"
-msgstr ""
-
-msgid "Escalation time"
 msgstr ""
 
 msgid "Event"
@@ -1229,10 +1221,9 @@ msgstr "The job name needs to be unique."
 msgid "Helptext_Admin_JobCreateEdit_Time"
 msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
 
-#, fuzzy
-#| msgid "Helptext_Admin_JobCreateEdit_Time"
 msgid "Helptext_Admin_JobCreateEdit_Type"
-msgstr "Choose the time(s) the job is supposed to run. Multiselect possible."
+msgstr ""
+"Choose the purpose for the job. The form will be completed accordingly."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
 msgstr ""
@@ -1819,6 +1810,22 @@ msgstr "Search for assets with this name or parts of this name."
 msgid "Helptext_CMDB_ConfigItem_Link_Number"
 msgstr "Search for assets with this number or a part of the number."
 
+msgid "Helptext_CMDB_Dashboard_Search"
+msgstr ""
+"Searchable are the following Asset properties: \"Name\" and \"A#\". It is "
+"possible to use Wildcards (*)."
+
+msgid "Helptext_Customer_Dashboard_Search"
+msgstr ""
+"If the tables are dependend, only Organisations are searchable. If the "
+"dependency is removed, Organisations and Contacts are searchable. The "
+"following Organisation attributes are considered: \"CNO\", \"Name\", \"URL"
+"\", \"Street\", \"ZIP\", \"City\" and \"Country\". The following Contact "
+"attributes are considered: \"Login Name\", \"Email\", \"First Name\", \"Last "
+"Name\", \"Title\", \"Phone\", \"Fax\", \"Mobile\", \"Street\", \"City\", "
+"\"County\". It is possible to use Wildcards (*). See FAQ article \"How to "
+"search in KIX 18\" for further use of special characters."
+
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
@@ -2075,10 +2082,11 @@ msgstr ""
 "Then choose the text modules you want to use in the context menu. You can "
 "narrow down the key word selection manually by entering more text."
 
-#, fuzzy
-#| msgid "Helptext_Tickets_Link_State"
 msgid "Helptext_Ticket_Dashboard_Search"
-msgstr "Search for tickets with the chosen state."
+msgstr ""
+"Searchable are the following Ticket properties: \"Ticket#\", \"Title\", "
+"\"Article Content\", \"To\", \"From\", \"Cc\". It is possible to use "
+"Wildcards (*)."
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
 msgstr ""
@@ -3185,9 +3193,6 @@ msgstr ""
 msgid "Reset to Default"
 msgstr ""
 
-msgid "Response time"
-msgstr ""
-
 msgid "Responsible"
 msgstr ""
 
@@ -3231,12 +3236,15 @@ msgid "Run"
 msgstr ""
 
 msgid "running"
-msgstr ""
+msgstr "läuft"
 
 msgid "Saturday"
 msgstr ""
 
 msgid "Save"
+msgstr ""
+
+msgid "Save new search"
 msgstr ""
 
 msgid "Save Search"
@@ -3359,13 +3367,7 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
-msgid "SLA"
-msgstr ""
-
 msgid "Solution"
-msgstr ""
-
-msgid "Solution time"
 msgstr ""
 
 msgid "Sort"
@@ -3805,9 +3807,6 @@ msgid "Update Text Module"
 msgstr ""
 
 msgid "Update Ticket"
-msgstr ""
-
-msgid "Update time"
 msgstr ""
 
 msgid "Update Translation"

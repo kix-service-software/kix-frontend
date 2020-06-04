@@ -20,11 +20,6 @@ export abstract class SocketClient {
 
         const options = {};
 
-        if (authenticated) {
-            const token = ClientStorageService.getToken();
-            options['query'] = "Token=" + token;
-        }
-
         let socket;
         if (typeof io !== 'undefined') {
             socket = io.connect(socketUrl + "/" + namespace, options);

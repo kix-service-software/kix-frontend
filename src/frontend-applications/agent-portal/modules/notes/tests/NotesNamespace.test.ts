@@ -71,11 +71,20 @@ describe('NotesNamespace Tests', () => {
         });
 
         it('Should load notes from user preferences', async () => {
-            const response: SocketResponse<LoadNotesResponse> = await (NotesNamespace.getInstance() as any).loadNotes({
-                token: 'token',
-                requestId: 'request',
-                clientRequestId: 'client'
-            });
+            const response: SocketResponse<LoadNotesResponse> = await (NotesNamespace.getInstance() as any).loadNotes(
+                {
+                    token: 'token',
+                    requestId: 'request',
+                    clientRequestId: 'client'
+                },
+                {
+                    handshake: {
+                        headers: {
+                            cookie: "token=token"
+                        }
+                    }
+                }
+            );
 
             expect(response).exist;
             expect(response.data).exist;
@@ -125,13 +134,21 @@ describe('NotesNamespace Tests', () => {
         });
 
         it('Should load notes from user preferences', async () => {
-            const response: SocketResponse = await (NotesNamespace.getInstance() as any).saveNotes({
-                token: 'token',
-                requestId: 'request',
-                clientRequestId: 'client',
-                contextId: 'test-context',
-                notes: 'test notes'
-            });
+            const response: SocketResponse = await (NotesNamespace.getInstance() as any).saveNotes(
+                {
+                    token: 'token',
+                    requestId: 'request',
+                    clientRequestId: 'client',
+                    contextId: 'test-context',
+                    notes: 'test notes'
+                },
+                {
+                    handshake: {
+                        headers: {
+                            cookie: "token=token"
+                        }
+                    }
+                });
 
             expect(response).exist;
             expect(response.event).equals(NotesEvent.SAVE_NOTES_FINISHED);
@@ -139,13 +156,22 @@ describe('NotesNamespace Tests', () => {
 
 
         it('Should return error response if user not exists', async () => {
-            const response: SocketResponse = await (NotesNamespace.getInstance() as any).saveNotes({
-                token: 'wrong',
-                requestId: 'request',
-                clientRequestId: 'client',
-                contextId: 'test-context',
-                notes: 'test notes'
-            });
+            const response: SocketResponse = await (NotesNamespace.getInstance() as any).saveNotes(
+                {
+                    token: 'wrong',
+                    requestId: 'request',
+                    clientRequestId: 'client',
+                    contextId: 'test-context',
+                    notes: 'test notes'
+                },
+                {
+                    handshake: {
+                        headers: {
+                            cookie: "token=wrong"
+                        }
+                    }
+                }
+            );
 
             expect(response).exist;
             expect(response.event).equals(SocketEvent.ERROR);

@@ -372,9 +372,16 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
             Array.isArray(fieldValue.Value)
         ) {
             for (const v of fieldValue.Value) {
-                const checklist = JSON.parse(v);
-                const counts = DynamicFieldFormUtil.getInstance().countValues(checklist);
-                values.push(`${counts[0]}/${counts[1]}`);
+                try {
+                    const checklist = JSON.parse(v);
+                    const counts = DynamicFieldFormUtil.getInstance().countValues(checklist);
+                    values.push(`${counts[0]}/${counts[1]}`);
+                } catch (error) {
+                    console.error(`Could not parse checklist value from dynamic field`);
+                    console.error(field);
+                    console.error(fieldValue);
+                    console.error(error);
+                }
             }
         }
         return values;

@@ -86,7 +86,7 @@ export class Article extends KIXObject<Article> {
     public bodyAttachment: Attachment = null;
 
     public constructor(article?: Article) {
-        super();
+        super(article);
 
         if (article) {
             this.TicketID = article.TicketID;

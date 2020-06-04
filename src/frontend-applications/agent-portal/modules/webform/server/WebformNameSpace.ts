@@ -18,6 +18,7 @@ import { SaveWebformRequest } from "../model/SaveWebformRequest";
 import { UserService } from "../../user/server/UserService";
 import { CreateObjectResponse } from "../../../modules/base-components/webapp/core/CreateObjectResponse";
 
+import cookie = require('cookie');
 
 export class WebformNameSpace extends SocketNameSpace {
 
@@ -43,8 +44,11 @@ export class WebformNameSpace extends SocketNameSpace {
         this.registerEventHandler(client, WebformEvent.SAVE_WEBFORM, this.saveWebform.bind(this));
     }
 
-    private async loadWebforms(data: ISocketRequest): Promise<SocketResponse> {
-        const webforms = await WebformService.getInstance().loadWebforms(data.token);
+    private async loadWebforms(data: ISocketRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const webforms = await WebformService.getInstance().loadWebforms(token);
 
         return new SocketResponse(
             WebformEvent.LOAD_WEBFORMS_FINISHED,
@@ -52,12 +56,15 @@ export class WebformNameSpace extends SocketNameSpace {
         );
     }
 
-    private async saveWebform(data: SaveWebformRequest): Promise<SocketResponse> {
-        const user = await UserService.getInstance().getUserByToken(data.token);
+    private async saveWebform(data: SaveWebformRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const user = await UserService.getInstance().getUserByToken(token);
         const userId = user.UserID;
 
         const objectId = await WebformService.getInstance().saveWebform(
-            data.token, userId, data.webform, data.webformId
+            token, userId, data.webform, data.webformId
         );
 
         return new SocketResponse(WebformEvent.WEBFORM_SAVED, new CreateObjectResponse(data.requestId, objectId));

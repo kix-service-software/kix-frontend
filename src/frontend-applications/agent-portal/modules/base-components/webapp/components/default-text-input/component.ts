@@ -48,7 +48,7 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public setCurrentValue(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
+        if (this.state.defaultValue && this.state.defaultValue.value !== null) {
             this.state.currentValue = this.state.defaultValue.value;
             (this as any).emit('valueChanged', this.state.currentValue);
             super.provideValue(this.state.currentValue);

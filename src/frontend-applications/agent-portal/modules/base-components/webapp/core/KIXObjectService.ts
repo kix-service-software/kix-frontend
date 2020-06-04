@@ -292,7 +292,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<TreeNode[]> {
         for (const extendedService of this.extendedServices) {
-            const extendedNodes = extendedService.getTreeNodes(
+            const extendedNodes = await extendedService.getTreeNodes(
                 property, showInvalid, invalidClickable, filterIds, loadingOptions, objectLoadingOptions
             );
             if (extendedNodes) {
@@ -453,16 +453,20 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         return nodes;
     }
     public static async search(
-        objectType: KIXObjectType | string, searchValue: string, limit: number = 10, onlyValidObjects: boolean = false
+        objectType: KIXObjectType | string, searchValue: string, limit: number = 10,
+        additionalFilter?: FilterCriteria[], onlyValidObjects: boolean = false
     ): Promise<KIXObject[]> {
         let result = [];
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         if (service) {
-            const filter = await service.prepareFullTextFilter(searchValue);
+            let filter = await service.prepareFullTextFilter(searchValue);
             if (onlyValidObjects) {
                 filter.push(new FilterCriteria(
                     KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
                 ));
+            }
+            if (Array.isArray(additionalFilter)) {
+                filter = filter.concat(additionalFilter);
             }
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             result = await service.loadObjects(objectType, null, loadingOptions);

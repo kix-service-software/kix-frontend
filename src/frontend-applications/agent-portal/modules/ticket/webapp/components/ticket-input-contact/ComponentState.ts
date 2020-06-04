@@ -16,7 +16,6 @@ export class ComponentState extends FormInputComponentState<number> {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
-        public isLoading: boolean = false,
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public placeholder: string = '',
         public actions: FormInputAction[] = [],

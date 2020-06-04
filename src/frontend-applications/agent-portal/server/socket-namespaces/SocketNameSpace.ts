@@ -37,7 +37,8 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     }
 
     protected registerEventHandler<RQ extends ISocketRequest, RS>(
-        client: SocketIO.Socket, event: string, handler: (data: RQ) => Promise<SocketResponse<RS>>
+        client: SocketIO.Socket, event: string,
+        handler: (data: RQ, client: SocketIO.Socket) => Promise<SocketResponse<RS>>
     ): void {
         client.on(event, (data: RQ) => {
 
@@ -62,7 +63,7 @@ export abstract class SocketNameSpace implements ISocketNamespace {
             const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
             const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, data);
 
-            handler(data).then((response) => {
+            handler(data, client).then((response) => {
                 client.emit(response.event, response.data);
 
                 // stop profiling

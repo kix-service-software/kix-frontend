@@ -40,7 +40,7 @@ export class MacroActionTableFactory extends TableFactory {
     }
 
     private setDefaultTableConfiguration(
-        tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle?: boolean
+        tableConfiguration: TableConfiguration, defaultRouting?: boolean, defaultToggle: boolean = true
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(null, null, null,
@@ -67,16 +67,19 @@ export class MacroActionTableFactory extends TableFactory {
                 TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
 
+        } else if (!tableConfiguration.tableColumns) {
+            tableConfiguration.tableColumns = tableColumns;
+        }
+
+        if (defaultToggle) {
             tableConfiguration.toggle = true;
             tableConfiguration.toggleOptions = new ToggleOptions(
                 'object-information', 'object', [], false,
                 {
                     flat: false
                 },
-                'Parameters'
+                'preparedParameters'
             );
-        } else if (!tableConfiguration.tableColumns) {
-            tableConfiguration.tableColumns = tableColumns;
         }
 
         return tableConfiguration;

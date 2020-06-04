@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-04-14 09:25+0000\n"
-"Last-Translator: fuhlig <Frank.Uhlig@cape-it.de>\n"
+"PO-Revision-Date: 2020-05-05 09:50+0000\n"
+"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
 "Language: de\n"
@@ -309,9 +309,6 @@ msgstr "Sammelaktion"
 
 msgid "Button with 3 points = Here you can find further actions"
 msgstr "Button mit 3 Punkten  =  Hier befinden sich weitere Aktionen"
-
-msgid "Calendar"
-msgstr "Kalender"
 
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -738,7 +735,7 @@ msgid "Download"
 msgstr "Download"
 
 msgid "Download log"
-msgstr "Log herunterladen"
+msgstr "Log Download"
 
 msgid "Duplicate"
 msgstr "Duplizieren"
@@ -925,9 +922,6 @@ msgstr "Fehler beim Hinzufügen des Bildes:"
 
 msgid "Escalated Tickets"
 msgstr "Eskalierte Tickets"
-
-msgid "Escalation time"
-msgstr "Eskalationszeit"
 
 msgid "Event"
 msgstr "Event"
@@ -1259,12 +1253,10 @@ msgstr ""
 "Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
 "Mehrfachauswahl möglich."
 
-#, fuzzy
-#| msgid "Helptext_Admin_JobCreateEdit_Time"
 msgid "Helptext_Admin_JobCreateEdit_Type"
 msgstr ""
-"Wählen Sie die Uhrzeit(en) aus, zu denen der Job durchgeführt wird. "
-"Mehrfachauswahl möglich."
+"Wählen Sie aus, für welchen Zweck Sie einen Job erstellen wollen. Danach "
+"werden die entsprechenden Seiten im Dialog geladen."
 
 msgid "Helptext_Admin_JobCreateEdit_Validity"
 msgstr ""
@@ -1920,6 +1912,22 @@ msgstr "Suchen Sie nach Assets mit diesem Name oder Teilen des Namens."
 msgid "Helptext_CMDB_ConfigItem_Link_Number"
 msgstr "Suchen Sie nach Assets mit dieser Nummer oder Teilen der Nummer."
 
+msgid "Helptext_CMDB_Dashboard_Search"
+msgstr ""
+"Durchsuchbar sind die Asset-Eigenschaften \"Name\" und \"A#\". Verwendung "
+"von Wildcards (*) ist möglich."
+
+msgid "Helptext_Customer_Dashboard_Search"
+msgstr ""
+"Wenn die Tabellen abhängig sind, wird nur nach Kunden gesucht. Ist die "
+"Abhängigkeit aufgelöst, wird nach Kunden und Kontakten gesucht. Durchsuchbar "
+"sind die Kunden-Eigenschaften \"KNR\", \"Name\", \"URL\", \"Straße\", \"PLZ"
+"\", \"Stadt\" und \"Land\" und die Kontakt-Eigenschaften \"Nutzername\", \"E-"
+"Mail\", \"Vorname\", \"Nachname\", \"Titel\", \"Telefon\", \"Fax\", \"Mobil"
+"\", \"Straße\", \"Stadt\", \"Land\". Verwendung von Wildcards (*) ist "
+"möglich. Die Nutzung weiterer Sonderzeichen ist im FAQ Artikel \"Wie suche "
+"ich in KIX 18\" zu finden."
+
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
@@ -2195,8 +2203,8 @@ msgstr ""
 
 msgid "Helptext_Ticket_Dashboard_Search"
 msgstr ""
-"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", \""
-"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
+"Durchsuchbar sind die Ticket-Eigenschaften \"Ticket#\", \"Titel\", "
+"\"Artikelinhalt\", \"Von\", \"An\", \"Cc\". Verwendung von Wildcards (*) ist "
 "möglich."
 
 msgid "Helptext_Tickets_ArticleCreate_Attachments"
@@ -2941,8 +2949,6 @@ msgstr "Nicht mehr als 5 Dateien möglich."
 msgid "No version available"
 msgstr "Keine Version verfügbar"
 
-#, fuzzy
-#| msgid "No."
 msgid "Nr."
 msgstr "Nr."
 
@@ -3322,9 +3328,6 @@ msgstr "Daten zurücksetzen"
 msgid "Reset to Default"
 msgstr "Auf Standard zurücksetzen"
 
-msgid "Response time"
-msgstr "Reaktionszeit"
-
 msgid "Responsible"
 msgstr "Verantwortlicher"
 
@@ -3377,6 +3380,9 @@ msgstr "Samstag"
 
 msgid "Save"
 msgstr "Speichern"
+
+msgid "Save new search"
+msgstr "Neue Suche speichern"
 
 msgid "Save Search"
 msgstr "Suche speichern"
@@ -3498,14 +3504,8 @@ msgstr "Größe"
 msgid "Skip"
 msgstr "Überspringen"
 
-msgid "SLA"
-msgstr "SLA"
-
 msgid "Solution"
 msgstr "Lösung"
-
-msgid "Solution time"
-msgstr "Lösungszeit"
 
 msgid "Sort"
 msgstr "Sortieren"
@@ -3517,7 +3517,7 @@ msgid "Split Option"
 msgstr "Trennoptionen"
 
 msgid "Start by"
-msgstr "gestartet von"
+msgstr "Gestartet von"
 
 msgid "Start Import"
 msgstr "Import starten"
@@ -3953,9 +3953,6 @@ msgstr "Aktualisierung wird durchgeführt"
 msgid "Update Ticket"
 msgstr "Aktualisierung wird durchgeführt"
 
-msgid "Update time"
-msgstr "Aktualisierung wird durchgeführt"
-
 msgid "Update Translation"
 msgstr "Aktualisierung wird durchgeführt"
 
@@ -4108,6 +4105,24 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Calendar"
+#~ msgstr "Kalender"
+
+#~ msgid "Escalation time"
+#~ msgstr "Eskalationszeit"
+
+#~ msgid "Response time"
+#~ msgstr "Reaktionszeit"
+
+#~ msgid "SLA"
+#~ msgstr "SLA"
+
+#~ msgid "Solution time"
+#~ msgstr "Lösungszeit"
+
+#~ msgid "Update time"
+#~ msgstr "Aktualisierung wird durchgeführt"
 
 #~ msgid "Link Objects"
 #~ msgstr "Objekte verknüpfen"

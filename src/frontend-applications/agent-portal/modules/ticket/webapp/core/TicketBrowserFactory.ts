@@ -29,8 +29,16 @@ export class TicketBrowserFactory extends KIXObjectFactory<Ticket> {
     }
 
     public async create(ticket: Ticket): Promise<Ticket> {
-        const newTicket = new Ticket(ticket);
+        let newTicket = new Ticket(ticket);
+
+        if (this.objectConstructor && this.objectConstructor.length) {
+            for (const objectConstructor of this.objectConstructor) {
+                newTicket = new objectConstructor(newTicket);
+            }
+        }
+
         await this.mapTicketData(newTicket);
+
         return newTicket;
     }
 

@@ -33,6 +33,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { SysconfigEvent } from '../../core/SysconfigEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { SysConfigOption } from '../../../model/SysConfigOption';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -160,8 +161,13 @@ class SysConfigContentProvider extends TableContentProvider {
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, null, loadingOptions
             );
 
+            const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, definitions.map((d) => d.Name)
+            );
+
             for (const scd of definitions) {
-                const rowObject = await this.createRowObject(scd);
+                const option = options.find((o) => o.Name === scd.Name);
+                const rowObject = await this.createRowObject(scd, option);
                 rowObjects.push(rowObject);
             }
         }
@@ -173,12 +179,18 @@ class SysConfigContentProvider extends TableContentProvider {
         return rowObjects;
     }
 
-    private async createRowObject(definition: SysConfigOptionDefinition): Promise<RowObject> {
+    private async createRowObject(definition: SysConfigOptionDefinition, option: SysConfigOption): Promise<RowObject> {
         const values: TableValue[] = [];
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
-            const tableValue = await this.getTableValue(definition, column.property, column);
+            let tableValue;
+            if (column.property === SysConfigOptionDefinitionProperty.VALUE) {
+                const value = option.Value ? option.Value : '';
+                tableValue = new TableValue(column.property, value, value);
+            } else {
+                tableValue = await this.getTableValue(definition, column.property, column);
+            }
             values.push(tableValue);
         }
 

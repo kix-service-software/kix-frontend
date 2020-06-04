@@ -115,15 +115,11 @@ export enum KIXObjectType {
 
     OBJECT_ICON = 'OBJECT_ICON',
 
-    OBJECT_DEFINITION = 'ObjectDefinition',
-
     QUEUE = 'Queue',
 
     ROLE = 'Role',
 
     SERVICE = 'Service',
-
-    SLA = 'SLA',
 
     SYS_CONFIG_OPTION = 'SysConfigOption',
 

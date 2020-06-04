@@ -7,7 +7,6 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
 import { Article } from "../../model/Article";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
@@ -15,14 +14,11 @@ import { ArticleProperty } from "../../model/ArticleProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class ArticlePlaceholderHandler implements IPlaceholderHandler {
+export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'ArticlePlaceholderHandler';
-
-    public isHandlerFor(objectString: string): boolean {
-        return false;
-    }
+    public handlerId: string = '350-ArticlePlaceholderHandler';
 
     public async replace(placeholder: string, article: Article, language?: string): Promise<string> {
         let result = '';

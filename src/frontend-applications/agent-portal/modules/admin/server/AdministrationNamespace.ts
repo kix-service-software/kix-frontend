@@ -20,6 +20,8 @@ import { AdminCategoriesResponse } from "../model/AdminCategoriesResponse";
 import { AdminModuleService } from "./AdminModuleService";
 import { AdminModuleCategory } from "../model/AdminModuleCategory";
 
+import cookie = require('cookie');
+
 export class AdministrationNamespace extends SocketNameSpace {
 
     private static INSTANCE: AdministrationNamespace;
@@ -48,13 +50,15 @@ export class AdministrationNamespace extends SocketNameSpace {
         );
     }
 
-    private async loadAdminCategories(
-        data: MainMenuEntriesRequest
-    ): Promise<SocketResponse> {
-        const response = await AdminModuleService.getInstance().getAdminModules(data.token)
+    private async loadAdminCategories(data: MainMenuEntriesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
+        const response = await AdminModuleService.getInstance().getAdminModules(token)
             .then((categories: AdminModuleCategory[]) =>
                 new SocketResponse(
-                    AdministrationEvent.ADMIN_CATEGORIES_LOADED, new AdminCategoriesResponse(data.requestId, categories)
+                    AdministrationEvent.ADMIN_CATEGORIES_LOADED,
+                    new AdminCategoriesResponse(data.requestId, categories)
                 )
             )
             .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));

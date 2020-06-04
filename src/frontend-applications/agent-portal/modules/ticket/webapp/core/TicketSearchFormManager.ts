@@ -86,8 +86,8 @@ export class TicketSearchFormManager extends SearchFormManager {
         return properties;
     }
 
-    public async getOperations(property: string): Promise<any[]> {
-        let operations: SearchOperator[] = [];
+    public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
+        let operations: Array<string | SearchOperator> = [];
 
         switch (property) {
             case TicketProperty.TICKET_NUMBER:
@@ -115,10 +115,6 @@ export class TicketSearchFormManager extends SearchFormManager {
             case TicketProperty.CHANGED:
             case TicketProperty.PENDING_TIME:
             case TicketProperty.LAST_CHANGE_TIME:
-            case TicketProperty.ESCALATION_TIME:
-            case TicketProperty.ESCALATION_RESPONSE_TIME:
-            case TicketProperty.ESCALATION_UPDATE_TIME:
-            case TicketProperty.ESCALATION_SOLUTION_TIME:
                 operations = SearchDefinition.getDateTimeOperators();
                 break;
             case SearchProperty.FULLTEXT:
@@ -164,11 +160,7 @@ export class TicketSearchFormManager extends SearchFormManager {
             || property === TicketProperty.CLOSE_TIME
             || property === TicketProperty.CHANGED
             || property === TicketProperty.PENDING_TIME
-            || property === TicketProperty.LAST_CHANGE_TIME
-            || property === TicketProperty.ESCALATION_TIME
-            || property === TicketProperty.ESCALATION_RESPONSE_TIME
-            || property === TicketProperty.ESCALATION_SOLUTION_TIME
-            || property === TicketProperty.ESCALATION_UPDATE_TIME;
+            || property === TicketProperty.LAST_CHANGE_TIME;
     }
 
     public getOperatorDisplayText(operator: string): Promise<string> {
@@ -176,7 +168,7 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        return property !== TicketProperty.LOCK_ID || super.isMultiselect(property);
+        return super.isMultiselect(property) || property !== TicketProperty.LOCK_ID;
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
@@ -197,7 +189,10 @@ export class TicketSearchFormManager extends SearchFormManager {
                 }
                 break;
             default:
-                nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);
+                nodes = await super.getTreeNodes(property);
+                if (!nodes || !nodes.length) {
+                    nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);
+                }
         }
         return nodes;
     }
