@@ -16,9 +16,8 @@ export class ComponentState extends FormInputComponentState<string[]> {
 
     public constructor(
         public autoCompleteConfiguration: AutoCompleteConfiguration = null,
-        public nodes: TreeNode[] = [],
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
-        public currentNodes: TreeNode[] = []
+        public loadNodes: () => Promise<TreeNode[]> = null
     ) {
         super();
     }

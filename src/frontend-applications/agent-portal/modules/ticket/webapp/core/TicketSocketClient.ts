@@ -66,7 +66,7 @@ export class TicketSocketClient extends SocketClient {
             this.socket.on(TicketEvent.ARTICLE_ATTACHMENT_LOADED, (result: LoadArticleAttachmentResponse) => {
                 if (requestId === result.requestId) {
                     window.clearTimeout(timeout);
-                    resolve(result.attachment);
+                    resolve(new Attachment(result.attachment));
                 }
             });
 

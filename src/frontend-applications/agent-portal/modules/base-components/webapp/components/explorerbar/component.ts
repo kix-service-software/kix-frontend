@@ -52,7 +52,7 @@ class Component {
     private setContext(context: Context): void {
         if (context) {
             this.state.isExplorerBarExpanded = context.explorerBarExpanded;
-            this.state.explorer = context.getExplorer() || [];
+            this.state.explorer = (context.getExplorer() || []).filter((w) => Boolean(w.configuration));
             if (this.state.explorer.length) {
                 context.registerListener(this.contextListernerId, {
                     sidebarToggled: () => { return; },

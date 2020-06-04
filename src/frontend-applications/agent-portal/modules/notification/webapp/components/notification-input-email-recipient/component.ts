@@ -23,12 +23,14 @@ import { FilterDataType } from "../../../../../model/FilterDataType";
 import { FilterType } from "../../../../../model/FilterType";
 import { TreeNode } from "../../../../base-components/webapp/core/tree";
 import { ContactService } from "../../../../customer/webapp/core";
+import { FormService } from "../../../../base-components/webapp/core/FormService";
 
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
+        this.state.loadNodes = this.getCurrentNodes.bind(this);
     }
 
     public onInput(input: any): void {
@@ -40,17 +42,17 @@ class Component extends FormInputComponent<string[], ComponentState> {
         this.state.searchCallback = this.searchContacts.bind(this);
         const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
         this.state.autoCompleteConfiguration = new AutoCompleteConfiguration(10, 2000, 3, objectName);
-
-        this.setCurrentNodes();
     }
 
-    public async setCurrentNodes(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            const contactEmails: string[] = Array.isArray(this.state.defaultValue.value)
-                ? this.state.defaultValue.value
-                : (this.state.defaultValue.value as string).split(',').map((v) => v.trim());
+    public async getCurrentNodes(): Promise<TreeNode[]> {
+        const nodes = [];
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const defaultValue = formInstance ? formInstance.getFormFieldValue<string>(this.state.field.instanceId) : null;
+        if (defaultValue && defaultValue.value) {
+            const contactEmails: string[] = Array.isArray(defaultValue.value)
+                ? defaultValue.value
+                : (defaultValue.value as string).split(',').map((v) => v.trim());
 
-            const nodes = [];
             const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                 KIXObjectType.SYSTEM_ADDRESS
             );
@@ -68,26 +70,29 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
                     ), null, true
                 );
+                let node: TreeNode;
                 if (contacts && !!contacts.length) {
-                    nodes.push(await this.createTreeNode(contacts[0]));
+                    node = await this.createTreeNode(contacts[0]);
                 } else {
                     if (
                         !systemAddresses
                         || !!!systemAddresses.length
                         || !systemAddresses.map((sa) => sa.Name).some((f) => f === plainMail)
                     ) {
-                        nodes.push(new TreeNode(plainMail, email));
+                        node = new TreeNode(plainMail, email);
                     }
                 }
+                node.selected = true;
+                nodes.push(node);
             }
-            this.state.nodes = nodes;
             this.emailChanged(nodes);
         }
+        return nodes;
     }
 
     public emailChanged(nodes: TreeNode[]): void {
-        this.state.currentNodes = nodes && !!nodes.length ? nodes : [];
-        super.provideValue(this.state.currentNodes.map((n) => n.id));
+        const emailNodes = nodes && !!nodes.length ? nodes : [];
+        super.provideValue(emailNodes.map((n) => n.id));
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
@@ -97,17 +102,15 @@ class Component extends FormInputComponent<string[], ComponentState> {
             KIXObjectType.CONTACT, null, loadingOptions, null, false
         );
 
-        this.state.nodes = [];
+        const nodes = [];
         if (searchValue && searchValue !== '') {
-            const nodes = [];
             for (const c of contacts.filter((co) => co.Email)) {
                 const node = await this.createTreeNode(c);
                 nodes.push(node);
             }
-            this.state.nodes = nodes;
         }
 
-        return this.state.nodes;
+        return nodes;
     }
 
     private async createTreeNode(contact: Contact): Promise<TreeNode> {

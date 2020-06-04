@@ -248,7 +248,7 @@ export class Server implements IServer {
                     Name: c.id,
                     Description: name,
                     Default: JSON.stringify(c),
-                    Context: serverConfig.NOTIFICATION_CLIENT_ID,
+                    Context: 'kix18-web-frontend',
                     ContextMetadata: c.type,
                     Type: 'String',
                     IsRequired: 0

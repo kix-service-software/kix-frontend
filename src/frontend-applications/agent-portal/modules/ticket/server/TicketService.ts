@@ -122,17 +122,23 @@ export class TicketAPIService extends KIXObjectAPIService {
             const articleParameter = await this.prepareArticleData(
                 token, clientRequestId, parameter, queueId, contactId
             );
-            parameter.push([TicketProperty.ARTICLES, articleParameter ? [new RequestObject(articleParameter)] : null]);
+
+            const ticketParameter = articleParameter ? parameter.filter(
+                (p) => !articleParameter.some((ap) => ap[0] === p[0])
+            ) : parameter;
+            ticketParameter.push(
+                [TicketProperty.ARTICLES, articleParameter ? [new RequestObject(articleParameter)] : null]
+            );
 
             const ticketId = await super.executeUpdateOrCreateRequest<number>(
-                token, clientRequestId, parameter, this.RESOURCE_URI, KIXObjectType.TICKET, 'TicketID', true
+                token, clientRequestId, ticketParameter, this.RESOURCE_URI, KIXObjectType.TICKET, 'TicketID', true
             ).catch((error: Error) => {
                 LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
                 throw new Error(error.Code, error.Message);
             });
 
             await this.createLinks(
-                token, clientRequestId, ticketId, this.getParameterValue(parameter, TicketProperty.LINK)
+                token, clientRequestId, ticketId, this.getParameterValue(ticketParameter, TicketProperty.LINK)
             );
 
             return ticketId;
@@ -179,17 +185,21 @@ export class TicketAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
+        const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
+        const articleParameter = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
+
+        const ticketParameter = articleParameter ? parameter.filter(
+            (p) => !articleParameter.some((ap) => ap[0] === p[0])
+        ) : parameter;
 
         const uri = this.buildUri(this.RESOURCE_URI, objectId);
         const ticketId = await super.executeUpdateOrCreateRequest<number>(
-            token, clientRequestId, parameter, uri, this.objectType, 'TicketID'
+            token, clientRequestId, ticketParameter, uri, this.objectType, 'TicketID'
         ).catch((error: Error) => {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
 
-        const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
-        const articleParameter = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
         if (articleParameter) {
             const articleUri = this.buildUri(this.RESOURCE_URI, objectId, 'articles');
             await super.executeUpdateOrCreateRequest<number>(
@@ -395,7 +405,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.STATE,
             KIXObjectProperty.CREATE_BY,
-            KIXObjectProperty.CHANGE_BY
+            KIXObjectProperty.CHANGE_BY,
+            TicketProperty.TICKET_ID
         ];
 
         let filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
@@ -429,7 +440,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.PRIORITY_ID,
             TicketProperty.LOCK_ID,
             TicketProperty.OWNER_ID,
-            TicketProperty.RESPONSIBLE_ID
+            TicketProperty.RESPONSIBLE_ID,
+            TicketProperty.STATE_TYPE
         ];
 
         const searchCriteria = criteria.filter(

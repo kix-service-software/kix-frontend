@@ -29,9 +29,7 @@ export class TableSortUtil {
 
                 let compare = 0;
                 if (dataType === DataType.DATE || dataType === DataType.DATE_TIME) {
-                    compare = SortUtil.compareValues(
-                        cellA.getValue().objectValue, cellB.getValue().objectValue, dataType
-                    );
+                    compare = SortUtil.compareValues(valueA, valueB, dataType);
                 } else if (isNaN(numberA) || isNaN(numberB)) {
                     compare = SortUtil.compareValues(valueA, valueB, dataType);
                 } else {

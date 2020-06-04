@@ -20,6 +20,12 @@ import { ValidationResult } from "../ValidationResult";
 import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
 import { KIXObjectService } from "../KIXObjectService";
 import { ExtendedDynamicFormManager } from "./ExtendedDynamicFormManager";
+import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
+import { FilterCriteria } from "../../../../../model/FilterCriteria";
+import { ConfigItemProperty } from "../../../../cmdb/model/ConfigItemProperty";
+import { SearchOperator } from "../../../../search/model/SearchOperator";
+import { FilterDataType } from "../../../../../model/FilterDataType";
+import { FilterType } from "../../../../../model/FilterType";
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -218,6 +224,14 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             const tree = await extendedManager.searchValues(property, searchValue, limit);
             if (tree) {
                 return tree;
+            } else {
+                const dfName = KIXObjectService.getDynamicFieldName(property);
+                if (dfName) {
+                    const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+                    if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                        return await this.getCIReferenceTree(dynamicField, searchValue, limit);
+                    }
+                }
             }
         }
 
@@ -278,7 +292,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public async isMultiselect(property: string): Promise<boolean> {
         for (const extendedManager of this.extendedFormManager) {
             const result = extendedManager.isMultiselect(property);
-            if (result) {
+            if (result !== undefined && result !== null) {
                 return result;
             }
         }
@@ -328,6 +342,38 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         return this.readPermissions.get(resource);
+    }
+
+    protected async getCIReferenceTree(
+        dynamicField: DynamicField, searchValue: string, limit?: number
+    ): Promise<TreeNode[]> {
+        const filter = [];
+
+        if (dynamicField.Config) {
+            const classes = dynamicField.Config.ITSMConfigItemClasses;
+            if (classes && Array.isArray(classes) && classes.length) {
+                filter.push(new FilterCriteria(
+                    ConfigItemProperty.CLASS_ID, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, classes.map((c) => Number(c))
+                ));
+            }
+
+            const depStates = dynamicField.Config.DeploymentStates;
+            if (depStates && Array.isArray(depStates) && depStates.length) {
+                filter.push(new FilterCriteria(
+                    ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN,
+                    FilterDataType.NUMERIC, FilterType.AND, depStates.map((d) => Number(d))
+                ));
+            }
+        }
+
+        const configItems = await KIXObjectService.search(KIXObjectType.CONFIG_ITEM, searchValue, limit, filter);
+
+        let tree: TreeNode[] = [];
+        if (Array.isArray(configItems)) {
+            tree = await KIXObjectService.prepareTree(configItems);
+        }
+        return tree;
     }
 
 }

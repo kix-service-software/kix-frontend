@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2020-05-05 09:50+0000\n"
+"PO-Revision-Date: 2020-05-26 14:50+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -298,9 +298,6 @@ msgid "Bulk Action"
 msgstr ""
 
 msgid "Button with 3 points = Here you can find further actions"
-msgstr ""
-
-msgid "Calendar"
 msgstr ""
 
 msgid "Cancel"
@@ -3239,7 +3236,7 @@ msgid "Run"
 msgstr ""
 
 msgid "running"
-msgstr ""
+msgstr "läuft"
 
 msgid "Saturday"
 msgstr ""
