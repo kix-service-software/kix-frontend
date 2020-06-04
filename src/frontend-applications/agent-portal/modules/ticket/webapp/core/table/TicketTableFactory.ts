@@ -123,12 +123,15 @@ export class TicketTableFactory extends TableFactory {
             ];
         }
 
+        let useDefaultColumns: boolean = false;
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(
                 null, null, null, KIXObjectType.TICKET, null, null, tableColumns, [], true);
             defaultToggle = true;
+            useDefaultColumns = true;
         } else if (!tableConfiguration.tableColumns || !tableConfiguration.tableColumns.length) {
             tableConfiguration.tableColumns = tableColumns;
+            useDefaultColumns = true;
         }
 
         if (defaultRouting) {
@@ -143,6 +146,12 @@ export class TicketTableFactory extends TableFactory {
         }
 
         tableConfiguration.objectType = KIXObjectType.TICKET;
+
+        for (const extendedFactory of this.extendedTableFactories) {
+            extendedFactory.modifiyTableConfiguation(tableConfiguration, useDefaultColumns);
+        }
+
+
         return tableConfiguration;
     }
 

@@ -71,11 +71,12 @@ export class ContextService {
         );
 
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
-            await this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
 
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
                 context.setObjectId(objectId);
             }
+
+            this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
 
             DialogService.getInstance().closeMainDialog();
             this.activeMainContext = context;
@@ -119,8 +120,8 @@ export class ContextService {
     public async setDialogContext(
         contextId: string, objectType?: KIXObjectType | string, contextMode?: ContextMode, objectId?: string | number,
         resetContext?: boolean, title?: string, singleTab?: boolean, icon?: string | ObjectIcon,
-        formId?: string, deleteForm: boolean = true
-    ): Promise<void> {
+        formId?: string, deleteForm: boolean = true, additionalInformation: Array<[string, any]> = []
+    ): Promise<Context> {
         const oldContext = this.getActiveContext();
 
         let context: Context = await ContextFactory.getInstance().getContext(
@@ -136,40 +137,56 @@ export class ContextService {
             }
         }
 
+        if (context) {
+            additionalInformation.forEach((ai) => context.setAdditionalInformation(ai[0], ai[1]));
+        }
+
         if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
-
-            this.activeDialogContext = context;
-            this.activeContextType = ContextType.DIALOG;
-
-            if (!formId) {
-                formId = await context.getFormId(contextMode, objectType, objectId);
-            }
-
-            if (objectId) {
-                await context.setObjectId(objectId);
-            }
-
-            if (formId) {
-                context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
-                if (deleteForm) {
-                    FormService.getInstance().deleteFormInstance(formId);
-                }
-                await FormService.getInstance().getFormInstance(formId);
-            }
-
-            await context.initContext();
-
-            DialogService.getInstance().openMainDialog(
-                context.getDescriptor().contextMode, context.getDescriptor().componentId,
-                objectType, title, icon, singleTab
-            );
-
-            this.serviceListener.forEach(
-                (sl) => sl.contextChanged(
-                    context.getDescriptor().contextId, context, context.getDescriptor().contextType, false, oldContext
-                )
+            this.handleDialogContext(
+                context, oldContext, formId, objectType, deleteForm, title, icon, singleTab, objectId
             );
         }
+
+        return context;
+    }
+
+    private async handleDialogContext(
+        context: Context, oldContext: Context, formId: string, objectType: KIXObjectType | string,
+        deleteForm: boolean, title: string, icon: ObjectIcon | string, singleTab: boolean, objectId?: string | number
+    ): Promise<void> {
+        this.activeDialogContext = context;
+        this.activeContextType = ContextType.DIALOG;
+
+        if (!formId) {
+            formId = await context.getFormId(context.getDescriptor().contextMode, objectType, context.getObjectId());
+        }
+
+        if (objectId) {
+            await context.setObjectId(objectId);
+        } else if (context.getObjectId()) {
+            await context.setObjectId(context.getObjectId());
+        }
+
+        if (formId) {
+            context.setAdditionalInformation(AdditionalContextInformation.FORM_ID, formId);
+            if (deleteForm) {
+                FormService.getInstance().deleteFormInstance(formId);
+            }
+            await FormService.getInstance().getFormInstance(formId);
+        }
+
+        await context.initContext();
+
+        DialogService.getInstance().openMainDialog(
+            context.getDescriptor().contextMode, context.getDescriptor().componentId,
+            objectType, title, icon, singleTab
+        );
+
+        this.serviceListener.forEach(
+            (sl) => sl.contextChanged(
+                context.getDescriptor().contextId, context, context.getDescriptor().contextType, false, oldContext
+            )
+        );
     }
 
     public closeDialogContext(): void {

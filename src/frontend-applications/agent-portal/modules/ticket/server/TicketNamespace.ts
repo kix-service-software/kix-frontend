@@ -20,6 +20,8 @@ import { TicketAPIService } from "./TicketService";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
 import { CacheService } from "../../../server/services/cache";
 
+import cookie = require('cookie');
+
 export class TicketNamespace extends SocketNameSpace {
 
     private static INSTANCE: TicketNamespace;
@@ -47,9 +49,14 @@ export class TicketNamespace extends SocketNameSpace {
         this.registerEventHandler(client, TicketEvent.REMOVE_ARTICLE_SEEN_FLAG, this.removeArticleSeenFlag.bind(this));
     }
 
-    private async loadArticleAttachment(data: LoadArticleAttachmentRequest): Promise<SocketResponse> {
+    private async loadArticleAttachment(
+        data: LoadArticleAttachmentRequest, client: SocketIO.Socket
+    ): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         const response = await TicketAPIService.getInstance().loadArticleAttachment(
-            data.token, data.ticketId, data.articleId, data.attachmentId
+            token, data.ticketId, data.articleId, data.attachmentId
         ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ATTACHMENT_LOADED,
@@ -60,9 +67,14 @@ export class TicketNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async loadArticleZipAttachment(data: LoadArticleZipAttachmentRequest): Promise<SocketResponse> {
+    private async loadArticleZipAttachment(
+        data: LoadArticleZipAttachmentRequest, client: SocketIO.Socket
+    ): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         const response = await TicketAPIService.getInstance().loadArticleZipAttachment(
-            data.token, data.ticketId, data.articleId
+            token, data.ticketId, data.articleId
         ).then((attachment) =>
             new SocketResponse(
                 TicketEvent.ARTICLE_ZIP_ATTACHMENT_LOADED,
@@ -73,9 +85,14 @@ export class TicketNamespace extends SocketNameSpace {
         return response;
     }
 
-    private async removeArticleSeenFlag(data: SetArticleSeenFlagRequest): Promise<SocketResponse> {
+    private async removeArticleSeenFlag(
+        data: SetArticleSeenFlagRequest, client: SocketIO.Socket
+    ): Promise<SocketResponse> {
+        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
+        const token = parsedCookie ? parsedCookie.token : '';
+
         const response = await TicketAPIService.getInstance().setArticleSeenFlag(
-            data.token, null, data.ticketId, data.articleId
+            token, null, data.ticketId, data.articleId
         ).then(() =>
             new SocketResponse(TicketEvent.REMOVE_ARTICLE_SEEN_FLAG_DONE, { requestId: data.requestId })
         ).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));

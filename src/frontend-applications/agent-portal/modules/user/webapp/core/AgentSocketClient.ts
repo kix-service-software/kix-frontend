@@ -60,7 +60,6 @@ export class AgentSocketClient extends SocketClient {
 
         const requestId = IdService.generateDateBasedId();
         const currentUserRequest = new GetCurrentUserRequest(
-            ClientStorageService.getToken(),
             requestId,
             ClientStorageService.getClientRequestId()
         );
@@ -105,7 +104,6 @@ export class AgentSocketClient extends SocketClient {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<PersonalSetting[]>((resolve, reject) => {
 
-            const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
 
             const timeout = window.setTimeout(() => {
@@ -130,7 +128,7 @@ export class AgentSocketClient extends SocketClient {
             });
 
             const request: ISocketRequest = {
-                requestId, token,
+                requestId,
                 clientRequestId: ClientStorageService.getClientRequestId()
             };
 
@@ -142,7 +140,6 @@ export class AgentSocketClient extends SocketClient {
         const requestId = IdService.generateDateBasedId();
 
         const preferencesRequest = new SetPreferencesRequest(
-            ClientStorageService.getToken(),
             requestId,
             ClientStorageService.getClientRequestId(),
             parameter

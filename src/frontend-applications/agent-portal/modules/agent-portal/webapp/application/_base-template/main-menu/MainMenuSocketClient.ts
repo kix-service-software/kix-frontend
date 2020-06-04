@@ -58,7 +58,6 @@ export class MainMenuSocketClient extends SocketClient {
                 reject('Timeout: ' + MainMenuEvent.LOAD_MENU_ENTRIES);
             }, socketTimeout);
 
-            const token = ClientStorageService.getToken();
             const requestId = IdService.generateDateBasedId();
 
             this.socket.on(MainMenuEvent.MENU_ENTRIES_LOADED, (result: MainMenuEntriesResponse) => {
@@ -78,7 +77,7 @@ export class MainMenuSocketClient extends SocketClient {
 
             this.socket.emit(
                 MainMenuEvent.LOAD_MENU_ENTRIES,
-                new MainMenuEntriesRequest(token, requestId, ClientStorageService.getClientRequestId())
+                new MainMenuEntriesRequest(requestId, ClientStorageService.getClientRequestId())
             );
         });
 

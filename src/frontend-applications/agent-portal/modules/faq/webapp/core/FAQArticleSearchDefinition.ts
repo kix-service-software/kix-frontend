@@ -117,48 +117,49 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
     public getFulltextCriteria(value: string): FilterCriteria[] {
         const criteria: FilterCriteria[] = [];
         if (value) {
+            value = `*${value}*`;
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.NUMBER, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                FAQArticleProperty.NUMBER, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
             ));
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.TITLE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                FAQArticleProperty.TITLE, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
             ));
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.LANGUAGE, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                FAQArticleProperty.LANGUAGE, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
             ));
 
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.KEYWORDS, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                FAQArticleProperty.KEYWORDS, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
             ));
 
             const encodedValue = BrowserUtil.encodeHTMLString(value);
 
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_1, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                FAQArticleProperty.FIELD_1, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
             ));
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_1, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, encodedValue
-            ));
-
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_2, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
-            ));
-            criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_2, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, encodedValue
+                FAQArticleProperty.FIELD_1, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
             ));
 
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_3, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                FAQArticleProperty.FIELD_2, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
             ));
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_3, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, encodedValue
+                FAQArticleProperty.FIELD_2, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
             ));
 
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_6, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, value
+                FAQArticleProperty.FIELD_3, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
             ));
             criteria.push(new FilterCriteria(
-                FAQArticleProperty.FIELD_6, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, encodedValue
+                FAQArticleProperty.FIELD_3, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
+            ));
+
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.FIELD_6, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, value
+            ));
+            criteria.push(new FilterCriteria(
+                FAQArticleProperty.FIELD_6, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, encodedValue
             ));
         }
         return criteria;

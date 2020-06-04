@@ -7,25 +7,23 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
 import { User } from "../../model/User";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { AgentService } from ".";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
 import { UserProperty } from "../../model/UserProperty";
 import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
 import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { ContactProperty } from "../../../customer/model/ContactProperty";
+import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class UserPlaceholderHandler implements IPlaceholderHandler {
+export class UserPlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'UserPlaceholderHandler';
-
-    public isHandlerFor(objectString: string): boolean {
-        return objectString === 'CURRENT';
-    }
+    public handlerId: string = '100-UserPlaceholderHandler';
+    protected objectStrings: string[] = [
+        'CURRENT'
+    ];
 
     public async replace(placeholder: string, user?: User, language: string = 'en'): Promise<string> {
         let result = '';

@@ -7,7 +7,6 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
 import { Ticket } from "../../model/Ticket";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
@@ -18,14 +17,11 @@ import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/Da
 import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
 import { Queue } from "../../model/Queue";
 import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class QueuePlaceholderHandler implements IPlaceholderHandler {
+export class QueuePlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'QueuePlaceholderHandler';
-
-    public isHandlerFor(objectString: string): boolean {
-        return false;
-    }
+    public handlerId: string = '300-QueuePlaceholderHandler';
 
     public async replace(placeholder: string, ticket?: Ticket, language: string = 'en'): Promise<string> {
         let result = '';

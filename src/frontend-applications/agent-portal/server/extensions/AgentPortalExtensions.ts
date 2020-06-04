@@ -31,6 +31,8 @@ export enum AgentPortalExtensions {
 
     LOCALE_EXTENSION = 'kix:locale',
 
-    EXTENDED_FORM_CONFIGURATION = 'kix:exended-form-configuration'
+    EXTENDED_FORM_CONFIGURATION = 'kix:exended-form-configuration',
+
+    MODIFY_CONFIGURATION = 'kix:modify-configuration'
 
 }

@@ -11,6 +11,7 @@ import { IConfiguration } from "../../model/configuration/IConfiguration";
 
 export interface IConfigurationExtension {
 
+    // TODO: obsolete
     getModuleId(): string;
 
     getDefaultConfiguration(): Promise<IConfiguration[]>;

@@ -7,7 +7,6 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../base-components/webapp/core/IPlaceholderHandler";
 import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
 import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
 import { KIXObject } from "../../../../model/kix/KIXObject";
@@ -15,11 +14,11 @@ import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
 import { DynamicFieldValue } from "../../model/DynamicFieldValue";
 import { CheckListItem } from "./CheckListItem";
 import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { ExtendedDynamicFieldPlaceHolderHandler } from "./ExtendedDynamicFieldPlaceHolderHandler";
+import { ExtendedDynamicFieldPlaceholderHandler } from "./ExtendedDynamicFieldPlaceholderHandler";
 import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler {
-
+export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHandler {
 
     private static INSTANCE: DynamicFieldValuePlaceholderHandler;
 
@@ -30,19 +29,16 @@ export class DynamicFieldValuePlaceholderHandler implements IPlaceholderHandler 
         return DynamicFieldValuePlaceholderHandler.INSTANCE;
     }
 
-    private constructor() { }
+    private extendedPlaceholderHandler: ExtendedDynamicFieldPlaceholderHandler[] = [];
 
-    private extendedPlaceholderHandler: ExtendedDynamicFieldPlaceHolderHandler[] = [];
+    public handlerId: string = '150-DynamicFieldValuePlaceholderHandler';
 
-    public handlerId: string = 'DynamicFieldValuePlaceholderHandler';
-    private objectTypes = [KIXObjectType.DYNAMIC_FIELD];
-
-    public addExtendedPlaceholderHandler(handler: ExtendedDynamicFieldPlaceHolderHandler): void {
+    public addExtendedPlaceholderHandler(handler: ExtendedDynamicFieldPlaceholderHandler): void {
         this.extendedPlaceholderHandler.push(handler);
     }
 
-    public isHandlerFor(objectType: KIXObjectType | string): boolean {
-        return this.objectTypes.some((os) => os === objectType);
+    public isHandlerForObjectType(objectType: KIXObjectType | string): boolean {
+        return objectType === KIXObjectType.DYNAMIC_FIELD;
     }
 
     public async replace(placeholder: string, object?: KIXObject, language?: string): Promise<string> {

@@ -28,6 +28,7 @@ import { FormFieldValue } from '../../../../../model/configuration/FormFieldValu
 import { IObjectReferenceHandler } from '../../core/IObjectReferenceHandler';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { IdService } from '../../../../../model/IdService';
 
 class Component {
 
@@ -35,8 +36,8 @@ class Component {
 
     private handler: IObjectReferenceHandler;
     private config: ObjectReferenceWidgetConfiguration;
-    private object: KIXObject;
     private loadTimeout: any;
+    private listenerId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -53,6 +54,22 @@ class Component {
         if (this.state.widgetConfiguration.configuration) {
             this.initWidget(context);
         }
+
+        this.listenerId = IdService.generateDateBasedId('referenced-objects-widget');
+        context.registerListener(this.listenerId, {
+            additionalInformationChanged: () => null,
+            explorerBarToggled: () => null,
+            filteredObjectListChanged: () => null,
+            objectListChanged: () => null,
+            scrollInformationChanged: () => null,
+            sidebarToggled: () => null,
+            objectChanged: () => this.createObjectTable(context)
+        });
+    }
+
+    public onDestroy(): void {
+        const context = ContextService.getInstance().getActiveContext();
+        context.unregisterListener(this.listenerId);
     }
 
     private async initWidget(context: Context): Promise<void> {
@@ -60,14 +77,13 @@ class Component {
         if (this.config && this.config.handlerId) {
             this.handler = ServiceRegistry.getObjectReferenceHandler(this.config.handlerId);
             if (this.handler) {
-                this.object = await context.getObject();
-                if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-                    this.createObjectTable();
+                this.createObjectTable(context);
 
+                if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
                     EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
                         eventSubscriberId: 'referenced-object-widget-' + this.handler.name,
                         eventPublished: () => {
-                            this.createObjectTable();
+                            this.createObjectTable(context);
                         }
                     });
                 } else if (context.getDescriptor().contextType === ContextType.DIALOG) {
@@ -83,9 +99,10 @@ class Component {
         }
     }
 
-    private async createObjectTable(): Promise<void> {
+    private async createObjectTable(context: Context): Promise<void> {
+        const object = await context.getObject();
         const objects = this.handler
-            ? await this.handler.determineObjects(this.object, this.config.handlerConfiguration)
+            ? await this.handler.determineObjects(object, this.config.handlerConfiguration)
             : [];
         this.createTable(this.handler.objectType, objects);
     }
@@ -101,9 +118,10 @@ class Component {
 
             this.loadTimeout = setTimeout(async () => {
                 const context = ContextService.getInstance().getActiveContext();
+                const object = await context.getObject();
                 const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
                 const objects = await this.handler.determineObjectsByForm(
-                    formId, this.object, this.config.handlerConfiguration
+                    formId, object, this.config.handlerConfiguration
                 );
                 this.createTable(this.handler.objectType, objects);
                 this.loadTimeout = null;

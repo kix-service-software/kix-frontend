@@ -155,7 +155,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.loading = true;
         const nodes = await this.state.searchCallback(
             this.state.autocompleteConfiguration.limit, this.state.filterValue
-        );
+        ) || [];
 
         this.handler.setTree(nodes, null, true);
         this.state.tree = nodes;

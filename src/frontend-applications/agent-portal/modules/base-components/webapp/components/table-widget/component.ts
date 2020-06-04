@@ -24,6 +24,7 @@ import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyF
 import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
 import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
 import { ContextUIEvent } from "../../core/ContextUIEvent";
+import { ApplicationEvent } from "../../core/ApplicationEvent";
 
 class Component {
 
@@ -60,7 +61,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.filterPlaceHolder = await TranslationService.translate(this.state.filterPlaceHolder);
+        this.state.filterPlaceholder = await TranslationService.translate(this.state.filterPlaceholder);
         this.additionalFilterCriteria = [];
         const context = ContextService.getInstance().getActiveContext(this.contextType);
 
@@ -92,6 +93,12 @@ class Component {
                         this.state.loading = true;
                     }
 
+                    if (eventId === ApplicationEvent.OBJECT_CREATED || eventId === ApplicationEvent.OBJECT_UPDATED) {
+                        if (this.state.table && data.objectType === this.state.table.getObjectType()) {
+                            this.state.table.reload(true);
+                        }
+                    }
+
                     if (data && this.state.table && data.tableId === this.state.table.getTableId()) {
                         if (eventId === TableEvent.RELOAD) {
                             this.state.loading = true;
@@ -121,6 +128,8 @@ class Component {
                 }
             };
 
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
+            EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.TABLE_READY, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
             EventService.getInstance().subscribe(TableEvent.RELOADED, this.subscriber);

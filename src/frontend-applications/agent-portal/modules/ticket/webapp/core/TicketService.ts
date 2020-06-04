@@ -337,7 +337,15 @@ export class TicketService extends KIXObjectService<Ticket> {
             inlineAttachments.forEach(
                 (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
             );
-            return [Buffer.from(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
+
+            let content = Buffer.from(AttachmentWithContent.Content, 'base64').toString('utf8');
+            const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
+            if (match && match.length >= 3) {
+                console.table(match);
+                content = match[2];
+            }
+
+            return [content, inlineContent];
         } else {
             return [article.Body, null];
         }

@@ -19,6 +19,10 @@ export interface IServerConfiguration {
 
     FRONTEND_URL: string;
 
+    FRONTEND_TOKEN_SECRET: string;
+
+    CHECK_TOKEN_ORIGIN: boolean;
+
     NOTIFICATION_URL: string;
 
     NOTIFICATION_INTERVAL: number;
@@ -46,5 +50,7 @@ export interface IServerConfiguration {
     REDIS_CACHE_PORT: number;
 
     REDIS_CACHE_HOST: string;
+
+    INSTALLED_BUILD: number;
 
 }

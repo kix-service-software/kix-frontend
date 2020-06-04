@@ -33,7 +33,6 @@ import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptio
 import { FilterCriteria } from "../../../../model/FilterCriteria";
 import { SearchProperty } from "../../../search/model/SearchProperty";
 import { SearchOperator } from "../../../search/model/SearchOperator";
-import { VersionProperty } from "../../../cmdb/model/VersionProperty";
 import { FilterType } from "../../../../model/FilterType";
 import { FilterDataType } from "../../../../model/FilterDataType";
 import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
@@ -254,7 +253,8 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public async handleDynamicFieldValues(
-        formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService
+        formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService,
+        formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
         for (const field of fields) {
@@ -290,16 +290,20 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                 if (dynamicField.FieldType === DynamicFieldTypes.SELECTION ||
                     dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE
                 ) {
-                    field.defaultValue = new FormFieldValue(dfValue);
-                } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST && dfValue && dfValue[0]) {
-                    field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
+                    formFieldValues.set(field.instanceId, new FormFieldValue(dfValue));
+                } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
+                    if (dfValue && dfValue[0]) {
+                        field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
+                    } else {
+                        field.defaultValue = new FormFieldValue(JSON.parse(dynamicField.Config.DefaultValue));
+                    }
                 } else if (dfValue && Array.isArray(dfValue)) {
                     for (let i = 0; i < dfValue.length; i++) {
                         if (i === 0) {
-                            field.defaultValue = new FormFieldValue(dfValue[i], true);
+                            formFieldValues.set(field.instanceId, new FormFieldValue(dfValue[i]));
                         } else {
                             const newField = formService.getNewFormField(field);
-                            newField.defaultValue = new FormFieldValue(dfValue[i], true);
+                            formFieldValues.set(newField.instanceId, new FormFieldValue(dfValue[i]));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index + i, 0, newField);
                         }
@@ -313,13 +317,15 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
                         for (let i = 1; i < count; i++) {
                             const newField = formService.getNewFormField(field);
-                            newField.defaultValue = new FormFieldValue(null, false);
+                            formFieldValues.set(newField.instanceId, new FormFieldValue(null, false));
                             const index = formFields.findIndex((f) => field.instanceId === f.instanceId);
                             formFields.splice(index, 0, newField);
                         }
                     } else if (field.countMin === 0 && !dfValue.length) {
                         field.empty = true;
                     }
+                } else {
+                    formFieldValues.set(field.instanceId, new FormFieldValue(dfValue));
                 }
             }
         }

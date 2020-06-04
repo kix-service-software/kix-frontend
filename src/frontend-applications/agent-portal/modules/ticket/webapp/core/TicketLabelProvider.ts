@@ -103,22 +103,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.CREATED:
             case TicketProperty.CHANGED:
             case TicketProperty.PENDING_TIME:
-            case TicketProperty.ESCALATION_DESTINATION_DATE:
-            case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_DATE:
-            case TicketProperty.UPDATE_TIME_DESTINATION_DATE:
-            case TicketProperty.SOLUTION_TIME_DESTINATION_DATE:
                 if (value) {
                     displayValue = translatable ?
                         await DateTimeUtil.getLocalDateTimeString(displayValue) : displayValue;
                 }
                 break;
-            case TicketProperty.ESCALATION_RESPONSE_TIME:
-            case TicketProperty.ESCALATION_UPDATE_TIME:
-            case TicketProperty.ESCALATION_SOLUTION_TIME:
-            case TicketProperty.ESCALATION_DESTINATION_TIME:
-            case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_TIME:
-            case TicketProperty.UPDATE_TIME_DESTINATION_TIME:
-            case TicketProperty.SOLUTION_TIME_DESTINATION_TIME:
             case TicketProperty.CREATED_TIME_UNIX:
                 if (displayValue) {
                     displayValue = translatable
@@ -159,33 +148,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                     displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue));
                 }
                 break;
-            case TicketProperty.ESCALATION_TIME_WORKING_TIME:
-            case TicketProperty.ESCALATION_TIME:
-            case TicketProperty.FIRST_RESPONSE_TIME_WORKING_TIME:
-            case TicketProperty.FIRST_RESPONSE_TIME:
-            case TicketProperty.UPDATE_TIME_WORKING_TIME:
-            case TicketProperty.UPDATE_TIME:
-            case TicketProperty.SOLUTION_TIME_WORKING_TIME:
-            case TicketProperty.SOLUTION_TIME:
-                if (value) {
-                    displayValue = DateTimeUtil.calculateTimeInterval(Number(displayValue) * 1000);
-                }
-                break;
             case TicketProperty.UNSEEN:
                 displayValue = value ? 'Translatable#Unread Articles' : '';
                 break;
             case TicketProperty.ARCHIVE_FLAG:
                 displayValue = displayValue && displayValue === 'y' ? 'Translatable#Yes' : 'Translatable#No';
-                break;
-            case TicketProperty.FIRST_RESPONSE_TIME_ESCALATION:
-            case TicketProperty.FIRST_RESPONSE_TIME_NOTIFICATION:
-            case TicketProperty.UPDATE_TIME_ESCALATION:
-            case TicketProperty.UPDATE_TIME_NOTIFICATION:
-            case TicketProperty.SOLUTION_TIME_ESCALATION:
-            case TicketProperty.SOLUTION_TIME_NOTIFICATION:
-                if (value) {
-                    displayValue = displayValue ? 'Translatable#Yes' : 'Translatable#No';
-                }
                 break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
@@ -232,9 +199,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.SERVICE_ID:
                 displayValue = 'Translatable#Service';
                 break;
-            case TicketProperty.SLA_ID:
-                displayValue = 'Translatable#SLA';
-                break;
             case TicketProperty.OWNER_ID:
                 displayValue = 'Translatable#Owner';
                 break;
@@ -260,18 +224,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Value;
                 }
-                break;
-            case TicketProperty.ESCALATION_TIME:
-                displayValue = 'Translatable#Escalation time';
-                break;
-            case TicketProperty.ESCALATION_RESPONSE_TIME:
-                displayValue = 'Translatable#Response time';
-                break;
-            case TicketProperty.ESCALATION_UPDATE_TIME:
-                displayValue = 'Translatable#Update time';
-                break;
-            case TicketProperty.ESCALATION_SOLUTION_TIME:
-                displayValue = 'Translatable#Solution time';
                 break;
             case TicketProperty.TICKET_FLAG:
                 displayValue = 'Translatable#Ticket Flags';
@@ -521,9 +473,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.SERVICE_ID:
                 icons.push(new ObjectIcon(TicketProperty.SERVICE_ID, value));
                 break;
-            case TicketProperty.SLA_ID:
-                icons.push(new ObjectIcon(TicketProperty.SLA_ID, value));
-                break;
             case TicketProperty.LOCK_ID:
                 value === 2
                     ? icons.push('kix-icon-lock-close')
@@ -554,7 +503,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
             case TicketProperty.TYPE_ID:
-            case TicketProperty.SLA_ID:
             case TicketProperty.SERVICE_ID:
             case TicketProperty.ARTICLES:
             case TicketProperty.HISTORY:

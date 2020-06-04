@@ -15,7 +15,13 @@ export abstract class KIXObjectFactory<T extends KIXObject> implements IKIXObjec
 
     public abstract create(object: T): Promise<T>;
 
+    protected objectConstructor: Array<new (object: any) => any> = [];
+
     protected constructor() { }
+
+    public registerObjectConstructor(objectConstructor: new (object: any) => any): void {
+        this.objectConstructor.push(objectConstructor);
+    }
 
     public cleanupProperties(target: T, source: T): T {
         const propertiesToDelete: string[] = [];

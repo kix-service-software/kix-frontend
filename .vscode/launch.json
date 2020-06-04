@@ -57,8 +57,8 @@
                 "ts:ts-node/register",
                 "--require",
                 "source-map-support/register",
-                "'tests/**/*.test.ts'",
-                "'src/**/*.test.ts'"
+                "tests/**/*.test.ts",
+                "src/**/*.test.ts"
             ],
             "env": {
                 "NODE_ENV": "test",

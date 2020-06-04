@@ -224,7 +224,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
                         ff = this.getNewFormField(formField);
                         formFields.push(ff);
                     }
-                    await this.setDataValue(ff, pd, index, formFieldValues);
+                    this.setDataValue(ff, pd, index, formFieldValues);
                     await this.setDataChildren(ff, pd, formFieldValues);
                 }
                 index++;
@@ -235,10 +235,10 @@ export class ConfigItemFormService extends KIXObjectFormService {
         return formFields;
     }
 
-    private async setDataValue(
+    private setDataValue(
         ff: FormFieldConfiguration, pd: PreparedData, index: number, formFieldValues: Map<string, FormFieldValue<any>>
-    ): Promise<void> {
-        let value = await this.getDataValue(ff, pd);
+    ): void {
+        let value = pd.Value;
         if (value && value !== '') {
             ff.empty = false;
         }
@@ -279,57 +279,6 @@ export class ConfigItemFormService extends KIXObjectFormService {
             }
             ff.children = newChildren;
         }
-    }
-
-    private async getDataValue(formField: FormFieldConfiguration, preparedData: PreparedData): Promise<any> {
-        let value;
-        switch (preparedData.Type) {
-            case 'GeneralCatalog':
-                const gcItem = await KIXObjectService.loadObjects<GeneralCatalogItem>(
-                    KIXObjectType.GENERAL_CATALOG_ITEM, [Number(preparedData.Value)], null, null, false
-                );
-                if (gcItem && !!gcItem.length) {
-                    value = gcItem[0].ItemID;
-                } else {
-                    value = preparedData.Value;
-                }
-                break;
-            case 'Contact':
-                const contacts = await KIXObjectService.loadObjects<Contact>(
-                    KIXObjectType.CONTACT, [preparedData.Value], null
-                );
-                value = contacts && !!contacts.length ? preparedData.Value : null;
-                break;
-            case 'Organisation':
-                const organisations = await KIXObjectService.loadObjects<Organisation>(
-                    KIXObjectType.ORGANISATION, [preparedData.Value], null
-                );
-                if (organisations && !!organisations.length) {
-                    value = organisations[0].ID;
-                } else {
-                    value = preparedData.Value;
-                }
-                break;
-            case 'CIClassReference':
-                const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-                    KIXObjectType.CONFIG_ITEM, [Number(preparedData.Value)], null, null, false
-                );
-                if (configItems && !!configItems.length) {
-                    value = configItems[0].ConfigItemID;
-                } else {
-                    value = preparedData.Value;
-                }
-                break;
-            case 'Date':
-            case 'DateTime':
-            case 'Attachment':
-                value = preparedData.Value;
-                break;
-            default:
-                value = preparedData.DisplayValue ? preparedData.DisplayValue
-                    : preparedData.Value ? preparedData.Value.toString() : null;
-        }
-        return value;
     }
 
     public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {

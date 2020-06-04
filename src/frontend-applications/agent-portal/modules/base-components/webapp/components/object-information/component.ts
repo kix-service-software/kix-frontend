@@ -12,7 +12,7 @@ import { ComponentInput } from './ComponentInput';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private routingConfigurations: Array<[string, RoutingConfiguration]>;
@@ -35,7 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (!this.state.properties) {
                 this.state.properties = [];
                 for (const key in object) {
-                    if (object[key]) {
+                    if (object[key] !== undefined) {
                         this.state.properties.push(key);
                     }
                 }

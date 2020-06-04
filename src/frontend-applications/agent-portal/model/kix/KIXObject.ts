@@ -43,14 +43,13 @@ export abstract class KIXObject<T = any> {
     public constructor(object?: KIXObject) {
         this.displayValues = [];
         if (object) {
+            for (const key in object) {
+                if (typeof object[key] !== 'undefined') {
+                    this[key] = object[key];
+                }
+            }
+
             this.displayValues = object.displayValues ? object.displayValues : [];
-            this.ConfiguredPermissions = object.ConfiguredPermissions;
-            this.CreateBy = object.CreateBy;
-            this.ChangeBy = object.ChangeBy;
-            this.CreateTime = object.CreateTime;
-            this.ChangeTime = object.ChangeTime;
-            this.ValidID = object.ValidID;
-            this.Comment = object.Comment;
             this.DynamicFields = object.DynamicFields
                 ? object.DynamicFields.map((df) => new DynamicFieldValue(df))
                 : [];

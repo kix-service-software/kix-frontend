@@ -83,7 +83,7 @@ export class TicketJobFilterManager extends AbstractDynamicFormManager {
             ? [
                 ArticleProperty.SENDER_TYPE_ID, ArticleProperty.CHANNEL_ID,
                 ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.FROM,
-                ArticleProperty.SUBJECT, ArticleProperty.BODY
+                ArticleProperty.SUBJECT, ArticleProperty.BODY, ArticleProperty.CUSTOMER_VISIBLE
             ]
             : [];
 
@@ -153,6 +153,7 @@ export class TicketJobFilterManager extends AbstractDynamicFormManager {
             case TicketProperty.RESPONSIBLE_ID:
             case ArticleProperty.SENDER_TYPE_ID:
             case ArticleProperty.CHANNEL_ID:
+            case ArticleProperty.CUSTOMER_VISIBLE:
                 return InputFieldTypes.DROPDOWN;
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.CONTACT_ID:
@@ -207,6 +208,12 @@ export class TicketJobFilterManager extends AbstractDynamicFormManager {
                     );
                     nodes = await KIXObjectService.prepareTree(contacts);
                 }
+                break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                nodes = [
+                    new TreeNode(0, 'No'),
+                    new TreeNode(1, 'Yes')
+                ];
                 break;
             default:
                 nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);

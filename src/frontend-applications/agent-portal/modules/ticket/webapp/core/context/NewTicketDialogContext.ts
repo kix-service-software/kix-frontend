@@ -37,6 +37,12 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
         await FormService.getInstance().registerFormInstanceListener(formId, this);
     }
 
+    public reset(refresh?: boolean): void {
+        super.reset();
+        this.contact = null;
+        this.organisation = null;
+    }
+
     public updateForm(): void {
         return;
     }
@@ -67,7 +73,7 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
         } else if (kixObjectType === KIXObjectType.ORGANISATION) {
             object = this.organisation;
         } else if (kixObjectType === KIXObjectType.CONTACT) {
-            object = this.contact;
+            object = this.contact || this.getAdditionalInformation(KIXObjectType.CONTACT);
         }
         return object;
     }

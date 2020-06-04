@@ -7,7 +7,7 @@
     <meta name="generator" content="https://github.com/raml2html/raml2html {{ config.raml2HtmlVersion }}">
 
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/default.min.css">    
     <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
@@ -20,6 +20,10 @@
       {% include "./styles.css" %}
       {% include "./plugins/json-browse.css" %}
     </style>
+
+    <link rel="stylesheet" href="static/prism.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script type="text/javascript" src="static/prism.js"></script>
   </head>
 
   <body data-spy="scroll" data-target="#sidebar">
@@ -50,6 +54,7 @@
           </div>
 
           <div class="chapter">
+          <h2 id="resources"><a href="#resources">Extensions & Components</a></h2>
             {% for resource in resources %}
               <div class="panel panel-default resource">
                 <div class="panel-heading">
@@ -78,7 +83,7 @@
           <div id="sidebar" class="hidden-print affix" role="complementary">
             <ul class="nav nav-pills nav-stacked">
               {% for resource in resources %}
-                <li><a href="#{{ resource.uniqueId}}">{% if resource.displayName %}{{ resource.displayName }}{% else %}{{ resource.relativeUri }}{% endif %}</a></li>
+                <li><a class="nav-resource" href="#{{ resource.uniqueId}}">{% if resource.displayName %}{{ resource.displayName }}{% else %}{{ resource.relativeUri }}{% endif %}</a></li>
               {% endfor %}
             </ul>
           </div>

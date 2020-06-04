@@ -13,7 +13,7 @@ import { LogFile } from "../../../model/LogFile";
 export class LogFileTableCSSHandler implements ITableCSSHandler<LogFile> {
 
     public async getRowCSSClasses(logFile: LogFile): Promise<string[]> {
-        return ['linked-row'];
+        return ['log-download'];
     }
 
     public async getValueCSSClasses(logFile: LogFile, value: TableValue): Promise<string[]> {

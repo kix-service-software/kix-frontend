@@ -216,21 +216,10 @@ export class TicketDetailsDataBuilder {
             case TicketProperty.CREATED:
             case TicketProperty.CHANGED:
             case TicketProperty.PENDING_TIME:
-            case TicketProperty.ESCALATION_DESTINATION_DATE:
-            case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_DATE:
-            case TicketProperty.UPDATE_TIME_DESTINATION_DATE:
-            case TicketProperty.SOLUTION_TIME_DESTINATION_DATE:
                 if (value) {
                     displayValue = await DateTimeAPIUtil.getLocalDateTimeString(token, displayValue);
                 }
                 break;
-            case TicketProperty.ESCALATION_RESPONSE_TIME:
-            case TicketProperty.ESCALATION_UPDATE_TIME:
-            case TicketProperty.ESCALATION_SOLUTION_TIME:
-            case TicketProperty.ESCALATION_DESTINATION_TIME:
-            case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_TIME:
-            case TicketProperty.UPDATE_TIME_DESTINATION_TIME:
-            case TicketProperty.SOLUTION_TIME_DESTINATION_TIME:
             case TicketProperty.CREATED_TIME_UNIX:
                 if (displayValue) {
                     displayValue = await DateTimeAPIUtil.getLocalDateTimeString(token, Number(displayValue) * 1000);
@@ -257,28 +246,6 @@ export class TicketDetailsDataBuilder {
             case TicketProperty.AGE:
                 if (value) {
                     displayValue = DateTimeAPIUtil.calculateTimeInterval(Number(displayValue));
-                }
-                break;
-            case TicketProperty.ESCALATION_TIME_WORKING_TIME:
-            case TicketProperty.ESCALATION_TIME:
-            case TicketProperty.FIRST_RESPONSE_TIME_WORKING_TIME:
-            case TicketProperty.FIRST_RESPONSE_TIME:
-            case TicketProperty.UPDATE_TIME_WORKING_TIME:
-            case TicketProperty.UPDATE_TIME:
-            case TicketProperty.SOLUTION_TIME_WORKING_TIME:
-            case TicketProperty.SOLUTION_TIME:
-                if (value) {
-                    displayValue = DateTimeAPIUtil.calculateTimeInterval(Number(displayValue) * 1000);
-                }
-                break;
-            case TicketProperty.FIRST_RESPONSE_TIME_ESCALATION:
-            case TicketProperty.FIRST_RESPONSE_TIME_NOTIFICATION:
-            case TicketProperty.UPDATE_TIME_ESCALATION:
-            case TicketProperty.UPDATE_TIME_NOTIFICATION:
-            case TicketProperty.SOLUTION_TIME_ESCALATION:
-            case TicketProperty.SOLUTION_TIME_NOTIFICATION:
-                if (value) {
-                    displayValue = displayValue === true ? 'Translatable#Yes' : 'Translatable#No';
                 }
                 break;
             default:
@@ -343,9 +310,6 @@ export class TicketDetailsDataBuilder {
             case TicketProperty.SERVICE_ID:
                 displayValue = 'Translatable#Service';
                 break;
-            case TicketProperty.SLA_ID:
-                displayValue = 'Translatable#SLA';
-                break;
             case TicketProperty.OWNER_ID:
                 displayValue = 'Translatable#Owner';
                 break;
@@ -372,18 +336,6 @@ export class TicketDetailsDataBuilder {
                 if (hookConfig && hookConfig.length) {
                     displayValue = hookConfig[0].Value;
                 }
-                break;
-            case TicketProperty.ESCALATION_TIME:
-                displayValue = 'Translatable#Escalation time';
-                break;
-            case TicketProperty.ESCALATION_RESPONSE_TIME:
-                displayValue = 'Translatable#Response time';
-                break;
-            case TicketProperty.ESCALATION_UPDATE_TIME:
-                displayValue = 'Translatable#Update time';
-                break;
-            case TicketProperty.ESCALATION_SOLUTION_TIME:
-                displayValue = 'Translatable#Solution time';
                 break;
             case TicketProperty.TICKET_FLAG:
                 displayValue = 'Translatable#Ticket Flags';

@@ -7,7 +7,7 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../../modules/base-components/webapp/core/IPlaceholderHandler";
+import { IPlaceholderHandler } from "../../../base-components/webapp/core/IPlaceholderHandler";
 import { Ticket } from "../../model/Ticket";
 import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
 import { SortUtil } from "../../../../model/SortUtil";
@@ -38,11 +38,12 @@ import { ContactPlaceholderHandler } from "../../../customer/webapp/core/Contact
 import {
     DynamicFieldValuePlaceholderHandler
 } from "../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler";
+import { AbstractPlaceholderHandler } from "../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler";
 
-export class TicketPlaceholderHandler implements IPlaceholderHandler {
+export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
-    public handlerId: string = 'TicketPlaceholderHandler';
-    private objectStrings = [
+    public handlerId: string = '050-TicketPlaceholderHandler';
+    protected objectStrings: string[] = [
         'TICKET',
         'ARTICLE', 'FIRST', 'LAST', 'CUSTOMER', 'AGENT',
         'OWNER', 'TICKETOWNER', 'RESPONSIBLE', 'TICKETRESPONSIBLE',
@@ -50,14 +51,28 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
         'QUEUE'
     ];
 
-    public isHandlerFor(objectString: string): boolean {
-        return this.objectStrings.some((os) => os === objectString);
+    private static INSTANCE: TicketPlaceholderHandler;
+
+    public static getInstance(): TicketPlaceholderHandler {
+        if (!TicketPlaceholderHandler.INSTANCE) {
+            TicketPlaceholderHandler.INSTANCE = new TicketPlaceholderHandler();
+        }
+        return TicketPlaceholderHandler.INSTANCE;
+    }
+
+    private extendedPlaceholderHandler: IPlaceholderHandler[] = [];
+
+    public isHandlerForObjectType(objectType: KIXObjectType | string): boolean {
+        return objectType === KIXObjectType.TICKET;
+    }
+
+    public addExtendedPlaceholderHandler(handler: IPlaceholderHandler): void {
+        this.extendedPlaceholderHandler.push(handler);
     }
 
     public async replace(placeholder: string, ticket?: Ticket, language?: string): Promise<string> {
         let result = '';
         const objectString = PlaceholderService.getInstance().getObjectString(placeholder);
-        const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
         if (!ticket) {
             ticket = await this.getTicket();
         }
@@ -69,7 +84,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
             if (attribute) {
                 switch (objectString) {
                     case 'TICKET':
-                        result = await this.getTicketValue(attribute, ticket, language, optionsString);
+                        result = await this.getTicketValue(attribute, ticket, language, placeholder);
                         break;
                     case 'FIRST':
                     case 'LAST':
@@ -89,7 +104,7 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                     case 'AGENT':
                         if (ticket.Articles && !!ticket.Articles.length) {
                             const relevantArticles = ticket.Articles.filter(
-                                (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'customer')
+                                (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'external')
                             );
                             const lastArticle = SortUtil.sortObjects(
                                 relevantArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER, SortOrder.DOWN
@@ -187,13 +202,27 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
         return result;
     }
 
-    private async getTicketValue(attribute: string, ticket?: Ticket, language?: string, optionsString?: string) {
+    private async getTicketValue(attribute: string, ticket?: Ticket, language?: string, placeholder?: string) {
         let result = '';
+        let normalTicketAttribut: boolean = true;
+        const optionsString: string = PlaceholderService.getInstance().getOptionsString(placeholder);
+
         if (
             PlaceholderService.getInstance().isDynamicFieldAttribute(attribute) && DynamicFieldValuePlaceholderHandler
         ) {
             result = await DynamicFieldValuePlaceholderHandler.getInstance().replaceDFValue(ticket, optionsString);
-        } else if (this.isKnownProperty(attribute)) {
+            normalTicketAttribut = false;
+        } else if (this.extendedPlaceholderHandler.length && placeholder) {
+            const handler = SortUtil.sortObjects(this.extendedPlaceholderHandler, 'handlerId').find(
+                (ph) => ph.isHandlerFor(placeholder)
+            );
+            if (handler) {
+                result = await handler.replace(placeholder, ticket, language);
+                normalTicketAttribut = false;
+            }
+        }
+
+        if (normalTicketAttribut && this.isKnownProperty(attribute)) {
             switch (attribute) {
                 case TicketProperty.STATE_ID:
                 case TicketProperty.QUEUE_ID:
@@ -203,7 +232,6 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                 case TicketProperty.CONTACT_ID:
                 case TicketProperty.OWNER_ID:
                 case TicketProperty.TYPE_ID:
-                case TicketProperty.SLA_ID:
                 case TicketProperty.SERVICE_ID:
                 case TicketProperty.RESPONSIBLE_ID:
                 case TicketProperty.TICKET_ID:
@@ -212,19 +240,8 @@ export class TicketPlaceholderHandler implements IPlaceholderHandler {
                 case TicketProperty.CREATED:
                 case TicketProperty.CHANGED:
                 case TicketProperty.PENDING_TIME:
-                case TicketProperty.ESCALATION_DESTINATION_DATE:
-                case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_DATE:
-                case TicketProperty.UPDATE_TIME_DESTINATION_DATE:
-                case TicketProperty.SOLUTION_TIME_DESTINATION_DATE:
                     result = await DateTimeUtil.getLocalDateTimeString(ticket[attribute], language);
                     break;
-                case TicketProperty.ESCALATION_RESPONSE_TIME:
-                case TicketProperty.ESCALATION_UPDATE_TIME:
-                case TicketProperty.ESCALATION_SOLUTION_TIME:
-                case TicketProperty.ESCALATION_DESTINATION_TIME:
-                case TicketProperty.FIRST_RESPONSE_TIME_DESTINATION_TIME:
-                case TicketProperty.UPDATE_TIME_DESTINATION_TIME:
-                case TicketProperty.SOLUTION_TIME_DESTINATION_TIME:
                 case TicketProperty.CREATED_TIME_UNIX:
                     if (Number.isInteger(Number(ticket[attribute]))) {
                         result = await DateTimeUtil.getLocalDateTimeString(Number(ticket[attribute]) * 1000, language);

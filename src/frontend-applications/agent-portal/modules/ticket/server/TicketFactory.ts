@@ -10,9 +10,6 @@
 import { ObjectFactory } from "../../../server/model/ObjectFactory";
 import { Ticket } from "../model/Ticket";
 import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Article } from "../model/Article";
-import { TicketHistory } from "../model/TicketHistory";
-import { Link } from "../../links/model/Link";
 
 export class TicketFactory extends ObjectFactory<Ticket> {
 
@@ -22,21 +19,6 @@ export class TicketFactory extends ObjectFactory<Ticket> {
 
     public async create(ticket: Ticket, token: string): Promise<Ticket> {
         const newTicket = new Ticket(ticket);
-
-        newTicket.Articles = ticket.Articles
-            ? ticket.Articles.map((a) => new Article(a))
-            : [];
-
-        newTicket.Links = ticket.Links
-            ? ticket.Links.map((l) => new Link(l))
-            : [];
-
-        newTicket.History = ticket.History
-            ? ticket.History.map((th) => new TicketHistory(th))
-            : [];
-
-        newTicket.History.sort((a, b) => b.HistoryID - a.HistoryID);
-
         return newTicket;
     }
 

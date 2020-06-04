@@ -217,7 +217,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-organisation',
-                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', true,
+                'Translatable#Organisation', TicketProperty.ORGANISATION_ID, 'ticket-input-organisation', false,
                 'Translatable#Helptext_Tickets_TicketEdit_Organisation'
             )
         );
