@@ -201,7 +201,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 for (const i of items) {
                     const text = await LabelService.getInstance().getObjectText(i);
                     nodes.push(new TreeNode(
-                        i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
+                        i.ItemID, text, new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
                         undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,
                         i.ValidID === 1 || invalidClickable,

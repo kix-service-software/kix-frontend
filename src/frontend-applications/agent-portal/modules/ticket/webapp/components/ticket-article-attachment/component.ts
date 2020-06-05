@@ -26,7 +26,7 @@ class ArticleAttachmentComponent {
         this.state.article = input.article;
 
         if (this.state.attachment) {
-            this.state.icon = new ObjectIcon('MIMEType', this.state.attachment.ContentType);
+            this.state.icon = new ObjectIcon(null, 'MIMEType', this.state.attachment.ContentType);
         }
     }
 

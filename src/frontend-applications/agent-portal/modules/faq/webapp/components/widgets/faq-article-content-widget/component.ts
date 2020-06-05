@@ -108,7 +108,7 @@ class Component {
         const idx = fileName.lastIndexOf('.');
         if (idx >= 0) {
             const extension = fileName.substring(idx + 1, fileName.length);
-            return new ObjectIcon('Filetype', extension);
+            return new ObjectIcon(null, 'Filetype', extension);
         }
         return null;
     }

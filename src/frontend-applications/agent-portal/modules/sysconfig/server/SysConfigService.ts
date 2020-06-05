@@ -9,8 +9,6 @@
 
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { SysConfigOptionDefinitionFactory } from './SysConfigOptionDefinitionFactory';
-import { SysConfigOptionFactory } from './SysConfigOptionFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
@@ -40,7 +38,7 @@ export class SysConfigService extends KIXObjectAPIService {
     public objectType: KIXObjectType | string = KIXObjectType.SYS_CONFIG_OPTION;
 
     private constructor() {
-        super([new SysConfigOptionFactory(), new SysConfigOptionDefinitionFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -57,13 +55,14 @@ export class SysConfigService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
             objects = await super.load<SysConfigOption>(
-                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption'
+                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption',
+                SysConfigOption
             );
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
             objects = await super.load<SysConfigOptionDefinition>(
                 token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
-                loadingOptions, objectIds, 'SysConfigOptionDefinition'
+                loadingOptions, objectIds, 'SysConfigOptionDefinition', SysConfigOptionDefinition
             );
         }
 

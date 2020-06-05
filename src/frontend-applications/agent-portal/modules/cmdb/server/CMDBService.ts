@@ -38,10 +38,9 @@ import { CreateConfigItem } from './api/CreateConfigItem';
 import { CreateConfigItemResponse } from './api/CreateConfigItemResponse';
 import { CreateConfigItemRequest } from './api/CreateConfigItemRequest';
 import { LoggingService } from '../../../../../server/services/LoggingService';
-import { ConfigItemFactory } from './ConfigItemFactory';
-import { ConfigItemImageFactory } from './ConfigItemImageFactory';
 import { Error } from '../../../../../server/model/Error';
 import { AttachmentLoadingOptions } from '../model/AttachmentLoadingOptions';
+import { Version } from '../model/Version';
 
 
 export class CMDBAPIService extends KIXObjectAPIService {
@@ -105,7 +104,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
                         'versions'
                     );
                     objects = await super.load(
-                        token, KIXObjectType.CONFIG_ITEM_VERSION, uri, loadingOptions, objectIds, 'ConfigItemVersion'
+                        token, KIXObjectType.CONFIG_ITEM_VERSION, uri, loadingOptions, objectIds, 'ConfigItemVersion',
+                        Version
                     );
                 }
                 break;
@@ -164,7 +164,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             configItems = response.ConfigItem;
         }
 
-        return configItems.map((ci) => ConfigItemFactory.create(ci));
+        return configItems.map((ci) => new ConfigItem(ci));
     }
 
     private async getImages(
@@ -215,7 +215,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 images = response.Image;
             }
 
-            return images.map((cii) => ConfigItemImageFactory.create(cii));
+            return images.map((cii) => new ConfigItemImage(cii));
         } else {
             throw new Error('', 'No config item id given!');
         }

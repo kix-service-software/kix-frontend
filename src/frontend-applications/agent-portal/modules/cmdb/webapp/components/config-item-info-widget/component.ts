@@ -79,7 +79,7 @@ class Component {
     }
 
     public getIcon(object: string, objectId: string): ObjectIcon {
-        return new ObjectIcon(object, objectId);
+        return new ObjectIcon(null, object, objectId);
     }
 }
 

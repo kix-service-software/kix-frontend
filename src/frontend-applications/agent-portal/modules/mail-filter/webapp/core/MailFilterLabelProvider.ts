@@ -137,7 +137,7 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
     }
 
     public getObjectIcon(object: MailFilter): string | ObjectIcon {
-        return new ObjectIcon('MailFilter', object.ID);
+        return new ObjectIcon(null, 'MailFilter', object.ID);
     }
 
     public async getObjectTooltip(object: MailFilter, translatable: boolean = true): Promise<string> {

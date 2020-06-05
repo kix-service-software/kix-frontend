@@ -55,7 +55,9 @@ export class LinkAPIService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.LINK_TYPE) {
             const baseUri = this.buildUri(this.RESOURCE_URI, 'types');
-            objects = await super.load(token, KIXObjectType.LINK_TYPE, baseUri, loadingOptions, objectIds, 'LinkType');
+            objects = await super.load(
+                token, KIXObjectType.LINK_TYPE, baseUri, loadingOptions, objectIds, 'LinkType', LinkType
+            );
         }
 
         return objects;

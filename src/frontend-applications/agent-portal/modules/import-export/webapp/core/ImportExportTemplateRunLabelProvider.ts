@@ -124,7 +124,7 @@ export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportEx
     }
 
     public getObjectIcon(object: ImportExportTemplateRun): string | ObjectIcon {
-        return new ObjectIcon('ImportExportTemplateRun', object.ID);
+        return new ObjectIcon(null, 'ImportExportTemplateRun', object.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

@@ -218,16 +218,16 @@ export class WebformLabelProvider extends LabelProvider {
 
         switch (property) {
             case WebformProperty.PRIORITY_ID:
-                icons.push(new ObjectIcon('Priority', value));
+                icons.push(new ObjectIcon(null, 'Priority', value));
                 break;
             case WebformProperty.TYPE_ID:
-                icons.push(new ObjectIcon('TicketType', value));
+                icons.push(new ObjectIcon(null, 'TicketType', value));
                 break;
             case WebformProperty.QUEUE_ID:
-                icons.push(new ObjectIcon('Queue', value));
+                icons.push(new ObjectIcon(null, 'Queue', value));
                 break;
             case WebformProperty.STATE_ID:
-                icons.push(new ObjectIcon('TicketState', value));
+                icons.push(new ObjectIcon(null, 'TicketState', value));
                 break;
             default:
         }

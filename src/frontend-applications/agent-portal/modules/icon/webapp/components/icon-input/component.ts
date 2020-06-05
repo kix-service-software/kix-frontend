@@ -113,7 +113,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             const content = await BrowserUtil.readFile(files[0]);
 
             setTimeout(() => {
-                this.state.icon = new ObjectIcon(
+                this.state.icon = new ObjectIcon(null,
                     null, null,
                     files[0].type,
                     content

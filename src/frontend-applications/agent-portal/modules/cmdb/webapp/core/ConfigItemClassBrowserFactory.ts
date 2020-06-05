@@ -9,7 +9,6 @@
 
 import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
 import { ConfigItemClass } from '../../model/ConfigItemClass';
-import { ConfigItemClassFactory } from '../../server/ConfigItemClassFactory';
 
 export class ConfigItemClassBrowserFactory extends KIXObjectFactory<ConfigItemClass> {
 
@@ -27,7 +26,7 @@ export class ConfigItemClassBrowserFactory extends KIXObjectFactory<ConfigItemCl
     }
 
     public async create(configItemClass: ConfigItemClass): Promise<ConfigItemClass> {
-        const newConfigItemClass = ConfigItemClassFactory.create(configItemClass);
+        const newConfigItemClass = new ConfigItemClass(configItemClass);
         super.createPermissions(newConfigItemClass);
         return newConfigItemClass;
     }

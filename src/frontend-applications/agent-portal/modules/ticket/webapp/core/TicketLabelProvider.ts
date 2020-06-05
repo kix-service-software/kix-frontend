@@ -440,7 +440,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
         switch (property) {
             case TicketProperty.PRIORITY_ID:
-                icons.push(new ObjectIcon('Priority', value));
+                icons.push(new ObjectIcon(null, 'Priority', value));
                 break;
             case TicketProperty.UNSEEN:
                 if (ticket && ticket.Unseen === 1) {
@@ -448,7 +448,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.TYPE_ID:
-                icons.push(new ObjectIcon('TicketType', value));
+                icons.push(new ObjectIcon(null, 'TicketType', value));
                 break;
             case TicketProperty.CONTACT_ID:
             case TicketProperty.CONTACT:
@@ -465,13 +465,13 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER));
                 break;
             case TicketProperty.QUEUE_ID:
-                icons.push(new ObjectIcon('Queue', value));
+                icons.push(new ObjectIcon(null, 'Queue', value));
                 break;
             case TicketProperty.STATE_ID:
-                icons.push(new ObjectIcon('TicketState', value));
+                icons.push(new ObjectIcon(null, 'TicketState', value));
                 break;
             case TicketProperty.SERVICE_ID:
-                icons.push(new ObjectIcon(TicketProperty.SERVICE_ID, value));
+                icons.push(new ObjectIcon(null, TicketProperty.SERVICE_ID, value));
                 break;
             case TicketProperty.LOCK_ID:
                 value === 2

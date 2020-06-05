@@ -53,6 +53,14 @@ export class Job extends KIXObject {
             this.LastExecutionTime = job.LastExecutionTime;
             this.Filter = job.Filter;
 
+            this.Macros = job.Macros
+                ? job.Macros.map((a) => new Macro(a))
+                : null;
+
+            this.ExecPlans = job.ExecPlans
+                ? job.ExecPlans.map((ep) => new ExecPlan(ep))
+                : null;
+
             if (job.Filter) {
                 const newFilter = {};
                 for (const key in job.Filter) {

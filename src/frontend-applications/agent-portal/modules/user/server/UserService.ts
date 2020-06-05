@@ -15,8 +15,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecifi
 import { HttpService } from '../../../server/services/HttpService';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { LoggingService } from '../../../../../server/services/LoggingService';
-import { UserFactory } from './UserFactory';
-import { UserPreferenceFactory } from './UserPreferenceFactory';
 import { PreferencesLoadingOptions } from '../model/PreferencesLoadingOptions';
 import { User } from '../model/User';
 import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
@@ -37,7 +35,7 @@ export class UserService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new UserFactory(), new UserPreferenceFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -58,7 +56,7 @@ export class UserService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.USER) {
             objects = await super.load(
-                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER
+                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER, User
             );
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences');
@@ -68,7 +66,8 @@ export class UserService extends KIXObjectAPIService {
             }
 
             objects = await super.load(
-                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
+                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE,
+                UserPreference
             );
         }
 
@@ -208,7 +207,7 @@ export class UserService extends KIXObjectAPIService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleIDs', false);
+        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', Number, false);
 
         const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
         const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));

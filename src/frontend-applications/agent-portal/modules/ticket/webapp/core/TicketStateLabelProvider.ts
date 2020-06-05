@@ -80,7 +80,7 @@ export class TicketStateLabelProvider extends LabelProvider<TicketState> {
     }
 
     public getObjectIcon(ticketState?: TicketState): string | ObjectIcon {
-        return new ObjectIcon('TicketState', ticketState.ID);
+        return new ObjectIcon(null, 'TicketState', ticketState.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -103,7 +103,7 @@ export class TicketStateLabelProvider extends LabelProvider<TicketState> {
         ticketState: TicketState, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === TicketStateProperty.ID || property === 'ICON') {
-            return [new ObjectIcon('TicketState', ticketState.ID)];
+            return [new ObjectIcon(null, 'TicketState', ticketState.ID)];
         }
         return null;
     }

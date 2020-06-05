@@ -9,7 +9,6 @@
 
 import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
 import { ConfigItem } from '../../model/ConfigItem';
-import { ConfigItemFactory } from '../../server/ConfigItemFactory';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { User } from '../../../user/model/User';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -32,7 +31,7 @@ export class ConfigItemBrowserFactory implements IKIXObjectFactory<ConfigItem> {
     private constructor() { }
 
     public async create(configItem: ConfigItem): Promise<ConfigItem> {
-        const newConfigItem = ConfigItemFactory.create(configItem);
+        const newConfigItem = new ConfigItem(configItem);
         await this.mapAdditionalData(newConfigItem);
         return newConfigItem;
     }

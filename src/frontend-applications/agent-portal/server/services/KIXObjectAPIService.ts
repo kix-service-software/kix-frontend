@@ -10,8 +10,6 @@
 import { IKIXObjectService } from './IKIXObjectService';
 import { HttpService } from './HttpService';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
-import { IObjectFactory } from '../model/IObjectFactory';
-import { ObjectFactoryService } from './ObjectFactoryService';
 import { KIXObject } from '../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
@@ -45,10 +43,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected extendedServices: ExtendedKIXObjectAPIService[] = [];
 
-    public constructor(factories: IObjectFactory[] = []) {
-        factories.forEach((f) => ObjectFactoryService.registerFactory(f));
-    }
-
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
 
     public addExtendedService(service: ExtendedKIXObjectAPIService): void {
@@ -62,9 +56,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         throw new Error('-1', `Method loadObjects not implemented (${objectType})`);
     }
 
-    protected async load<O extends KIXObject | string = any>(
+    protected async load<O extends KIXObject | string | number = any>(
         token: string, objectType: KIXObjectType | string, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
-        objectIds: Array<number | string>, responseProperty: string, useCache?: boolean
+        objectIds: Array<number | string>, responseProperty: string,
+        // tslint:disable-next-line: ban-types
+        objectConstructor: new (object?: KIXObject) => O | String | Number,
+        useCache?: boolean
+        // tslint:disable-next-line: ban-types
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
@@ -94,13 +92,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             ? responseObject
             : [responseObject];
 
-        const result = [];
-        for (const o of objects) {
-            const object = await ObjectFactoryService.createObject(token, objectType, o);
-            result.push(object);
-        }
-
-        return result;
+        const result = objects.map((o) => new objectConstructor(o as KIXObject));
+        return result as any;
     }
 
     protected async executeUpdateOrCreateRequest<R = number>(

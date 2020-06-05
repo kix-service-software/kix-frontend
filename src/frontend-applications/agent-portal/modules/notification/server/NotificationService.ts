@@ -15,7 +15,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecifi
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
-import { NotificationFactory } from './NotificationFactory';
 import { Error } from '../../../../../server/model/Error';
 import { Notification } from '../model/Notification';
 import { NotificationProperty } from '../model/NotificationProperty';
@@ -38,7 +37,7 @@ export class NotificationAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.NOTIFICATION;
 
     private constructor() {
-        super([new NotificationFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -54,7 +53,8 @@ export class NotificationAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.NOTIFICATION) {
             objects = await super.load<Notification>(
-                token, KIXObjectType.NOTIFICATION, this.RESOURCE_URI, loadingOptions, objectIds, 'Notification'
+                token, KIXObjectType.NOTIFICATION, this.RESOURCE_URI, loadingOptions, objectIds, 'Notification',
+                Notification
             );
         }
 

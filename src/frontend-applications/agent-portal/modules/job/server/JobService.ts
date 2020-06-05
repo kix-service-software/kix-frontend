@@ -8,11 +8,6 @@
  */
 
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
-import { JobFactory } from './JobFactory';
-import { JobTypeFactory } from './JobTypeFactory';
-import { ExecPlanFactory } from './ExecPlanFactory';
-import { MacroFactory } from './MacroFactory';
-import { MacroActionTypeFactory } from './MacroActionTypeFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
@@ -33,7 +28,6 @@ import { Error } from '../../../../../server/model/Error';
 import { JobTypes } from '../model/JobTypes';
 import { MacroActionType } from '../model/MacroActionType';
 import { JobType } from '../model/JobType';
-import { JobRunFactory } from './JobRunFactory';
 import { JobRun } from '../model/JobRun';
 
 export class JobAPIService extends KIXObjectAPIService {
@@ -48,11 +42,7 @@ export class JobAPIService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([
-            new JobFactory(), new JobTypeFactory(), new JobRunFactory(),
-            new ExecPlanFactory(),
-            new MacroFactory(), new MacroActionTypeFactory()
-        ]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -80,12 +70,12 @@ export class JobAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.JOB) {
             objects = await super.load<Job>(
-                token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, objectIds, 'Job'
+                token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, objectIds, 'Job', Job
             );
         } else if (objectType === KIXObjectType.JOB_TYPE) {
             objects = await super.load<JobType>(
                 token, KIXObjectType.JOB_TYPE, this.RESOURCE_URI_JOB_TYPE, loadingOptions,
-                objectIds, 'JobType'
+                objectIds, 'JobType', JobType
             );
         } else if (objectType === KIXObjectType.JOB_RUN) {
             const uri = this.buildUri(
@@ -95,15 +85,16 @@ export class JobAPIService extends KIXObjectAPIService {
             );
             objects = await super.load<JobRun>(
                 token, KIXObjectType.JOB_RUN, uri, loadingOptions,
-                objectIds, 'JobRun'
+                objectIds, 'JobRun', JobRun
             );
         } else if (objectType === KIXObjectType.EXEC_PLAN) {
             objects = await super.load<ExecPlan>(
-                token, KIXObjectType.EXEC_PLAN, this.RESOURCE_URI_EXEC_PLAN, loadingOptions, objectIds, 'ExecPlan'
+                token, KIXObjectType.EXEC_PLAN, this.RESOURCE_URI_EXEC_PLAN, loadingOptions, objectIds, 'ExecPlan',
+                ExecPlan
             );
         } else if (objectType === KIXObjectType.MACRO) {
             objects = await super.load<Macro>(
-                token, KIXObjectType.MACRO, this.RESOURCE_URI_MACRO, loadingOptions, objectIds, 'Macro'
+                token, KIXObjectType.MACRO, this.RESOURCE_URI_MACRO, loadingOptions, objectIds, 'Macro', Macro
             );
         } else if (objectType === KIXObjectType.MACRO_ACTION_TYPE) {
             if (objectLoadingOptions) {
@@ -113,7 +104,8 @@ export class JobAPIService extends KIXObjectAPIService {
                     'actiontypes'
                 );
                 objects = await super.load<MacroActionType>(
-                    token, KIXObjectType.MACRO_ACTION_TYPE, uri, loadingOptions, objectIds, 'MacroActionType'
+                    token, KIXObjectType.MACRO_ACTION_TYPE, uri, loadingOptions, objectIds, 'MacroActionType',
+                    MacroActionType
                 );
             }
         }
@@ -242,7 +234,7 @@ export class JobAPIService extends KIXObjectAPIService {
                     JobProperty.MACROS, JobProperty.EXEC_PLANS
                 ]);
                 const jobs = await super.load<Job>(
-                    token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, [jobId], 'Job'
+                    token, KIXObjectType.JOB, this.RESOURCE_URI, loadingOptions, [jobId], 'Job', Job
                 ).catch((error: Error) => {
                     throw new Error(error.Code, error.Message);
                 });

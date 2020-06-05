@@ -192,7 +192,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
     }
 
     public getObjectIcon(queue?: Queue): string | ObjectIcon {
-        return new ObjectIcon('Queue', queue.QueueID);
+        return new ObjectIcon(null, 'Queue', queue.QueueID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -215,10 +215,10 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
         queue: Queue, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === QueueProperty.QUEUE_ID || property === 'ICON') {
-            return [new ObjectIcon('Queue', queue.QueueID)];
+            return [new ObjectIcon(null, 'Queue', queue.QueueID)];
         }
         if (property === QueueProperty.FOLLOW_UP_ID) {
-            return [new ObjectIcon('FollowUpType', value)];
+            return [new ObjectIcon(null, 'FollowUpType', value)];
         }
         return null;
     }

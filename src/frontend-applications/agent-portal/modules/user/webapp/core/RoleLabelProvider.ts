@@ -74,7 +74,7 @@ export class RoleLabelProvider extends LabelProvider<Role> {
     }
 
     public getObjectIcon(role?: Role): string | ObjectIcon {
-        return new ObjectIcon('Role', role.ID);
+        return new ObjectIcon(null, 'Role', role.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -97,7 +97,7 @@ export class RoleLabelProvider extends LabelProvider<Role> {
         role: Role, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === RoleProperty.ID) {
-            return [new ObjectIcon('Role', role.ID)];
+            return [new ObjectIcon(null, 'Role', role.ID)];
         }
         return null;
     }

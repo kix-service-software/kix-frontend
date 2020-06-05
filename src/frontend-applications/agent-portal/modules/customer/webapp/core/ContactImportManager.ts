@@ -150,7 +150,7 @@ export class ContactImportManager extends ImportManager {
 
                     for (const o of organisations) {
                         const displayValue = await LabelService.getInstance().getObjectText(o);
-                        nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(o.KIXObjectType, o.ID)));
+                        nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(null, o.KIXObjectType, o.ID)));
                     }
                 }
                 return nodes;

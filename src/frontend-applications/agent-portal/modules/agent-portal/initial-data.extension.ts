@@ -37,7 +37,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
                     __dirname + '/../../static/img/kix-logo.png',
                     { encoding: 'base64' }
                 );
-                const logo = new ObjectIcon('agent-portal-logo', 'agent-portal-logo', 'image/png', image);
+                const logo = new ObjectIcon(null, 'agent-portal-logo', 'agent-portal-logo', 'image/png', image);
                 await ObjectIconService.getInstance().createIcons(serverConfig.BACKEND_API_TOKEN, '', logo)
                     .catch((e) => LoggingService.getInstance().error(e));
             } catch (e) {

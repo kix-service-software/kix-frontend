@@ -179,7 +179,7 @@ export class FAQService extends KIXObjectService {
 
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
-                    new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
+                    new ObjectIcon(null, KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
                     subTree,
                     null, null, null, null, null, null, null,

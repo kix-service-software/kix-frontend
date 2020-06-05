@@ -109,7 +109,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
     }
 
     public getObjectIcon(faqCategory: FAQCategory): string | ObjectIcon {
-        return faqCategory ? new ObjectIcon('FAQCategory', faqCategory.ID) : null;
+        return faqCategory ? new ObjectIcon(null, 'FAQCategory', faqCategory.ID) : null;
     }
 
     public async getObjectTooltip(faqCategory: FAQCategory, translatable: boolean = true): Promise<string> {
@@ -132,7 +132,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
         faqCategory: FAQCategory, property: string, value?: number | string
     ): Promise<Array<string | ObjectIcon>> {
         if (property === FAQCategoryProperty.ID || property === FAQCategoryProperty.ICON) {
-            return [new ObjectIcon('FAQCategory', faqCategory.ID)];
+            return [new ObjectIcon(null, 'FAQCategory', faqCategory.ID)];
         }
         return null;
     }

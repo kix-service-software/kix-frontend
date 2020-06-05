@@ -14,8 +14,8 @@ import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions'
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { LoggingService } from '../../../../../server/services/LoggingService';
-import { GeneralCatalogItemFactory } from './GeneralCatalogItemFactory';
 import { Error } from '../../../../../server/model/Error';
+import { GeneralCatalogItem } from '../model/GeneralCatalogItem';
 
 export class GeneralCatalogService extends KIXObjectAPIService {
 
@@ -33,7 +33,7 @@ export class GeneralCatalogService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new GeneralCatalogItemFactory()]);
+        super();
 
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
@@ -51,12 +51,13 @@ export class GeneralCatalogService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.GENERAL_CATALOG_ITEM) {
             objects = await super.load(
-                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'GeneralCatalogItem'
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'GeneralCatalogItem',
+                GeneralCatalogItem
             );
         } else if (objectType === KIXObjectType.GENERAL_CATALOG_CLASS) {
             const uri = this.buildUri('system', 'generalcatalog', 'classes');
             objects = await super.load<string>(
-                token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass'
+                token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass', String
             );
         }
 

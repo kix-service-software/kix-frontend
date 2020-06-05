@@ -75,7 +75,7 @@ export class TicketPriorityLabelProvider extends LabelProvider<TicketPriority> {
     }
 
     public getObjectIcon(ticketPriority?: TicketPriority): string | ObjectIcon {
-        return new ObjectIcon('Priority', ticketPriority.ID);
+        return new ObjectIcon(null, 'Priority', ticketPriority.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -98,7 +98,7 @@ export class TicketPriorityLabelProvider extends LabelProvider<TicketPriority> {
         ticketPriority: TicketPriority, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === TicketPriorityProperty.ID || property === 'ICON') {
-            return [new ObjectIcon('Priority', ticketPriority.ID)];
+            return [new ObjectIcon(null, 'Priority', ticketPriority.ID)];
         }
         return null;
     }

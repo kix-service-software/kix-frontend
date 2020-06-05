@@ -23,6 +23,7 @@ import { ConfigItemClassProperty } from '../model/ConfigItemClassProperty';
 import { UpdateConfigItemClassResponse } from './api/UpdateConfigItemClassResponse';
 import { UpdateConfigItemClassRequest } from './api/UpdateConfigItemClassRequest';
 import { Error } from '../../../../../server/model/Error';
+import { ConfigItemClass } from '../model/ConfigItemClass';
 
 
 export class ConfigItemAPIClassService extends KIXObjectAPIService {
@@ -57,7 +58,7 @@ export class ConfigItemAPIClassService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.CONFIG_ITEM_CLASS) {
             objects = await super.load(
-                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'ConfigItemClass'
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'ConfigItemClass', ConfigItemClass
             );
         }
 
