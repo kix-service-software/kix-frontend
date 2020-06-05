@@ -10,14 +10,13 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
-    NotificationService, NotificationTableFactory, NotificationLabelProvider, NotificationBrowserFactory,
+    NotificationService, NotificationTableFactory, NotificationLabelProvider,
     NotificationEmailRecipientValidator, NotificationFilterValidator, NotificationFormService,
     NotificationFilterTableFactory, NotificationCreateAction, NewNotificationDialogContext,
     NotificationEditAction, EditNotificationDialogContext, NotificationDetailsContext
 } from '.';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
@@ -36,9 +35,6 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(NotificationService.getInstance());
         TableFactoryService.getInstance().registerFactory(new NotificationTableFactory());
         LabelService.getInstance().registerLabelProvider(new NotificationLabelProvider());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.NOTIFICATION, NotificationBrowserFactory.getInstance()
-        );
 
         FormValidationService.getInstance().registerValidator(new NotificationEmailRecipientValidator());
         FormValidationService.getInstance().registerValidator(new NotificationFilterValidator());

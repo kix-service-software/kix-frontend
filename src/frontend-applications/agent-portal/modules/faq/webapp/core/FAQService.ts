@@ -51,6 +51,10 @@ export class FAQService extends KIXObjectService {
 
     private constructor() {
         super();
+        this.objectConstructors.set(KIXObjectType.FAQ_ARTICLE, [FAQArticle]);
+        this.objectConstructors.set(KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [Attachment]);
+        this.objectConstructors.set(KIXObjectType.FAQ_CATEGORY, [FAQCategory]);
+        this.objectConstructors.set(KIXObjectType.FAQ_VOTE, [FAQVote]);
     }
 
     public isServiceFor(type: KIXObjectType | string) {

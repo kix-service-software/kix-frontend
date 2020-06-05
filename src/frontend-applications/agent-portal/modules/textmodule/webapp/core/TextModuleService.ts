@@ -35,6 +35,7 @@ export class TextModuleService extends KIXObjectService {
 
     private constructor() {
         super();
+        this.objectConstructors.set(KIXObjectType.TEXT_MODULE, [TextModule]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

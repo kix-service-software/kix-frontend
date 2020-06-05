@@ -13,6 +13,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
+import { TicketStateType } from '../../../model/TicketStateType';
 
 export class TicketStateService extends KIXObjectService<TicketState> {
 
@@ -24,6 +25,12 @@ export class TicketStateService extends KIXObjectService<TicketState> {
         }
 
         return TicketStateService.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.TICKET_STATE, [TicketState]);
+        this.objectConstructors.set(KIXObjectType.TICKET_STATE_TYPE, [TicketStateType]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

@@ -10,11 +10,10 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
-    JobService, JobFormService, JobBrowserFactory, JobLabelProvider, MacroActionLabelProvider,
+    JobService, JobFormService, JobLabelProvider, MacroActionLabelProvider,
     JobTableFactory, JobDetailsContext, JobExecuteAction, JobCreateAction, NewJobDialogContext,
     JobEditAction, EditJobDialogContext
 } from '.';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
@@ -30,7 +29,6 @@ import { TicketJobFormManager } from './TicketJobFormManager';
 import { SyncJobFormManager } from './SyncJobFormManager';
 import { JobRunHistoryTableFactory } from './table/JobRunHistoryTableFactory';
 import { JobRunLabelProvider } from './JobRunLabelProvider';
-import { JobRunBrowserFactory } from './JobRunBrowserFactory';
 import { JobRunLogLabelProvider } from './JobRunLogLabelProvider';
 import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
 
@@ -47,9 +45,6 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(JobService.getInstance());
         ServiceRegistry.registerServiceInstance(JobFormService.getInstance());
-
-        FactoryService.getInstance().registerFactory(KIXObjectType.JOB, JobBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(KIXObjectType.JOB_RUN, JobRunBrowserFactory.getInstance());
 
         LabelService.getInstance().registerLabelProvider(new JobLabelProvider());
         LabelService.getInstance().registerLabelProvider(new MacroActionLabelProvider());

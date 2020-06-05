@@ -14,7 +14,6 @@ import { IdService } from '../../../../model/IdService';
 import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
 import { WebformEvent } from '../../model/WebformEvent';
 import { LoadWebformsResponse } from '../../model/LoadWebformsResponse';
-import { WebformBrowserFactory } from '.';
 import { SocketEvent } from '../../../../modules/base-components/webapp/core/SocketEvent';
 import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
 import { SaveWebformRequest } from '../../model/SaveWebformRequest';
@@ -58,7 +57,7 @@ export class WebformSocketClient extends SocketClient {
                     window.clearTimeout(timeout);
                     const webforms = [];
                     for (const object of result.webforms) {
-                        const factoryObject = await WebformBrowserFactory.getInstance().create(object);
+                        const factoryObject = new Webform(object);
                         webforms.push(factoryObject);
                     }
                     resolve(webforms);

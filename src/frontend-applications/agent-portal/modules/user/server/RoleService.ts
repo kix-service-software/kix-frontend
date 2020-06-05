@@ -19,8 +19,8 @@ import { LoggingService } from '../../../../../server/services/LoggingService';
 import { PermissionProperty } from '../model/PermissionProperty';
 import { CreatePermissionDescription } from './CreatePermissionDescription';
 import { Permission } from '../model/Permission';
-import { PermissionType } from '../model/PermissionType';
 import { Role } from '../model/Role';
+import { PermissionType } from '../model/PermissionType';
 
 
 export class RoleService extends KIXObjectAPIService {

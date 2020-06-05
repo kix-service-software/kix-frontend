@@ -8,14 +8,12 @@
  */
 
 import { IUIModule } from '../../../../../model/IUIModule';
-import { FactoryService } from '../../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import {
-    FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleTableFactory, FAQArticleHistoryTableFactory,
+    FAQArticleTableFactory, FAQArticleHistoryTableFactory,
     FAQLabelProvider, FAQCategoryLabelProvider, FAQArticleHistoryLabelProvider, FAQService, FAQArticleFormService,
     FAQArticleSearchDefinition, FAQArticleSearchContext, FAQArticleVoteAction, LoadFAQAricleAction
 } from '..';
-import { FAQCategoryBrowserFactory } from '../FAQCategoryBrowserFactory';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
@@ -49,18 +47,6 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.FAQ_ARTICLE, FAQArticleBrowserFactory.getInstance()
-        );
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.FAQ_CATEGORY, FAQCategoryBrowserFactory.getInstance()
-        );
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.FAQ_ARTICLE_ATTACHMENT, FAQArticleAttachmentBrowserFactory.getInstance()
-        );
-
         TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
         TableFactoryService.getInstance().registerFactory(new FAQArticleHistoryTableFactory());
 

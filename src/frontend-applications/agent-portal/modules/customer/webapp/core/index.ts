@@ -14,13 +14,11 @@ export * from './actions';
 export { ContactService } from './ContactService';
 export { ContactFormService } from './ContactFormService';
 export { ContactLabelProvider } from './ContactLabelProvider';
-export { ContactBrowserFactory } from './ContactBrowserFactory';
 export { ContactSearchDefinition } from './ContactSearchDefinition';
 export { ContactDialogUtil } from './ContactDialogUtil';
 
 export { OrganisationService } from './OrganisationService';
 export { OrganisationLabelProvider } from './OrganisationLabelProvider';
-export { OrganisationBrowserFactory } from './OrganisationBrowserFactory';
 export { OrganisationSearchDefinition } from './OrganisationSearchDefinition';
 export { OrganisationFormService } from './OrganisationFormService';
 export { OrganisationImportManager } from './OrganisationImportManager';

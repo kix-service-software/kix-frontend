@@ -9,6 +9,7 @@
 
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { LogFile } from '../../model/LogFile';
 
 export class LogFileService extends KIXObjectService {
 
@@ -23,6 +24,7 @@ export class LogFileService extends KIXObjectService {
 
     private constructor() {
         super();
+        this.objectConstructors.set(KIXObjectType.LOG_FILE, [LogFile]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {

@@ -16,6 +16,7 @@ import { ServiceRegistry } from '../../../../modules/base-components/webapp/core
 import { IKIXObjectService } from '../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { LinkObjectProperty } from '../../model/LinkObjectProperty';
+import { LinkType } from '../../model/LinkType';
 
 export class LinkService extends KIXObjectService<Link> {
 
@@ -31,6 +32,9 @@ export class LinkService extends KIXObjectService<Link> {
 
     private constructor() {
         super();
+        this.objectConstructors.set(KIXObjectType.LINK, [Link]);
+        this.objectConstructors.set(KIXObjectType.LINK_OBJECT, [LinkObject]);
+        this.objectConstructors.set(KIXObjectType.LINK_TYPE, [LinkType]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

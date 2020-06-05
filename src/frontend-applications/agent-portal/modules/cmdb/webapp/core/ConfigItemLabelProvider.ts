@@ -11,7 +11,6 @@ import { LabelProvider } from '../../../../modules/base-components/webapp/core/L
 import { ConfigItem } from '../../model/ConfigItem';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
-import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ConfigItemClass } from '../../model/ConfigItemClass';
 import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
@@ -39,10 +38,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     ): Promise<string> {
         let displayValue = '';
         switch (property) {
-            case ConfigItemProperty.CREATE_TIME:
-            case ConfigItemProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(value);
-                break;
             case ConfigItemProperty.CLASS_ID:
                 const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
                     KIXObjectType.CONFIG_ITEM_CLASS, [value], null
@@ -73,7 +68,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 }
                 break;
             default:
-                displayValue = value;
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {
@@ -149,14 +144,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
                 displayValue = configItem.CurInciState;
                 break;
-            case ConfigItemProperty.CREATE_BY:
-                displayValue = configItem.createdBy ? configItem.createdBy.Contact ?
-                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.CreateBy;
-                break;
-            case ConfigItemProperty.CHANGE_BY:
-                displayValue = configItem.changedBy ? configItem.createdBy.Contact ?
-                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.ChangeBy;
-                break;
             case ConfigItemProperty.NAME:
                 displayValue = configItem.Name;
                 break;
@@ -166,8 +153,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.CLASS_ID:
             case ConfigItemProperty.CLASS:
-            case ConfigItemProperty.CHANGE_TIME:
-            case ConfigItemProperty.CREATE_TIME:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
                 break;
             default:

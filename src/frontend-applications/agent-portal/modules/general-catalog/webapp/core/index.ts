@@ -14,5 +14,4 @@ export * from './actions';
 export { GeneralCatalogService } from './GeneralCatalogService';
 export { GeneralCatalogFormService } from './GeneralCatalogFormService';
 export { GeneralCatalogLabelProvider } from './GeneralCatalogLabelProvider';
-export { GeneralCatalogBrowserFactory } from './GeneralCatalogBrowserFactory';
 export { UIModule as GeneralCatalogUIModule } from './GeneralCatalogUIModule';

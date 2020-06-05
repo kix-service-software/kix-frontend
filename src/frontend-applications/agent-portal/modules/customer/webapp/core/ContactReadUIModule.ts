@@ -11,13 +11,12 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
 import {
     ContactService, ContactFormService, ContactTableFactory,
-    ContactLabelProvider, ContactBrowserFactory, ContactSearchDefinition, ContactDetailsContext,
+    ContactLabelProvider, ContactSearchDefinition, ContactDetailsContext,
     ContactSearchContext, ContactSearchAction, ContactCSVExportAction, ContactTableDependingAction
 } from '.';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchService } from '../../../search/webapp/core';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
@@ -45,7 +44,6 @@ export class UIModule implements IUIModule {
 
         TableFactoryService.getInstance().registerFactory(new ContactTableFactory());
         LabelService.getInstance().registerLabelProvider(new ContactLabelProvider());
-        FactoryService.getInstance().registerFactory(KIXObjectType.CONTACT, ContactBrowserFactory.getInstance());
         SearchService.getInstance().registerSearchDefinition(new ContactSearchDefinition());
 
         await this.registerContexts();

@@ -41,7 +41,11 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
     private constructor() {
         super();
         this.init();
+
+        this.objectConstructors.set(KIXObjectType.TRANSLATION, [Translation]);
+        this.objectConstructors.set(KIXObjectType.TRANSLATION_PATTERN, [TranslationPattern]);
     }
+
 
     private async init(): Promise<void> {
         this.userLanguage = await TranslationService.getUserLanguage();

@@ -17,6 +17,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Channel } from '../../model/Channel';
+import { SenderType } from '../../model/SenderType';
 
 
 export class ArticleLabelProvider extends LabelProvider<Article> {
@@ -96,9 +97,11 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
             ? defaultValue : article[property];
         switch (property) {
             case ArticleProperty.SENDER_TYPE_ID:
-                if (article.senderType) {
-                    displayValue = article.senderType.Name;
-                }
+                const senderTypes = await KIXObjectService.loadObjects<SenderType>(
+                    KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
+                ).catch((error) => []);
+
+                displayValue = senderTypes && senderTypes.length ? senderTypes[0] : null;
                 break;
             case ArticleProperty.TO:
                 displayValue = article.toList.length ? short
@@ -271,7 +274,13 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                             ? 'kix-icon-mail-warning'
                             : new ObjectIcon(null, 'Channel', channelID);
                         let directionIcon = 'kix-icon-arrow-receive';
-                        if (article && article.senderType.Name === 'agent') {
+
+                        const senderTypes = await KIXObjectService.loadObjects<SenderType>(
+                            KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
+                        ).catch((error) => []);
+
+                        const senderType = senderTypes && senderTypes.length ? senderTypes[0] : '';
+                        if (article && senderType.Name === 'agent') {
                             directionIcon = 'kix-icon-arrow-outward';
                         }
                         icons.push(mailIcon);

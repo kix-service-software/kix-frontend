@@ -10,11 +10,7 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import {
-    TranslationPatternLabelProvider, TranslationLanguageLabelProvider, TranslationBrowserFactory,
-    TranslationPatternBrowserFactory
-} from '.';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '.';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -40,13 +36,6 @@ export class UIModule implements IUIModule {
     public priority: number = 9999;
 
     public async register(): Promise<void> {
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION_PATTERN, TranslationPatternBrowserFactory.getInstance()
-        );
-
         ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 

@@ -10,11 +10,10 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import {
-    WebformCreateAction, WebformEditAction, WebformFormService, WebformBrowserFactory,
+    WebformCreateAction, WebformEditAction, WebformFormService,
     WebformTableFactory, WebformLabelProvider, NewWebformDialogContext, WebformDetailsContext, EditWebformDialogContext
 } from '.';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -40,10 +39,6 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerServiceInstance(WebformService.getInstance());
         ServiceRegistry.registerServiceInstance(WebformFormService.getInstance());
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.WEBFORM, WebformBrowserFactory.getInstance()
-        );
 
         TableFactoryService.getInstance().registerFactory(new WebformTableFactory());
         LabelService.getInstance().registerLabelProvider(new WebformLabelProvider());

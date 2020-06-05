@@ -12,11 +12,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
-import {
-    SysConfigFormService, SysConfigOptionBrowserFactory, SysConfigOptionDefinitionBrowserFactory,
-    SysConfigTableFactory, SysConfigLabelProvider, EditSysConfigDialogContext
-} from '.';
+import { SysConfigFormService, SysConfigTableFactory, SysConfigLabelProvider, EditSysConfigDialogContext } from '.';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
@@ -41,12 +37,6 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(SysConfigService.getInstance());
         ServiceRegistry.registerServiceInstance(SysConfigFormService.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.SYS_CONFIG_OPTION, SysConfigOptionBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, SysConfigOptionDefinitionBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new SysConfigTableFactory());
         LabelService.getInstance().registerLabelProvider(new SysConfigLabelProvider());
 

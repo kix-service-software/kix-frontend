@@ -34,6 +34,11 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         return OrganisationService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.ORGANISATION, [Organisation]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.ORGANISATION;
     }

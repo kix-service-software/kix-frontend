@@ -12,6 +12,7 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ValidObject } from '../../model/ValidObject';
 
 export class ValidService extends KIXObjectService {
 
@@ -26,6 +27,7 @@ export class ValidService extends KIXObjectService {
 
     private constructor() {
         super();
+        this.objectConstructors.set(KIXObjectType.VALID_OBJECT, [ValidObject]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {

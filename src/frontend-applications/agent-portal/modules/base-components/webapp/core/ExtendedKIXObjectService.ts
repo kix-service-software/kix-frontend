@@ -22,6 +22,10 @@ import { ServiceType } from './ServiceType';
 
 export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
+    public getObjectConstructors(): Array<new (object?: KIXObject) => KIXObject> {
+        return [];
+    }
+
     public loadObjects<O extends KIXObject>(
         kixObjectType: string, objectIds: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions, cache?: boolean, forceIds?: boolean

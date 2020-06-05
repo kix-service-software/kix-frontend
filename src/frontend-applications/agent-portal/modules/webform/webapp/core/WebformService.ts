@@ -38,6 +38,11 @@ export class WebformService extends KIXObjectService<Webform> {
         return WebformService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.WEBFORM, [Webform]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.WEBFORM;
     }

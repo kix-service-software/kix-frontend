@@ -13,6 +13,7 @@ import { Attachment } from '../../../model/kix/Attachment';
 import { ArticleFlag } from './ArticleFlag';
 import { SenderType } from './SenderType';
 import { ArticleReceiver } from './ArticleReceiver';
+import { ArticleProperty } from './ArticleProperty';
 
 export class Article extends KIXObject {
 
@@ -133,7 +134,50 @@ export class Article extends KIXObject {
                     this.Attachments.splice(bodyAttachmentIndex, 1);
                 }
             }
+
+            this.prepareReceiverLists();
         }
+    }
+
+    private prepareReceiverLists(): void {
+        let toStringList = [];
+        if (!Array.isArray(this.To)) {
+            toStringList = this.To ? this.To.split(/,\s*/) : [];
+        }
+
+        let ccStringList = [];
+        if (!Array.isArray(this.Cc)) {
+            ccStringList = this.Cc ? this.Cc.split(/,\s*/) : [];
+        }
+
+        let bccStringList = [];
+        if (!Array.isArray(this.Bcc)) {
+            bccStringList = this.Bcc ? this.Bcc.split(/,\s*/) : [];
+        }
+
+
+        let toRealNameStringList = [];
+        if (!Array.isArray(this.ToRealname)) {
+            toRealNameStringList = this.ToRealname ? this.ToRealname.split(/,\s*/) : [];
+        }
+
+        let ccRealNameStringList = [];
+        if (!Array.isArray(this.CcRealname)) {
+            ccRealNameStringList = this.CcRealname ? this.CcRealname.split(/,\s*/) : [];
+        }
+
+        let bccRealNameStringList = [];
+        if (!Array.isArray(this.BccRealname)) {
+            bccRealNameStringList = this.BccRealname ? this.BccRealname.split(/,\s*/) : [];
+        }
+
+        this.toList = toStringList.map((t, index) => new ArticleReceiver(t, toRealNameStringList[index]));
+        this.ccList = ccStringList.map(
+            (cc, index) => new ArticleReceiver(cc, ccRealNameStringList[index], ArticleProperty.CC)
+        );
+        this.bccList = bccStringList.map(
+            (bcc, index) => new ArticleReceiver(bcc, bccRealNameStringList[index], ArticleProperty.BCC)
+        );
     }
 
     public isUnread(): boolean {

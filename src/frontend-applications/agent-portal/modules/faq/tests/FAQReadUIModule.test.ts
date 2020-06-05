@@ -13,15 +13,13 @@ import chaiAsPromised = require('chai-as-promised');
 
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
 import {
-    FAQReadUIModule, FAQArticleSearchContext, FAQLabelProvider, FAQCategoryLabelProvider, FAQArticleHistoryLabelProvider, FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQArticleFormService, FAQArticleSearchDefinition
+    FAQReadUIModule, FAQArticleSearchContext, FAQLabelProvider, FAQCategoryLabelProvider, FAQArticleHistoryLabelProvider, FAQArticleTableFactory, FAQArticleHistoryTableFactory, FAQArticleFormService, FAQArticleSearchDefinition
 } from '../webapp/core';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { FAQContext } from '../webapp/core/context/FAQContext';
 import { FAQDetailsContext } from '../webapp/core/context/FAQDetailsContext';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { FactoryService } from '../../base-components/webapp/core/FactoryService';
-import { FAQCategoryBrowserFactory } from '../webapp/core/FAQCategoryBrowserFactory';
 import { TableFactoryService } from '../../base-components/webapp/core/table';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
@@ -87,24 +85,6 @@ describe('FAQReadUIModule', () => {
             const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.FAQ_ARTICLE_HISTORY);
             expect(provider).exist;
             expect(provider).instanceof(FAQArticleHistoryLabelProvider);
-        });
-
-        it('Should register the FAQArticleBrowserFactory', () => {
-            const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.FAQ_ARTICLE);
-            expect(factory).exist;
-            expect(factory).instanceof(FAQArticleBrowserFactory);
-        });
-
-        it('Should register the FAQCategoryBrowserFactory', () => {
-            const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.FAQ_CATEGORY);
-            expect(factory).exist;
-            expect(factory).instanceof(FAQCategoryBrowserFactory);
-        });
-
-        it('Should register the FAQArticleAttachmentBrowserFactory', () => {
-            const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.FAQ_ARTICLE_ATTACHMENT);
-            expect(factory).exist;
-            expect(factory).instanceof(FAQArticleAttachmentBrowserFactory);
         });
 
         it('Should register the FAQArticleTableFactory', () => {

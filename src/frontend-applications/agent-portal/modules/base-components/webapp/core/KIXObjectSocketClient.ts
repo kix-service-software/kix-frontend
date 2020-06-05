@@ -18,7 +18,6 @@ import { LoadObjectsRequest } from './LoadObjectsRequest';
 import { BrowserCacheService } from './CacheService';
 import { LoadObjectsResponse } from './LoadObjectsResponse';
 import { KIXObjectEvent } from './KIXObjectEvent';
-import { FactoryService } from './FactoryService';
 import { PermissionError } from '../../../user/model/PermissionError';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { CreateObjectRequest } from './CreateObjectRequest';
@@ -54,9 +53,9 @@ export class KIXObjectSocketClient extends SocketClient {
     }
 
     public async loadObjects<T extends KIXObject>(
-        kixObjectType: KIXObjectType | string, objectIds: Array<string | number> = null,
-        loadingOptions: KIXObjectLoadingOptions = null, objectLoadingOptions: KIXObjectSpecificLoadingOptions = null,
-        cache: boolean = true, timeout?: number
+        kixObjectType: KIXObjectType | string, objectConstructors: Array<new (object?: T) => T>,
+        objectIds: Array<string | number> = null, loadingOptions: KIXObjectLoadingOptions = null,
+        objectLoadingOptions: KIXObjectSpecificLoadingOptions = null, cache: boolean = true, timeout?: number
     ): Promise<T[]> {
         const requestId = IdService.generateDateBasedId();
 
@@ -71,7 +70,7 @@ export class KIXObjectSocketClient extends SocketClient {
         if (cache) {
             requestPromise = BrowserCacheService.getInstance().get(cacheKey, kixObjectType);
             if (!requestPromise) {
-                requestPromise = this.createRequestPromise<T>(request, timeout);
+                requestPromise = this.createRequestPromise<T>(request, objectConstructors, timeout);
                 BrowserCacheService.getInstance().set(cacheKey, requestPromise, kixObjectType);
 
                 requestPromise.catch((error) => {
@@ -81,21 +80,26 @@ export class KIXObjectSocketClient extends SocketClient {
             return requestPromise;
         }
 
-        requestPromise = this.createRequestPromise<T>(request, timeout);
+        requestPromise = this.createRequestPromise<T>(request, objectConstructors, timeout);
         return requestPromise;
     }
 
-    private createRequestPromise<T extends KIXObject>(request: LoadObjectsRequest, timeout?: number): Promise<T[]> {
+    private createRequestPromise<T extends KIXObject>(
+        request: LoadObjectsRequest, objectConstructors: Array<new (object?: T) => T>, timeout?: number
+    ): Promise<T[]> {
         return new Promise<T[]>(async (resolve, reject) => {
             this.sendRequest<LoadObjectsResponse<T>>(
                 request,
                 KIXObjectEvent.LOAD_OBJECTS, KIXObjectEvent.LOAD_OBJECTS_FINISHED, KIXObjectEvent.LOAD_OBJECTS_ERROR,
                 timeout
             ).then(async (response) => {
-                const objects = [];
-                for (const object of response.objects) {
-                    const factoryObject = await FactoryService.getInstance().create<T>(request.objectType, object);
-                    objects.push(factoryObject);
+                let objects = response.objects;
+                if (objectConstructors && objectConstructors.length) {
+                    objects = objects.map((o) => {
+                        let object = o;
+                        objectConstructors.forEach((c) => object = new c(object));
+                        return object;
+                    });
                 }
 
                 resolve(objects);

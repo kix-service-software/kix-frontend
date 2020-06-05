@@ -14,7 +14,7 @@ import { NotificationProperty } from '../../model/NotificationProperty';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
-
+import { Notification } from '../../model/Notification';
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
 
@@ -26,6 +26,11 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
         }
 
         return NotificationService.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.NOTIFICATION, [Notification]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

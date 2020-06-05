@@ -20,7 +20,6 @@ import { FormValidationService } from './FormValidationService';
 import { ValidationSeverity } from './ValidationSeverity';
 import { ContextService } from './ContextService';
 import { ContextType } from '../../../../model/ContextType';
-import { FactoryService } from './FactoryService';
 import { AdditionalContextInformation } from './AdditionalContextInformation';
 import { ValidationResult } from './ValidationResult';
 import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
@@ -326,8 +325,7 @@ export class FormInstance implements IFormInstance {
                     }
                 });
 
-                const formObject = await FactoryService.getInstance().create<any>(this.form.objectType, newObject);
-
+                const formObject = await KIXObjectService.createObjectInstance<any>(this.form.objectType, newObject);
                 dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
             }
         }

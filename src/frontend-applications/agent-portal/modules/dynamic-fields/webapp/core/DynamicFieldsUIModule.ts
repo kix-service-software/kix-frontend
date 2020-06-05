@@ -10,9 +10,7 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { DynamicFieldService } from './DynamicFieldService';
-import { DynamicFieldBrowserFactory } from './DynamicFieldBrowserFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { FactoryService } from '../../../base-components/webapp/core/FactoryService';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { DynamicFieldLabelProvider } from './DynamicFieldLabelProvider';
@@ -35,7 +33,6 @@ import { DynamicFieldDateTimeValidator } from './DynamicFieldDateTimeValidator';
 import { CMDBService } from '../../../cmdb/webapp/core';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { ConfigItemClass } from '../../../cmdb/model/ConfigItemClass';
-import { DynamicFieldTypeBrowserFactory } from './DynamicFieldTypeBrowserFactory';
 import { DynamicFieldTypeLabelProvider } from './DynamicFieldTypeLabelProvider';
 
 export class UIModule implements IUIModule {
@@ -53,14 +50,6 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(DynamicFieldFormService.getInstance());
 
         PlaceholderService.getInstance().registerPlaceholderHandler(DynamicFieldValuePlaceholderHandler.getInstance());
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.DYNAMIC_FIELD, DynamicFieldBrowserFactory.getInstance()
-        );
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.DYNAMIC_FIELD_TYPE, DynamicFieldTypeBrowserFactory.getInstance()
-        );
 
         TableFactoryService.getInstance().registerFactory(new DynamicFieldTableFactory());
 

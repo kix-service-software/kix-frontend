@@ -34,6 +34,16 @@ export class AgentService extends KIXObjectService<User> {
         return AgentService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.USER, [User]);
+    }
+
+    public isServiceFor(kixObjectType: KIXObjectType | string) {
+        return kixObjectType === KIXObjectType.USER ||
+            kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
+    }
+
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType | string, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
@@ -57,11 +67,6 @@ export class AgentService extends KIXObjectService<User> {
 
     public getLinkObjectName(): string {
         return 'User';
-    }
-
-    public isServiceFor(kixObjectType: KIXObjectType | string) {
-        return kixObjectType === KIXObjectType.USER ||
-            kixObjectType === KIXObjectType.PERSONAL_SETTINGS;
     }
 
     public async login(userName: string, password: string, redirectUrl: string): Promise<boolean> {

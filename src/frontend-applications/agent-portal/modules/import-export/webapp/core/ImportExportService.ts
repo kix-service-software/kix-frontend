@@ -23,6 +23,11 @@ export class ImportExportService extends KIXObjectService<ImportExportTemplate> 
         return ImportExportService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.IMPORT_EXPORT_TEMPLATE, [ImportExportTemplate]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE;
     }

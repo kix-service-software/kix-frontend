@@ -9,7 +9,6 @@
 
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -19,7 +18,7 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import {
-    SystemAddressService, SystemAddressFormService, SystemAddressBrowserFactory, SystemAddressTableFactory,
+    SystemAddressService, SystemAddressFormService, SystemAddressTableFactory,
     SystemAddressLabelProvider, SystemAddressCreateAction, NewSystemAddressDialogContext, SystemAddressEditAction,
     EditSystemAddressDialogContext, SystemAddressDetailsContext
 } from '.';
@@ -37,9 +36,6 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(SystemAddressService.getInstance());
         ServiceRegistry.registerServiceInstance(SystemAddressFormService.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.SYSTEM_ADDRESS, SystemAddressBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new SystemAddressTableFactory());
         LabelService.getInstance().registerLabelProvider(new SystemAddressLabelProvider());
 
