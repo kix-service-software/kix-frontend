@@ -81,8 +81,8 @@ export class SysConfigFormService extends KIXObjectFormService {
                     ),
                     new FormFieldConfiguration(
                         'sysconfig-edit-form-field-description',
-                        'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, null, false,
-                        'Translatable#Helptext_Admin_SysConfigEdit_Description',
+                        'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, 'text-area-input',
+                        false, 'Translatable#Helptext_Admin_SysConfigEdit_Description',
                         [
                             new FormFieldOption('SYSCONFIG_NAME', key.Name)
                         ],
@@ -171,16 +171,14 @@ export class SysConfigFormService extends KIXObjectFormService {
                 }
                 break;
             case SysConfigOptionDefinitionProperty.VALUE:
-                if (sysConfig.IsModified !== 1) {
-                    value = sysConfig.Default;
-                } else {
-                    const options = await KIXObjectService.loadObjects<SysConfigOption>(
-                        KIXObjectType.SYS_CONFIG_OPTION, [sysConfig.Name]
-                    );
 
-                    if (options && options.length) {
-                        value = options[0].Value;
-                    }
+                const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [sysConfig.Name]
+                );
+
+                if (options && options.length) {
+                    value = options[0].Value;
+                    formField.readonly = options[0].ReadOnly;
                 }
 
                 if (typeof value !== 'string' && typeof value !== 'number') {

@@ -46,7 +46,7 @@ export class SysConfigTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(null, null, null,
-                SysConfigOptionDefinitionProperty.NAME, true, false, true, false, 400, true, true, false,
+                SysConfigOptionDefinitionProperty.NAME, true, true, true, false, 400, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(null, null, null,
