@@ -11,10 +11,9 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
-    TextModuleService, TextModuleBrowserFactory, TextModuleFormService, TextModulesTableFactory,
+    TextModuleService, TextModuleFormService, TextModulesTableFactory,
     TextModuleLabelProvider, TextModuleCreateAction, NewTextModuleDialogContext, EditTextModuleDialogContext
 } from '.';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -38,9 +37,6 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(TextModuleService.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TEXT_MODULE, TextModuleBrowserFactory.getInstance()
-        );
         ServiceRegistry.registerServiceInstance(TextModuleFormService.getInstance());
         TableFactoryService.getInstance().registerFactory(new TextModulesTableFactory());
         LabelService.getInstance().registerLabelProvider(new TextModuleLabelProvider());

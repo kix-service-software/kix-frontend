@@ -10,7 +10,6 @@
 export * from './actions';
 export * from './context';
 
-export { WebformBrowserFactory } from './WebformBrowserFactory';
 export { WebformFormService } from './WebformFormService';
 export { WebformLabelProvider } from './WebformLabelProvider';
 export { WebformService } from './WebformService';

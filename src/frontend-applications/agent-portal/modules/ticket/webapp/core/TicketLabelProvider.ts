@@ -17,7 +17,6 @@ import { TicketState } from '../../model/TicketState';
 import { TicketPriority } from '../../model/TicketPriority';
 import { TicketType } from '../../model/TicketType';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { User } from '../../../user/model/User';
 import { AgentService } from '../../../user/webapp/core';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
@@ -122,8 +121,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
-            case KIXObjectProperty.CREATE_BY:
-            case KIXObjectProperty.CHANGE_BY:
                 if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
                         KIXObjectType.USER, [value],

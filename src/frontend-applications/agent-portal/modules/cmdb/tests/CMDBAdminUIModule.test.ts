@@ -12,13 +12,12 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import {
-    CMDBAdminUIModule, ConfigItemClassService, ConfigItemClassFormService, ConfigItemClassBrowserFactory, ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, NewConfigItemClassDialogContext, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext
+    CMDBAdminUIModule, ConfigItemClassService, ConfigItemClassFormService, ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, NewConfigItemClassDialogContext, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext
 } from '../webapp/core';
 import { CRUD } from '../../../../../server/model/rest/CRUD';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
-import { FactoryService } from '../../base-components/webapp/core/FactoryService';
 import { TableFactoryService } from '../../base-components/webapp/core/table';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
@@ -55,12 +54,6 @@ describe('CMDBAdminUIModule', () => {
                 const service = ServiceRegistry.getServiceInstance(KIXObjectType.CONFIG_ITEM_CLASS, ServiceType.FORM);
                 expect(service).exist;
                 expect(service).instanceof(ConfigItemClassFormService);
-            });
-
-            it('should register ConfigItemClassBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.CONFIG_ITEM_CLASS);
-                expect(factory).exist;
-                expect(factory).instanceof(ConfigItemClassBrowserFactory);
             });
 
             it('should register ConfigItemClassTableFactory', () => {

@@ -26,6 +26,11 @@ export class ChannelService extends KIXObjectService<Channel> {
         return ChannelService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.CHANNEL, [Channel]);
+    }
+
     public async loadObjects<O extends KIXObject>(
         objectType: KIXObjectType, objectIds: Array<string | number>,
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions

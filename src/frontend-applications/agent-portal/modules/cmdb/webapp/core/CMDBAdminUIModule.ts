@@ -10,16 +10,14 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
-    ConfigItemClassService, ConfigItemClassFormService, ConfigItemClassBrowserFactory,
+    ConfigItemClassService, ConfigItemClassFormService,
     ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider,
     ConfigItemClassDefinitionLabelProvider, ConfigItemClassCreateAction, NewConfigItemClassDialogContext,
     ConfigItemClassEditAction, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext
 } from '.';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
@@ -42,10 +40,6 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerServiceInstance(ConfigItemClassService.getInstance());
         ServiceRegistry.registerServiceInstance(ConfigItemClassFormService.getInstance());
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.CONFIG_ITEM_CLASS, ConfigItemClassBrowserFactory.getInstance()
-        );
 
         TableFactoryService.getInstance().registerFactory(new ConfigItemClassTableFactory());
         TableFactoryService.getInstance().registerFactory(new ConfigItemClassDefinitionTableFactory());

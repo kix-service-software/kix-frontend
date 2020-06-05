@@ -23,6 +23,11 @@ export class MailFilterService extends KIXObjectService<MailFilter> {
         return MailFilterService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.MAIL_FILTER, [MailFilter]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.MAIL_FILTER;
     }

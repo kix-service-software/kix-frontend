@@ -10,11 +10,10 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
-    GeneralCatalogService, GeneralCatalogFormService, GeneralCatalogBrowserFactory, GeneralCatalogTableFactory,
+    GeneralCatalogService, GeneralCatalogFormService, GeneralCatalogTableFactory,
     GeneralCatalogLabelProvider, GeneralCatalogCreateAction, NewGeneralCatalogDialogContext,
     EditGeneralCatalogDialogContext
 } from '.';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -37,9 +36,6 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(GeneralCatalogService.getInstance());
         ServiceRegistry.registerServiceInstance(GeneralCatalogFormService.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.GENERAL_CATALOG_ITEM, GeneralCatalogBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new GeneralCatalogTableFactory());
         LabelService.getInstance().registerLabelProvider(new GeneralCatalogLabelProvider());
 

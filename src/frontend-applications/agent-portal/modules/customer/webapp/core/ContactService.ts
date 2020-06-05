@@ -34,7 +34,7 @@ export class ContactService extends KIXObjectService<Contact> {
 
     private constructor() {
         super();
-
+        this.objectConstructors.set(KIXObjectType.CONTACT, [Contact]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

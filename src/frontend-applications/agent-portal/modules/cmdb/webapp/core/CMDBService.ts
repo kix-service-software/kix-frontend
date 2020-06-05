@@ -20,7 +20,6 @@ import { ConfigItemProperty } from '../../model/ConfigItemProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
-
 import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { ConfigItemClass } from '../../model/ConfigItemClass';
@@ -31,6 +30,8 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { ConfigItemDetailsContext } from '.';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../model/ContextMode';
+import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
+import { Version } from '../../model/Version';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -46,6 +47,11 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
 
     private constructor() {
         super();
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM, [ConfigItem]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_VERSION, [Version]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_IMAGE, [ConfigItemImage]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_CLASS, [ConfigItemClass]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_ATTACHMENT, [ConfigItemAttachment]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

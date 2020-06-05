@@ -52,8 +52,19 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     private extendedServices: ExtendedKIXObjectService[] = [];
 
+    // tslint:disable-next-line: ban-types
+    protected objectConstructors: Map<KIXObjectType | string, Array<new (object?: KIXObject) => KIXObject>> = new Map();
+
     public addExtendedService(service: ExtendedKIXObjectService): void {
         this.extendedServices.push(service);
+    }
+
+    public addObjectConstructor(objectType: KIXObjectType | string, oc: new (object?: KIXObject) => KIXObject): void {
+        if (!this.objectConstructors.has(objectType)) {
+            this.objectConstructors.set(objectType, []);
+        }
+
+        this.objectConstructors.get(objectType).push(oc);
     }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
@@ -64,6 +75,23 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public isServiceType(kixObjectServiceType: ServiceType): boolean {
         return kixObjectServiceType === ServiceType.OBJECT;
+    }
+
+    public static createObjectInstance<O>(objectType: KIXObjectType | string, object: O): O {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            object = service.createObjectInstance(objectType, object);
+        } else {
+            const errorMessage = `No service registered for object type ${objectType}`;
+            console.warn(errorMessage);
+        }
+        return object;
+    }
+
+    protected createObjectInstance<O>(objectType: KIXObjectType | string, object: O): O {
+        const objectConstructors = this.getObjectConstructors(objectType);
+        objectConstructors.forEach((c) => object = new c(object));
+        return object;
     }
 
     public static async loadObjects<T extends KIXObject>(
@@ -104,21 +132,41 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
         cache: boolean = true, forceIds?: boolean
     ): Promise<O[]> {
+        const objectConstructors = this.getObjectConstructors(objectType);
+
         let objects = [];
         if (objectIds) {
             if (objectIds.length) {
                 const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                    objectType, objectIds, loadingOptions, objectLoadingOptions, cache
+                    objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
                 );
                 objects = loadedObjects;
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                objectType, objectIds, loadingOptions, objectLoadingOptions, cache
+                objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
             );
         }
 
         return objects;
+    }
+
+    protected getObjectConstructors(objectType: KIXObjectType | string): any[] {
+        let objectConstructors = [];
+        if (this.objectConstructors.has(objectType)) {
+            objectConstructors = this.objectConstructors.get(objectType);
+        }
+
+        for (const extendedService of this.extendedServices) {
+            const extendedConstructors = extendedService.getObjectConstructors();
+            if (Array.isArray(extendedConstructors)) {
+                objectConstructors = [
+                    ...objectConstructors,
+                    ...extendedConstructors
+                ];
+            }
+        }
+        return objectConstructors;
     }
 
     public static async createObject(

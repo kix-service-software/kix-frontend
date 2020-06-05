@@ -10,11 +10,10 @@
 import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
-    MailAccountFormService, MailAccountBrowserFactory, MailAccountTableFactory, MailAccountLabelProvider,
+    MailAccountFormService, MailAccountTableFactory, MailAccountLabelProvider,
     MailAccountCreateAction, NewMailAccountDialogContext, MailAccountEditAction, MailAccountFetchAction,
     EditMailAccountDialogContext, MailAccountDetailsContext
 } from '.';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
@@ -38,9 +37,6 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(MailAccountService.getInstance());
         ServiceRegistry.registerServiceInstance(MailAccountFormService.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.MAIL_ACCOUNT, MailAccountBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new MailAccountTableFactory());
         LabelService.getInstance().registerLabelProvider(new MailAccountLabelProvider());
 

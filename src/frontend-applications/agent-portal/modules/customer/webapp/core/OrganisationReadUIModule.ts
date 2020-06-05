@@ -11,14 +11,13 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
 import {
     OrganisationService, OrganisationFormService, OrganisationLabelProvider,
-    OrganisationBrowserFactory, OrganisationSearchDefinition, OrganisationDetailsContext, OrganisationSearchContext,
+    OrganisationSearchDefinition, OrganisationDetailsContext, OrganisationSearchContext,
     OrganisationSearchAction
 } from '.';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { OrganisationTableFactory } from './table/OrganisationTableFactory';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchService } from '../../../search/webapp/core';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
@@ -46,9 +45,6 @@ export class UIModule implements IUIModule {
 
         TableFactoryService.getInstance().registerFactory(new OrganisationTableFactory());
         LabelService.getInstance().registerLabelProvider(new OrganisationLabelProvider());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.ORGANISATION, OrganisationBrowserFactory.getInstance()
-        );
         SearchService.getInstance().registerSearchDefinition(new OrganisationSearchDefinition());
 
         await this.registerContexts();

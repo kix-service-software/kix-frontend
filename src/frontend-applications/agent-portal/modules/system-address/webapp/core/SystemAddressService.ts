@@ -23,6 +23,11 @@ export class SystemAddressService extends KIXObjectService<SystemAddress> {
         return SystemAddressService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.SYSTEM_ADDRESS, [SystemAddress]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.SYSTEM_ADDRESS;
     }

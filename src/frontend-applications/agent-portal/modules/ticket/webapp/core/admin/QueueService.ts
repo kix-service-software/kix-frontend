@@ -35,6 +35,12 @@ export class QueueService extends KIXObjectService<Queue> {
         return QueueService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.QUEUE, [Queue]);
+        this.objectConstructors.set(KIXObjectType.FOLLOW_UP_TYPE, [FollowUpType]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.QUEUE
             || kixObjectType === KIXObjectType.FOLLOW_UP_TYPE;

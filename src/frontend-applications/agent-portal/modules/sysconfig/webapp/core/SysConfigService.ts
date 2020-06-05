@@ -11,6 +11,7 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { SysConfigOption } from '../../model/SysConfigOption';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../model/SysConfigKey';
+import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 
@@ -22,6 +23,12 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
         }
 
         return SysConfigService.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.SYS_CONFIG_OPTION, [SysConfigOption]);
+        this.objectConstructors.set(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [SysConfigOptionDefinition]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string) {

@@ -24,6 +24,11 @@ export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> 
         return GeneralCatalogService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.GENERAL_CATALOG_ITEM, [GeneralCatalogItem]);
+    }
+
     public isServiceFor(type: KIXObjectType) {
         return type === KIXObjectType.GENERAL_CATALOG_ITEM
             || type === KIXObjectType.GENERAL_CATALOG_CLASS;

@@ -8,11 +8,8 @@
  */
 
 import { IUIModule } from '../../../../model/IUIModule';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
 import { ConsoleCommandService } from './ConsoleCommandService';
-import { ConsoleCommandBrowserFactory } from './ConsoleCommandBrowserFactory';
 
 export class UIModule implements IUIModule {
 
@@ -26,9 +23,6 @@ export class UIModule implements IUIModule {
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ConsoleCommandService.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.CONSOLE_COMMAND, ConsoleCommandBrowserFactory.getInstance()
-        );
     }
 
 }

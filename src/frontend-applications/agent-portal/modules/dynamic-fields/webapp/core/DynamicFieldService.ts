@@ -32,6 +32,12 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         return DynamicFieldService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.DYNAMIC_FIELD, [DynamicField]);
+        this.objectConstructors.set(KIXObjectType.DYNAMIC_FIELD_TYPE, [DynamicFieldType]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.DYNAMIC_FIELD
             || kixObjectType === KIXObjectType.DYNAMIC_FIELD_TYPE;

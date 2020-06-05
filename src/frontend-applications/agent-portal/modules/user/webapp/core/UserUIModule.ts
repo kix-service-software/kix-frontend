@@ -21,16 +21,12 @@ import { UserLabelProvider } from './UserLabelProvider';
 import { RoleLabelProvider } from './RoleLabelProvider';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
-import { UserBrowserFactory } from './UserBrowserFactory';
-import { RoleBrowserFactory } from './RoleBrowserFactory';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { PermissionTableCSSHandler } from './PermissionTableCSSHandler';
-import { PermissionTypeBrowserFactory } from './PermissionTypeBrowserFactory';
 import { PermissionsTableFactory } from './PermissionsTableFactory';
 import { PermissionLabelProvider } from './PermissionLabelProvider';
 import { PersonalSettingsDialogContext } from './PersonalSettingsDialogContext';
@@ -69,12 +65,6 @@ export class UIModule implements IUIModule {
             KIXObjectType.PERMISSION, new PermissionTableCSSHandler()
         );
         TableFactoryService.getInstance().registerFactory(new PermissionsTableFactory());
-
-        FactoryService.getInstance().registerFactory(KIXObjectType.USER, UserBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(KIXObjectType.ROLE, RoleBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.PERMISSION_TYPE, PermissionTypeBrowserFactory.getInstance()
-        );
 
         const settingsDialogContext = new ContextDescriptor(
             PersonalSettingsDialogContext.CONTEXT_ID, [KIXObjectType.PERSONAL_SETTINGS],

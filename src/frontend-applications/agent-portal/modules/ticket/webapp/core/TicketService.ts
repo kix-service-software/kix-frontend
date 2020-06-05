@@ -42,6 +42,9 @@ import { UserProperty } from '../../../user/model/UserProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../model/ContextMode';
+import { SenderType } from '../../model/SenderType';
+import { Lock } from '../../model/Lock';
+import { Watcher } from '../../model/Watcher';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -53,6 +56,15 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         return TicketService.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.TICKET, [Ticket]);
+        this.objectConstructors.set(KIXObjectType.ARTICLE, [Article]);
+        this.objectConstructors.set(KIXObjectType.SENDER_TYPE, [SenderType]);
+        this.objectConstructors.set(KIXObjectType.LOCK, [Lock]);
+        this.objectConstructors.set(KIXObjectType.WATCHER, [Watcher]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

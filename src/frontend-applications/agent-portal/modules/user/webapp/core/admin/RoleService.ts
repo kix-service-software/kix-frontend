@@ -10,6 +10,8 @@
 import { Role } from '../../../model/Role';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Permission } from '../../../model/Permission';
+import { PermissionType } from '../../../model/PermissionType';
 
 export class RoleService extends KIXObjectService<Role> {
 
@@ -21,6 +23,13 @@ export class RoleService extends KIXObjectService<Role> {
         }
 
         return RoleService.INSTANCE;
+    }
+
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.ROLE, [Role]);
+        this.objectConstructors.set(KIXObjectType.PERMISSION, [Permission]);
+        this.objectConstructors.set(KIXObjectType.PERMISSION_TYPE, [PermissionType]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string) {

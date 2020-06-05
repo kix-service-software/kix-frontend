@@ -14,13 +14,10 @@ import {
     FAQCategoryCreateAction, NewFAQCategoryDialogContext, FAQCategoryEditAction, EditFAQCategoryDialogContext,
     FAQCategoryDetailsContext
 } from '..';
-import { FactoryService } from '../../../../../modules/base-components/webapp/core/FactoryService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { FAQCategoryBrowserFactory } from '../FAQCategoryBrowserFactory';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
-
 import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../../model/ContextType';
 import { ContextMode } from '../../../../../model/ContextMode';
@@ -39,9 +36,6 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
 
         ServiceRegistry.registerServiceInstance(FAQService.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.FAQ_CATEGORY, FAQCategoryBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new FAQCategoryTableFactory());
         LabelService.getInstance().registerLabelProvider(new FAQCategoryLabelProvider());
         ServiceRegistry.registerServiceInstance(FAQCategoryFormService.getInstance());

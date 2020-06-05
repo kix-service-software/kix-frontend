@@ -14,7 +14,6 @@ import { FAQArticleProperty } from '../../model/FAQArticleProperty';
 import { FAQCategory } from '../../model/FAQCategory';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
-import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { FAQVote } from '../../model/FAQVote';
@@ -135,24 +134,12 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 const category = faqCategories.find((fc) => fc.ID === displayValue);
                 displayValue = category ? category.Name : displayValue;
                 break;
-            case FAQArticleProperty.CREATED:
-            case FAQArticleProperty.CHANGED:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
-                break;
             case FAQArticleProperty.VOTES:
                 displayValue = '';
                 if (faqArticle.Votes && faqArticle.Votes.length) {
                     const average = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
                     displayValue = `(${average})`;
                 }
-                break;
-            case FAQArticleProperty.CREATED_BY:
-                displayValue = faqArticle.createdBy ? faqArticle.createdBy.Contact ?
-                    faqArticle.createdBy.Contact.Fullname : faqArticle.createdBy.UserLogin : faqArticle.CreatedBy;
-                break;
-            case FAQArticleProperty.CHANGED_BY:
-                displayValue = faqArticle.changedBy ? faqArticle.createdBy.Contact ?
-                    faqArticle.createdBy.Contact.Fullname : faqArticle.createdBy.UserLogin : faqArticle.ChangedBy;
                 break;
             case FAQArticleProperty.LANGUAGE:
                 const translationService = ServiceRegistry.getServiceInstance<TranslationService>(

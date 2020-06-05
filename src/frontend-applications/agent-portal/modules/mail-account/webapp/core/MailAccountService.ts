@@ -26,6 +26,11 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
         return MailAccountService.INSTANCE;
     }
 
+    private constructor() {
+        super();
+        this.objectConstructors.set(KIXObjectType.MAIL_ACCOUNT, [MailAccount]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.MAIL_ACCOUNT
             || kixObjectType === KIXObjectType.MAIL_ACCOUNT_TYPE;
