@@ -184,10 +184,14 @@ class SysConfigContentProvider extends TableContentProvider {
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
-            let tableValue;
+            let tableValue: TableValue;
             if (column.property === SysConfigOptionDefinitionProperty.VALUE) {
-                const value = option.Value ? option.Value : '';
+                const value = option && option.Value ? option.Value : '';
                 tableValue = new TableValue(column.property, value, value);
+            } else if (column.property === SysConfigOptionDefinitionProperty.NAME) {
+                const icons = option && option.ReadOnly ? ['kix-icon-lock-close'] : [];
+                tableValue = await this.getTableValue(definition, column.property, column);
+                tableValue.displayIcons = icons;
             } else {
                 tableValue = await this.getTableValue(definition, column.property, column);
             }

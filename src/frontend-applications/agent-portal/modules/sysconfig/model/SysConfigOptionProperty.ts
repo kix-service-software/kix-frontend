@@ -15,6 +15,8 @@ export enum SysConfigOptionProperty {
 
     CONTEXT = 'Context',
 
-    CONTEXT_METADATA = 'ContextMetadata'
+    CONTEXT_METADATA = 'ContextMetadata',
+
+    READONLY = 'ReadOnly'
 
 }

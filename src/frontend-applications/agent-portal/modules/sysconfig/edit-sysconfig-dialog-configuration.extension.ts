@@ -25,10 +25,8 @@ import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfi
 import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
-
 import { ModuleConfigurationService } from '../../server/services/configuration';
 import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
-
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
@@ -80,7 +78,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'sysconfig-edit-form-field-description',
-                'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, null, false,
+                'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, 'text-area-input', false,
                 'Translatable#Helptext_Admin_SysConfigEdit_Description', null, null, null, null, null,
                 null, null, null, null, null, null, false, false, true
             )

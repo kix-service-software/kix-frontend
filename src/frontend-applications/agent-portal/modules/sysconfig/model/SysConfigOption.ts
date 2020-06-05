@@ -24,6 +24,8 @@ export class SysConfigOption extends KIXObject {
 
     public ContextMetadata: string;
 
+    public ReadOnly: boolean;
+
     public constructor(sysConfigOption?: SysConfigOption) {
         super();
         if (sysConfigOption) {
@@ -32,6 +34,7 @@ export class SysConfigOption extends KIXObject {
             this.Value = sysConfigOption.Value;
             this.Context = sysConfigOption.Context;
             this.ContextMetadata = sysConfigOption.ContextMetadata;
+            this.ReadOnly = Boolean(sysConfigOption.ReadOnly);
         }
     }
 
