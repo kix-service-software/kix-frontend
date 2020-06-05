@@ -8,7 +8,6 @@
  */
 
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { TicketPriorityFactory } from './TicketPriorityFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
@@ -34,7 +33,7 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.TICKET_PRIORITY;
 
     private constructor() {
-        super([new TicketPriorityFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -50,7 +49,8 @@ export class TicketPriorityAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET_PRIORITY) {
             const priorities = await super.load<TicketPriority>(
-                token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, loadingOptions, objectIds, 'Priority'
+                token, KIXObjectType.TICKET_PRIORITY, this.RESOURCE_URI, loadingOptions, objectIds, 'Priority',
+                TicketPriority
             );
             if (objectIds && objectIds.length) {
                 objects = priorities.filter((t) => objectIds.some((oid) => oid === t.ObjectId));

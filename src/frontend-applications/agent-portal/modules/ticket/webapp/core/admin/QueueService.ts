@@ -96,7 +96,7 @@ export class QueueService extends KIXObjectService<Queue> {
 
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
-                    new ObjectIcon(KIXObjectType.QUEUE, queue.QueueID),
+                    new ObjectIcon(null, KIXObjectType.QUEUE, queue.QueueID),
                     null,
                     subTree,
                     null, null, null,

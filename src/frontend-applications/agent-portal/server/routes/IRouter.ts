@@ -15,6 +15,4 @@ export interface IRouter {
 
     getBaseRoute(): string;
 
-    setAppTemplate(appTemplate: any): void;
-
 }

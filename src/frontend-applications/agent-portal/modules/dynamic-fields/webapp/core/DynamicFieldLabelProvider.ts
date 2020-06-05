@@ -87,7 +87,7 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
     }
 
     public getObjectIcon(dynamicField?: DynamicField): string | ObjectIcon {
-        return new ObjectIcon('DynamicField', dynamicField.ID);
+        return new ObjectIcon(null, 'DynamicField', dynamicField.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -108,7 +108,7 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
 
     public async getIcons(dynamicField: DynamicField, property: string): Promise<Array<string | ObjectIcon>> {
         if (property === DynamicFieldProperty.ID || property === 'ICON') {
-            return [new ObjectIcon('DynamicField', dynamicField.ID)];
+            return [new ObjectIcon(null, 'DynamicField', dynamicField.ID)];
         } else if (property === DynamicFieldProperty.INTERNAL_FIELD) {
             return dynamicField.InternalField === 1 ? ['kix-icon-check'] : [];
         } else if (property === DynamicFieldProperty.CUSTOMER_VISIBLE) {

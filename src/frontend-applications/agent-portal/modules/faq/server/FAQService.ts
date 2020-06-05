@@ -18,9 +18,10 @@ import { CreateFAQVoteOptions } from '../model/CreateFAQVoteOptions';
 import { Attachment } from '../../../model/kix/Attachment';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { FAQArticleProperty } from '../model/FAQArticleProperty';
-import { FAQCategoryFactory } from './FAQCategoryFactory';
 import { Error } from '../../../../../server/model/Error';
 import { FilterCriteria } from '../../../model/FilterCriteria';
+import { FAQArticle } from '../model/FAQArticle';
+import { FAQCategory } from '../model/FAQCategory';
 
 
 export class FAQService extends KIXObjectAPIService {
@@ -39,7 +40,7 @@ export class FAQService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new FAQCategoryFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -61,12 +62,14 @@ export class FAQService extends KIXObjectAPIService {
         switch (objectType) {
             case KIXObjectType.FAQ_ARTICLE:
                 objects = await super.load(
-                    token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle'
+                    token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'FAQArticle', FAQArticle
                 );
                 break;
             case KIXObjectType.FAQ_CATEGORY:
                 const categoryUri = this.buildUri('system', 'faq', 'categories');
-                objects = await super.load(token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory');
+                objects = await super.load(
+                    token, objectType, categoryUri, loadingOptions, objectIds, 'FAQCategory', FAQCategory
+                );
                 break;
             case KIXObjectType.FAQ_ARTICLE_ATTACHMENT:
                 objects = await this.loadAttachment(
@@ -75,7 +78,9 @@ export class FAQService extends KIXObjectAPIService {
                 break;
             case KIXObjectType.FAQ_KEYWORD:
                 const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
-                objects = await super.load<string>(token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword');
+                objects = await super.load<string>(
+                    token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword', String
+                );
                 break;
             default:
         }
@@ -121,7 +126,7 @@ export class FAQService extends KIXObjectAPIService {
         const uri = this.buildUri(this.RESOURCE_URI, objectId, 'attachments');
 
         const existingAttachments = await super.load<Attachment>(
-            token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment'
+            token, KIXObjectType.FAQ_ARTICLE_ATTACHMENT, uri, null, null, 'Attachment', Attachment
         );
 
         const deletableAttachments = existingAttachments
@@ -245,7 +250,9 @@ export class FAQService extends KIXObjectAPIService {
                 'attachments', objectLoadingOptions.attachmentId
             );
 
-            const attachments = await super.load<Attachment>(token, null, uri, loadingOptions, null, 'Attachment');
+            const attachments = await super.load<Attachment>(
+                token, null, uri, loadingOptions, null, 'Attachment', Attachment
+            );
             return attachments;
         } else {
             const error = 'No FAQArticleAttachmentLoadingOptions given.';

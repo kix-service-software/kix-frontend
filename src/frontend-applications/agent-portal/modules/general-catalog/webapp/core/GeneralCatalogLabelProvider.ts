@@ -87,6 +87,6 @@ export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogIte
     }
 
     public getObjectIcon(catlogItem?: GeneralCatalogItem): string | ObjectIcon {
-        return new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, catlogItem.ItemID);
+        return new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, catlogItem.ItemID);
     }
 }

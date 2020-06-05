@@ -254,10 +254,10 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
         switch (property) {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                icons.push(new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, value));
+                icons.push(new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, value));
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
-                icons.push(new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, value));
+                icons.push(new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, value));
                 break;
             default:
         }
@@ -281,7 +281,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
                 const labels = [];
                 for (const ci of configItems) {
-                    const ciIcon = new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
+                    const ciIcon = new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
                     const incidentIcons = await LabelService.getInstance().getIcons(
                         ci, ConfigItemProperty.CUR_INCI_STATE_ID
                     );

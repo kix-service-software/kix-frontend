@@ -214,9 +214,9 @@ class Component extends FormInputComponent<any, ComponentState> {
         const idx = mimeType.lastIndexOf('/');
         if (idx >= 0) {
             const extension = mimeType.substring(idx + 1, mimeType.length);
-            fileIcon = new ObjectIcon('Filetype', extension);
+            fileIcon = new ObjectIcon(null, 'Filetype', extension);
         } else if (mimeType) {
-            fileIcon = new ObjectIcon('Filetype', mimeType);
+            fileIcon = new ObjectIcon(null, 'Filetype', mimeType);
         }
         return fileIcon;
     }

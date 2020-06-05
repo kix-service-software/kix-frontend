@@ -9,7 +9,6 @@
 
 import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
 import { ConfigItemImage } from '../../model/ConfigItemImage';
-import { ConfigItemImageFactory } from '../../server/ConfigItemImageFactory';
 
 export class ConfigItemImageBrowserFactory implements IKIXObjectFactory<ConfigItemImage> {
 
@@ -25,6 +24,6 @@ export class ConfigItemImageBrowserFactory implements IKIXObjectFactory<ConfigIt
     private constructor() { }
 
     public async create(imgage: ConfigItemImage): Promise<ConfigItemImage> {
-        return ConfigItemImageFactory.create(imgage);
+        return new ConfigItemImage(imgage);
     }
 }

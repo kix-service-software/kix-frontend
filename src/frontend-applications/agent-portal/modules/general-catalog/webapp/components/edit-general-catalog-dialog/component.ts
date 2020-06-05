@@ -14,8 +14,6 @@ import { EditGeneralCatalogDialogContext } from '../../core';
 
 class Component extends AbstractEditDialog {
 
-    private formId: string;
-
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
@@ -24,10 +22,6 @@ class Component extends AbstractEditDialog {
             KIXObjectType.GENERAL_CATALOG_ITEM,
             EditGeneralCatalogDialogContext.CONTEXT_ID
         );
-    }
-
-    public onInput(input: any) {
-        this.formId = input.formId;
     }
 
     public async onMount(): Promise<void> {

@@ -16,7 +16,6 @@ import { ConsoleCommand } from '../model/ConsoleCommand';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { ConsoleExecuteResult } from '../model/ConsoleExecuteResult';
 import { LoggingService } from '../../../../../server/services/LoggingService';
-import { ConsoleCommandFactory } from './ConsoleCommandFactory';
 import { Error } from '../../../../../server/model/Error';
 
 export class ConsoleCommandService extends KIXObjectAPIService {
@@ -31,7 +30,7 @@ export class ConsoleCommandService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new ConsoleCommandFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -51,7 +50,8 @@ export class ConsoleCommandService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.CONSOLE_COMMAND) {
             objects = await super.load<ConsoleCommand>(
-                token, KIXObjectType.CONSOLE_COMMAND, this.RESOURCE_URI, loadingOptions, objectIds, 'ConsoleCommand'
+                token, KIXObjectType.CONSOLE_COMMAND, this.RESOURCE_URI, loadingOptions, objectIds, 'ConsoleCommand',
+                ConsoleCommand
             );
         }
 

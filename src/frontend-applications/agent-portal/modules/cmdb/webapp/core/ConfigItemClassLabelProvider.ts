@@ -104,7 +104,7 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
 
 
     public getObjectIcon(ciClass?: ConfigItemClass): string | ObjectIcon {
-        return new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID);
+        return new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID);
     }
 
     public async getIcons(

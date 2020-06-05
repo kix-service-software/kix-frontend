@@ -207,7 +207,8 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                     if (input.Type === 'GeneralCatalog') {
                         const items = await this.getGeneralCatalogItems(input, objectIds);
                         return items.map((item) => new TreeNode(
-                            item.ItemID, item.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
+                            item.ItemID, item.Name,
+                            new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
                         ));
                     } else if (input.Type === 'Organisation' && objectIds) {
                         const organisations = await KIXObjectService.loadObjects<Organisation>(
@@ -248,7 +249,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         if (input.Type === 'CIClassReference') {
             const configItems = await this.loadConfigItems(input, searchValue, limit);
             tree = configItems.map(
-                (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID))
+                (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(null, ci.KIXObjectType, ci.ConfigItemID))
             );
         } else if (input.Type === 'Organisation') {
             const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);

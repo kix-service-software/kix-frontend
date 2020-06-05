@@ -61,11 +61,11 @@ export class TranslationAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.TRANSLATION_PATTERN) {
             const uri = this.buildUri('system', this.RESOURCE_URI);
             objects = await super.load<TranslationPattern>(
-                token, objectType, uri, loadingOptions, objectIds, 'TranslationPattern'
+                token, objectType, uri, loadingOptions, objectIds, 'TranslationPattern', TranslationPattern
             );
         } else if (objectType === KIXObjectType.TRANSLATION) {
             objects = await super.load<Translation>(
-                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'Translation'
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'Translation', Translation
             );
         }
 
@@ -127,7 +127,8 @@ export class TranslationAPIService extends KIXObjectAPIService {
                 null, null, null, [TranslationPatternProperty.LANGUAGES]
             );
             const translations = await super.load<TranslationPattern>(
-                token, KIXObjectType.TRANSLATION_PATTERN, uri, loadingOptions, null, 'TranslationPattern'
+                token, KIXObjectType.TRANSLATION_PATTERN, uri, loadingOptions, null, 'TranslationPattern',
+                TranslationPattern
             );
             if (translations && translations.length) {
                 const languageParameter = parameter.filter((p) => p[0] !== TranslationPatternProperty.VALUE);

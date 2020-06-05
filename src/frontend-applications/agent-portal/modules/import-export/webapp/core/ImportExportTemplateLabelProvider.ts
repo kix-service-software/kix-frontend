@@ -126,7 +126,7 @@ export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExpor
     }
 
     public getObjectIcon(object: ImportExportTemplate): string | ObjectIcon {
-        return new ObjectIcon('ImportExportTemplate', object.ID);
+        return new ObjectIcon(null, 'ImportExportTemplate', object.ID);
     }
 
     public async getObjectTooltip(object: ImportExportTemplate, translatable: boolean = true): Promise<string> {

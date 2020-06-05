@@ -154,7 +154,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
     }
 
     public getObjectIcon(object?: Permission): string | ObjectIcon {
-        return new ObjectIcon('Permission', object.ID);
+        return new ObjectIcon(null, 'Permission', object.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -174,7 +174,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
         object: Permission, property: string, value?: any
     ): Promise<Array<string | ObjectIcon>> {
         if (property === PermissionProperty.ID) {
-            return [new ObjectIcon('Permission', object.ID)];
+            return [new ObjectIcon(null, 'Permission', object.ID)];
         } else if (property === PermissionProperty.IS_REQUIRED) {
             return value ? ['kix-icon-check'] : null;
         }

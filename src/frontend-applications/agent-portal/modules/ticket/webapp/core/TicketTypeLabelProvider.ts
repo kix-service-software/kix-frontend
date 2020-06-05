@@ -73,7 +73,7 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
     }
 
     public getObjectIcon(ticketType?: TicketType): string | ObjectIcon {
-        return new ObjectIcon('TicketType', ticketType.ID);
+        return new ObjectIcon(null, 'TicketType', ticketType.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -96,7 +96,7 @@ export class TicketTypeLabelProvider extends LabelProvider<TicketType> {
         ticketType: TicketType, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === TicketTypeProperty.ID || property === 'ICON') {
-            return [new ObjectIcon('TicketType', ticketType.ID)];
+            return [new ObjectIcon(null, 'TicketType', ticketType.ID)];
         }
         return null;
     }

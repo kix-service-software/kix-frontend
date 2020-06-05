@@ -161,7 +161,9 @@ export class TicketBulkManager extends BulkManager {
 
                     for (const c of contacts) {
                         const displayValue = await LabelService.getInstance().getObjectText(c);
-                        nodes.push(new TreeNode(c.ObjectId, displayValue, new ObjectIcon(c.KIXObjectType, c.ObjectId)));
+                        nodes.push(
+                            new TreeNode(c.ObjectId, displayValue, new ObjectIcon(null, c.KIXObjectType, c.ObjectId))
+                        );
                     }
                 }
                 return nodes;
@@ -185,13 +187,14 @@ export class TicketBulkManager extends BulkManager {
                         const displayValue = await LabelService.getInstance().getObjectText(organisations[0]);
                         nodes.push(new TreeNode(
                             organisations[0].ID, displayValue,
-                            new ObjectIcon(KIXObjectType.ORGANISATION, organisations[0].ID)
+                            new ObjectIcon(null, KIXObjectType.ORGANISATION, organisations[0].ID)
                         ));
                     } else {
                         const orgStringValue = Array.isArray(organisationValue.value)
                             ? organisationValue.value[0].toString() : organisationValue.value.toString();
                         nodes.push(new TreeNode(
-                            orgStringValue, orgStringValue, new ObjectIcon(KIXObjectType.ORGANISATION, orgStringValue)
+                            orgStringValue, orgStringValue,
+                            new ObjectIcon(null, KIXObjectType.ORGANISATION, orgStringValue)
                         ));
                     }
                 }

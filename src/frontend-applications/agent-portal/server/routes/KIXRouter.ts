@@ -17,8 +17,6 @@ export abstract class KIXRouter implements IRouter {
     protected router: Router;
     protected serverConfig: IServerConfiguration;
 
-    private appTemplate: any;
-
     public constructor() {
         this.router = Router();
         this.serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -27,10 +25,6 @@ export abstract class KIXRouter implements IRouter {
 
     public getRouter(): Router {
         return this.router;
-    }
-
-    public setAppTemplate(appTemplate: any): void {
-        this.appTemplate = appTemplate;
     }
 
     public abstract getBaseRoute(): string;

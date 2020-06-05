@@ -8,7 +8,6 @@
  */
 
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { TicketTypeFactory } from './TicketTypeFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
@@ -34,7 +33,7 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 
     private constructor() {
-        super([new TicketTypeFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -50,7 +49,7 @@ export class TicketTypeAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET_TYPE) {
             objects = await super.load<TicketType>(
-                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketType'
+                token, KIXObjectType.TICKET_TYPE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketType', TicketType
             );
         }
 

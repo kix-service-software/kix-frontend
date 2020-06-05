@@ -269,7 +269,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     if (channels && channels.length && channels[0].Name === 'email') {
                         const mailIcon = article && article.isUnsent()
                             ? 'kix-icon-mail-warning'
-                            : new ObjectIcon('Channel', channelID);
+                            : new ObjectIcon(null, 'Channel', channelID);
                         let directionIcon = 'kix-icon-arrow-receive';
                         if (article && article.senderType.Name === 'agent') {
                             directionIcon = 'kix-icon-arrow-outward';
@@ -277,7 +277,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                         icons.push(mailIcon);
                         icons.push(directionIcon);
                     } else {
-                        icons.push(new ObjectIcon('Channel', channelID));
+                        icons.push(new ObjectIcon(null, 'Channel', channelID));
                     }
                 }
                 break;

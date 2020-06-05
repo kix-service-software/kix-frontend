@@ -34,8 +34,6 @@ declare const jKanban: any;
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private kanban: any;
-
     private dragTo: string[];
 
     private boards: any[] = [];
@@ -93,7 +91,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             true, 'closed', 'closed', 'Translatable#Recently Closed', true
         );
 
-        this.kanban = new jKanban({
+        // tslint:disable-next-line: no-unused-expression
+        new jKanban({
             element: '#kanban-board',
             gutter: '15px',
             widthBoard: '250px',

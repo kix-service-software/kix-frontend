@@ -15,7 +15,6 @@ import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecifi
 import { ImportExportTemplate } from '../model/ImportExportTemplate';
 import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 import { LoggingService } from '../../../../../server/services/LoggingService';
-import { ImportExportTemplateFactory } from './ImportExportTemplateFactory';
 import { Error } from '../../../../../server/model/Error';
 import { CreateImportExportTemplateRunOptions } from '../model/CreateImportExportTemplateRunOptions';
 import { ImportExportTemplateRunProperty } from '../model/ImportExportTemplateRunProperty';
@@ -38,7 +37,7 @@ export class ImportExportAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.IMPORT_EXPORT_TEMPLATE;
 
     private constructor() {
-        super([new ImportExportTemplateFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -56,7 +55,7 @@ export class ImportExportAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.IMPORT_EXPORT_TEMPLATE) {
             objects = await super.load<ImportExportTemplate>(
                 token, KIXObjectType.IMPORT_EXPORT_TEMPLATE, this.RESOURCE_URI, loadingOptions, objectIds,
-                'ImportExportTemplate'
+                'ImportExportTemplate', ImportExportTemplate
             );
         }
 

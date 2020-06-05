@@ -27,7 +27,7 @@ export class ObjectIcon extends KIXObject {
     public Content: string;
 
     public constructor(
-        object?: string, id?: string | number, contentType?: string, content?: any, objectIcon?: ObjectIcon
+        objectIcon?: ObjectIcon, object?: string, id?: string | number, contentType?: string, content?: any
     ) {
         super(objectIcon);
 

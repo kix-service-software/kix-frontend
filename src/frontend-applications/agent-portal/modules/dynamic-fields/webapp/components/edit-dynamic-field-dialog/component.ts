@@ -14,12 +14,6 @@ import { EditDynamicFieldDialogContext } from '../../core/EditDynamicFieldDialog
 
 class Component extends AbstractEditDialog {
 
-    private formId: string;
-
-    public onInput(input: any) {
-        this.formId = input.formId;
-    }
-
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(

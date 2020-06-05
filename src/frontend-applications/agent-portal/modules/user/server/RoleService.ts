@@ -9,7 +9,6 @@
 
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { RoleFactory } from './RoleFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
@@ -18,9 +17,10 @@ import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecific
 import { RoleProperty } from '../model/RoleProperty';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { PermissionProperty } from '../model/PermissionProperty';
-import { PermissionTypeFactory } from './PermissionTypeFactory';
 import { CreatePermissionDescription } from './CreatePermissionDescription';
 import { Permission } from '../model/Permission';
+import { PermissionType } from '../model/PermissionType';
+import { Role } from '../model/Role';
 
 
 export class RoleService extends KIXObjectAPIService {
@@ -41,7 +41,7 @@ export class RoleService extends KIXObjectAPIService {
     public kixObjectType: KIXObjectType = KIXObjectType.ROLE;
 
     private constructor() {
-        super([new RoleFactory(), new PermissionTypeFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -59,12 +59,13 @@ export class RoleService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.ROLE) {
             objects = await super.load(
-                token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE
+                token, this.objectType, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ROLE, Role
             );
         } else if (objectType === KIXObjectType.PERMISSION_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'permissiontypes');
             objects = await super.load(
-                token, KIXObjectType.PERMISSION_TYPE, uri, loadingOptions, objectIds, KIXObjectType.PERMISSION_TYPE
+                token, KIXObjectType.PERMISSION_TYPE, uri, loadingOptions, objectIds, KIXObjectType.PERMISSION_TYPE,
+                PermissionType
             );
         }
 
@@ -125,7 +126,9 @@ export class RoleService extends KIXObjectAPIService {
             userIds = [];
         }
         const baseUri = this.buildUri(this.RESOURCE_URI, roleId, 'userids');
-        const existingUserIds = await this.load(token, null, baseUri, null, null, RoleProperty.USER_IDS);
+        const existingUserIds = await this.load<number>(
+            token, null, baseUri, null, null, RoleProperty.USER_IDS, Number
+        );
 
         const userIdsToRemove = existingUserIds.filter((euid) => !userIds.some((uid) => uid === euid));
         const userIdsToAdd = userIds.filter((uid) => !existingUserIds.some((euid) => euid === uid));
@@ -152,7 +155,7 @@ export class RoleService extends KIXObjectAPIService {
         if (roleId) {
             const baseUri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions');
             const existingPermissions = await this.load(
-                token, null, baseUri, loadingOptionsForExistingPermissions, null, 'Permission'
+                token, null, baseUri, loadingOptionsForExistingPermissions, null, 'Permission', Permission
             );
 
             if (alsoDelete) {

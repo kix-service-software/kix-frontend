@@ -9,7 +9,6 @@
 
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { ContactFactory } from './ContactFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { LoggingService } from '../../../../../server/services/LoggingService';
@@ -26,6 +25,7 @@ import { UserProperty } from '../../user/model/UserProperty';
 import { UserService } from '../../user/server/UserService';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
+import { Contact } from '../model/Contact';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -45,7 +45,7 @@ export class ContactAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     private constructor() {
-        super([new ContactFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -57,9 +57,14 @@ export class ContactAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         objectIds: string[], loadingOptions: KIXObjectLoadingOptions
     ): Promise<T[]> {
-        const objects = await super.load(
-            token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT
-        );
+        let objects = [];
+
+        if (objectType === KIXObjectType.CONTACT) {
+            objects = await super.load(
+                token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
+                Contact
+            );
+        }
 
         return objects;
     }

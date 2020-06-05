@@ -29,7 +29,6 @@ import { FilterType } from '../../../../model/FilterType';
 import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 import { QueueProperty } from '../../../ticket/model/QueueProperty';
 import { NotificationProperty } from '../../../notification/model/NotificationProperty';
-
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { User } from '../../../user/model/User';
@@ -41,8 +40,8 @@ import { PersonalSettingsFormService } from '../../../user/webapp/core';
 import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 import { Contact } from '../../model/Contact';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { Role } from '../../../user/model/Role';
 import { RoleProperty } from '../../../user/model/RoleProperty';
+import { Role } from '../../../user/model/Role';
 
 export class ContactFormService extends KIXObjectFormService {
 

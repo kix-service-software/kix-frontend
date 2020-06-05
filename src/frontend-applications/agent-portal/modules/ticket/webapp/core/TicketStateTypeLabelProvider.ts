@@ -90,7 +90,7 @@ export class TicketStateTypeLabelProvider extends LabelProvider<TicketStateType>
         ticketStateType: TicketStateType, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === TicketStateProperty.ID) {
-            return [new ObjectIcon('StateTypes', ticketStateType.ID)];
+            return [new ObjectIcon(null, 'StateTypes', ticketStateType.ID)];
         }
         return null;
     }

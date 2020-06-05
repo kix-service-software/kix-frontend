@@ -9,7 +9,6 @@
 
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { MailAccountFactory } from './MailAccountFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
@@ -36,7 +35,7 @@ export class MailAccountService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.MAIL_ACCOUNT;
 
     private constructor() {
-        super([new MailAccountFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -54,12 +53,12 @@ export class MailAccountService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.MAIL_ACCOUNT) {
             const uri = this.buildUri('system', 'communication', 'mailaccounts');
             objects = await super.load<MailAccount>(
-                token, KIXObjectType.MAIL_ACCOUNT, uri, loadingOptions, objectIds, 'MailAccount'
+                token, KIXObjectType.MAIL_ACCOUNT, uri, loadingOptions, objectIds, 'MailAccount', MailAccount
             );
         } else if (objectType === KIXObjectType.MAIL_ACCOUNT_TYPE) {
             const uri = this.buildUri('system', 'communication', 'mailaccounts', 'types');
             objects = await super.load<string>(
-                token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType'
+                token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType', String
             );
         }
 

@@ -86,7 +86,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
     }
 
     public getObjectIcon(translation?: TranslationPattern): string | ObjectIcon {
-        return translation ? new ObjectIcon('Translation', translation.ObjectId) : null;
+        return translation ? new ObjectIcon(null, 'Translation', translation.ObjectId) : null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -110,7 +110,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
         translation: TranslationPattern, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === 'ICON') {
-            return [new ObjectIcon('Translation', translation.ObjectId)];
+            return [new ObjectIcon(null, 'Translation', translation.ObjectId)];
         }
         return null;
     }

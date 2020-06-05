@@ -142,7 +142,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
     }
 
     public getObjectIcon(object: MailAccount): string | ObjectIcon {
-        return new ObjectIcon('MailAccount', object.ID);
+        return new ObjectIcon(null, 'MailAccount', object.ID);
     }
 
     public async getObjectTooltip(object: MailAccount, translatable: boolean = true): Promise<string> {

@@ -9,7 +9,6 @@
 
 import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
-import { ObjectIconFactory } from './ObjectIconFactory';
 import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
 import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
 import { ObjectIconLoadingOptions } from '../../../server/model/ObjectIconLoadingOptions';
@@ -39,7 +38,7 @@ export class ObjectIconService extends KIXObjectAPIService {
     public objectType: KIXObjectType | string = KIXObjectType.OBJECT_ICON;
 
     private constructor() {
-        super([new ObjectIconFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -80,7 +79,7 @@ export class ObjectIconService extends KIXObjectAPIService {
 
     public async getObjectIcons(token: string): Promise<ObjectIcon[]> {
         return await super.load<ObjectIcon>(
-            token, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon'
+            token, KIXObjectType.OBJECT_ICON, this.RESOURCE_URI, null, null, 'ObjectIcon', ObjectIcon
         );
     }
 
