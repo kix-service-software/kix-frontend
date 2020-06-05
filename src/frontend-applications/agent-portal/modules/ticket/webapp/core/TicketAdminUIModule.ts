@@ -7,8 +7,8 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     TicketTypeFormService, TicketPriorityFormService, TicketStateFormService, QueueFormService,
     TicketTypeService, TicketStateService, TicketPriorityService, QueueService, TicketTypeLabelProvider,
@@ -21,18 +21,18 @@ import {
     TicketStateDetailsContext, TicketPriorityCreateAction, NewTicketPriorityDialogContext, TicketPriorityEditAction,
     EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction, TicketPriorityDetailsContext,
     TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext, QueueDetailsContext
-} from ".";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ChannelLabelProvider } from "./ChannelLabelProvider";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { QueueDuplicateAction } from "./admin";
+} from '.';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ChannelLabelProvider } from './ChannelLabelProvider';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { QueueDuplicateAction } from './admin';
 
 export class UIModule implements IUIModule {
 
@@ -41,7 +41,7 @@ export class UIModule implements IUIModule {
     public name: string = 'TicketAdminUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

@@ -7,12 +7,12 @@
  * --
  */
 
-import { IDynamicFormManager } from "./IDynamicFormManager";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { TreeNode } from "../tree";
-import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
-import { ValidationResult } from "../ValidationResult";
-import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
+import { IDynamicFormManager } from './IDynamicFormManager';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { TreeNode } from '../tree';
+import { DynamicFormOperationsType } from './DynamicFormOperationsType';
+import { ValidationResult } from '../ValidationResult';
+import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
 

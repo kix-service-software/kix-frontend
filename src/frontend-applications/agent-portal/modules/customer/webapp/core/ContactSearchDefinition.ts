@@ -7,13 +7,13 @@
  * --
  */
 
-import { ContactService } from "./ContactService";
-import { ContactSearchFormManager } from "./ContactSearchFormManager";
-import { SearchDefinition, SearchResultCategory } from "../../../search/webapp/core";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { SearchProperty } from "../../../search/model/SearchProperty";
+import { ContactService } from './ContactService';
+import { ContactSearchFormManager } from './ContactSearchFormManager';
+import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class ContactSearchDefinition extends SearchDefinition {
 

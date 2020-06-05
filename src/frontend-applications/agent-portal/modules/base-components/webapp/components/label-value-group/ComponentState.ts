@@ -7,7 +7,7 @@
  * --
  */
 
-import { LabelValueGroup } from "../../../../../model/LabelValueGroup";
+import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
 
 export class ComponentState {
 

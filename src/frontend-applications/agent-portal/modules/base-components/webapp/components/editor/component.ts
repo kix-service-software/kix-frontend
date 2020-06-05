@@ -251,7 +251,7 @@ class EditorComponent {
         if (inlineContent) {
             for (const contentItem of inlineContent) {
                 if (contentItem.contentId && contentItem.contentType) {
-                    const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), "'");
+                    const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), '\'');
                     const replaceString = `data:${contentType};base64,${contentItem.content}`;
                     const contentIdLength = contentItem.contentId.length - 1;
                     const contentId = contentItem.contentId.substring(1, contentIdLength);

@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../../server/model/rest/CRUD";
-import { QueueDialogUtil } from "../../QueueDialogUtil";
-import { ContextService } from "../../../../../../base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { Queue } from "../../../../../model/Queue";
+import { AbstractAction } from '../../../../../../base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
+import { QueueDialogUtil } from '../../QueueDialogUtil';
+import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { Queue } from '../../../../../model/Queue';
 
 export class QueueDuplicateAction extends AbstractAction {
 

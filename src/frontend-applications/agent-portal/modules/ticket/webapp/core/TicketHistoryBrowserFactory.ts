@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { TicketHistory } from "../../model/TicketHistory";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { TicketHistory } from '../../model/TicketHistory';
 
 export class TicketHistoryBrowserFactory extends KIXObjectFactory<TicketHistory> {
 

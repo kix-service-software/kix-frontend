@@ -7,12 +7,12 @@
  * --
  */
 
-import { IConfiguration } from "../../../../../model/configuration/IConfiguration";
-import { ConfigurationType } from "../../../../../model/configuration/ConfigurationType";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { ConfigurationDefinition } from "../../../../../model/configuration/ConfigurationDefinition";
-import { ChartComponentConfiguration } from "../../../../charts/model/ChartComponentConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { IConfiguration } from '../../../../../model/configuration/IConfiguration';
+import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { ConfigurationDefinition } from '../../../../../model/configuration/ConfigurationDefinition';
+import { ChartComponentConfiguration } from '../../../../charts/model/ChartComponentConfiguration';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export class TicketChartWidgetConfiguration implements IConfiguration {
 

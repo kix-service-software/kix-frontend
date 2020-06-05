@@ -7,31 +7,32 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormInputAction } from "../../../../../modules/base-components/webapp/core/FormInputAction";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { PreviousTabData } from "../../../../../modules/base-components/webapp/core/PreviousTabData";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { TabContainerEvent } from "../../../../../modules/base-components/webapp/core/TabContainerEvent";
-import { TabContainerEventData } from "../../../../../modules/base-components/webapp/core/TabContainerEventData";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { NewTicketDialogContext } from "../../core";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FormValidationService } from "../../../../../modules/base-components/webapp/core/FormValidationService";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { ServiceRegistry } from "../../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { IKIXObjectService } from "../../../../../modules/base-components/webapp/core/IKIXObjectService";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
+import { Label } from '../../../../../modules/base-components/webapp/core/Label';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { PreviousTabData } from '../../../../../modules/base-components/webapp/core/PreviousTabData';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
+import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { NewTicketDialogContext } from '../../core';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FormValidationService } from '../../../../../modules/base-components/webapp/core/FormValidationService';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { Contact } from '../../../../customer/model/Contact';
 
 class Component extends FormInputComponent<number | string, ComponentState> {
 
@@ -178,14 +179,11 @@ class Component extends FormInputComponent<number | string, ComponentState> {
                     FilterType.AND, contactId
                 )
             ]);
-            const contacts = await KIXObjectService.loadObjects(
+            const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions
             );
             if (contacts && contacts.length) {
-                const contact = contacts[0];
-                const currentNode = await this.createTreeNode(contact);
-                const nodes = [currentNode];
-                contactId = contact.ObjectId;
+                contactId = contacts[0].ID;
             }
         } else {
             contactId = null;

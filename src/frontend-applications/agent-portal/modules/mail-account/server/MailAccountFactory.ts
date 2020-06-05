@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { MailAccount } from "../model/MailAccount";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { MailAccount } from '../model/MailAccount';
 
 export class MailAccountFactory extends ObjectFactory<MailAccount> {
 

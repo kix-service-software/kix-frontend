@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObjectService } from "./KIXObjectService";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectService } from './KIXObjectService';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class SysConfigUtil {
 

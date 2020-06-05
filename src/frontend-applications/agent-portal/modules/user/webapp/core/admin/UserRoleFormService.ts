@@ -7,11 +7,11 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoleProperty } from "../../../model/RoleProperty";
-import { KIXObjectSpecificCreateOptions } from "../../../../../model/KIXObjectSpecificCreateOptions";
-import { RoleUsageContextTypes } from "../../../model/RoleUsageContextTypes";
+import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoleProperty } from '../../../model/RoleProperty';
+import { KIXObjectSpecificCreateOptions } from '../../../../../model/KIXObjectSpecificCreateOptions';
+import { RoleUsageContextTypes } from '../../../model/RoleUsageContextTypes';
 
 
 export class UserRoleFormService extends KIXObjectFormService {

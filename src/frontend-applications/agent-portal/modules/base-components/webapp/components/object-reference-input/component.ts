@@ -338,7 +338,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 const icon = LabelService.getInstance().getObjectIcon(o);
                 let tooltip = await LabelService.getInstance().getTooltip(o);
 
-                tooltip = (tooltip && tooltip !== text) ? text + ": " + tooltip : text;
+                tooltip = (tooltip && tooltip !== text) ? text + ': ' + tooltip : text;
                 return new TreeNode(
                     o.ObjectId, text ? text : `${o.KIXObjectType}: ${o.ObjectId} `, icon, undefined, undefined,
                     undefined, undefined, undefined, undefined, undefined, undefined, undefined,

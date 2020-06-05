@@ -7,12 +7,12 @@
  * --
  */
 
-import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
-import { ILabelProvider } from "./ILabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { Label } from "./Label";
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
+import { ILabelProvider } from './ILabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { Label } from './Label';
 
 export abstract class ExtendedLabelProvider<T extends KIXObject = KIXObject> implements ILabelProvider<T> {
 

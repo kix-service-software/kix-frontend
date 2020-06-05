@@ -7,13 +7,13 @@
  * --
  */
 
-import { Context } from "../../../../../../../model/Context";
-import { LabelService } from "../../../../../../../modules/base-components/webapp/core/LabelService";
-import { Queue } from "../../../../../model/Queue";
-import { BreadcrumbInformation } from "../../../../../../../model/BreadcrumbInformation";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { AdminContext } from "../../../../../../admin/webapp/core";
-import { KIXObject } from "../../../../../../../model/kix/KIXObject";
+import { Context } from '../../../../../../../model/Context';
+import { LabelService } from '../../../../../../../modules/base-components/webapp/core/LabelService';
+import { Queue } from '../../../../../model/Queue';
+import { BreadcrumbInformation } from '../../../../../../../model/BreadcrumbInformation';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { AdminContext } from '../../../../../../admin/webapp/core';
+import { KIXObject } from '../../../../../../../model/kix/KIXObject';
 
 export class QueueDetailsContext extends Context {
 

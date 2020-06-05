@@ -7,10 +7,10 @@
  * --
  */
 
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 
-export class ComponentState<T> {
+export class ComponentState {
 
     public constructor(
         public propertyDisplayText: string = null,

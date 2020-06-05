@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { ConsoleCommand } from "../../model/ConsoleCommand";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { ConsoleCommand } from '../../model/ConsoleCommand';
 
 export class ConsoleCommandBrowserFactory implements IKIXObjectFactory<ConsoleCommand> {
 

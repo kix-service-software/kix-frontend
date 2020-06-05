@@ -7,13 +7,12 @@
  * --
  */
 
-import { ConfigItem } from "../model/ConfigItem";
+import { ConfigItem } from '../model/ConfigItem';
 
 export class ConfigItemFactory {
 
-    public static create(_configItem: ConfigItem): ConfigItem {
-        const configItem = new ConfigItem(_configItem);
-        return configItem;
+    public static create(configItem: ConfigItem): ConfigItem {
+        return new ConfigItem(configItem);
     }
 
 }

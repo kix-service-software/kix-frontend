@@ -7,10 +7,10 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { MailFilterMatch } from "../../../model/MailFilterMatch";
+import { ComponentState } from './ComponentState';
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { MailFilterMatch } from '../../../model/MailFilterMatch';
 
 class Component extends AbstractMarkoComponent {
 

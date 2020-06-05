@@ -7,20 +7,20 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { ImportExportTemplate } from "../model/ImportExportTemplate";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { ImportExportTemplateFactory } from "./ImportExportTemplateFactory";
-import { Error } from "../../../../../server/model/Error";
-import { CreateImportExportTemplateRunOptions } from "../model/CreateImportExportTemplateRunOptions";
-import { ImportExportTemplateRunProperty } from "../model/ImportExportTemplateRunProperty";
-import { ImportExportTemplateRunTypes } from "../model/ImportExportTemplateRunTypes";
-import { ImportExportTemplateRunPostResult } from "../model/ImportExportTemplateRunPostResult";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { ImportExportTemplate } from '../model/ImportExportTemplate';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { ImportExportTemplateFactory } from './ImportExportTemplateFactory';
+import { Error } from '../../../../../server/model/Error';
+import { CreateImportExportTemplateRunOptions } from '../model/CreateImportExportTemplateRunOptions';
+import { ImportExportTemplateRunProperty } from '../model/ImportExportTemplateRunProperty';
+import { ImportExportTemplateRunTypes } from '../model/ImportExportTemplateRunTypes';
+import { ImportExportTemplateRunPostResult } from '../model/ImportExportTemplateRunPostResult';
 
 export class ImportExportAPIService extends KIXObjectAPIService {
 

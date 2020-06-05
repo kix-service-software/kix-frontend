@@ -7,35 +7,35 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { TicketFactory } from "./TicketFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { TicketProperty } from "../model/TicketProperty";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectSpecificDeleteOptions } from "../../../model/KIXObjectSpecificDeleteOptions";
-import { ArticleProperty } from "../model/ArticleProperty";
-import { UserService } from "../../user/server/UserService";
-import { Attachment } from "../../../model/kix/Attachment";
-import { Article } from "../model/Article";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
-import { SearchOperator } from "../../search/model/SearchOperator";
-import { FilterDataType } from "../../../model/FilterDataType";
-import { CreateTicketArticleOptions } from "../model/CreateTicketArticleOptions";
-import { ArticleLoadingOptions } from "../model/ArticleLoadingOptions";
-import { CreateTicketWatcherOptions } from "../model/CreateTicketWatcherOptions";
-import { Error } from "../../../../../server/model/Error";
-import { SenderTypeFactory } from "./SenderTypeFactory";
-import { ArticleFactory } from "./ArticleFactory";
-import { LockFactory } from "./LockFactory";
-import { SearchProperty } from "../../search/model/SearchProperty";
-import { FilterType } from "../../../model/FilterType";
-import { Ticket } from "../model/Ticket";
-import { RequestObject } from "../../../../../server/model/rest/RequestObject";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { TicketFactory } from './TicketFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { TicketProperty } from '../model/TicketProperty';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { ArticleProperty } from '../model/ArticleProperty';
+import { UserService } from '../../user/server/UserService';
+import { Attachment } from '../../../model/kix/Attachment';
+import { Article } from '../model/Article';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { CreateTicketArticleOptions } from '../model/CreateTicketArticleOptions';
+import { ArticleLoadingOptions } from '../model/ArticleLoadingOptions';
+import { CreateTicketWatcherOptions } from '../model/CreateTicketWatcherOptions';
+import { Error } from '../../../../../server/model/Error';
+import { SenderTypeFactory } from './SenderTypeFactory';
+import { ArticleFactory } from './ArticleFactory';
+import { LockFactory } from './LockFactory';
+import { SearchProperty } from '../../search/model/SearchProperty';
+import { FilterType } from '../../../model/FilterType';
+import { Ticket } from '../model/Ticket';
+import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 
 export class TicketAPIService extends KIXObjectAPIService {
 

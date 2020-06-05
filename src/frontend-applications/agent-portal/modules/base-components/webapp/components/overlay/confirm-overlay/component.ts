@@ -7,9 +7,9 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractMarkoComponent } from "../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { ConfirmOverlayContent } from "../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
+import { ComponentState } from './ComponentState';
+import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ConfirmOverlayContent } from '../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
 
 class OverlayComponent extends AbstractMarkoComponent<ComponentState> {
 

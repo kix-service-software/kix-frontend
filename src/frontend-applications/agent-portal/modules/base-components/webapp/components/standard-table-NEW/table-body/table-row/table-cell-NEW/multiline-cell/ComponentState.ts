@@ -7,7 +7,7 @@
  * --
  */
 
-import { ICell } from "../../../../../../core/table";
+import { ICell } from '../../../../../../core/table';
 
 export class ComponentState {
 

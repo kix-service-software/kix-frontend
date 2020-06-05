@@ -7,22 +7,22 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { ContactProperty } from "../../../model/ContactProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { Contact } from "../../../model/Contact";
-import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
-import { OrganisationService } from "../OrganisationService";
-import { ContactService } from "../ContactService";
+import { Context } from '../../../../../model/Context';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { ContactProperty } from '../../../model/ContactProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { Contact } from '../../../model/Contact';
+import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
+import { OrganisationService } from '../OrganisationService';
+import { ContactService } from '../ContactService';
 
 export class OrganisationContext extends Context {
 

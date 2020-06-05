@@ -9,7 +9,7 @@
 
 import { Request, Response } from 'express';
 import { KIXRouter } from './KIXRouter';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+
 import { AuthenticationService } from '../services/AuthenticationService';
 
 import path = require('path');
@@ -36,7 +36,7 @@ export class ApplicationRouter extends KIXRouter {
     }
 
     public getBaseRoute(): string {
-        return "/";
+        return '/';
     }
 
     public async getDefaultModule(req: Request, res: Response, next: () => void): Promise<void> {
@@ -56,25 +56,25 @@ export class ApplicationRouter extends KIXRouter {
 
     protected initialize(): void {
         this.router.get(
-            "/",
+            '/',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getDefaultModule.bind(this)
         );
 
         this.router.get(
-            "/:moduleId",
+            '/:moduleId',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)
         );
 
         this.router.get(
-            "/:moduleId/:objectId",
+            '/:moduleId/:objectId',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)
         );
 
         this.router.get(
-            "/:moduleId/:objectId/*",
+            '/:moduleId/:objectId/*',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getModule.bind(this)
         );

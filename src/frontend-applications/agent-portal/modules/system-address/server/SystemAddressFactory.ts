@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { SystemAddress } from "../model/SystemAddress";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { SystemAddress } from '../model/SystemAddress';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class SystemAddressFactory extends ObjectFactory<SystemAddress> {
 

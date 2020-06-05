@@ -7,17 +7,17 @@
  * --
  */
 
-import { IContextServiceListener } from "../../../../../modules/base-components/webapp/core/IContextServiceListener";
-import { ComponentState } from "./ComponentState";
-import { IdService } from "../../../../../model/IdService";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { Context } from "vm";
-import { ContextType } from "../../../../../model/ContextType";
-import { SearchContext } from "../../core/SearchContext";
-import { SearchService } from "../../core/SearchService";
-import { CacheState } from "../../../model/CacheState";
-import { ContextDescriptor } from "../../../../../model/ContextDescriptor";
+import { IContextServiceListener } from '../../../../../modules/base-components/webapp/core/IContextServiceListener';
+import { ComponentState } from './ComponentState';
+import { IdService } from '../../../../../model/IdService';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { Context } from 'vm';
+import { ContextType } from '../../../../../model/ContextType';
+import { SearchContext } from '../../core/SearchContext';
+import { SearchService } from '../../core/SearchService';
+import { CacheState } from '../../../model/CacheState';
+import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
 
 class Component implements IContextServiceListener {
 

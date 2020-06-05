@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { ConfigItemClassFactory } from "../../server/ConfigItemClassFactory";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { ConfigItemClassFactory } from '../../server/ConfigItemClassFactory';
 
 export class ConfigItemClassBrowserFactory extends KIXObjectFactory<ConfigItemClass> {
 

@@ -7,14 +7,14 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { AdminContext } from "../../../../admin/webapp/core";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { Notification } from "../../../model/Notification";
+import { Context } from '../../../../../model/Context';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AdminContext } from '../../../../admin/webapp/core';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Notification } from '../../../model/Notification';
 
 export class NotificationDetailsContext extends Context {
 

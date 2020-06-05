@@ -7,9 +7,9 @@
  * --
  */
 
-import { IObjectFactory } from "../model/IObjectFactory";
-import { KIXObject } from "../../model/kix/KIXObject";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
+import { IObjectFactory } from '../model/IObjectFactory';
+import { KIXObject } from '../../model/kix/KIXObject';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
 
 export class ObjectFactoryService {
 

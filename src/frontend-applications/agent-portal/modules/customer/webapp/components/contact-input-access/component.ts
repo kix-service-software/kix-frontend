@@ -7,17 +7,17 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../base-components/webapp/core/FormInputComponent";
-import { ComponentState } from "./ComponentState";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { FormService } from "../../../../base-components/webapp/core/FormService";
-import { ServiceRegistry } from "../../../../base-components/webapp/core/ServiceRegistry";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ServiceType } from "../../../../base-components/webapp/core/ServiceType";
-import { SortUtil } from "../../../../../model/SortUtil";
-import { ContactFormService } from "../../core";
-import { UserProperty } from "../../../../user/model/UserProperty";
+import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
+import { ComponentState } from './ComponentState';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { ContactFormService } from '../../core';
+import { UserProperty } from '../../../../user/model/UserProperty';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 

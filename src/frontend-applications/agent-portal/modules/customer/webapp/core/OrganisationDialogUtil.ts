@@ -7,11 +7,11 @@
  * --
  */
 
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { NewOrganisationDialogContext, OrganisationDetailsContext, EditOrganisationDialogContext } from ".";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { Organisation } from "../../model/Organisation";
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { NewOrganisationDialogContext, OrganisationDetailsContext, EditOrganisationDialogContext } from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { Organisation } from '../../model/Organisation';
 
 export class OrganisationDialogUtil {
 

@@ -7,32 +7,32 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     JobService, JobFormService, JobBrowserFactory, JobLabelProvider, MacroActionLabelProvider,
     JobTableFactory, JobDetailsContext, JobExecuteAction, JobCreateAction, NewJobDialogContext,
     JobEditAction, EditJobDialogContext
-} from ".";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { JobFilterTableFactory } from "./table/JobFilterTableFactory";
-import { MacroActionTableFactory } from "./table/MacroActionTableFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { JobTypes } from "../../model/JobTypes";
-import { TicketJobFormManager } from "./TicketJobFormManager";
-import { SyncJobFormManager } from "./SyncJobFormManager";
-import { JobRunHistoryTableFactory } from "./table/JobRunHistoryTableFactory";
-import { JobRunLabelProvider } from "./JobRunLabelProvider";
-import { JobRunBrowserFactory } from "./JobRunBrowserFactory";
-import { JobRunLogLabelProvider } from "./JobRunLogLabelProvider";
-import { JobRunLogTableFactory } from "./table/JobRunLogTableFactory";
+} from '.';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { JobFilterTableFactory } from './table/JobFilterTableFactory';
+import { MacroActionTableFactory } from './table/MacroActionTableFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { JobTypes } from '../../model/JobTypes';
+import { TicketJobFormManager } from './TicketJobFormManager';
+import { SyncJobFormManager } from './SyncJobFormManager';
+import { JobRunHistoryTableFactory } from './table/JobRunHistoryTableFactory';
+import { JobRunLabelProvider } from './JobRunLabelProvider';
+import { JobRunBrowserFactory } from './JobRunBrowserFactory';
+import { JobRunLogLabelProvider } from './JobRunLogLabelProvider';
+import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
 
 export class UIModule implements IUIModule {
 
@@ -41,7 +41,7 @@ export class UIModule implements IUIModule {
     public name: string = 'JobUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

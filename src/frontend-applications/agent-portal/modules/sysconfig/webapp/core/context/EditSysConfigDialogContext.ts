@@ -7,9 +7,9 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { ContextDescriptor } from "../../../../../model/ContextDescriptor";
-import { ContextConfiguration } from "../../../../../model/configuration/ContextConfiguration";
+import { Context } from '../../../../../model/Context';
+import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
+import { ContextConfiguration } from '../../../../../model/configuration/ContextConfiguration';
 
 
 export class EditSysConfigDialogContext extends Context {

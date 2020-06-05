@@ -7,17 +7,17 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { FAQHistory } from "../../model/FAQHistory";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FAQArticleHistoryProperty } from "../../model/FAQArticleHistoryProperty";
-import { User } from "../../../user/model/User";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { UserProperty } from "../../../user/model/UserProperty";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { FAQHistory } from '../../model/FAQHistory';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FAQArticleHistoryProperty } from '../../model/FAQArticleHistoryProperty';
+
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+
+
 
 export class FAQArticleHistoryLabelProvider extends LabelProvider<FAQHistory> {
 

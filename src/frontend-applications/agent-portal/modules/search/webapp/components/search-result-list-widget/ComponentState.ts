@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { ITable } from "../../../../base-components/webapp/core/table";
-import { IAction } from "../../../../../modules/base-components/webapp/core/IAction";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { ITable } from '../../../../base-components/webapp/core/table';
+import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 
 export class ComponentState {
@@ -18,7 +18,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = 'search-dashboard-result-list-widget',
         public widgetConfiguration: WidgetConfiguration = null,
-        public resultTitle: string = "Translatable#Hit List",
+        public resultTitle: string = 'Translatable#Hit List',
         public resultIcon: string | ObjectIcon = null,
         public table: ITable = null,
         public noSearch: boolean = true,

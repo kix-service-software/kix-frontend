@@ -7,14 +7,14 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { FAQArticle } from "../../../model/FAQArticle";
-import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { FAQContext } from "./FAQContext";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { Context } from '../../../../../model/Context';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { FAQArticle } from '../../../model/FAQArticle';
+import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
+import { FAQContext } from './FAQContext';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export class FAQDetailsContext extends Context {
 

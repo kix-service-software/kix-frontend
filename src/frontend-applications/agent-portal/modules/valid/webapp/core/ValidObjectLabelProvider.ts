@@ -7,10 +7,10 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { ValidObject } from "../../model/ValidObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { ValidObject } from '../../model/ValidObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class ValidObjectLabelProvider extends LabelProvider<ValidObject> {
 

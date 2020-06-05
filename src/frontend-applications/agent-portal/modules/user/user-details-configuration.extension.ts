@@ -7,25 +7,25 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { UserDetailsContext } from "./webapp/core/admin";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContactProperty } from "../customer/model/ContactProperty";
-import { UserProperty } from "./model/UserProperty";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { ContextMode } from "../../model/ContextMode";
-import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
-import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { UserDetailsContext } from './webapp/core/admin';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContactProperty } from '../customer/model/ContactProperty';
+import { UserProperty } from './model/UserProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { ContextMode } from '../../model/ContextMode';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

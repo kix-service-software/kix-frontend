@@ -7,19 +7,19 @@
  * --
  */
 
-import { SystemAddressDetailsContext } from "../context";
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../base-components/webapp/core/table";
-import { SystemAddressTableContentProvider } from "./SystemAddressTableContentProvider";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { SystemAddressProperty } from "../../../model/SystemAddressProperty";
-import { DataType } from "../../../../../model/DataType";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { SystemAddressDetailsContext } from '../context';
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { SystemAddressTableContentProvider } from './SystemAddressTableContentProvider';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { SystemAddressProperty } from '../../../model/SystemAddressProperty';
+import { DataType } from '../../../../../model/DataType';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class SystemAddressTableFactory extends TableFactory {
 

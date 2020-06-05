@@ -28,7 +28,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public baseFAQUri: string;
 
     public onCreate(input: any): void {
-        this.baseFAQUri = "faqarticles/";
+        this.baseFAQUri = 'faqarticles/';
         this.state = new ComponentState();
     }
 

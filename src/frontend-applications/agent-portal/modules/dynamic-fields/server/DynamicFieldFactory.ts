@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { DynamicField } from "../model/DynamicField";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { DynamicField } from '../model/DynamicField';
 
 
 export class DynamicFieldFactory extends ObjectFactory<DynamicField> {

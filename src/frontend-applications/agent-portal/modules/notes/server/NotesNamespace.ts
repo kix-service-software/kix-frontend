@@ -7,17 +7,17 @@
  * --
  */
 
-import { SocketNameSpace } from "../../../server/socket-namespaces/SocketNameSpace";
-import { NotesEvent } from "../model/NotesEvent";
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
-import { SocketResponse } from "../../../modules/base-components/webapp/core/SocketResponse";
-import { LoadNotesResponse } from "../model/LoadNotesResponse";
-import { UserService } from "../../user/server/UserService";
-import { User } from "../../user/model/User";
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { SaveNotesRequest } from "../model/SaveNotesRequest";
-import { SocketEvent } from "../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../modules/base-components/webapp/core/SocketErrorResponse";
+import { SocketNameSpace } from '../../../server/socket-namespaces/SocketNameSpace';
+import { NotesEvent } from '../model/NotesEvent';
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
+import { SocketResponse } from '../../../modules/base-components/webapp/core/SocketResponse';
+import { LoadNotesResponse } from '../model/LoadNotesResponse';
+import { UserService } from '../../user/server/UserService';
+import { User } from '../../user/model/User';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { SaveNotesRequest } from '../model/SaveNotesRequest';
+import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
 
 import cookie = require('cookie');
 

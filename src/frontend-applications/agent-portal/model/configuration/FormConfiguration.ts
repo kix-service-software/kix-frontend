@@ -7,12 +7,12 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { FormPageConfiguration } from "./FormPageConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
-import { AutoCompleteConfiguration } from "./AutoCompleteConfiguration";
-import { FormContext } from "./FormContext";
+import { IConfiguration } from './IConfiguration';
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { FormPageConfiguration } from './FormPageConfiguration';
+import { ConfigurationType } from './ConfigurationType';
+import { AutoCompleteConfiguration } from './AutoCompleteConfiguration';
+import { FormContext } from './FormContext';
 
 export class FormConfiguration implements IConfiguration {
 

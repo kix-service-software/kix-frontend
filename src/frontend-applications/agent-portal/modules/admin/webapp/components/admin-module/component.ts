@@ -7,15 +7,15 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { AdminContext } from "../../core/AdminContext";
-import { ContextType } from "../../../../../model/ContextType";
-import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { AdminModule } from "../../../model/AdminModule";
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { AdminContext } from '../../core/AdminContext';
+import { ContextType } from '../../../../../model/ContextType';
+import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AdminModule } from '../../../model/AdminModule';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

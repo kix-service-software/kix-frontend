@@ -7,15 +7,15 @@
  * --
  */
 
-import { ITableFactory } from "./ITableFactory";
-import { ITable } from ".";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { ContextService } from "../ContextService";
-import { ContextType } from "../../../../../model/ContextType";
-import { Context } from "../../../../../model/Context";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { ITableFactory } from './ITableFactory';
+import { ITable } from '.';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { ContextService } from '../ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { Context } from '../../../../../model/Context';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export class TableFactoryService {
 

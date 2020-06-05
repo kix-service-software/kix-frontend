@@ -7,19 +7,19 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { ComponentState } from "./ComponentState";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { NotificationProperty } from "../../../model/NotificationProperty";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../model/ContextType";
-import { NotificationService } from "../../core";
-import { ArticleProperty } from "../../../../ticket/model/ArticleProperty";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { InputFieldTypes } from "../../../../../modules/base-components/webapp/core/InputFieldTypes";
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { ComponentState } from './ComponentState';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { NotificationProperty } from '../../../model/NotificationProperty';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { NotificationService } from '../../core';
+import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
 
 class Component extends FormInputComponent<Array<[string, string[] | number[]]>, ComponentState> {
 

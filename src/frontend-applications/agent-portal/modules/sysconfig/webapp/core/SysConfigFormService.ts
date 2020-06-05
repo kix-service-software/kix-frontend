@@ -7,25 +7,25 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { EditSysConfigDialogContext } from ".";
-import { SysConfigOptionDefinition } from "../../model/SysConfigOptionDefinition";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { ObjectReferenceOptions } from "../../../base-components/webapp/core/ObjectReferenceOptions";
-import { SysConfigOption } from "../../model/SysConfigOption";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { EditSysConfigDialogContext } from '.';
+import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { SysConfigOptionDefinitionProperty } from '../../model/SysConfigOptionDefinitionProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { SysConfigOption } from '../../model/SysConfigOption';
 
 export class SysConfigFormService extends KIXObjectFormService {
 

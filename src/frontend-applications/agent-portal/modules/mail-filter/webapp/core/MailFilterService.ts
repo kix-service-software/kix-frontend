@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { MailFilter } from "../../model/MailFilter";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { MailFilter } from '../../model/MailFilter';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class MailFilterService extends KIXObjectService<MailFilter> {
 

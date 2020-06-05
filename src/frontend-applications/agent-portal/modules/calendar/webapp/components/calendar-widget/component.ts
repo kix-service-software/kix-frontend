@@ -22,8 +22,8 @@ import { AgentService } from '../../../../user/webapp/core';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+
+
 import { CalendarConfiguration } from '../../core/CalendarConfiguration';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';

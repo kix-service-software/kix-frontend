@@ -24,8 +24,8 @@ class Component {
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         this.state.contentWidgets = context.getContent();
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Search",
-            "Translatable#Help"
+            'Translatable#Search',
+            'Translatable#Help'
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');

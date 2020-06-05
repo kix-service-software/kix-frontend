@@ -7,17 +7,17 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
 
 export class FAQArticleVoteAction extends AbstractAction {
 

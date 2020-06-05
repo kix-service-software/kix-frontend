@@ -7,35 +7,35 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Article } from "../../model/Article";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { Ticket } from "../../model/Ticket";
-import { ArticleProperty } from "../../model/ArticleProperty";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { Channel } from "../../model/Channel";
-import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
-import { IFormInstance } from "../../../../modules/base-components/webapp/core/IFormInstance";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { AutocompleteFormFieldOption } from "../../../../model/AutocompleteFormFieldOption";
-import { AutocompleteOption } from "../../../../model/AutocompleteOption";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { ContextMode } from "../../../../model/ContextMode";
-import { TicketService } from ".";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { Context } from "vm";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../system-address/model/SystemAddress";
-import { TicketParameterUtil } from "./TicketParameterUtil";
-import { CreateTicketArticleOptions } from "../../model/CreateTicketArticleOptions";
-import { TicketProperty } from "../../model/TicketProperty";
-import { Queue } from "../../model/Queue";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { Article } from '../../model/Article';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Ticket } from '../../model/Ticket';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { Channel } from '../../model/Channel';
+import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
+import { IFormInstance } from '../../../../modules/base-components/webapp/core/IFormInstance';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { AutocompleteFormFieldOption } from '../../../../model/AutocompleteFormFieldOption';
+import { AutocompleteOption } from '../../../../model/AutocompleteOption';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { ContextMode } from '../../../../model/ContextMode';
+import { TicketService } from '.';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { Context } from 'vm';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../system-address/model/SystemAddress';
+import { TicketParameterUtil } from './TicketParameterUtil';
+import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptions';
+import { TicketProperty } from '../../model/TicketProperty';
+import { Queue } from '../../model/Queue';
 
 export class ArticleFormService extends KIXObjectFormService {
 

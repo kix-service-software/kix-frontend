@@ -7,7 +7,7 @@
  * --
  */
 
-import { UpdateContact } from "./UpdateContact";
+import { UpdateContact } from './UpdateContact';
 
 export class UpdateContactRequest {
 

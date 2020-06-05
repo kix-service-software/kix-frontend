@@ -7,10 +7,10 @@
  * --
  */
 
-import { FAQCategoryLabelProvider } from "../../../../core";
-import { WidgetComponentState } from "../../../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { FAQCategory } from "../../../../../model/FAQCategory";
+import { FAQCategoryLabelProvider } from '../../../../core';
+import { WidgetComponentState } from '../../../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { FAQCategory } from '../../../../../model/FAQCategory';
 
 export class ComponentState extends WidgetComponentState {
 

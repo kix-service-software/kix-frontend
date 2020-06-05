@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../../model/ContextMode";
-import { NewContactDialogContext } from "../../../../../customer/webapp/core";
-import { UIComponentPermission } from "../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../server/model/rest/CRUD";
+import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../model/ContextMode';
+import { NewContactDialogContext } from '../../../../../customer/webapp/core';
+import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
 
 export class UserCreateAction extends AbstractAction {
 

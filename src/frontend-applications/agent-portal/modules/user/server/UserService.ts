@@ -7,23 +7,23 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { HttpService } from "../../../server/services/HttpService";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { UserFactory } from "./UserFactory";
-import { UserPreferenceFactory } from "./UserPreferenceFactory";
-import { PreferencesLoadingOptions } from "../model/PreferencesLoadingOptions";
-import { User } from "../model/User";
-import { PersonalSettingsProperty } from "../model/PersonalSettingsProperty";
-import { SetPreferenceOptions } from "../model/SetPreferenceOptions";
-import { UserPreference } from "../model/UserPreference";
-import { Error } from "../../../../../server/model/Error";
-import { UserProperty } from "../model/UserProperty";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { HttpService } from '../../../server/services/HttpService';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { UserFactory } from './UserFactory';
+import { UserPreferenceFactory } from './UserPreferenceFactory';
+import { PreferencesLoadingOptions } from '../model/PreferencesLoadingOptions';
+import { User } from '../model/User';
+import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
+import { SetPreferenceOptions } from '../model/SetPreferenceOptions';
+import { UserPreference } from '../model/UserPreference';
+import { Error } from '../../../../../server/model/Error';
+import { UserProperty } from '../model/UserProperty';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -276,7 +276,7 @@ export class UserService extends KIXObjectAPIService {
         }
         // TODO: für Komponente ggf. Fehlerliste übermitteln
         if (!!errors.length) {
-            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"), errors[0].StatusCode);
+            throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
     }
 

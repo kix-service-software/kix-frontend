@@ -7,20 +7,20 @@
  * --
  */
 
-import { IdService } from "../../../../../../model/IdService";
-import { WidgetConfiguration } from "../../../../../../model/configuration/WidgetConfiguration";
-import { TableWidgetConfiguration } from "../../../../../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { FAQCategoryProperty } from "../../../../model/FAQCategoryProperty";
-import { SortOrder } from "../../../../../../model/SortOrder";
-import { TableConfiguration } from "../../../../../../model/configuration/TableConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../../model/FilterType";
-import { TableHeaderHeight } from "../../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../../model/configuration/TableRowHeight";
+import { IdService } from '../../../../../../model/IdService';
+import { WidgetConfiguration } from '../../../../../../model/configuration/WidgetConfiguration';
+import { TableWidgetConfiguration } from '../../../../../../model/configuration/TableWidgetConfiguration';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { FAQCategoryProperty } from '../../../../model/FAQCategoryProperty';
+import { SortOrder } from '../../../../../../model/SortOrder';
+import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
+import { TableHeaderHeight } from '../../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../../model/configuration/TableRowHeight';
 
 export class ComponentState {
 

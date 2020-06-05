@@ -7,38 +7,38 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { EditWebformDialogContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextMode } from "../../model/ContextMode";
-import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
-import { WebformProperty } from "./model/WebformProperty";
-import { FormFieldValue } from "../../model/configuration/FormFieldValue";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { QueueProperty } from "../ticket/model/QueueProperty";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { TicketStateProperty } from "../ticket/model/TicketStateProperty";
-import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../modules/base-components/webapp/core/InputFieldTypes";
-import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
-import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { ModuleConfigurationService } from "../../server/services/configuration";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { EditWebformDialogContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContextMode } from '../../model/ContextMode';
+import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
+import { WebformProperty } from './model/WebformProperty';
+import { FormFieldValue } from '../../model/configuration/FormFieldValue';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { FormFieldOption } from '../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { QueueProperty } from '../ticket/model/QueueProperty';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { TicketStateProperty } from '../ticket/model/TicketStateProperty';
+import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../modules/base-components/webapp/core/InputFieldTypes';
+import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { ModuleConfigurationService } from '../../server/services/configuration';
+
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

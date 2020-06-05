@@ -7,34 +7,34 @@
  * --
  */
 
-import { SocketClient } from "./SocketClient";
-import { ClientStorageService } from "./ClientStorageService";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { IdService } from "../../../../model/IdService";
-import { LoadObjectsRequest } from "./LoadObjectsRequest";
-import { BrowserCacheService } from "./CacheService";
-import { LoadObjectsResponse } from "./LoadObjectsResponse";
-import { KIXObjectEvent } from "./KIXObjectEvent";
-import { FactoryService } from "./FactoryService";
-import { PermissionError } from "../../../user/model/PermissionError";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { CreateObjectRequest } from "./CreateObjectRequest";
-import { CreateObjectResponse } from "./CreateObjectResponse";
-import { UpdateObjectRequest } from "./UpdateObjectRequest";
-import { UpdateObjectResponse } from "./UpdateObjectResponse";
-import { KIXObjectSpecificDeleteOptions } from "../../../../model/KIXObjectSpecificDeleteOptions";
-import { DeleteObjectRequest } from "./DeleteObjectRequest";
-import { DeleteObjectResponse } from "./DeleteObjectResponse";
-import { ISocketResponse } from "./ISocketResponse";
-import { ISocketObjectRequest } from "./ISocketObjectRequest";
-import { SocketErrorResponse } from "./SocketErrorResponse";
-import { SocketEvent } from "./SocketEvent";
-import { Error } from "../../../../../../server/model/Error";
-import { EventService } from "./EventService";
-import { ApplicationEvent } from "./ApplicationEvent";
+import { SocketClient } from './SocketClient';
+import { ClientStorageService } from './ClientStorageService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { IdService } from '../../../../model/IdService';
+import { LoadObjectsRequest } from './LoadObjectsRequest';
+import { BrowserCacheService } from './CacheService';
+import { LoadObjectsResponse } from './LoadObjectsResponse';
+import { KIXObjectEvent } from './KIXObjectEvent';
+import { FactoryService } from './FactoryService';
+import { PermissionError } from '../../../user/model/PermissionError';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { CreateObjectRequest } from './CreateObjectRequest';
+import { CreateObjectResponse } from './CreateObjectResponse';
+import { UpdateObjectRequest } from './UpdateObjectRequest';
+import { UpdateObjectResponse } from './UpdateObjectResponse';
+import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
+import { DeleteObjectRequest } from './DeleteObjectRequest';
+import { DeleteObjectResponse } from './DeleteObjectResponse';
+import { ISocketResponse } from './ISocketResponse';
+import { ISocketObjectRequest } from './ISocketObjectRequest';
+import { SocketErrorResponse } from './SocketErrorResponse';
+import { SocketEvent } from './SocketEvent';
+import { Error } from '../../../../../../server/model/Error';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class KIXObjectSocketClient extends SocketClient {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../base-components/webapp/core/IPlaceholderHandler";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { DynamicFieldValue } from "../../model/DynamicFieldValue";
+import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { DynamicFieldValue } from '../../model/DynamicFieldValue';
 
 export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandler {
     public handlerId: string;
@@ -26,7 +26,7 @@ export class ExtendedDynamicFieldPlaceholderHandler implements IPlaceholderHandl
         return null;
     }
 
-    public replace(placeholder: string, object?: KIXObject<any>, language?: string): Promise<string> {
+    public replace(placeholder: string, object?: KIXObject, language?: string): Promise<string> {
         return null;
     }
 

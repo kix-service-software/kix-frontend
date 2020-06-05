@@ -7,18 +7,18 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { QueueDetailsContext } from "./webapp/core";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { QueueDetailsContext } from './webapp/core';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

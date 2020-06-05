@@ -16,8 +16,6 @@ export class TicketDetailsPrintRouter extends KIXRouter {
 
     private static INSTANCE: TicketDetailsPrintRouter;
 
-    private update: boolean = false;
-
     public static getInstance(): TicketDetailsPrintRouter {
         if (!TicketDetailsPrintRouter.INSTANCE) {
             TicketDetailsPrintRouter.INSTANCE = new TicketDetailsPrintRouter();
@@ -30,12 +28,12 @@ export class TicketDetailsPrintRouter extends KIXRouter {
     }
 
     public getBaseRoute(): string {
-        return "/tickets";
+        return '/tickets';
     }
 
     protected initialize(): void {
         this.router.get(
-            "/:objectId/print",
+            '/:objectId/print',
             AuthenticationService.getInstance().isAuthenticated.bind(AuthenticationService.getInstance()),
             this.getPrintComponent.bind(this)
         );

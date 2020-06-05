@@ -7,20 +7,20 @@
  * --
  */
 
-import { TicketProperty } from "../../../model/TicketProperty";
-import { Ticket } from "../../../model/Ticket";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { TicketStateProperty } from "../../../model/TicketStateProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { SysConfigService } from "../../../../sysconfig/webapp/core";
-import { ILabelProvider } from "../../../../base-components/webapp/core/ILabelProvider";
+import { TicketProperty } from '../../../model/TicketProperty';
+import { Ticket } from '../../../model/Ticket';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { TicketStateProperty } from '../../../model/TicketStateProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
+
 
 export class TicketChartFactory {
 

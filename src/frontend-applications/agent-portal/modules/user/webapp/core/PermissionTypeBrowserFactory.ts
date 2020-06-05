@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { PermissionType } from "../../model/PermissionType";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { PermissionType } from '../../model/PermissionType';
 
 export class PermissionTypeBrowserFactory implements IKIXObjectFactory<PermissionType> {
 

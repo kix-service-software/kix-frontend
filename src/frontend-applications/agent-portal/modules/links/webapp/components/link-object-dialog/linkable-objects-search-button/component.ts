@@ -26,7 +26,7 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject(["Translatable#Start search"]);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Start search']);
         await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
             formListenerId: this.formListenerId,
             formValueChanged: async () => {

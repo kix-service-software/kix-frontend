@@ -7,19 +7,19 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { Ticket } from "../../../model/Ticket";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { TicketDetailsContext } from "..";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { BrowserCacheService } from "../../../../../modules/base-components/webapp/core/CacheService";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Ticket } from '../../../model/Ticket';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { TicketDetailsContext } from '..';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { BrowserCacheService } from '../../../../../modules/base-components/webapp/core/CacheService';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
 

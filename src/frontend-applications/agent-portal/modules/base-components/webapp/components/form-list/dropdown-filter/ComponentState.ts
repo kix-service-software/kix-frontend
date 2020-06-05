@@ -7,9 +7,9 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { AutoCompleteConfiguration } from "../../../../../../model/configuration/AutoCompleteConfiguration";
-import { TreeNode } from "../../../core/tree";
+import { AbstractComponentState } from '../../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { AutoCompleteConfiguration } from '../../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode } from '../../../core/tree';
 
 export class ComponentState extends AbstractComponentState {
 

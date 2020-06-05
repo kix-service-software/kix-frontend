@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { TextModule } from "../../model/TextModule";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { TextModule } from '../../model/TextModule';
 
 export class TextModuleBrowserFactory implements IKIXObjectFactory<TextModule> {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { ConfiguredWidget } from "../../../../../model/configuration/ConfiguredWidget";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
 export class ComponentState {
 

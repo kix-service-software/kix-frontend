@@ -7,11 +7,11 @@
  * --
  */
 
-import { IServerRouterExtension } from "../../server/extensions/IServerRouterExtension";
+import { IServerRouterExtension } from '../../server/extensions/IServerRouterExtension';
 import { Router } from 'express';
-import { TicketDetailsPrintRouter } from "./server/TicketDetailsPrintRouter";
+import { TicketDetailsPrintRouter } from './server/TicketDetailsPrintRouter';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IServerRouterExtension {
 

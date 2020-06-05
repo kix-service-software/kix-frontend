@@ -7,11 +7,11 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { GeneralCatalogItem } from "../../model/GeneralCatalogItem";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { GeneralCatalogItemProperty } from "../../model/GeneralCatalogItemProperty";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { GeneralCatalogItem } from '../../model/GeneralCatalogItem';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { GeneralCatalogItemProperty } from '../../model/GeneralCatalogItemProperty';
 
 export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> {
 
@@ -30,7 +30,7 @@ export class GeneralCatalogService extends KIXObjectService<GeneralCatalogItem> 
     }
 
     public getLinkObjectName(): string {
-        return "GeneralCatalogItem";
+        return 'GeneralCatalogItem';
     }
 
     public async getTreeNodes(property: string, showInvalid: boolean = false): Promise<TreeNode[]> {

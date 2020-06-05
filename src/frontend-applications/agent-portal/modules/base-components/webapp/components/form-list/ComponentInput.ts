@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputAction } from "../../../../../modules/base-components/webapp/core/FormInputAction";
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { TreeNode } from "../../core/tree";
+import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode } from '../../core/tree';
 
 export class ComponentInput {
 

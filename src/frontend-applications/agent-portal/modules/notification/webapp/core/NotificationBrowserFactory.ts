@@ -7,12 +7,12 @@
  * --
  */
 
-import { NotificationFilterManager } from "./NotificationFilterManager";
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { NotificationProperty } from "../../model/NotificationProperty";
-import { ArticleProperty } from "../../../ticket/model/ArticleProperty";
-import { Notification } from "../../model/Notification";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { NotificationFilterManager } from './NotificationFilterManager';
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { NotificationProperty } from '../../model/NotificationProperty';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
+import { Notification } from '../../model/Notification';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class NotificationBrowserFactory extends KIXObjectFactory<Notification> {
 

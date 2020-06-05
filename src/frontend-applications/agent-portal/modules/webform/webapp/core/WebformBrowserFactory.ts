@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Webform } from "../../model/Webform";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Webform } from '../../model/Webform';
 
 export class WebformBrowserFactory implements IKIXObjectFactory<Webform> {
 

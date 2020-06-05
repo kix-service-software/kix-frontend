@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { CreateLinkDescription } from "../../../server/api/CreateLinkDescription";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
+import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 
 
 export class ComponentState extends FormInputComponentState<CreateLinkDescription[]> {

@@ -7,37 +7,37 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
-import { UserPlaceholderHandler } from "./UserPlaceholderHandler";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
+import { UserPlaceholderHandler } from './UserPlaceholderHandler';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     RoleService, UserRoleFormService, RoleTableFactory, UserTableFactory, UserCreateAction,
     UserEditAction, UserDetailsContext, UserRoleCreateAction, NewUserRoleDialogContext,
     UserRoleEditAction, EditUserRoleDialogContext, RoleDetailsContext
-} from "./admin";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { UserLabelProvider } from "./UserLabelProvider";
-import { RoleLabelProvider } from "./RoleLabelProvider";
-import { TableFactoryService, TableCSSHandlerRegistry } from "../../../base-components/webapp/core/table";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { UserBrowserFactory } from "./UserBrowserFactory";
-import { RoleBrowserFactory } from "./RoleBrowserFactory";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { PermissionTableCSSHandler } from "./PermissionTableCSSHandler";
-import { PermissionTypeBrowserFactory } from "./PermissionTypeBrowserFactory";
-import { PermissionsTableFactory } from "./PermissionsTableFactory";
-import { PermissionLabelProvider } from "./PermissionLabelProvider";
-import { PersonalSettingsDialogContext } from "./PersonalSettingsDialogContext";
-import { UserPasswordValidator } from "./UserPasswordValidator";
-import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
-import { AgentService } from "./AgentService";
-import { PersonalSettingsFormService } from "./PersonalSettingsFormService";
+} from './admin';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { UserLabelProvider } from './UserLabelProvider';
+import { RoleLabelProvider } from './RoleLabelProvider';
+import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { UserBrowserFactory } from './UserBrowserFactory';
+import { RoleBrowserFactory } from './RoleBrowserFactory';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { PermissionTableCSSHandler } from './PermissionTableCSSHandler';
+import { PermissionTypeBrowserFactory } from './PermissionTypeBrowserFactory';
+import { PermissionsTableFactory } from './PermissionsTableFactory';
+import { PermissionLabelProvider } from './PermissionLabelProvider';
+import { PersonalSettingsDialogContext } from './PersonalSettingsDialogContext';
+import { UserPasswordValidator } from './UserPasswordValidator';
+import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
+import { AgentService } from './AgentService';
+import { PersonalSettingsFormService } from './PersonalSettingsFormService';
 
 
 export class UIModule implements IUIModule {
@@ -47,7 +47,7 @@ export class UIModule implements IUIModule {
     public priority: number = 50;
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

@@ -7,17 +7,17 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { Queue } from "../../../model/Queue";
-import { FormContext } from "../../../../../model/configuration/FormContext";
-import { QueueProperty } from "../../../model/QueueProperty";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { IdService } from "../../../../../model/IdService";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
+import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { Queue } from '../../../model/Queue';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { QueueProperty } from '../../../model/QueueProperty';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { IdService } from '../../../../../model/IdService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class QueueFormService extends KIXObjectFormService {
 

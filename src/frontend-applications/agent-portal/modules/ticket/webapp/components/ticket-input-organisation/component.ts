@@ -7,18 +7,18 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { IdService } from "../../../../../model/IdService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { TreeNode, TreeHandler } from "../../../../base-components/webapp/core/tree";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { IdService } from '../../../../../model/IdService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { TreeNode, TreeHandler } from '../../../../base-components/webapp/core/tree';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 
 class Component extends FormInputComponent<number, ComponentState> {
 

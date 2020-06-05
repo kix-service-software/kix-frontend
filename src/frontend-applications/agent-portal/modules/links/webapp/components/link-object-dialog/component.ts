@@ -75,7 +75,7 @@ class LinkDialogComponent {
         this.selectedObjects = [];
 
         this.state.translations = await TranslationService.createTranslationObject(
-            ["Translatable#Link to", "Translatable#Search"]
+            ['Translatable#Link to', 'Translatable#Search']
         );
 
         WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);

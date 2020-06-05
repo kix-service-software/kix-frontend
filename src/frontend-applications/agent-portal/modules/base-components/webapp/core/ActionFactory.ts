@@ -7,9 +7,9 @@
  * --
  */
 
-import { AbstractAction } from "./AbstractAction";
-import { IAction } from "./IAction";
-import { AuthenticationSocketClient } from "./AuthenticationSocketClient";
+import { AbstractAction } from './AbstractAction';
+import { IAction } from './IAction';
+import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 
 
 export class ActionFactory<T extends AbstractAction> {

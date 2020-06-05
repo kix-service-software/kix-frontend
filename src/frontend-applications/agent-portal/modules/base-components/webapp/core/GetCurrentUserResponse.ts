@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "./ISocketResponse";
-import { User } from "../../../user/model/User";
+import { ISocketResponse } from './ISocketResponse';
+import { User } from '../../../user/model/User';
 
 export class GetCurrentUserResponse implements ISocketResponse {
 

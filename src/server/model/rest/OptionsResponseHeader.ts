@@ -7,9 +7,9 @@
  * --
  */
 
-import { RequestMethod } from "./RequestMethod";
-import { ResponseHeader } from "./ResponseHeader";
-import { CRUD } from "./CRUD";
+import { RequestMethod } from './RequestMethod';
+import { ResponseHeader } from './ResponseHeader';
+import { CRUD } from './CRUD';
 
 export class OptionsResponseHeader {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { IKIXObjectFactory } from "./IKIXObjectFactory";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { Permission } from "../../../user/model/Permission";
+import { IKIXObjectFactory } from './IKIXObjectFactory';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { Permission } from '../../../user/model/Permission';
 
 export abstract class KIXObjectFactory<T extends KIXObject> implements IKIXObjectFactory<T> {
 

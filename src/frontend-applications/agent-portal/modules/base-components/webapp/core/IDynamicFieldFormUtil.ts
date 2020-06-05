@@ -7,14 +7,14 @@
  * --
  */
 
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { IKIXObjectFormService } from "./IKIXObjectFormService";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { ValidationResult } from "./ValidationResult";
-import { CheckListItem } from "../../../dynamic-fields/webapp/core/CheckListItem";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { IKIXObjectFormService } from './IKIXObjectFormService';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { ValidationResult } from './ValidationResult';
+import { CheckListItem } from '../../../dynamic-fields/webapp/core/CheckListItem';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 
 export interface IDynamicFieldFormUtil {
 

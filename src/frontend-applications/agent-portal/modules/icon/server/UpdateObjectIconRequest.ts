@@ -7,7 +7,7 @@
  * --
  */
 
-import { UpdateObjectIcon } from "./UpdateObjectIcon";
+import { UpdateObjectIcon } from './UpdateObjectIcon';
 
 export class UpdateObjectIconRequest {
 

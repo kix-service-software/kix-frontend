@@ -7,8 +7,8 @@
  * --
  */
 
-import { ConfiguredWidget } from "../../../../../model/configuration/ConfiguredWidget";
-import { ContextType } from "../../../../../model/ContextType";
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { ContextType } from '../../../../../model/ContextType';
 
 
 export class ComponentState {
@@ -16,7 +16,7 @@ export class ComponentState {
     public sidebars: ConfiguredWidget[] = [];
     public showIconBar: boolean = true;
     public rows: string[] = [];
-    public context: string = "dashboard";
+    public context: string = 'dashboard';
     public sidebarBarExpanded: boolean = false;
     public showSidebar: boolean = false;
     public contextType: ContextType = null;

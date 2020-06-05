@@ -7,13 +7,13 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../system-address/model/SystemAddress";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { NotificationProperty } from "../../model/NotificationProperty";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../system-address/model/SystemAddress';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { NotificationProperty } from '../../model/NotificationProperty';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 
 
 export class NotificationService extends KIXObjectService<SystemAddress> {

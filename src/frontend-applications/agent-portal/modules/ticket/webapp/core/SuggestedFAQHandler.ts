@@ -7,23 +7,23 @@
  * --
  */
 
-import { IObjectReferenceHandler } from "../../../base-components/webapp/core/IObjectReferenceHandler";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FAQArticle } from "../../../faq/model/FAQArticle";
-import { Ticket } from "../../model/Ticket";
-import { ServiceRegistry } from "../../../base-components/webapp/core/ServiceRegistry";
-import { IKIXObjectService } from "../../../base-components/webapp/core/IKIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { FormService } from "../../../base-components/webapp/core/FormService";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { FAQArticleProperty } from "../../../faq/model/FAQArticleProperty";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
+import { IObjectReferenceHandler } from '../../../base-components/webapp/core/IObjectReferenceHandler';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FAQArticle } from '../../../faq/model/FAQArticle';
+import { Ticket } from '../../model/Ticket';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { IKIXObjectService } from '../../../base-components/webapp/core/IKIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FAQArticleProperty } from '../../../faq/model/FAQArticleProperty';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 
 export class SuggestedFAQHandler implements IObjectReferenceHandler {
 
@@ -44,7 +44,7 @@ export class SuggestedFAQHandler implements IObjectReferenceHandler {
                 const minLength = config.minLenght ? config.minLength : 3;
                 for (const p of config.properties) {
                     if (ticket[p] && typeof ticket[p] === 'string') {
-                        const searchWords = ticket[p].split(" ");
+                        const searchWords = ticket[p].split(' ');
                         filter = await this.buildFilterForSearchWords(
                             searchWords, service, minLength, stopWords
                         );
@@ -81,14 +81,14 @@ export class SuggestedFAQHandler implements IObjectReferenceHandler {
                     if (formField) {
                         const value = await formInstance.getFormFieldValueByProperty(p);
                         if (value && value.value && typeof value.value === 'string') {
-                            const searchWords = value.value.split(" ");
+                            const searchWords = value.value.split(' ');
                             filter = await this.buildFilterForSearchWords(
                                 searchWords, service, minLength, stopWords
                             );
                         }
                     } else {
                         if (ticket && ticket[p] && typeof ticket[p] === 'string') {
-                            const searchWords = ticket[p].split(" ");
+                            const searchWords = ticket[p].split(' ');
                             filter = await this.buildFilterForSearchWords(
                                 searchWords, service, minLength, stopWords
                             );

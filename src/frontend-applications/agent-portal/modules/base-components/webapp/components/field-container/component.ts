@@ -37,7 +37,7 @@ class FieldContainerComponent {
     public async onMount(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Add", "Translatable#Delete"
+            'Translatable#Add', 'Translatable#Delete'
         ]);
         formInstance.registerListener({
             updateForm: () => (this as any).setStateDirty('fields'),

@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Translation } from "../../model/Translation";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Translation } from '../../model/Translation';
 
 export class TranslationBrowserFactory implements IKIXObjectFactory<Translation> {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { FollowUpType } from "../../model/FollowUpType";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { FollowUpType } from '../../model/FollowUpType';
 
 
 export class FollowUpTypeBrowserFactory implements IKIXObjectFactory<FollowUpType> {

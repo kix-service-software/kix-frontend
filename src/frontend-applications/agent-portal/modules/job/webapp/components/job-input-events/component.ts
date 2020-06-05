@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { JobService } from "../../core";
-import { JobProperty } from "../../../model/JobProperty";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { JobService } from '../../core';
+import { JobProperty } from '../../../model/JobProperty';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 

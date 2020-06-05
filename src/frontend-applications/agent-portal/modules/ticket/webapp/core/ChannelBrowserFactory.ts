@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Channel } from "../../model/Channel";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Channel } from '../../model/Channel';
 
 export class ChannelBrowserFactory implements IKIXObjectFactory<Channel> {
 

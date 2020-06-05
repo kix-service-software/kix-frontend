@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { FollowUpType } from "../model/FollowUpType";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { FollowUpType } from '../model/FollowUpType';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class FollowUpTypeFactory extends ObjectFactory<FollowUpType> {
 

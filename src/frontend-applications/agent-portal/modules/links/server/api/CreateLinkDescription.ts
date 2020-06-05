@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { LinkTypeDescription } from "../../model/LinkTypeDescription";
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { LinkTypeDescription } from '../../model/LinkTypeDescription';
 
 
 export class CreateLinkDescription<T extends KIXObject = KIXObject> {

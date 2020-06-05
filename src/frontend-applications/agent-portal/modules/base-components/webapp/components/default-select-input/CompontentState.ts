@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { IdService } from "../../../../../model/IdService";
-import { TreeNode } from "../../core/tree";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { IdService } from '../../../../../model/IdService';
+import { TreeNode } from '../../core/tree';
 
 export class CompontentState extends FormInputComponentState<string | number | string[] | number[]> {
 

@@ -7,12 +7,12 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { FAQArticle } from "../../model/FAQArticle";
-import { FAQArticleFactory } from "../../model/FAQArticleFactory";
-import { User } from "../../../user/model/User";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { FAQArticle } from '../../model/FAQArticle';
+import { FAQArticleFactory } from '../../model/FAQArticleFactory';
+import { User } from '../../../user/model/User';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class FAQArticleBrowserFactory implements IKIXObjectFactory<FAQArticle> {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../../model/ConfigItemClass";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../../model/ConfigItemClass';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 
 export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {

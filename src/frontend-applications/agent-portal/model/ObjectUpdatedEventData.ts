@@ -7,7 +7,7 @@
  * --
  */
 
-import { ObjectUpdatedEvent } from "./ObjectUpdatedEvent";
+import { ObjectUpdatedEvent } from './ObjectUpdatedEvent';
 
 export class ObjectUpdatedEventData {
 

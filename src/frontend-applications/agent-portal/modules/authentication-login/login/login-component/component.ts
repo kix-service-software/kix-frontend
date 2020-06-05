@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import * as Bowser from "bowser";
+import * as Bowser from 'bowser';
 import { AgentService } from '../../../user/webapp/core';
 
 class Component {
@@ -42,18 +42,18 @@ class Component {
 
     private initTranslations(): void {
         this.translations = [
-            ["Welcome to KIX", "Willkommen bei KIX"],
+            ['Welcome to KIX', 'Willkommen bei KIX'],
             [
-                "Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.",
+                'Note: For optimal use of KIX, we recommend alternative browsers such as Chromium or Firefox.',
                 // tslint:disable-next-line:max-line-length
-                "Hinweis: Für die optimale Nutzung von KIX  empfehlen wir alternative Browser wie Chromium oder Firefox."
+                'Hinweis: Für die optimale Nutzung von KIX  empfehlen wir alternative Browser wie Chromium oder Firefox.'
             ]
             ,
-            ["Login failed", "Anmeldung fehlgeschlagen"],
-            ["You have successfully logged out.", "Sie haben sich erfolgreich abgemeldet."],
-            ["Login Name", "Nutzername"],
-            ["Password", "Passwort"],
-            ["Login", "Anmelden"]
+            ['Login failed', 'Anmeldung fehlgeschlagen'],
+            ['You have successfully logged out.', 'Sie haben sich erfolgreich abgemeldet.'],
+            ['Login Name', 'Nutzername'],
+            ['Password', 'Passwort'],
+            ['Login', 'Anmelden']
         ];
     }
 
@@ -73,12 +73,12 @@ class Component {
         let userName: string;
         let password: string;
 
-        const userElement = (this as any).getEl("login-user-name");
+        const userElement = (this as any).getEl('login-user-name');
         if (userElement) {
             userName = userElement.value;
         }
 
-        const passwordElement = (this as any).getEl("login-user-password");
+        const passwordElement = (this as any).getEl('login-user-password');
         if (passwordElement) {
             password = passwordElement.value;
         }

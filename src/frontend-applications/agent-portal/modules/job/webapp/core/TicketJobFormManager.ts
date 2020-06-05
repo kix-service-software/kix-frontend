@@ -7,17 +7,17 @@
  * --
  */
 
-import { AbstractJobFormManager } from "./AbstractJobFormManager";
-import { Job } from "../../model/Job";
-import { JobProperty } from "../../model/JobProperty";
-import { ArticleProperty } from "../../../ticket/model/ArticleProperty";
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { JobService } from ".";
+import { AbstractJobFormManager } from './AbstractJobFormManager';
+import { Job } from '../../model/Job';
+import { JobProperty } from '../../model/JobProperty';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { JobService } from '.';
 import { TicketJobFilterManager } from './TicketJobFilterManager';
-import { TicketProperty } from "../../../ticket/model/TicketProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { FormContext } from "../../../../model/configuration/FormContext";
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { MailFilterMatchManager } from "../../core";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { MailFilterMatchManager } from '../../core';
 
 export class ComponentState extends FormInputComponentState<any[]> {
 

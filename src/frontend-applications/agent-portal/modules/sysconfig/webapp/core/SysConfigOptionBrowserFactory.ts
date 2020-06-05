@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { SysConfigOption } from "../../model/SysConfigOption";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { SysConfigOption } from '../../model/SysConfigOption';
 
 export class SysConfigOptionBrowserFactory extends KIXObjectFactory<SysConfigOption> {
 

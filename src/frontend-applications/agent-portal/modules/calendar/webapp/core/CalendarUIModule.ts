@@ -7,20 +7,20 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { CalendarContext } from ".";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { CalendarContext } from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
 
 export class UIModule implements IUIModule {
 
-    public name: string = "Calendar";
+    public name: string = 'Calendar';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

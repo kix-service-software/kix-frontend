@@ -7,17 +7,17 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { ConsoleCommand } from "../model/ConsoleCommand";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { ConsoleExecuteResult } from "../model/ConsoleExecuteResult";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { ConsoleCommandFactory } from "./ConsoleCommandFactory";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { ConsoleCommand } from '../model/ConsoleCommand';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { ConsoleExecuteResult } from '../model/ConsoleExecuteResult';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { ConsoleCommandFactory } from './ConsoleCommandFactory';
+import { Error } from '../../../../../server/model/Error';
 
 export class ConsoleCommandService extends KIXObjectAPIService {
 

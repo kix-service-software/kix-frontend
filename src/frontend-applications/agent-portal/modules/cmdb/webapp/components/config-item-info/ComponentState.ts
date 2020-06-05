@@ -7,9 +7,9 @@
  * --
  */
 
-import { ConfigItem } from "../../../model/ConfigItem";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
-import { ConfigItemLabelProvider } from "../../core";
+import { ConfigItem } from '../../../model/ConfigItem';
+
+import { ConfigItemLabelProvider } from '../../core';
 
 export class ComponentState {
 

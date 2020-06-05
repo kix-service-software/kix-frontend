@@ -7,8 +7,8 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { IdService } from '../../../../../model/IdService';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 
 export class ComponentState {

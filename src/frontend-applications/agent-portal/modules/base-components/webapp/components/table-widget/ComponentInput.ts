@@ -7,8 +7,8 @@
  * --
  */
 
-import { ContextType } from "../../../../../model/ContextType";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
+import { ContextType } from '../../../../../model/ContextType';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 
 export class ComponentInput {
 

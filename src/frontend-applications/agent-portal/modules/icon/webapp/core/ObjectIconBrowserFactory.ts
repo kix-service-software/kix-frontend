@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { ObjectIcon } from "../../model/ObjectIcon";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { ObjectIcon } from '../../model/ObjectIcon';
 
 export class ObjectIconBrowserFactory implements IKIXObjectFactory<ObjectIcon> {
 

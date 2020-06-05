@@ -7,25 +7,25 @@
  * --
  */
 
-import { IContextServiceListener } from "./IContextServiceListener";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextFactory } from "./ContextFactory";
-import { DialogService } from "./DialogService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { BrowserHistoryState } from "./BrowserHistoryState";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { RoutingService } from "./RoutingService";
-import { ContextHistory } from "./ContextHistory";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { AdditionalContextInformation } from "./AdditionalContextInformation";
-import { FormService } from "./FormService";
-import { TableFactoryService } from "./table/TableFactoryService";
-import { ContextHistoryEntry } from "./ContextHistoryEntry";
-import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
-import { ContextSocketClient } from "./ContextSocketClient";
-import { Context } from "../../../../model/Context";
+import { IContextServiceListener } from './IContextServiceListener';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextFactory } from './ContextFactory';
+import { DialogService } from './DialogService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { BrowserHistoryState } from './BrowserHistoryState';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { RoutingService } from './RoutingService';
+import { ContextHistory } from './ContextHistory';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { FormService } from './FormService';
+import { TableFactoryService } from './table/TableFactoryService';
+import { ContextHistoryEntry } from './ContextHistoryEntry';
+import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
+import { ContextSocketClient } from './ContextSocketClient';
+import { Context } from '../../../../model/Context';
 
 
 export class ContextService {

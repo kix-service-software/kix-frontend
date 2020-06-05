@@ -7,10 +7,10 @@
  * --
  */
 
-import { ITableCSSHandler, TableValue } from "../../../../base-components/webapp/core/table";
-import { Ticket } from "../../../model/Ticket";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { SysConfigService } from "../../../../sysconfig/webapp/core";
+import { ITableCSSHandler, TableValue } from '../../../../base-components/webapp/core/table';
+import { Ticket } from '../../../model/Ticket';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { SysConfigService } from '../../../../sysconfig/webapp/core';
 
 export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
 
@@ -19,7 +19,7 @@ export class TicketTableCSSHandler implements ITableCSSHandler<Ticket> {
 
         if (ticket) {
             if (ticket.Unseen) {
-                classes.push("article-unread");
+                classes.push('article-unread');
             }
 
             const stateTypes = await SysConfigService.getInstance().getTicketViewableStateTypes();

@@ -7,17 +7,17 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ITable, TableExportUtil } from "../../../../base-components/webapp/core/table";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ITable, TableExportUtil } from '../../../../base-components/webapp/core/table';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class CSVExportAction extends AbstractAction<ITable> {
 
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
-        this.text = "Translatable#CSV-Export";
-        this.icon = "kix-icon-export";
+        this.text = 'Translatable#CSV-Export';
+        this.icon = 'kix-icon-export';
     }
 
     public canRun(): boolean {

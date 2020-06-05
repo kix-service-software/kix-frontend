@@ -7,11 +7,11 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { MailFilter } from "../../model/MailFilter";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { MailFilterProperty } from "../../model/MailFilterProperty";
-import { MailFilterMatch } from "../../model/MailFilterMatch";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { MailFilter } from '../../model/MailFilter';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { MailFilterProperty } from '../../model/MailFilterProperty';
+import { MailFilterMatch } from '../../model/MailFilterMatch';
 
 export class MailFilterFormService extends KIXObjectFormService {
 

@@ -53,10 +53,10 @@ export class Component {
     private getActiveNode(queueId: number, nodes: TreeNode[] = this.state.nodes): TreeNode {
         let activeNode = nodes.find((n) => n.id === queueId);
         if (!activeNode) {
-            for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(queueId, nodes[index].children);
+            for (const node of nodes) {
+                activeNode = this.getActiveNode(queueId, node.children);
                 if (activeNode) {
-                    nodes[index].expanded = true;
+                    node.expanded = true;
                     break;
                 }
             }

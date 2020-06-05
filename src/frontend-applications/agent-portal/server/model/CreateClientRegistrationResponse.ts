@@ -7,7 +7,7 @@
  * --
  */
 
-import { SystemInfo } from "../../model/SystemInfo";
+import { SystemInfo } from '../../model/SystemInfo';
 
 export class CreateClientRegistrationResponse {
 

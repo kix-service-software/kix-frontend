@@ -7,11 +7,11 @@
  * --
  */
 
-import { AbstractAction } from "../../../../base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { TextModuleDialogUtil } from "../TextModuleDialogUtil";
-import { Row } from "../../../../base-components/webapp/core/table";
+import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { TextModuleDialogUtil } from '../TextModuleDialogUtil';
+import { Row } from '../../../../base-components/webapp/core/table';
 
 export class TextModuleDuplicateAction extends AbstractAction {
 

@@ -7,19 +7,19 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
+import { IUIModule } from '../../../../model/IUIModule';
 import {
     OrganisationImportManager, NewOrganisationDialogContext, EditOrganisationDialogContext,
     OrganisationImportDialogContext, OrganisationCreateAction, OrganisationEditAction
-} from ".";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ImportService } from "../../../import/webapp/core";
-import { OrganisationDuplicateAction } from "./actions/OrganisationDuplicateAction";
+} from '.';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ImportService } from '../../../import/webapp/core';
+import { OrganisationDuplicateAction } from './actions/OrganisationDuplicateAction';
 
 export class UIModule implements IUIModule {
 
@@ -28,7 +28,7 @@ export class UIModule implements IUIModule {
     public name: string = 'OrganisationEditUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

@@ -7,9 +7,9 @@
  * --
  */
 
-import { UpdateFormEvent } from "./UpdateFormEvent";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
+import { UpdateFormEvent } from './UpdateFormEvent';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 
 export class FormFieldValueChangeEvent<T = any> extends UpdateFormEvent {
 

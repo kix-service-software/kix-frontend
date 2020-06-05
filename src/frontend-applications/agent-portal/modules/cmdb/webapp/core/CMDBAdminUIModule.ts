@@ -7,26 +7,26 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     ConfigItemClassService, ConfigItemClassFormService, ConfigItemClassBrowserFactory,
     ConfigItemClassTableFactory, ConfigItemClassDefinitionTableFactory, ConfigItemClassLabelProvider,
     ConfigItemClassDefinitionLabelProvider, ConfigItemClassCreateAction, NewConfigItemClassDialogContext,
     ConfigItemClassEditAction, EditConfigItemClassDialogContext, ConfigItemClassDetailsContext
-} from ".";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
+} from '.';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+
+
 
 export class UIModule implements IUIModule {
 
@@ -35,7 +35,7 @@ export class UIModule implements IUIModule {
     public priority: number = 204;
 
     public unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

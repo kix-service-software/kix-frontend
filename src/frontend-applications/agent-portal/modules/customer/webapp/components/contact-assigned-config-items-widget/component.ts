@@ -13,7 +13,7 @@ import { Contact } from '../../../model/Contact';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { ContactProperty } from '../../../model/ContactProperty';

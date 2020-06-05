@@ -7,16 +7,16 @@
  * --
  */
 
-import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
-import { DynamicFieldValue } from "../../model/DynamicFieldValue";
-import { CheckListItem } from "./CheckListItem";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { ExtendedDynamicFieldPlaceholderHandler } from "./ExtendedDynamicFieldPlaceholderHandler";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
+import { DynamicFieldValue } from '../../model/DynamicFieldValue';
+import { CheckListItem } from './CheckListItem';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { ExtendedDynamicFieldPlaceholderHandler } from './ExtendedDynamicFieldPlaceholderHandler';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
 
 export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHandler {
 

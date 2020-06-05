@@ -7,15 +7,15 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { AdministrationSocketClient } from "../../core/AdministrationSocketClient";
-import { AdminContext } from "../../core/AdminContext";
-import { AdminModule } from "../../../model/AdminModule";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { AdminModuleCategory } from "../../../model/AdminModuleCategory";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { AdministrationSocketClient } from '../../core/AdministrationSocketClient';
+import { AdminContext } from '../../core/AdminContext';
+import { AdminModule } from '../../../model/AdminModule';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -59,12 +59,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private getActiveNode(adminModule: AdminModule, nodes: TreeNode[] = this.state.nodes): TreeNode {
         let activeNode = nodes.find((n) => n.id.id === adminModule.id);
         if (!activeNode) {
-            for (let index = 0; index < nodes.length; index++) {
-                if (nodes[index].children && nodes[index].children.length) {
-                    activeNode = this.getActiveNode(adminModule, nodes[index].children);
+            for (const node of nodes) {
+                if (node.children && node.children.length) {
+                    activeNode = this.getActiveNode(adminModule, node.children);
                 }
                 if (activeNode) {
-                    nodes[index].expanded = true;
+                    node.expanded = true;
                     break;
                 }
             }

@@ -7,15 +7,15 @@
  * --
  */
 
-import { FAQArticleCreateAction, FAQArticleDeleteAction, FAQArticleEditAction } from "../actions";
-import { IUIModule } from "../../../../../model/IUIModule";
-import { ContextDescriptor } from "../../../../../model/ContextDescriptor";
-import { NewFAQArticleDialogContext, EditFAQArticleDialogContext } from "..";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../../model/ContextType";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
+import { FAQArticleCreateAction, FAQArticleDeleteAction, FAQArticleEditAction } from '../actions';
+import { IUIModule } from '../../../../../model/IUIModule';
+import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
+import { NewFAQArticleDialogContext, EditFAQArticleDialogContext } from '..';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../../model/ContextType';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 
 export class UIModule implements IUIModule {
 
@@ -24,7 +24,7 @@ export class UIModule implements IUIModule {
     public name: string = 'FAQEditUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
 

@@ -7,10 +7,10 @@
  * --
  */
 
-import { FilterDataType } from "./FilterDataType";
-import { FilterType } from "./FilterType";
-import { KIXObject } from "./kix/KIXObject";
-import { SearchOperator } from "../modules/search/model/SearchOperator";
+import { FilterDataType } from './FilterDataType';
+import { FilterType } from './FilterType';
+import { KIXObject } from './kix/KIXObject';
+import { SearchOperator } from '../modules/search/model/SearchOperator';
 
 export class FilterCriteria {
 

@@ -7,17 +7,17 @@
  * --
  */
 
-import { KIXModulesSocketClient } from "./KIXModulesSocketClient";
-import { FormFactory } from "./FormFactory";
-import { BrowserUtil } from "./BrowserUtil";
-import { IFormInstance } from "./IFormInstance";
-import { SearchFormInstance } from "./SearchFormInstance";
-import { SearchForm } from "./SearchForm";
-import { FormInstance } from "./FormInstance";
-import { IFormInstanceListener } from "./IFormInstanceListener";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXModulesSocketClient } from './KIXModulesSocketClient';
+import { FormFactory } from './FormFactory';
+import { BrowserUtil } from './BrowserUtil';
+import { IFormInstance } from './IFormInstance';
+import { SearchFormInstance } from './SearchFormInstance';
+import { SearchForm } from './SearchForm';
+import { FormInstance } from './FormInstance';
+import { IFormInstanceListener } from './IFormInstanceListener';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class FormService {
 

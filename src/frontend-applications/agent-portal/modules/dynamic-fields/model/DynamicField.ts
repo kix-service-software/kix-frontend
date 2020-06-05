@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { DynamicFieldTypes } from "./DynamicFieldTypes";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { DynamicFieldTypes } from './DynamicFieldTypes';
 
 export class DynamicField extends KIXObject {
 

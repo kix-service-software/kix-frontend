@@ -7,13 +7,13 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Article } from "../../model/Article";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SenderType } from "../../model/SenderType";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ArticleReceiver } from "../../model/ArticleReceiver";
-import { ArticleProperty } from "../../model/ArticleProperty";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Article } from '../../model/Article';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SenderType } from '../../model/SenderType';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ArticleReceiver } from '../../model/ArticleReceiver';
+import { ArticleProperty } from '../../model/ArticleProperty';
 
 export class ArticleBrowserFactory implements IKIXObjectFactory<Article> {
 

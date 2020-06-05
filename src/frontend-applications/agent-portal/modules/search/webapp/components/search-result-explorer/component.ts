@@ -116,8 +116,8 @@ export class Component implements IKIXObjectSearchListener {
     ): SearchResultCategory {
         let activeCategory = categories.find((c) => c.objectType === objectType);
         if (!activeCategory) {
-            for (let index = 0; index < categories.length; index++) {
-                activeCategory = this.getActiveCategory(objectType, categories[index].children);
+            for (const category of categories) {
+                activeCategory = this.getActiveCategory(objectType, category.children);
                 if (activeCategory) {
                     break;
                 }
@@ -132,8 +132,8 @@ export class Component implements IKIXObjectSearchListener {
     ): TreeNode {
         let activeNode = nodes.find((n) => n.id === objectType);
         if (!activeNode) {
-            for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(objectType, nodes[index].children);
+            for (const node of nodes) {
+                activeNode = this.getActiveNode(objectType, node.children);
                 if (activeNode) {
                     break;
                 }

@@ -7,18 +7,18 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Contact } from "../../model/Contact";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContactProperty } from "../../model/ContactProperty";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ContactDetailsContext } from ".";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Contact } from '../../model/Contact';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContactProperty } from '../../model/ContactProperty';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ContactDetailsContext } from '.';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -42,7 +42,7 @@ export class ContactService extends KIXObjectService<Contact> {
     }
 
     public getLinkObjectName(): string {
-        return "Person";
+        return 'Person';
     }
 
     public determineDependendObjects(contacts: Contact[], targetObjectType: KIXObjectType): string[] | number[] {

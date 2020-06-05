@@ -7,45 +7,45 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { TicketContext, TicketChartWidgetConfiguration } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { KIXObjectPropertyFilter } from "../../model/KIXObjectPropertyFilter";
-import { TableFilterCriteria } from "../../model/TableFilterCriteria";
-import { TicketProperty } from "./model/TicketProperty";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ChartComponentConfiguration } from "../charts/model/ChartComponentConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { TableConfiguration } from "../../model/configuration/TableConfiguration";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { TableHeaderHeight } from "../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../model/configuration/TableRowHeight";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { SortOrder } from "../../model/SortOrder";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
-import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
-import { SearchProperty } from "../search/model/SearchProperty";
-import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { QueueProperty } from "./model/QueueProperty";
-import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
-import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { FormContext } from "../../model/configuration/FormContext";
-import { ModuleConfigurationService } from "../../server/services/configuration";
-import { ToggleOptions } from "../base-components/webapp/core/table";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { TicketContext, TicketChartWidgetConfiguration } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { KIXObjectPropertyFilter } from '../../model/KIXObjectPropertyFilter';
+import { TableFilterCriteria } from '../../model/TableFilterCriteria';
+import { TicketProperty } from './model/TicketProperty';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ChartComponentConfiguration } from '../charts/model/ChartComponentConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../model/configuration/TableRowHeight';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { SortOrder } from '../../model/SortOrder';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
+import { SearchProperty } from '../search/model/SearchProperty';
+import { FormFieldOption } from '../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { QueueProperty } from './model/QueueProperty';
+import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
+import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
+import { ModuleConfigurationService } from '../../server/services/configuration';
+import { ToggleOptions } from '../base-components/webapp/core/table';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -94,16 +94,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     datasets: [
                         {
                             backgroundColor: [
-                                "rgb(91, 91, 91)",
-                                "rgb(4, 83, 125)",
-                                "rgb(0, 141, 210)",
-                                "rgb(129, 189, 223)",
-                                "rgb(160, 230, 200)",
-                                "rgb(130, 200, 38)",
-                                "rgb(0, 152, 70)",
-                                "rgb(227, 30, 36)",
-                                "rgb(239, 127, 26)",
-                                "rgb(254, 204, 0)"
+                                'rgb(91, 91, 91)',
+                                'rgb(4, 83, 125)',
+                                'rgb(0, 141, 210)',
+                                'rgb(129, 189, 223)',
+                                'rgb(160, 230, 200)',
+                                'rgb(130, 200, 38)',
+                                'rgb(0, 152, 70)',
+                                'rgb(227, 30, 36)',
+                                'rgb(239, 127, 26)',
+                                'rgb(254, 204, 0)'
                             ]
                         }
                     ]
@@ -148,16 +148,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     datasets: [{
                         fill: true,
                         backgroundColor: [
-                            "rgb(91, 91, 91)",
-                            "rgb(4, 83, 125)",
-                            "rgb(0, 141, 210)",
-                            "rgb(129, 189, 223)",
-                            "rgb(160, 230, 200)",
-                            "rgb(130, 200, 38)",
-                            "rgb(0, 152, 70)",
-                            "rgb(227, 30, 36)",
-                            "rgb(239, 127, 26)",
-                            "rgb(254, 204, 0)"
+                            'rgb(91, 91, 91)',
+                            'rgb(4, 83, 125)',
+                            'rgb(0, 141, 210)',
+                            'rgb(129, 189, 223)',
+                            'rgb(160, 230, 200)',
+                            'rgb(130, 200, 38)',
+                            'rgb(0, 152, 70)',
+                            'rgb(227, 30, 36)',
+                            'rgb(239, 127, 26)',
+                            'rgb(254, 204, 0)'
                         ]
                     }]
                 },
@@ -192,7 +192,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 type: 'line',
                 data: {
                     datasets: [{
-                        backgroundColor: "rgb(91, 91, 91)"
+                        backgroundColor: 'rgb(91, 91, 91)'
                     }]
                 },
                 options: {

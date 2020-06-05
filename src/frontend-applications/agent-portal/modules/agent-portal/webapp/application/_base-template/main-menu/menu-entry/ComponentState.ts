@@ -7,7 +7,7 @@
  * --
  */
 
-import { MenuEntry } from "../../../../../../../model/MenuEntry";
+import { MenuEntry } from '../../../../../../../model/MenuEntry';
 
 export class ComponentState {
 

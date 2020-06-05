@@ -7,26 +7,26 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { NotificationProperty } from "../../model/NotificationProperty";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
-import { ArticleProperty } from "../../../ticket/model/ArticleProperty";
-import { NotificationService } from ".";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { NotificationMessage } from "../../model/NotificationMessage";
-import { Notification } from "../../model/Notification";
-import { TicketProperty } from "../../../ticket/model/TicketProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { IdService } from "../../../../model/IdService";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { NotificationProperty } from '../../model/NotificationProperty';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
+import { NotificationService } from '.';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { NotificationMessage } from '../../model/NotificationMessage';
+import { Notification } from '../../model/Notification';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { IdService } from '../../../../model/IdService';
 
 export class NotificationFormService extends KIXObjectFormService {
 

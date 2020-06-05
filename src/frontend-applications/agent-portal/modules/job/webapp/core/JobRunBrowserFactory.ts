@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../base-components/webapp/core/KIXObjectFactory";
-import { JobRun } from "../../model/JobRun";
+import { KIXObjectFactory } from '../../../base-components/webapp/core/KIXObjectFactory';
+import { JobRun } from '../../model/JobRun';
 
 export class JobRunBrowserFactory extends KIXObjectFactory<JobRun> {
 

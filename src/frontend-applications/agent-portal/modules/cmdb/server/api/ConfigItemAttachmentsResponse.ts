@@ -7,7 +7,7 @@
  * --
  */
 
-import { ConfigItemAttachment } from "../../model/ConfigItemAttachment";
+import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
 
 export class ConfigItemAttachmentsResponse {
 

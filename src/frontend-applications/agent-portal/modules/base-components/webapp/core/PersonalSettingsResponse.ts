@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "./ISocketResponse";
-import { PersonalSetting } from "../../../user/model/PersonalSetting";
+import { ISocketResponse } from './ISocketResponse';
+import { PersonalSetting } from '../../../user/model/PersonalSetting';
 
 export class PersonalSettingsResponse implements ISocketResponse {
 

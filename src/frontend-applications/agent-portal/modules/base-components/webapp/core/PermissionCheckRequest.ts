@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketRequest } from "./ISocketRequest";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
+import { ISocketRequest } from './ISocketRequest';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export class PermissionCheckRequest implements ISocketRequest {
 

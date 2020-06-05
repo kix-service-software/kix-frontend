@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { GeneralCatalogItem } from "../../../../general-catalog/model/GeneralCatalogItem";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { GeneralCatalogItem } from '../../../../general-catalog/model/GeneralCatalogItem';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 export class CompontentState extends FormInputComponentState<GeneralCatalogItem> {
 

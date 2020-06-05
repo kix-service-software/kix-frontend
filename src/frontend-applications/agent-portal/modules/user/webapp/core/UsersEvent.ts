@@ -9,8 +9,8 @@
 
 export enum UsersEvent {
 
-    LOAD_USERS = "load-users",
+    LOAD_USERS = 'load-users',
 
-    USERS_LOADED = "users-loaded"
+    USERS_LOADED = 'users-loaded'
 
 }

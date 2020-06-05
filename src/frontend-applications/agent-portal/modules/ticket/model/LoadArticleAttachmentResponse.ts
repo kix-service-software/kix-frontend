@@ -7,7 +7,7 @@
  * --
  */
 
-import { Attachment } from "../../../model/kix/Attachment";
+import { Attachment } from '../../../model/kix/Attachment';
 
 export class LoadArticleAttachmentResponse {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { ConfigurationType } from "./ConfigurationType";
+import { ConfigurationType } from './ConfigurationType';
 
 export class ConfigurationDefinition {
 

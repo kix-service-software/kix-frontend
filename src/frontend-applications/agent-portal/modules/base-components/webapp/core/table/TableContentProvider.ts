@@ -7,20 +7,20 @@
  * --
  */
 
-import { ITableContentProvider } from "./ITableContentProvider";
-import { ITable } from "./ITable";
-import { IRowObject } from "./IRowObject";
-import { RowObject } from "./RowObject";
-import { TableValue } from "./TableValue";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { ContextService } from "../ContextService";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectService } from "../KIXObjectService";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
-import { LabelService } from "../LabelService";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
+import { ITableContentProvider } from './ITableContentProvider';
+import { ITable } from './ITable';
+import { IRowObject } from './IRowObject';
+import { RowObject } from './RowObject';
+import { TableValue } from './TableValue';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ContextService } from '../ContextService';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectService } from '../KIXObjectService';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
+import { LabelService } from '../LabelService';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 

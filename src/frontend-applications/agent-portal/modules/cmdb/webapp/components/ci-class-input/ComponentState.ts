@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { ConfigItemClass } from "../../../model/ConfigItemClass";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { ConfigItemClass } from '../../../model/ConfigItemClass';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 
 export class ComponentState extends FormInputComponentState<ConfigItemClass> {

@@ -7,16 +7,16 @@
  * --
  */
 
-import { DataType } from "../../../../model/DataType";
-import { AttributeDefinition } from "../../model/AttributeDefinition";
-import { InputDefinition } from "../../model/InputDefinition";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { ConfigItemClassProperty } from "../../model/ConfigItemClassProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SortUtil } from "../../../../model/SortUtil";
+import { DataType } from '../../../../model/DataType';
+import { AttributeDefinition } from '../../model/AttributeDefinition';
+import { InputDefinition } from '../../model/InputDefinition';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { SortUtil } from '../../../../model/SortUtil';
 
 export class ConfigItemClassAttributeUtil {
 

@@ -7,13 +7,13 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../../base-components/webapp/core/table/TableContentProvider";
-import { Article } from "../../../../model/Article";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { ArticleProperty } from "../../../../model/ArticleProperty";
+import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
+import { Article } from '../../../../model/Article';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
 
 export class ArticleTableContentProvider extends TableContentProvider<Article> {
 

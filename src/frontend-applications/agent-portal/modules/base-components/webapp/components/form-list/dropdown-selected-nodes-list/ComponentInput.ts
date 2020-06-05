@@ -7,7 +7,7 @@
  * --
  */
 
-import { TreeHandler } from "../../../core/tree";
+import { TreeHandler } from '../../../core/tree';
 
 export class ComponentInput {
 

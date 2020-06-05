@@ -7,19 +7,19 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { JobProperty } from "../../model/JobProperty";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { MacroActionType } from "../../model/MacroActionType";
-import { Job } from "../../model/Job";
-import { ExecPlan } from "../../model/ExecPlan";
-import { Macro } from "../../model/Macro";
-import { JobType } from "../../model/JobType";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { JobProperty } from '../../model/JobProperty';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { MacroActionType } from '../../model/MacroActionType';
+import { Job } from '../../model/Job';
+import { ExecPlan } from '../../model/ExecPlan';
+import { Macro } from '../../model/Macro';
+import { JobType } from '../../model/JobType';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 
 export class JobService extends KIXObjectService<Job> {
 

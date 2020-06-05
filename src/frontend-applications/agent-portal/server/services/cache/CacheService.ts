@@ -7,14 +7,14 @@
  * --
  */
 
-import { InMemoryCache } from "./InMemoryCache";
-import { RedisCache } from "./RedisCache";
+import { InMemoryCache } from './InMemoryCache';
+import { RedisCache } from './RedisCache';
 
 import md5 = require('md5');
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { ObjectUpdatedEventData } from "../../../model/ObjectUpdatedEventData";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { LoggingService } from "../../../../../server/services/LoggingService";
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { LoggingService } from '../../../../../server/services/LoggingService';
 
 export class CacheService {
 

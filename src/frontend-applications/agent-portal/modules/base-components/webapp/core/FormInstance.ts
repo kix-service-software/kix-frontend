@@ -7,29 +7,29 @@
  * --
  */
 
-import { IFormInstance } from "./IFormInstance";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
-import { IFormInstanceListener } from "./IFormInstanceListener";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { ServiceRegistry } from "./ServiceRegistry";
-import { IKIXObjectFormService } from "./IKIXObjectFormService";
-import { ServiceType } from "./ServiceType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormValidationService } from "./FormValidationService";
-import { ValidationSeverity } from "./ValidationSeverity";
-import { ContextService } from "./ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { FactoryService } from "./FactoryService";
-import { AdditionalContextInformation } from "./AdditionalContextInformation";
-import { ValidationResult } from "./ValidationResult";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { KIXObjectService } from "./KIXObjectService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
-import { IdService } from "../../../../model/IdService";
+import { IFormInstance } from './IFormInstance';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
+import { IFormInstanceListener } from './IFormInstanceListener';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ServiceRegistry } from './ServiceRegistry';
+import { IKIXObjectFormService } from './IKIXObjectFormService';
+import { ServiceType } from './ServiceType';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormValidationService } from './FormValidationService';
+import { ValidationSeverity } from './ValidationSeverity';
+import { ContextService } from './ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { FactoryService } from './FactoryService';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { ValidationResult } from './ValidationResult';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectService } from './KIXObjectService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
+import { IdService } from '../../../../model/IdService';
 
 export class FormInstance implements IFormInstance {
 

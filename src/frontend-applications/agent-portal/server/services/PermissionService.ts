@@ -7,11 +7,11 @@
  * --
  */
 
-import { UIComponent } from "../../model/UIComponent";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { HttpService } from "./HttpService";
+import { UIComponent } from '../../model/UIComponent';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { HttpService } from './HttpService';
 
 export class PermissionService {
 

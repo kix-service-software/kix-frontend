@@ -7,12 +7,12 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ITable, IRowObject, TableValue } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ImportExportTemplateRun } from "../../../model/ImportExportTemplateRun";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ITable, IRowObject } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ImportExportTemplateRun } from '../../../model/ImportExportTemplateRun';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class ImportExportTemplateRunTableContentProvider extends TableContentProvider<ImportExportTemplateRun> {
 

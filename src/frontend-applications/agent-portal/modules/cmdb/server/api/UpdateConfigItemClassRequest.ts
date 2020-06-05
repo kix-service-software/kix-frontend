@@ -7,7 +7,7 @@
  * --
  */
 
-import { UpdateConfigItemClass } from "./UpdateConfigItemClass";
+import { UpdateConfigItemClass } from './UpdateConfigItemClass';
 
 export class UpdateConfigItemClassRequest {
 

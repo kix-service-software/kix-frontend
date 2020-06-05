@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { TicketPriorityLabelProvider } from "../../core";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { TicketPriority } from "../../../model/TicketPriority";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { TicketPriorityLabelProvider } from '../../core';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { TicketPriority } from '../../../model/TicketPriority';
 
 export class ComponentState extends WidgetComponentState {
 

@@ -7,10 +7,10 @@
  * --
  */
 
-import { AgentPortalExtensions } from "../../../server/extensions/AgentPortalExtensions";
-import { PersonalSetting } from "../model/PersonalSetting";
-import { PluginService } from "../../../../../server/services/PluginService";
-import { IPersonalSettingsExtension } from "../../../server/extensions/IPersonalSettingsExtension";
+import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
+import { PersonalSetting } from '../model/PersonalSetting';
+import { PluginService } from '../../../../../server/services/PluginService';
+import { IPersonalSettingsExtension } from '../../../server/extensions/IPersonalSettingsExtension';
 
 export class PersonalSettingsService {
 

@@ -7,28 +7,28 @@
  * --
  */
 
-import { IKIXObjectFormService } from "./IKIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ServiceType } from "./ServiceType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { ContextService } from "./ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "./LabelService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { InlineContent } from "./InlineContent";
-import { AuthenticationSocketClient } from "./AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { FormService } from "./FormService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
-import { IdService } from "../../../../model/IdService";
-import { IFormInstance } from "./IFormInstance";
+import { IKIXObjectFormService } from './IKIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ServiceType } from './ServiceType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { ContextService } from './ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from './LabelService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { InlineContent } from './InlineContent';
+import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormService } from './FormService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
+import { IdService } from '../../../../model/IdService';
+import { IFormInstance } from './IFormInstance';
 
 export abstract class KIXObjectFormService implements IKIXObjectFormService {
 
@@ -232,7 +232,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                 const replaceString = `data:${contentItem.contentType};base64,${contentItem.content}`;
                 const contentIdLength = contentItem.contentId.length - 1;
                 const contentId = contentItem.contentId.substring(1, contentIdLength);
-                const regexpString = new RegExp('cid:' + contentId, "g");
+                const regexpString = new RegExp('cid:' + contentId, 'g');
                 newString = newString.replace(regexpString, replaceString);
             }
         }

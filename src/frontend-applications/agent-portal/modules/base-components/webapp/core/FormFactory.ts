@@ -7,11 +7,11 @@
  * --
  */
 
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { IdService } from "../../../../model/IdService";
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { IdService } from '../../../../model/IdService';
 
 export class FormFactory {
 

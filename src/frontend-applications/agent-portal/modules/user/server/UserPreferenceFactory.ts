@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { UserPreference } from "../model/UserPreference";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { UserPreference } from '../model/UserPreference';
 
 export class UserPreferenceFactory extends ObjectFactory<UserPreference> {
 

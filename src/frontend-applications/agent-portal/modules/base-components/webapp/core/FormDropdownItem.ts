@@ -7,7 +7,7 @@
  * --
  */
 
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 
 export class FormDropdownItem<T = any> {

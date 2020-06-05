@@ -127,7 +127,7 @@ export enum KIXObjectType {
 
     SYSTEM_ADDRESS = 'SystemAddress',
 
-    TEXT_MODULE = "TextModule",
+    TEXT_MODULE = 'TextModule',
 
     TICKET = 'Ticket',
 

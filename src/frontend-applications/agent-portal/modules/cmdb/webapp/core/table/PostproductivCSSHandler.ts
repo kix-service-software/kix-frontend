@@ -7,8 +7,8 @@
  * --
  */
 
-import { ITableCSSHandler, TableValue } from "../../../../base-components/webapp/core/table";
-import { ConfigItem } from "../../../model/ConfigItem";
+import { ITableCSSHandler, TableValue } from '../../../../base-components/webapp/core/table';
+import { ConfigItem } from '../../../model/ConfigItem';
 
 export class PostproductivCSSHandler implements ITableCSSHandler {
 

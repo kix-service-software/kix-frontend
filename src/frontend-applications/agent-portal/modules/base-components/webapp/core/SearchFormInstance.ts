@@ -7,19 +7,19 @@
  * --
  */
 
-import { IFormInstance } from "./IFormInstance";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { ISearchFormListener } from "./ISearchFormListener";
-import { SearchForm } from "./SearchForm";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { IFormInstanceListener } from "./IFormInstanceListener";
-import { ValidationResult } from "./ValidationResult";
-import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
+import { IFormInstance } from './IFormInstance';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { ISearchFormListener } from './ISearchFormListener';
+import { SearchForm } from './SearchForm';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { IFormInstanceListener } from './IFormInstanceListener';
+import { ValidationResult } from './ValidationResult';
+import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 
 export class SearchFormInstance implements IFormInstance {
 

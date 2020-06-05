@@ -7,21 +7,21 @@
  * --
  */
 
-import { SocketClient } from "../../../../modules/base-components/webapp/core/SocketClient";
-import { Webform } from "../../model/Webform";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { IdService } from "../../../../model/IdService";
-import { ISocketRequest } from "../../../../modules/base-components/webapp/core/ISocketRequest";
-import { WebformEvent } from "../../model/WebformEvent";
-import { LoadWebformsResponse } from "../../model/LoadWebformsResponse";
-import { WebformBrowserFactory } from ".";
-import { SocketEvent } from "../../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { SaveWebformRequest } from "../../model/SaveWebformRequest";
-import { CreateObjectResponse } from "../../../../modules/base-components/webapp/core/CreateObjectResponse";
-import { EventService } from "../../../base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
+import { Webform } from '../../model/Webform';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { IdService } from '../../../../model/IdService';
+import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
+import { WebformEvent } from '../../model/WebformEvent';
+import { LoadWebformsResponse } from '../../model/LoadWebformsResponse';
+import { WebformBrowserFactory } from '.';
+import { SocketEvent } from '../../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { SaveWebformRequest } from '../../model/SaveWebformRequest';
+import { CreateObjectResponse } from '../../../../modules/base-components/webapp/core/CreateObjectResponse';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class WebformSocketClient extends SocketClient {
 

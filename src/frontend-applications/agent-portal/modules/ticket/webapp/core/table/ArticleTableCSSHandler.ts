@@ -7,9 +7,9 @@
  * --
  */
 
-import { ITableCSSHandler, TableValue } from "../../../../base-components/webapp/core/table";
-import { Article } from "../../../model/Article";
-import { ArticleProperty } from "../../../model/ArticleProperty";
+import { ITableCSSHandler, TableValue } from '../../../../base-components/webapp/core/table';
+import { Article } from '../../../model/Article';
+import { ArticleProperty } from '../../../model/ArticleProperty';
 
 export class ArticleTableCSSHandler implements ITableCSSHandler<Article> {
 
@@ -18,7 +18,7 @@ export class ArticleTableCSSHandler implements ITableCSSHandler<Article> {
 
         if (article) {
             if (article.isUnread()) {
-                classes.push("article-unread");
+                classes.push('article-unread');
             }
         }
 

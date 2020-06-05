@@ -9,8 +9,8 @@
 
 export enum SortOrder {
 
-    DOWN = "Down",
+    DOWN = 'Down',
 
-    UP = "Up"
+    UP = 'Up'
 
 }

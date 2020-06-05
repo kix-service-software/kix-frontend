@@ -7,13 +7,13 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Macro } from "./Macro";
-import { ArticleProperty } from "../../ticket/model/ArticleProperty";
-import { ExecPlan } from "./ExecPlan";
-import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
-import { JobTypes } from "./JobTypes";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Macro } from './Macro';
+import { ArticleProperty } from '../../ticket/model/ArticleProperty';
+import { ExecPlan } from './ExecPlan';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { JobTypes } from './JobTypes';
 
 export class Job extends KIXObject {
 

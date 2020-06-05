@@ -7,9 +7,9 @@
  * --
  */
 
-import { IKIXObjectFactory } from "./IKIXObjectFactory";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { IKIXObjectFactory } from './IKIXObjectFactory';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class FactoryService {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { ISocketRequest } from "./ISocketRequest";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
+import { ISocketRequest } from './ISocketRequest';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 
 export class UpdateObjectRequest implements ISocketRequest {
 

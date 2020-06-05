@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { TranslationPattern } from "../../model/TranslationPattern";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationPatternProperty } from "../../model/TranslationPatternProperty";
-import { TranslationService } from "./TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { TranslationPattern } from '../../model/TranslationPattern';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationPatternProperty } from '../../model/TranslationPatternProperty';
+import { TranslationService } from './TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class TranslationPatternLabelProvider extends LabelProvider<TranslationPattern> {
 

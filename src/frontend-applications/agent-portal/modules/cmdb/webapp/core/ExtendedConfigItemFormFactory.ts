@@ -7,8 +7,8 @@
  * --
  */
 
-import { AttributeDefinition } from "../../model/AttributeDefinition";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { AttributeDefinition } from '../../model/AttributeDefinition';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 
 export abstract class ExtendedConfigItemFormFactory {
 

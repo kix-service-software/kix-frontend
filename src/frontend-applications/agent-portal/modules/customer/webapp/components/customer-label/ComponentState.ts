@@ -7,9 +7,9 @@
  * --
  */
 
-import { ILabelProvider } from "../../../../../modules/base-components/webapp/core/ILabelProvider";
-import { Organisation } from "../../../model/Organisation";
-import { Contact } from "../../../model/Contact";
+import { ILabelProvider } from '../../../../../modules/base-components/webapp/core/ILabelProvider';
+import { Organisation } from '../../../model/Organisation';
+import { Contact } from '../../../model/Contact';
 
 export class ComponentState {
 

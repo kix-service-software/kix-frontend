@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { SenderType } from "../model/SenderType";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { SenderType } from '../model/SenderType';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class SenderTypeFactory extends ObjectFactory<SenderType> {
 

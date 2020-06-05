@@ -7,20 +7,20 @@
  * --
  */
 
-import { TicketService } from "./TicketService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { TicketProperty } from "../../model/TicketProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { SearchDefinition, SearchOperatorUtil } from "../../../search/webapp/core";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SearchFormManager } from "../../../base-components/webapp/core/SearchFormManager";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { CMDBService } from "../../../cmdb/webapp/core";
+import { TicketService } from './TicketService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { TicketProperty } from '../../model/TicketProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { CMDBService } from '../../../cmdb/webapp/core';
 
 export class TicketSearchFormManager extends SearchFormManager {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { FilterCriteria } from "../../../../model/FilterCriteria";
+import { FilterCriteria } from '../../../../model/FilterCriteria';
 
 export interface ISearchFormListener {
 

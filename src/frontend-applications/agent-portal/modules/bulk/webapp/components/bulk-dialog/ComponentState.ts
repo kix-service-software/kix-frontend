@@ -7,7 +7,7 @@
  * --
  */
 
-import { BulkManager } from "../../core/BulkManager";
+import { BulkManager } from '../../core/BulkManager';
 
 export class ComponentState {
 

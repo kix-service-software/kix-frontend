@@ -8,12 +8,12 @@
  */
 
 
-import { TicketDetailsContext, EditTicketDialogContext, NewTicketDialogContext } from "./context";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { Ticket } from "../../model/Ticket";
-import { Contact } from "../../../customer/model/Contact";
+import { TicketDetailsContext, EditTicketDialogContext, NewTicketDialogContext } from './context';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { Ticket } from '../../model/Ticket';
+import { Contact } from '../../../customer/model/Contact';
 
 
 export class TicketDialogUtil {

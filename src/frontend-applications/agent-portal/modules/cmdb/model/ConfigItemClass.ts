@@ -7,13 +7,13 @@
  * --
  */
 
-import { ConfigItemClassDefinition } from "./ConfigItemClassDefinition";
-import { ConfigItemStats } from "./ConfigItemStats";
-import { AttributeDefinition } from "./AttributeDefinition";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ConfigItemClassDefinition } from './ConfigItemClassDefinition';
+import { ConfigItemStats } from './ConfigItemStats';
+import { AttributeDefinition } from './AttributeDefinition';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class ConfigItemClass extends KIXObject<ConfigItemClass> {
+export class ConfigItemClass extends KIXObject {
 
     public ObjectId: string | number;
 

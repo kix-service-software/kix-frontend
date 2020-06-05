@@ -7,13 +7,13 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { GeneralCatalogItem } from "../../../../general-catalog/model/GeneralCatalogItem";
-import { CompontentState } from "./CompontentState";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { GeneralCatalogService } from "../../../../general-catalog/webapp/core";
-import { GeneralCatalogItemProperty } from "../../../../general-catalog/model/GeneralCatalogItemProperty";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { GeneralCatalogItem } from '../../../../general-catalog/model/GeneralCatalogItem';
+import { CompontentState } from './CompontentState';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { GeneralCatalogService } from '../../../../general-catalog/webapp/core';
+import { GeneralCatalogItemProperty } from '../../../../general-catalog/model/GeneralCatalogItemProperty';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 class Component extends FormInputComponent<GeneralCatalogItem, CompontentState> {
 

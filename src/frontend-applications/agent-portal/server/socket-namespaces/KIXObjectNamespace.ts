@@ -7,23 +7,23 @@
  * --
  */
 
-import { SocketNameSpace } from "./SocketNameSpace";
-import { KIXObjectEvent } from "../../modules/base-components/webapp/core/KIXObjectEvent";
-import { LoadObjectsRequest } from "../../modules/base-components/webapp/core/LoadObjectsRequest";
-import { SocketResponse } from "../../modules/base-components/webapp/core/SocketResponse";
-import { KIXObjectServiceRegistry } from "../services/KIXObjectServiceRegistry";
-import { LoadObjectsResponse } from "../../modules/base-components/webapp/core/LoadObjectsResponse";
-import { LoggingService } from "../../../../server/services/LoggingService";
-import { SocketEvent } from "../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../modules/base-components/webapp/core/SocketErrorResponse";
-import { CreateObjectRequest } from "../../modules/base-components/webapp/core/CreateObjectRequest";
-import { CreateObjectResponse } from "../../modules/base-components/webapp/core/CreateObjectResponse";
-import { UpdateObjectRequest } from "../../modules/base-components/webapp/core/UpdateObjectRequest";
-import { UpdateObjectResponse } from "../../modules/base-components/webapp/core/UpdateObjectResponse";
-import { DeleteObjectRequest } from "../../modules/base-components/webapp/core/DeleteObjectRequest";
-import { DeleteObjectResponse } from "../../modules/base-components/webapp/core/DeleteObjectResponse";
-import { PermissionError } from "../../modules/user/model/PermissionError";
-import { Error } from "../../../../server/model/Error";
+import { SocketNameSpace } from './SocketNameSpace';
+import { KIXObjectEvent } from '../../modules/base-components/webapp/core/KIXObjectEvent';
+import { LoadObjectsRequest } from '../../modules/base-components/webapp/core/LoadObjectsRequest';
+import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
+import { KIXObjectServiceRegistry } from '../services/KIXObjectServiceRegistry';
+import { LoadObjectsResponse } from '../../modules/base-components/webapp/core/LoadObjectsResponse';
+import { LoggingService } from '../../../../server/services/LoggingService';
+import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
+import { CreateObjectRequest } from '../../modules/base-components/webapp/core/CreateObjectRequest';
+import { CreateObjectResponse } from '../../modules/base-components/webapp/core/CreateObjectResponse';
+import { UpdateObjectRequest } from '../../modules/base-components/webapp/core/UpdateObjectRequest';
+import { UpdateObjectResponse } from '../../modules/base-components/webapp/core/UpdateObjectResponse';
+import { DeleteObjectRequest } from '../../modules/base-components/webapp/core/DeleteObjectRequest';
+import { DeleteObjectResponse } from '../../modules/base-components/webapp/core/DeleteObjectResponse';
+import { PermissionError } from '../../modules/user/model/PermissionError';
+import { Error } from '../../../../server/model/Error';
 
 import cookie = require('cookie');
 

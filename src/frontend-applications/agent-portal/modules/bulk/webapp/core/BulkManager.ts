@@ -7,28 +7,26 @@
  * --
  */
 
-import {
-    AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { PropertyOperator } from "../../../../modules/base-components/webapp/core/PropertyOperator";
-import { PropertyOperatorUtil } from "../../../../modules/base-components/webapp/core/PropertyOperatorUtil";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFieldFormUtil } from "../../../base-components/webapp/core/DynamicFieldFormUtil";
-import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
-import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { PropertyOperator } from '../../../../modules/base-components/webapp/core/PropertyOperator';
+import { PropertyOperatorUtil } from '../../../../modules/base-components/webapp/core/PropertyOperatorUtil';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../../../dynamic-fields/model/DynamicFieldProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DynamicFieldFormUtil } from '../../../base-components/webapp/core/DynamicFieldFormUtil';
+import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
+import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export abstract class BulkManager extends AbstractDynamicFormManager {
 

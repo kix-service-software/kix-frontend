@@ -7,7 +7,7 @@
  * --
  */
 
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export interface IAction<T = any> {
 

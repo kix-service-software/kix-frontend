@@ -7,18 +7,18 @@
  * --
  */
 
-import { DynamicFieldValue } from "../../dynamic-fields/model/DynamicFieldValue";
-import { DynamicFieldTypes } from "../../dynamic-fields/model/DynamicFieldTypes";
-import { DynamicField } from "../../dynamic-fields/model/DynamicField";
-import { DynamicFieldFormUtil } from "../../base-components/webapp/core/DynamicFieldFormUtil";
-import { ConfigItem } from "../../cmdb/model/ConfigItem";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { ConfigItemProperty } from "../../cmdb/model/ConfigItemProperty";
-import { DynamicFieldAPIService } from "../../dynamic-fields/server/DynamicFieldService";
-import { DateTimeAPIUtil } from "../../../server/services/DateTimeAPIUtil";
-import { TranslationAPIService } from "../../translation/server/TranslationService";
-import { CMDBAPIService } from "../../cmdb/server/CMDBService";
+import { DynamicFieldValue } from '../../dynamic-fields/model/DynamicFieldValue';
+import { DynamicFieldTypes } from '../../dynamic-fields/model/DynamicFieldTypes';
+import { DynamicField } from '../../dynamic-fields/model/DynamicField';
+import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
+import { ConfigItem } from '../../cmdb/model/ConfigItem';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { ConfigItemProperty } from '../../cmdb/model/ConfigItemProperty';
+import { DynamicFieldAPIService } from '../../dynamic-fields/server/DynamicFieldService';
+import { DateTimeAPIUtil } from '../../../server/services/DateTimeAPIUtil';
+import { TranslationAPIService } from '../../translation/server/TranslationService';
+import { CMDBAPIService } from '../../cmdb/server/CMDBService';
 
 export class TicketDetailsDFDataBuilder {
     public static async getDFDisplayValues(

@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { DynamicFieldType } from '../../model/DynamicFieldType';
 
 export class DynamicFieldTypeBrowserFactory implements IKIXObjectFactory<DynamicFieldType> {
 

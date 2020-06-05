@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { Channel } from "../model/Channel";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { Channel } from '../model/Channel';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class ChannelFactory extends ObjectFactory<Channel> {
 

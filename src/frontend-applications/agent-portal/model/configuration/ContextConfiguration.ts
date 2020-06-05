@@ -7,10 +7,10 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
-import { ConfiguredWidget } from "./ConfiguredWidget";
-import { ConfiguredDialogWidget } from "./ConfiguredDialogWidget";
+import { IConfiguration } from './IConfiguration';
+import { ConfigurationType } from './ConfigurationType';
+import { ConfiguredWidget } from './ConfiguredWidget';
+import { ConfiguredDialogWidget } from './ConfiguredDialogWidget';
 
 export class ContextConfiguration implements IConfiguration {
 

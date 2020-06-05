@@ -7,22 +7,22 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table, TableEvent, TableEventData } from "../../../../base-components/webapp/core/table";
-import { LogFileTableContentProvider } from "./LogFileTableContentProvider";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../model/DataType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { LogFileProperty } from "../../../model/LogFileProperty";
-import { LogFile } from "../../../model/LogFile";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table, TableEvent, TableEventData } from '../../../../base-components/webapp/core/table';
+import { LogFileTableContentProvider } from './LogFileTableContentProvider';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../model/DataType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { LogFileProperty } from '../../../model/LogFileProperty';
+import { LogFile } from '../../../model/LogFile';
 
 export class LogFileTableFactory extends TableFactory {
 

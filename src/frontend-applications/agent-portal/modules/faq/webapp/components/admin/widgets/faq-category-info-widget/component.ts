@@ -8,8 +8,8 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { FAQCategoryLabelProvider } from "../../../../core";
-import { FAQCategoryDetailsContext } from "../../../../core/admin";
+import { FAQCategoryLabelProvider } from '../../../../core';
+import { FAQCategoryDetailsContext } from '../../../../core/admin';
 import {
     AbstractMarkoComponent
 } from '../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';

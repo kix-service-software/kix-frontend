@@ -7,13 +7,13 @@
  * --
  */
 
-import { IFormFieldValidator } from "./IFormFieldValidator";
-import { ValidationResult } from "./ValidationResult";
-import { FormService } from "./FormService";
-import { ValidationSeverity } from "./ValidationSeverity";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from './IFormFieldValidator';
+import { ValidationResult } from './ValidationResult';
+import { FormService } from './FormService';
+import { ValidationSeverity } from './ValidationSeverity';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 
 export class MaxLengthFormFieldValidator implements IFormFieldValidator {
 
@@ -31,7 +31,7 @@ export class MaxLengthFormFieldValidator implements IFormFieldValidator {
             if (fieldValue.length > formField.maxLength) {
                 const fieldLabel = await TranslationService.translate(formField.label);
                 const errorString = await TranslationService.translate(
-                    "Translatable#Value of field '{0}' is too long (max: {1}).", [fieldLabel, formField.maxLength]
+                    'Translatable#Value of field \'{0}\' is too long (max: {1}).', [fieldLabel, formField.maxLength]
                 );
                 return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }

@@ -7,24 +7,24 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     NotificationService, NotificationTableFactory, NotificationLabelProvider, NotificationBrowserFactory,
     NotificationEmailRecipientValidator, NotificationFilterValidator, NotificationFormService,
     NotificationFilterTableFactory, NotificationCreateAction, NewNotificationDialogContext,
     NotificationEditAction, EditNotificationDialogContext, NotificationDetailsContext
-} from ".";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
+} from '.';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 
 export class UIModule implements IUIModule {
 
@@ -72,7 +72,7 @@ export class UIModule implements IUIModule {
     }
 
     public unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
 }

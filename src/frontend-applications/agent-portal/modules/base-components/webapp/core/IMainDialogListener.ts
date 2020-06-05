@@ -7,8 +7,8 @@
  * --
  */
 
-import { ConfiguredDialogWidget } from "../../../../model/configuration/ConfiguredDialogWidget";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { ConfiguredDialogWidget } from '../../../../model/configuration/ConfiguredDialogWidget';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export interface IMainDialogListener {
 

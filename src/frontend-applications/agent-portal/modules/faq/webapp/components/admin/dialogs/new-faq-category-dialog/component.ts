@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FAQCategoryDetailsContext } from "../../../../core/admin";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../../../../model/ContextMode";
-import { FAQCategoryProperty } from "../../../../../model/FAQCategoryProperty";
-import { AbstractNewDialog } from "../../../../../../../modules/base-components/webapp/core/AbstractNewDialog";
+import { ComponentState } from './ComponentState';
+import { FAQCategoryDetailsContext } from '../../../../core/admin';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../../../../model/ContextMode';
+import { FAQCategoryProperty } from '../../../../../model/FAQCategoryProperty';
+import { AbstractNewDialog } from '../../../../../../../modules/base-components/webapp/core/AbstractNewDialog';
 
 class Component extends AbstractNewDialog {
 

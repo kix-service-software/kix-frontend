@@ -8,12 +8,12 @@
  */
 
 
-import { ModuleConfigurationService } from "./ModuleConfigurationService";
-import { IConfigurationResolver } from "./IConfigurationResolver";
-import { IConfiguration } from "../../../model/configuration/IConfiguration";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
-import { ChartComponentConfiguration } from "../../../modules/charts/model/ChartComponentConfiguration";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
+
+import { IConfigurationResolver } from './IConfigurationResolver';
+import { IConfiguration } from '../../../model/configuration/IConfiguration';
+
+
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
 
 export class ChartWidgetConfigurationResolver implements IConfigurationResolver<IConfiguration> {
 

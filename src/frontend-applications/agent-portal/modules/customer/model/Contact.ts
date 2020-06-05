@@ -7,13 +7,13 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Ticket } from "../../ticket/model/Ticket";
-import { TicketStats } from "./TicketStats";
-import { User } from "../../user/model/User";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Ticket } from '../../ticket/model/Ticket';
+import { TicketStats } from './TicketStats';
+import { User } from '../../user/model/User';
 
-export class Contact extends KIXObject<Contact> {
+export class Contact extends KIXObject {
 
     public ObjectId: string | number;
 

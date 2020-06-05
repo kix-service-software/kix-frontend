@@ -7,22 +7,22 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { IdService } from "../../../../../../model/IdService";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { FAQContext } from "../../../core/context/FAQContext";
-import { FilterCriteria } from "../../../../../../model/FilterCriteria";
-import { FAQCategoryProperty } from "../../../../model/FAQCategoryProperty";
-import { SearchOperator } from "../../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../../model/FilterType";
-import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
-import { FAQCategory } from "../../../../model/FAQCategory";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { TreeNode } from "../../../../../base-components/webapp/core/tree";
-import { LabelService } from "../../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectService } from "../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
+import { ComponentState } from './ComponentState';
+import { IdService } from '../../../../../../model/IdService';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { FAQContext } from '../../../core/context/FAQContext';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { FAQCategoryProperty } from '../../../../model/FAQCategoryProperty';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { FAQCategory } from '../../../../model/FAQCategory';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { TreeNode } from '../../../../../base-components/webapp/core/tree';
+import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 
 export class Component {
 
@@ -73,10 +73,10 @@ export class Component {
     ): TreeNode {
         let activeNode = nodes.find((n) => n.id.ID === category.ID);
         if (!activeNode) {
-            for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(category, nodes[index].children);
+            for (const node of nodes) {
+                activeNode = this.getActiveNode(category, node.children);
                 if (activeNode) {
-                    nodes[index].expanded = true;
+                    node.expanded = true;
                     break;
                 }
             }

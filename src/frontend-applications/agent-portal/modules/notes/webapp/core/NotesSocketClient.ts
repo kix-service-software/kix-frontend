@@ -7,16 +7,16 @@
  * --
  */
 
-import { SocketClient } from "../../../../modules/base-components/webapp/core/SocketClient";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { NotesEvent } from "../../model/NotesEvent";
-import { IdService } from "../../../../model/IdService";
-import { LoadNotesResponse } from "../../model/LoadNotesResponse";
-import { SocketEvent } from "../../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { ISocketRequest } from "../../../../modules/base-components/webapp/core/ISocketRequest";
-import { SaveNotesRequest } from "../../model/SaveNotesRequest";
-import { ISocketResponse } from "../../../../modules/base-components/webapp/core/ISocketResponse";
+import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { NotesEvent } from '../../model/NotesEvent';
+import { IdService } from '../../../../model/IdService';
+import { LoadNotesResponse } from '../../model/LoadNotesResponse';
+import { SocketEvent } from '../../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
+import { SaveNotesRequest } from '../../model/SaveNotesRequest';
+import { ISocketResponse } from '../../../../modules/base-components/webapp/core/ISocketResponse';
 
 export class NotesSocketClient extends SocketClient {
 

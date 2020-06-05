@@ -7,12 +7,12 @@
  * --
  */
 
-import { IMigration } from "./IMigration";
-import { ReleaseInfoUtil } from "../../../server/ReleaseInfoUtil";
-import { LoggingService } from "../../../server/services/LoggingService";
-import { ConfigurationService } from "../../../server/services/ConfigurationService";
-import { SysConfigService } from "../modules/sysconfig/server/SysConfigService";
-import { KIXObjectType } from "../model/kix/KIXObjectType";
+import { IMigration } from './IMigration';
+import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
+
+import { ConfigurationService } from '../../../server/services/ConfigurationService';
+import { SysConfigService } from '../modules/sysconfig/server/SysConfigService';
+import { KIXObjectType } from '../model/kix/KIXObjectType';
 
 class Migration implements IMigration {
 

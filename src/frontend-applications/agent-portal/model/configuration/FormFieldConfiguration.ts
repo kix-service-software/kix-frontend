@@ -7,10 +7,10 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { FormFieldOption } from "./FormFieldOption";
-import { FormFieldValue } from "./FormFieldValue";
-import { ConfigurationType } from "./ConfigurationType";
+import { IConfiguration } from './IConfiguration';
+import { FormFieldOption } from './FormFieldOption';
+import { FormFieldValue } from './FormFieldValue';
+import { ConfigurationType } from './ConfigurationType';
 
 export class FormFieldConfiguration implements IConfiguration {
 

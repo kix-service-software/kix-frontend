@@ -7,14 +7,14 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Attachment } from "../../../model/kix/Attachment";
-import { ArticleFlag } from "./ArticleFlag";
-import { SenderType } from "./SenderType";
-import { ArticleReceiver } from "./ArticleReceiver";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Attachment } from '../../../model/kix/Attachment';
+import { ArticleFlag } from './ArticleFlag';
+import { SenderType } from './SenderType';
+import { ArticleReceiver } from './ArticleReceiver';
 
-export class Article extends KIXObject<Article> {
+export class Article extends KIXObject {
 
     public ObjectId: string | number;
 
@@ -139,7 +139,7 @@ export class Article extends KIXObject<Article> {
     public isUnread(): boolean {
         if (this.Flags) {
             return !this.Flags.some(
-                (af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'seen' && af.Value === "1"
+                (af) => typeof af === 'object' && af.Name.toLocaleLowerCase() === 'seen' && af.Value === '1'
             );
         }
         return false;

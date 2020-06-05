@@ -7,7 +7,7 @@
  * --
  */
 
-import { IServer } from "./IServer";
+import { IServer } from './IServer';
 
 /**
  * Copyright (C) 2006-2019 c.a.p.e. IT GmbH, https://www.cape-it.de

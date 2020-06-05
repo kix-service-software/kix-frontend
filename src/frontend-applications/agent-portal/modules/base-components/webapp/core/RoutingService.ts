@@ -7,20 +7,20 @@
  * --
  */
 
-import { ComponentRouter } from "../../../../model/ComponentRouter";
-import { IRoutingServiceListener } from "./IRoutingServiceListener";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { AgentService } from "../../../user/webapp/core/AgentService";
-import { KIXModulesSocketClient } from "./KIXModulesSocketClient";
-import { ContextService } from "./ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { Context } from "vm";
-import { ContextFactory } from "./ContextFactory";
-import { BrowserUtil } from "./BrowserUtil";
-import { ActionFactory } from "./ActionFactory";
-import { EventService } from "./EventService";
-import { ApplicationEvent } from "./ApplicationEvent";
+import { ComponentRouter } from '../../../../model/ComponentRouter';
+import { IRoutingServiceListener } from './IRoutingServiceListener';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { KIXModulesSocketClient } from './KIXModulesSocketClient';
+import { ContextService } from './ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { Context } from 'vm';
+import { ContextFactory } from './ContextFactory';
+import { BrowserUtil } from './BrowserUtil';
+import { ActionFactory } from './ActionFactory';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class RoutingService {
 

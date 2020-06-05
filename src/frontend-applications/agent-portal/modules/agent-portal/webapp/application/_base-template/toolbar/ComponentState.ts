@@ -7,8 +7,8 @@
  * --
  */
 
-import { ToolbarAction } from "./ToolbarAction";
-import { AbstractComponentState } from "../../../../../base-components/webapp/core/AbstractComponentState";
+import { ToolbarAction } from './ToolbarAction';
+import { AbstractComponentState } from '../../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 

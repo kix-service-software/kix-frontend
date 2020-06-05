@@ -7,7 +7,7 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState {
 

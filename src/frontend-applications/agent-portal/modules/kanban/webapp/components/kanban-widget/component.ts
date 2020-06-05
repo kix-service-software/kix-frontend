@@ -7,28 +7,28 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { TicketProperty } from "../../../../ticket/model/TicketProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { Ticket } from "../../../../ticket/model/Ticket";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { AgentService } from "../../../../user/webapp/core/AgentService";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { KIXModulesService } from "../../../../base-components/webapp/core/KIXModulesService";
-import { EventService } from "../../../../base-components/webapp/core/EventService";
-import { DateTimeUtil } from "../../../../base-components/webapp/core/DateTimeUtil";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { KanbanConfiguration } from "../../core/KanbanConfiguration";
-import { KanbanEvent } from "../../core/KanbanEvent";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { TicketState } from "../../../../ticket/model/TicketState";
-import { TicketStateProperty } from "../../../../ticket/model/TicketStateProperty";
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { Ticket } from '../../../../ticket/model/Ticket';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { AgentService } from '../../../../user/webapp/core/AgentService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { KanbanConfiguration } from '../../core/KanbanConfiguration';
+import { KanbanEvent } from '../../core/KanbanEvent';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { TicketState } from '../../../../ticket/model/TicketState';
+import { TicketStateProperty } from '../../../../ticket/model/TicketStateProperty';
 
 declare const jKanban: any;
 

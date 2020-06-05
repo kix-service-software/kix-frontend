@@ -7,8 +7,8 @@
  * --
  */
 
-import { Ticket } from "../../../model/Ticket";
-import { Article } from "../../../model/Article";
+import { Ticket } from '../../../model/Ticket';
+import { Article } from '../../../model/Article';
 
 export class ComponentState {
 

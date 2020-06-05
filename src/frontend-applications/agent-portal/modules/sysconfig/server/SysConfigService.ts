@@ -7,22 +7,22 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { SysConfigOptionDefinitionFactory } from "./SysConfigOptionDefinitionFactory";
-import { SysConfigOptionFactory } from "./SysConfigOptionFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { SysConfigOption } from "../model/SysConfigOption";
-import { SysConfigOptionDefinition } from "../model/SysConfigOptionDefinition";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { Error } from "../../../../../server/model/Error";
-import { ModuleConfigurationService } from "../../../server/services/configuration";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { KIXObjectSpecificDeleteOptions } from "../../../model/KIXObjectSpecificDeleteOptions";
-import { SysConfigKey } from "../model/SysConfigKey";
-import { FilterCriteria } from "../../../model/FilterCriteria";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { SysConfigOptionDefinitionFactory } from './SysConfigOptionDefinitionFactory';
+import { SysConfigOptionFactory } from './SysConfigOptionFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { SysConfigOption } from '../model/SysConfigOption';
+import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { Error } from '../../../../../server/model/Error';
+import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { SysConfigKey } from '../model/SysConfigKey';
+import { FilterCriteria } from '../../../model/FilterCriteria';
 
 export class SysConfigService extends KIXObjectAPIService {
 

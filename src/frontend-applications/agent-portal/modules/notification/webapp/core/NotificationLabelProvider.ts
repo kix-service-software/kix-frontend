@@ -7,24 +7,24 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { NotificationProperty } from "../../model/NotificationProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { Role } from "../../../user/model/Role";
-import { NotificationRecipientTypes } from "../../model/NotificationRecipientTypes";
-import { Contact } from "../../../customer/model/Contact";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { ContactProperty } from "../../../customer/model/ContactProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { Notification } from "../../model/Notification";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { NotificationProperty } from '../../model/NotificationProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { User } from '../../../user/model/User';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { Role } from '../../../user/model/Role';
+import { NotificationRecipientTypes } from '../../model/NotificationRecipientTypes';
+import { Contact } from '../../../customer/model/Contact';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { Notification } from '../../model/Notification';
 
 
 export class NotificationLabelProvider extends LabelProvider {
@@ -201,7 +201,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     displayString = 'Translatable#All agents with update permission for the ticket';
                     break;
                 case NotificationRecipientTypes.AGENT_MY_QUEUES:
-                    displayString = "Translatable#All agents subscribed to the ticket's queue";
+                    displayString = 'Translatable#All agents subscribed to the ticket\'s queue';
                     break;
                 case NotificationRecipientTypes.CUSTOMER:
                     displayString = 'Translatable#Contact';

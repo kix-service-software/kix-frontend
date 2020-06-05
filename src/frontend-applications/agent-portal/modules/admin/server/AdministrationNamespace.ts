@@ -7,18 +7,18 @@
  * --
  */
 
-import { SocketNameSpace } from "../../../server/socket-namespaces/SocketNameSpace";
-import { MainMenuEntriesRequest } from "../../agent-portal/model/MainMenuEntriesRequest";
-import { SocketResponse } from "../../../modules/base-components/webapp/core/SocketResponse";
-import { SocketEvent } from "../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
-import { PluginService } from "../../../../../server/services/PluginService";
-import { MarkoService } from "../../../server/services/MarkoService";
-import { AdministrationEvent } from "../model/AdministrationEvent";
-import { AdminCategoriesResponse } from "../model/AdminCategoriesResponse";
-import { AdminModuleService } from "./AdminModuleService";
-import { AdminModuleCategory } from "../model/AdminModuleCategory";
+import { SocketNameSpace } from '../../../server/socket-namespaces/SocketNameSpace';
+import { MainMenuEntriesRequest } from '../../agent-portal/model/MainMenuEntriesRequest';
+import { SocketResponse } from '../../../modules/base-components/webapp/core/SocketResponse';
+import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
+import { PluginService } from '../../../../../server/services/PluginService';
+import { MarkoService } from '../../../server/services/MarkoService';
+import { AdministrationEvent } from '../model/AdministrationEvent';
+import { AdminCategoriesResponse } from '../model/AdminCategoriesResponse';
+import { AdminModuleService } from './AdminModuleService';
+import { AdminModuleCategory } from '../model/AdminModuleCategory';
 
 import cookie = require('cookie');
 

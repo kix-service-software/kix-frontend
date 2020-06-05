@@ -7,19 +7,19 @@
  * --
  */
 
-import { FAQArticleSearchFormManager } from "./FAQArticleSearchFormManager";
-import { SearchDefinition, SearchResultCategory } from "../../../search/webapp/core";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { FAQArticleProperty } from "../../model/FAQArticleProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { FAQArticleSearchFormManager } from './FAQArticleSearchFormManager';
+import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { FAQArticleProperty } from '../../model/FAQArticleProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class FAQArticleSearchDefinition extends SearchDefinition {
 

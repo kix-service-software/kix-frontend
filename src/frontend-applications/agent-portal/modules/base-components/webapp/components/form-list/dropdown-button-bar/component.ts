@@ -25,7 +25,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject(["Translatable#Submit"]);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Submit']);
         if (this.treeHandler) {
             this.treeHandler.registerSelectionListener('dropdown-button-bar', () => this.setCheckState());
             this.setCheckState();
@@ -74,7 +74,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public submit(event: any): void {
         event.stopPropagation();
         event.preventDefault();
-        (this as any).emit("submit");
+        (this as any).emit('submit');
     }
 
 }

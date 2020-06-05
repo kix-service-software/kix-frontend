@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ImportExportTemplate } from "../../model/ImportExportTemplate";
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ImportExportTemplate } from '../../model/ImportExportTemplate';
 
 export class ImportExportService extends KIXObjectService<ImportExportTemplate> {
 

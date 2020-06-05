@@ -7,10 +7,10 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractEditDialog } from "../../../../../modules/base-components/webapp/core/AbstractEditDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EditGeneralCatalogDialogContext } from "../../../../general-catalog/webapp/core";
+import { ComponentState } from './ComponentState';
+import { AbstractEditDialog } from '../../../../../modules/base-components/webapp/core/AbstractEditDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EditGeneralCatalogDialogContext } from '../../../../general-catalog/webapp/core';
 
 class Component extends AbstractEditDialog {
 

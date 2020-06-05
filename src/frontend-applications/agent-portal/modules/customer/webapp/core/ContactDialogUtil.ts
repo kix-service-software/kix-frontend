@@ -7,11 +7,11 @@
  * --
  */
 
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { NewContactDialogContext, ContactDetailsContext, EditContactDialogContext } from ".";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { Contact } from "../../model/Contact";
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { NewContactDialogContext, ContactDetailsContext, EditContactDialogContext } from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { Contact } from '../../model/Contact';
 
 export class ContactDialogUtil {
 

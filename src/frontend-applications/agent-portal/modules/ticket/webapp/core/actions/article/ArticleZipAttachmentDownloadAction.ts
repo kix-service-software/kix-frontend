@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { Article } from "../../../../model/Article";
-import { TicketService } from "../..";
-import { BrowserUtil } from "../../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { OverlayService } from "../../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../../modules/base-components/webapp/core/OverlayType";
-import { StringContent } from "../../../../../../modules/base-components/webapp/core/StringContent";
+import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Article } from '../../../../model/Article';
+import { TicketService } from '../..';
+import { BrowserUtil } from '../../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { OverlayService } from '../../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../../modules/base-components/webapp/core/OverlayType';
+import { StringContent } from '../../../../../../modules/base-components/webapp/core/StringContent';
 
 export class ArticleZipAttachmentDownloadAction extends AbstractAction<Article> {
 

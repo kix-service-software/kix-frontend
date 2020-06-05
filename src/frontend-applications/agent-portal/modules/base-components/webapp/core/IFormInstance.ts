@@ -7,15 +7,15 @@
  * --
  */
 
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { ValidationResult } from "./ValidationResult";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { IFormInstanceListener } from "./IFormInstanceListener";
-import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { ValidationResult } from './ValidationResult';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { IFormInstanceListener } from './IFormInstanceListener';
+import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
 
 export interface IFormInstance {
 

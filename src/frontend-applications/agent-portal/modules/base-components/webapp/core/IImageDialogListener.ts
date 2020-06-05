@@ -7,7 +7,7 @@
  * --
  */
 
-import { DisplayImageDescription } from "./DisplayImageDescription";
+import { DisplayImageDescription } from './DisplayImageDescription';
 
 export interface IImageDialogListener {
 

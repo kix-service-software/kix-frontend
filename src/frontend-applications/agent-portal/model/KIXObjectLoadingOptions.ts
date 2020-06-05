@@ -7,7 +7,7 @@
  * --
  */
 
-import { FilterCriteria } from "./FilterCriteria";
+import { FilterCriteria } from './FilterCriteria';
 
 export class KIXObjectLoadingOptions {
 

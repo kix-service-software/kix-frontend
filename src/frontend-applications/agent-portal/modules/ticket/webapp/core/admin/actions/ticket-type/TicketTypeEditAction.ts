@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../../../modules/base-components/webapp/core/ContextService";
-import { TicketTypeDetailsContext, EditTicketTypeDialogContext } from "../..";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../../../model/ContextMode";
+import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
+import { TicketTypeDetailsContext, EditTicketTypeDialogContext } from '../..';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../../model/ContextMode';
 
 export class TicketTypeEditAction extends AbstractAction {
 
@@ -23,7 +23,7 @@ export class TicketTypeEditAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
-        this.icon = "kix-icon-edit";
+        this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {

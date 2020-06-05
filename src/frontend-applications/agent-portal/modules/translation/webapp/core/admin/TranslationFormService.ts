@@ -7,14 +7,14 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { TranslationPattern } from "../../../model/TranslationPattern";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../../model/configuration/FormConfiguration";
-import { TranslationService } from "../TranslationService";
-import { SortUtil } from "../../../../../model/SortUtil";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { TranslationPatternProperty } from "../../../model/TranslationPatternProperty";
+import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { TranslationPattern } from '../../../model/TranslationPattern';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
+import { TranslationService } from '../TranslationService';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { TranslationPatternProperty } from '../../../model/TranslationPatternProperty';
 
 export class TranslationFormService extends KIXObjectFormService {
 

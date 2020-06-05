@@ -7,13 +7,13 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { HomeContext } from "./HomeContext";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { HomeContext } from './HomeContext';
 
 export class UIModule implements IUIModule {
 
@@ -22,7 +22,7 @@ export class UIModule implements IUIModule {
     public name: string = 'HomeUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

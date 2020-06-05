@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { CacheState } from "./CacheState";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { CacheState } from './CacheState';
 
 export class SearchCache<T extends KIXObject = KIXObject> {
 

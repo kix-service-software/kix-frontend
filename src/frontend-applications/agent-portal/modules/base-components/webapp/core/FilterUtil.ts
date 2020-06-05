@@ -7,16 +7,16 @@
  * --
  */
 
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AgentService } from "../../../user/webapp/core/AgentService";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class FilterUtil {
 
     public static prepareFilterValue(value: string): string {
-        return value ? value.toString().toLocaleLowerCase().toLocaleString().replace(/\u200E/g, "") : '';
+        return value ? value.toString().toLocaleLowerCase().toLocaleString().replace(/\u200E/g, '') : '';
     }
 
     public static stringContains(displayValue: string, filterValue: string): boolean {

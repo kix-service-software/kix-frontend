@@ -7,7 +7,7 @@
  * --
  */
 
-import { ISocketRequest } from "./ISocketRequest";
+import { ISocketRequest } from './ISocketRequest';
 
 export class LoadContextConfigurationRequest implements ISocketRequest {
 

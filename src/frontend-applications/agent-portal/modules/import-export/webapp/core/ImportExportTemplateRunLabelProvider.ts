@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { ImportExportTemplateRun } from "../../model/ImportExportTemplateRun";
-import { ImportExportTemplateRunProperty } from "../../model/ImportExportTemplateRunProperty";
-import { DateTimeUtil } from "../../../base-components/webapp/core/DateTimeUtil";
+import { LabelProvider } from '../../../base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ImportExportTemplateRun } from '../../model/ImportExportTemplateRun';
+import { ImportExportTemplateRunProperty } from '../../model/ImportExportTemplateRunProperty';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 
 export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportExportTemplateRun> {
 

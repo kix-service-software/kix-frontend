@@ -7,10 +7,10 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { FormInputAction } from "../../../../../modules/base-components/webapp/core/FormInputAction";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
 
 export class ComponentState extends FormInputComponentState<number> {
 

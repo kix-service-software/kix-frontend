@@ -7,17 +7,17 @@
  * --
  */
 
-import { SearchService } from "./SearchService";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { Context } from "../../../../model/Context";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { SearchService } from './SearchService';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { Context } from '../../../../model/Context';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class SearchContext extends Context {
 
     public static CONTEXT_ID = 'search';
 
     public getIcon(): string | ObjectIcon {
-        return "kix-icon-search";
+        return 'kix-icon-search';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

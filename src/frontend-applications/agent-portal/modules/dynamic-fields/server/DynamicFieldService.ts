@@ -7,22 +7,22 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { DynamicFieldFactory } from "./DynamicFieldFactory";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { Error } from "../../../../../server/model/Error";
-import { DynamicField } from "../model/DynamicField";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../model/DynamicFieldProperty";
-import { SearchOperator } from "../../search/model/SearchOperator";
-import { FilterDataType } from "../../../model/FilterDataType";
-import { FilterType } from "../../../model/FilterType";
-import { KIXObjectService } from "../../base-components/webapp/core/KIXObjectService";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { DynamicFieldFactory } from './DynamicFieldFactory';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { Error } from '../../../../../server/model/Error';
+import { DynamicField } from '../model/DynamicField';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../model/DynamicFieldProperty';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { FilterType } from '../../../model/FilterType';
+
 
 
 export class DynamicFieldAPIService extends KIXObjectAPIService {

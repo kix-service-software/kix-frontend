@@ -7,21 +7,21 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table, IRow, IColumn } from "../../../../base-components/webapp/core/table";
-import { FAQArticleTableContentProvider } from ".";
-import { FAQArticleProperty } from "../../../model/FAQArticleProperty";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { FAQDetailsContext } from "../context/FAQDetailsContext";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../model/DataType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { FAQVote } from "../../../model/FAQVote";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table, IRow, IColumn } from '../../../../base-components/webapp/core/table';
+import { FAQArticleTableContentProvider } from '.';
+import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { FAQDetailsContext } from '../context/FAQDetailsContext';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../model/DataType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { FAQVote } from '../../../model/FAQVote';
 
 export class FAQArticleTableFactory extends TableFactory {
 

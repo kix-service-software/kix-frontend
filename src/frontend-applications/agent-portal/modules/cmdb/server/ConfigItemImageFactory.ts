@@ -7,13 +7,12 @@
  * --
  */
 
-import { ConfigItemImage } from "../model/ConfigItemImage";
+import { ConfigItemImage } from '../model/ConfigItemImage';
 
 export class ConfigItemImageFactory {
 
-    public static create(_configItemImage: ConfigItemImage): ConfigItemImage {
-        const configItemImage = new ConfigItemImage(_configItemImage);
-        return configItemImage;
+    public static create(image: ConfigItemImage): ConfigItemImage {
+        return new ConfigItemImage(image);
     }
 
 }

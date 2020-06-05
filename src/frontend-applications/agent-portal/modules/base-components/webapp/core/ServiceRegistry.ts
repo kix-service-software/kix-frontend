@@ -7,10 +7,10 @@
  * --
  */
 
-import { ServiceType } from "./ServiceType";
-import { IKIXService } from "./IKIXService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { IObjectReferenceHandler } from "./IObjectReferenceHandler";
+import { ServiceType } from './ServiceType';
+import { IKIXService } from './IKIXService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { IObjectReferenceHandler } from './IObjectReferenceHandler';
 
 export class ServiceRegistry {
 

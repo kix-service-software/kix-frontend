@@ -7,17 +7,17 @@
  * --
  */
 
-import { SocketClient } from "./SocketClient";
-import { ClientStorageService } from "./ClientStorageService";
-import { ContextEvent } from "./ContextEvent";
-import { LoadContextConfigurationResponse } from "./LoadContextConfigurationResponse";
-import { LoadContextConfigurationRequest } from "./LoadContextConfigurationRequest";
-import { SocketErrorResponse } from "./SocketErrorResponse";
-import { SocketEvent } from "./SocketEvent";
-import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
-import { IdService } from "../../../../model/IdService";
-import { ISocketRequest } from "./ISocketRequest";
-import { ISocketResponse } from "./ISocketResponse";
+import { SocketClient } from './SocketClient';
+import { ClientStorageService } from './ClientStorageService';
+import { ContextEvent } from './ContextEvent';
+import { LoadContextConfigurationResponse } from './LoadContextConfigurationResponse';
+import { LoadContextConfigurationRequest } from './LoadContextConfigurationRequest';
+import { SocketErrorResponse } from './SocketErrorResponse';
+import { SocketEvent } from './SocketEvent';
+import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
+import { IdService } from '../../../../model/IdService';
+import { ISocketRequest } from './ISocketRequest';
+import { ISocketResponse } from './ISocketResponse';
 
 export class ContextSocketClient extends SocketClient {
 

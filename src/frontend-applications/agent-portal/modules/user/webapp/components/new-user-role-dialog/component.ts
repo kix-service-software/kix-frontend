@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../modules/base-components/webapp/core/AbstractNewDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { RoleDetailsContext } from "../../core/admin";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { RoleProperty } from "../../../model/RoleProperty";
+import { ComponentState } from './ComponentState';
+import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { RoleDetailsContext } from '../../core/admin';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { RoleProperty } from '../../../model/RoleProperty';
 
 class Component extends AbstractNewDialog {
 

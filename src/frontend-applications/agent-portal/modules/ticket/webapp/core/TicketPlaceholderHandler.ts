@@ -7,38 +7,38 @@
  * --
  */
 
-import { IPlaceholderHandler } from "../../../base-components/webapp/core/IPlaceholderHandler";
-import { Ticket } from "../../model/Ticket";
-import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
-import { SortUtil } from "../../../../model/SortUtil";
-import { ArticleProperty } from "../../model/ArticleProperty";
-import { DataType } from "../../../../model/DataType";
-import { SortOrder } from "../../../../model/SortOrder";
-import { ArticlePlaceholderHandler } from "./ArticlePlaceholderHandler";
-import { QueuePlaceholderHandler } from "./QueuePlaceholderHandler";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { UserPlaceholderHandler } from "../../../user/webapp/core/UserPlaceholderHandler";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TicketProperty } from "../../model/TicketProperty";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { IPlaceholderHandler } from '../../../base-components/webapp/core/IPlaceholderHandler';
+import { Ticket } from '../../model/Ticket';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
+import { SortUtil } from '../../../../model/SortUtil';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { DataType } from '../../../../model/DataType';
+import { SortOrder } from '../../../../model/SortOrder';
+import { ArticlePlaceholderHandler } from './ArticlePlaceholderHandler';
+import { QueuePlaceholderHandler } from './QueuePlaceholderHandler';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { User } from '../../../user/model/User';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { UserPlaceholderHandler } from '../../../user/webapp/core/UserPlaceholderHandler';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TicketProperty } from '../../model/TicketProperty';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import {
     AdditionalContextInformation
-} from "../../../../modules/base-components/webapp/core/AdditionalContextInformation";
-import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { OrganisationPlaceholderHandler } from "../../../customer/webapp/core/OrganisationPlaceholderHandler";
-import { ContactPlaceholderHandler } from "../../../customer/webapp/core/ContactPlaceholderHandler";
+} from '../../../../modules/base-components/webapp/core/AdditionalContextInformation';
+import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { OrganisationPlaceholderHandler } from '../../../customer/webapp/core/OrganisationPlaceholderHandler';
+import { ContactPlaceholderHandler } from '../../../customer/webapp/core/ContactPlaceholderHandler';
 import {
     DynamicFieldValuePlaceholderHandler
-} from "../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler";
-import { AbstractPlaceholderHandler } from "../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler";
+} from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
+import { AbstractPlaceholderHandler } from '../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler';
 
 export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 

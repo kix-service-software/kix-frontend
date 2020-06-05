@@ -61,7 +61,7 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Remove parameter"
+            'Translatable#Remove parameter'
         ]);
         if (this.manager) {
             this.manager.init();

@@ -7,8 +7,8 @@
  * --
  */
 
-import { IConfiguration } from "../../../model/configuration/IConfiguration";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
+import { IConfiguration } from '../../../model/configuration/IConfiguration';
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
 
 export interface IConfigurationResolver<T extends IConfiguration = IConfiguration> {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
+import { ComponentState } from './ComponentState';
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { ContextType } from "../../../../../model/ContextType";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { ContextType } from '../../../../../model/ContextType';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 
 export class ComponentState {

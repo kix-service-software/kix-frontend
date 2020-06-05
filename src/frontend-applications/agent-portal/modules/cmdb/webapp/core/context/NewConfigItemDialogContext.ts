@@ -7,13 +7,13 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { VersionProperty } from "../../../model/VersionProperty";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
+import { Context } from '../../../../../model/Context';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { VersionProperty } from '../../../model/VersionProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
 
 export class NewConfigItemDialogContext extends Context {
 

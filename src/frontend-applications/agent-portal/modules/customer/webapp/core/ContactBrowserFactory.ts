@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Contact } from "../../model/Contact";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Contact } from '../../model/Contact';
 
 export class ContactBrowserFactory implements IKIXObjectFactory<Contact> {
 

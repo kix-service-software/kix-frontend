@@ -7,10 +7,10 @@
  * --
  */
 
-import { Server } from "./server/Server";
-import { IFrontendServerExtension } from "../../server/model/IFrontendServerExtension";
-import { IServer } from "../../server/model/IServer";
-import { KIXExtension } from "../../server/model/KIXExtension";
+import { Server } from './server/Server';
+import { IFrontendServerExtension } from '../../server/model/IFrontendServerExtension';
+import { IServer } from '../../server/model/IServer';
+import { KIXExtension } from '../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IFrontendServerExtension {
 

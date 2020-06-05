@@ -7,20 +7,20 @@
  * --
  */
 
-import { AbstractDynamicFormManager } from "./dynamic-form";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { KIXObjectService } from "./KIXObjectService";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { AbstractDynamicFormManager } from './dynamic-form';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../../../dynamic-fields/model/DynamicFieldProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from './KIXObjectService';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class SearchFormManager extends AbstractDynamicFormManager {
 

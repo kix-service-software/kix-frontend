@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class ConsoleCommandService extends KIXObjectService {
 

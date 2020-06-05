@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { ValidObject } from "../../model/ValidObject";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { ValidObject } from '../../model/ValidObject';
 
 export class ValidObjectBrowserFactory implements IKIXObjectFactory<ValidObject> {
 

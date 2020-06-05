@@ -7,15 +7,15 @@
  * --
  */
 
-import { IKIXObjectService } from "./IKIXObjectService";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { KIXObject } from "../../model/kix/KIXObject";
-import { KIXObjectSpecificLoadingOptions } from "../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectSpecificCreateOptions } from "../../model/KIXObjectSpecificCreateOptions";
-import { KIXObjectSpecificDeleteOptions } from "../../model/KIXObjectSpecificDeleteOptions";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { Error } from "../../../../server/model/Error";
-import { FilterCriteria } from "../../model/FilterCriteria";
+import { IKIXObjectService } from './IKIXObjectService';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { KIXObject } from '../../model/kix/KIXObject';
+import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
+import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { Error } from '../../../../server/model/Error';
+import { FilterCriteria } from '../../model/FilterCriteria';
 
 export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
 
@@ -23,7 +23,7 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
         return false;
     }
 
-    public async loadObjects<T extends KIXObject<any> = any>(
+    public async loadObjects<T extends KIXObject = any>(
         token: string, clientRequestId: string, objectType: string, objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions, objectLoadingOptions: KIXObjectSpecificLoadingOptions
     ): Promise<T[]> {

@@ -7,17 +7,17 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import {
     NewConfigItemDialogContext, EditConfigItemDialogContext, ConfigItemCreateAction, ConfigItemEditAction
-} from ".";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ConfigItemDuplicateAction } from "./actions";
+} from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ConfigItemDuplicateAction } from './actions';
 
 export class UIModule implements IUIModule {
 
@@ -26,7 +26,7 @@ export class UIModule implements IUIModule {
     public priority: number = 201;
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { ImportExportTemplateRun } from "./ImportExportTemplateRun";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { ImportExportTemplateRun } from './ImportExportTemplateRun';
 
 export class ImportExportTemplate extends KIXObject {
 

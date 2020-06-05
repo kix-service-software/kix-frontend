@@ -7,26 +7,26 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Job } from "../../model/Job";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { JobProperty } from "../../model/JobProperty";
-import { ExecPlan } from "../../model/ExecPlan";
-import { JobService } from ".";
-import { ExecPlanTypes } from "../../model/ExecPlanTypes";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { MacroAction } from "../../model/MacroAction";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { JobTypes } from "../../model/JobTypes";
-import { IFormInstance } from "../../../base-components/webapp/core/IFormInstance";
-import { IJobFormManager } from "./IJobFormManager";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { Job } from '../../model/Job';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { JobProperty } from '../../model/JobProperty';
+import { ExecPlan } from '../../model/ExecPlan';
+import { JobService } from '.';
+import { ExecPlanTypes } from '../../model/ExecPlanTypes';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { MacroAction } from '../../model/MacroAction';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { JobTypes } from '../../model/JobTypes';
+import { IFormInstance } from '../../../base-components/webapp/core/IFormInstance';
+import { IJobFormManager } from './IJobFormManager';
 import { AbstractJobFormManager } from './AbstractJobFormManager';
-import { FormInstance } from "../../../base-components/webapp/core/FormInstance";
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class JobFormService extends KIXObjectFormService {
 

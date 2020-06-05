@@ -7,16 +7,16 @@
  * --
  */
 
-import { TableFactory } from "../../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../../model/configuration/TableConfiguration";
-import { ITable, Table, ToggleOptions } from "../../../../../base-components/webapp/core/table";
-import { ConfigItemVersionContentProvider } from ".";
-import { DefaultColumnConfiguration } from "../../../../../../model/configuration/DefaultColumnConfiguration";
-import { VersionProperty } from "../../../../model/VersionProperty";
-import { DataType } from "../../../../../../model/DataType";
-import { TableHeaderHeight } from "../../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../../model/configuration/TableRowHeight";
+import { TableFactory } from '../../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
+import { ITable, Table, ToggleOptions } from '../../../../../base-components/webapp/core/table';
+import { ConfigItemVersionContentProvider } from '.';
+import { DefaultColumnConfiguration } from '../../../../../../model/configuration/DefaultColumnConfiguration';
+import { VersionProperty } from '../../../../model/VersionProperty';
+import { DataType } from '../../../../../../model/DataType';
+import { TableHeaderHeight } from '../../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../../model/configuration/TableRowHeight';
 
 export class ConfigItemVersionTableFactory extends TableFactory {
 

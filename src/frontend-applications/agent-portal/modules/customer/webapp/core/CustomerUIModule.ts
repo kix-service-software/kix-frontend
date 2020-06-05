@@ -7,13 +7,13 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { OrganisationContext } from ".";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { OrganisationContext } from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 
 export class UIModule implements IUIModule {
 
@@ -22,7 +22,7 @@ export class UIModule implements IUIModule {
     public name: string = 'CustomerUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

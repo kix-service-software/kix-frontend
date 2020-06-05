@@ -7,16 +7,16 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../base-components/webapp/core/table";
-import { LinkObjectTableContentProvider } from "./LinkObjectTableContentProvider";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { LinkObjectProperty } from "../../../model/LinkObjectProperty";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { LinkObjectTableContentProvider } from './LinkObjectTableContentProvider';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { LinkObjectProperty } from '../../../model/LinkObjectProperty';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 
 export class LinkObjectTableFactory extends TableFactory {

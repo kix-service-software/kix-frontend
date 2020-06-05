@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "./ISocketResponse";
-import { ReleaseInfo } from "../../../../model/ReleaseInfo";
+import { ISocketResponse } from './ISocketResponse';
+import { ReleaseInfo } from '../../../../model/ReleaseInfo';
 
 export class LoadReleaseInfoResponse implements ISocketResponse {
 

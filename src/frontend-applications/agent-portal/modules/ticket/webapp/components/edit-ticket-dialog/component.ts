@@ -7,16 +7,16 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { ArticleProperty } from "../../../model/ArticleProperty";
-import { TicketDetailsContext } from "../../core";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { AbstractEditDialog } from "../../../../base-components/webapp/core/AbstractEditDialog";
+import { ComponentState } from './ComponentState';
+
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { TicketDetailsContext } from '../../core';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractEditDialog } from '../../../../base-components/webapp/core/AbstractEditDialog';
 
 class Component extends AbstractEditDialog {
 
@@ -34,7 +34,7 @@ class Component extends AbstractEditDialog {
         super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
+            'Translatable#Cancel', 'Translatable#Save'
         ]);
 
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);

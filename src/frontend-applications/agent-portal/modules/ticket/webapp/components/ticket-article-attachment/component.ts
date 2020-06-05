@@ -13,8 +13,6 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { TicketService } from '../../core';
 
-declare var window: any;
-
 class ArticleAttachmentComponent {
 
     private state: ComponentState;
@@ -28,7 +26,7 @@ class ArticleAttachmentComponent {
         this.state.article = input.article;
 
         if (this.state.attachment) {
-            this.state.icon = new ObjectIcon("MIMEType", this.state.attachment.ContentType);
+            this.state.icon = new ObjectIcon('MIMEType', this.state.attachment.ContentType);
         }
     }
 

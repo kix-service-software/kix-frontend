@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { Role } from "../../model/Role";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { Role } from '../../model/Role';
 
 
 export class RoleBrowserFactory extends KIXObjectFactory<Role> {

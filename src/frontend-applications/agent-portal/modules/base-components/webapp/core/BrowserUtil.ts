@@ -7,15 +7,15 @@
  * --
  */
 
-import { OverlayService } from "./OverlayService";
-import { OverlayType } from "./OverlayType";
-import { StringContent } from "./StringContent";
-import { ComponentContent } from "./ComponentContent";
-import { ToastContent } from "./ToastContent";
-import { ConfirmOverlayContent } from "./ConfirmOverlayContent";
-import { RefreshToastSettings } from "./RefreshToastSettings";
-import { DateTimeUtil } from "./DateTimeUtil";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { OverlayService } from './OverlayService';
+import { OverlayType } from './OverlayType';
+import { StringContent } from './StringContent';
+import { ComponentContent } from './ComponentContent';
+import { ToastContent } from './ToastContent';
+import { ConfirmOverlayContent } from './ConfirmOverlayContent';
+import { RefreshToastSettings } from './RefreshToastSettings';
+import { DateTimeUtil } from './DateTimeUtil';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 
 export class BrowserUtil {
@@ -149,8 +149,8 @@ export class BrowserUtil {
     }
 
     public static getBrowserFontsize(): number {
-        const browserFontSizeSetting = getComputedStyle(document.getElementsByTagName("body")[0])
-            .getPropertyValue("font-size");
+        const browserFontSizeSetting = getComputedStyle(document.getElementsByTagName('body')[0])
+            .getPropertyValue('font-size');
         return Number(browserFontSizeSetting.replace('px', ''));
     }
 

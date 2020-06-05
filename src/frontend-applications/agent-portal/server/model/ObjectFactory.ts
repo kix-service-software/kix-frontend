@@ -7,11 +7,11 @@
  * --
  */
 
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { KIXObject } from "../../model/kix/KIXObject";
-import { IObjectFactory } from "./IObjectFactory";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+
+import { KIXObject } from '../../model/kix/KIXObject';
+import { IObjectFactory } from './IObjectFactory';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+
 
 export abstract class ObjectFactory<T extends KIXObject = any> implements IObjectFactory<T> {
 

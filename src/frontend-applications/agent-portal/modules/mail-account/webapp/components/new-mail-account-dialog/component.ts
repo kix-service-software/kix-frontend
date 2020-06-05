@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractNewDialog } from "../../../../../modules/base-components/webapp/core/AbstractNewDialog";
-import { ComponentState } from "../../../../admin/webapp/components/admin-module/ComponentState";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { MailAccountDetailsContext } from "../../core";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { MailAccountProperty } from "../../../model/MailAccountProperty";
+import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
+import { ComponentState } from '../../../../admin/webapp/components/admin-module/ComponentState';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { MailAccountDetailsContext } from '../../core';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { MailAccountProperty } from '../../../model/MailAccountProperty';
 
 class Component extends AbstractNewDialog {
 

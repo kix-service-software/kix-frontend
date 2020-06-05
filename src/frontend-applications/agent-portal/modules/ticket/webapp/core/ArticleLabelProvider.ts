@@ -17,7 +17,7 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Channel } from '../../model/Channel';
-import { User } from '../../../user/model/User';
+
 
 export class ArticleLabelProvider extends LabelProvider<Article> {
 

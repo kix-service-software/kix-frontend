@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { Channel } from "../../../model/Channel";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { Channel } from '../../../model/Channel';
 
 export class ComponentState extends FormInputComponentState<number> {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { TicketStateType } from "../../model/TicketStateType";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { TicketStateType } from '../../model/TicketStateType';
 
 export class TicketStateTypeBrowserFactory implements IKIXObjectFactory<TicketStateType> {
 

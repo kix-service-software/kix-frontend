@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { OrganisationDialogUtil } from "../OrganisationDialogUtil";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { OrganisationDialogUtil } from '../OrganisationDialogUtil';
 
 export class OrganisationEditAction extends AbstractAction {
 
@@ -20,7 +20,7 @@ export class OrganisationEditAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
-        this.icon = "kix-icon-edit";
+        this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {

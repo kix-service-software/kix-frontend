@@ -7,34 +7,34 @@
  * --
  */
 
-import { IUIModule } from "../../../../../model/IUIModule";
-import { FactoryService } from "../../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { IUIModule } from '../../../../../model/IUIModule';
+import { FactoryService } from '../../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import {
     FAQArticleBrowserFactory, FAQArticleAttachmentBrowserFactory, FAQArticleTableFactory, FAQArticleHistoryTableFactory,
     FAQLabelProvider, FAQCategoryLabelProvider, FAQArticleHistoryLabelProvider, FAQService, FAQArticleFormService,
     FAQArticleSearchDefinition, FAQArticleSearchContext, FAQArticleVoteAction, LoadFAQAricleAction
-} from "..";
-import { FAQCategoryBrowserFactory } from "../FAQCategoryBrowserFactory";
-import { TableFactoryService } from "../../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { ServiceRegistry } from "../../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { SearchService } from "../../../../search/webapp/core";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { ContextDescriptor } from "../../../../../model/ContextDescriptor";
-import { FAQContext } from "../context/FAQContext";
-import { ContextType } from "../../../../../model/ContextType";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { FAQDetailsContext } from "../context/FAQDetailsContext";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { Bookmark } from "../../../../../model/Bookmark";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { BookmarkService } from "../../../../../modules/base-components/webapp/core/BookmarkService";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FAQArticleVoteFormService } from "../FAQArticleVoteFormService";
+} from '..';
+import { FAQCategoryBrowserFactory } from '../FAQCategoryBrowserFactory';
+import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { SearchService } from '../../../../search/webapp/core';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
+import { FAQContext } from '../context/FAQContext';
+import { ContextType } from '../../../../../model/ContextType';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { FAQDetailsContext } from '../context/FAQDetailsContext';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { Bookmark } from '../../../../../model/Bookmark';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { BookmarkService } from '../../../../../modules/base-components/webapp/core/BookmarkService';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FAQArticleVoteFormService } from '../FAQArticleVoteFormService';
 
 
 
@@ -45,7 +45,7 @@ export class UIModule implements IUIModule {
     public name: string = 'FAQReadUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

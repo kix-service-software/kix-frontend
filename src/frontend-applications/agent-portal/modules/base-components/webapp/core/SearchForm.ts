@@ -7,10 +7,10 @@
  * --
  */
 
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { AutoCompleteConfiguration } from '../../../../model/configuration/AutoCompleteConfiguration';
 
 export class SearchForm extends FormConfiguration {
 

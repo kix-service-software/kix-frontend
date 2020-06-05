@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { GeneralCatalogItem } from "../../model/GeneralCatalogItem";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { GeneralCatalogItem } from '../../model/GeneralCatalogItem';
 
 export class GeneralCatalogBrowserFactory implements IKIXObjectFactory<GeneralCatalogItem> {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { ContextMode } from "../ContextMode";
-import { ContextType } from "../ContextType";
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { ContextMode } from '../ContextMode';
+import { ContextType } from '../ContextType';
 
 export class RoutingConfiguration {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
-import { IAction } from "../../../../../modules/base-components/webapp/core/IAction";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { Label } from '../../../../../modules/base-components/webapp/core/Label';
+import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
 
 export class ComponentState extends AbstractComponentState {
 

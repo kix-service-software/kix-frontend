@@ -7,12 +7,12 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../base-components/webapp/core/FormInputComponent";
+import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { ComponentState } from './ComponentState';
-import { FormService } from "../../../../base-components/webapp/core/FormService";
-import { CheckListItem } from "../../core/CheckListItem";
-import { CheckListInputType } from "../../core/CheckListInputType";
-import { DynamicFieldFormUtil } from "../../../../base-components/webapp/core/DynamicFieldFormUtil";
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { CheckListItem } from '../../core/CheckListItem';
+
+import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/DynamicFieldFormUtil';
 
 class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 

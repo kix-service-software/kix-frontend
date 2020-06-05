@@ -7,41 +7,41 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { ArticleProperty } from "../../model/ArticleProperty";
-import { TicketProperty } from "../../model/TicketProperty";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { TicketSocketClient } from "./TicketSocketClient";
-import { QueueService, } from "./admin/QueueService";
-import { TicketDetailsContext } from "./context/TicketDetailsContext";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TicketType } from "../../model/TicketType";
-import { TicketPriority } from "../../model/TicketPriority";
-import { TicketState } from "../../model/TicketState";
-import { User } from "../../../user/model/User";
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { AgentService } from "../../../user/webapp/core/AgentService";
-import { StateType } from "../../model/StateType";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { Article } from "../../model/Article";
-import { InlineContent } from "../../../../modules/base-components/webapp/core/InlineContent";
-import { Channel } from "../../model/Channel";
-import { ChannelProperty } from "../../model/ChannelProperty";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../model/ContextMode";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { TicketProperty } from '../../model/TicketProperty';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { TicketSocketClient } from './TicketSocketClient';
+import { QueueService, } from './admin/QueueService';
+import { TicketDetailsContext } from './context/TicketDetailsContext';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TicketType } from '../../model/TicketType';
+import { TicketPriority } from '../../model/TicketPriority';
+import { TicketState } from '../../model/TicketState';
+import { User } from '../../../user/model/User';
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { StateType } from '../../model/StateType';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { Article } from '../../model/Article';
+import { InlineContent } from '../../../../modules/base-components/webapp/core/InlineContent';
+import { Channel } from '../../model/Channel';
+import { ChannelProperty } from '../../model/ChannelProperty';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../model/ContextMode';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -86,7 +86,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public getLinkObjectName(): string {
-        return "Ticket";
+        return 'Ticket';
     }
 
     public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {

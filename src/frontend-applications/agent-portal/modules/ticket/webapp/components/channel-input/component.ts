@@ -36,11 +36,11 @@ class Component extends FormInputComponent<number, ComponentState> {
         await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#No Article"
+            'Translatable#No Article'
         ]);
 
         let channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
-        channels = channels.filter((c) => c.ValidID.toString() === "1");
+        channels = channels.filter((c) => c.ValidID.toString() === '1');
 
         const channelsOption = this.state.field.options.find((o) => o.option === 'CHANNELS');
         if (channelsOption && channelsOption.value && isArray(channelsOption.value) && channelsOption.value.length) {
