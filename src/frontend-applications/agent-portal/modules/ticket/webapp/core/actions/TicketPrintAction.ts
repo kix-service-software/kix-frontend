@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractAction } from "../../../../base-components/webapp/core/AbstractAction";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { EventService } from "../../../../base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../base-components/webapp/core/ApplicationEvent";
+import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
 
 export class TicketPrintAction extends AbstractAction {
 
@@ -18,7 +18,7 @@ export class TicketPrintAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Print';
-        this.icon = "kix-icon-print";
+        this.icon = 'kix-icon-print';
     }
 
     public async run(event: any): Promise<void> {

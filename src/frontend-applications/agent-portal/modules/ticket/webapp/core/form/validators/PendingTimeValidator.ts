@@ -7,13 +7,13 @@
  * --
  */
 
-import { IFormFieldValidator } from "../../../../../../modules/base-components/webapp/core/IFormFieldValidator";
-import { FormFieldConfiguration } from "../../../../../../model/configuration/FormFieldConfiguration";
-import { TicketProperty } from "../../../../model/TicketProperty";
-import { ValidationResult } from "../../../../../../modules/base-components/webapp/core/ValidationResult";
-import { FormService } from "../../../../../../modules/base-components/webapp/core/FormService";
-import { ValidationSeverity } from "../../../../../../modules/base-components/webapp/core/ValidationSeverity";
-import { DynamicField } from "../../../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from '../../../../../../modules/base-components/webapp/core/IFormFieldValidator';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { TicketProperty } from '../../../../model/TicketProperty';
+import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
+import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
+import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
+import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
 
 export class PendingTimeValidator implements IFormFieldValidator {
 

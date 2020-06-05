@@ -7,11 +7,11 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { FAQArticle } from "../../../../model/FAQArticle";
-import { Attachment } from "../../../../../../model/kix/Attachment";
-import { InlineContent } from "../../../../../../modules/base-components/webapp/core/InlineContent";
-import { AbstractAction } from "../../../../../../modules/base-components/webapp/core/AbstractAction";
+import { WidgetComponentState } from '../../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { FAQArticle } from '../../../../model/FAQArticle';
+import { Attachment } from '../../../../../../model/kix/Attachment';
+import { InlineContent } from '../../../../../../modules/base-components/webapp/core/InlineContent';
+import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
 
 export class ComponentState extends WidgetComponentState {
 

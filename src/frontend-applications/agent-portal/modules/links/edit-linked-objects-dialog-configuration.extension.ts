@@ -7,17 +7,17 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { EditLinkedObjectsDialogContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextMode } from "../../model/ContextMode";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { EditLinkedObjectsDialogContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContextMode } from '../../model/ContextMode';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

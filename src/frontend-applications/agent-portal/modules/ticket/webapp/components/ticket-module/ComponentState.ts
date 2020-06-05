@@ -7,8 +7,8 @@
  * --
  */
 
-import { ConfiguredWidget } from "../../../../../model/configuration/ConfiguredWidget";
-import { AbstractComponentState } from "../../../../base-components/webapp/core/AbstractComponentState";
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 

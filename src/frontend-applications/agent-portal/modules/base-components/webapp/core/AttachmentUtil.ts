@@ -7,12 +7,12 @@
  * --
  */
 
-import { AttachmentError } from "../../../../model/AttachmentError";
-import { KIXObjectService } from "./KIXObjectService";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { AttachmentError } from '../../../../model/AttachmentError';
+import { KIXObjectService } from './KIXObjectService';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 
 export class AttachmentUtil {
@@ -76,7 +76,7 @@ export class AttachmentUtil {
                     errorMessages.push(typeError);
                     break;
                 default:
-                    errorMessages.push(fe[1] + ": " + fe[0]);
+                    errorMessages.push(fe[1] + ': ' + fe[0]);
             }
         }
         return errorMessages;
@@ -85,13 +85,13 @@ export class AttachmentUtil {
 
     public static getFileSize(fileSize: number, decPlaces: number = 1): string {
         let sizeString = fileSize + ' Byte';
-        const siteUnits = ["kB", "MB", "GB"];
+        const siteUnits = ['kB', 'MB', 'GB'];
         for (
             let newSize = fileSize / 1000, sizeUnit = 0;
             newSize >= 1 && sizeUnit < 3;
             newSize /= 1000, sizeUnit++
         ) {
-            sizeString = newSize.toFixed(decPlaces) + " " + siteUnits[sizeUnit];
+            sizeString = newSize.toFixed(decPlaces) + ' ' + siteUnits[sizeUnit];
         }
         return sizeString;
     }

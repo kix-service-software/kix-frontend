@@ -7,20 +7,20 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { FAQArticle } from "../../model/FAQArticle";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FAQArticleProperty } from "../../model/FAQArticleProperty";
-import { FAQCategory } from "../../model/FAQCategory";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { FAQVote } from "../../model/FAQVote";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { FAQArticle } from '../../model/FAQArticle';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FAQArticleProperty } from '../../model/FAQArticleProperty';
+import { FAQCategory } from '../../model/FAQCategory';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { FAQVote } from '../../model/FAQVote';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class FAQLabelProvider extends LabelProvider<FAQArticle> {
 
@@ -194,7 +194,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                 returnString = `${faqHook}${faqArticle.Number}`;
             }
             if (title) {
-                returnString += (id ? " - " : '') + faqArticle.Title;
+                returnString += (id ? ' - ' : '') + faqArticle.Title;
             }
 
         } else {
@@ -222,7 +222,7 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
     }
 
     public async getObjectName(): Promise<string> {
-        return "FAQ";
+        return 'FAQ';
     }
 
     public async getIcons(

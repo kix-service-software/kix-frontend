@@ -7,11 +7,11 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { TicketListContext } from "..";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { TicketListContext } from '..';
 
 
 export class ShowUserTicketsAction extends AbstractAction {

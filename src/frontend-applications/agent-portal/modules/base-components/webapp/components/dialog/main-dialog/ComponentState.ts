@@ -7,7 +7,7 @@
  * --
  */
 
-import { WidgetConfiguration } from "../../../../../../model/configuration/WidgetConfiguration";
+import { WidgetConfiguration } from '../../../../../../model/configuration/WidgetConfiguration';
 
 export class ComponentState {
 

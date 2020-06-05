@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { TicketState } from "../../model/TicketState";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TicketStateProperty } from "../../model/TicketStateProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { TicketState } from '../../model/TicketState';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TicketStateProperty } from '../../model/TicketStateProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class TicketStateLabelProvider extends LabelProvider<TicketState> {
 

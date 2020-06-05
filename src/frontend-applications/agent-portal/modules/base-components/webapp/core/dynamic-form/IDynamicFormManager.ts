@@ -7,12 +7,12 @@
  * --
  */
 
-import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { InputFieldTypes } from "../InputFieldTypes";
-import { TreeNode } from "../tree";
-import { ValidationResult } from "../ValidationResult";
+import { DynamicFormOperationsType } from './DynamicFormOperationsType';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { InputFieldTypes } from '../InputFieldTypes';
+import { TreeNode } from '../tree';
+import { ValidationResult } from '../ValidationResult';
 
 export interface IDynamicFormManager {
 

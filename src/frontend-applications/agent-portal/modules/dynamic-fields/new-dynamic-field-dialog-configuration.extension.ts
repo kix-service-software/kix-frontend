@@ -29,7 +29,7 @@ import { TreeNode } from '../base-components/webapp/core/tree';
 import { FormFieldValue } from '../../model/configuration/FormFieldValue';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

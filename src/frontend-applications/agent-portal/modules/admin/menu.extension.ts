@@ -7,11 +7,11 @@
  * --
  */
 
-import { IMainMenuExtension } from "../../server/extensions/IMainMenuExtension";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { AdminContext } from "./webapp/core/AdminContext";
+import { IMainMenuExtension } from '../../server/extensions/IMainMenuExtension';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { AdminContext } from './webapp/core/AdminContext';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IMainMenuExtension {
 
@@ -38,9 +38,9 @@ class Extension extends KIXExtension implements IMainMenuExtension {
 
     public primaryMenu: boolean = false;
 
-    public icon: string = "kix-icon-admin";
+    public icon: string = 'kix-icon-admin';
 
-    public text: string = "Translatable#Admin";
+    public text: string = 'Translatable#Admin';
 
     public permissions: UIComponentPermission[] = [];
 

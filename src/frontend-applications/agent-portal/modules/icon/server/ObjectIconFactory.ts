@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { ObjectIcon } from "../model/ObjectIcon";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { ObjectIcon } from '../model/ObjectIcon';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class ObjectIconFactory extends ObjectFactory<ObjectIcon> {
 

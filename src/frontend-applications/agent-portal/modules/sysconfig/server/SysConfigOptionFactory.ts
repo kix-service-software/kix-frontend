@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { SysConfigOption } from "../model/SysConfigOption";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { SysConfigOption } from '../model/SysConfigOption';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class SysConfigOptionFactory extends ObjectFactory<SysConfigOption> {
 

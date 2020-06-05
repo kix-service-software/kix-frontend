@@ -36,7 +36,7 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Assign Links"
+            'Translatable#Assign Links'
         ]);
 
         this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions([

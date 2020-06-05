@@ -7,17 +7,17 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { GeneralCatalogItem } from "../../../model/GeneralCatalogItem";
-import { ITable, IRowObject, RowObject, TableValue } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { GeneralCatalogItemProperty } from "../../../model/GeneralCatalogItemProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { GeneralCatalogItem } from '../../../model/GeneralCatalogItem';
+import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { GeneralCatalogItemProperty } from '../../../model/GeneralCatalogItemProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class GeneralCatalogTableContentProvider extends TableContentProvider<GeneralCatalogItem> {
 
@@ -36,7 +36,7 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
         const definitionFilter = [
             new FilterCriteria(
                 GeneralCatalogItemProperty.CLASS, SearchOperator.NOT_EQUALS,
-                FilterDataType.STRING, FilterType.AND, "ITSM::ConfigItem::Class"
+                FilterDataType.STRING, FilterType.AND, 'ITSM::ConfigItem::Class'
             ),
         ];
         loadingOptions = new KIXObjectLoadingOptions(definitionFilter);

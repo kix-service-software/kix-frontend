@@ -7,11 +7,11 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ITable, IRowObject, RowObject, TableValue } from "../../../../base-components/webapp/core/table";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { JobRunLog } from "../../../model/JobRunLog";
-import { JobRunLogProperty } from "../../../model/JobRunLogProperty";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { JobRunLog } from '../../../model/JobRunLog';
+import { JobRunLogProperty } from '../../../model/JobRunLogProperty';
 
 export class JobRunLogContentProvider extends TableContentProvider<JobRunLog> {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { CRUD } from "../../../server/model/rest/CRUD";
+import { CRUD } from '../../../server/model/rest/CRUD';
 
 export class UIComponentPermission {
 

@@ -9,13 +9,13 @@
 
 import {
     AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { DynamicFormOperationsType } from "../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType";
+} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { DynamicFormOperationsType } from '../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType';
 
 export class MailFilterMatchManager extends AbstractDynamicFormManager {
 

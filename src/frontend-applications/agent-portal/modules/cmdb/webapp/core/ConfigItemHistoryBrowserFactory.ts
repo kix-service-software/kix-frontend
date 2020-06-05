@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { ConfigItemHistory } from "../../model/ConfigItemHistory";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { ConfigItemHistory } from '../../model/ConfigItemHistory';
 
 export class ConfigItemHistoryBrowserFactory implements IKIXObjectFactory<ConfigItemHistory> {
 

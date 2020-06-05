@@ -7,24 +7,24 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { ComponentState } from "./ComponentState";
-import { TreeNode, TreeService } from "../../../../base-components/webapp/core/tree";
-import { IdService } from "../../../../../model/IdService";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { ServiceRegistry } from "../../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { JobFormService, JobService } from "../../core";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ServiceType } from "../../../../../modules/base-components/webapp/core/ServiceType";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { JobProperty } from "../../../model/JobProperty";
-import { FormInstance } from "../../../../../modules/base-components/webapp/core/FormInstance";
-import { SortUtil } from "../../../../../model/SortUtil";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { MacroActionType } from "../../../model/MacroActionType";
-import { JobType } from "../../../model/JobType";
-import { KIXObjectSpecificLoadingOptions } from "../../../../../model/KIXObjectSpecificLoadingOptions";
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { ComponentState } from './ComponentState';
+import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
+import { IdService } from '../../../../../model/IdService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { JobFormService, JobService } from '../../core';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ServiceType } from '../../../../../modules/base-components/webapp/core/ServiceType';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { JobProperty } from '../../../model/JobProperty';
+import { FormInstance } from '../../../../../modules/base-components/webapp/core/FormInstance';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { MacroActionType } from '../../../model/MacroActionType';
+
+
 
 class Component extends FormInputComponent<string, ComponentState> {
 

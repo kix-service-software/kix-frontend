@@ -7,13 +7,13 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { FAQHistory } from "../../../model/FAQHistory";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { FAQArticle } from "../../../model/FAQArticle";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { FAQHistory } from '../../../model/FAQHistory';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { FAQArticle } from '../../../model/FAQArticle';
 
 export class FAQArticleHistoryContentProvider extends TableContentProvider<FAQHistory> {
 

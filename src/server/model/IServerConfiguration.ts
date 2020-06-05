@@ -7,7 +7,7 @@
  * --
  */
 
-import { LogLevel } from "./LogLevel";
+import { LogLevel } from './LogLevel';
 
 export interface IServerConfiguration {
 

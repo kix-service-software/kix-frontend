@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { LogFile } from "../model/LogFile";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { LogFile } from '../model/LogFile';
 
 export class LogFileFactory extends ObjectFactory<LogFile> {
 

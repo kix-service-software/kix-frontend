@@ -7,7 +7,7 @@
  * --
  */
 
-import { InlineContent } from "../../../../../modules/base-components/webapp/core/InlineContent";
+import { InlineContent } from '../../../../../modules/base-components/webapp/core/InlineContent';
 
 export class ComponentState {
 

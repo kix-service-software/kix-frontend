@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../base-components/webapp/core/FormInputComponentState";
-import { CheckListItem } from "../../core/CheckListItem";
+import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
+import { CheckListItem } from '../../core/CheckListItem';
 
 export class ComponentState extends FormInputComponentState<any>  {
 

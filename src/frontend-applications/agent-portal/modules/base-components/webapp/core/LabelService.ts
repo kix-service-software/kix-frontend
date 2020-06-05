@@ -7,13 +7,13 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { LabelProvider } from "./LabelProvider";
-import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
-import { Label } from "./Label";
-import { KIXObjectService } from "./KIXObjectService";
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { LabelProvider } from './LabelProvider';
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
+import { Label } from './Label';
+import { KIXObjectService } from './KIXObjectService';
 
 export class LabelService {
 

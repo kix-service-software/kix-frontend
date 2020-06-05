@@ -14,7 +14,7 @@ export class SocketAuthenticationError implements Error {
     public message: string;
 
     public constructor(error: string) {
-        this.name = "SocketAuthenticationError";
+        this.name = 'SocketAuthenticationError';
         this.message = error;
     }
 }

@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { MacroAction } from "./MacroAction";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { MacroAction } from './MacroAction';
 
 export class Macro extends KIXObject {
 

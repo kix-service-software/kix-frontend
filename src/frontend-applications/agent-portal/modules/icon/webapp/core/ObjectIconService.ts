@@ -7,13 +7,13 @@
  * --
  */
 
-import { ObjectIcon } from "../../model/ObjectIcon";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { ObjectIconLoadingOptions } from "../../../../server/model/ObjectIconLoadingOptions";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { ObjectIcon } from '../../model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ObjectIconLoadingOptions } from '../../../../server/model/ObjectIconLoadingOptions';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class ObjectIconService extends KIXObjectService<ObjectIcon> {
 

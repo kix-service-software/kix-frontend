@@ -7,9 +7,9 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { FormFieldConfiguration } from "./FormFieldConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
+import { IConfiguration } from './IConfiguration';
+import { FormFieldConfiguration } from './FormFieldConfiguration';
+import { ConfigurationType } from './ConfigurationType';
 
 export class FormGroupConfiguration implements IConfiguration {
 

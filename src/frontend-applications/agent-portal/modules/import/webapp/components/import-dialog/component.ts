@@ -7,46 +7,46 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { ImportConfigValue } from "./ImportConfigValue";
-import { Context } from "vm";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { WidgetService } from "../../../../../modules/base-components/webapp/core/WidgetService";
-import { WidgetType } from "../../../../../model/configuration/WidgetType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../model/ContextType";
-import { ImportService, ImportPropertyOperator } from "../../core";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
+import { ComponentState } from './ComponentState';
+import { ImportConfigValue } from './ImportConfigValue';
+import { Context } from 'vm';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
+import { WidgetType } from '../../../../../model/configuration/WidgetType';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { ImportService, ImportPropertyOperator } from '../../core';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import {
     TableEvent, TableFactoryService, TableEventData, ValueState
-} from "../../../../base-components/webapp/core/table";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormGroupConfiguration } from "../../../../../model/configuration/FormGroupConfiguration";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldOption } from "../../../../../model/configuration/FormFieldOption";
-import { DefaultSelectInputFormOption } from "../../../../../model/configuration/DefaultSelectInputFormOption";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { FormConfiguration } from "../../../../../model/configuration/FormConfiguration";
-import { FormContext } from "../../../../../model/configuration/FormContext";
-import { FormPageConfiguration } from "../../../../../model/configuration/FormPageConfiguration";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../model/DataType";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
-import { Error } from "../../../../../../../server/model/Error";
+} from '../../../../base-components/webapp/core/table';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldOption } from '../../../../../model/configuration/FormFieldOption';
+import { DefaultSelectInputFormOption } from '../../../../../model/configuration/DefaultSelectInputFormOption';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { FormPageConfiguration } from '../../../../../model/configuration/FormPageConfiguration';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../model/DataType';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
+import { Error } from '../../../../../../../server/model/Error';
 
 class Component {
 
@@ -93,7 +93,7 @@ class Component {
                 [
                     'text_separator', [
                         new ImportConfigValue('DOUBLE', 'Translatable#DOUBLE_QUOTES', '"'),
-                        new ImportConfigValue('SINGLE', 'Translatable#SINGLE_QUOTES', "'")
+                        new ImportConfigValue('SINGLE', 'Translatable#SINGLE_QUOTES', '\'')
                     ]
                 ]
             ]
@@ -131,8 +131,8 @@ class Component {
 
     public async onInput(input: any): Promise<any> {
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Replace Values",
-            "Translatable#Close Dialog", "Translatable#Start Import"
+            'Translatable#Cancel', 'Translatable#Replace Values',
+            'Translatable#Close Dialog', 'Translatable#Start Import'
         ]);
 
         return input;
@@ -453,12 +453,12 @@ class Component {
 
     private getCSVData(importString: string, valueseparatorKey: string[], textSeparatorKey: string): string[][] {
         const textSeparator = this.importConfigs.get('text_separator').find((v) => v.key === textSeparatorKey);
-        const textSeparatorString = textSeparator && textSeparator.value ? textSeparator.value : "'";
+        const textSeparatorString = textSeparator && textSeparator.value ? textSeparator.value : '\'';
         const valueseparators = this.importConfigs.get('value_separator').filter(
             (v) => valueseparatorKey.some((vsk) => vsk === v.key)
         );
         const valueseparatorString = valueseparators && !!valueseparators.length
-            ? `[${valueseparators.map((vs) => vs.value).join('')}]` : ";";
+            ? `[${valueseparators.map((vs) => vs.value).join('')}]` : ';';
 
         return BrowserUtil.parseCSV(importString, textSeparatorString, valueseparatorString);
     }

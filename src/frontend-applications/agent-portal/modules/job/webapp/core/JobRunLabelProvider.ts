@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { DateTimeUtil } from "../../../base-components/webapp/core/DateTimeUtil";
-import { JobRun } from "../../model/JobRun";
-import { JobRunProperty } from "../../model/JobRunProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { LabelProvider } from '../../../base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
+import { JobRun } from '../../model/JobRun';
+import { JobRunProperty } from '../../model/JobRunProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class JobRunLabelProvider extends LabelProvider {
 

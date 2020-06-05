@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { User } from "../model/User";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { User } from '../model/User';
 
 
 export class UserFactory extends ObjectFactory<User> {

@@ -7,7 +7,7 @@
  * --
  */
 
-import { TreeHandler } from "./TreeHandler";
+import { TreeHandler } from './TreeHandler';
 
 export class TreeService {
 

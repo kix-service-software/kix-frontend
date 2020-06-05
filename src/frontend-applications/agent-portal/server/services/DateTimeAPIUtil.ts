@@ -7,7 +7,7 @@
  * --
  */
 
-import { TranslationAPIService } from "../../modules/translation/server/TranslationService";
+import { TranslationAPIService } from '../../modules/translation/server/TranslationService';
 
 export class DateTimeAPIUtil {
 

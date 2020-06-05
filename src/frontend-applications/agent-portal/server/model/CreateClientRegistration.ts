@@ -7,9 +7,9 @@
  * --
  */
 
-import { RequestObject } from "../../../../server/model/rest/RequestObject";
-import { SysConfigOptionDefinition } from "../../modules/sysconfig/model/SysConfigOptionDefinition";
-import { PODefinition } from "./PODefinition";
+import { RequestObject } from '../../../../server/model/rest/RequestObject';
+import { SysConfigOptionDefinition } from '../../modules/sysconfig/model/SysConfigOptionDefinition';
+import { PODefinition } from './PODefinition';
 
 
 export class CreateClientRegistration extends RequestObject {

@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class ConfigItemImage extends KIXObject<ConfigItemImage> {
+export class ConfigItemImage extends KIXObject {
 
     public ObjectId: string | number;
 

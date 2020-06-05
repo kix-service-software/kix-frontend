@@ -19,11 +19,11 @@ import { FormService } from '../../../../../modules/base-components/webapp/core/
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { ArticleProperty } from '../../../model/ArticleProperty';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { Ticket } from '../../../model/Ticket';
-import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+
+
+
+
+
 
 class Component extends AbstractNewDialog {
 

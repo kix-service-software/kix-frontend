@@ -7,11 +7,11 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TicketState } from "../../../model/TicketState";
-import { TicketStateProperty } from "../../../model/TicketStateProperty";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TicketState } from '../../../model/TicketState';
+import { TicketStateProperty } from '../../../model/TicketStateProperty';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 
 
 export class TicketStateFormService extends KIXObjectFormService {

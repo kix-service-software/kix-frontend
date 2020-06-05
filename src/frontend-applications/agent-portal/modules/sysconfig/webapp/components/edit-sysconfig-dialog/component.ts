@@ -7,22 +7,22 @@
  * --
  */
 
-import { AbstractEditDialog } from "../../../../../modules/base-components/webapp/core/AbstractEditDialog";
-import { ComponentState } from "./ComponentState";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EditSysConfigDialogContext } from "../../core";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { SysConfigOptionDefinitionProperty } from "../../../model/SysConfigOptionDefinitionProperty";
-import { EventService } from "../../../../base-components/webapp/core/EventService";
-import { SysconfigEvent } from "../../core/SysconfigEvent";
-import { DialogService } from "../../../../base-components/webapp/core/DialogService";
-import { BrowserUtil } from "../../../../base-components/webapp/core/BrowserUtil";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { SysConfigOptionDefinition } from "../../../model/SysConfigOptionDefinition";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { ValidationSeverity } from "../../../../base-components/webapp/core/ValidationSeverity";
-import { SysConfigOptionProperty } from "../../../model/SysConfigOptionProperty";
+import { AbstractEditDialog } from '../../../../../modules/base-components/webapp/core/AbstractEditDialog';
+import { ComponentState } from './ComponentState';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EditSysConfigDialogContext } from '../../core';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptionDefinitionProperty';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { SysconfigEvent } from '../../core/SysconfigEvent';
+import { DialogService } from '../../../../base-components/webapp/core/DialogService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ValidationSeverity } from '../../../../base-components/webapp/core/ValidationSeverity';
+import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 
 class Component extends AbstractEditDialog {
 

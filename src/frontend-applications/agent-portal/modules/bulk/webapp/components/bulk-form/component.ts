@@ -60,8 +60,8 @@ class Component {
     public async onMount(): Promise<void> {
         this.createTable();
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Reset data", "Translatable#Close Dialog",
-            "Translatable#Execute now", "Translatable#Attributes to be edited"
+            'Translatable#Cancel', 'Translatable#Reset data', 'Translatable#Close Dialog',
+            'Translatable#Execute now', 'Translatable#Attributes to be edited'
         ]);
     }
 

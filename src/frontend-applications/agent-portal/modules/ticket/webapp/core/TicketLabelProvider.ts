@@ -7,26 +7,26 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TicketProperty } from "../../model/TicketProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Queue } from "../../model/Queue";
-import { TicketState } from "../../model/TicketState";
-import { TicketPriority } from "../../model/TicketPriority";
-import { TicketType } from "../../model/TicketType";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { User } from "../../../user/model/User";
-import { AgentService } from "../../../user/webapp/core";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { UserProperty } from "../../../user/model/UserProperty";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TicketProperty } from '../../model/TicketProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Queue } from '../../model/Queue';
+import { TicketState } from '../../model/TicketState';
+import { TicketPriority } from '../../model/TicketPriority';
+import { TicketType } from '../../model/TicketType';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { User } from '../../../user/model/User';
+import { AgentService } from '../../../user/webapp/core';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { UserProperty } from '../../../user/model/UserProperty';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -395,7 +395,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;
             }
             if (title) {
-                returnString += (id ? " - " : '') + ticket.Title;
+                returnString += (id ? ' - ' : '') + ticket.Title;
             }
 
         } else {

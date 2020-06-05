@@ -9,13 +9,13 @@
 
 export enum AuthenticationEvent {
 
-    LOGIN = "login",
+    LOGIN = 'login',
 
-    LOGOUT = "logout",
+    LOGOUT = 'logout',
 
-    AUTHORIZED = "authorized",
+    AUTHORIZED = 'authorized',
 
-    UNAUTHORIZED = "unauthorized",
+    UNAUTHORIZED = 'unauthorized',
 
     VALIDATE_TOKEN = 'validate-token',
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { SystemAddress } from "../../model/SystemAddress";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { SystemAddress } from '../../model/SystemAddress';
 
 
 export class SystemAddressBrowserFactory extends KIXObjectFactory<SystemAddress> {

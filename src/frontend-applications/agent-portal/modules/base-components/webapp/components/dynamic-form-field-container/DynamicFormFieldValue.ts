@@ -7,20 +7,20 @@
  * --
  */
 
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { TreeNode, TreeHandler, TreeService, TreeUtil } from "../../core/tree";
-import { IDynamicFormManager } from "../../core/dynamic-form/IDynamicFormManager";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { IdService } from "../../../../../model/IdService";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { DynamicFormOperationsType } from "../../core/dynamic-form/DynamicFormOperationsType";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { InputFieldTypes } from "../../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
-import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { LabelProvider } from "../../core/LabelProvider";
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode, TreeHandler, TreeService, TreeUtil } from '../../core/tree';
+import { IDynamicFormManager } from '../../core/dynamic-form/IDynamicFormManager';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { IdService } from '../../../../../model/IdService';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { DynamicFormOperationsType } from '../../core/dynamic-form/DynamicFormOperationsType';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+
 
 export class DynamicFormFieldValue {
 

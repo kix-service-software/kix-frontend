@@ -8,21 +8,21 @@
  */
 
 
-import { NotificationFilterTableProperty } from "./NotificationFilterTableProperty";
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { NotificationDetailsContext } from "..";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { TicketProperty } from "../../../../ticket/model/TicketProperty";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
-import { Notification } from "../../../model/Notification";
-import { ILabelProvider } from "../../../../base-components/webapp/core/ILabelProvider";
-import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { NotificationFilterTableProperty } from './NotificationFilterTableProperty';
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { NotificationDetailsContext } from '..';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { Notification } from '../../../model/Notification';
+
+import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
+
 
 export class NotificationFilterTableContentProvider extends TableContentProvider<any> {
 

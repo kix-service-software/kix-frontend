@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { FAQCategory } from "../../model/FAQCategory";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FAQCategoryProperty } from "../../model/FAQCategoryProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { FAQCategory } from '../../model/FAQCategory';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FAQCategoryProperty } from '../../model/FAQCategoryProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
 

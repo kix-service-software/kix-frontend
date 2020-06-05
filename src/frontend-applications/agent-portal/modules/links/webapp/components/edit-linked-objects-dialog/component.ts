@@ -32,9 +32,9 @@ import {
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
-import { LinkObjectProperty } from '../../../model/LinkObjectProperty';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
+
+
+
 import { LinkType } from '../../../model/LinkType';
 import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
@@ -72,7 +72,7 @@ class Component {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Assign Link", "Translatable#Delete Link", "Translatable#Submit"
+            'Translatable#Cancel', 'Translatable#Assign Link', 'Translatable#Delete Link', 'Translatable#Submit'
         ]);
 
         if (context) {

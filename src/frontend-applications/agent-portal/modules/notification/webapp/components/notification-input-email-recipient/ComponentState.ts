@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 
 export class ComponentState extends FormInputComponentState<string[]> {

@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { Job } from "../../model/Job";
-import { Macro } from "../../model/Macro";
-import { ExecPlan } from "../../model/ExecPlan";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { Job } from '../../model/Job';
+import { Macro } from '../../model/Macro';
+import { ExecPlan } from '../../model/ExecPlan';
 
 export class JobBrowserFactory extends KIXObjectFactory<Job> {
 

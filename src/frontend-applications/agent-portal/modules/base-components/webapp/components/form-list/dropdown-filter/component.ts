@@ -52,8 +52,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onUpdate(): void {
-        const filterInput = (this as any).getEl("form-list-input");
-        const hiddenInput = (this as any).getEl("hidden-filter-input");
+        const filterInput = (this as any).getEl('form-list-input');
+        const hiddenInput = (this as any).getEl('hidden-filter-input');
         if (filterInput) {
             filterInput.focus();
         } else if (hiddenInput) {
@@ -69,8 +69,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public keyup(event: any): void {
-        const filterInput = (this as any).getEl("form-list-input");
-        const hiddenInput = (this as any).getEl("hidden-filter-input");
+        const filterInput = (this as any).getEl('form-list-input');
+        const hiddenInput = (this as any).getEl('hidden-filter-input');
 
         const isFilterInput = filterInput && document.activeElement === filterInput;
 
@@ -104,8 +104,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public keydown(event: any): void {
-        const filterInput = (this as any).getEl("form-list-input");
-        const hiddenInput = (this as any).getEl("hidden-filter-input");
+        const filterInput = (this as any).getEl('form-list-input');
+        const hiddenInput = (this as any).getEl('hidden-filter-input');
 
         const isFilterInput = filterInput && document.activeElement === filterInput;
         if (!isFilterInput && event.key === 'Tab' && event.shiftKey) {

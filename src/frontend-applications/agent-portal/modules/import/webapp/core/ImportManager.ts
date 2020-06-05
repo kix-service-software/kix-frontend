@@ -9,24 +9,24 @@
 
 import {
     AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { ValidObject } from "../../../valid/model/ValidObject";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ImportPropertyOperator } from "./ImportPropertyOperator";
-import { ImportPropertyOperatorUtil } from "./ImportPropertyOperatorUtil";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { IColumn } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { Error } from "../../../../../../server/model/Error";
+} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ValidObject } from '../../../valid/model/ValidObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ImportPropertyOperator } from './ImportPropertyOperator';
+import { ImportPropertyOperatorUtil } from './ImportPropertyOperatorUtil';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { IColumn } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { Error } from '../../../../../../server/model/Error';
 
 export abstract class ImportManager extends AbstractDynamicFormManager {
 

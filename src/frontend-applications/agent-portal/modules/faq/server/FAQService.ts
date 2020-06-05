@@ -7,20 +7,20 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { FAQArticleAttachmentLoadingOptions } from "../model/FAQArticleAttachmentLoadingOptions";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { CreateFAQVoteOptions } from "../model/CreateFAQVoteOptions";
-import { Attachment } from "../../../model/kix/Attachment";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { FAQArticleProperty } from "../model/FAQArticleProperty";
-import { FAQCategoryFactory } from "./FAQCategoryFactory";
-import { Error } from "../../../../../server/model/Error";
-import { FilterCriteria } from "../../../model/FilterCriteria";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { FAQArticleAttachmentLoadingOptions } from '../model/FAQArticleAttachmentLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { CreateFAQVoteOptions } from '../model/CreateFAQVoteOptions';
+import { Attachment } from '../../../model/kix/Attachment';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { FAQArticleProperty } from '../model/FAQArticleProperty';
+import { FAQCategoryFactory } from './FAQCategoryFactory';
+import { Error } from '../../../../../server/model/Error';
+import { FilterCriteria } from '../../../model/FilterCriteria';
 
 
 export class FAQService extends KIXObjectAPIService {

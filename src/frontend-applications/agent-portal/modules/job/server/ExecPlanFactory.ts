@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { ExecPlan } from "../model/ExecPlan";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { ExecPlan } from '../model/ExecPlan';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class ExecPlanFactory extends ObjectFactory<ExecPlan> {
 

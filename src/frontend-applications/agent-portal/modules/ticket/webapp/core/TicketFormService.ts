@@ -7,27 +7,27 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { TicketProperty } from "../../model/TicketProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TicketState } from "../../model/TicketState";
-import { StateType } from "../../model/StateType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ArticleProperty } from "../../model/ArticleProperty";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { TicketParameterUtil } from "./TicketParameterUtil";
-import { ArticleFormService } from "./ArticleFormService";
-import { IdService } from "../../../../model/IdService";
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { Contact } from "../../../customer/model/Contact";
-import { Organisation } from "../../../customer/model/Organisation";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { TicketProperty } from '../../model/TicketProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TicketState } from '../../model/TicketState';
+import { StateType } from '../../model/StateType';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { TicketParameterUtil } from './TicketParameterUtil';
+import { ArticleFormService } from './ArticleFormService';
+import { IdService } from '../../../../model/IdService';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+
+import { Contact } from '../../../customer/model/Contact';
+import { Organisation } from '../../../customer/model/Organisation';
 
 export class TicketFormService extends KIXObjectFormService {
 

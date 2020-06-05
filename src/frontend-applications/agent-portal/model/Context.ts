@@ -7,26 +7,26 @@
  * --
  */
 
-import { IContextListener } from "../modules/base-components/webapp/core/IContextListener";
-import { KIXObjectType } from "./kix/KIXObjectType";
-import { KIXObject } from "./kix/KIXObject";
-import { ContextDescriptor } from "./ContextDescriptor";
-import { ContextConfiguration } from "./configuration/ContextConfiguration";
-import { AdditionalContextInformation } from "../modules/base-components/webapp/core/AdditionalContextInformation";
-import { ConfiguredWidget } from "./configuration/ConfiguredWidget";
-import { WidgetConfiguration } from "./configuration/WidgetConfiguration";
-import { WidgetType } from "./configuration/WidgetType";
-import { ContextMode } from "./ContextMode";
-import { FormContext } from "./configuration/FormContext";
-import { FormService } from "../modules/base-components/webapp/core/FormService";
-import { BreadcrumbInformation } from "./BreadcrumbInformation";
-import { KIXObjectService } from "../modules/base-components/webapp/core/KIXObjectService";
-import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
-import { EventService } from "../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../modules/base-components/webapp/core/ApplicationEvent";
-import { ClientStorageService } from "../modules/base-components/webapp/core/ClientStorageService";
-import { KIXObjectLoadingOptions } from "./KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "./KIXObjectSpecificLoadingOptions";
+import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
+import { KIXObjectType } from './kix/KIXObjectType';
+import { KIXObject } from './kix/KIXObject';
+import { ContextDescriptor } from './ContextDescriptor';
+import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
+import { ConfiguredWidget } from './configuration/ConfiguredWidget';
+import { WidgetConfiguration } from './configuration/WidgetConfiguration';
+import { WidgetType } from './configuration/WidgetType';
+import { ContextMode } from './ContextMode';
+import { FormContext } from './configuration/FormContext';
+import { FormService } from '../modules/base-components/webapp/core/FormService';
+import { BreadcrumbInformation } from './BreadcrumbInformation';
+import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
+import { EventService } from '../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
+import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
+import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
 
 export abstract class Context {
 
@@ -86,7 +86,7 @@ export abstract class Context {
     }
 
     public getIcon(): string | ObjectIcon {
-        return "kix-icon-unknown";
+        return 'kix-icon-unknown';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {

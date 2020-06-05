@@ -8,11 +8,11 @@
  */
 
 
-import { IConfigurationResolver } from "./IConfigurationResolver";
-import { TableConfiguration } from "../../../model/configuration/TableConfiguration";
-import { IColumnConfiguration } from "../../../model/configuration/IColumnConfiguration";
-import { ResolverUtil } from "./ResolverUtil";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
+import { IConfigurationResolver } from './IConfigurationResolver';
+import { TableConfiguration } from '../../../model/configuration/TableConfiguration';
+import { IColumnConfiguration } from '../../../model/configuration/IColumnConfiguration';
+import { ResolverUtil } from './ResolverUtil';
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
 
 export class TableConfigurationResolver implements IConfigurationResolver<TableConfiguration> {
 

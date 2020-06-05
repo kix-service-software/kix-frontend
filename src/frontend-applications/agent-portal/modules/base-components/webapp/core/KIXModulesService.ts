@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXModulesSocketClient } from "./KIXModulesSocketClient";
-import { IKIXModuleExtension } from "../../../../model/IKIXModuleExtension";
+import { KIXModulesSocketClient } from './KIXModulesSocketClient';
+import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 
 export class KIXModulesService {
 

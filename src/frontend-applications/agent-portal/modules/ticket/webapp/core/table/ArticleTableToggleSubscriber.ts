@@ -7,13 +7,13 @@
  * --
  */
 
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { TableEventData, TableEvent } from "../../../../base-components/webapp/core/table";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { Article } from "../../../model/Article";
-import { TicketService } from "..";
-import { ArticleFlag } from "../../../model/ArticleFlag";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { TableEventData, TableEvent } from '../../../../base-components/webapp/core/table';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Article } from '../../../model/Article';
+import { TicketService } from '..';
+import { ArticleFlag } from '../../../model/ArticleFlag';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 
 export class ArticleTableToggleSubscriber implements IEventSubscriber {
 

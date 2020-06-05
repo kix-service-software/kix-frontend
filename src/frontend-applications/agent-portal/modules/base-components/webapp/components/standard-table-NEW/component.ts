@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { Table, ITable, TableEvent, TableEventData, IRow, IColumn } from "../../core/table";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { Table, ITable, TableEvent, TableEventData, IRow, IColumn } from '../../core/table';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -105,7 +105,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             }
 
             if (eventId === TableEvent.SORTED || eventId === TableEvent.TABLE_FILTERED) {
-                const container = (this as any).getEl(this.state.table.getTableId() + "table-container");
+                const container = (this as any).getEl(this.state.table.getTableId() + 'table-container');
                 if (container) {
                     container.scrollTop = 0;
                 }

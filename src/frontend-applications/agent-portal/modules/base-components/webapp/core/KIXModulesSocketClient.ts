@@ -7,26 +7,26 @@
  * --
  */
 
-import { SocketClient } from "./SocketClient";
-import { ClientStorageService } from "./ClientStorageService";
-import { LoadKIXModulesRequest } from "./LoadKIXModulesRequest";
-import { KIXModulesEvent } from "./KIXModulesEvent";
-import { LoadKIXModulesResponse } from "./LoadKIXModulesResponse";
-import { SocketErrorResponse } from "./SocketErrorResponse";
-import { SocketEvent } from "./SocketEvent";
-import { LoadFormConfigurationsRequest } from "./LoadFormConfigurationsRequest";
-import { LoadFormConfigurationsResponse } from "./LoadFormConfigurationsResponse";
-import { LoadReleaseInfoResponse } from "./LoadReleaseInfoResponse";
-import { ISocketRequest } from "./ISocketRequest";
-import { LoadFormConfigurationRequest } from "./LoadFormConfigurationRequest";
-import { LoadFormConfigurationResponse } from "./LoadFormConfigurationResponse";
-import { IKIXModuleExtension } from "../../../../model/IKIXModuleExtension";
-import { IdService } from "../../../../model/IdService";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { ReleaseInfo } from "../../../../model/ReleaseInfo";
-import { ISocketResponse } from "./ISocketResponse";
+import { SocketClient } from './SocketClient';
+import { ClientStorageService } from './ClientStorageService';
+import { LoadKIXModulesRequest } from './LoadKIXModulesRequest';
+import { KIXModulesEvent } from './KIXModulesEvent';
+import { LoadKIXModulesResponse } from './LoadKIXModulesResponse';
+import { SocketErrorResponse } from './SocketErrorResponse';
+import { SocketEvent } from './SocketEvent';
+import { LoadFormConfigurationsRequest } from './LoadFormConfigurationsRequest';
+import { LoadFormConfigurationsResponse } from './LoadFormConfigurationsResponse';
+import { LoadReleaseInfoResponse } from './LoadReleaseInfoResponse';
+import { ISocketRequest } from './ISocketRequest';
+import { LoadFormConfigurationRequest } from './LoadFormConfigurationRequest';
+import { LoadFormConfigurationResponse } from './LoadFormConfigurationResponse';
+import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
+import { IdService } from '../../../../model/IdService';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ReleaseInfo } from '../../../../model/ReleaseInfo';
+import { ISocketResponse } from './ISocketResponse';
 
 export class KIXModulesSocketClient extends SocketClient {
 

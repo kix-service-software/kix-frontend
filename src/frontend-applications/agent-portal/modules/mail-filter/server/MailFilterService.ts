@@ -7,17 +7,17 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { MailFilter } from "../model/MailFilter";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { MailFilterProperty } from "../model/MailFilterProperty";
-import { MailFilterFactory } from "./MailFilterFactory";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { MailFilter } from '../model/MailFilter';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { MailFilterProperty } from '../model/MailFilterProperty';
+import { MailFilterFactory } from './MailFilterFactory';
+import { Error } from '../../../../../server/model/Error';
 
 export class MailFilterAPIService extends KIXObjectAPIService {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class DateTimeUtil {
 

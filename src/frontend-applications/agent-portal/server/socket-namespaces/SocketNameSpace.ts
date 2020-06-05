@@ -7,12 +7,12 @@
  * --
  */
 
-import { ISocketNamespace } from "./ISocketNamespace";
-import { AuthenticationService } from "../services/AuthenticationService";
-import { SocketEvent } from "../../modules/base-components/webapp/core/SocketEvent";
-import { ISocketRequest } from "../../modules/base-components/webapp/core/ISocketRequest";
-import { ProfilingService } from "../../../../server/services/ProfilingService";
-import { SocketResponse } from "../../modules/base-components/webapp/core/SocketResponse";
+import { ISocketNamespace } from './ISocketNamespace';
+import { AuthenticationService } from '../services/AuthenticationService';
+import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
+import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
+import { ProfilingService } from '../../../../server/services/ProfilingService';
+import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
 
 export abstract class SocketNameSpace implements ISocketNamespace {
 

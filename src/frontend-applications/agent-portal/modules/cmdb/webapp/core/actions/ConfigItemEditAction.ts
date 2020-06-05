@@ -8,11 +8,11 @@
  */
 
 
-import { ConfigItemDialogUtil } from "../ConfigItemDialogUtil";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ConfigItem } from "../../../model/ConfigItem";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { ConfigItemDialogUtil } from '../ConfigItemDialogUtil';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ConfigItem } from '../../../model/ConfigItem';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
 export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
@@ -23,7 +23,7 @@ export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
-        this.icon = "kix-icon-edit";
+        this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {

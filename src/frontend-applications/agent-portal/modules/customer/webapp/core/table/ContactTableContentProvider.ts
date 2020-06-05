@@ -7,16 +7,16 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { Contact } from "../../../model/Contact";
-import { ITable, IRowObject, TableValue } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContactProperty } from "../../../model/ContactProperty";
-import { TicketStats } from "../../../model/TicketStats";
-import { UserProperty } from "../../../../user/model/UserProperty";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { User } from "../../../../user/model/User";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { Contact } from '../../../model/Contact';
+import { ITable, IRowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContactProperty } from '../../../model/ContactProperty';
+import { TicketStats } from '../../../model/TicketStats';
+import { UserProperty } from '../../../../user/model/UserProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { User } from '../../../../user/model/User';
 
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 

@@ -7,14 +7,14 @@
  * --
  */
 
-import { AbstractAction } from "../../../base-components/webapp/core/AbstractAction";
-import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
-import { EventService } from "../../../base-components/webapp/core/EventService";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { BrowserUtil } from "../../../base-components/webapp/core/BrowserUtil";
-import { ContextSocketClient } from "../../../base-components/webapp/core/ContextSocketClient";
-import { KIXModulesSocketClient } from "../../../base-components/webapp/core/KIXModulesSocketClient";
-import { SysconfigEvent } from "./SysconfigEvent";
+import { AbstractAction } from '../../../base-components/webapp/core/AbstractAction';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { ContextSocketClient } from '../../../base-components/webapp/core/ContextSocketClient';
+import { KIXModulesSocketClient } from '../../../base-components/webapp/core/KIXModulesSocketClient';
+import { SysconfigEvent } from './SysconfigEvent';
 
 export class ReloadConfigurationCacheAction extends AbstractAction {
 

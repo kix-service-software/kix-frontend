@@ -7,20 +7,20 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Contact } from "../../model/Contact";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContactProperty } from "../../model/ContactProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Organisation } from "../../model/Organisation";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { User } from "../../../user/model/User";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { PersonalSettingsProperty } from "../../../user/model/PersonalSettingsProperty";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Contact } from '../../model/Contact';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContactProperty } from '../../model/ContactProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Organisation } from '../../model/Organisation';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { User } from '../../../user/model/User';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
 
 export class ContactLabelProvider extends LabelProvider<Contact> {
 
@@ -35,7 +35,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (value) {
                     const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
                         KIXObjectType.ORGANISATION, [value], null, null, true, true, false
-                    ).catch((error) => console.log(error));
+                    ).catch((error) => console.error(error));
                     displayValue = primaryOrganisations && !!primaryOrganisations.length
                         ? `${primaryOrganisations[0].Name} (${primaryOrganisations[0].Number})`
                         : '';
@@ -45,7 +45,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (value) {
                     const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
                         KIXObjectType.ORGANISATION, [value], null, null, true
-                    ).catch((error) => console.log(error));
+                    ).catch((error) => console.error(error));
                     displayValue = primaryOrganisations && !!primaryOrganisations.length
                         ? primaryOrganisations[0].Number
                         : '';
@@ -55,7 +55,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                 if (value && Array.isArray(value) && value.length) {
                     const organisations = await KIXObjectService.loadObjects<Organisation>(
                         KIXObjectType.ORGANISATION, value, null, null, true, true, false
-                    ).catch((error) => console.log(error));
+                    ).catch((error) => console.error(error));
                     const organisationNames = organisations && organisations.length
                         ? organisations.map((c) => c.Name)
                         : [];
@@ -175,7 +175,7 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
                     if (orgId) {
                         const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
                             KIXObjectType.ORGANISATION, [orgId], null, null, true
-                        ).catch((error) => console.log(error));
+                        ).catch((error) => console.error(error));
                         newValue = primaryOrganisations && !!primaryOrganisations.length
                             ? primaryOrganisations[0].Number
                             : orgId;

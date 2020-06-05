@@ -7,12 +7,12 @@
  * --
  */
 
-import { ModuleConfigurationService } from "./ModuleConfigurationService";
-import { TableConfigurationResolver } from "./TableConfigurationResolver";
-import { IConfigurationResolver } from "./IConfigurationResolver";
-import { TableWidgetConfiguration } from "../../../model/configuration/TableWidgetConfiguration";
-import { TableConfiguration } from "../../../model/configuration/TableConfiguration";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
+
+import { TableConfigurationResolver } from './TableConfigurationResolver';
+import { IConfigurationResolver } from './IConfigurationResolver';
+import { TableWidgetConfiguration } from '../../../model/configuration/TableWidgetConfiguration';
+
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
 
 export class TableWidgetConfigurationResolver implements IConfigurationResolver<TableWidgetConfiguration> {
 

@@ -7,25 +7,25 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
+import { IUIModule } from '../../../../model/IUIModule';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
 import {
     ContactService, ContactFormService, ContactTableFactory,
     ContactLabelProvider, ContactBrowserFactory, ContactSearchDefinition, ContactDetailsContext,
     ContactSearchContext, ContactSearchAction, ContactCSVExportAction, ContactTableDependingAction
-} from ".";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchService } from "../../../search/webapp/core";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContactPlaceholderHandler } from "./ContactPlaceholderHandler";
+} from '.';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchService } from '../../../search/webapp/core';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContactPlaceholderHandler } from './ContactPlaceholderHandler';
 
 export class UIModule implements IUIModule {
 
@@ -34,7 +34,7 @@ export class UIModule implements IUIModule {
     public name: string = 'CMDBReadUIModule';
 
     public unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

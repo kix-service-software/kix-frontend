@@ -7,18 +7,18 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../base-components/webapp/core/FormInputComponent";
-import { IdService } from "../../../../../model/IdService";
-import { PermissionManager } from "../../core/admin";
-import { CreatePermissionDescription } from "../../../server/CreatePermissionDescription";
-import { PermissionFormData } from "../../../../base-components/webapp/core/PermissionFormData";
-import { IDynamicFormManager } from "../../../../base-components/webapp/core/dynamic-form";
-import { Permission } from "../../../model/Permission";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { LabelService } from "../../../../base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
+import { IdService } from '../../../../../model/IdService';
+import { PermissionManager } from '../../core/admin';
+import { CreatePermissionDescription } from '../../../server/CreatePermissionDescription';
+import { PermissionFormData } from '../../../../base-components/webapp/core/PermissionFormData';
+import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
+import { Permission } from '../../../model/Permission';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 

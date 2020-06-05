@@ -1,8 +1,8 @@
 {
     "tasks": [
         {
-            "taskName": "gulp",
-            "command": "gulp",
+            "label": "gulp",
+            "command": "./node_modules/.bin/gulp",
             "options": {
                 "env": {
                     "NODE_ENV": "development",

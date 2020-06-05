@@ -7,31 +7,31 @@
  * --
  */
 
-import { IKIXObjectService } from "./IKIXObjectService";
-import { HttpService } from "./HttpService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { IObjectFactory } from "../model/IObjectFactory";
-import { ObjectFactoryService } from "./ObjectFactoryService";
-import { KIXObject } from "../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../model/KIXObjectSpecificLoadingOptions";
-import { Error } from "../../../../server/model/Error";
-import { KIXObjectSpecificDeleteOptions } from "../../model/KIXObjectSpecificDeleteOptions";
-import { LoggingService } from "../../../../server/services/LoggingService";
-import { SortOrder } from "../../model/SortOrder";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { FilterType } from "../../model/FilterType";
-import { RequestObject } from "../../../../server/model/rest/RequestObject";
-import { KIXObjectSpecificCreateOptions } from "../../model/KIXObjectSpecificCreateOptions";
-import { Query } from "../../../../server/model/rest/Query";
-import { KIXObjectServiceRegistry } from "./KIXObjectServiceRegistry";
-import { ObjectIconLoadingOptions } from "../model/ObjectIconLoadingOptions";
-import { ObjectIcon } from "../../modules/icon/model/ObjectIcon";
-import { CreateLinkDescription } from "../../modules/links/server/api/CreateLinkDescription";
-import { CreateLink } from "../../modules/links/server/api/CreateLink";
-import { CreateLinkRequest } from "../../modules/links/server/api/CreateLinkRequest";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { ExtendedKIXObjectAPIService } from "./ExtendedKIXObjectAPIService";
+import { IKIXObjectService } from './IKIXObjectService';
+import { HttpService } from './HttpService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { IObjectFactory } from '../model/IObjectFactory';
+import { ObjectFactoryService } from './ObjectFactoryService';
+import { KIXObject } from '../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
+import { Error } from '../../../../server/model/Error';
+import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
+import { LoggingService } from '../../../../server/services/LoggingService';
+import { SortOrder } from '../../model/SortOrder';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { FilterType } from '../../model/FilterType';
+import { RequestObject } from '../../../../server/model/rest/RequestObject';
+import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
+import { Query } from '../../../../server/model/rest/Query';
+import { KIXObjectServiceRegistry } from './KIXObjectServiceRegistry';
+import { ObjectIconLoadingOptions } from '../model/ObjectIconLoadingOptions';
+import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
+import { CreateLinkDescription } from '../../modules/links/server/api/CreateLinkDescription';
+import { CreateLink } from '../../modules/links/server/api/CreateLink';
+import { CreateLinkRequest } from '../../modules/links/server/api/CreateLinkRequest';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -136,14 +136,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        throw new Error('', 'Method not implemented.');
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        throw new Error('', 'Method not implemented.');
     }
 
     protected prepareQuery(loadingOptions: KIXObjectLoadingOptions): any {
@@ -250,7 +250,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected buildUri(...args): string {
-        return args.join("/");
+        return args.join('/');
     }
 
     public async deleteObject(

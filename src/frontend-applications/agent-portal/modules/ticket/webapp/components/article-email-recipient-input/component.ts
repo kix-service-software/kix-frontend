@@ -7,35 +7,35 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { TreeHandler, TreeService, TreeNode } from "../../../../base-components/webapp/core/tree";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { ArticleProperty } from "../../../model/ArticleProperty";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../../system-address/model/SystemAddress";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { FormInputAction } from "../../../../../modules/base-components/webapp/core/FormInputAction";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../model/ContextType";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { Ticket } from "../../../model/Ticket";
-import { Article } from "../../../model/Article";
-import { ArticleReceiver } from "../../../model/ArticleReceiver";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { ServiceRegistry } from "../../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { IKIXObjectService } from "../../../../../modules/base-components/webapp/core/IKIXObjectService";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { TreeHandler, TreeService, TreeNode } from '../../../../base-components/webapp/core/tree';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../../system-address/model/SystemAddress';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
+import { Label } from '../../../../../modules/base-components/webapp/core/Label';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { Ticket } from '../../../model/Ticket';
+import { Article } from '../../../model/Article';
+import { ArticleReceiver } from '../../../model/ArticleReceiver';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 class Component extends FormInputComponent<string[], ComponentState> {
 
     private ccSubscriber: IEventSubscriber;

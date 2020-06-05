@@ -18,7 +18,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TableFactoryService } from '../../../../base-components/webapp/core/table';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
+
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 

@@ -7,18 +7,18 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../base-components/webapp/core/table";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../model/DataType";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { JobRunLogContentProvider } from "./JobRunLogContentProvider";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { JobRunLog } from "../../../model/JobRunLog";
-import { JobRunLogProperty } from "../../../model/JobRunLogProperty";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../model/DataType';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { JobRunLogContentProvider } from './JobRunLogContentProvider';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { JobRunLog } from '../../../model/JobRunLog';
+import { JobRunLogProperty } from '../../../model/JobRunLogProperty';
 
 export class JobRunLogTableFactory extends TableFactory {
 

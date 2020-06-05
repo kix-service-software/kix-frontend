@@ -13,7 +13,7 @@ import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptio
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import {
-    ToggleOptions, Table, ITable, IRowObject, RowObject, TableValue, TableFactoryService, TableEvent, TableEventData
+    ITable, IRowObject, RowObject, TableValue, TableFactoryService, TableEvent, TableEventData
 } from '../../../../base-components/webapp/core/table';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
@@ -53,7 +53,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
 
-        this.state.translations = await TranslationService.createTranslationObject(["Translatable#SysConfig"]);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#SysConfig']);
 
         this.state.prepared = true;
     }

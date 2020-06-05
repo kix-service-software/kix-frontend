@@ -7,8 +7,8 @@
  * --
  */
 
-import { RequestObject } from "../../../../../../server/model/rest/RequestObject";
-import { ConfigItemClassProperty } from "../../model/ConfigItemClassProperty";
+import { RequestObject } from '../../../../../../server/model/rest/RequestObject';
+import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
 
 export class CreateConfigItemClass extends RequestObject {
 
@@ -18,8 +18,8 @@ export class CreateConfigItemClass extends RequestObject {
             if (p[0] === ConfigItemClassProperty.DEFINITION_STRING) {
                 let definitionString = p[1].toString();
                 definitionString = definitionString
-                    .replace(/\n/g, "\n")
-                    .replace(/\u200B/g, "");
+                    .replace(/\n/g, '\n')
+                    .replace(/\u200B/g, '');
                 p[1] = definitionString;
             }
             this.applyProperty(p[0], p[1]);

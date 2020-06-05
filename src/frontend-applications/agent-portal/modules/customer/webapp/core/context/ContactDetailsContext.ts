@@ -7,15 +7,15 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { Contact } from "../../../model/Contact";
-import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { ContactProperty } from "../../../model/ContactProperty";
-import { OrganisationContext } from "./OrganisationContext";
+import { Context } from '../../../../../model/Context';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { Contact } from '../../../model/Contact';
+import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ContactProperty } from '../../../model/ContactProperty';
+import { OrganisationContext } from './OrganisationContext';
 
 export class ContactDetailsContext extends Context {
 

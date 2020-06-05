@@ -7,21 +7,21 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { ValidObjectLabelProvider } from "./ValidObjectLabelProvider";
-import { ValidService } from "./ValidService";
-import { ValidObjectBrowserFactory } from "./ValidObjectBrowserFactory";
+import { IUIModule } from '../../../../model/IUIModule';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { ValidObjectLabelProvider } from './ValidObjectLabelProvider';
+import { ValidService } from './ValidService';
+import { ValidObjectBrowserFactory } from './ValidObjectBrowserFactory';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'ValidUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

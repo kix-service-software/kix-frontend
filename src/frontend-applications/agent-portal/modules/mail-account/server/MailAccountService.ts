@@ -7,18 +7,18 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { MailAccountFactory } from "./MailAccountFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { MailAccount } from "../model/MailAccount";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { MailAccountProperty } from "../model/MailAccountProperty";
-import { DispatchingType } from "../model/DispatchingType";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { MailAccountFactory } from './MailAccountFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { MailAccount } from '../model/MailAccount';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { MailAccountProperty } from '../model/MailAccountProperty';
+import { DispatchingType } from '../model/DispatchingType';
+import { Error } from '../../../../../server/model/Error';
 
 export class MailAccountService extends KIXObjectAPIService {
 

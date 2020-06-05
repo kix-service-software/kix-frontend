@@ -7,9 +7,9 @@
  * --
  */
 
-import { BulkManager } from "./BulkManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { BulkManager } from './BulkManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class BulkService {
 

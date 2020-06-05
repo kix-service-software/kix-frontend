@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { TicketPriority } from "../model/TicketPriority";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { TicketPriority } from '../model/TicketPriority';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class TicketPriorityFactory extends ObjectFactory<TicketPriority> {
 

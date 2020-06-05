@@ -7,12 +7,12 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../../../base-components/webapp/core/table/TableContentProvider";
-import { Queue } from "../../../../../model/Queue";
-import { ITable, IRowObject, RowObject, TableValue } from "../../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { Queue } from '../../../../../model/Queue';
+import { ITable, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+
 
 export class TicketQueueTableContentProvider extends TableContentProvider<Queue> {
 

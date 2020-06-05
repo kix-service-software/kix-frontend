@@ -7,16 +7,16 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { MailFilter } from "../../model/MailFilter";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { MailFilterProperty } from "../../model/MailFilterProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { MailFilterMatch } from "../../model/MailFilterMatch";
-import { SortUtil } from "../../../../model/SortUtil";
-import { DataType } from "../../../../model/DataType";
-import { MailFilterSet } from "../../model/MailFilterSet";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { MailFilter } from '../../model/MailFilter';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { MailFilterProperty } from '../../model/MailFilterProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { MailFilterMatch } from '../../model/MailFilterMatch';
+import { SortUtil } from '../../../../model/SortUtil';
+import { DataType } from '../../../../model/DataType';
+import { MailFilterSet } from '../../model/MailFilterSet';
 
 export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
 

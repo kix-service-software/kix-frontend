@@ -7,21 +7,21 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { IFormInstanceListener } from "../../../../../modules/base-components/webapp/core/IFormInstanceListener";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormContext } from "../../../../../model/configuration/FormContext";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Ticket } from "../../../model/Ticket";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { Organisation } from "../../../../customer/model/Organisation";
-import { Contact } from "../../../../customer/model/Contact";
+import { Context } from '../../../../../model/Context';
+import { IFormInstanceListener } from '../../../../../modules/base-components/webapp/core/IFormInstanceListener';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Ticket } from '../../../model/Ticket';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { Organisation } from '../../../../customer/model/Organisation';
+import { Contact } from '../../../../customer/model/Contact';
 
 export class EditTicketDialogContext extends Context implements IFormInstanceListener {
 

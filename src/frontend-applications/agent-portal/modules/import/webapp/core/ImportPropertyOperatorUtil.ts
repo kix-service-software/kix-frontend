@@ -7,8 +7,8 @@
  * --
  */
 
-import { ImportPropertyOperator } from "./ImportPropertyOperator";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { ImportPropertyOperator } from './ImportPropertyOperator';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class ImportPropertyOperatorUtil {
 

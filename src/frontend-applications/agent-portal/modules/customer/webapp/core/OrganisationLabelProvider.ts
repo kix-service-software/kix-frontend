@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Organisation } from "../../model/Organisation";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Organisation } from '../../model/Organisation';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class OrganisationLabelProvider extends LabelProvider<Organisation> {
 

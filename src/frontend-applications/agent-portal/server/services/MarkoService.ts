@@ -16,7 +16,7 @@ import { PluginService } from '../../../../server/services/PluginService';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
 import { ProfilingService } from '../../../../server/services/ProfilingService';
-import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 import { ServerUtil } from '../../../../server/ServerUtil';

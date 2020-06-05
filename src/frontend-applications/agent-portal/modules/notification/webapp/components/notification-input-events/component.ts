@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { NotificationService } from "../../core";
-import { NotificationProperty } from "../../../model/NotificationProperty";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { NotificationService } from '../../core';
+import { NotificationProperty } from '../../../model/NotificationProperty';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 

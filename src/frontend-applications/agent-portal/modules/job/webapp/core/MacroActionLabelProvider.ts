@@ -7,16 +7,16 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { MacroAction } from "../../model/MacroAction";
-import { MacroActionProperty } from "../../model/MacroActionProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { MacroActionType } from "../../model/MacroActionType";
-import { Macro } from "../../model/Macro";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { MacroAction } from '../../model/MacroAction';
+import { MacroActionProperty } from '../../model/MacroActionProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { MacroActionType } from '../../model/MacroActionType';
+import { Macro } from '../../model/Macro';
 
 export class MacroActionLabelProvider extends LabelProvider {
 

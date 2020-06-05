@@ -7,7 +7,7 @@
  * --
  */
 
-import { IFormEvent } from "./IFormEvent";
+import { IFormEvent } from './IFormEvent';
 
 export class UpdateFormEvent implements IFormEvent {
 

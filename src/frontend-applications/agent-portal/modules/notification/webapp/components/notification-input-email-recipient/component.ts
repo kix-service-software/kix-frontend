@@ -7,24 +7,23 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { ComponentState } from "./ComponentState";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../../system-address/model/SystemAddress";
-import { Contact } from "../../../../customer/model/Contact";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { ContactProperty } from "../../../../customer/model/ContactProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { ContactService } from "../../../../customer/webapp/core";
-import { FormService } from "../../../../base-components/webapp/core/FormService";
-
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { ComponentState } from './ComponentState';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../../system-address/model/SystemAddress';
+import { Contact } from '../../../../customer/model/Contact';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { ContactProperty } from '../../../../customer/model/ContactProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { ContactService } from '../../../../customer/webapp/core';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 

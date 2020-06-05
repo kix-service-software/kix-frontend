@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SysConfigOption } from "../../model/SysConfigOption";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SysConfigKey } from "../../model/SysConfigKey";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SysConfigOption } from '../../model/SysConfigOption';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SysConfigKey } from '../../model/SysConfigKey';
 
 export class SysConfigService extends KIXObjectService<SysConfigOption> {
 

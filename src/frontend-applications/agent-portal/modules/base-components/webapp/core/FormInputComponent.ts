@@ -7,9 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from "./FormInputComponentState";
-import { FormService } from "./FormService";
-import { IdService } from "../../../../model/IdService";
+import { FormInputComponentState } from './FormInputComponentState';
+import { FormService } from './FormService';
+import { IdService } from '../../../../model/IdService';
 
 export abstract class FormInputComponent<T, C extends FormInputComponentState<T>> {
 

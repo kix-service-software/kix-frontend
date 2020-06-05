@@ -7,8 +7,8 @@
  * --
  */
 
-import { SearchOperator } from "../../model/SearchOperator";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { SearchOperator } from '../../model/SearchOperator';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 
 
 export class SearchOperatorUtil {

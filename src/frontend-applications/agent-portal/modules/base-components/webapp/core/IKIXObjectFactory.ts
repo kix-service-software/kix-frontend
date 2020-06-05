@@ -7,7 +7,7 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export interface IKIXObjectFactory<T extends KIXObject> {
 

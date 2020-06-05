@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Organisation } from "../../model/Organisation";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Organisation } from '../../model/Organisation';
 
 export class OrganisationBrowserFactory implements IKIXObjectFactory<Organisation> {
 

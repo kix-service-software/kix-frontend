@@ -7,9 +7,9 @@
  * --
  */
 
-import { ChartConfiguration } from "chart.js";
-import { IConfiguration } from "../../../model/configuration/IConfiguration";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
+import { ChartConfiguration } from 'chart.js';
+import { IConfiguration } from '../../../model/configuration/IConfiguration';
+import { ConfigurationType } from '../../../model/configuration/ConfigurationType';
 
 export class ChartComponentConfiguration implements IConfiguration {
 

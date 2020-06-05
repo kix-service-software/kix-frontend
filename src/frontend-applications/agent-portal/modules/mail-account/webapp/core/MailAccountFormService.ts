@@ -7,17 +7,17 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { MailAccount } from "../../model/MailAccount";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { MailAccountProperty } from "../../model/MailAccountProperty";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { DispatchingType } from "../../model/DispatchingType";
-import { IdService } from "../../../../model/IdService";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { MailAccount } from '../../model/MailAccount';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { MailAccountProperty } from '../../model/MailAccountProperty';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { DispatchingType } from '../../model/DispatchingType';
+import { IdService } from '../../../../model/IdService';
 
 export class MailAccountFormService extends KIXObjectFormService {
 

@@ -7,18 +7,18 @@
  * --
  */
 
-import { Context } from "../../../../../../model/Context";
-import { LabelService } from "../../../../../../modules/base-components/webapp/core/LabelService";
-import { Role } from "../../../../model/Role";
-import { BreadcrumbInformation } from "../../../../../../model/BreadcrumbInformation";
-import { AdminContext } from "../../../../../admin/webapp/core";
-import { KIXObject } from "../../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
-import { RoleProperty } from "../../../../model/RoleProperty";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { User } from "../../../../model/User";
-import { KIXObjectService } from "../../../../../base-components/webapp/core/KIXObjectService";
+import { Context } from '../../../../../../model/Context';
+import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
+import { Role } from '../../../../model/Role';
+import { BreadcrumbInformation } from '../../../../../../model/BreadcrumbInformation';
+import { AdminContext } from '../../../../../admin/webapp/core';
+import { KIXObject } from '../../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { RoleProperty } from '../../../../model/RoleProperty';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { User } from '../../../../model/User';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
 
 
 export class RoleDetailsContext extends Context {

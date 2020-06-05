@@ -7,19 +7,19 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { ConsoleCommandService } from "./ConsoleCommandService";
-import { ConsoleCommandBrowserFactory } from "./ConsoleCommandBrowserFactory";
+import { IUIModule } from '../../../../model/IUIModule';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { ConsoleCommandService } from './ConsoleCommandService';
+import { ConsoleCommandBrowserFactory } from './ConsoleCommandBrowserFactory';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'ConsoleUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

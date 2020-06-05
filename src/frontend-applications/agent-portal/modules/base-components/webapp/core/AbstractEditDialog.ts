@@ -7,26 +7,26 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "./AbstractMarkoComponent";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { DialogService } from "./DialogService";
-import { ContextService } from "./ContextService";
-import { ContextMode } from "../../../../model/ContextMode";
-import { FormService } from "./FormService";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { AdditionalContextInformation } from "./AdditionalContextInformation";
-import { ValidationSeverity } from "./ValidationSeverity";
-import { ContextType } from "../../../../model/ContextType";
-import { KIXObjectService } from "./KIXObjectService";
-import { BrowserUtil } from "./BrowserUtil";
-import { EventService } from "./EventService";
-import { ApplicationEvent } from "./ApplicationEvent";
-import { ValidationResult } from "./ValidationResult";
-import { ComponentContent } from "./ComponentContent";
-import { OverlayService } from "./OverlayService";
-import { OverlayType } from "./OverlayType";
-import { Error } from "../../../../../../server/model/Error";
+import { AbstractMarkoComponent } from './AbstractMarkoComponent';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DialogService } from './DialogService';
+import { ContextService } from './ContextService';
+import { ContextMode } from '../../../../model/ContextMode';
+import { FormService } from './FormService';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { ValidationSeverity } from './ValidationSeverity';
+import { ContextType } from '../../../../model/ContextType';
+import { KIXObjectService } from './KIXObjectService';
+import { BrowserUtil } from './BrowserUtil';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
+import { ValidationResult } from './ValidationResult';
+import { ComponentContent } from './ComponentContent';
+import { OverlayService } from './OverlayService';
+import { OverlayType } from './OverlayType';
+import { Error } from '../../../../../../server/model/Error';
 
 export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 
@@ -48,10 +48,10 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
     public async onMount(): Promise<void> {
         DialogService.getInstance().setMainDialogHint(
             // tslint:disable-next-line:max-line-length
-            "Translatable#For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual for more detailed information."
+            'Translatable#For keyboard navigation, press \'Ctrl\' to switch focus to dialog. See manual for more detailed information.'
         );
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
+            'Translatable#Cancel', 'Translatable#Save'
         ]);
         const dialogContext = await ContextService.getInstance().getContextByTypeAndMode(
             this.objectType, [ContextMode.EDIT, ContextMode.EDIT_ADMIN]

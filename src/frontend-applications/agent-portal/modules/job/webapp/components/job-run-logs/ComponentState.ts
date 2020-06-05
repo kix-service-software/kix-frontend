@@ -7,8 +7,8 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../base-components/webapp/core/WidgetComponentState";
-import { ITable } from "../../../../base-components/webapp/core/table";
+import { WidgetComponentState } from '../../../../base-components/webapp/core/WidgetComponentState';
+import { ITable } from '../../../../base-components/webapp/core/table';
 
 export class ComponentState extends WidgetComponentState {
 

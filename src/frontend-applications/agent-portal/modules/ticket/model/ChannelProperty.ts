@@ -9,8 +9,8 @@
 
 export enum ChannelProperty {
 
-    ID = "ID",
+    ID = 'ID',
 
-    NAME = "Name"
+    NAME = 'Name'
 
 }

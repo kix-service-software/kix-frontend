@@ -7,14 +7,14 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { MailAccount } from "../../model/MailAccount";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { MailAccountProperty } from "../../model/MailAccountProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { DispatchingType } from "../../model/DispatchingType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { MailAccount } from '../../model/MailAccount';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { MailAccountProperty } from '../../model/MailAccountProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { DispatchingType } from '../../model/DispatchingType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
 

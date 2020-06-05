@@ -7,13 +7,13 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ConfigItemHistory } from "../../../model/ConfigItemHistory";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { ConfigItem } from "../../../model/ConfigItem";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ConfigItemHistory } from '../../../model/ConfigItemHistory';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ConfigItem } from '../../../model/ConfigItem';
 
 export class ConfigItemHistoryContentProvider extends TableContentProvider<ConfigItemHistory> {
 

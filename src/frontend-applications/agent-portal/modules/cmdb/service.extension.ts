@@ -7,11 +7,11 @@
  * --
  */
 
-import { IServiceExtension } from "../../server/extensions/IServiceExtension";
-import { CMDBAPIService } from "./server/CMDBService";
-import { ConfigItemAPIClassService } from "./server/ConfigItemClassService";
+import { IServiceExtension } from '../../server/extensions/IServiceExtension';
+import { CMDBAPIService } from './server/CMDBService';
+import { ConfigItemAPIClassService } from './server/ConfigItemClassService';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IServiceExtension {
 

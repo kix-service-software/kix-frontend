@@ -7,8 +7,8 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     CMDBService, ConfigItemFormService, ConfigItemBrowserFactory, ConfigItemHistoryBrowserFactory,
     ConfigItemClassBrowserFactory, ConfigItemImageBrowserFactory, ConfigItemTableFactory,
@@ -17,18 +17,18 @@ import {
     ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider,
     ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext,
     CompareConfigItemVersionDialogContext, ConfigItemVersionCompareAction
-} from ".";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TableFactoryService, TableCSSHandlerRegistry } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { SearchService } from "../../../search/webapp/core";
-import { PostproductivCSSHandler } from "./table/PostproductivCSSHandler";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
+} from '.';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { SearchService } from '../../../search/webapp/core';
+import { PostproductivCSSHandler } from './table/PostproductivCSSHandler';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 
 export class UIModule implements IUIModule {
 
@@ -37,7 +37,7 @@ export class UIModule implements IUIModule {
     public priority: number = 200;
 
     public unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

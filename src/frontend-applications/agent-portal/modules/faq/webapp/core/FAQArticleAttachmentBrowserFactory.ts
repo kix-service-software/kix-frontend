@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Attachment } from "../../../../model/kix/Attachment";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Attachment } from '../../../../model/kix/Attachment';
 
 export class FAQArticleAttachmentBrowserFactory implements IKIXObjectFactory<Attachment> {
 

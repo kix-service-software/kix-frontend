@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
 export class ComponentInput {
 

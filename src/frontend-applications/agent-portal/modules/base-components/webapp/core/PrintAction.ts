@@ -7,7 +7,7 @@
  * --
  */
 
-import { AbstractAction } from "./AbstractAction";
+import { AbstractAction } from './AbstractAction';
 
 export class PrintAction extends AbstractAction {
 
@@ -15,7 +15,7 @@ export class PrintAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Print';
-        this.icon = "kix-icon-print";
+        this.icon = 'kix-icon-print';
     }
 
     public async run(event: any): Promise<void> {

@@ -7,8 +7,8 @@
  * --
  */
 
-import { AdminModule } from "./AdminModule";
-import { ObjectIcon } from "../../icon/model/ObjectIcon";
+import { AdminModule } from './AdminModule';
+import { ObjectIcon } from '../../icon/model/ObjectIcon';
 
 export class AdminModuleCategory {
 

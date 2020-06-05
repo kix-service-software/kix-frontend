@@ -7,7 +7,7 @@
  * --
  */
 
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+
 
 export class KanbanColumn {
     public constructor(

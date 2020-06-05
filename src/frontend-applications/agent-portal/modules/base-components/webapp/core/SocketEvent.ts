@@ -9,13 +9,13 @@
 
 export enum SocketEvent {
 
-    CONNECT = "connect",
+    CONNECT = 'connect',
 
-    CONNECT_ERROR = "connect_error",
+    CONNECT_ERROR = 'connect_error',
 
-    CONNECT_TIMEOUT = "connect_timeout",
+    CONNECT_TIMEOUT = 'connect_timeout',
 
-    CONNECTION = "connection",
+    CONNECTION = 'connection',
 
     PERMISSION_ERROR = 'PERMISSION_ERROR',
 

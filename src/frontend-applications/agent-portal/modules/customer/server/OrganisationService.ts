@@ -7,19 +7,19 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { OrganisationFactory } from "./OrganisationFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { CreateOrganisation } from "./api/CreateOrganisation";
-import { CreateOrganisationResponse } from "./api/CreateOrganisationResponse";
-import { CreateOrganisationRequest } from "./api/CreateOrganisationRequest";
-import { UpdateOrganisation } from "./api/UpdateOrganisation";
-import { UpdateOrganisationResponse } from "./api/UpdateOrganisationResponse";
-import { UpdateOrganisationRequest } from "./api/UpdateOrganisationRequest";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { OrganisationFactory } from './OrganisationFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { CreateOrganisation } from './api/CreateOrganisation';
+import { CreateOrganisationResponse } from './api/CreateOrganisationResponse';
+import { CreateOrganisationRequest } from './api/CreateOrganisationRequest';
+import { UpdateOrganisation } from './api/UpdateOrganisation';
+import { UpdateOrganisationResponse } from './api/UpdateOrganisationResponse';
+import { UpdateOrganisationRequest } from './api/UpdateOrganisationRequest';
+import { Error } from '../../../../../server/model/Error';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 

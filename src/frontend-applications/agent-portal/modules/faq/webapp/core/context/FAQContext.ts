@@ -7,19 +7,19 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { FAQCategory } from "../../../model/FAQCategory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { FAQArticleProperty } from "../../../model/FAQArticleProperty";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { Context } from '../../../../../model/Context';
+import { FAQCategory } from '../../../model/FAQCategory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
+
+
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class FAQContext extends Context {
 

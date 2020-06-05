@@ -7,9 +7,9 @@
  * --
  */
 
-import { ITable } from "./ITable";
-import { LabelService } from "../LabelService";
-import { BrowserUtil } from "../BrowserUtil";
+import { ITable } from './ITable';
+import { LabelService } from '../LabelService';
+import { BrowserUtil } from '../BrowserUtil';
 
 export class TableExportUtil {
 
@@ -41,7 +41,7 @@ export class TableExportUtil {
             columnTitles.push(`"${this.escapeText(value.trim())}"`);
         }
 
-        let csvString = columnTitles.join(';') + "\n";
+        let csvString = columnTitles.join(';') + '\n';
 
         const relevantRows = allRows ? table.getRows() : table.getSelectedRows();
 
@@ -73,7 +73,7 @@ export class TableExportUtil {
                 }
                 values.push(`"${this.escapeText(displayValue)}"`);
             }
-            csvString += values.join(';') + "\n";
+            csvString += values.join(';') + '\n';
         }
         return csvString;
     }

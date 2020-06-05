@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class FollowUpType extends KIXObject<FollowUpType> {
+export class FollowUpType extends KIXObject {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.FOLLOW_UP_TYPE;
 

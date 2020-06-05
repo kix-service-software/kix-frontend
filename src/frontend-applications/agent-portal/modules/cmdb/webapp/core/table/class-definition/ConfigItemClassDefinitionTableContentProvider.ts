@@ -7,16 +7,16 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../../base-components/webapp/core/table/TableContentProvider";
-import { ConfigItemClassDefinition } from "../../../../model/ConfigItemClassDefinition";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { ConfigItemClassDetailsContext } from "../..";
-import { ConfigItemClass } from "../../../../model/ConfigItemClass";
-import { ConfigItemClassDefinitionProperty } from "../../../../model/ConfigItemClassDefinitionProperty";
+import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
+import { ConfigItemClassDefinition } from '../../../../model/ConfigItemClassDefinition';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { ConfigItemClassDetailsContext } from '../..';
+import { ConfigItemClass } from '../../../../model/ConfigItemClass';
+import { ConfigItemClassDefinitionProperty } from '../../../../model/ConfigItemClassDefinitionProperty';
 
 export class ConfigItemClassDefinitionTableContentProvider extends TableContentProvider<ConfigItemClassDefinition> {
 

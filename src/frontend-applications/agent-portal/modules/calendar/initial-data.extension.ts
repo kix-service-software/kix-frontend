@@ -7,20 +7,20 @@
  * --
  */
 
-import { IInitialDataExtension } from "../../model/IInitialDataExtension";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { DynamicFieldAPIService } from "../dynamic-fields/server/DynamicFieldService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../dynamic-fields/model/DynamicFieldProperty";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { DynamicField } from "../dynamic-fields/model/DynamicField";
-import { LoggingService } from "../../../../server/services/LoggingService";
+import { IInitialDataExtension } from '../../model/IInitialDataExtension';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { DynamicFieldAPIService } from '../dynamic-fields/server/DynamicFieldService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../dynamic-fields/model/DynamicFieldProperty';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { DynamicField } from '../dynamic-fields/model/DynamicField';
+import { LoggingService } from '../../../../server/services/LoggingService';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IInitialDataExtension {
 
@@ -43,10 +43,10 @@ class Extension extends KIXExtension implements IInitialDataExtension {
 
         if (fields) {
             const config = {
-                CountDefault: "0", CountMax: "1", CountMin: "0",
-                DateRestriction: "none", DefaultValue: "0", ItemSeparator: "",
-                YearsInFuture: "0", YearsInPast: "0",
-                Link: "", ValueTTL: "",
+                CountDefault: '0', CountMax: '1', CountMin: '0',
+                DateRestriction: 'none', DefaultValue: '0', ItemSeparator: '',
+                YearsInFuture: '0', YearsInPast: '0',
+                Link: '', ValueTTL: '',
             };
 
             const parameter: Array<[string, any]> = [

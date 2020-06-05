@@ -7,21 +7,21 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { MailAccountDetailsContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { MailAccountProperty } from "./model/MailAccountProperty";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { MailAccountDetailsContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { MailAccountProperty } from './model/MailAccountProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

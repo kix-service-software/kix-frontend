@@ -7,8 +7,8 @@
  * --
  */
 
-import { Context } from "vm";
-import { ContextType } from "../../../../model/ContextType";
+import { Context } from 'vm';
+import { ContextType } from '../../../../model/ContextType';
 
 export class ContextServiceState {
 

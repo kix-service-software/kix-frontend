@@ -7,9 +7,9 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 
 class Component extends FormInputComponent<Date, ComponentState> {
 

@@ -10,9 +10,9 @@
 import { Request, Response } from 'express';
 import cors = require('cors');
 
-import { KIXRouter } from "../../../server/routes/KIXRouter";
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { WebformService } from "./WebformService";
+import { KIXRouter } from '../../../server/routes/KIXRouter';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { WebformService } from './WebformService';
 import { Error } from '../../../../../server/model/Error';
 
 export class KIXIntegrationRouter extends KIXRouter {
@@ -31,7 +31,7 @@ export class KIXIntegrationRouter extends KIXRouter {
     }
 
     public getBaseRoute(): string {
-        return "/integrations";
+        return '/integrations';
     }
 
     protected async initialize(): Promise<void> {
@@ -43,7 +43,7 @@ export class KIXIntegrationRouter extends KIXRouter {
             }
         }
         this.router.get(
-            "/",
+            '/',
             this.handleUnsupportedGetRequest.bind(this)
         );
     }

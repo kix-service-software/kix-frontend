@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { LogFile } from "../../model/LogFile";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { LogFile } from '../../model/LogFile';
 
 export class LogFileBrowserFactory implements IKIXObjectFactory<LogFile> {
 

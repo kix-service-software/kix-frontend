@@ -7,8 +7,8 @@
  * --
  */
 
-import { ICell } from "../../../../../../core/table";
-import { ObjectIcon } from "../../../../../../../../icon/model/ObjectIcon";
+import { ICell } from '../../../../../../core/table';
+import { ObjectIcon } from '../../../../../../../../icon/model/ObjectIcon';
 
 export class ComponentState {
 

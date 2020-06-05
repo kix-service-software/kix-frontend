@@ -7,24 +7,24 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { ConfigItem } from "../../model/ConfigItem";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalogItem";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { VersionProperty } from "../../model/VersionProperty";
-import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { Label } from "../../../base-components/webapp/core/Label";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { ConfigItem } from '../../model/ConfigItem';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { VersionProperty } from '../../model/VersionProperty';
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { Label } from '../../../base-components/webapp/core/Label';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 

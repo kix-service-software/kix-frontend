@@ -32,7 +32,7 @@ export class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.state.placeholder = await TranslationService.translate("Translatable#Quick search (Tickets)");
+        this.state.placeholder = await TranslationService.translate('Translatable#Quick search (Tickets)');
         const allowed = await AuthenticationSocketClient.getInstance().checkPermissions([
             new UIComponentPermission('tickets', [CRUD.READ])
         ]);

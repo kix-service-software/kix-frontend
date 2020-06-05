@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { LogFile } from "../../model/LogFile";
-import { LogFileProperty } from "../../model/LogFileProperty";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { LogFile } from '../../model/LogFile';
+import { LogFileProperty } from '../../model/LogFileProperty';
 
 export class LogFileLabelProvider extends LabelProvider {
 

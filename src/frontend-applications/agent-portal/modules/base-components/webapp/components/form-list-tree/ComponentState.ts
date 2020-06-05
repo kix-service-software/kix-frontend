@@ -7,7 +7,7 @@
  * --
  */
 
-import { TreeNode } from "../../core/tree";
+import { TreeNode } from '../../core/tree';
 
 export class ComponentState {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { TreeNode } from "./TreeNode";
-import { TreeUtil } from "./TreeUtil";
-import { TreeNavigationHandler } from "./TreeNavigationHandler";
+import { TreeNode } from './TreeNode';
+import { TreeUtil } from './TreeUtil';
+import { TreeNavigationHandler } from './TreeNavigationHandler';
 
 export class TreeHandler {
 

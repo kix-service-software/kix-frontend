@@ -7,20 +7,20 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { RoleFactory } from "./RoleFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { RoleProperty } from "../model/RoleProperty";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { PermissionProperty } from "../model/PermissionProperty";
-import { PermissionTypeFactory } from "./PermissionTypeFactory";
-import { CreatePermissionDescription } from "./CreatePermissionDescription";
-import { Permission } from "../model/Permission";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { RoleFactory } from './RoleFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { RoleProperty } from '../model/RoleProperty';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { PermissionProperty } from '../model/PermissionProperty';
+import { PermissionTypeFactory } from './PermissionTypeFactory';
+import { CreatePermissionDescription } from './CreatePermissionDescription';
+import { Permission } from '../model/Permission';
 
 
 export class RoleService extends KIXObjectAPIService {

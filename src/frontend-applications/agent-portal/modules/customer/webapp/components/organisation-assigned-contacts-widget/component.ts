@@ -7,17 +7,17 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { OrganisationDetailsContext } from "../../core";
-import { Organisation } from "../../../model/Organisation";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableFactoryService } from "../../../../base-components/webapp/core/table";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { OrganisationProperty } from "../../../model/OrganisationProperty";
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { OrganisationDetailsContext } from '../../core';
+import { Organisation } from '../../../model/Organisation';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../../base-components/webapp/core/table';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { OrganisationProperty } from '../../../model/OrganisationProperty';
 class Component {
 
     private state: ComponentState;

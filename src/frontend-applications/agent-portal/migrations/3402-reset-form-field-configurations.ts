@@ -7,20 +7,20 @@
  * --
  */
 
-import { IMigration } from "./IMigration";
-import { SysConfigService } from "../modules/sysconfig/server/SysConfigService";
-import { LoggingService } from "../../../server/services/LoggingService";
-import { ConfigurationService } from "../../../server/services/ConfigurationService";
-import { KIXObjectType } from "../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../model/FilterCriteria";
-import { SysConfigOptionProperty } from "../modules/sysconfig/model/SysConfigOptionProperty";
-import { SysConfigOptionDefinitionProperty } from "../modules/sysconfig/model/SysConfigOptionDefinitionProperty";
-import { SearchOperator } from "../modules/search/model/SearchOperator";
-import { FilterDataType } from "../model/FilterDataType";
-import { FilterType } from "../model/FilterType";
-import { ConfigurationType } from "../model/configuration/ConfigurationType";
-import { SysConfigOptionDefinition } from "../modules/sysconfig/model/SysConfigOptionDefinition";
+import { IMigration } from './IMigration';
+import { SysConfigService } from '../modules/sysconfig/server/SysConfigService';
+
+import { ConfigurationService } from '../../../server/services/ConfigurationService';
+import { KIXObjectType } from '../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../model/FilterCriteria';
+import { SysConfigOptionProperty } from '../modules/sysconfig/model/SysConfigOptionProperty';
+import { SysConfigOptionDefinitionProperty } from '../modules/sysconfig/model/SysConfigOptionDefinitionProperty';
+import { SearchOperator } from '../modules/search/model/SearchOperator';
+import { FilterDataType } from '../model/FilterDataType';
+import { FilterType } from '../model/FilterType';
+import { ConfigurationType } from '../model/configuration/ConfigurationType';
+import { SysConfigOptionDefinition } from '../modules/sysconfig/model/SysConfigOptionDefinition';
 
 class Migration implements IMigration {
 

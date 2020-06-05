@@ -7,11 +7,11 @@
  * --
  */
 
-import { LinkType } from "./LinkType";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { LinkType } from './LinkType';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class LinkObject extends KIXObject<LinkObject> {
+export class LinkObject extends KIXObject {
 
     public ObjectId: string | number;
 

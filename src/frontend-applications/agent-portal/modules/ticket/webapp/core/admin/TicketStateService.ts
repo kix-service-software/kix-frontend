@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TicketState } from "../../../model/TicketState";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TicketState } from '../../../model/TicketState';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 
 export class TicketStateService extends KIXObjectService<TicketState> {
 

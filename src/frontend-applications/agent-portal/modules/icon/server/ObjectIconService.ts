@@ -7,21 +7,21 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { ObjectIconFactory } from "./ObjectIconFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { ObjectIconLoadingOptions } from "../../../server/model/ObjectIconLoadingOptions";
-import { ObjectIcon } from "../model/ObjectIcon";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { CreateObjectIcon } from "./CreateObjectIcon";
-import { CreateObjectIconResponse } from "./CreateObjectIconResponse";
-import { CreateObjectIconRequest } from "./CreateObjectIconRequest";
-import { UpdateObjectIcon } from "./UpdateObjectIcon";
-import { UpdateObjectIconResponse } from "./UpdateObjectIconResponse";
-import { UpdateObjectIconRequest } from "./UpdateObjectIconRequest";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { ObjectIconFactory } from './ObjectIconFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { ObjectIconLoadingOptions } from '../../../server/model/ObjectIconLoadingOptions';
+import { ObjectIcon } from '../model/ObjectIcon';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { CreateObjectIcon } from './CreateObjectIcon';
+import { CreateObjectIconResponse } from './CreateObjectIconResponse';
+import { CreateObjectIconRequest } from './CreateObjectIconRequest';
+import { UpdateObjectIcon } from './UpdateObjectIcon';
+import { UpdateObjectIconResponse } from './UpdateObjectIconResponse';
+import { UpdateObjectIconRequest } from './UpdateObjectIconRequest';
+import { Error } from '../../../../../server/model/Error';
 
 export class ObjectIconService extends KIXObjectAPIService {
 

@@ -7,24 +7,24 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../model/ContextType";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { TicketDetailsContext } from "../../core";
-import { Ticket } from "../../../model/Ticket";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Queue } from "../../../model/Queue";
-import { AgentService } from "../../../../user/webapp/core";
-import { SystemAddress } from "../../../../system-address/model/SystemAddress";
-import { TreeNode, TreeHandler } from "../../../../base-components/webapp/core/tree";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { TicketDetailsContext } from '../../core';
+import { Ticket } from '../../../model/Ticket';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Queue } from '../../../model/Queue';
+import { AgentService } from '../../../../user/webapp/core';
+import { SystemAddress } from '../../../../system-address/model/SystemAddress';
+import { TreeNode, TreeHandler } from '../../../../base-components/webapp/core/tree';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -135,7 +135,7 @@ class Component extends FormInputComponent<number, ComponentState> {
                 )
             ));
 
-            const formList = (this as any).getComponent("article-email-from-input");
+            const formList = (this as any).getComponent('article-email-from-input');
             if (formList) {
                 const treeHandler: TreeHandler = formList.getTreeHandler();
                 if (treeHandler) {

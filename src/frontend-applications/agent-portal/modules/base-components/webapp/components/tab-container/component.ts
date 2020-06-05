@@ -53,7 +53,7 @@ class TabLaneComponent implements IEventSubscriber {
         this.state.contextType = input.contextType;
         this.hideSidebar = typeof input.hideSidebar !== 'undefined' ? input.hideSidebar : false;
 
-        WidgetService.getInstance().setWidgetType("tab-widget", WidgetType.LANE);
+        WidgetService.getInstance().setWidgetType('tab-widget', WidgetType.LANE);
 
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_TITLE, this);
         EventService.getInstance().subscribe(TabContainerEvent.CHANGE_ICON, this);

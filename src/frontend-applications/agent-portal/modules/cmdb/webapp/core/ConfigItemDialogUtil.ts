@@ -7,11 +7,11 @@
  * --
  */
 
-import { ConfigItemDetailsContext, EditConfigItemDialogContext, NewConfigItemDialogContext } from "./context";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ConfigItem } from "../../model/ConfigItem";
+import { ConfigItemDetailsContext, EditConfigItemDialogContext, NewConfigItemDialogContext } from './context';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ConfigItem } from '../../model/ConfigItem';
 
 export class ConfigItemDialogUtil {
 

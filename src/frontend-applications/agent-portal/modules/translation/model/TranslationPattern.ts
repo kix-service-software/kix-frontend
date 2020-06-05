@@ -7,15 +7,15 @@
  * --
  */
 
-import { TranslationLanguage } from "./TranslationLanguage";
-import { TranslationLanguageProperty } from "./TranslationLanguageProperty";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { SortUtil } from "../../../model/SortUtil";
-import { DataType } from "../../../model/DataType";
-import { SortOrder } from "../../../model/SortOrder";
+import { TranslationLanguage } from './TranslationLanguage';
+import { TranslationLanguageProperty } from './TranslationLanguageProperty';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { SortUtil } from '../../../model/SortUtil';
+import { DataType } from '../../../model/DataType';
+import { SortOrder } from '../../../model/SortOrder';
 
-export class TranslationPattern extends KIXObject<TranslationPattern> {
+export class TranslationPattern extends KIXObject {
 
     public ObjectId: string | number;
 

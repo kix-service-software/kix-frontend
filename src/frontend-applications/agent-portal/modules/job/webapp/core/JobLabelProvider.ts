@@ -7,19 +7,19 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { Job } from "../../model/Job";
-import { JobProperty } from "../../model/JobProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { Macro } from "../../model/Macro";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { ExecPlan } from "../../model/ExecPlan";
-import { JobService } from ".";
-import { JobType } from "../../model/JobType";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Job } from '../../model/Job';
+import { JobProperty } from '../../model/JobProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { Macro } from '../../model/Macro';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ExecPlan } from '../../model/ExecPlan';
+import { JobService } from '.';
+import { JobType } from '../../model/JobType';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class JobLabelProvider extends LabelProvider {
 

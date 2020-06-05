@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../base-components/webapp/core/KIXObjectFactory";
-import { ImportExportTemplate } from "../../model/ImportExportTemplate";
+import { KIXObjectFactory } from '../../../base-components/webapp/core/KIXObjectFactory';
+import { ImportExportTemplate } from '../../model/ImportExportTemplate';
 
 export class ImportExportTemplateBrowserFactory extends KIXObjectFactory<ImportExportTemplate> {
 

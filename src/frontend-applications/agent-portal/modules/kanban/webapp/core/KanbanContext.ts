@@ -7,7 +7,7 @@
  * --
  */
 
-import { Context } from "../../../../model/Context";
+import { Context } from '../../../../model/Context';
 
 export class KanbanContext extends Context {
 
@@ -19,7 +19,7 @@ export class KanbanContext extends Context {
     }
 
     public async getDisplayText(): Promise<string> {
-        return "Personal Kanban Board";
+        return 'Personal Kanban Board';
     }
 
 }

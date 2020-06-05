@@ -7,24 +7,24 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { ContextType } from "../../../../../model/ContextType";
-import { ComponentInput } from "./ComponentInput";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { IdService } from "../../../../../model/IdService";
-import { TableEventData, TableEvent, TableFactoryService } from "../../core/table";
-import { WidgetService } from "../../../../../modules/base-components/webapp/core/WidgetService";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
-import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { ContextUIEvent } from "../../core/ContextUIEvent";
-import { ApplicationEvent } from "../../core/ApplicationEvent";
+import { ComponentState } from './ComponentState';
+import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { ContextType } from '../../../../../model/ContextType';
+import { ComponentInput } from './ComponentInput';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { IdService } from '../../../../../model/IdService';
+import { TableEventData, TableEvent, TableFactoryService } from '../../core/table';
+import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
+import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ContextUIEvent } from '../../core/ContextUIEvent';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
 
 class Component {
 
@@ -193,10 +193,10 @@ class Component {
         if (!this.configuredTitle) {
             let title = WidgetService.getInstance().getWidgetTitle(this.state.instanceId);
             if (!title) {
-                title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+                title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
             }
             title = await TranslationService.translate(title);
-            const countString = count > 0 ? " (" + count + ")" : "";
+            const countString = count > 0 ? ' (' + count + ')' : '';
             this.state.title = title + countString;
         }
     }

@@ -7,14 +7,14 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { IdService } from "../../../../../model/IdService";
-import { MailFilterMatchManager } from "../../core";
-import { MailFilterMatch } from "../../../model/MailFilterMatch";
-import { IDynamicFormManager } from "../../../../base-components/webapp/core/dynamic-form/IDynamicFormManager";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { IdService } from '../../../../../model/IdService';
+import { MailFilterMatchManager } from '../../core';
+import { MailFilterMatch } from '../../../model/MailFilterMatch';
+import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form/IDynamicFormManager';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 

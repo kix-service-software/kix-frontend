@@ -7,7 +7,7 @@
  * --
  */
 
-import { ISocketResponse } from "../../../modules/base-components/webapp/core/ISocketResponse";
+import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
 
 export class LoadNotesResponse implements ISocketResponse {
 

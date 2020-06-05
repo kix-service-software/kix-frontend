@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { PermissionType } from "../model/PermissionType";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { PermissionType } from '../model/PermissionType';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 
 export class PermissionTypeFactory extends ObjectFactory<PermissionType> {

@@ -7,29 +7,29 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { Contact } from "../../model/Contact";
-import { ContactProperty } from "../../model/ContactProperty";
-import { Organisation } from "../../model/Organisation";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { SortUtil } from "../../../../model/SortUtil";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { ContactService } from ".";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { IKIXObjectService } from "../../../../modules/base-components/webapp/core/IKIXObjectService";
-import { ImportManager, ImportPropertyOperator } from "../../../import/webapp/core";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { Contact } from '../../model/Contact';
+import { ContactProperty } from '../../model/ContactProperty';
+import { Organisation } from '../../model/Organisation';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { SortUtil } from '../../../../model/SortUtil';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ContactService } from '.';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { IKIXObjectService } from '../../../../modules/base-components/webapp/core/IKIXObjectService';
+import { ImportManager, ImportPropertyOperator } from '../../../import/webapp/core';
 
 export class ContactImportManager extends ImportManager {
 
@@ -67,7 +67,7 @@ export class ContactImportManager extends ImportManager {
         );
         const primaryOrganisations = await KIXObjectService.loadObjects<Organisation>(
             KIXObjectType.ORGANISATION, null, loadingOptions, null, true
-        ).catch((error) => console.log(error));
+        ).catch((error) => console.error(error));
         return primaryOrganisations && !!primaryOrganisations.length ? primaryOrganisations[0] : null;
     }
 

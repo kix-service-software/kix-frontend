@@ -22,8 +22,8 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 import { StringContent } from '../../../../../modules/base-components/webapp/core/StringContent';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQDetailsContext } from '../../core/context/FAQDetailsContext';
-import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+
+
 
 export class Component {
 

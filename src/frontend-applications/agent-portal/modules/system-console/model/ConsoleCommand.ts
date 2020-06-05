@@ -8,11 +8,11 @@
  */
 
 
-import { ConsoleParameter } from "./ConsoleParameter";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ConsoleParameter } from './ConsoleParameter';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class ConsoleCommand extends KIXObject<ConsoleCommand> {
+export class ConsoleCommand extends KIXObject {
 
     public ObjectId: string | number;
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { LinkType } from "./LinkType";
+import { LinkType } from './LinkType';
 
 export class LinkTypeDescription {
 

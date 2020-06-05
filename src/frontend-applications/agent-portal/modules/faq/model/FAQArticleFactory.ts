@@ -7,7 +7,7 @@
  * --
  */
 
-import { FAQArticle } from "./FAQArticle";
+import { FAQArticle } from './FAQArticle';
 
 export class FAQArticleFactory {
 

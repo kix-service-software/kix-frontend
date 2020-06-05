@@ -9,8 +9,8 @@
 
 export enum ContextType {
 
-    DIALOG = "DIALOG",
+    DIALOG = 'DIALOG',
 
-    MAIN = "MAIN"
+    MAIN = 'MAIN'
 
 }

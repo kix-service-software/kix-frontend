@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Role } from "../../model/Role";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { RoleProperty } from "../../model/RoleProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Role } from '../../model/Role';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { RoleProperty } from '../../model/RoleProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 
 export class RoleLabelProvider extends LabelProvider<Role> {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { Queue } from "../../model/Queue";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { Queue } from '../../model/Queue';
 
 
 export class QueueBrowserFactory implements IKIXObjectFactory<Queue> {

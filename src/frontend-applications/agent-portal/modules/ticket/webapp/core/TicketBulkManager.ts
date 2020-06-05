@@ -7,25 +7,25 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { TicketProperty } from "../../model/TicketProperty";
-import { PropertyOperator } from "../../../../modules/base-components/webapp/core/PropertyOperator";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { SortUtil } from "../../../../model/SortUtil";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { TicketService } from ".";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { BulkManager } from "../../../bulk/webapp/core";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { TicketProperty } from '../../model/TicketProperty';
+import { PropertyOperator } from '../../../../modules/base-components/webapp/core/PropertyOperator';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { SortUtil } from '../../../../model/SortUtil';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { TicketService } from '.';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { BulkManager } from '../../../bulk/webapp/core';
 
 export class TicketBulkManager extends BulkManager {
 

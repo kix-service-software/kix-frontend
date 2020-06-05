@@ -7,10 +7,10 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
-import { ConfigurationDefinition } from "./ConfigurationDefinition";
-import { ObjectIcon } from "../../modules/icon/model/ObjectIcon";
+import { IConfiguration } from './IConfiguration';
+import { ConfigurationType } from './ConfigurationType';
+import { ConfigurationDefinition } from './ConfigurationDefinition';
+import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 
 export class WidgetConfiguration implements IConfiguration {
 

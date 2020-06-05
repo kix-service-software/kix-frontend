@@ -9,8 +9,8 @@
 
 export enum DynamicFieldTypeProperty {
 
-    NAME = "Name",
+    NAME = 'Name',
 
-    DISPLAY_NAME = "DisplayName",
+    DISPLAY_NAME = 'DisplayName',
 
 }

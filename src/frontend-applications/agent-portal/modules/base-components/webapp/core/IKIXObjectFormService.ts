@@ -7,15 +7,15 @@
  * --
  */
 
-import { IKIXService } from "./IKIXService";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { SearchFormInstance } from "./SearchFormInstance";
-import { IFormInstance } from "./IFormInstance";
-import { FormContext } from "../../../../model/configuration/FormContext";
+import { IKIXService } from './IKIXService';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SearchFormInstance } from './SearchFormInstance';
+import { IFormInstance } from './IFormInstance';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export interface IKIXObjectFormService extends IKIXService {
 

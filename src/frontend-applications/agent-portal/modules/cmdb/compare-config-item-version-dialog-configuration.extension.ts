@@ -7,20 +7,20 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { CompareConfigItemVersionDialogContext } from "./webapp/core/context/CompareConfigItemVersionDialogContext";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
-import { ContextMode } from "../../model/ContextMode";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { CompareConfigItemVersionDialogContext } from './webapp/core/context/CompareConfigItemVersionDialogContext';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
+import { ContextMode } from '../../model/ContextMode';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

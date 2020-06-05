@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 
 export interface IFormInstanceListener {
 

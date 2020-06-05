@@ -7,16 +7,16 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { SystemAddressFactory } from "./SystemAddressFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { SystemAddress } from "../model/SystemAddress";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { SystemAddressFactory } from './SystemAddressFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { SystemAddress } from '../model/SystemAddress';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { Error } from '../../../../../server/model/Error';
 
 export class SystemAddressService extends KIXObjectAPIService {
 

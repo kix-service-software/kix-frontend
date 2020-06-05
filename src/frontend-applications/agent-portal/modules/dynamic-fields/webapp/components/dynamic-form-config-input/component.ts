@@ -7,17 +7,17 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../base-components/webapp/core/FormInputComponent";
+import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { ComponentState } from './ComponentState';
-import { FormService } from "../../../../base-components/webapp/core/FormService";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { AdditionalContextInformation } from "../../../../base-components/webapp/core/AdditionalContextInformation";
-import { IdService } from "../../../../../model/IdService";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { DynamicFieldProperty } from "../../../model/DynamicFieldProperty";
-import { DynamicFieldService } from "../../core/DynamicFieldService";
-import { FormContext } from "../../../../../model/configuration/FormContext";
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { IdService } from '../../../../../model/IdService';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { DynamicFieldProperty } from '../../../model/DynamicFieldProperty';
+import { DynamicFieldService } from '../../core/DynamicFieldService';
+import { FormContext } from '../../../../../model/configuration/FormContext';
 
 declare var JSONEditor: any;
 

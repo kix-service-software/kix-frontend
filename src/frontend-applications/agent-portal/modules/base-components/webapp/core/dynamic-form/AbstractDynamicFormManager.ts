@@ -7,25 +7,25 @@
  * --
  */
 
-import { IDynamicFormManager } from "./IDynamicFormManager";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { InputFieldTypes } from "../InputFieldTypes";
-import { TreeNode } from "../tree";
-import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
-import { AuthenticationSocketClient } from "../AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { ValidationResult } from "../ValidationResult";
-import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
-import { KIXObjectService } from "../KIXObjectService";
-import { ExtendedDynamicFormManager } from "./ExtendedDynamicFormManager";
-import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { ConfigItemProperty } from "../../../../cmdb/model/ConfigItemProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
+import { IDynamicFormManager } from './IDynamicFormManager';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { InputFieldTypes } from '../InputFieldTypes';
+import { TreeNode } from '../tree';
+import { DynamicFormOperationsType } from './DynamicFormOperationsType';
+import { AuthenticationSocketClient } from '../AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ValidationResult } from '../ValidationResult';
+import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
+import { KIXObjectService } from '../KIXObjectService';
+import { ExtendedDynamicFormManager } from './ExtendedDynamicFormManager';
+import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 

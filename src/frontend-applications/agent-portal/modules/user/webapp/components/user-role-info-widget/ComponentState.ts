@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { RoleLabelProvider } from "../../core/RoleLabelProvider";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { Role } from "../../../model/Role";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { RoleLabelProvider } from '../../core/RoleLabelProvider';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Role } from '../../../model/Role';
 
 export class ComponentState extends WidgetComponentState {
 

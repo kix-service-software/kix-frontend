@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Attachment } from "../../../model/kix/Attachment";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Attachment } from '../../../model/kix/Attachment';
 
 export class ConfigItemAttachment extends Attachment {
 

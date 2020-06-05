@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { SysConfigOptionDefinition } from "../../model/SysConfigOptionDefinition";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SysConfigOptionDefinitionProperty } from '../../model/SysConfigOptionDefinitionProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 
 export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinition> {
 
@@ -100,7 +100,7 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
             case SysConfigOptionDefinitionProperty.VALUE:
                 displayValue = sysConfig.IsModified === 1
                     ? sysConfig.Value : sysConfig.Default;
-                displayValue = sysConfig.Type === "Hash"
+                displayValue = sysConfig.Type === 'Hash'
                     ? JSON.stringify(displayValue) : displayValue;
                 break;
             default:

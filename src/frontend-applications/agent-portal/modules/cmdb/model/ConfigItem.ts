@@ -7,16 +7,16 @@
  * --
  */
 
-import { Version } from "./Version";
-import { ConfigItemImage } from "./ConfigItemImage";
-import { ConfigItemHistory } from "./ConfigItemHistory";
-import { PreparedData } from "./PreparedData";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { User } from "../../user/model/User";
-import { Link } from "../../links/model/Link";
+import { Version } from './Version';
+import { ConfigItemImage } from './ConfigItemImage';
+import { ConfigItemHistory } from './ConfigItemHistory';
+import { PreparedData } from './PreparedData';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { User } from '../../user/model/User';
+import { Link } from '../../links/model/Link';
 
-export class ConfigItem extends KIXObject<ConfigItem> {
+export class ConfigItem extends KIXObject {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 

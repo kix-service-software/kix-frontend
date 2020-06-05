@@ -7,10 +7,10 @@
  * --
  */
 
-import { IRow } from "./IRow";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { DataType } from "../../../../../model/DataType";
-import { SortUtil } from "../../../../../model/SortUtil";
+import { IRow } from './IRow';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { DataType } from '../../../../../model/DataType';
+import { SortUtil } from '../../../../../model/SortUtil';
 
 export class TableSortUtil {
 

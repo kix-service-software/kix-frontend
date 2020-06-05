@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../base-components/webapp/core/LabelProvider";
-import { ImportExportTemplate } from "../../model/ImportExportTemplate";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ImportExportTemplateProperty } from "../../model/ImportExportTemplateProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { ImportExportTemplateRunTypes } from "../../model/ImportExportTemplateRunTypes";
+import { LabelProvider } from '../../../base-components/webapp/core/LabelProvider';
+import { ImportExportTemplate } from '../../model/ImportExportTemplate';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ImportExportTemplateProperty } from '../../model/ImportExportTemplateProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ImportExportTemplateRunTypes } from '../../model/ImportExportTemplateRunTypes';
 
 export class ImportExportTemplateLabelProvider extends LabelProvider<ImportExportTemplate> {
 

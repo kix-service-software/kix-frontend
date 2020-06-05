@@ -7,9 +7,9 @@
  * --
  */
 
-import { Role } from "../../../model/Role";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { Role } from '../../../model/Role';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class RoleService extends KIXObjectService<Role> {
 

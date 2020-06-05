@@ -7,10 +7,10 @@
  * --
  */
 
-import { IPlaceholderHandler } from "./IPlaceholderHandler";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { SortUtil } from "../../../../model/SortUtil";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { IPlaceholderHandler } from './IPlaceholderHandler';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { SortUtil } from '../../../../model/SortUtil';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class PlaceholderService {
 

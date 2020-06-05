@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class MailFilterCreateAction extends AbstractAction {
 

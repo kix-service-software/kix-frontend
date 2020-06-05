@@ -7,10 +7,10 @@
  * --
  */
 
-import { IMainMenuExtension } from "../../server/extensions/IMainMenuExtension";
-import { HomeContext } from "./webapp/core";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { IMainMenuExtension } from '../../server/extensions/IMainMenuExtension';
+import { HomeContext } from './webapp/core';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IMainMenuExtension {
 
@@ -20,9 +20,9 @@ export class Extension extends KIXExtension implements IMainMenuExtension {
 
     public primaryMenu: boolean = true;
 
-    public icon: string = "kix-icon-home";
+    public icon: string = 'kix-icon-home';
 
-    public text: string = "Translatable#Home";
+    public text: string = 'Translatable#Home';
 
     public permissions: UIComponentPermission[] = [];
 

@@ -7,25 +7,25 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { ContactFactory } from "./ContactFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { ContactProperty } from "../model/ContactProperty";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { CreateContact } from "./api/CreateContact";
-import { CreateContactResponse } from "./api/CreateContactResponse";
-import { CreateContactRequest } from "./api/CreateContactRequest";
-import { UpdateContact } from "./api/UpdateContact";
-import { UpdateContactResponse } from "./api/UpdateContactResponse";
-import { UpdateContactRequest } from "./api/UpdateContactRequest";
-import { Error } from "../../../../../server/model/Error";
-import { UserProperty } from "../../user/model/UserProperty";
-import { UserService } from "../../user/server/UserService";
-import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
-import { PersonalSettingsProperty } from "../../user/model/PersonalSettingsProperty";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { ContactFactory } from './ContactFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { ContactProperty } from '../model/ContactProperty';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { CreateContact } from './api/CreateContact';
+import { CreateContactResponse } from './api/CreateContactResponse';
+import { CreateContactRequest } from './api/CreateContactRequest';
+import { UpdateContact } from './api/UpdateContact';
+import { UpdateContactResponse } from './api/UpdateContactResponse';
+import { UpdateContactRequest } from './api/UpdateContactRequest';
+import { Error } from '../../../../../server/model/Error';
+import { UserProperty } from '../../user/model/UserProperty';
+import { UserService } from '../../user/server/UserService';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -40,7 +40,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         return ContactAPIService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "contacts";
+    protected RESOURCE_URI: string = 'contacts';
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 

@@ -26,7 +26,7 @@ export class Component implements IImageDialogListener {
         DialogService.getInstance().registerImageDialogListener(this);
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Next Image", "Translatable#Previous Image"
+            'Translatable#Next Image', 'Translatable#Previous Image'
         ]);
     }
 

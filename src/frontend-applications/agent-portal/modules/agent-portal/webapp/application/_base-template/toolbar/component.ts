@@ -58,7 +58,7 @@ class Component {
         this.state.ownedTicketsCount = user.Tickets.Owned.length;
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Personal Kanban Board", "Translatable#Personal Ticket Calendar"
+            'Translatable#Personal Kanban Board', 'Translatable#Personal Ticket Calendar'
         ]);
 
         const myTicketsNewArticles = await TranslationService.translate('Translatable#My tickets with new articles');

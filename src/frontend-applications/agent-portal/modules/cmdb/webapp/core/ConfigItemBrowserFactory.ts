@@ -7,16 +7,16 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { ConfigItem } from "../../model/ConfigItem";
-import { ConfigItemFactory } from "../../server/ConfigItemFactory";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { Version } from "../../model/Version";
-import { ConfigItemImage } from "../../model/ConfigItemImage";
-import { ConfigItemHistory } from "../../model/ConfigItemHistory";
-import { Link } from "../../../links/model/Link";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { ConfigItem } from '../../model/ConfigItem';
+import { ConfigItemFactory } from '../../server/ConfigItemFactory';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { User } from '../../../user/model/User';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Version } from '../../model/Version';
+import { ConfigItemImage } from '../../model/ConfigItemImage';
+import { ConfigItemHistory } from '../../model/ConfigItemHistory';
+import { Link } from '../../../links/model/Link';
 
 export class ConfigItemBrowserFactory implements IKIXObjectFactory<ConfigItem> {
 

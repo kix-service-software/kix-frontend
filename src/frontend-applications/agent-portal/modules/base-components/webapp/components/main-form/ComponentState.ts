@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { IFormInstance } from "../../../../../modules/base-components/webapp/core/IFormInstance";
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { IFormInstance } from '../../../../../modules/base-components/webapp/core/IFormInstance';
 
 export class ComponentState {
 

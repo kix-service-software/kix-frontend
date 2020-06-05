@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { MailAccount } from "../../model/MailAccount";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { MailAccount } from '../../model/MailAccount';
 
 export class MailAccountBrowserFactory extends KIXObjectFactory<MailAccount> {
 

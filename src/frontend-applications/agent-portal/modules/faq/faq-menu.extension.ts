@@ -14,7 +14,7 @@ import { IMainMenuExtension } from '../../server/extensions/IMainMenuExtension';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IMainMenuExtension {
 
@@ -24,9 +24,9 @@ class Extension extends KIXExtension implements IMainMenuExtension {
 
     public primaryMenu: boolean = true;
 
-    public icon: string = "kix-icon-faq";
+    public icon: string = 'kix-icon-faq';
 
-    public text: string = "Translatable#FAQ";
+    public text: string = 'Translatable#FAQ';
 
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('faq/articles', [CRUD.READ])

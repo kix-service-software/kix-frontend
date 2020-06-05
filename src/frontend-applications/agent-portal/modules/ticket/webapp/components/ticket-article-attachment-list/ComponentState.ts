@@ -7,8 +7,8 @@
  * --
  */
 
-import { Article } from "../../../model/Article";
-import { Attachment } from "../../../../../model/kix/Attachment";
+import { Article } from '../../../model/Article';
+import { Attachment } from '../../../../../model/kix/Attachment';
 
 export class ComponentState {
 

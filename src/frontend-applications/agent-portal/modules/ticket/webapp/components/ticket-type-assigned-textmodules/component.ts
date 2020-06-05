@@ -7,19 +7,19 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { TicketTypeDetailsContext } from "../../core";
-import { WidgetService } from "../../../../../modules/base-components/webapp/core/WidgetService";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { TableEvent, TableFactoryService, TableEventData } from "../../../../base-components/webapp/core/table";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { TicketTypeDetailsContext } from '../../core';
+import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { TableEvent, TableFactoryService, TableEventData } from '../../../../base-components/webapp/core/table';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

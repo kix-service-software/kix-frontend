@@ -7,24 +7,24 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { User } from "../../model/User";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { UserProperty } from "../../model/UserProperty";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { PersonalSettingsProperty } from "../../model/PersonalSettingsProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ContactProperty } from "../../../customer/model/ContactProperty";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { Contact } from "../../../customer/model/Contact";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { User } from '../../model/User';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { UserProperty } from '../../model/UserProperty';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { Contact } from '../../../customer/model/Contact';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
 
 export class UserLabelProvider extends LabelProvider<User> {

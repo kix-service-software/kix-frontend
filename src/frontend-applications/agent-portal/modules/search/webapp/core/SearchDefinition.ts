@@ -7,25 +7,25 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchResultCategory } from "./SearchResultCategory";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterType } from "../../../../model/FilterType";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { SearchOperator } from "../../model/SearchOperator";
-import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
-import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchResultCategory } from './SearchResultCategory';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterType } from '../../../../model/FilterType';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { SearchOperator } from '../../model/SearchOperator';
+import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
+import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
 
 export abstract class SearchDefinition {
 

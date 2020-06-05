@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { DynamicField } from "../../model/DynamicField";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { DynamicField } from '../../model/DynamicField';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
 
 export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
 

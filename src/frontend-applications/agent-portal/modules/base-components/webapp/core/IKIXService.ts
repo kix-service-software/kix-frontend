@@ -7,8 +7,8 @@
  * --
  */
 
-import { ServiceType } from "./ServiceType";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { ServiceType } from './ServiceType';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export interface IKIXService {
 

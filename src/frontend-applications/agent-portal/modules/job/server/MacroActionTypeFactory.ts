@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { MacroActionType } from "../model/MacroActionType";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { MacroActionType } from '../model/MacroActionType';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class MacroActionTypeFactory extends ObjectFactory<MacroActionType> {
 

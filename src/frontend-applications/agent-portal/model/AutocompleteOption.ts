@@ -7,7 +7,7 @@
  * --
  */
 
-import { KIXObjectType } from "./kix/KIXObjectType";
+import { KIXObjectType } from './kix/KIXObjectType';
 
 export class AutocompleteOption {
 

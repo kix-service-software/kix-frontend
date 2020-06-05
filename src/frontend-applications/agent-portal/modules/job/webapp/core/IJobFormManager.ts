@@ -7,13 +7,13 @@
  * --
  */
 
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { Job } from "../../model/Job";
-import { MacroAction } from "../../model/MacroAction";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form";
-import { ExecPlanTypes } from "../../model/ExecPlanTypes";
-import { FormContext } from "../../../../model/configuration/FormContext";
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { Job } from '../../model/Job';
+import { MacroAction } from '../../model/MacroAction';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
+import { ExecPlanTypes } from '../../model/ExecPlanTypes';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export interface IJobFormManager {
 

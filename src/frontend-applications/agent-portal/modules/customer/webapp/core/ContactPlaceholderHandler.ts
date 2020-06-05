@@ -7,15 +7,15 @@
  * --
  */
 
-import { Contact } from "../../model/Contact";
-import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ContactProperty } from "../../model/ContactProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
+import { Contact } from '../../model/Contact';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ContactProperty } from '../../model/ContactProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
 
 export class ContactPlaceholderHandler extends AbstractPlaceholderHandler {
 

@@ -7,17 +7,17 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { MailAccountService } from "../../core";
-import { MailAccountProperty } from "../../../model/MailAccountProperty";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { MailAccountService } from '../../core';
+import { MailAccountProperty } from '../../../model/MailAccountProperty';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 class Component extends FormInputComponent<string, ComponentState> {
 

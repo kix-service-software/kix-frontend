@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { GeneralCatalogItem } from "../../model/GeneralCatalogItem";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { GeneralCatalogItemProperty } from "../../model/GeneralCatalogItemProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { GeneralCatalogItem } from '../../model/GeneralCatalogItem';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { GeneralCatalogItemProperty } from '../../model/GeneralCatalogItemProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogItem> {
 

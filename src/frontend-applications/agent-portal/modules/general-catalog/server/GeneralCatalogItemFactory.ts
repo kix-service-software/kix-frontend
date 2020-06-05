@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { GeneralCatalogItem } from "../model/GeneralCatalogItem";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { GeneralCatalogItem } from '../model/GeneralCatalogItem';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class GeneralCatalogItemFactory extends ObjectFactory<GeneralCatalogItem> {
 

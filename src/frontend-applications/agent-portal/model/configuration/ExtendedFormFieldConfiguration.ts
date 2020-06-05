@@ -7,7 +7,7 @@
  * --
  */
 
-import { FormFieldConfiguration } from "./FormFieldConfiguration";
+import { FormFieldConfiguration } from './FormFieldConfiguration';
 
 export class ExtendedFormFieldConfiguration {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { DialogRoutingConfiguration } from "../../../../../model/configuration/DialogRoutingConfiguration";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export class ComponentState {
 

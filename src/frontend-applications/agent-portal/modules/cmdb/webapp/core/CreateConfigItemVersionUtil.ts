@@ -7,16 +7,16 @@
  * --
  */
 
-import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { VersionProperty } from "../../model/VersionProperty";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { IFormInstance } from "../../../../modules/base-components/webapp/core/IFormInstance";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
+import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { VersionProperty } from '../../model/VersionProperty';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { IFormInstance } from '../../../../modules/base-components/webapp/core/IFormInstance';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 
 export class CreateConfigItemVersionUtil {
 

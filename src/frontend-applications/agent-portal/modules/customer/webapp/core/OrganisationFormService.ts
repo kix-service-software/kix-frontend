@@ -7,13 +7,13 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Organisation } from "../../model/Organisation";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { Organisation } from '../../model/Organisation';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class OrganisationFormService extends KIXObjectFormService {
 

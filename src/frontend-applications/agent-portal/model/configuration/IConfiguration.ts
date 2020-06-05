@@ -7,8 +7,8 @@
  * --
  */
 
-import { ConfigurationType } from "./ConfigurationType";
-import { ConfigurationDefinition } from "./ConfigurationDefinition";
+import { ConfigurationType } from './ConfigurationType';
+import { ConfigurationDefinition } from './ConfigurationDefinition';
 
 export interface IConfiguration {
 

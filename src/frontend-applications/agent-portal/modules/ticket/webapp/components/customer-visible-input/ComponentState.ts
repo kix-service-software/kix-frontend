@@ -7,7 +7,7 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../base-components/webapp/core/FormInputComponentState";
+import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
 
 export class ComponentState extends FormInputComponentState<any> {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { ObjectFactory } from "../../../server/model/ObjectFactory";
-import { ConsoleCommand } from "../model/ConsoleCommand";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { ObjectFactory } from '../../../server/model/ObjectFactory';
+import { ConsoleCommand } from '../model/ConsoleCommand';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 
 export class ConsoleCommandFactory extends ObjectFactory<ConsoleCommand> {

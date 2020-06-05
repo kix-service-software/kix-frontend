@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFactory } from "../../../../modules/base-components/webapp/core/KIXObjectFactory";
-import { MailFilter } from "../../model/MailFilter";
+import { KIXObjectFactory } from '../../../../modules/base-components/webapp/core/KIXObjectFactory';
+import { MailFilter } from '../../model/MailFilter';
 
 export class MailFilterBrowserFactory extends KIXObjectFactory<MailFilter> {
 

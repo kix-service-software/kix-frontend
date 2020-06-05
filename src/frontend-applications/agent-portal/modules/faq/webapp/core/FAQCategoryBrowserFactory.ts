@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectFactory } from "../../../../modules/base-components/webapp/core/IKIXObjectFactory";
-import { FAQCategory } from "../../model/FAQCategory";
+import { IKIXObjectFactory } from '../../../../modules/base-components/webapp/core/IKIXObjectFactory';
+import { FAQCategory } from '../../model/FAQCategory';
 
 export class FAQCategoryBrowserFactory implements IKIXObjectFactory<FAQCategory> {
 

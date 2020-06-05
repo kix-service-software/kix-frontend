@@ -7,7 +7,7 @@
  * --
  */
 
-import { ConfigItemImage } from "../../model/ConfigItemImage";
+import { ConfigItemImage } from '../../model/ConfigItemImage';
 
 export class ConfigItemImagesResponse {
 

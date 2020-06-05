@@ -7,30 +7,30 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItem } from "../../model/ConfigItem";
-import { ConfigItemImage } from "../../model/ConfigItemImage";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { CreateConfigItemUtil } from "./CreateConfigItemUtil";
-import { CreateConfigItemVersionUtil } from "./CreateConfigItemVersionUtil";
-import { CreateConfigItemVersionOptions } from "../../model/CreateConfigItemVersionOptions";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { VersionProperty } from "../../model/VersionProperty";
-import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalogItem";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ConfigItemDetailsContext } from ".";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../model/ContextMode";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItem } from '../../model/ConfigItem';
+import { ConfigItemImage } from '../../model/ConfigItemImage';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { CreateConfigItemUtil } from './CreateConfigItemUtil';
+import { CreateConfigItemVersionUtil } from './CreateConfigItemVersionUtil';
+import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+
+import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ConfigItemDetailsContext } from '.';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../model/ContextMode';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 

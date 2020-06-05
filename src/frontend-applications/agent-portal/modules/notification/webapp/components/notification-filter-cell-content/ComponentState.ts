@@ -7,7 +7,7 @@
  * --
  */
 
-import { ICell } from "../../../../base-components/webapp/core/table/ICell";
+import { ICell } from '../../../../base-components/webapp/core/table/ICell';
 
 export class ComponentState {
 

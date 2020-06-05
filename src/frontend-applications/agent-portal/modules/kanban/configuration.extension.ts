@@ -7,17 +7,17 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { KanbanContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { KanbanConfiguration } from "./webapp/core/KanbanConfiguration";
-import { TicketProperty } from "../ticket/model/TicketProperty";
-import { KanbanColumn } from "./webapp/core/KanbanColumn";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { KanbanContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { KanbanConfiguration } from './webapp/core/KanbanConfiguration';
+import { TicketProperty } from '../ticket/model/TicketProperty';
+import { KanbanColumn } from './webapp/core/KanbanColumn';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 

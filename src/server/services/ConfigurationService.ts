@@ -10,7 +10,7 @@
 import fs = require('fs');
 import path = require('path');
 import { IServerConfiguration } from '../model/IServerConfiguration';
-import { ServerUtil } from '../ServerUtil';
+
 
 export class ConfigurationService {
 
@@ -63,15 +63,15 @@ export class ConfigurationService {
         for (const key in config) {
             if (process.env[key]) {
                 switch (typeof config[key]) {
-                    case "number": {
+                    case 'number': {
                         config[key] = Number(process.env[key]);
                         break;
                     }
-                    case "boolean": {
+                    case 'boolean': {
                         config[key] = (process.env[key] === 'true');
                         break;
                     }
-                    case "object": {
+                    case 'object': {
                         config[key] = JSON.parse(process.env[key]);
                         break;
                     }

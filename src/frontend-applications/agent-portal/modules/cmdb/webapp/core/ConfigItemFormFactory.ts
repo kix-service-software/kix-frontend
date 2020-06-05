@@ -7,29 +7,29 @@
  * --
  */
 
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { ConfigItemClassProperty } from "../../model/ConfigItemClassProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AttributeDefinition } from "../../model/AttributeDefinition";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { ObjectReferenceOptions } from "../../../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { GeneralCatalogItemProperty } from "../../../general-catalog/model/GeneralCatalogItemProperty";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { isArray } from "util";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { IdService } from "../../../../model/IdService";
-import { ExtendedConfigItemFormFactory } from "./ExtendedConfigItemFormFactory";
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { AttributeDefinition } from '../../model/AttributeDefinition';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { GeneralCatalogItemProperty } from '../../../general-catalog/model/GeneralCatalogItemProperty';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { isArray } from 'util';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { IdService } from '../../../../model/IdService';
+import { ExtendedConfigItemFormFactory } from './ExtendedConfigItemFormFactory';
 
 export class ConfigItemFormFactory {
 

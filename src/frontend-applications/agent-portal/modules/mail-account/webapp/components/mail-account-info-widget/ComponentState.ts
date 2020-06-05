@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { MailAccount } from "../../../model/MailAccount";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { MailAccount } from '../../../model/MailAccount';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
 export class ComponentState extends WidgetComponentState {
 

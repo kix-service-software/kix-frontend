@@ -7,32 +7,32 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { ContactDetailsContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContactProperty } from "./model/ContactProperty";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
-import { OrganisationProperty } from "./model/OrganisationProperty";
-import { DataType } from "../../model/DataType";
-import { TableConfiguration } from "../../model/configuration/TableConfiguration";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { TableHeaderHeight } from "../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../model/configuration/TableRowHeight";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
-import { UserProperty } from "../user/model/UserProperty";
-import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../model/ContextMode";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { ContactDetailsContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContactProperty } from './model/ContactProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
+import { OrganisationProperty } from './model/OrganisationProperty';
+import { DataType } from '../../model/DataType';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../model/configuration/TableRowHeight';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+import { UserProperty } from '../user/model/UserProperty';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../model/ContextMode';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 

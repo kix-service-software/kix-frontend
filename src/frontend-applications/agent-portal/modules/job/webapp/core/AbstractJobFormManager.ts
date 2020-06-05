@@ -7,32 +7,32 @@
  * --
  */
 
-import { IJobFormManager } from "./IJobFormManager";
-import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
-import { JobProperty } from "../../model/JobProperty";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { DefaultSelectInputFormOption } from "../../../../model/configuration/DefaultSelectInputFormOption";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { Macro } from "../../model/Macro";
-import { JobService } from ".";
-import { MacroAction } from "../../model/MacroAction";
-import { IdService } from "../../../../model/IdService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { Job } from "../../model/Job";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { MacroActionType } from "../../model/MacroActionType";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { MacroActionTypeOption } from "../../model/MacroActionTypeOption";
-import { ExecPlan } from "../../model/ExecPlan";
-import { ExecPlanTypes } from "../../model/ExecPlanTypes";
-import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { ObjectReferenceOptions } from "../../../base-components/webapp/core/ObjectReferenceOptions";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { ExtendedJobFormManager } from "./ExtendedJobFormManager";
+import { IJobFormManager } from './IJobFormManager';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { JobProperty } from '../../model/JobProperty';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { Macro } from '../../model/Macro';
+import { JobService } from '.';
+import { MacroAction } from '../../model/MacroAction';
+import { IdService } from '../../../../model/IdService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { Job } from '../../model/Job';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { MacroActionType } from '../../model/MacroActionType';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
+import { ExecPlan } from '../../model/ExecPlan';
+import { ExecPlanTypes } from '../../model/ExecPlanTypes';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ExtendedJobFormManager } from './ExtendedJobFormManager';
 
 export class AbstractJobFormManager implements IJobFormManager {
 
@@ -133,13 +133,13 @@ export class AbstractJobFormManager implements IJobFormManager {
                 new FormFieldOption(
                     DefaultSelectInputFormOption.NODES,
                     [
-                        new TreeNode("Mon", 'Translatable#Monday'),
-                        new TreeNode("Tue", 'Translatable#Tuesday'),
-                        new TreeNode("Wed", 'Translatable#Wednesday'),
-                        new TreeNode("Thu", 'Translatable#Thursday'),
-                        new TreeNode("Fri", 'Translatable#Friday'),
-                        new TreeNode("Sat", 'Translatable#Saturday'),
-                        new TreeNode("Sun", 'Translatable#Sunday')
+                        new TreeNode('Mon', 'Translatable#Monday'),
+                        new TreeNode('Tue', 'Translatable#Tuesday'),
+                        new TreeNode('Wed', 'Translatable#Wednesday'),
+                        new TreeNode('Thu', 'Translatable#Thursday'),
+                        new TreeNode('Fri', 'Translatable#Friday'),
+                        new TreeNode('Sat', 'Translatable#Saturday'),
+                        new TreeNode('Sun', 'Translatable#Sunday')
                     ]
                 ),
                 new FormFieldOption(DefaultSelectInputFormOption.MULTI, true)
@@ -348,7 +348,7 @@ export class AbstractJobFormManager implements IJobFormManager {
             `job-action-${actionType}-${option.Name}`, option.Label,
             `ACTION###${actionFieldInstanceId}###${option.Name}`,
             inputType, Boolean(option.Required), option.Description, undefined,
-            typeof defaultValue !== undefined ? new FormFieldValue(defaultValue) : undefined);
+            typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined);
 
     }
 
@@ -364,7 +364,7 @@ export class AbstractJobFormManager implements IJobFormManager {
             `ACTION###${actionFieldInstanceId}###SKIP`,
             'checkbox-input', false,
             'Translatable#Helptext_Admin_JobCreateEdit_ActionSkip', undefined,
-            typeof defaultValue !== undefined ? new FormFieldValue(defaultValue) : new FormFieldValue(false)
+            typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : new FormFieldValue(false)
         );
     }
 

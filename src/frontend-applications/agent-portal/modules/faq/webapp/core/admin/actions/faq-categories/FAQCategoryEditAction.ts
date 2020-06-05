@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../../../modules/base-components/webapp/core/ContextService";
-import { FAQCategoryDetailsContext, EditFAQCategoryDialogContext } from "../..";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../../../model/ContextMode";
+import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
+import { FAQCategoryDetailsContext, EditFAQCategoryDialogContext } from '../..';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../../model/ContextMode';
 
 export class FAQCategoryEditAction extends AbstractAction {
 

@@ -8,15 +8,15 @@
  */
 
 // tslint:disable-next-line: max-line-length
-import { IJobFormManager } from "./IJobFormManager";
-import { Job } from "../../model/Job";
-import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { MacroAction } from "../../model/MacroAction";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { ExecPlanTypes } from "../../model/ExecPlanTypes";
-import { MacroActionTypeOption } from "../../model/MacroActionTypeOption";
+import { IJobFormManager } from './IJobFormManager';
+import { Job } from '../../model/Job';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { MacroAction } from '../../model/MacroAction';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { ExecPlanTypes } from '../../model/ExecPlanTypes';
+import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
 // tslint:enable
 
 export class ExtendedJobFormManager implements IJobFormManager {

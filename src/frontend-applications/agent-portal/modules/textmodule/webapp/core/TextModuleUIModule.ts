@@ -8,30 +8,30 @@
  */
 
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     TextModuleService, TextModuleBrowserFactory, TextModuleFormService, TextModulesTableFactory,
     TextModuleLabelProvider, TextModuleCreateAction, NewTextModuleDialogContext, EditTextModuleDialogContext
-} from ".";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { TextModuleCSVExportAction } from "./actions/TextModuleCSVExportAction";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { TextModuleDuplicateAction } from "./actions";
+} from '.';
+import { FactoryService } from '../../../../modules/base-components/webapp/core/FactoryService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { TextModuleCSVExportAction } from './actions/TextModuleCSVExportAction';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { TextModuleDuplicateAction } from './actions';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'TextModuleUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

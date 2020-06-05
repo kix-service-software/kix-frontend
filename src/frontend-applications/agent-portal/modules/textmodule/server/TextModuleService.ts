@@ -7,15 +7,15 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { TextModuleFactory } from "./TextModuleFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { Error } from "../../../../../server/model/Error";
-import { TextModule } from "../model/TextModule";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { TextModuleFactory } from './TextModuleFactory';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { Error } from '../../../../../server/model/Error';
+import { TextModule } from '../model/TextModule';
 
 export class TextModuleAPIService extends KIXObjectAPIService {
 

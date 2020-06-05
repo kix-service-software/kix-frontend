@@ -9,10 +9,10 @@
 
 export enum Environment {
 
-    TEST = "test",
+    TEST = 'test',
 
-    DEVELOPMENT = "development",
+    DEVELOPMENT = 'development',
 
-    PRODUCTION = "production"
+    PRODUCTION = 'production'
 
 }

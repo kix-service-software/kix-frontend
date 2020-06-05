@@ -7,26 +7,25 @@
  * --
  */
 
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { SysConfigService } from "../../../modules/sysconfig/server/SysConfigService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { IConfiguration } from "../../../model/configuration/IConfiguration";
-import { CacheService } from "../cache";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
-import { SysConfigOptionDefinition } from "../../../modules/sysconfig/model/SysConfigOptionDefinition";
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { SysConfigOptionDefinitionProperty } from "../../../modules/sysconfig/model/SysConfigOptionDefinitionProperty";
-import { FilterType } from "../../../model/FilterType";
-import { FilterDataType } from "../../../model/FilterDataType";
-import { Error } from "../../../../../server/model/Error";
-import { SearchOperator } from "../../../modules/search/model/SearchOperator";
-import { FormContext } from "../../../model/configuration/FormContext";
-import { FormConfiguration } from "../../../model/configuration/FormConfiguration";
-import { SysConfigAccessLevel } from "../../../modules/sysconfig/model/SysConfigAccessLevel";
-import { SysConfigOptionProperty } from "../../../modules/sysconfig/model/SysConfigOptionProperty";
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { SysConfigService } from '../../../modules/sysconfig/server/SysConfigService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { IConfiguration } from '../../../model/configuration/IConfiguration';
+import { CacheService } from '../cache';
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
+import { ConfigurationType } from '../../../model/configuration/ConfigurationType';
+import { SysConfigOptionDefinition } from '../../../modules/sysconfig/model/SysConfigOptionDefinition';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { SysConfigOptionDefinitionProperty } from '../../../modules/sysconfig/model/SysConfigOptionDefinitionProperty';
+import { FilterType } from '../../../model/FilterType';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { Error } from '../../../../../server/model/Error';
+import { SearchOperator } from '../../../modules/search/model/SearchOperator';
+import { FormContext } from '../../../model/configuration/FormContext';
+import { FormConfiguration } from '../../../model/configuration/FormConfiguration';
+import { SysConfigAccessLevel } from '../../../modules/sysconfig/model/SysConfigAccessLevel';
+import { SysConfigOptionProperty } from '../../../modules/sysconfig/model/SysConfigOptionProperty';
 
 export class ModuleConfigurationService {
 
@@ -97,7 +96,6 @@ export class ModuleConfigurationService {
     private async updateConfiguration(
         token: string, configuration: IConfiguration, accessLevel: SysConfigAccessLevel = SysConfigAccessLevel.INTERNAL
     ): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         LoggingService.getInstance().info(`Update existing configuration: ${configuration.id}`);
         const name = configuration.name ? configuration.name : configuration.id;
         await SysConfigService.getInstance().updateObject(
@@ -118,7 +116,6 @@ export class ModuleConfigurationService {
     private async createConfiguration(
         token: string, configuration: IConfiguration, accessLevel: SysConfigAccessLevel = SysConfigAccessLevel.INTERNAL
     ): Promise<void> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         LoggingService.getInstance().info(`Create new configuration: ${configuration.id}`);
         const name = configuration.name ? configuration.name : configuration.id;
         await SysConfigService.getInstance().createObject(
@@ -138,11 +135,11 @@ export class ModuleConfigurationService {
 
     private validate(configuration: IConfiguration): void {
         if (!configuration.id) {
-            throw new Error("-1", 'Missing required property id.');
+            throw new Error('-1', 'Missing required property id.');
         }
 
         if (!configuration.type) {
-            throw new Error("-1", 'Missing required property type.');
+            throw new Error('-1', 'Missing required property type.');
         }
     }
 
@@ -205,8 +202,6 @@ export class ModuleConfigurationService {
     private async loadSysconfigDefinitions(
         token: string, type?: string | ConfigurationType
     ): Promise<SysConfigOptionDefinition[]> {
-        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
-
         const loadingOptions = new KIXObjectLoadingOptions([
             new FilterCriteria(
                 SysConfigOptionDefinitionProperty.CONTEXT, SearchOperator.EQUALS,

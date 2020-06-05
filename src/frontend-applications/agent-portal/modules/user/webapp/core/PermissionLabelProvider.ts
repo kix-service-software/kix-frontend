@@ -7,15 +7,15 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { Role } from "../../model/Role";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { PermissionProperty } from "../../model/PermissionProperty";
-import { PermissionType } from "../../model/PermissionType";
-import { Permission } from "../../model/Permission";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Role } from '../../model/Role';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { PermissionProperty } from '../../model/PermissionProperty';
+import { PermissionType } from '../../model/PermissionType';
+import { Permission } from '../../model/Permission';
 
 export class PermissionLabelProvider extends LabelProvider<Permission> {
 

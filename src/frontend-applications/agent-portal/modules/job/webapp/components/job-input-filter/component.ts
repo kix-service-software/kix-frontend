@@ -20,8 +20,8 @@ import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
-import { JobType } from '../../../model/JobType';
-import { JobTypes } from '../../../model/JobTypes';
+
+
 
 class Component extends FormInputComponent<{}, ComponentState> {
 
@@ -61,7 +61,7 @@ class Component extends FormInputComponent<{}, ComponentState> {
                             : false;
 
                         if (hasArticleEvent) {
-                            // await this.addRequiredArticleProperties();
+                            await this.addRequiredArticleProperties();
                         } else {
                             await this.removeArticleProperties();
                         }

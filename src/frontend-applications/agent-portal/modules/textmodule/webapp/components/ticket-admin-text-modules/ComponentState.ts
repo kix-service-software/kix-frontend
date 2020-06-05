@@ -7,12 +7,12 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { TextModuleProperty } from "../../../model/TextModuleProperty";
+import { IdService } from '../../../../../model/IdService';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { TextModuleProperty } from '../../../model/TextModuleProperty';
 
 
 export class ComponentState {

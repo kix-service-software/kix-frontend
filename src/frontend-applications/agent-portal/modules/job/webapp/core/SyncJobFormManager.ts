@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractJobFormManager } from "./AbstractJobFormManager";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { ExecPlanTypes } from "../../model/ExecPlanTypes";
-import { FormContext } from "../../../../model/configuration/FormContext";
+import { AbstractJobFormManager } from './AbstractJobFormManager';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { ExecPlanTypes } from '../../model/ExecPlanTypes';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export class SyncJobFormManager extends AbstractJobFormManager {
 
