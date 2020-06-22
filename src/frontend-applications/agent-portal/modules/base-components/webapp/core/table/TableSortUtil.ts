@@ -28,10 +28,8 @@ export class TableSortUtil {
                 const numberB = Number(valueB);
 
                 let compare = 0;
-                if (dataType === DataType.DATE || dataType === DataType.DATE_TIME) {
-                    compare = SortUtil.compareValues(valueA, valueB, dataType);
-                } else if (isNaN(numberA) || isNaN(numberB)) {
-                    compare = SortUtil.compareValues(valueA, valueB, dataType);
+                if (isNaN(numberA) || isNaN(numberB)) {
+                    compare = SortUtil.compareValues(valueA, valueB, DataType.STRING);
                 } else {
                     compare = numberA - numberB;
                 }
