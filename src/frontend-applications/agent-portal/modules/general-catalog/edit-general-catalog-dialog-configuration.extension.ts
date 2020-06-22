@@ -72,20 +72,20 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new FormFieldConfiguration(
                 'general-catalog-edit-form-field-class',
                 'Translatable#Class', GeneralCatalogItemProperty.CLASS, 'object-reference-input', true,
-                'Translatable#Helptext_Admin_GeneralCatalogCreate_Class', [
-                new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_CLASS),
+                'Translatable#Helptext_Admin_GeneralCatalogCreate_Class',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.GENERAL_CATALOG_CLASS),
 
-                new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
-                    new KIXObjectLoadingOptions([
-                        new FilterCriteria(
-                            KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
-                            FilterType.AND, 1
-                        )
-                    ])
-                ),
-                new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
-            ], null, null,
-                null, null, null, null, null, 100
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions([
+                            new FilterCriteria(
+                                KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                FilterType.AND, 1
+                            )
+                        ])
+                    ),
+                    new FormFieldOption(ObjectReferenceOptions.MULTISELECT, false)
+                ], null, null, null, null, null, null, null, 100, null, null, null, null, true
             )
         );
         configurations.push(
