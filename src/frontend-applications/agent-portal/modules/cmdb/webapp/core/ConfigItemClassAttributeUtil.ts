@@ -75,7 +75,7 @@ export class ConfigItemClassAttributeUtil {
     private static getPath(attributes: AttributeDefinition[], key: string, parent: string = ''): string {
         for (const attribute of attributes) {
             if (attribute.Key === key) {
-                return `${parent}.${attribute.Key}`;
+                return parent ? `${parent}.${attribute.Key}` : attribute.Key;
             }
 
             if (attribute.Sub) {
