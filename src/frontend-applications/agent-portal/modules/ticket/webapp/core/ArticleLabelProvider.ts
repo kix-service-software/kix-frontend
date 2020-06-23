@@ -101,7 +101,8 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
                 ).catch((error) => []);
 
-                displayValue = senderTypes && senderTypes.length ? senderTypes[0] : null;
+                displayValue = senderTypes && senderTypes.length ?
+                    typeof senderTypes[0] === 'object' ? senderTypes[0].Name : senderTypes[0] : null;
                 break;
             case ArticleProperty.TO:
                 displayValue = article.toList.length ? short
