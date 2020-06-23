@@ -338,16 +338,20 @@ export class ArticleFormService extends KIXObjectFormService {
         let value;
         const referencedArticle = await this.getReferencedArticle();
         if (referencedArticle) {
+            const fromString = referencedArticle.From.replace(/>/g, '&gt;').replace(/</g, '&lt;');
+            const wroteString = await TranslationService.translate('{0} wrote', [fromString]);
+            const dateTime = await DateTimeUtil.getLocalDateTimeString(referencedArticle.ChangeTime);
+            let articleString = referencedArticle.Body;
+
             const prepareContent = await TicketService.getInstance().getPreparedArticleBodyContent(referencedArticle);
-            if (prepareContent && prepareContent[1]) {
-                const fromString = referencedArticle.From.replace(/>/g, '&gt;').replace(/</g, '&lt;');
-                const wroteString = await TranslationService.translate('{0} wrote', [fromString]);
-                const dateTime = await DateTimeUtil.getLocalDateTimeString(referencedArticle.ChangeTime);
-                value = `<p></p>${wroteString} ${dateTime}:`
-                    + '<div type="cite" style="border-left:2px solid #0a7cb3;padding:10px;">'
-                    + this.replaceInlineContent(prepareContent[0], prepareContent[1])
-                    + '</div>';
+            if (prepareContent) {
+                articleString = prepareContent[1] ?
+                    this.replaceInlineContent(prepareContent[0], prepareContent[1]) : prepareContent[0];
             }
+            value = `<p></p>${wroteString} ${dateTime}:`
+                + '<div type="cite" style="border-left:2px solid #0a7cb3;padding:10px;">'
+                + articleString
+                + '</div>';
         }
         return value;
     }
