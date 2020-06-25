@@ -9,6 +9,8 @@
 
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { NotificationProperty } from './NotificationProperty';
+import { ArticleProperty } from '../../ticket/model/ArticleProperty';
 
 export class Notification extends KIXObject {
 
@@ -46,7 +48,73 @@ export class Notification extends KIXObject {
             this.Name = notification.Name;
             this.Data = notification.Data;
             this.Message = notification.Message;
+
+            if (notification.Data) {
+                this.Filter = new Map();
+                for (const key in notification.Data) {
+                    if (key && Array.isArray(notification.Data[key])) {
+                        const value = notification.Data[key];
+                        switch (key) {
+                            case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
+                                this.VisibleForAgent = Boolean(Number(value[0]));
+                                break;
+                            case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
+                                this.VisibleForAgentTooltip = value[0];
+                                break;
+                            case NotificationProperty.DATA_RECIPIENTS:
+                                this.Recipients = value;
+                                break;
+                            case NotificationProperty.DATA_EVENTS:
+                                this.Events = value;
+                                break;
+                            case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                                this.RecipientAgents = value.map((v) => Number(v));
+                                break;
+                            case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                                this.RecipientEmail = value[0].split(/,\s?/);
+                                break;
+                            case NotificationProperty.DATA_RECIPIENT_ROLES:
+                                this.RecipientRoles = value.map((v) => Number(v));
+                                break;
+                            case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+                                this.RecipientSubject = Boolean(Number(value[0]));
+                                break;
+                            case NotificationProperty.DATA_SEND_DESPITE_OOO:
+                                this.SendOnOutOfOffice = Boolean(Number(value[0]));
+                                break;
+                            case NotificationProperty.DATA_SEND_ONCE_A_DAY:
+                                this.OncePerDay = Boolean(Number(value[0]));
+                                break;
+                            case NotificationProperty.DATA_CREATE_ARTICLE:
+                                this.CreateArticle = Boolean(Number(value[0]));
+                                break;
+                            default:
+                                if (key.match(/(Ticket|Article)::/)) {
+                                    let property = key.replace('Ticket::', '');
+                                    property = property.replace('Article::', '');
+                                    let newValue;
+                                    if (this.isStringProperty(property)) {
+                                        newValue = value[0];
+                                    } else {
+                                        newValue = value.map((v) => !isNaN(Number(v)) ? Number(v) : v);
+                                    }
+                                    this.Filter.set(property, newValue);
+                                }
+                        }
+                    }
+                }
+            }
+
         }
+    }
+
+    private isStringProperty(property: string): boolean {
+        return property === ArticleProperty.FROM
+            || property === ArticleProperty.TO
+            || property === ArticleProperty.CC
+            || property === ArticleProperty.BCC
+            || property === ArticleProperty.SUBJECT
+            || property === ArticleProperty.BODY;
     }
 
 }

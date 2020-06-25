@@ -133,6 +133,7 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
     public async onDestroy(): Promise<void> {
         if (this.state.manager) {
             this.state.manager.unregisterListener(this.listenerId);
+            this.state.manager.reset(false);
         }
 
         const form = await FormService.getInstance().getFormInstance(this.state.formId);
