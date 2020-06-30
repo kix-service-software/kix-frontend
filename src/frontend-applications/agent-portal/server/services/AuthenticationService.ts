@@ -154,8 +154,7 @@ export class AuthenticationService {
     }
 
     public async logout(token: string): Promise<boolean> {
-        const backendToken = this.getBackendToken(token);
-        await HttpService.getInstance().delete(['session'], backendToken, null).catch((error) => null);
+        await HttpService.getInstance().delete(['session'], token, null).catch((error) => null);
         return true;
     }
 }
