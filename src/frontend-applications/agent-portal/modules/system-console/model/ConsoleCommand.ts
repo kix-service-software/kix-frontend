@@ -11,6 +11,7 @@
 import { ConsoleParameter } from './ConsoleParameter';
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { ConsoleArgument } from './ConsoleArgument';
 
 export class ConsoleCommand extends KIXObject {
 
@@ -20,7 +21,7 @@ export class ConsoleCommand extends KIXObject {
 
     public AdditionalHelp: string;
 
-    public Arguments: string[];
+    public Arguments: ConsoleArgument[];
 
     public Command: string;
 

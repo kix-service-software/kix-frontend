@@ -53,6 +53,11 @@ export class ConsoleCommandService extends KIXObjectAPIService {
                 token, KIXObjectType.CONSOLE_COMMAND, this.RESOURCE_URI, loadingOptions, objectIds, 'ConsoleCommand',
                 ConsoleCommand
             );
+
+            // ignore help and search script - not needed
+            if (Array.isArray(objects)) {
+                objects = objects.filter((c: ConsoleCommand) => !c.Command.match(/Console::Command::(?:Help|Search)/));
+            }
         }
 
         return objects;
