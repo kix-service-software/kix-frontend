@@ -44,7 +44,7 @@ export class OrganisationContext extends Context {
     }
 
     public async initContext(): Promise<void> {
-        this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, true);
+        this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
     }
 
     public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
