@@ -10,6 +10,10 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<Date, ComponentState> {
@@ -28,13 +32,27 @@ class Component extends FormInputComponent<Date, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
+        let date = new Date();
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
-        if (value) {
-            const pendingDate = new Date(value.value);
-            this.state.selectedDate = DateTimeUtil.getKIXDateString(pendingDate);
-            this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
+        if (value.value) {
+            date = new Date(value.value);
+        } else {
+            let offset = 86400;
+
+            const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
+            ).catch((error): SysConfigOption[] => []);
+
+            if (Array.isArray(offsetConfig) && offsetConfig[0].Value) {
+                offset = offsetConfig[0].Value;
+            }
+
+            date.setSeconds(date.getSeconds() + Number(offset));
         }
+
+        this.state.selectedDate = DateTimeUtil.getKIXDateString(date);
+        this.state.selectedTime = DateTimeUtil.getKIXTimeString(date, true, true);
     }
 
     public dateChanged(event: any): void {

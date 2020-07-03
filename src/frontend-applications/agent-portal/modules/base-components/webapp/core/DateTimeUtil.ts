@@ -91,11 +91,14 @@ export class DateTimeUtil {
         return kixDateString;
     }
 
-    public static getKIXTimeString(date: Date, short: boolean = true): string {
+    public static getKIXTimeString(date: Date, short: boolean = true, roundHalfHour?: boolean): string {
         let kixTimeString;
         if (date) {
             const hours = DateTimeUtil.padZero(date.getHours());
-            const minutes = DateTimeUtil.padZero(date.getMinutes());
+            let minutes = DateTimeUtil.padZero(date.getMinutes());
+            if (roundHalfHour) {
+                minutes = Number(minutes) <= 15 || Number(minutes) >= 30 ? '00' : '30';
+            }
             const seconds = DateTimeUtil.padZero(date.getSeconds());
             kixTimeString = `${hours}:${minutes}`;
             if (!short) {
