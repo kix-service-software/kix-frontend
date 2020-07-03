@@ -81,7 +81,7 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
             const formInstance = await FormService.getInstance().getFormInstance(formId);
             const filter: FilterCriteria[] = [];
             for (const p of config.properties) {
-                const formField = await formInstance.getFormFieldByProperty(p);
+                const formField = formInstance.getFormFieldByProperty(p);
                 if (formField) {
                     const value = await formInstance.getFormFieldValueByProperty(p);
                     if (value && value.value && Array.isArray(value.value) && value.value.length) {

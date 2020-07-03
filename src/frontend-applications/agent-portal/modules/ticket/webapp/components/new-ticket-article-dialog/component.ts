@@ -23,8 +23,13 @@ import { ArticleProperty } from '../../../model/ArticleProperty';
 import { Ticket } from '../../../model/Ticket';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 class Component extends AbstractNewDialog {
+
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -62,27 +67,29 @@ class Component extends AbstractNewDialog {
             Number(context.getObjectId())
         );
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.registerListener({
-                formListenerId: 'new-article-dialog-listener',
-                formValueChanged:
-                    async (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
-                        if (formField.property === ArticleProperty.CHANNEL_ID) {
-                            if (value && value.value === 2) {
-                                this.state.buttonLabel = 'Translatable#Send';
-                            } else {
-                                this.state.buttonLabel = 'Translatable#Save';
-                            }
-                        }
-                    },
-                updateForm: () => { return; }
-            });
-        }
+        this.formSubscriber = {
+            eventSubscriberId: 'NewTicketArticleDialog',
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                const channelValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === ArticleProperty.CHANNEL_ID
+                );
+
+                if (channelValue && channelValue[1]) {
+                    const channelId = channelValue[1].value;
+                    if (channelId === 2) {
+                        this.state.buttonLabel = 'Translatable#Send';
+                    } else {
+                        this.state.buttonLabel = 'Translatable#Save';
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async onDestroy(): Promise<void> {
         await super.onDestroy();
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async cancel(): Promise<void> {

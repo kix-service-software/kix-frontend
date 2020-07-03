@@ -112,13 +112,13 @@ class Component extends AbstractEditDialog {
     }
     public async reset(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const sysConfigValueField = await formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
+        const sysConfigValueField = formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
         const defaultValue = await formInstance.getFormFieldValueByProperty(SysConfigOptionDefinitionProperty.DEFAULT);
         if (sysConfigValueField && defaultValue) {
-            formInstance.provideFormFieldValue(sysConfigValueField.instanceId, defaultValue.value);
+            formInstance.provideFormFieldValues([[sysConfigValueField.instanceId, defaultValue.value]], null);
         }
 
-        const sysConfigValidField = await formInstance.getFormFieldByProperty(KIXObjectProperty.VALID_ID);
+        const sysConfigValidField = formInstance.getFormFieldByProperty(KIXObjectProperty.VALID_ID);
         const context = ContextService.getInstance().getActiveContext();
         if (sysConfigValidField && context) {
             const sysConfigId = await context.getObjectId();
@@ -126,7 +126,9 @@ class Component extends AbstractEditDialog {
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]
             ) : null;
             if (optionDefs && optionDefs[0]) {
-                formInstance.provideFormFieldValue(sysConfigValidField.instanceId, optionDefs[0].DefaultValidID);
+                formInstance.provideFormFieldValues(
+                    [[sysConfigValidField.instanceId, optionDefs[0].DefaultValidID]], null
+                );
             }
         }
     }

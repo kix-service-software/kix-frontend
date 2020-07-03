@@ -44,7 +44,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(helpWidget);
 
-
         const widget = new WidgetConfiguration(
             'organisation-import-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'import-dialog', 'Translatable#Import Organisations', [], null, null,

@@ -28,8 +28,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async cancel(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.reset();
         DialogService.getInstance().closeMainDialog();
     }
 

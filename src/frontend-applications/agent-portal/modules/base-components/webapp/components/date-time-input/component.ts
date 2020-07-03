@@ -12,6 +12,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<string | Date, ComponentState> {
 
@@ -52,15 +53,15 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
         await super.onMount();
         this.state.dateValue = null;
         this.state.timeValue = null;
-        this.setCurrentValue();
     }
 
-    public setCurrentValue(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentValue = new Date(this.state.defaultValue.value);
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        if (value) {
+            this.state.currentValue = new Date(value.value);
             this.state.dateValue = DateTimeUtil.getKIXDateString(this.state.currentValue);
             this.state.timeValue = DateTimeUtil.getKIXTimeString(this.state.currentValue, true);
-            this.setValue();
         }
     }
 

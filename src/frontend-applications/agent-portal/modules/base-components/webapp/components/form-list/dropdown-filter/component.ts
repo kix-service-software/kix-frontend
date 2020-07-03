@@ -136,7 +136,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             || key === 'Enter';
     }
 
-
     private startSearch(): void {
         if (this.autocompleteTimeout) {
             window.clearTimeout(this.autocompleteTimeout);

@@ -69,7 +69,6 @@ export class ConfigItemTableFactory extends TableFactory {
                 null, null, null, ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
 
-
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.CONFIG_ITEM, null, null, tableColumns, [],

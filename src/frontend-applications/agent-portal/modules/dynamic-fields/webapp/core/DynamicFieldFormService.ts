@@ -98,7 +98,8 @@ export class DynamicFieldFormService extends KIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext
     ): Promise<Array<[string, any]>> {
 
         const fieldTypeParameter = parameter.find((p) => p[0] === DynamicFieldProperty.FIELD_TYPE);
@@ -117,7 +118,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
             }
         }
 
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext);
     }
 
 }

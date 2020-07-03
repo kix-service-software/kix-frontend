@@ -15,17 +15,15 @@ import { RoutingConfiguration } from '../../../../../model/configuration/Routing
 import { TicketDetailsContext } from '../../core';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { ArticleProperty } from '../../../model/ArticleProperty';
 
-
-
-
-
-
 class Component extends AbstractNewDialog {
+
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -43,29 +41,31 @@ class Component extends AbstractNewDialog {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.registerListener({
-                formListenerId: 'new-article-dialog-listener',
-                formValueChanged:
-                    async (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
-                        if (formField.property === ArticleProperty.CHANNEL_ID) {
-                            if (value && value.value === 2) {
-                                this.state.buttonLabel = 'Translatable#Send';
-                            } else {
-                                this.state.buttonLabel = 'Translatable#Save';
-                            }
-                        }
-                    },
-                updateForm: () => { return; }
-            });
-        }
+        this.formSubscriber = {
+            eventSubscriberId: 'NewTicketDialog',
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                const channelValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === ArticleProperty.CHANNEL_ID
+                );
+
+                if (channelValue && channelValue[1]) {
+                    const channelId = channelValue[1].value;
+                    if (channelId === 2) {
+                        this.state.buttonLabel = 'Translatable#Send';
+                    } else {
+                        this.state.buttonLabel = 'Translatable#Save';
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
 
         this.state.loading = false;
     }
 
     public async onDestroy(): Promise<void> {
         await super.onDestroy();
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async cancel(): Promise<void> {

@@ -36,7 +36,6 @@ import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTyp
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SortUtil } from '../../../../model/SortUtil';
-import { CMDBService } from '../../../cmdb/webapp/core';
 // tslint:enable
 
 export class TicketJobFilterManager extends AbstractDynamicFormManager {
@@ -227,44 +226,6 @@ export class TicketJobFilterManager extends AbstractDynamicFormManager {
 
     public async isMultiselect(property: string): Promise<boolean> {
         return true;
-    }
-
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        const result = await super.searchValues(property, searchValue, limit);
-        if (result) {
-            return result;
-        }
-
-        let tree: TreeNode[];
-
-        switch (property) {
-            case TicketProperty.CONTACT_ID:
-                const contacts = await KIXObjectService.search(KIXObjectType.CONTACT, searchValue, limit);
-                tree = await KIXObjectService.prepareTree(contacts);
-                break;
-            case TicketProperty.ORGANISATION_ID:
-                const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
-                tree = await KIXObjectService.prepareTree(organisations);
-                break;
-            default:
-        }
-
-        if (!tree && CMDBService) {
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (dfName) {
-                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                    const configItems = await CMDBService.searchConfigItems(searchValue, limit);
-                    tree = configItems.map(
-                        (ci) => new TreeNode(
-                            ci.ConfigItemID, ci.Name, 'kix-icon-ci'
-                        )
-                    );
-                }
-            }
-        }
-
-        return tree;
     }
 
 }

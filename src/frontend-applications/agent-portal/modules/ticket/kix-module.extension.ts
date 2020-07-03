@@ -143,7 +143,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'ticket-input-organisation', '/kix-module-ticket$0/webapp/components/ticket-input-organisation', []
         ),
-        new UIComponent('ticket-input-state', '/kix-module-ticket$0/webapp/components/ticket-input-state', []),
         new UIComponent(
             'ticket-input-state-pending', '/kix-module-ticket$0/webapp/components/ticket-input-state-pending', []
         ),

@@ -165,7 +165,6 @@ export class RoutingService {
         this.notifyListener(router);
     }
 
-
     private notifyListener(router: ComponentRouter): void {
         for (const listener of this.serviceListener) {
             listener.routedTo(router);

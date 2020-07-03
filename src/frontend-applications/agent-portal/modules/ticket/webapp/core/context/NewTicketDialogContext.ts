@@ -8,23 +8,21 @@
  */
 
 import { Context } from '../../../../../model/Context';
-import { IFormInstanceListener } from '../../../../../modules/base-components/webapp/core/IFormInstanceListener';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { FormContext } from '../../../../../model/configuration/FormContext';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { Ticket } from '../../../model/Ticket';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { FormContext } from '../../../../../model/configuration/FormContext';
 
-export class NewTicketDialogContext extends Context implements IFormInstanceListener {
+export class NewTicketDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'new-ticket-dialog-context';
-    public formListenerId: string;
 
     private contact: any;
     private organisation: any;
@@ -32,29 +30,34 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
     public async initContext(): Promise<void> {
         this.contact = null;
         this.organisation = null;
-        const formId = await FormService.getInstance().getFormIdByContext(FormContext.NEW, KIXObjectType.TICKET);
-        this.formListenerId = 'NewTicketDialogContext';
-        await FormService.getInstance().registerFormInstanceListener(formId, this);
+
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
+            eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                const form = data.formInstance.getForm();
+                if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {
+                    const organisationValue = data.changedValues.find(
+                        (cv) => cv[0] && cv[0].property === TicketProperty.ORGANISATION_ID
+                    );
+                    if (organisationValue) {
+                        this.handleOrganisationValue(organisationValue[1].value);
+                    }
+
+                    const contactValue = data.changedValues.find(
+                        (cv) => cv[0].property === TicketProperty.CONTACT_ID
+                    );
+                    if (contactValue) {
+                        this.handleContactValue(contactValue[1].value);
+                    }
+                }
+            }
+        });
     }
 
     public reset(refresh?: boolean): void {
         super.reset();
         this.contact = null;
         this.organisation = null;
-    }
-
-    public updateForm(): void {
-        return;
-    }
-
-    public async formValueChanged(
-        formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any
-    ): Promise<void> {
-        if (formField && formField.property === TicketProperty.ORGANISATION_ID) {
-            this.handleOrganisationValue(value);
-        } else if (formField && formField.property === TicketProperty.CONTACT_ID) {
-            this.handleContactValue(value);
-        }
     }
 
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
@@ -78,20 +81,13 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
         return object;
     }
 
-    private async handleOrganisationValue(value: FormFieldValue): Promise<void> {
-        let organisationId = null;
-        if (value && value.value) {
-            if (!isNaN(value.value)) {
-                const organisations = await KIXObjectService.loadObjects(
-                    KIXObjectType.ORGANISATION, [value.value]
-                );
-                if (organisations && organisations.length) {
-                    this.organisation = organisations[0];
-                    organisationId = this.organisation ? this.organisation.ID : null;
-                }
-            } else {
-                organisationId = value.value;
-                this.organisation = null;
+    private async handleOrganisationValue(organisationId: number): Promise<void> {
+        if (!isNaN(organisationId)) {
+            const organisations = await KIXObjectService.loadObjects(
+                KIXObjectType.ORGANISATION, [organisationId]
+            );
+            if (organisations && organisations.length) {
+                this.organisation = organisations[0];
             }
         } else {
             this.organisation = null;
@@ -102,20 +98,13 @@ export class NewTicketDialogContext extends Context implements IFormInstanceList
         ));
     }
 
-    private async handleContactValue(value: FormFieldValue): Promise<void> {
-        let contactId = null;
-        if (value && value.value) {
-            if (!isNaN(value.value)) {
-                const contacts = await KIXObjectService.loadObjects(
-                    KIXObjectType.CONTACT, [value.value]
-                );
-                if (contacts && contacts.length) {
-                    this.contact = contacts[0];
-                    contactId = this.contact ? this.contact.ID : null;
-                }
-            } else {
-                contactId = value.value;
-                this.contact = null;
+    private async handleContactValue(contactId: number): Promise<void> {
+        if (!isNaN(contactId)) {
+            const contacts = await KIXObjectService.loadObjects(
+                KIXObjectType.CONTACT, [contactId]
+            );
+            if (contacts && contacts.length) {
+                this.contact = contacts[0];
             }
         } else {
             this.contact = null;

@@ -19,6 +19,7 @@ import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpeci
 import { IAutofillConfiguration } from './IAutofillConfiguration';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ServiceType } from './ServiceType';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -32,7 +33,6 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
     ): Promise<O[]> {
         return null;
     }
-
 
     public createObject(
         kixObjectType: string, object: KIXObject, createOptions: KIXObjectSpecificCreateOptions
@@ -108,6 +108,10 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
     }
 
     public isServiceType(kixObjectServiceType: ServiceType): boolean {
+        return null;
+    }
+
+    public getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
         return null;
     }
 

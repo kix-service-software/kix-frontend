@@ -10,6 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<Date, ComponentState> {
 
@@ -23,16 +24,16 @@ class Component extends FormInputComponent<Date, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        this.setCurrentValues();
+        this.setCurrentValue();
     }
 
-    protected setCurrentValues(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            const pendingDate = new Date(this.state.defaultValue.value);
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (value) {
+            const pendingDate = new Date(value.value);
             this.state.selectedDate = DateTimeUtil.getKIXDateString(pendingDate);
             this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
-            this.setValue();
         }
     }
 

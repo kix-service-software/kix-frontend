@@ -236,7 +236,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 )
             ])));
 
-
         const tableWidgetConfig = new TableWidgetConfiguration(
             'cmdb-dashboard-ci-table-widget', 'CI Table Widget', ConfigurationType.TableWidget,
             KIXObjectType.CONFIG_ITEM, null, null, null, null, true, null, filter

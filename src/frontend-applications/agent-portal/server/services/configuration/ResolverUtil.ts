@@ -13,7 +13,6 @@ import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOptio
 
 export class ResolverUtil {
 
-
     public static async loadConfigurations<T extends IConfiguration>(
         token: string, ids: string[], configurations: T[], sysConfigOptions: SysConfigOption[]
     ): Promise<T[]> {

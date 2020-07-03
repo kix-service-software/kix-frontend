@@ -51,26 +51,29 @@ class Component extends FormInputComponent<string[], ComponentState> {
         return nodes.sort((a, b) => {
             return SortUtil.compareString(a[1], b[1]);
         });
-
     }
 
-    private setCurrentNode(nodes: TreeNode[]): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
+    public async setCurrentValue(): Promise<void> {
+        return;
+    }
+
+    private async setCurrentNode(nodes: TreeNode[]): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<number[] | number>(this.state.field.instanceId);
+        if (value) {
             let currentNodes: TreeNode[];
-            if (Array.isArray(this.state.defaultValue.value)) {
+            if (Array.isArray(value.value)) {
                 currentNodes = nodes.filter(
-                    (eventNode) => this.state.defaultValue.value.some((v) => v === eventNode.id)
+                    (eventNode) => (value.value as number[]).some((v) => v === eventNode.id)
                 );
             } else {
                 currentNodes = nodes.filter(
-                    (eventNode) => eventNode.id === this.state.defaultValue.value
+                    (eventNode) => eventNode.id === value.value
                 );
             }
 
             if (currentNodes) {
                 currentNodes.forEach((n) => n.selected = true);
-                super.provideValue(currentNodes.map((n) => n.id), true);
-
                 this.currentAccesses = currentNodes;
                 this.setFields(false);
 
@@ -81,7 +84,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
     public nodesChanged(nodes: TreeNode[]): void {
         this.currentAccesses = nodes ? nodes : [];
         super.provideValue(nodes ? nodes.map((n) => n.id) : null);
-
         this.setFields();
     }
 
@@ -97,9 +99,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
                     const childFields = await formService.getFormFieldsForAccess(
                         this.currentAccesses.map((n) => n.id), this.state.formId
                     );
-                    formInstance.addNewFormField(this.state.field, childFields, true);
+                    formInstance.addFieldChildren(this.state.field, childFields, true);
                 } else {
-                    formInstance.addNewFormField(this.state.field, [], true);
+                    formInstance.addFieldChildren(this.state.field, [], true);
                 }
             }
         }

@@ -143,7 +143,6 @@ export class KIXModulesSocketClient extends SocketClient {
     }
 
 
-
     public async loadReleaseConfig(): Promise<ReleaseInfo> {
         const socketTimeout = ClientStorageService.getSocketTimeout();
         return new Promise<ReleaseInfo>((resolve, reject) => {

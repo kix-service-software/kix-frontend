@@ -80,7 +80,6 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
         return result;
     }
 
-
     private async getDFDisplayValue(
         object: KIXObject, dfValue: DynamicFieldValue, dfOptions: string = ''
     ): Promise<string> {

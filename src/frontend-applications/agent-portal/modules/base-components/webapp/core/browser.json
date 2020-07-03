@@ -62,8 +62,6 @@
         "require ./IEventSubscriber",
         "require ./IFormEvent",
         "require ./IFormFieldValidator",
-        "require ./IFormInstance",
-        "require ./IFormInstanceListener",
         "require ./IImageDialogListener",
         "require ./IKIXObjectFormService",
         "require ./IKIXObjectService",

@@ -10,13 +10,13 @@
 import { CompontentState } from './CompontentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { TreeNode } from '../../core/tree';
+import { TreeNode, TreeService, TreeHandler } from '../../core/tree';
+import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<string, CompontentState> {
 
     public onCreate(): void {
         this.state = new CompontentState();
-        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -33,31 +33,44 @@ class Component extends FormInputComponent<string, CompontentState> {
     }
 
     public async onMount(): Promise<void> {
+        const treeHandler = new TreeHandler([], null, null, false);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+        await this.load();
         await super.onMount();
         this.state.prepared = true;
     }
 
-    private async load(): Promise<TreeNode[]> {
+    private async load(): Promise<void> {
         const languages = await TranslationService.getInstance().getLanguages();
         const nodes = languages.map((l) => new TreeNode(l[0], l[1]));
-        await this.setCurrentNode(nodes);
-        return nodes;
+
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes, null, true);
+        }
     }
 
-    public async setCurrentNode(nodes: TreeNode[]): Promise<void> {
+    public async setCurrentValue(): Promise<void> {
         let lang: string;
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            lang = this.state.defaultValue.value;
+
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        if (value) {
+            lang = value.value;
         } else {
             lang = await TranslationService.getUserLanguage();
         }
 
-        if (lang) {
+        if (lang && treeHandler) {
+            const nodes = treeHandler.getTree();
             const currentNode = nodes.find((n) => n.id === lang);
             if (currentNode) {
                 currentNode.selected = true;
-                super.provideValue(currentNode.id);
             }
+
+            treeHandler.setSelection([currentNode], true, true, true);
         }
     }
 

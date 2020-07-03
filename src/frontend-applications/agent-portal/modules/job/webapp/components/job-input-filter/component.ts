@@ -10,23 +10,24 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { JobProperty } from '../../../model/JobProperty';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { ContextType } from '../../../../../model/ContextType';
-import { JobService, JobFormService } from '../../core';
+import { JobFormService, JobService } from '../../core';
 import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
-
-
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
 
 class Component extends FormInputComponent<{}, ComponentState> {
 
     private listenerId: string;
     private formTimeout: any;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -38,21 +39,22 @@ class Component extends FormInputComponent<{}, ComponentState> {
 
     public async onMount(): Promise<void> {
         this.listenerId = 'job-input-filter-manager-listener';
+        await this.setManager();
         await super.onMount();
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        await this.setManager();
-        await this.setCurrentNode();
-
-
-        formInstance.registerListener({
-            formListenerId: 'job-input-filter',
-            updateForm: () => { return; },
-            formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>) => {
-                if (formField.property === JobProperty.TYPE) {
+        this.formSubscriber = {
+            eventSubscriberId: 'JobInputFilter',
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+                const jobTypeValue = data.changedValues.find((cv) => cv[0] && cv[0].property === JobProperty.TYPE);
+                if (jobTypeValue) {
                     this.setManager();
-                    await this.setCurrentNode();
-                } else if (formField.property === JobProperty.EXEC_PLAN_EVENTS) {
+                    await this.setCurrentValue();
+                }
+
+                const eventValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === JobProperty.EXEC_PLAN_EVENTS
+                );
+                if (eventValue) {
                     const context = ContextService.getInstance().getActiveContext();
                     if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
                         const selectedEvents = context.getAdditionalInformation(JobProperty.EXEC_PLAN_EVENTS);
@@ -74,7 +76,8 @@ class Component extends FormInputComponent<{}, ComponentState> {
                     }
                 }
             }
-        });
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
 
         this.state.prepared = true;
     }
@@ -97,8 +100,8 @@ class Component extends FormInputComponent<{}, ComponentState> {
                 }
                 this.formTimeout = setTimeout(async () => {
                     const filterValues = {};
-                    if (this.state.manager.hasDefinedValues()) {
-                        const values = this.state.manager.getEditableValues();
+                    if (await this.state.manager.hasDefinedValues()) {
+                        const values = await this.state.manager.getEditableValues();
                         values.forEach((v) => {
                             if (v.value !== null) {
                                 filterValues[v.property] = v.value;
@@ -155,20 +158,14 @@ class Component extends FormInputComponent<{}, ComponentState> {
         if (this.state.manager) {
             this.state.manager.unregisterListener(this.listenerId);
         }
-
-        const form = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (form) {
-            form.removeListener('job-input-filter');
-        }
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
-    public async setCurrentNode(): Promise<void> {
-        if (
-            this.state.defaultValue && this.state.defaultValue.value
-            && typeof this.state.defaultValue.value === 'object'
-            && this.state.manager
-        ) {
-            for (const property in this.state.defaultValue.value) {
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue(this.state.field.instanceId);
+        if (value && typeof value.value === 'object' && this.state.manager) {
+            for (const property in value.value) {
                 if (property) {
                     let newProperty = property.replace('Ticket::', '');
                     newProperty = newProperty.replace('Article::', '');
@@ -180,10 +177,9 @@ class Component extends FormInputComponent<{}, ComponentState> {
                             objectType = await this.state.manager.getObjectReferenceObjectType(newProperty);
                         }
                         if ((inputType === InputFieldTypes.TEXT || inputType === InputFieldTypes.TEXT_AREA)
-                            && Array.isArray(this.state.defaultValue.value[newProperty])
+                            && Array.isArray(value.value[newProperty])
                         ) {
-                            this.state.defaultValue.value[newProperty]
-                                = this.state.defaultValue.value[newProperty][0];
+                            value.value[newProperty] = value.value[newProperty][0];
                         }
                     }
 
@@ -191,13 +187,12 @@ class Component extends FormInputComponent<{}, ComponentState> {
                     objectType = isRequired ? KIXObjectType.ARTICLE : objectType;
                     this.state.manager.setValue(
                         new ObjectPropertyValue(
-                            newProperty, null, this.state.defaultValue.value[newProperty],
+                            newProperty, null, value.value[newProperty],
                             isRequired, true, objectType, null, null, newProperty
                         )
                     );
                 }
             }
-            super.provideValue(this.state.defaultValue.value, true);
         }
     }
 

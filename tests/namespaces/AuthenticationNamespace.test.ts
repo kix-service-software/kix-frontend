@@ -54,7 +54,6 @@ describe('AuthenticationNamespace', () => {
             ];
             const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
 
-
             it('the should be positiv', async () => {
                 const socketRespopnse: SocketResponse = await (AuthenticationNamespace.getInstance() as any).checkPermissions(request);
                 expect(socketRespopnse).exist;
@@ -69,7 +68,6 @@ describe('AuthenticationNamespace', () => {
                 new UIComponentPermission('contacts', [CRUD.READ])
             ];
             const request = new PermissionCheckRequest('requestId', 'clientId', permissions);
-
 
             it('the should be positiv', async () => {
                 const socketRespopnse: SocketResponse = await (AuthenticationNamespace.getInstance() as any).checkPermissions(request);

@@ -27,7 +27,7 @@ export class ChannelService extends KIXObjectService<Channel> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CHANNEL);
         this.objectConstructors.set(KIXObjectType.CHANNEL, [Channel]);
     }
 

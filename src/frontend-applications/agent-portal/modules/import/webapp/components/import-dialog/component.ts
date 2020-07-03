@@ -20,9 +20,7 @@ import { ContextType } from '../../../../../model/ContextType';
 import { ImportService, ImportPropertyOperator } from '../../core';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import {
-    TableEvent, TableFactoryService, TableEventData, ValueState
-} from '../../../../base-components/webapp/core/table';
+import { TableEvent, TableFactoryService, TableEventData, ValueState } from '../../../../base-components/webapp/core/table';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { FormGroupConfiguration } from '../../../../../model/configuration/FormGroupConfiguration';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
@@ -47,6 +45,8 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
 import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 import { Error } from '../../../../../../../server/model/Error';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 class Component {
 
@@ -67,6 +67,7 @@ class Component {
 
     private propertiesFormTimeout;
     private importFormTimeout;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.instanceId);
@@ -125,6 +126,22 @@ class Component {
             }
         }
 
+        this.formSubscriber = {
+            eventSubscriberId: 'ImportDialog',
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                if (this.importFormTimeout) {
+                    clearTimeout(this.importFormTimeout);
+                } else {
+                    this.fileLoaded = false;
+                }
+                this.importFormTimeout = setTimeout(async () => {
+                    this.importFormTimeout = null;
+                    await this.prepareTableDataByCSV();
+                }, 100);
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+
         this.prepareImportConfigForm();
         this.createTable();
     }
@@ -139,10 +156,10 @@ class Component {
     }
 
     public onDestroy(): void {
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.tableSubscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_INITIALIZED, this.tableSubscriber);
-        FormService.getInstance().removeFormInstanceListener(this.state.importConfigFormId, this.formListenerId);
         FormService.getInstance().deleteFormInstance(this.state.importConfigFormId);
         if (this.state.importManager) {
             this.state.importManager.unregisterListener(this.formListenerId);
@@ -215,22 +232,7 @@ class Component {
 
         FormService.getInstance().deleteFormInstance(form.id);
         await FormService.getInstance().addForm(form);
-        FormService.getInstance().registerFormInstanceListener(form.id, {
-            formListenerId: this.formListenerId,
-            formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>) => {
-                if (this.importFormTimeout) {
-                    clearTimeout(this.importFormTimeout);
-                } else {
-                    this.fileLoaded = false;
-                }
-                this.importFormTimeout = setTimeout(async () => {
-                    this.importFormTimeout = null;
-                    await this.prepareTableDataByCSV();
-                }, 100);
 
-            },
-            updateForm: () => { return; }
-        });
         this.state.importConfigFormId = form.id;
     }
 
@@ -323,8 +325,8 @@ class Component {
             });
         }
 
-        if (this.state.importManager && this.state.importManager.hasDefinedValues()) {
-            const values = this.state.importManager.getEditableValues();
+        if (this.state.importManager && await this.state.importManager.hasDefinedValues()) {
+            const values = await this.state.importManager.getEditableValues();
             values.filter((v) => v.operator !== ImportPropertyOperator.IGNORE)
                 .map((v) => v.property)
                 .filter((p) =>
@@ -556,8 +558,8 @@ class Component {
                 }
             }
             if (!!objects.length) {
-                if (this.state.importManager.hasDefinedValues()) {
-                    const values = this.state.importManager.getEditableValues();
+                if (await this.state.importManager.hasDefinedValues()) {
+                    const values = await this.state.importManager.getEditableValues();
                     values.forEach((v) => {
                         objects.forEach((o) => {
                             const value = Array.isArray(v.value) ? v.value[0] : v.value;

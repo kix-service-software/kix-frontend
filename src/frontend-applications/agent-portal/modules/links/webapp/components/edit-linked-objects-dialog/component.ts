@@ -335,7 +335,6 @@ class Component {
         this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
     }
 
-
     public cancel(): void {
         DialogService.getInstance().closeMainDialog();
     }

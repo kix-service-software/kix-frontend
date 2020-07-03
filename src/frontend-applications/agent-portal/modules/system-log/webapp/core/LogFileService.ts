@@ -23,7 +23,7 @@ export class LogFileService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.LOG_FILE);
         this.objectConstructors.set(KIXObjectType.LOG_FILE, [LogFile]);
     }
 

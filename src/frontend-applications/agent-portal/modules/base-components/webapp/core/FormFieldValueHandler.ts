@@ -7,15 +7,16 @@
  * --
  */
 
+import { FormInstance } from './FormInstance';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 
-export interface IFormInstanceListener {
+export class FormFieldValueHandler {
 
-    formListenerId: string;
-
-    formValueChanged(formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any): void;
-
-    updateForm(): void;
+    public async handleFormFieldValues(
+        formInstance: FormInstance, changedFieldValues: Array<[FormFieldConfiguration, FormFieldValue]>
+    ): Promise<void> {
+        return;
+    }
 
 }

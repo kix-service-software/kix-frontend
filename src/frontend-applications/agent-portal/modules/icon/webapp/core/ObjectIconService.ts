@@ -28,7 +28,7 @@ export class ObjectIconService extends KIXObjectService<ObjectIcon> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.OBJECT_ICON);
         this.objectConstructors.set(KIXObjectType.OBJECT_ICON, [ObjectIcon]);
         super.loadObjects<ObjectIcon>(KIXObjectType.OBJECT_ICON, null);
     }

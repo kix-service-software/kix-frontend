@@ -19,7 +19,6 @@ import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptio
 import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { UserProperty } from '../../../user/model/UserProperty';
-import { IFormInstance } from '../../../base-components/webapp/core/IFormInstance';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -42,6 +41,7 @@ import { Contact } from '../../model/Contact';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { RoleProperty } from '../../../user/model/RoleProperty';
 import { Role } from '../../../user/model/Role';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -76,7 +76,7 @@ export class ContactFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    public async initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>> {
+    public async initValues(form: FormConfiguration, formInstance: FormInstance): Promise<void> {
         this.editUserId = null;
         this.isAgentDialog = false;
         let contact: Contact;
@@ -93,7 +93,7 @@ export class ContactFormService extends KIXObjectFormService {
             }
         }
 
-        return await super.initValues(form, contact);
+        await super.initValues(form, formInstance, contact);
     }
 
     protected async prePrepareForm(form: FormConfiguration, contact: Contact): Promise<void> {
@@ -185,7 +185,7 @@ export class ContactFormService extends KIXObjectFormService {
         return fields;
     }
 
-    private async addLoginField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async addLoginField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.USER_LOGIN)
             : null;
@@ -196,7 +196,7 @@ export class ContactFormService extends KIXObjectFormService {
         );
     }
 
-    private async addPasswordField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async addPasswordField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         return new FormFieldConfiguration(
             'contact-form-field-password',
             'Translatable#Password', UserProperty.USER_PASSWORD, null, !Boolean(this.assignedUserId),
@@ -209,7 +209,7 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async addRolesField(
-        accesses: string[], formInstance?: IFormInstance
+        accesses: string[], formInstance?: FormInstance
     ): Promise<FormFieldConfiguration> {
         if (accesses && accesses.some((a) => a === UserProperty.IS_AGENT)) {
             let value = formInstance
@@ -254,7 +254,7 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async addPreferencesFields(
-        accesses: string[], formInstance?: IFormInstance
+        accesses: string[], formInstance?: FormInstance
     ): Promise<FormFieldConfiguration> {
         const languageField = await this.getLanguageField(formInstance);
 
@@ -274,7 +274,7 @@ export class ContactFormService extends KIXObjectFormService {
         return preferencesField;
     }
 
-    private async getLanguageField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async getLanguageField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.USER_LANGUAGE)
             : null;
@@ -285,7 +285,7 @@ export class ContactFormService extends KIXObjectFormService {
         return languageField;
     }
 
-    private async getQueueField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async getQueueField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.MY_QUEUES)
             : null;
@@ -310,7 +310,7 @@ export class ContactFormService extends KIXObjectFormService {
         return queueField;
     }
 
-    private async getNotifiactionField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async getNotifiactionField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.NOTIFICATIONS)
             : null;
@@ -336,7 +336,9 @@ export class ContactFormService extends KIXObjectFormService {
         );
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (property === UserProperty.USER_ACCESS) {
             const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
@@ -371,7 +373,7 @@ export class ContactFormService extends KIXObjectFormService {
         if (this.assignedUserId && formContext === FormContext.EDIT) {
             parameter.push([ContactProperty.ASSIGNED_USER_ID, this.assignedUserId]);
         }
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext);
     }
 
     private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {

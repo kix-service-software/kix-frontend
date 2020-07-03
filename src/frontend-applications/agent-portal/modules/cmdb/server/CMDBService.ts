@@ -221,7 +221,6 @@ export class CMDBAPIService extends KIXObjectAPIService {
         }
     }
 
-
     private async getAttachments(
         token: string, attachmentIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions,
         objectLoadingOptions: AttachmentLoadingOptions

@@ -18,6 +18,10 @@ import { FormFieldConfiguration } from '../../../../../model/configuration/FormF
 import { DynamicFieldProperty } from '../../../model/DynamicFieldProperty';
 import { DynamicFieldService } from '../../core/DynamicFieldService';
 import { FormContext } from '../../../../../model/configuration/FormContext';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 declare var JSONEditor: any;
 
@@ -25,6 +29,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
 
     private schema: JSON = null;
     private editor: any;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -36,40 +41,29 @@ class Component extends FormInputComponent<JSON, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const context = ContextService.getInstance().getActiveContext();
-        if (context) {
-            const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-            if (formId) {
-                const formInstance = await FormService.getInstance().getFormInstance(formId);
-                if (formInstance) {
-                    formInstance.registerListener({
-                        formListenerId: IdService.generateDateBasedId('config-input'),
-                        formValueChanged: this.formValueChanged.bind(this),
-                        updateForm: () => { return; }
-                    });
 
-                    await this.setValue();
+        this.formSubscriber = {
+            eventSubscriberId: this.state.field.instanceId,
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+                const typeValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === DynamicFieldProperty.FIELD_TYPE
+                );
+                if (typeValue && typeValue[1]) {
+                    if (typeValue[1].value) {
+                        if (this.state.formContext === FormContext.NEW) {
+                            setTimeout(() => this.createEditor(typeValue[1].value, null), 50);
+                        }
+                    } else {
+                        await this.destroyEditor();
+                        this.state.prepared = false;
+                    }
                 }
             }
-        }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
-    private async formValueChanged(
-        formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any
-    ): Promise<void> {
-        if (formField.property === DynamicFieldProperty.FIELD_TYPE) {
-            if (value && value.value) {
-                if (this.state.formContext === FormContext.NEW) {
-                    setTimeout(() => this.createEditor(value.value, null), 50);
-                }
-            } else {
-                await this.onDestroy();
-                this.state.prepared = false;
-            }
-        }
-    }
-
-    private async setValue(): Promise<void> {
+    public async setCurrentValue(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
 
@@ -80,7 +74,7 @@ class Component extends FormInputComponent<JSON, ComponentState> {
     }
 
     private async createEditor(type: string, value?: any): Promise<void> {
-        await this.onDestroy();
+        await this.destroyEditor();
         this.schema = await DynamicFieldService.getInstance().getConfigSchema(type);
         if (this.schema) {
             this.state.prepared = true;
@@ -116,6 +110,11 @@ class Component extends FormInputComponent<JSON, ComponentState> {
     }
 
     public async onDestroy(): Promise<void> {
+        this.destroyEditor();
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+    }
+
+    private destroyEditor(): void {
         if (this.editor) {
             this.editor.destroy();
             this.editor = null;

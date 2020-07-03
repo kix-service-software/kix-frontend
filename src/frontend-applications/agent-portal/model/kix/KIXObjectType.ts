@@ -141,8 +141,6 @@ export enum KIXObjectType {
 
     TICKET_STATE_TYPE = 'StateType',
 
-    TICKET_TEMPLATE = 'TICKET_TEMPLATE',
-
     TRANSLATION = 'Translation',
 
     TRANSLATION_PATTERN = 'TranslationPattern',

@@ -13,11 +13,14 @@ import { IdService } from '../../../../../../model/IdService';
 import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
 import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 import { KIXModulesService } from '../../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { EventService } from '../../../core/EventService';
+import { FormEvent } from '../../../core/FormEvent';
+import { IEventSubscriber } from '../../../core/IEventSubscriber';
 
 class Component {
 
     private state: ComponentState;
-    private formListenerId: string;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -50,21 +53,23 @@ class Component {
     }
 
     public async onMount(): Promise<void> {
-        this.formListenerId = IdService.generateDateBasedId('form-field-' + this.state.field.instanceId);
-        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-            formListenerId: this.formListenerId,
-            formValueChanged: () => { return; },
-            updateForm: async () => {
+        this.formSubscriber = {
+            eventSubscriberId: this.state.field.instanceId,
+            eventPublished: async (data: any, eventId: string) => {
                 if (this.hasChildren()) {
                     this.state.minimized = this.state.minimized && !(await this.hasInvalidChildren());
                 }
             }
-        });
+        };
+        EventService.getInstance().subscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
+
         this.update();
     }
 
-    public async onDestroy(): Promise<void> {
-        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(FormEvent.FORM_VALIDATED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_VALIDATED, this.formSubscriber);
     }
 
     private async hasInvalidChildren(field: FormFieldConfiguration = this.state.field): Promise<boolean> {

@@ -241,7 +241,6 @@ class TabLaneComponent implements IEventSubscriber {
                     : this.state.tabWidgets[0];
             }
 
-
             this.tabClicked(nextTab);
         }
     }

@@ -79,7 +79,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }, 300);
     }
 
-
     public showValidationError(result: ValidationResult[]): void {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
         const content = new ComponentContent('list-with-title',

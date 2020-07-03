@@ -8,14 +8,14 @@
  */
 
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { IFormInstance } from '../../../../../modules/base-components/webapp/core/IFormInstance';
+import { FormInstance } from '../../core/FormInstance';
 
 export class ComponentState {
 
     public constructor(
         public formId: string = null,
         public objectType: KIXObjectType | string = null,
-        public formInstance: IFormInstance = null,
+        public formInstance: FormInstance = null,
         public isSearchContext: boolean = false,
         public loading: boolean = true,
         public additionalFieldControlsNeeded: boolean = false,

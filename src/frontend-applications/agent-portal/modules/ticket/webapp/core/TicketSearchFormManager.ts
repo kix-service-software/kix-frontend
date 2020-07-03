@@ -19,8 +19,6 @@ import { InputFieldTypes } from '../../../../modules/base-components/webapp/core
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
-import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { CMDBService } from '../../../cmdb/webapp/core';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -195,44 +193,6 @@ export class TicketSearchFormManager extends SearchFormManager {
                 }
         }
         return nodes;
-    }
-
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        const result = await super.searchValues(property, searchValue, limit);
-        if (result) {
-            return result;
-        }
-
-        let tree: TreeNode[];
-
-        switch (property) {
-            case TicketProperty.CONTACT_ID:
-                const contacts = await KIXObjectService.search(KIXObjectType.CONTACT, searchValue, limit);
-                tree = await KIXObjectService.prepareTree(contacts);
-                break;
-            case TicketProperty.ORGANISATION_ID:
-                const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
-                tree = await KIXObjectService.prepareTree(organisations);
-                break;
-            default:
-        }
-
-        if (!tree && CMDBService) {
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (dfName) {
-                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                    const configItems = await CMDBService.searchConfigItems(searchValue, limit);
-                    tree = configItems.map(
-                        (ci) => new TreeNode(
-                            ci.ConfigItemID, ci.Name, 'kix-icon-ci'
-                        )
-                    );
-                }
-            }
-        }
-
-        return tree;
     }
 
 }

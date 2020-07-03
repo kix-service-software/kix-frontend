@@ -73,7 +73,10 @@ export class DateTimeUtil {
         return isNegative ? '- ' + ageResult : ageResult;
     }
 
-    public static getKIXDateTimeString(date: Date): string {
+    public static getKIXDateTimeString(date: Date | string): string {
+        if (typeof date === 'string') {
+            date = new Date(date);
+        }
         return `${DateTimeUtil.getKIXDateString(date)} ${DateTimeUtil.getKIXTimeString(date, false)}`;
     }
 

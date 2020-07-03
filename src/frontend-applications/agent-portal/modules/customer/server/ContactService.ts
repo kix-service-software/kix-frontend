@@ -26,6 +26,7 @@ import { UserService } from '../../user/server/UserService';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 import { Contact } from '../model/Contact';
+import { SearchOperator } from '../../search/model/SearchOperator';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -232,6 +233,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         const searchCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
                 && f.property !== KIXObjectProperty.VALID_ID
+                && f.operator !== SearchOperator.IN
         );
 
         const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);

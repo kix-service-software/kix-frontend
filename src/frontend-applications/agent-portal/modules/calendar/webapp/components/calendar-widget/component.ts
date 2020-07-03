@@ -106,7 +106,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         });
 
-
         const schedules = await this.createSchedules(tickets);
         this.calendar.createSchedules(schedules);
 

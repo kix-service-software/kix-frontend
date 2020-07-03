@@ -59,7 +59,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.TICKET);
         this.objectConstructors.set(KIXObjectType.TICKET, [Ticket]);
         this.objectConstructors.set(KIXObjectType.ARTICLE, [Article]);
         this.objectConstructors.set(KIXObjectType.SENDER_TYPE, [SenderType]);
@@ -212,9 +212,16 @@ export class TicketService extends KIXObjectService<Ticket> {
                     } else {
                         loadingOptions.includes = [UserProperty.CONTACT];
                     }
+
+                    if (Array.isArray(loadingOptions.query)) {
+                        loadingOptions.query.push(['requiredPermission', 'TicketRead,TicketUpdate']);
+                    } else {
+                        loadingOptions.query = [['requiredPermission', 'TicketRead,TicketUpdate']];
+                    }
                 } else {
                     loadingOptions = new KIXObjectLoadingOptions(
-                        null, null, null, [UserProperty.CONTACT]
+                        null, null, null, [UserProperty.CONTACT], null,
+                        [['requiredPermission', 'TicketRead,TicketUpdate']]
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(
@@ -253,6 +260,30 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(1, 'agent'));
                 nodes.push(new TreeNode(2, 'system'));
                 nodes.push(new TreeNode(3, 'external'));
+                break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                nodes.push(new TreeNode(0, 'No'));
+                nodes.push(new TreeNode(1, 'Yes'));
+                break;
+            case ArticleProperty.TO:
+            case ArticleProperty.CC:
+            case ArticleProperty.BCC:
+            case TicketProperty.CONTACT_ID:
+                if (Array.isArray(filterIds)) {
+                    const contactIds = filterIds.filter((id) => !isNaN(Number(id))).map((id) => Number(id));
+                    const contacts = await KIXObjectService.loadObjects(
+                        KIXObjectType.CONTACT, contactIds, null, null, true
+                    );
+                    nodes = await KIXObjectService.prepareTree(contacts);
+                }
+                break;
+            case TicketProperty.ORGANISATION_ID:
+                if (Array.isArray(filterIds)) {
+                    const organisations = await KIXObjectService.loadObjects(
+                        KIXObjectType.ORGANISATION, filterIds
+                    );
+                    nodes = await KIXObjectService.prepareTree(organisations);
+                }
                 break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
@@ -297,11 +328,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         return ids;
     }
 
-    public async hasPendingState(ticket: Ticket): Promise<boolean> {
-        return this.isPendingState(ticket.StateID);
-    }
-
-    public async isPendingState(stateId: number): Promise<boolean> {
+    public static async isPendingState(stateId: number): Promise<boolean> {
         let pending = false;
 
         const states = await KIXObjectService.loadObjects<TicketState>(
@@ -321,6 +348,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         return pending;
     }
+
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         const id = object ? object.ObjectId : objectId;

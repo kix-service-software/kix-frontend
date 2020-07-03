@@ -48,7 +48,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(widget);
 
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Textmodule Edit Dialog', ConfigurationType.Context,

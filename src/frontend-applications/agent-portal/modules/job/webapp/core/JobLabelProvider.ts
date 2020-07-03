@@ -181,7 +181,6 @@ export class JobLabelProvider extends LabelProvider {
                 ).catch(() => [] as ExecPlan[]);
             }
 
-
             if (property === JobProperty.HAS_TRIGGER_EVENTS) {
                 const hasEvents: boolean = execPlans && !!execPlans.length && execPlans.some(
                     (ep) => ep.Parameters && Array.isArray(ep.Parameters.Event) && !!ep.Parameters.Event.length

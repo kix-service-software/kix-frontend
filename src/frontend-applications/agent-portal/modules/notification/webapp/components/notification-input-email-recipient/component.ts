@@ -43,6 +43,10 @@ class Component extends FormInputComponent<string[], ComponentState> {
         this.state.autoCompleteConfiguration = new AutoCompleteConfiguration(10, 2000, 3, objectName);
     }
 
+    public async setCurrentValue(): Promise<void> {
+        return;
+    }
+
     public async getCurrentNodes(): Promise<TreeNode[]> {
         const nodes = [];
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
@@ -84,7 +88,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
                 node.selected = true;
                 nodes.push(node);
             }
-            this.emailChanged(nodes);
         }
         return nodes;
     }

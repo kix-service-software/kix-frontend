@@ -77,7 +77,9 @@ export class FAQArticleFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (property === FAQArticleProperty.ATTACHMENTS) {
             if (value && value.length) {

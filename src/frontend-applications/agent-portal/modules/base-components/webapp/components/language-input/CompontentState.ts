@@ -16,7 +16,6 @@ export class CompontentState extends FormInputComponentState<string> {
     public constructor(
         public placeholder: string = '',
         public treeId: string = IdService.generateDateBasedId('language-input-'),
-        public loadNodes: () => Promise<TreeNode[]> = null,
         public prepared: boolean = false
     ) {
         super();

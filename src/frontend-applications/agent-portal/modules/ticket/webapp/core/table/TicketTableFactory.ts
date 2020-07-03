@@ -151,7 +151,6 @@ export class TicketTableFactory extends TableFactory {
             extendedFactory.modifiyTableConfiguation(tableConfiguration, useDefaultColumns);
         }
 
-
         return tableConfiguration;
     }
 

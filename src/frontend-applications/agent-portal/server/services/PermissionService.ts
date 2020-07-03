@@ -49,7 +49,6 @@ export class PermissionService {
         const others = await this.checkConfiguration(token, configuration.others);
         const dialogs = await this.checkConfiguration(token, configuration.dialogs);
 
-
         return new ContextConfiguration(
             configuration.id, configuration.name, configuration.type,
             configuration.contextId,

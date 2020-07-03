@@ -49,7 +49,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(newDIalogWidget);
 
-
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), this.getModuleId(), ConfigurationType.Context,

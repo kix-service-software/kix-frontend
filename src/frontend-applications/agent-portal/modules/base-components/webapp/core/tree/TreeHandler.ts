@@ -72,7 +72,7 @@ export class TreeHandler {
 
     public filter(filterValue: string): void {
         this.filterValue = filterValue;
-        this.setTree(this.tree, this.filterValue);
+        this.setTree(this.tree, this.filterValue, true);
     }
 
     public handleKeyEvent(event: any): void {
@@ -160,7 +160,7 @@ export class TreeHandler {
         }
     }
 
-    public setTree(tree: TreeNode[], filterValue?: string, keepSelection?: boolean): void {
+    public setTree(tree: TreeNode[], filterValue?: string, keepSelection?: boolean, filterSelection?: boolean): void {
         this.tree = tree;
         if (!keepSelection) {
             this.selectedNodes = [];
@@ -176,7 +176,7 @@ export class TreeHandler {
             }
         });
         const treeSelection = this.getSelection(tree);
-        this.setSelection(treeSelection, true, true, true);
+        this.setSelection(treeSelection, true, true, true, filterSelection);
 
         this.listener.forEach((l) => l(tree));
     }
@@ -186,14 +186,15 @@ export class TreeHandler {
     }
 
     public setSelection(
-        nodes: TreeNode[], selected: boolean = true, silent: boolean = false, force: boolean = false
+        nodes: TreeNode[], selected: boolean = true, silent: boolean = false, force: boolean = false,
+        filterSelection?: boolean
     ): void {
         if (nodes) {
 
             nodes = nodes.filter((n) => n !== null && typeof n !== 'undefined');
 
             let selectionChanged = true;
-            if (!!nodes.length) {
+            if (nodes.length) {
                 if (this.multiselect) {
                     nodes.forEach((n) => n.selected = selected);
                 } else {
@@ -223,12 +224,32 @@ export class TreeHandler {
                             this.selectedNodes.splice(nodeIndex, 1);
                         }
                     });
-                    this.listener.forEach((l) => l(this.getSelectedNodes()));
-
-                    if (!silent) {
-                        this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
-                    }
                 }
+            }
+
+            if (filterSelection) {
+                const selection = [];
+                this.selectedNodes.forEach((n) => {
+                    const exists = selection.some((sn) => sn.id === n.id);
+                    if (!filterSelection && !exists) {
+                        selection.push(n);
+                    } else if (filterSelection && !exists) {
+                        const existingNode = TreeUtil.findNode(this.tree, n.id);
+                        if (existingNode) {
+                            selection.push(n);
+                        } else {
+                            n.selected = false;
+                        }
+                    } else if (!exists) {
+                        selection.push(n);
+                    }
+                });
+                this.selectedNodes = selection;
+            }
+
+            this.listener.forEach((l) => l(this.getSelectedNodes()));
+            if (!silent) {
+                this.selectionListener.forEach((l) => l(this.getSelectedNodes()));
             }
         }
     }

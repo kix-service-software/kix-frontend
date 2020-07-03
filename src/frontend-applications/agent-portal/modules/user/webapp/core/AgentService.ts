@@ -35,7 +35,7 @@ export class AgentService extends KIXObjectService<User> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.USER);
         this.objectConstructors.set(KIXObjectType.USER, [User]);
     }
 
@@ -88,7 +88,7 @@ export class AgentService extends KIXObjectService<User> {
         );
         let parameter: Array<[string, any]>;
         if (service) {
-            parameter = await service.prepareFormFields(formId);
+            parameter = await service.getFormParameter(formId);
         }
 
         await AgentSocketClient.getInstance().setPreferences(parameter);

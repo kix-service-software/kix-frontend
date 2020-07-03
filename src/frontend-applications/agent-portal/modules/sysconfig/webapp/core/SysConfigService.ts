@@ -26,7 +26,7 @@ export class SysConfigService extends KIXObjectService<SysConfigOption> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.SYS_CONFIG_OPTION);
         this.objectConstructors.set(KIXObjectType.SYS_CONFIG_OPTION, [SysConfigOption]);
         this.objectConstructors.set(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [SysConfigOptionDefinition]);
     }

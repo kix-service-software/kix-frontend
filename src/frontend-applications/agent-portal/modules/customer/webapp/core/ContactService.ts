@@ -33,7 +33,7 @@ export class ContactService extends KIXObjectService<Contact> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CONTACT);
         this.objectConstructors.set(KIXObjectType.CONTACT, [Contact]);
     }
 

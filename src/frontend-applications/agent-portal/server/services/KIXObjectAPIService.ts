@@ -98,15 +98,16 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     protected async executeUpdateOrCreateRequest<R = number>(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, uri: string,
-        objectType: KIXObjectType | string, responseProperty: string, create: boolean = false
+        objectType: KIXObjectType | string, responseProperty: string, create: boolean = false,
+        cacheKeyPrefix: string = objectType
     ): Promise<R> {
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
 
-        const response = await this.sendRequest(token, clientRequestId, uri, object, objectType, create);
+        const response = await this.sendRequest(token, clientRequestId, uri, object, cacheKeyPrefix, create);
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
+        if (icon && icon.Content) {
             icon.Object = objectType;
             icon.ObjectID = response[responseProperty];
             if (create) {
@@ -150,7 +151,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             if (loadingOptions.sortOrder) {
                 query = { ...query, sort: loadingOptions.sortOrder };
             }
-
 
             let additionalIncludes = [];
             this.extendedServices.forEach(

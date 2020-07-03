@@ -16,6 +16,11 @@ import { KIXModulesService } from '../../../../../../../../modules/base-componen
 import { ServiceRegistry } from '../../../../../core/ServiceRegistry';
 import { IKIXObjectService } from '../../../../../core/IKIXObjectService';
 import { RoutingService } from '../../../../../core/RoutingService';
+import { ContextType } from '../../../../../../../../model/ContextType';
+import { DialogRoutingConfiguration } from '../../../../../../../../model/configuration/DialogRoutingConfiguration';
+import { KIXObjectService } from '../../../../../core/KIXObjectService';
+import { LabelService } from '../../../../../core/LabelService';
+import { ContextService } from '../../../../../core/ContextService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -125,8 +130,33 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public cellClicked(): void {
         if (this.state.routingConfiguration) {
-            RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
+            const contextType = this.state.routingConfiguration.contextType;
+            if (contextType && contextType === ContextType.DIALOG) {
+                this.openDialog(event);
+            } else {
+                RoutingService.getInstance().routeToContext(this.state.routingConfiguration, this.state.objectId);
+            }
         }
+    }
+
+    private async openDialog(event: any): Promise<void> {
+        if (event.preventDefault) {
+            event.preventDefault();
+        }
+        const configuration = this.state.routingConfiguration as DialogRoutingConfiguration;
+
+        const objectId = configuration.objectId ? configuration.objectId : this.state.objectId;
+
+        ContextService.getInstance().setDialogContext(
+            configuration.contextId,
+            configuration.objectType,
+            configuration.contextMode,
+            objectId,
+            configuration.resetContext,
+            configuration.title,
+            configuration.singleTab,
+            configuration.icon,
+        );
     }
 }
 

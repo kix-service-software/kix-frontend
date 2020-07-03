@@ -124,7 +124,7 @@ export class AbstractJobFormManager implements IJobFormManager {
     }
 
     protected async getTimeGroup(formContext: FormContext): Promise<FormGroupConfiguration> {
-        const weekdaysValue = await this.getValue(JobProperty.EXEC_PLAN_WEEKDAYS, null, this.job, formContext);
+        const weekdaysValue = await this.getValue(JobProperty.EXEC_PLAN_WEEKDAYS, null, null, this.job, formContext);
         const weekdays = new FormFieldConfiguration(
             'job-form-field-weekdays',
             'Translatable#Weekday(s)', JobProperty.EXEC_PLAN_WEEKDAYS, 'default-select-input', false,
@@ -153,7 +153,7 @@ export class AbstractJobFormManager implements IJobFormManager {
             timeNodes.push(new TreeNode(hour + ':30:00', i + ':30'));
         });
 
-        const timesValue = await this.getValue(JobProperty.EXEC_PLAN_WEEKDAYS_TIMES, null, this.job, formContext);
+        const timesValue = await this.getValue(JobProperty.EXEC_PLAN_WEEKDAYS_TIMES, null, null, this.job, formContext);
         const times = new FormFieldConfiguration(
             'job-form-field-times',
             'Translatable#Time', JobProperty.EXEC_PLAN_WEEKDAYS_TIMES, 'default-select-input', false,
@@ -171,7 +171,7 @@ export class AbstractJobFormManager implements IJobFormManager {
     }
 
     protected async getEventGroup(formContext: FormContext): Promise<FormGroupConfiguration> {
-        const eventsValue = await this.getValue(JobProperty.EXEC_PLAN_EVENTS, null, this.job, formContext);
+        const eventsValue = await this.getValue(JobProperty.EXEC_PLAN_EVENTS, null, null, this.job, formContext);
         const events = new FormFieldConfiguration(
             'job-form-field-events', 'Translatable#Events', JobProperty.EXEC_PLAN_EVENTS,
             'job-input-events', false, 'Translatable#Helptext_Admin_JobCreateEdit_Events',
@@ -184,7 +184,7 @@ export class AbstractJobFormManager implements IJobFormManager {
     }
 
     protected async getFilterPage(formContext: FormContext): Promise<FormPageConfiguration> {
-        const filtersValue = await this.getValue(JobProperty.FILTER, null, this.job, formContext);
+        const filtersValue = await this.getValue(JobProperty.FILTER, null, null, this.job, formContext);
         const filters = new FormFieldConfiguration(
             'job-form-field-filters',
             'Translatable#Filter', JobProperty.FILTER, 'job-input-filter', false,
@@ -312,12 +312,12 @@ export class AbstractJobFormManager implements IJobFormManager {
                         }
                     }
                 }
-                const validField = await this.getValidField(actionType, actionFieldInstanceId, action);
+                const skip = await this.getSkipField(actionType, actionFieldInstanceId, action);
 
                 // special instance id to distinguish between the actions
-                validField.instanceId = IdService.generateDateBasedId(`ACTION###${actionFieldInstanceId}###SKIP`);
+                skip.instanceId = IdService.generateDateBasedId(`ACTION###${actionFieldInstanceId}###SKIP`);
 
-                fields.unshift(validField);
+                fields.unshift(skip);
             }
         }
         return fields;
@@ -349,10 +349,9 @@ export class AbstractJobFormManager implements IJobFormManager {
             `ACTION###${actionFieldInstanceId}###${option.Name}`,
             inputType, Boolean(option.Required), option.Description, undefined,
             typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined);
-
     }
 
-    private async getValidField(
+    private async getSkipField(
         actionType: string, actionFieldInstanceId: string, action?: MacroAction
     ): Promise<FormFieldConfiguration> {
         let defaultValue;
@@ -368,7 +367,9 @@ export class AbstractJobFormManager implements IJobFormManager {
         );
     }
 
-    public async getValue(property: string, value: any, job: Job, formContext: FormContext): Promise<any> {
+    public async getValue(
+        property: string, formField: FormFieldConfiguration, value: any, job: Job, formContext: FormContext
+    ): Promise<any> {
         switch (property) {
             case JobProperty.EXEC_PLAN_WEEKDAYS:
                 if (job && formContext === FormContext.EDIT) {
@@ -404,11 +405,18 @@ export class AbstractJobFormManager implements IJobFormManager {
                 }
                 break;
             default:
+                if (property.startsWith('ACTION###') || property.startsWith('MACRO_ACTIONS')) {
+                    value = (formField && formField.defaultValue)
+                        ? formField.defaultValue.value
+                        : null;
+                }
         }
         return value;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         return [[property, value]];
     }
 

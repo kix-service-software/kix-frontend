@@ -14,8 +14,13 @@ import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { JobService } from '../../core';
 import { JobProperty } from '../../../model/JobProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<string[], ComponentState> {
+
+    public async setCurrentValue(): Promise<void> {
+        return;
+    }
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -47,23 +52,24 @@ class Component extends FormInputComponent<string[], ComponentState> {
         return nodes;
     }
 
-    public setCurrentNode(nodes: TreeNode[]): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
+    public async setCurrentNode(nodes: TreeNode[]): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<string[] | string>(this.state.field.instanceId);
+        if (value) {
             let currentNodes = [];
-            if (Array.isArray(this.state.defaultValue.value)) {
+            if (Array.isArray(value.value)) {
                 currentNodes = nodes.filter(
-                    (eventNode) => this.state.defaultValue.value.some((eventName) => eventName === eventNode.id)
+                    (eventNode) => (value.value as string[]).some((eventName) => eventName === eventNode.id)
                 );
             } else {
                 const node = nodes.find(
-                    (eventNode) => eventNode.id === this.state.defaultValue.value
+                    (eventNode) => eventNode.id === value.value
                 );
                 currentNodes = node ? [node] : [];
             }
 
             currentNodes.forEach((n) => n.selected = true);
             this.provideToContext(currentNodes);
-            super.provideValue(currentNodes.map((n) => n.id), true);
         }
     }
 

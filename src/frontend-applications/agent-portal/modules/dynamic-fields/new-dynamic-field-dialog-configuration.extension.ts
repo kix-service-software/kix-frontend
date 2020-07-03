@@ -93,7 +93,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             )
         );
 
-
         configurations.push(
             new FormFieldConfiguration(
                 'dynamic-field-new-form-field-object-type',

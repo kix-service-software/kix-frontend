@@ -30,7 +30,6 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async load(): Promise<TreeNode[]> {
         const nodes = await MailAccountService.getInstance().getTreeNodes(MailAccountProperty.TYPE);
-        this.setCurrentNode(nodes);
         this.handleIMAPFolderField();
         return nodes;
     }
@@ -53,19 +52,8 @@ class Component extends FormInputComponent<string, ComponentState> {
         this.state.prepared = true;
     }
 
-    public setCurrentNode(nodes: TreeNode[]): void {
-        let node: TreeNode;
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            node = nodes.find((n) => n.id === this.state.defaultValue.value);
-        } else {
-            node = nodes.find((n) => n.id === 'IMAP');
-        }
-        if (node) {
-            node.selected = true;
-            this.typeID = node.id;
-        }
-
-        super.provideValue(this.typeID);
+    public async setCurrentValue(): Promise<void> {
+        return;
     }
 
     public typeChanged(nodes: TreeNode[]): void {
@@ -79,7 +67,7 @@ class Component extends FormInputComponent<string, ComponentState> {
         let field = this.state.field.children.find((f) => f.property === MailAccountProperty.IMAP_FOLDER);
         const showFolderField = this.showIMAPFolderField();
         if (field && !showFolderField) {
-            formInstance.removeFormField(field, this.state.field);
+            formInstance.removeFormField(field);
         } else if (!field && showFolderField) {
             const label = await LabelService.getInstance().getPropertyText(
                 MailAccountProperty.IMAP_FOLDER, KIXObjectType.MAIL_ACCOUNT
@@ -90,7 +78,7 @@ class Component extends FormInputComponent<string, ComponentState> {
                 'Translatable#Helptext_Admin_MailAccountCreate_IMAPFolder', undefined,
                 new FormFieldValue('INBOX')
             );
-            formInstance.addNewFormField(this.state.field, [field]);
+            formInstance.addFieldChildren(this.state.field, [field]);
         }
     }
 

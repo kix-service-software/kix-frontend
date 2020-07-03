@@ -21,7 +21,6 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 
 class Component {
 
-
     public state: ComponentState;
     private ticketChartConfiguration: TicketChartWidgetConfiguration;
     private subscriber: IEventSubscriber;

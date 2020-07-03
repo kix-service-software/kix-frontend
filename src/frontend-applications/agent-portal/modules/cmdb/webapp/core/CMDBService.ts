@@ -46,7 +46,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CONFIG_ITEM);
         this.objectConstructors.set(KIXObjectType.CONFIG_ITEM, [ConfigItem]);
         this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_VERSION, [Version]);
         this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_IMAGE, [ConfigItemImage]);
@@ -251,26 +251,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         }
     }
 
-    public static async searchConfigItems(searchValue: string, limit?: number) {
-        const filter = [
-            new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ConfigItemProperty.NAME, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            )
-        ];
-
-        const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit, [ConfigItemProperty.CURRENT_VERSION]);
-
-        const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-            KIXObjectType.CONFIG_ITEM, null, loadingOptions
-        );
-        return configItems;
-    }
-
     public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
         if (object && object.KIXObjectType === KIXObjectType.CONFIG_ITEM_VERSION) {
             return null;
@@ -281,7 +261,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
         );
     }
-
 
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         searchValue = `*${searchValue}*`;
@@ -298,4 +277,18 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         ];
     }
 
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType;
+
+        switch (property) {
+            case 'OwnerContact':
+                objectType = KIXObjectType.CONTACT;
+                break;
+            case 'OwnerOrganisation':
+                objectType = KIXObjectType.ORGANISATION;
+                break;
+            default:
+        }
+        return objectType;
+    }
 }

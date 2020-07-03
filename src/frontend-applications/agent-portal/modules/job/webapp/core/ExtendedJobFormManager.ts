@@ -29,7 +29,9 @@ export class ExtendedJobFormManager implements IJobFormManager {
         return null;
     }
 
-    public getValue(property: string, value: any, job: Job, formContext: FormContext): Promise<any> {
+    public getValue(
+        property: string, formField: FormFieldConfiguration, value: any, job: Job, formContext: FormContext
+    ): Promise<any> {
         return null;
     }
 

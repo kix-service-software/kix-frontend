@@ -39,7 +39,7 @@ export class WebformService extends KIXObjectService<Webform> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.WEBFORM);
         this.objectConstructors.set(KIXObjectType.WEBFORM, [Webform]);
     }
 
@@ -104,7 +104,7 @@ export class WebformService extends KIXObjectService<Webform> {
             KIXObjectType.WEBFORM, ServiceType.FORM
         );
 
-        const parameter: Array<[string, any]> = await service.prepareFormFields(formId);
+        const parameter: Array<[string, any]> = await service.getFormParameter(formId);
         return new Webform(null,
             this.getParameterValue(parameter, WebformProperty.BUTTON_LABEL),
             this.getParameterValue(parameter, WebformProperty.TITLE),

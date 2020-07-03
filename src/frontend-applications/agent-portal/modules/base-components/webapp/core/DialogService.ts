@@ -210,7 +210,6 @@ export class DialogService {
         return dialogs;
     }
 
-
     public setMainDialogTitle(title: string): void {
         if (this.mainDialogListener) {
             this.mainDialogListener.setTitle(title);

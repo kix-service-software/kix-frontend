@@ -28,7 +28,7 @@ export class TicketTypeService extends KIXObjectService<TicketType> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.TICKET_TYPE);
         this.objectConstructors.set(KIXObjectType.TICKET_TYPE, [TicketType]);
     }
 

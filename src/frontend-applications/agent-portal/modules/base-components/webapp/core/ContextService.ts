@@ -73,7 +73,7 @@ export class ContextService {
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
 
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-                context.setObjectId(objectId);
+                context.setObjectId(objectId, kixObjectType);
             }
 
             this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
@@ -162,9 +162,9 @@ export class ContextService {
         }
 
         if (objectId) {
-            await context.setObjectId(objectId);
+            await context.setObjectId(objectId, objectType);
         } else if (context.getObjectId()) {
-            await context.setObjectId(context.getObjectId());
+            await context.setObjectId(context.getObjectId(), objectType);
         }
 
         if (formId) {

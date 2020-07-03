@@ -23,7 +23,7 @@ export class ConsoleCommandService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CONSOLE_COMMAND);
         this.objectConstructors.set(KIXObjectType.CONSOLE_COMMAND, [ConsoleCommand]);
     }
 

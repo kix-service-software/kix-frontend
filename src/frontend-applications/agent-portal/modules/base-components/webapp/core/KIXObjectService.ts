@@ -47,6 +47,9 @@ import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { SortUtil } from '../../../../model/SortUtil';
 import { DataType } from '../../../../model/DataType';
 import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -65,6 +68,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
 
         this.objectConstructors.get(objectType).push(oc);
+    }
+
+    protected constructor(public objectType: KIXObjectType | string) {
+
     }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
@@ -224,7 +231,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
-        const parameter: Array<[string, any]> = await service.prepareFormFields(formId, false, createOptions);
+        const parameter: Array<[string, any]> = await service.getFormParameter(formId, false, createOptions);
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
@@ -285,7 +292,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             throw new Error(null, `Can not update "${objectType}". No objectId given`);
         }
         const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
-        const parameter: Array<[string, any]> = await service.prepareFormFields(formId, true);
+        const parameter: Array<[string, any]> = await service.getFormParameter(formId, true);
 
         const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
             objectType, parameter, objectId, cacheKeyPrefix
@@ -632,4 +639,45 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
         return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
     }
+
+    public static async searchObjectTree(
+        objectType: KIXObjectType | string, property: string, searchValue: string, limit: number
+    ): Promise<TreeNode[]> {
+
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            const objectTypeForSearch = await service.getObjectTypeForProperty(property);
+            const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, limit);
+            return KIXObjectService.prepareTree(objects);
+        }
+    }
+
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType = this.objectType;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                objectType = KIXObjectType.CONFIG_ITEM;
+            } else if (dynamicField.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
+                objectType = KIXObjectType.TICKET;
+            }
+        } else {
+            switch (property) {
+                case TicketProperty.CONTACT_ID:
+                case ArticleProperty.TO:
+                case ArticleProperty.CC:
+                case ArticleProperty.BCC:
+                    objectType = KIXObjectType.CONTACT;
+                    break;
+                case TicketProperty.ORGANISATION_ID:
+                case ContactProperty.PRIMARY_ORGANISATION_ID:
+                    objectType = KIXObjectType.ORGANISATION;
+                    break;
+                default:
+            }
+        }
+        return objectType;
+    }
+
 }

@@ -77,7 +77,7 @@ export class SuggestedFAQHandler implements IObjectReferenceHandler {
                 const stopWords = await this.getStopWords();
 
                 for (const p of config.properties) {
-                    const formField = await formInstance.getFormFieldByProperty(p);
+                    const formField = formInstance.getFormFieldByProperty(p);
                     if (formField) {
                         const value = await formInstance.getFormFieldValueByProperty(p);
                         if (value && value.value && typeof value.value === 'string') {

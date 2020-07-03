@@ -205,7 +205,6 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         return false;
     }
 
-
     private getValueState(oldValue: string, versionValue: string): ValueState {
         if (versionValue === undefined) {
             return ValueState.NOT_EXISTING;

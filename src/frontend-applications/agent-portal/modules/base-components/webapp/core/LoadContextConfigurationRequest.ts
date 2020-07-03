@@ -11,7 +11,6 @@ import { ISocketRequest } from './ISocketRequest';
 
 export class LoadContextConfigurationRequest implements ISocketRequest {
 
-
     public constructor(
         public requestId: string,
         public clientRequestId: string,

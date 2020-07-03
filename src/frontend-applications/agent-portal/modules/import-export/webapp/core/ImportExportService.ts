@@ -24,7 +24,7 @@ export class ImportExportService extends KIXObjectService<ImportExportTemplate> 
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
         this.objectConstructors.set(KIXObjectType.IMPORT_EXPORT_TEMPLATE, [ImportExportTemplate]);
     }
 

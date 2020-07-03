@@ -53,7 +53,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(helpWidget);
 
-
         const widget = new WidgetConfiguration(
             'contact-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,
             'search-contact-dialog', 'Translatable#Contact Search', [],

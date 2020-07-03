@@ -33,7 +33,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(searchResultExplorer);
 
-
         const searchResultListWidget = new WidgetConfiguration(
             'search-dashboard-result-list-widget', 'Search Result List', ConfigurationType.Widget,
             'search-result-list-widget', 'Hit List',

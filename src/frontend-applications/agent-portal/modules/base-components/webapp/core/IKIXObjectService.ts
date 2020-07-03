@@ -69,4 +69,6 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
 
     getObjectRoutingConfiguration(object?: KIXObject): RoutingConfiguration;
 
+    getObjectTypeForProperty(property: string): Promise<KIXObjectType | string>;
+
 }

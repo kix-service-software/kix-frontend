@@ -27,7 +27,7 @@ export class TicketPriorityService extends KIXObjectService<TicketPriority> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.TICKET_PRIORITY);
         this.objectConstructors.set(KIXObjectType.TICKET_PRIORITY, [TicketPriority]);
     }
 

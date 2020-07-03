@@ -8,78 +8,14 @@
  */
 
 import { AbstractDynamicFormManager } from './dynamic-form';
-import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { DynamicFieldProperty } from '../../../dynamic-fields/model/DynamicFieldProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
-import { FilterDataType } from '../../../../model/FilterDataType';
-import { FilterType } from '../../../../model/FilterType';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectService } from './KIXObjectService';
-import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
-import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class SearchFormManager extends AbstractDynamicFormManager {
 
     public objectType: string;
-
-    public async getProperties(): Promise<Array<[string, string]>> {
-        let properties = [];
-
-        for (const manager of this.extendedFormManager) {
-            const extendedProperties = await manager.getProperties();
-            if (extendedProperties) {
-                properties = [...properties, ...extendedProperties];
-            }
-        }
-
-        if (await this.checkReadPermissions('/system/dynamicfields')) {
-
-            let validDFTypes = [];
-            this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
-
-            const loadingOptions = new KIXObjectLoadingOptions(
-                [
-                    new FilterCriteria(
-                        DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS,
-                        FilterDataType.STRING, FilterType.AND, this.objectType
-                    ),
-                    new FilterCriteria(
-                        DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
-                        FilterDataType.STRING, FilterType.AND,
-                        [
-                            DynamicFieldTypes.TEXT,
-                            DynamicFieldTypes.TEXT_AREA,
-                            DynamicFieldTypes.DATE,
-                            DynamicFieldTypes.DATE_TIME,
-                            DynamicFieldTypes.SELECTION,
-                            DynamicFieldTypes.CI_REFERENCE,
-                            ...validDFTypes
-                        ]
-                    ),
-                    new FilterCriteria(
-                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
-                        FilterDataType.NUMERIC, FilterType.AND, 1
-                    )
-                ]
-            );
-            const fields = await KIXObjectService.loadObjects<DynamicField>(
-                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
-
-            if (fields) {
-                for (const field of fields) {
-                    const translated = await TranslationService.translate(field.Label);
-                    properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
-                }
-            }
-        }
-
-        return properties.filter((p, index) => properties.indexOf(p) === index);
-    }
 
     public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
         let operations: Array<string | SearchOperator> = [];

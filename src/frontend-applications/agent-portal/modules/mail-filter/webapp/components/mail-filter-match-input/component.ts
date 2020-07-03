@@ -36,8 +36,13 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.valueTitle = await TranslationService.translate('Translatable#Pattern');
         this.state.negateTitle = await TranslationService.translate('Translatable#Negate');
+    }
+
+    public async setCurrentValue(): Promise<void> {
+        return;
     }
 
     public checkboxClicked(event: any): void {

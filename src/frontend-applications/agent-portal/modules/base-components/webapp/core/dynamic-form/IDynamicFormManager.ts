@@ -22,6 +22,12 @@ export interface IDynamicFormManager {
 
     resetOperator?: boolean;
 
+    resetValue?: boolean;
+
+    useOwnSearch?: boolean;
+
+    searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]>;
+
     registerListener(listenerId: string, callback: () => void): void;
 
     unregisterListener(listenerId: string): void;
@@ -42,7 +48,7 @@ export interface IDynamicFormManager {
 
     getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string>;
 
-    getSpecificInput(): string;
+    getSpecificInput(property: string): string;
 
     getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>>;
 
@@ -68,9 +74,8 @@ export interface IDynamicFormManager {
 
     isMultiselect(property: string): Promise<boolean>;
 
-    searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]>;
-
     validate(): Promise<ValidationResult[]>;
 
     shouldAddEmptyField(): Promise<boolean>;
+
 }

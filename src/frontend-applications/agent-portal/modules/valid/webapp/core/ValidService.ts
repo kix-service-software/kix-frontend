@@ -26,7 +26,7 @@ export class ValidService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.VALID_OBJECT);
         this.objectConstructors.set(KIXObjectType.VALID_OBJECT, [ValidObject]);
     }
 

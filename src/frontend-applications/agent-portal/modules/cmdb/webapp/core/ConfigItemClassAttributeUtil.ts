@@ -20,7 +20,6 @@ import { SortUtil } from '../../../../model/SortUtil';
 
 export class ConfigItemClassAttributeUtil {
 
-
     public static async getMergedClassAttributeIds(
         classIds?: number | number[]
     ): Promise<Array<[string, string, string]>> {

@@ -24,7 +24,7 @@ export class SystemAddressService extends KIXObjectService<SystemAddress> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.SYSTEM_ADDRESS);
         this.objectConstructors.set(KIXObjectType.SYSTEM_ADDRESS, [SystemAddress]);
     }
 
