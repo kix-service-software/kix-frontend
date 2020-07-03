@@ -23,7 +23,6 @@ import { DefaultColumnConfiguration } from '../../../../model/configuration/Defa
 
 export class DynamicFieldTableFactory extends TableFactory {
 
-
     public objectType: KIXObjectType = KIXObjectType.DYNAMIC_FIELD;
 
     public createTable(

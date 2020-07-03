@@ -33,7 +33,6 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         super();
     }
 
-
     protected RESOURCE_URI: string = 'clientregistration';
 
     public objectType: KIXObjectType | string = KIXObjectType.CLIENT_REGISTRATION;

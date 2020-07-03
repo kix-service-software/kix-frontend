@@ -13,7 +13,6 @@ export class KanbanContext extends Context {
 
     public static CONTEXT_ID: string = 'kanban';
 
-
     public getIcon(): string {
         return 'kix-icon-kanban';
     }

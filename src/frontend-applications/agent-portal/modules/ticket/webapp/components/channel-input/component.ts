@@ -38,7 +38,29 @@ class Component extends FormInputComponent<number, ComponentState> {
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#No Article'
         ]);
+    }
 
+    public async setCurrentValue(): Promise<void> {
+        if (!this.state.channels) {
+            await this.loadChannels();
+        }
+
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (value && value.value) {
+            let channelId = Number(value.value);
+            if (Array.isArray(value.value)) {
+                channelId = Number(value.value[0]);
+            }
+            if (!this.state.currentChannel || channelId !== this.state.currentChannel.ID) {
+                const channel = this.state.channels.find((ch) => ch.ID === channelId);
+                this.state.currentChannel = channel;
+                this.setFields();
+            }
+        }
+    }
+
+    private async loadChannels(): Promise<void> {
         let channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
         channels = channels.filter((c) => c.ValidID.toString() === '1');
 
@@ -65,26 +87,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (noChannelOption) {
             this.state.noChannel = noChannelOption.value;
         }
-
-        this.setCurrentChannel();
-
-        if (this.state.noChannel && !this.state.currentChannel) {
-            super.provideValue(null);
-        } else if (!this.state.noChannel && !this.state.currentChannel && this.state.channels.length) {
-            this.state.currentChannel = this.state.channels[0];
-            super.provideValue(this.state.currentChannel.ID);
-        }
-
         this.setFields();
-    }
-
-    public setCurrentChannel(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            const channel = this.state.channels.find((ch) => ch.ID === this.state.defaultValue.value);
-            this.channelClicked(channel);
-        } else if (this.state.channels.length === 1) {
-            this.channelClicked(this.state.channels[0]);
-        }
     }
 
     public getIcon(channel: Channel): string | ObjectIcon {
@@ -107,10 +110,10 @@ class Component extends FormInputComponent<number, ComponentState> {
     }
 
     public async channelClicked(channel: Channel): Promise<void> {
-        if (!this.isActive(channel)) {
+        if (!this.state.field.readonly && !this.isActive(channel)) {
             this.state.currentChannel = channel;
+            this.setFields();
             super.provideValue(this.state.currentChannel ? this.state.currentChannel.ID : null);
-            this.setFields(true);
         }
     }
 
@@ -124,9 +127,9 @@ class Component extends FormInputComponent<number, ComponentState> {
             const channelFields = await formService.getFormFieldsForChannel(
                 this.state.currentChannel, this.state.formId, clear
             );
-            formInstance.addNewFormField(this.state.field, channelFields, true);
+            formInstance.addFieldChildren(this.state.field, channelFields, true);
         } else {
-            formInstance.addNewFormField(this.state.field, [], true);
+            formInstance.addFieldChildren(this.state.field, [], true);
         }
     }
 

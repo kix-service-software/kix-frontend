@@ -34,7 +34,7 @@ export class TextModuleService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.TEXT_MODULE);
         this.objectConstructors.set(KIXObjectType.TEXT_MODULE, [TextModule]);
     }
 

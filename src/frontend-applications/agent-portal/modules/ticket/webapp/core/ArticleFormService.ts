@@ -19,7 +19,6 @@ import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { Channel } from '../../model/Channel';
 import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
-import { IFormInstance } from '../../../../modules/base-components/webapp/core/IFormInstance';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { AutocompleteFormFieldOption } from '../../../../model/AutocompleteFormFieldOption';
@@ -36,6 +35,7 @@ import { TicketParameterUtil } from './TicketParameterUtil';
 import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptions';
 import { TicketProperty } from '../../model/TicketProperty';
 import { Queue } from '../../model/Queue';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -57,7 +57,9 @@ export class ArticleFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.ARTICLE;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         return await TicketParameterUtil.prepareValue(property, value);
     }
 
@@ -147,11 +149,10 @@ export class ArticleFormService extends KIXObjectFormService {
             fields = newFields.filter((nf) => typeof nf !== 'undefined' && nf !== null);
         });
 
-
         return fields;
     }
 
-    private async getVisibleField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+    private async getVisibleField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
         const defaultValue = new FormFieldValue(null);
@@ -165,7 +166,7 @@ export class ArticleFormService extends KIXObjectFormService {
                 : 'Translatable#Helptext_Tickets_ArticleCreateEdit_CustomerVisible', null, defaultValue
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
+            const existingField = formInstance.getFormFieldByProperty(ArticleProperty.CUSTOMER_VISIBLE);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
@@ -177,7 +178,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return field;
     }
 
-    private async getSubjectField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+    private async getSubjectField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
         const referencedValue = await this.getSubjectFieldValue();
@@ -190,7 +191,7 @@ export class ArticleFormService extends KIXObjectFormService {
             null, referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
+            const existingField = formInstance.getFormFieldByProperty(ArticleProperty.SUBJECT);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
@@ -202,7 +203,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return field;
     }
 
-    private async getBodyField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+    private async getBodyField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const isTicket = formInstance && formInstance.getFormContext() === FormContext.NEW
             && formInstance.getObjectType() === KIXObjectType.TICKET;
 
@@ -226,7 +227,7 @@ export class ArticleFormService extends KIXObjectFormService {
         ], referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.BODY);
+            const existingField = formInstance.getFormFieldByProperty(ArticleProperty.BODY);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue<string>(existingField.instanceId);
@@ -238,7 +239,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return field;
     }
 
-    private async getAttachmentField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+    private async getAttachmentField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         const referencedValue = await this.getAttachmentFieldValue();
 
         let field = new FormFieldConfiguration(
@@ -248,7 +249,7 @@ export class ArticleFormService extends KIXObjectFormService {
             null, referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.ATTACHMENTS);
+            const existingField = formInstance.getFormFieldByProperty(ArticleProperty.ATTACHMENTS);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue<Attachment[]>(existingField.instanceId);
@@ -260,14 +261,14 @@ export class ArticleFormService extends KIXObjectFormService {
         return field;
     }
 
-    private async getFromField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+    private async getFromField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         let field = new FormFieldConfiguration(
             'from-input',
             'Translatable#From', ArticleProperty.FROM, 'article-email-from-input', true,
             'Translatable#Helptext_Tickets_ArticleCreate_From'
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(ArticleProperty.FROM);
+            const existingField = formInstance.getFormFieldByProperty(ArticleProperty.FROM);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue(existingField.instanceId);
@@ -279,7 +280,7 @@ export class ArticleFormService extends KIXObjectFormService {
         return field;
     }
 
-    private async getToOrCcField(formInstance: IFormInstance, clear: boolean): Promise<FormFieldConfiguration> {
+    private async getToOrCcField(formInstance: FormInstance, clear: boolean): Promise<FormFieldConfiguration> {
         let property = ArticleProperty.CC;
         let label = 'Translatable#Cc';
         let actions = [ArticleProperty.BCC];
@@ -304,7 +305,7 @@ export class ArticleFormService extends KIXObjectFormService {
             ], referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
-            const existingField = await formInstance.getFormFieldByProperty(property);
+            const existingField = formInstance.getFormFieldByProperty(property);
             if (existingField) {
                 field = existingField;
                 const value = formInstance.getFormFieldValue(existingField.instanceId);
@@ -420,10 +421,11 @@ export class ArticleFormService extends KIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions
+        parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions,
+        formContext?: FormContext
     ): Promise<Array<[string, any]>> {
         await this.addQueueSignature(parameter, createOptions);
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext);
     }
 
     public async addQueueSignature(

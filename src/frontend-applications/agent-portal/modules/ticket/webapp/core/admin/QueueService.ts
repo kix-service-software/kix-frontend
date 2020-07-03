@@ -36,7 +36,7 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.QUEUE);
         this.objectConstructors.set(KIXObjectType.QUEUE, [Queue]);
         this.objectConstructors.set(KIXObjectType.FOLLOW_UP_TYPE, [FollowUpType]);
     }
@@ -135,7 +135,6 @@ export class QueueService extends KIXObjectService<Queue> {
         }
         return hasValidDescendants;
     }
-
 
     private async getTicketStats(queue: Queue): Promise<TreeNodeProperty[]> {
         const properties: TreeNodeProperty[] = [];

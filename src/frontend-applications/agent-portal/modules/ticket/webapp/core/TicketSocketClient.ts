@@ -81,7 +81,6 @@ export class TicketSocketClient extends SocketClient {
             this.socket.emit(TicketEvent.LOAD_ARTICLE_ATTACHMENT, request);
         });
 
-
         this.requestPromises.set(cacheKey, requestPromise);
         return await requestPromise;
     }

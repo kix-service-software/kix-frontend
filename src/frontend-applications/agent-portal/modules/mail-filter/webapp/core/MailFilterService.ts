@@ -24,7 +24,7 @@ export class MailFilterService extends KIXObjectService<MailFilter> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.MAIL_FILTER);
         this.objectConstructors.set(KIXObjectType.MAIL_FILTER, [MailFilter]);
     }
 

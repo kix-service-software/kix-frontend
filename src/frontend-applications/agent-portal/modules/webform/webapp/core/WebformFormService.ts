@@ -32,6 +32,7 @@ import { TicketType } from '../../../ticket/model/TicketType';
 import { TicketTypeProperty } from '../../../ticket/model/TicketTypeProperty';
 import { TicketState } from '../../../ticket/model/TicketState';
 import { TicketStateProperty } from '../../../ticket/model/TicketStateProperty';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 
 export class WebformFormService extends KIXObjectFormService {
 
@@ -209,7 +210,9 @@ export class WebformFormService extends KIXObjectFormService {
         return stateId;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (value) {
             if (property === WebformProperty.USER_LOGIN) {

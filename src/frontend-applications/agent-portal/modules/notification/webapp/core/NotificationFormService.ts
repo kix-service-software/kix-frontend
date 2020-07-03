@@ -187,7 +187,9 @@ export class NotificationFormService extends KIXObjectFormService {
         }
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
             case NotificationProperty.DATA_SEND_ONCE_A_DAY:

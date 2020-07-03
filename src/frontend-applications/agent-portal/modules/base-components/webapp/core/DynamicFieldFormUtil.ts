@@ -232,7 +232,6 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             }
         }
 
-
         field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true));
@@ -334,45 +333,58 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     public async handleDynamicField(
         field: FormFieldConfiguration, value: FormFieldValue, parameter: Array<[string, any]>
     ): Promise<Array<[string, any]>> {
+        const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+        if (fieldNameOption) {
+            const setValue = field.empty ? null : value.value;
+            this.setDFParameterValue(fieldNameOption.value, setValue, parameter);
+        }
+        return parameter;
+    }
+
+    public async handleDynamicFieldByProperty(
+        property: string, value: FormFieldValue, parameter: Array<[string, any]>
+    ): Promise<Array<[string, any]>> {
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const setValue = value ? value.value : null;
+            await this.setDFParameterValue(dfName, setValue, parameter);
+        }
+        return parameter;
+    }
+
+    private async setDFParameterValue(dfName: string, value: any, parameter: Array<[string, any]>): Promise<void> {
         let dfParameter = parameter.find((p) => p[0] === KIXObjectProperty.DYNAMIC_FIELDS);
         if (!dfParameter) {
             dfParameter = [KIXObjectProperty.DYNAMIC_FIELDS, []];
             parameter.push(dfParameter);
         }
 
-        const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-        if (fieldNameOption) {
-            let setValue = field.empty ? null : value.value;
-            let notArray = false;
-
-            const dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
-            if (dynamicField) {
-                const fieldType = dynamicField.FieldType;
-                if (setValue && (fieldType === DynamicFieldTypes.DATE || fieldType === DynamicFieldTypes.DATE_TIME)) {
-                    setValue = DateTimeUtil.getKIXDateTimeString(setValue);
-                } else if (setValue && fieldType === DynamicFieldTypes.CHECK_LIST) {
-                    setValue = JSON.stringify(setValue);
-                    notArray = true;
-                }
-            }
-
-            let dfValue = dfParameter[1].find((p) => p.Name === fieldNameOption.value);
-            if (!dfValue) {
-                dfValue = {
-                    Name: fieldNameOption.value,
-                    Value: []
-                };
-                dfParameter[1].push(dfValue);
-            }
-
-            if (notArray || Array.isArray(setValue)) {
-                dfValue.Value = setValue;
-            } else if (setValue && !dfValue.Value.some((v) => v === setValue)) {
-                dfValue.Value.push(setValue);
+        let notArray = false;
+        const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+        if (dynamicField) {
+            const fieldType = dynamicField.FieldType;
+            if (value && (fieldType === DynamicFieldTypes.DATE || fieldType === DynamicFieldTypes.DATE_TIME)) {
+                value = DateTimeUtil.getKIXDateTimeString(value);
+            } else if (value && fieldType === DynamicFieldTypes.CHECK_LIST) {
+                value = JSON.stringify(value);
+                notArray = true;
             }
         }
 
-        return parameter;
+        let dfValue = dfParameter[1].find((p) => p.Name === dfName);
+        if (!dfValue) {
+            dfValue = {
+                Name: dfName,
+                Value: []
+            };
+            dfParameter[1].push(dfValue);
+        }
+
+        if (notArray || Array.isArray(value)) {
+            dfValue.Value = value;
+        } else if (value && !dfValue.Value.some((v) => v === value)) {
+            dfValue.Value.push(value);
+        }
     }
 
     public async validateDFValue(dfName: string, value: any): Promise<ValidationResult[]> {

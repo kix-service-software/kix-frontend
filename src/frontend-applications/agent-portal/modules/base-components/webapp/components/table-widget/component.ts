@@ -112,7 +112,6 @@ class Component {
                                 this.state.table.filter();
                             }
 
-
                             setTimeout(() => this.state.loading = false, 100);
                         } else {
                             if (eventId === TableEvent.TABLE_READY) {
@@ -200,7 +199,6 @@ class Component {
             this.state.title = title + countString;
         }
     }
-
 
     private async prepareTable(): Promise<void> {
         const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;

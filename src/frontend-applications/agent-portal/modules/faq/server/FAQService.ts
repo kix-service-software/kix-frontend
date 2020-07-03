@@ -210,7 +210,6 @@ export class FAQService extends KIXObjectAPIService {
         return id;
     }
 
-
     private async createFAQVote(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, createOptions: CreateFAQVoteOptions
     ): Promise<number> {

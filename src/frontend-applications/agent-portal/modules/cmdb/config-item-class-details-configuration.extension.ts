@@ -54,7 +54,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(tabLane);
 
-
         const tableConfig = new TableConfiguration(
             'ci-class-details-version-table-config', 'Table Config', ConfigurationType.Table,
             KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION, null, null, null, null, null, true,

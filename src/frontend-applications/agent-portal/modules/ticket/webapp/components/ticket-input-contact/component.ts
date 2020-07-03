@@ -19,7 +19,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TabContainerEvent } from '../../../../../modules/base-components/webapp/core/TabContainerEvent';
 import { TabContainerEventData } from '../../../../../modules/base-components/webapp/core/TabContainerEventData';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
 import { NewTicketDialogContext } from '../../core';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
@@ -33,14 +33,18 @@ import { ServiceRegistry } from '../../../../../modules/base-components/webapp/c
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { Contact } from '../../../../customer/model/Contact';
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 
 class Component extends FormInputComponent<number | string, ComponentState> {
 
     private contacts = [];
 
+    public constructor() {
+        super();
+    }
+
     public onCreate(): void {
         this.state = new ComponentState();
-        this.state.loadNodes = this.setCurrentNode.bind(this);
     }
 
     public onInput(input: any): void {
@@ -59,8 +63,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         this.state.searchCallback = this.searchContacts.bind(this);
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        this.state.autoCompleteConfiguration = formInstance.getAutoCompleteConfiguration();
+        this.state.autoCompleteConfiguration = new AutoCompleteConfiguration();
 
         const additionalTypeOption = this.state.field.options.find((o) => o.option === 'SHOW_NEW_CONTACT');
         const actions = [];
@@ -93,7 +96,7 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         }
     }
 
-    public async setCurrentNode(): Promise<TreeNode[]> {
+    public async setCurrentValue(): Promise<void> {
         let nodes = [];
         const newTicketDialogContext = await ContextService.getInstance().getContext<NewTicketDialogContext>(
             NewTicketDialogContext.CONTEXT_ID
@@ -104,10 +107,10 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         }
 
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const contactValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
 
-        if (contactId || (defaultValue && defaultValue.value)) {
-            contactId = contactId || defaultValue.value;
+        if (contactId || (contactValue && contactValue.value)) {
+            contactId = contactId || Array.isArray(contactValue.value) ? contactValue.value[0] : contactValue.value;
             if (!isNaN(Number(contactId))) {
                 const currentNode = await this.getContactNode(Number(contactId));
                 if (currentNode) {
@@ -119,9 +122,12 @@ class Component extends FormInputComponent<number | string, ComponentState> {
                 currentNode.selected = true;
                 nodes = [currentNode];
             }
-            super.provideValue(contactId);
         }
-        return nodes;
+
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes);
+        }
     }
 
     public async nodesChanged(nodes: TreeNode[]): Promise<void> {

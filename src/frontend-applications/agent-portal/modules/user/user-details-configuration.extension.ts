@@ -89,7 +89,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(tabWidgetConfiguration);
 
-
         const personalSettingsConfig = new WidgetConfiguration(
             'user-personal-settings-widget', 'User details personal settings widget', ConfigurationType.Widget,
             'user-personal-settings-widget', 'Translatable#Preferences', [], null, null, true, true, WidgetSize.BOTH

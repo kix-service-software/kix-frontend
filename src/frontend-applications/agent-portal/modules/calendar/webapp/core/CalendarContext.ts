@@ -14,7 +14,6 @@ export class CalendarContext extends Context {
 
     public static CONTEXT_ID: string = 'calendar';
 
-
     public getIcon(): string {
         return 'kix-icon-calendar';
     }

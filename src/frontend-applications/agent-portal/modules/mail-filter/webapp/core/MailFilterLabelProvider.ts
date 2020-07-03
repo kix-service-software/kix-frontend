@@ -156,7 +156,6 @@ export class MailFilterLabelProvider extends LabelProvider<MailFilter> {
         return plural ? 'Email Filters' : 'Email Filter';
     }
 
-
     public async getIcons(object: MailFilter, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
         switch (property) {

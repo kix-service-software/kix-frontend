@@ -141,7 +141,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
         return value.property && value.operator && value.operator !== ImportPropertyOperator.IGNORE;
     }
 
-    public getEditableValues(): ObjectPropertyValue[] {
+    public async getEditableValues(): Promise<ObjectPropertyValue[]> {
         return [...this.values.filter(
             (bv) => bv.operator === ImportPropertyOperator.IGNORE
                 || bv.property !== null

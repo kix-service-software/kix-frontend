@@ -22,7 +22,6 @@ export class TreeService {
 
     private constructor() { }
 
-
     private handler: Map<string, TreeHandler> = new Map();
 
     public registerTreeHandler(id: string, handler: TreeHandler): void {

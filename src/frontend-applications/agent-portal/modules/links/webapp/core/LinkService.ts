@@ -31,7 +31,7 @@ export class LinkService extends KIXObjectService<Link> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.LINK);
         this.objectConstructors.set(KIXObjectType.LINK, [Link]);
         this.objectConstructors.set(KIXObjectType.LINK_OBJECT, [LinkObject]);
         this.objectConstructors.set(KIXObjectType.LINK_TYPE, [LinkType]);

@@ -16,6 +16,10 @@ import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/Dy
 
 class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 
+    public async setCurrentValue(): Promise<void> {
+        return;
+    }
+
     public onCreate(): void {
         this.state = new ComponentState();
     }

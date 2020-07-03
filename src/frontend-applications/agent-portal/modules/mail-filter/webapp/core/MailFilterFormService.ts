@@ -12,6 +12,7 @@ import { MailFilter } from '../../model/MailFilter';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { MailFilterProperty } from '../../model/MailFilterProperty';
 import { MailFilterMatch } from '../../model/MailFilterMatch';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 
 export class MailFilterFormService extends KIXObjectFormService {
 
@@ -47,7 +48,9 @@ export class MailFilterFormService extends KIXObjectFormService {
         return value;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case MailFilterProperty.STOP_AFTER_MATCH:
                 value = Number(value);

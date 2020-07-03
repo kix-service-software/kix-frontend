@@ -134,7 +134,6 @@ class Component {
         await this.provideValue(value);
     }
 
-
     public async setSpecificValue(value: DynamicFormFieldValue, emittedValue: any): Promise<void> {
         value.setValue(emittedValue);
         await this.provideValue(value);

@@ -132,13 +132,4 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
         return nodes;
     }
 
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        let tree = [];
-        if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-            const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
-            tree = await KIXObjectService.prepareTree(organisations);
-        }
-        return tree;
-    }
-
 }

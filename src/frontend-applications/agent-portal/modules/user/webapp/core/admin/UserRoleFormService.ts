@@ -12,6 +12,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { RoleProperty } from '../../../model/RoleProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../../model/KIXObjectSpecificCreateOptions';
 import { RoleUsageContextTypes } from '../../../model/RoleUsageContextTypes';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 
 export class UserRoleFormService extends KIXObjectFormService {
@@ -34,7 +35,9 @@ export class UserRoleFormService extends KIXObjectFormService {
         return kixObjectType === KIXObjectType.ROLE;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (value) {
             if (property === RoleProperty.USER_IDS || property === RoleProperty.PERMISSIONS) {
@@ -57,10 +60,10 @@ export class UserRoleFormService extends KIXObjectFormService {
 
         if (contextParameter) {
             let usageContext = 0;
-            if (contextParameter[1].find((v) => v === RoleUsageContextTypes.AGENT)) {
+            if (contextParameter[1].some((v) => v === RoleUsageContextTypes.AGENT)) {
                 usageContext += 1;
             }
-            if (contextParameter[1].find((v) => v === RoleUsageContextTypes.CUSTOMER)) {
+            if (contextParameter[1].some((v) => v === RoleUsageContextTypes.CUSTOMER)) {
                 usageContext += 2;
             }
             contextParameter[1] = usageContext.toString();

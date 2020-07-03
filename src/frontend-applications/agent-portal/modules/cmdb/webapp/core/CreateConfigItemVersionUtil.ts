@@ -11,18 +11,17 @@ import { FormService } from '../../../../modules/base-components/webapp/core/For
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { VersionProperty } from '../../model/VersionProperty';
 import { ConfigItemProperty } from '../../model/ConfigItemProperty';
-import { IFormInstance } from '../../../../modules/base-components/webapp/core/IFormInstance';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class CreateConfigItemVersionUtil {
 
     public static async createParameter(formId: string): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
-
 
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const form = formInstance.getForm();
@@ -60,7 +59,7 @@ export class CreateConfigItemVersionUtil {
     }
 
     private static async prepareData(
-        versionData: any, formField: FormFieldConfiguration, formInstance: IFormInstance
+        versionData: any, formField: FormFieldConfiguration, formInstance: FormInstance
     ): Promise<any> {
         const data = await CreateConfigItemVersionUtil.perpareFormFieldData(formField, formInstance);
         if (data) {
@@ -81,7 +80,7 @@ export class CreateConfigItemVersionUtil {
     }
 
     private static async perpareFormFieldData(
-        formField: FormFieldConfiguration, formInstance: IFormInstance
+        formField: FormFieldConfiguration, formInstance: FormInstance
     ): Promise<any> {
         let data;
         let fieldType: string;

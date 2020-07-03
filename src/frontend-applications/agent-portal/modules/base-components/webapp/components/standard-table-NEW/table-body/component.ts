@@ -15,7 +15,6 @@ import { IEventSubscriber } from '../../../core/IEventSubscriber';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
-
     public eventSubscriberId: string = 'table-body';
 
     public columnLength: number = 0;

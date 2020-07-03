@@ -104,7 +104,9 @@ export class MailAccountFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case MailAccountProperty.TRUSTED:
                 value = Number(value);

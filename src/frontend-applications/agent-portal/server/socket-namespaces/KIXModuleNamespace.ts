@@ -198,7 +198,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
         );
     }
 
-
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {
         const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
         return new SocketResponse(

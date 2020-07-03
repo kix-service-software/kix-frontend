@@ -57,7 +57,9 @@ export class TextModuleFormService extends KIXObjectFormService {
         return value;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case TextModuleProperty.KEYWORDS:
                 value = value ? value.split(/[,;\s]\s?/) : undefined;

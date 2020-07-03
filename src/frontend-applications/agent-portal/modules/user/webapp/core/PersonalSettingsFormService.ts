@@ -89,7 +89,9 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
         return value;
     }
 
-    public async postPrepareValues(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+    public async postPrepareValues(
+        parameter: Array<[string, any]>
+    ): Promise<Array<[string, any]>> {
 
         const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
         if (queuesParameter) {

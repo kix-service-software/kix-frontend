@@ -239,7 +239,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(suggestedFAQWidget);
 
-
         // Overlays
         const organisationInfoOverlay = new WidgetConfiguration(
             'ticket-details-organisation-overlay', 'Organisation Info Overlay', ConfigurationType.Widget,
@@ -259,7 +258,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, false, false, 'kix-icon-man-bubble', false
         );
         configurations.push(contactInfoOverlay);
-
 
         const toReceiverOverlay = new WidgetConfiguration(
             'ticket-details-to-receiver-overlay', 'To Receiver Overlay', ConfigurationType.Widget,
@@ -288,7 +286,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             false, false, 'kix-icon-attachement', false
         );
         configurations.push(articleAttachmentOverlay);
-
 
         const tableSettings = new TableWidgetConfiguration(
             'ticket-details-article-list-table-config', 'Article Table', ConfigurationType.TableWidget,

@@ -8,17 +8,14 @@
  */
 
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
-import { Label } from '../../../../../modules/base-components/webapp/core/Label';
+import { Attachment } from '../../../../../model/kix/Attachment';
 
 export class ComponentState extends FormInputComponentState<any> {
 
     public constructor(
-        public count: number = 0,
-        public dragging: boolean = false,
-        public minimized: boolean = true,
-        public labels: Label[] = [],
-        public multiple: boolean = true,
-        public accept: string = null,
+        public attachments: Array<Attachment | File> = [],
+        public options: Array<[string, any]> = []
+
     ) {
         super();
     }

@@ -27,7 +27,6 @@ import { DataType } from '../../../../../../../model/DataType';
 
 export class TicketStateTableFactory extends TableFactory {
 
-
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
     public createTable(

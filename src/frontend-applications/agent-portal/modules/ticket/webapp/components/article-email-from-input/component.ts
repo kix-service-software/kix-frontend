@@ -18,15 +18,19 @@ import { TicketDetailsContext } from '../../core';
 import { Ticket } from '../../../model/Ticket';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Queue } from '../../../model/Queue';
 import { AgentService } from '../../../../user/webapp/core';
 import { SystemAddress } from '../../../../system-address/model/SystemAddress';
 import { TreeNode, TreeHandler } from '../../../../base-components/webapp/core/tree';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 class Component extends FormInputComponent<number, ComponentState> {
+
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -58,6 +62,24 @@ class Component extends FormInputComponent<number, ComponentState> {
             && (contextMode === ContextMode.EDIT || contextMode === ContextMode.CREATE)) {
             this.initValuesByForm();
         }
+
+        this.formSubscriber = {
+            eventSubscriberId: 'ArticleEmailFromInput',
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                const queueValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === TicketProperty.QUEUE_ID
+                );
+                if (queueValue && queueValue[1] && queueValue[1].value) {
+                    this.initNodes(queueValue[1].value);
+                }
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+    }
+
+    public async onDestroy(): Promise<void> {
+        super.onDestroy();
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     private async initValuesByContext(): Promise<void> {
@@ -79,23 +101,10 @@ class Component extends FormInputComponent<number, ComponentState> {
         if (queueValue && queueValue.value) {
             this.initNodes(queueValue.value);
         }
+    }
 
-        formInstance.registerListener({
-            formListenerId: 'article-email-from-input',
-            formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
-                if (formField && formField.property === TicketProperty.QUEUE_ID) {
-                    if (!value) {
-                        value = await formInstance.getFormFieldValueByProperty(TicketProperty.QUEUE_ID);
-                    }
-
-                    if (value && value.value) {
-                        this.initNodes(value.value);
-                    }
-
-                }
-            },
-            updateForm: () => { return; }
-        });
+    public async setCurrentValue(): Promise<void> {
+        return;
     }
 
     private async initNodes(queueId: number): Promise<void> {
@@ -143,8 +152,6 @@ class Component extends FormInputComponent<number, ComponentState> {
                     treeHandler.setSelection([nodes[0]], true);
                 }
             }
-
-            this.nodesChanged([nodes[0]]);
         }
     }
 

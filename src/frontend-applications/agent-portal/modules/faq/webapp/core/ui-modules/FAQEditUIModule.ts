@@ -27,7 +27,6 @@ export class UIModule implements IUIModule {
         throw new Error('Method not implemented.');
     }
 
-
     public async register(): Promise<void> {
         await this.registerContexts();
         this.registerActions();

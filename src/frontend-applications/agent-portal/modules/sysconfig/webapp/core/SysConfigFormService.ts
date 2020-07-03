@@ -26,6 +26,8 @@ import { FormFieldOption } from '../../../../model/configuration/FormFieldOption
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { SysConfigOption } from '../../model/SysConfigOption';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export class SysConfigFormService extends KIXObjectFormService {
 
@@ -125,7 +127,7 @@ export class SysConfigFormService extends KIXObjectFormService {
         return pages;
     }
 
-    public async initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>> {
+    public async initValues(form: FormConfiguration, formInstance: FormInstance): Promise<void> {
         const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
             EditSysConfigDialogContext.CONTEXT_ID
         );
@@ -135,13 +137,13 @@ export class SysConfigFormService extends KIXObjectFormService {
         );
 
         if (sysconfigKeys && sysconfigKeys.length) {
-            return super.initValues(form, null);
+            await super.initValues(form, null);
         } else {
             const sysConfigId = context ? context.getObjectId() : null;
             const sysConfigValues = sysConfigId
                 ? await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
                     KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]) : null;
-            return super.initValues(form, sysConfigValues ? sysConfigValues[0] : null);
+            await super.initValues(form, formInstance, sysConfigValues ? sysConfigValues[0] : null);
         }
     }
 
@@ -225,7 +227,8 @@ export class SysConfigFormService extends KIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext
     ): Promise<Array<[string, any]>> {
 
         const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
@@ -242,6 +245,6 @@ export class SysConfigFormService extends KIXObjectFormService {
             valid[1] = null;
         }
 
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext);
     }
 }

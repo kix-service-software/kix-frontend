@@ -51,7 +51,6 @@ export class UserDetailsContext extends Context {
             this.setObjectList(KIXObjectType.ROLE, roles, true);
         }
 
-
         if (reload) {
             this.listeners.forEach(
                 (l) => l.objectChanged(Number(this.objectId), user, KIXObjectType.USER, changedProperties)

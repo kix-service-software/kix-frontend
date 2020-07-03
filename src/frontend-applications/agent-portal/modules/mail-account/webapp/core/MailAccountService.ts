@@ -27,7 +27,7 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.MAIL_ACCOUNT);
         this.objectConstructors.set(KIXObjectType.MAIL_ACCOUNT, [MailAccount]);
     }
 

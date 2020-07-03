@@ -24,7 +24,6 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { TicketService } from '.';
-import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { BulkManager } from '../../../bulk/webapp/core';
 
 export class TicketBulkManager extends BulkManager {
@@ -147,31 +146,6 @@ export class TicketBulkManager extends BulkManager {
         return property === TicketProperty.ORGANISATION_ID || property === TicketProperty.PENDING_TIME;
     }
 
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        switch (property) {
-            case TicketProperty.CONTACT_ID:
-                const service = ServiceRegistry.getServiceInstance<KIXObjectService>(KIXObjectType.CONTACT);
-                const nodes = [];
-                if (service) {
-                    const filter = await service.prepareFullTextFilter(searchValue);
-                    const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
-                    const contacts = await KIXObjectService.loadObjects(
-                        KIXObjectType.CONTACT, null, loadingOptions, null, false
-                    );
-
-                    for (const c of contacts) {
-                        const displayValue = await LabelService.getInstance().getObjectText(c);
-                        nodes.push(
-                            new TreeNode(c.ObjectId, displayValue, new ObjectIcon(null, c.KIXObjectType, c.ObjectId))
-                        );
-                    }
-                }
-                return nodes;
-            default:
-                return super.searchValues(property, searchValue, limit);
-        }
-    }
-
     public async getTreeNodes(property: string): Promise<TreeNode[]> {
         let nodes: TreeNode[] = [];
         switch (property) {
@@ -269,7 +243,7 @@ export class TicketBulkManager extends BulkManager {
         if (stateValue && stateValue.value) {
             const stateValueForUse = Array.isArray(stateValue.value) ? stateValue.value[0] : stateValue.value;
             const pendingState = stateValueForUse
-                ? await TicketService.getInstance().isPendingState(Number(stateValueForUse)) : null;
+                ? await TicketService.isPendingState(Number(stateValueForUse)) : null;
             if (pendingState) {
                 const pendingValueIndex = this.values.findIndex((bv) => bv.property === TicketProperty.PENDING_TIME);
                 const value = new ObjectPropertyValue(

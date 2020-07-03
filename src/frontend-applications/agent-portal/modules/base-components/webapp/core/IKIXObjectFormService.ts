@@ -9,38 +9,35 @@
 
 import { IKIXService } from './IKIXService';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
-import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { SearchFormInstance } from './SearchFormInstance';
-import { IFormInstance } from './IFormInstance';
 import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormInstance } from './FormInstance';
 
 export interface IKIXObjectFormService extends IKIXService {
 
-    initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>>;
-
-    initOptions(form: FormConfiguration): Promise<void>;
+    initValues(
+        form: FormConfiguration, formInstance: FormInstance, kixObject?: KIXObject
+    ): Promise<void>;
 
     getNewFormField(
         formField: FormFieldConfiguration, parent?: FormFieldConfiguration, withChildren?: boolean
     ): FormFieldConfiguration;
 
-    updateForm(
-        formInstance: IFormInstance | SearchFormInstance,
-        form: FormConfiguration, formField: FormFieldConfiguration, value: any
-    ): Promise<void>;
+    updateFields(fields: FormFieldConfiguration[], formInstance: FormInstance): Promise<void>;
 
-    updateFields(fields: FormFieldConfiguration[], formInstance: IFormInstance): Promise<void>;
-
-    prepareFormFields(
+    getFormParameter(
         formId: string, forUpdate?: boolean, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>>;
 
-    prepareUpdateValue(property: string, value: any, formInstance: IFormInstance): Promise<Array<[string, any]>>;
+    prepareUpdateValue(
+        property: string, formField: FormFieldConfiguration, value: any, formInstance: FormInstance
+    ): Promise<Array<[string, any]>>;
 
-    prepareCreateValue(property: string, value: any, formInstance: IFormInstance): Promise<Array<[string, any]>>;
+    prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any, formInstance: FormInstance
+    ): Promise<Array<[string, any]>>;
 
     postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
@@ -50,7 +47,5 @@ export interface IKIXObjectFormService extends IKIXService {
     preparePredefinedValues(forUpdate: boolean): Promise<Array<[string, any]>>;
 
     prepareCreateParameter(object: KIXObject): Array<[string, any]>;
-
-    resetChildrenOnEmpty(formField: FormFieldConfiguration): void;
 
 }

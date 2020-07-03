@@ -40,6 +40,8 @@ import { TicketPrintAction } from './actions/TicketPrintAction';
 import { TicketsForAssetsHandler } from './TicketsForAssetsHandler';
 import { SuggestedFAQHandler } from './SuggestedFAQHandler';
 import { TicketHistoryTableFactory } from './table';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { TicketFormFieldValueHandler } from './TicketFormFieldValueHandler';
 
 export class UIModule implements IUIModule {
 
@@ -91,6 +93,8 @@ export class UIModule implements IUIModule {
 
         ServiceRegistry.registerObjectReferenceHandler('TicketsForAssetsHandler', new TicketsForAssetsHandler());
         ServiceRegistry.registerObjectReferenceHandler('SuggestedFAQHandler', new SuggestedFAQHandler());
+
+        FormService.getInstance().addFormFieldValueHandler(KIXObjectType.TICKET, new TicketFormFieldValueHandler());
 
         await this.registerContexts();
         this.registerTicketActions();

@@ -44,7 +44,6 @@ export abstract class SocketClient {
                 console.warn('Reconnect attempt');
             });
 
-
             socket.on('reconnect_error', (error) => {
                 console.error(namespace);
                 console.error('reconnect_error');

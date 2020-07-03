@@ -99,7 +99,9 @@ export class QueueFormService extends KIXObjectFormService {
         formFieldValues.set(lockField.instanceId, new FormFieldValue(value));
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case QueueProperty.FOLLOW_UP_LOCK:
                 value = Number(value);

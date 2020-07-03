@@ -64,7 +64,6 @@ export class UIModule implements IUIModule {
         await ContextService.getInstance().registerContext(searchContactContext);
     }
 
-
     private registerActions(): void {
         ActionFactory.getInstance().registerAction('contact-search-action', ContactSearchAction);
         ActionFactory.getInstance().registerAction('contact-csv-export-action', ContactCSVExportAction);

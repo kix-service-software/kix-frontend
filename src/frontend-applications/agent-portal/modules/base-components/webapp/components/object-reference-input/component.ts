@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { TreeNode, TreeService } from '../../core/tree';
+import { TreeNode, TreeService, TreeHandler, TreeUtil } from '../../core/tree';
 import { ObjectReferenceOptions } from '../../../../../modules/base-components/webapp/core/ObjectReferenceOptions';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { DataType } from '../../../../../model/DataType';
@@ -27,21 +27,21 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { UIUtil } from '../../core/UIUtil';
-import { IdService } from '../../../../../model/IdService';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { EventService } from '../../core/EventService';
+import { FormEvent } from '../../core/FormEvent';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { FormInstance } from '../../core/FormInstance';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
     private objects: KIXObject[];
     private autocomplete: boolean = false;
-    private formListenerId: string;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.formListenerId = IdService.generateDateBasedId('object-ref-input');
-        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -58,38 +58,43 @@ class Component extends FormInputComponent<string | number | string[] | number[]
     }
 
     public async onMount(): Promise<void> {
+        this.setOptions();
+        const treeHandler = new TreeHandler([], null, null, this.state.multiselect);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+        await this.load();
         await super.onMount();
         this.state.searchCallback = this.search.bind(this);
-        this.setOptions();
-        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-            formListenerId: this.formListenerId,
-            updateForm: () => { return; },
-            formValueChanged: (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
-                if (formField.instanceId === this.state.field.instanceId) {
-                    this.setCurrentNode(null, value, false);
+
+        this.formSubscriber = {
+            eventSubscriberId: this.state.field.instanceId,
+            eventPublished: (data: any, eventId: string) => {
+                if (data.formField && data.formField.instanceId === this.state.field.instanceId) {
+                    this.load();
                 }
             }
-        });
+        };
+        EventService.getInstance().subscribe(FormEvent.RELOAD_INPUT_VALUES, this.formSubscriber);
         this.state.prepared = true;
     }
 
     public async onDestroy(): Promise<void> {
         super.onDestroy();
-        if (this.formListenerId) {
-            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
-        }
+        TreeService.getInstance().removeTreeHandler(this.state.treeId);
     }
 
-    private async load(): Promise<TreeNode[]> {
+    private async load(loadingOptions?: KIXObjectLoadingOptions): Promise<void> {
         let nodes = [];
         const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
-        const loadingOptions = this.state.field.options.find(
+        const configLoadingOptions = this.state.field.options.find(
             (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
         );
+
+        loadingOptions = loadingOptions || configLoadingOptions ? configLoadingOptions.value : null;
+
         if (objectOption) {
             if (!this.autocomplete) {
                 this.objects = await KIXObjectService.loadObjects(
-                    objectOption.value, null, loadingOptions ? loadingOptions.value : null
+                    objectOption.value, null, loadingOptions
                 );
                 const structureOption = this.state.field.options.find(
                     (o) => o.option === ObjectReferenceOptions.USE_OBJECT_SERVICE
@@ -129,8 +134,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             nodes = [...additionalNodes.value, ...nodes];
         }
 
-        await this.setCurrentNode(nodes);
-        return nodes;
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes, null, true, !this.state.freeText);
+        }
     }
 
     private showInvalidNodes(): boolean {
@@ -147,79 +154,51 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         return validClickableOption ? validClickableOption.value : false;
     }
 
-    public async setCurrentNode(nodes?: TreeNode[], value?: any, update: boolean = true): Promise<void> {
+    public async setCurrentValue(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const defaultValue = value ? value : formInstance.getFormFieldValue<number>(this.state.field.instanceId);
-        if (defaultValue && typeof defaultValue.value !== 'undefined' && defaultValue.value !== null) {
-            const objectIds: any[] = Array.isArray(defaultValue.value)
-                ? defaultValue.value : [defaultValue.value];
+        const formValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
 
-            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
-            if (treeHandler) {
-                const selectedNodes = [];
+        if (treeHandler && formValue && typeof formValue.value !== 'undefined' && formValue.value !== null) {
+            const objectIds: any[] = Array.isArray(formValue.value)
+                ? formValue.value : [formValue.value];
 
-                if (!this.autocomplete) {
-                    if (!nodes) {
-                        nodes = treeHandler.getTree();
-                    }
-                    if (nodes && !!nodes.length) {
-                        objectIds.forEach((oid) => {
-                            const node = this.findNode(oid, nodes);
+            const selectedNodes = [];
+
+            if (!this.autocomplete) {
+                const nodes = treeHandler.getTree();
+                if (nodes && nodes.length) {
+                    objectIds.forEach((oid) => {
+                        const node = TreeUtil.findNode(nodes, oid);
+                        if (node) {
+                            node.selected = true;
+                            selectedNodes.push(node);
+                        }
+                    });
+                }
+            } else {
+                const objectOption = this.state.field.options.find(
+                    (o) => o.option === ObjectReferenceOptions.OBJECT
+                );
+                if (objectOption) {
+                    const objects = await KIXObjectService.loadObjects(
+                        objectOption.value, objectIds, null, null, null, null, true
+                    );
+                    if (objects && !!objects.length) {
+                        for (const object of objects) {
+                            const node = await this.createTreeNode(object);
                             if (node) {
                                 node.selected = true;
                                 selectedNodes.push(node);
                             }
-                        });
-                        if (update) {
-                            this.nodesChanged(selectedNodes);
-                        }
-                    }
-                } else {
-                    const objectOption = this.state.field.options.find(
-                        (o) => o.option === ObjectReferenceOptions.OBJECT
-                    );
-                    if (objectOption) {
-                        const objects = await KIXObjectService.loadObjects(
-                            objectOption.value, objectIds, null, null, null, null, true
-                        );
-                        if (objects && !!objects.length) {
-                            for (const object of objects) {
-                                const node = await this.createTreeNode(object);
-                                if (node) {
-                                    node.selected = true;
-                                    if (nodes) {
-                                        nodes.push(node);
-                                    }
-                                    selectedNodes.push(node);
-                                }
-                            }
-                            if (update) {
-                                this.nodesChanged(selectedNodes);
-                            }
-                        }
-                    }
-                }
-                treeHandler.setSelection(selectedNodes, true, !update, true);
-            }
-        }
-    }
-
-    private findNode(id: any, nodes: TreeNode[]): TreeNode {
-        let returnNode: TreeNode;
-        if (Array.isArray(nodes)) {
-            returnNode = nodes.find((n) => n.id.toString() === id.toString());
-            if (!returnNode) {
-                for (const node of nodes) {
-                    if (node.children && Array.isArray(node.children)) {
-                        returnNode = this.findNode(id, node.children);
-                        if (returnNode) {
-                            break;
                         }
                     }
                 }
             }
+            treeHandler.setSelection(selectedNodes, true, true, true);
+        } else if (treeHandler) {
+            treeHandler.setSelection([], true, true, true);
         }
-        return returnNode;
     }
 
     public nodesChanged(nodes: TreeNode[]): void {

@@ -108,7 +108,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             setTimeout(async () => {
                 const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
                 const result = await formInstance.validateForm();
-                const validationError = result.some((r) => r.severity === ValidationSeverity.ERROR);
+                const validationError = result.some((r) => r && r.severity === ValidationSeverity.ERROR);
                 if (validationError) {
                     if (this.showValidationError) {
                         this.showValidationError(result);

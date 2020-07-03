@@ -21,6 +21,7 @@ import { CreatePermissionDescription } from './CreatePermissionDescription';
 import { Permission } from '../model/Permission';
 import { Role } from '../model/Role';
 import { PermissionType } from '../model/PermissionType';
+import { FilterCriteria } from '../../../model/FilterCriteria';
 
 
 export class RoleService extends KIXObjectAPIService {
@@ -197,7 +198,7 @@ export class RoleService extends KIXObjectAPIService {
         ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
     }
 
-    private async createPermissions(
+    public async createPermissions(
         token: string, clientRequestId: string, roleId: number,
         existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[] = []
     ): Promise<void> {
@@ -252,4 +253,9 @@ export class RoleService extends KIXObjectAPIService {
         ];
         return parameter;
     }
+
+    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return [];
+    }
+
 }

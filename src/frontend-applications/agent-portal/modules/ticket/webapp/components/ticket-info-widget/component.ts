@@ -85,7 +85,7 @@ class Component {
         }
 
         if (this.state.ticket) {
-            const isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
+            const isPending = await TicketService.isPendingState(this.state.ticket.StateID);
             const isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
 
             if (!isPending) {

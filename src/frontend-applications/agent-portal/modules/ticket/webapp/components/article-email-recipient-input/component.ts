@@ -36,6 +36,9 @@ import { ArticleReceiver } from '../../../model/ArticleReceiver';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
+import { ContactService } from '../../../../customer/webapp/core';
+import { Contact } from '../../../../customer/model/Contact';
+
 class Component extends FormInputComponent<string[], ComponentState> {
 
     private ccSubscriber: IEventSubscriber;
@@ -51,16 +54,14 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        this.treeHandler = new TreeHandler([], null, null, true);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
         await super.onMount();
         this.state.searchCallback = this.searchContacts.bind(this);
         const objectName = await LabelService.getInstance().getObjectName(KIXObjectType.CONTACT, true, false);
         this.state.autoCompleteConfiguration = new AutoCompleteConfiguration(10, 2000, 3, objectName);
 
-        this.treeHandler = new TreeHandler([], null, null, true);
-        TreeService.getInstance().registerTreeHandler(this.state.treeId, this.treeHandler);
-
         await this.prepareActions();
-        await this.setCurrentNodes();
 
         if (this.state.field.property === ArticleProperty.CC) {
             this.ccSubscriber = {
@@ -73,6 +74,15 @@ class Component extends FormInputComponent<string[], ComponentState> {
             };
             EventService.getInstance().subscribe('SET_CC_RECIPIENTS', this.ccSubscriber);
             EventService.getInstance().publish('CC_READY');
+
+            const bccAction = this.state.actions.find((a) => a.id === ArticleProperty.BCC);
+            if (bccAction) {
+                const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+                const bccValue = await formInstance.getFormFieldValueByProperty(ArticleProperty.BCC);
+                if (bccValue && bccValue.value) {
+                    this.actionClicked(bccAction);
+                }
+            }
         }
 
         this.state.prepared = true;
@@ -83,47 +93,45 @@ class Component extends FormInputComponent<string[], ComponentState> {
         EventService.getInstance().unsubscribe('CC_READY', this.ccReadySubscriber);
     }
 
-    public async setCurrentNodes(): Promise<void> {
+    public async setCurrentValue(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
-        if (defaultValue && defaultValue.value) {
-            const contactEmails: any[] = Array.isArray(defaultValue.value)
-                ? defaultValue.value : [defaultValue.value];
+        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (value && value.value) {
+            let contactValues: any[] = Array.isArray(value.value) ? value.value : [value.value];
+            contactValues = contactValues.map((v) => v.replace(/.+ <(.+)>/, '$1'));
 
-            const nodes = [];
+            const emailAddresses = contactValues.filter((v) => isNaN(v));
+            const contactIds = contactValues.filter((v) => !isNaN(v)).map((v) => Number(v));
+
+            const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
+            let nodes = await this.createTreeNodes(contacts);
+
+            const mailContacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
+                new KIXObjectLoadingOptions(
+                    [
+                        new FilterCriteria(
+                            'Email', SearchOperator.IN, FilterDataType.STRING,
+                            FilterType.OR, emailAddresses
+                        )
+                    ]
+
+                ), null, true
+            );
+            const mailNodes = await this.createTreeNodes(mailContacts);
+            nodes = [...nodes, ...mailNodes];
+
             const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                 KIXObjectType.SYSTEM_ADDRESS
             );
 
-            // TODO: nicht sehr performant
-            for (const email of contactEmails) {
-                const plainMail = email.replace(/.+ <(.+)>/, '$1');
-                const contacts = await KIXObjectService.loadObjects(KIXObjectType.CONTACT, null,
-                    new KIXObjectLoadingOptions(
-                        [
-                            new FilterCriteria(
-                                'Email', SearchOperator.EQUALS, FilterDataType.STRING,
-                                FilterType.OR, plainMail
-                            )
-                        ]
+            const unknownNodes = contactValues.filter((v) =>
+                !contacts.some((c) => c.ID === Number(v) || c.Email === v) &&
+                !mailContacts.some((c) => c.ID === v || c.Email === v) &&
+                !systemAddresses.some((sa) => sa.Name === v)
+            ).map((n) => new TreeNode(n, n));
+            nodes = [...nodes, ...unknownNodes];
 
-                    ), null, true
-                );
-                if (contacts && !!contacts.length) {
-                    nodes.push(await this.createTreeNode(contacts[0]));
-                } else {
-                    if (
-                        !systemAddresses
-                        || !!!systemAddresses.length
-                        || !systemAddresses.map((sa) => sa.Name).some((f) => f === plainMail)
-                    ) {
-                        nodes.push(new TreeNode(plainMail, email));
-                    }
-                }
-            }
-
-            this.treeHandler.setSelection(nodes, true);
-            this.contactChanged(nodes);
+            this.treeHandler.setSelection(nodes, true, true);
         }
     }
 
@@ -177,7 +185,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
             let field = this.state.field.children.find((f) => f.property === action.id);
             if (field) {
-                formInstance.removeFormField(field, this.state.field);
+                formInstance.removeFormField(field);
                 action.active = false;
             } else {
                 const label = await LabelService.getInstance().getPropertyText(action.id, KIXObjectType.ARTICLE);
@@ -188,7 +196,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
                     'recipinet-field',
                     label, action.id, 'article-email-recipient-input', false, helpText
                 );
-                formInstance.addNewFormField(this.state.field, [field]);
+                await formInstance.addFieldChildren(this.state.field, [field]);
                 action.active = true;
             }
             (this as any).setStateDirty('actions');
@@ -265,34 +273,36 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     private async searchContacts(limit: number, searchValue: string): Promise<TreeNode[]> {
-        const nodes = [];
+        let nodes = [];
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.CONTACT);
         if (service) {
             const filter = await service.prepareFullTextFilter(searchValue);
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
-            const contacts = await KIXObjectService.loadObjects(
+            const contacts = await KIXObjectService.loadObjects<Contact>(
                 KIXObjectType.CONTACT, null, loadingOptions, null, false
             );
 
-
             if (searchValue && searchValue !== '') {
-                for (const c of contacts.filter((co) => co['Email'])) {
-                    const node = await this.createTreeNode(c);
-                    nodes.push(node);
-                }
+                nodes = await this.createTreeNodes(contacts.filter((co) => co.Email));
             }
         }
 
         return nodes;
     }
 
-    private async createTreeNode(contact: KIXObject): Promise<TreeNode> {
-        const displayValue = await LabelService.getInstance().getObjectText(contact);
-        return new TreeNode(
-            contact['Email'], displayValue, 'kix-icon-man-bubble', null, null, null,
-            null, null, null, null, undefined, undefined, undefined,
-            `"${contact['Firstname']} ${contact['Lastname']}" <${contact['Email']}>`
-        );
+    private async createTreeNodes(contacts: Contact[]): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        for (const contact of contacts) {
+            const displayValue = await LabelService.getInstance().getObjectText(contact);
+            nodes.push(
+                new TreeNode(
+                    contact.Email, displayValue, 'kix-icon-man-bubble', null, null, null,
+                    null, null, null, null, undefined, undefined, undefined,
+                    `"${contact['Firstname']} ${contact['Lastname']}" <${contact['Email']}>`
+                )
+            );
+        }
+        return nodes;
     }
 
     public async focusLost(event: any): Promise<void> {

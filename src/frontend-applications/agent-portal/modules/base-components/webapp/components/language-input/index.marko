@@ -6,11 +6,9 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.prepared)>
     <form-list
         treeId=state.treeId
-        loadNodes=state.loadNodes
         placeholder=state.placeholder
         on-focusLost("focusLost")
         on-nodesChanged("valueChanged")

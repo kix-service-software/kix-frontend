@@ -16,7 +16,6 @@ export class CompontentState extends FormInputComponentState<string | number | s
     public constructor(
         public treeId: string = IdService.generateDateBasedId('default-select-input-'),
         public prepared: boolean = false,
-        public loadNodes: () => Promise<TreeNode[]> = null,
         public asMultiselect: boolean = false,
         public placeholder: string = ''
     ) {

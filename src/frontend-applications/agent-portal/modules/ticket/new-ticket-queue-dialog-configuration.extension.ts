@@ -169,7 +169,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             )
         );
 
-
         configurations.push(
             new FormFieldConfiguration(
                 'queue-new-form-field-signature',

@@ -104,7 +104,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(contactInfoSidebar);
 
-
         const ticketsForAssetsWidget = new WidgetConfiguration(
             'ticket-new-dialog-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
             'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
@@ -315,8 +314,21 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-state',
-                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,
-                'Translatable#Helptext_Tickets_TicketCreate_State', null,
+                'Translatable#State', TicketProperty.STATE_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_State',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ],
                 new FormFieldValue(2)
             )
         );

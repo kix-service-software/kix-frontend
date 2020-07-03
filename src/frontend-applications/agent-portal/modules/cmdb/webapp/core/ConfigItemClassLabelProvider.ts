@@ -102,7 +102,6 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
         return plural ? 'CI Classes' : 'CI Class';
     }
 
-
     public getObjectIcon(ciClass?: ConfigItemClass): string | ObjectIcon {
         return new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID);
     }

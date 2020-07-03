@@ -155,7 +155,6 @@ export class Article extends KIXObject {
             bccStringList = this.Bcc ? this.Bcc.split(/,\s*/) : [];
         }
 
-
         let toRealNameStringList = [];
         if (!Array.isArray(this.ToRealname)) {
             toRealNameStringList = this.ToRealname ? this.ToRealname.split(/,\s*/) : [];

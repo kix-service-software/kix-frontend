@@ -35,7 +35,7 @@ export class JobService extends KIXObjectService<Job> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.JOB);
         this.objectConstructors.set(KIXObjectType.JOB, [Job]);
         this.objectConstructors.set(KIXObjectType.JOB_TYPE, [JobType]);
         this.objectConstructors.set(KIXObjectType.JOB_RUN, [JobRun]);

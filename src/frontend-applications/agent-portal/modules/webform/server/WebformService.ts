@@ -105,7 +105,6 @@ export class WebformService {
             LoggingService.getInstance().error(error.Message, error);
         });
 
-
         return webform.ObjectId;
     }
 

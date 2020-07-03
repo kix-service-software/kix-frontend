@@ -50,7 +50,7 @@ export class FAQService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.FAQ_ARTICLE);
         this.objectConstructors.set(KIXObjectType.FAQ_ARTICLE, [FAQArticle]);
         this.objectConstructors.set(KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [Attachment]);
         this.objectConstructors.set(KIXObjectType.FAQ_CATEGORY, [FAQCategory]);

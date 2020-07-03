@@ -14,7 +14,6 @@ export class ComponentState extends FormInputComponentState<string> {
 
     public constructor(
         public placeholder: string = '',
-        public loadNodes: () => Promise<TreeNode[]> = null
     ) {
         super();
     }

@@ -108,7 +108,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(chart1);
 
-
         const chartConfig2 = new ChartComponentConfiguration(
             'home-dashboard-ticket-chart-widget-states-config', 'States Chart', ConfigurationType.Chart,
             {

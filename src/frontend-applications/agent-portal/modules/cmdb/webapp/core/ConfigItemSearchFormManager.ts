@@ -43,6 +43,8 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
 
     protected readPermissions: Map<string, boolean> = new Map();
 
+    public useOwnSearch: boolean = true;
+
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
@@ -238,7 +240,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         return true;
     }
 
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
+    public async searchObjectTree(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         let tree = [];
 
         const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);

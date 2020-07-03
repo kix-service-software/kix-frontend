@@ -18,12 +18,15 @@ import { TicketJobFilterManager } from './TicketJobFilterManager';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 
 export class TicketJobFormManager extends AbstractJobFormManager {
 
     public filterManager = TicketJobFilterManager.getInstance();
 
-    public async getValue(property: string, value: any, job: Job, formContext: FormContext): Promise<any> {
+    public async getValue(
+        property: string, formField: FormFieldConfiguration, value: any, job: Job, formContext: FormContext
+    ): Promise<any> {
         switch (property) {
             case JobProperty.FILTER:
                 if (job && job.Filter && formContext === FormContext.EDIT) {
@@ -48,12 +51,14 @@ export class TicketJobFormManager extends AbstractJobFormManager {
                 }
                 break;
             default:
-                value = await super.getValue(property, value, job, formContext);
+                value = await super.getValue(property, formField, value, job, formContext);
         }
         return value;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case JobProperty.FILTER:
                 if (value) {

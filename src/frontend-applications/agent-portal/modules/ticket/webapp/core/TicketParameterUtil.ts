@@ -69,6 +69,7 @@ export class TicketParameterUtil {
                         }
                     }
                 }
+                parameter.push([property, Array.isArray(value) ? value[0] : value]);
             } else if (
                 (
                     property === ArticleProperty.TO
@@ -78,6 +79,25 @@ export class TicketParameterUtil {
                 && Array.isArray(value)
             ) {
                 parameter.push([property, value.join(',')]);
+            } else if (property === TicketProperty.CONTACT_ID
+                || property === TicketProperty.PRIORITY_ID
+                || property === TicketProperty.STATE_ID
+                || property === TicketProperty.TYPE_ID
+                || property === TicketProperty.QUEUE_ID
+            ) {
+                parameter.push([property, Array.isArray(value) ? value[0] : value]);
+            } else if (property === ArticleProperty.CHANNEL_ID) {
+                if (Array.isArray(value)) {
+                    parameter.push([property, Number(value[0])]);
+                } else {
+                    parameter.push([property, Number(value)]);
+                }
+            } else if (property === ArticleProperty.CUSTOMER_VISIBLE) {
+                if (Array.isArray(value)) {
+                    parameter.push([property, Number(value[0])]);
+                } else {
+                    parameter.push([property, Number(value)]);
+                }
             } else {
                 parameter.push([property, value]);
             }

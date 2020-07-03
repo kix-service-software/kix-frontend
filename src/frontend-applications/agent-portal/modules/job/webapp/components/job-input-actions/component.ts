@@ -23,20 +23,20 @@ import { FormInstance } from '../../../../../modules/base-components/webapp/core
 import { SortUtil } from '../../../../../model/SortUtil';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { MacroActionType } from '../../../model/MacroActionType';
-
-
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
     private currentAction: TreeNode;
-    private listenerId: string;
     private treeId: string;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.state.loadNodes = this.load.bind(this);
-        this.listenerId = IdService.generateDateBasedId('job-action-input');
-        this.treeId = this.listenerId;
+        this.treeId = IdService.generateDateBasedId('JobInputAction');
     }
 
     public onInput(input: any): void {
@@ -53,66 +53,78 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        await this.load();
         await super.onMount();
-        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-            formListenerId: this.listenerId,
-            updateForm: () => { return; },
-            formValueChanged: this.formValueChanged.bind(this)
-        });
+
+        this.formSubscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('JobInputActions'),
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+                const actionValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === JobProperty.MACRO_ACTIONS
+                );
+                if (actionValue && actionValue[0].instanceId !== this.state.field.instanceId) {
+                    const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
+                    if (treeHandler) {
+                        const nodes = await this.loadNodes();
+                        treeHandler.setTree(nodes, undefined, true);
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async onDestroy(): Promise<void> {
         super.onDestroy();
-        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.listenerId);
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
-    private async load(): Promise<TreeNode[]> {
-        const nodes = await this.getNodes();
-        this.setCurrentNode(nodes);
+    private async load(): Promise<void> {
+        let nodes = await this.loadNodes();
         const nodesWithTranslation: Array<[TreeNode, string]> = [];
         for (const node of nodes) {
             const translatedLabel = await TranslationService.translate(node.label);
             nodesWithTranslation.push([node, translatedLabel]);
         }
-        return nodesWithTranslation.sort((a, b) => {
+        nodes = nodesWithTranslation.sort((a, b) => {
             return SortUtil.compareString(a[1], b[1]);
         }).map((nwt) => nwt[0]);
 
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes);
+        }
     }
 
-    public setCurrentNode(nodes: TreeNode[]): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            let currentNode;
-            if (Array.isArray(this.state.defaultValue.value)) {
-                currentNode = nodes.find(
-                    (eventNode) => eventNode.id === this.state.defaultValue.value[0]
-                );
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue(this.state.field.instanceId);
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
+        if (value && treeHandler) {
+            const nodes = treeHandler.getTree();
+
+            let currentNode: TreeNode;
+            if (Array.isArray(value.value)) {
+                currentNode = nodes.find((eventNode) => eventNode.id === value.value[0]);
             } else {
-                currentNode = nodes.find(
-                    (eventNode) => eventNode.id === this.state.defaultValue.value
-                );
+                currentNode = nodes.find((eventNode) => eventNode.id === value.value);
             }
 
             if (currentNode) {
                 currentNode.selected = true;
-                // instanceId needed to distinguish between values of fields with same action type
-                super.provideValue(`${this.state.field.instanceId}###${currentNode.id}`, true);
-
                 this.currentAction = currentNode;
                 this.setFieldHint();
                 this.setFields(false);
-
             }
+
+            treeHandler.setSelection([currentNode], true, true);
         }
     }
 
     public nodesChanged(nodes: TreeNode[]): void {
         this.currentAction = nodes && nodes.length ? nodes[0] : null;
-        // instanceId needed to distinguish between values of fields with same action type
-        super.provideValue(this.currentAction ? `${this.state.field.instanceId}###${this.currentAction.id}` : null);
-
+        super.provideValue(this.currentAction.id);
         this.setFieldHint();
-
         this.setFields();
     }
 
@@ -138,7 +150,6 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
     }
@@ -159,26 +170,16 @@ class Component extends FormInputComponent<string, ComponentState> {
                         this.currentAction.id, this.state.field.instanceId,
                         typeValue ? typeValue.value : null
                     );
-                    formInstance.addNewFormField(this.state.field, childFields, true);
+                    formInstance.addFieldChildren(this.state.field, childFields, true);
                 } else {
-                    formInstance.addNewFormField(this.state.field, [], true);
+                    formInstance.addFieldChildren(this.state.field, [], true);
                 }
             }
         }
     }
 
-    protected async formValueChanged(formField: FormFieldConfiguration): Promise<void> {
-        if (formField.property === JobProperty.MACRO_ACTIONS && formField.instanceId !== this.state.field.instanceId) {
-            const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
-            if (treeHandler) {
-                const nodes = await this.getNodes();
-                treeHandler.setTree(nodes, undefined, true);
-            }
-        }
-    }
-
-    private async getNodes(unique: boolean = false): Promise<TreeNode[]> {
-        const formInstance = await FormService.getInstance().getFormInstance<FormInstance>(this.state.formId);
+    private async loadNodes(unique: boolean = false): Promise<TreeNode[]> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
 
         const typeValue = await formInstance.getFormFieldValueByProperty(JobProperty.TYPE);
         const type = typeValue ? typeValue.value : null;

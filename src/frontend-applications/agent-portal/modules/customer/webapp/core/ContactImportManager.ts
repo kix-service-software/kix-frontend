@@ -24,11 +24,8 @@ import { InputFieldTypes } from '../../../../modules/base-components/webapp/core
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { SortUtil } from '../../../../model/SortUtil';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
-import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { ContactService } from '.';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
-import { IKIXObjectService } from '../../../../modules/base-components/webapp/core/IKIXObjectService';
 import { ImportManager, ImportPropertyOperator } from '../../../import/webapp/core';
 
 export class ContactImportManager extends ImportManager {
@@ -134,30 +131,6 @@ export class ContactImportManager extends ImportManager {
         } else {
             return super.getAlternativeProperty(property);
         }
-    }
-
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        switch (property) {
-            case ContactProperty.PRIMARY_ORGANISATION_ID:
-                const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.ORGANISATION);
-                const nodes = [];
-                if (service) {
-                    const filter = await service.prepareFullTextFilter(searchValue);
-                    const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
-                    const organisations = await KIXObjectService.loadObjects<Organisation>(
-                        KIXObjectType.ORGANISATION, null, loadingOptions, null, false
-                    );
-
-                    for (const o of organisations) {
-                        const displayValue = await LabelService.getInstance().getObjectText(o);
-                        nodes.push(new TreeNode(o.ID, displayValue, new ObjectIcon(null, o.KIXObjectType, o.ID)));
-                    }
-                }
-                return nodes;
-            default:
-        }
-
-        return [];
     }
 
     public async getTreeNodes(property: string): Promise<TreeNode[]> {

@@ -172,9 +172,9 @@ export abstract class Context {
         }
     }
 
-    public async setObjectId(objectId: string | number): Promise<void> {
+    public async setObjectId(objectId: string | number, objectType: KIXObjectType | string): Promise<void> {
         this.objectId = objectId;
-        await this.getObject(undefined, true);
+        await this.getObject(objectType, true);
     }
 
     public getObjectId(): string | number {

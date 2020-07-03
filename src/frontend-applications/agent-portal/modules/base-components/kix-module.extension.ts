@@ -29,6 +29,7 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
     public uiComponents: UIComponent[] = [
         new UIComponent('action', '/kix-module-base-components$0/webapp/components/action', []),
         new UIComponent('action-list', '/kix-module-base-components$0/webapp/components/action-list', []),
+        new UIComponent('attachment', '/kix-module-base-components$0/webapp/components/attachment', []),
         new UIComponent('attachment-input', '/kix-module-base-components$0/webapp/components/attachment-input', []),
         new UIComponent('bookmarks', '/kix-module-base-components$0/webapp/components/bookmarks', []),
         new UIComponent('chart', '/kix-module-base-components$0/webapp/components/chart', []),

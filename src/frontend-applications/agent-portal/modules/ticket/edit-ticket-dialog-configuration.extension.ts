@@ -195,7 +195,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         return configurations;
     }
 
-
     public async getFormConfigurations(): Promise<IConfiguration[]> {
         const configurations = [];
         const formId = 'ticket-edit-form';
@@ -351,8 +350,21 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-edit-form-field-state',
-                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,
-                'Translatable#Helptext_Tickets_TicketEdit_State'
+                'Translatable#State', TicketProperty.STATE_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketEdit_State',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ]
             )
         );
 

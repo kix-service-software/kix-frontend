@@ -315,7 +315,6 @@ export class LabelService {
                 }
             }
 
-
             return await labelProvider.getIcons(object, property, value, forTable);
         }
         return [];

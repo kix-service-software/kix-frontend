@@ -161,7 +161,6 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         return plural ? 'Email Accounts' : 'Email Account';
     }
 
-
     public async getIcons(object: MailAccount, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];
         return icons;

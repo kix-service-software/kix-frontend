@@ -35,7 +35,7 @@ export class OrganisationService extends KIXObjectService<Organisation> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.ORGANISATION);
         this.objectConstructors.set(KIXObjectType.ORGANISATION, [Organisation]);
     }
 

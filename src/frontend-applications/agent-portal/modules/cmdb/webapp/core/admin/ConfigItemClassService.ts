@@ -25,7 +25,7 @@ export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CONFIG_ITEM_CLASS);
         this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_CLASS, [ConfigItemClass]);
     }
 

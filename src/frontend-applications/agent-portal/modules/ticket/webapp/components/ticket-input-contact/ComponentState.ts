@@ -11,6 +11,7 @@ import { FormInputComponentState } from '../../../../../modules/base-components/
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState extends FormInputComponentState<number> {
 
@@ -19,7 +20,7 @@ export class ComponentState extends FormInputComponentState<number> {
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public placeholder: string = '',
         public actions: FormInputAction[] = [],
-        public loadNodes: () => Promise<TreeNode[]> = null
+        public treeId: string = IdService.generateDateBasedId('TicketInputContact')
     ) {
         super();
     }

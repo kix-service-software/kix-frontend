@@ -26,7 +26,7 @@ export class RoleService extends KIXObjectService<Role> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.ROLE);
         this.objectConstructors.set(KIXObjectType.ROLE, [Role]);
         this.objectConstructors.set(KIXObjectType.PERMISSION, [Permission]);
         this.objectConstructors.set(KIXObjectType.PERMISSION_TYPE, [PermissionType]);

@@ -11,6 +11,7 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { AutocompleteFormFieldOption } from '../../../../../model/AutocompleteFormFieldOption';
+import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -43,10 +44,11 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    public setCurrentValue(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentValue = this.state.defaultValue.value;
-            super.provideValue(this.state.currentValue);
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const value = (await formInstance).getFormFieldValue<string>(this.state.field.instanceId);
+        if (value) {
+            this.state.currentValue = value.value;
         }
     }
 
