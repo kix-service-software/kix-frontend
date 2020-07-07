@@ -10,7 +10,6 @@
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
-import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { EditSysConfigDialogContext } from '.';
 import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
@@ -244,6 +243,12 @@ export class SysConfigFormService extends KIXObjectFormService {
         if (valid && defaultValidParameter && valid[1] === defaultValidParameter[1]) {
             valid[1] = null;
         }
+
+        parameter = parameter.filter((p) => {
+            return p[0] !== SysConfigOptionDefinitionProperty.DEFAULT
+                && p[0] !== SysConfigOptionDefinitionProperty.NAME
+                && p[0] !== SysConfigOptionDefinitionProperty.DESCRIPTION;
+        });
 
         return super.postPrepareValues(parameter, createOptions, formContext);
     }
