@@ -34,6 +34,7 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { SysconfigEvent } from '../../core/SysconfigEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../model/SysConfigOption';
+import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -186,7 +187,13 @@ class SysConfigContentProvider extends TableContentProvider {
         for (const column of columns) {
             let tableValue: TableValue;
             if (column.property === SysConfigOptionDefinitionProperty.VALUE) {
-                const value = option && option.Value ? option.Value : '';
+                let value = option && option.Value ? option.Value : '';
+                if (
+                    value !== '' &&
+                    (definition.Type === SysConfigOptionType.HASH || definition.Type === SysConfigOptionType.ARRAY)
+                ) {
+                    value = JSON.stringify(value);
+                }
                 tableValue = new TableValue(column.property, value, value);
             } else if (column.property === SysConfigOptionDefinitionProperty.NAME) {
                 const icons = option && option.ReadOnly ? ['kix-icon-lock-close'] : [];
