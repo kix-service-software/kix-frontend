@@ -21,6 +21,7 @@ import { CreatePermissionDescription } from './CreatePermissionDescription';
 import { Permission } from '../model/Permission';
 import { Role } from '../model/Role';
 import { PermissionType } from '../model/PermissionType';
+import { Error } from '../../../../../server/model/Error';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 
 
@@ -111,65 +112,91 @@ export class RoleService extends KIXObjectAPIService {
             token, clientRequestId, updateParameter, uri, this.objectType, 'RoleID'
         );
 
-        const userIds = this.getParameterValue(parameter, RoleProperty.USER_IDS);
-        await this.setUserIds(token, clientRequestId, Number(objectId), userIds);
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [RoleProperty.USER_IDS, RoleProperty.PERMISSIONS]
+        );
+        const roles = await super.load<Role>(
+            token, this.objectType, this.RESOURCE_URI, loadingOptions, [id], KIXObjectType.ROLE, Role
+        ).catch(() => [] as Role[]);
 
-        const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
-        await this.setPermissions(token, clientRequestId, Number(objectId), permissions);
+        if (Array.isArray(roles) && roles[0]) {
+            const userIds = this.getParameterValue(parameter, RoleProperty.USER_IDS);
+            const permissions = this.getParameterValue(parameter, RoleProperty.PERMISSIONS);
+
+            await Promise.all([
+                this.setUserIds(token, clientRequestId, Number(id), roles[0].UserIDs, userIds),
+                this.setPermissions(token, clientRequestId, Number(id), roles[0].Permissions, permissions)
+            ]);
+        }
 
         return id;
     }
 
     private async setUserIds(
-        token: string, clientRequestId: string, roleId: number, userIds: number[] = []
+        token: string, clientRequestId: string, roleId: number, existingUserIds: number[] = [], userIds: number[] = []
     ): Promise<void> {
         if (!userIds) {
             userIds = [];
         }
         const baseUri = this.buildUri(this.RESOURCE_URI, roleId, 'userids');
-        const existingUserIds = await this.load<number>(
-            token, null, baseUri, null, null, RoleProperty.USER_IDS, Number
-        );
 
+        await Promise.all([
+            this.deleteUserIds(token, clientRequestId, baseUri, existingUserIds, userIds),
+            this.createUserIds(token, clientRequestId, baseUri, existingUserIds, userIds)
+        ]);
+    }
+
+    private async deleteUserIds(
+        token: string, clientRequestId: string, baseUri: string, existingUserIds: number[], userIds: number[]
+    ): Promise<void> {
         const userIdsToRemove = existingUserIds.filter((euid) => !userIds.some((uid) => uid === euid));
-        const userIdsToAdd = userIds.filter((uid) => !existingUserIds.some((euid) => euid === uid));
-
-        for (const userId of userIdsToRemove) {
-            const deleteUri = this.buildUri(baseUri, userId);
-            await this.sendDeleteRequest(token, clientRequestId, [deleteUri], KIXObjectType.ROLE)
-                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
-        }
-
-        for (const userId of userIdsToAdd) {
-            await this.sendCreateRequest(token, clientRequestId, baseUri, { UserID: userId }, KIXObjectType.ROLE)
-                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        if (userIdsToRemove.length) {
+            const deleteUris = userIdsToRemove.map((userId) => this.buildUri(baseUri, userId));
+            const errors: Error[] = await this.sendDeleteRequest<Error>(
+                token, clientRequestId, deleteUris, KIXObjectType.ROLE
+            ).catch((error) => [error]);
+            errors.forEach((e) => LoggingService.getInstance().error(`${e.Code}: ${e.Message}`, e));
         }
     }
 
+    private async createUserIds(
+        token: string, clientRequestId: string, baseUri: string, existingUserIds: number[], userIds: number[]
+    ) {
+        const userIdsToAdd = userIds.filter((uid) => !existingUserIds.some((euid) => euid === uid));
+        const createPromises = [];
+        userIdsToAdd.forEach((UserID) => createPromises.push(
+            this.sendCreateRequest(token, clientRequestId, baseUri, { UserID }, KIXObjectType.ROLE).catch(
+                (error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error)
+            )
+        ));
+        await Promise.all(createPromises);
+    }
+
     public async setPermissions(
-        token: string, clientRequestId: string, roleId: number, permissionDescs: CreatePermissionDescription[] = [],
-        alsoDelete: boolean = true, loadingOptionsForExistingPermissions: KIXObjectLoadingOptions = null
+        token: string, clientRequestId: string, roleId: number,
+        existingPermissions: Permission[] = [], permissionDescs: CreatePermissionDescription[] = [],
+        alsoDelete: boolean = true
     ): Promise<void> {
         if (!permissionDescs) {
             permissionDescs = [];
         }
         if (roleId) {
-            const baseUri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions');
-            const existingPermissions = await this.load(
-                token, null, baseUri, loadingOptionsForExistingPermissions, null, 'Permission', Permission
-            );
+            const promises = [
+                this.createPermissions(
+                    token, clientRequestId, roleId, existingPermissions, permissionDescs
+                ),
+                this.updatePermissions(
+                    token, clientRequestId, roleId, existingPermissions, permissionDescs
+                )
+            ];
 
             if (alsoDelete) {
-                await this.deletePermissions(
+                promises.push(this.deletePermissions(
                     token, clientRequestId, roleId, existingPermissions, permissionDescs
-                );
+                ));
             }
-            await this.createPermissions(
-                token, clientRequestId, roleId, existingPermissions, permissionDescs
-            );
-            await this.updatePermissions(
-                token, clientRequestId, roleId, existingPermissions, permissionDescs
-            );
+
+            await Promise.all(promises);
         }
     }
 
@@ -183,19 +210,14 @@ export class RoleService extends KIXObjectAPIService {
             )
         ).map((ep) => ep.ID);
 
-        for (const permissionId of permissionIdsToRemove) {
-            await this.deletePermission(token, clientRequestId, roleId, permissionId);
-        }
-    }
+        const deleteUris = permissionIdsToRemove.map(
+            (permissionId) => this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionId)
+        );
 
-    public async deletePermission(
-        token: string, clientRequestId: string, roleId: number, permissionId: number
-    ): Promise<void> {
-        await this.sendDeleteRequest(
-            token, clientRequestId,
-            [this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionId)],
-            KIXObjectType.PERMISSION
-        ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        const errors: Error[] = await this.sendDeleteRequest(
+            token, clientRequestId, deleteUris, KIXObjectType.PERMISSION
+        ).catch((error) => [error]);
+        errors.forEach((e) => LoggingService.getInstance().error(`${e.Code}: ${e.Message}`, e));
     }
 
     public async createPermissions(
@@ -209,38 +231,50 @@ export class RoleService extends KIXObjectAPIService {
             )
         );
 
+        const requestPromises = [];
         const uri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions');
-        for (const permissionDesc of permissionsToAdd) {
-            await super.executeUpdateOrCreateRequest(
-                token, clientRequestId, this.getPermissionParameter(permissionDesc), uri,
-                KIXObjectType.PERMISSION, 'Permission', true
-            ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
-        }
+        permissionsToAdd.forEach(
+            (permissionDesc) => requestPromises.push(
+                super.executeUpdateOrCreateRequest(
+                    token, clientRequestId, this.getPermissionParameter(permissionDesc), uri,
+                    KIXObjectType.PERMISSION, 'Permission', true
+                ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error))
+            )
+        );
+        await Promise.all(requestPromises);
     }
 
     private async updatePermissions(
         token: string, clientRequestId: string, roleId: number,
         existingPermissions: Permission[], permissionDescs: CreatePermissionDescription[]
     ): Promise<void> {
-        const permissionsToPatch = permissionDescs.filter((pd) => {
-            const existingPermission = existingPermissions.find(
-                (ep) => ep.RoleID === roleId && ep.Target === pd.Target && ep.TypeID === pd.TypeID
-            );
-            if (existingPermission) {
-                pd.ID = existingPermission.ID;
-                return true;
-            } else {
-                return false;
-            }
-        });
 
-        for (const permissionDesc of permissionsToPatch) {
+        // use permssions which already exists but have another value or comment
+        const permissionsToPatch = permissionDescs.filter((pd) =>
+            existingPermissions.some((ep) => {
+                if (
+                    ep.RoleID === roleId && ep.Target === pd.Target && ep.TypeID === pd.TypeID
+                    && (ep.Value !== pd.Value || ep.Comment !== pd.Comment)
+                ) {
+                    pd.ID = ep.ID;
+                    return true;
+                } else {
+                    return false;
+                }
+            })
+        );
+
+        const requestPromises = [];
+        permissionsToPatch.forEach((permissionDesc) => {
             const uri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionDesc.ID);
-            await super.executeUpdateOrCreateRequest(
-                token, clientRequestId, this.getPermissionParameter(permissionDesc), uri,
-                KIXObjectType.PERMISSION, 'Permission'
-            ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
-        }
+            requestPromises.push(
+                super.executeUpdateOrCreateRequest(
+                    token, clientRequestId, this.getPermissionParameter(permissionDesc), uri,
+                    KIXObjectType.PERMISSION, 'Permission'
+                ).catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error))
+            );
+        });
+        await Promise.all(requestPromises);
     }
 
     private getPermissionParameter(permissionDesc: CreatePermissionDescription): Array<[string, any]> {
