@@ -35,6 +35,7 @@ class Component {
                 this.state.canSearch = data.formInstance.hasValues();
             }
         };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public onDestroy(): void {
@@ -42,7 +43,9 @@ class Component {
     }
 
     public executeSearch(): void {
-        (this as any).emit('executeSearch');
+        if (this.state.canSearch) {
+            (this as any).emit('executeSearch');
+        }
     }
 }
 
