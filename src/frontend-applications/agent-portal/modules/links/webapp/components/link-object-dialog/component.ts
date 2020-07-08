@@ -140,7 +140,9 @@ class LinkDialogComponent {
             formId = nodes[0].id.toString();
             this.linkLabel = nodes[0].label;
             const formInstance = await FormService.getInstance().getFormInstance(formId, false);
-            context.setObjectList(this.objectType, []);
+            if (formInstance) {
+                context.setObjectList(formInstance.getObjectType(), []);
+            }
         } else {
             this.state.table = null;
             formId = null;
