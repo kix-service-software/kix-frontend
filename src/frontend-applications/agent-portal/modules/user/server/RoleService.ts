@@ -292,4 +292,18 @@ export class RoleService extends KIXObjectAPIService {
         return [];
     }
 
+    public async deletePermission(
+        token: string, clientRequestId: string, roleId: number, permissionId: number
+    ): Promise<void> {
+        const deleteUri = this.buildUri(this.RESOURCE_URI, roleId, 'permissions', permissionId);
+
+        const errors: Error[] = await this.sendDeleteRequest(
+            token, clientRequestId, [deleteUri], KIXObjectType.PERMISSION
+        ).catch((error) => [error]);
+
+        if (errors && errors.length) {
+            throw new Error(errors[0].Code, errors[0].Message, errors[0].StatusCode);
+        }
+    }
+
 }
