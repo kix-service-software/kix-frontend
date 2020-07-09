@@ -59,6 +59,10 @@ export enum SysConfigKey {
 
     TICKET_SEARCH_INDEX_STOPWORDS = 'Ticket::SearchIndex::StopWords',
 
-    TICKET_FRONTEND_PENDING_DIFF_TIME = 'Ticket::Frontend::PendingDiffTime'
+    TICKET_FRONTEND_PENDING_DIFF_TIME = 'Ticket::Frontend::PendingDiffTime',
+
+    TICKET_SUBJECT_RE = 'Ticket::SubjectRe',
+
+    TICKET_SUBJECT_FW = 'Ticket::SubjectFwd'
 
 }
