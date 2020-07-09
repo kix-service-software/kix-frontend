@@ -36,6 +36,8 @@ import { CreateTicketArticleOptions } from '../../model/CreateTicketArticleOptio
 import { TicketProperty } from '../../model/TicketProperty';
 import { Queue } from '../../model/Queue';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -326,9 +328,15 @@ export class ArticleFormService extends KIXObjectFormService {
                 const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
                 const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
                 if (isReplyDialog) {
-                    value = `RE: ${value}`;
+                    const subjectConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                        KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_SUBJECT_RE], null, null, true
+                    ).catch((error): SysConfigOption[] => []);
+                    value = `${subjectConfig && subjectConfig.length ? subjectConfig[0].Value : 'RE'}: ${value}`;
                 } else if (isForwardDialog) {
-                    value = `FW: ${value}`;
+                    const subjectConfig: SysConfigOption[] = await KIXObjectService.loadObjects<SysConfigOption>(
+                        KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_SUBJECT_FW], null, null, true
+                    ).catch((error): SysConfigOption[] => []);
+                    value = `${subjectConfig && subjectConfig.length ? subjectConfig[0].Value : 'FW'}: ${value}`;
                 }
             }
         }
