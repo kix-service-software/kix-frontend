@@ -77,7 +77,7 @@ export class AgentSocketClient extends SocketClient {
                         if (result.requestId === requestId) {
                             window.clearTimeout(timeout);
                             BrowserCacheService.getInstance().set(
-                                KIXObjectType.CURRENT_USER, result.currentUser, KIXObjectType.CURRENT_USER
+                                KIXObjectType.CURRENT_USER, new User(result.currentUser), KIXObjectType.CURRENT_USER
                             );
                             this.currentUserRequestPromise = null;
                             resolve(result.currentUser);
