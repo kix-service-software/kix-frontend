@@ -139,7 +139,7 @@ export class SysConfigService extends KIXObjectAPIService {
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return [];
     }
 

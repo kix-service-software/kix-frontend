@@ -22,9 +22,9 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
-import { IKIXObjectFormService } from '../../../../base-components/webapp/core/IKIXObjectFormService';
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 
 export class EditTicketDialogContext extends Context {
 
@@ -61,7 +61,7 @@ export class EditTicketDialogContext extends Context {
     }
 
     private async setFormObject(formId: string): Promise<void> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.TICKET, ServiceType.FORM
         );
         if (service) {

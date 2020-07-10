@@ -27,6 +27,8 @@ export class Macro extends KIXObject {
 
     public Actions: MacroAction[];
 
+    public ExecuteMacro: any;
+
     public constructor(macro?: Macro) {
         super(macro);
         if (macro) {

@@ -10,8 +10,9 @@
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { FormInstance } from './FormInstance';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 
 export class ExtendedKIXObjectFormService {
 
@@ -26,6 +27,12 @@ export class ExtendedKIXObjectFormService {
         formContext?: FormContext
     ): Promise<Array<[string, any]>> {
         return parameter;
+    }
+
+    public async createFormFieldConfigurations(
+        formFields: FormFieldConfiguration[]
+    ): Promise<FormFieldConfiguration[]> {
+        return null;
     }
 
 }

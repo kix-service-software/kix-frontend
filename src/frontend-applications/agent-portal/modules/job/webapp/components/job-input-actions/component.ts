@@ -17,16 +17,11 @@ import { ServiceRegistry } from '../../../../../modules/base-components/webapp/c
 import { JobFormService, JobService } from '../../core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ServiceType } from '../../../../../modules/base-components/webapp/core/ServiceType';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { JobProperty } from '../../../model/JobProperty';
-import { FormInstance } from '../../../../../modules/base-components/webapp/core/FormInstance';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { MacroActionType } from '../../../model/MacroActionType';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
-import { EventService } from '../../../../base-components/webapp/core/EventService';
-import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
-import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -55,28 +50,10 @@ class Component extends FormInputComponent<string, ComponentState> {
     public async onMount(): Promise<void> {
         await this.load();
         await super.onMount();
-
-        this.formSubscriber = {
-            eventSubscriberId: IdService.generateDateBasedId('JobInputActions'),
-            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
-                const actionValue = data.changedValues.find(
-                    (cv) => cv[0] && cv[0].property === JobProperty.MACRO_ACTIONS
-                );
-                if (actionValue && actionValue[0].instanceId !== this.state.field.instanceId) {
-                    const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
-                    if (treeHandler) {
-                        const nodes = await this.loadNodes();
-                        treeHandler.setTree(nodes, undefined, true);
-                    }
-                }
-            }
-        };
-        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async onDestroy(): Promise<void> {
         super.onDestroy();
-        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     private async load(): Promise<void> {
@@ -115,6 +92,8 @@ class Component extends FormInputComponent<string, ComponentState> {
                 this.currentAction = currentNode;
                 this.setFieldHint();
                 this.setFields(false);
+            } else {
+                this.setFields();
             }
 
             treeHandler.setSelection([currentNode], true, true);
@@ -123,7 +102,7 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public nodesChanged(nodes: TreeNode[]): void {
         this.currentAction = nodes && nodes.length ? nodes[0] : null;
-        super.provideValue(this.currentAction.id);
+        super.provideValue(this.currentAction ? this.currentAction.id : null);
         this.setFieldHint();
         this.setFields();
     }

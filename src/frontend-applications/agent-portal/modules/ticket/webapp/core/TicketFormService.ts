@@ -10,26 +10,26 @@
 import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
 import { Ticket } from '../../model/Ticket';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
-import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { TicketProperty } from '../../model/TicketProperty';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { TicketState } from '../../model/TicketState';
-import { StateType } from '../../model/StateType';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { ArticleProperty } from '../../model/ArticleProperty';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { TicketParameterUtil } from './TicketParameterUtil';
 import { ArticleFormService } from './ArticleFormService';
-import { IdService } from '../../../../model/IdService';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
-
 import { Contact } from '../../../customer/model/Contact';
 import { Organisation } from '../../../customer/model/Organisation';
 import { Channel } from '../../model/Channel';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -153,10 +153,77 @@ export class TicketFormService extends KIXObjectFormService {
 
     public async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
-        formContext?: FormContext
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         await ArticleFormService.prototype.addQueueSignature(parameter);
-        return super.postPrepareValues(parameter, createOptions, formContext);
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
+    }
+
+    public async createFormFieldConfigurations(
+        formFields: FormFieldConfiguration[]
+    ): Promise<FormFieldConfiguration[]> {
+        await super.createFormFieldConfigurations(formFields);
+
+        for (const field of formFields) {
+            const label = await LabelService.getInstance().getPropertyText(field.property, KIXObjectType.TICKET);
+
+            switch (field.property) {
+                case TicketProperty.CONTACT_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.CONTACT, true);
+                    field.label = label;
+                    break;
+                case TicketProperty.ORGANISATION_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.ORGANISATION);
+                    field.label = label;
+                    break;
+                case TicketProperty.TYPE_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_TYPE);
+                    field.label = label;
+                    break;
+                case TicketProperty.QUEUE_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.QUEUE);
+                    field.label = label;
+                    break;
+                case TicketProperty.OWNER_ID:
+                case TicketProperty.RESPONSIBLE_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.USER);
+                    field.label = label;
+                    break;
+                case TicketProperty.PRIORITY_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_PRIORITY);
+                    field.label = label;
+                    break;
+                case TicketProperty.STATE_ID:
+                    field.label = label;
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_STATE);
+                    break;
+                default:
+                    field.label = label;
+            }
+        }
+
+        const articleFormService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+            KIXObjectType.ARTICLE, ServiceType.FORM
+        );
+        if (articleFormService) {
+            formFields = await articleFormService.createFormFieldConfigurations(formFields);
+        }
+
+        return formFields;
+    }
+
+    private getObjectReferenceOptions(objectType: KIXObjectType | string, autocomplete?: boolean): FormFieldOption[] {
+        return [
+            new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
+            new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete)
+        ];
     }
 
 }

@@ -27,6 +27,9 @@ import { ApplicationEvent } from '../modules/base-components/webapp/core/Applica
 import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
+import { ContextExtension } from './ContextExtension';
+import { ContextService } from '../modules/base-components/webapp/core/ContextService';
+import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 
 export abstract class Context {
 
@@ -56,7 +59,7 @@ export abstract class Context {
         if (this.descriptor) {
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
                 eventSubscriberId: this.descriptor.contextId + '-update-listener',
-                eventPublished: (data: any) => {
+                eventPublished: async (data: any) => {
                     if (data && data.objectType) {
                         if (this.objectLists.has(data.objectType)) {
                             this.deleteObjectList(data.objectType);
@@ -66,7 +69,7 @@ export abstract class Context {
                             && Array.isArray(this.descriptor.kixObjectTypes)
                             && this.descriptor.kixObjectTypes.some((t) => t === data.objectType)
                         ) {
-                            this.getObject(data.objectType, true);
+                            await this.getObject(data.objectType, true);
                         }
                     }
                 }
@@ -76,6 +79,23 @@ export abstract class Context {
 
     public async initContext(): Promise<void> {
         return;
+    }
+
+    public async getAdditionalActions(): Promise<AbstractAction[]> {
+        let actions: AbstractAction[] = [];
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            const extendedActions = await extension.getAdditionalActions(this);
+            if (Array.isArray(extendedActions)) {
+                const addionalActions = [];
+                for (const a of extendedActions) {
+                    if (await a.canShow()) {
+                        addionalActions.push(a);
+                    }
+                }
+                actions = [...actions, ...addionalActions];
+            }
+        }
+        return actions;
     }
 
     public addObjectDependency(objectType: KIXObjectType | string): void {

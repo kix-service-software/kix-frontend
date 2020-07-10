@@ -111,6 +111,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         this.extendedFormManager.push(manager);
     }
 
+    public getExtendedFormManager(): ExtendedDynamicFormManager[] {
+        return this.extendedFormManager;
+    }
+
     public registerListener(listenerId: string, callback: () => void): void {
         if (listenerId) {
             this.listeners.set(listenerId, callback);

@@ -52,17 +52,6 @@ class Component extends FormInputComponent<number, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-        const objectTypes = context.getDescriptor().kixObjectTypes;
-        const contextMode = context.getDescriptor().contextMode;
-
-        if (objectTypes.some((ot) => ot === KIXObjectType.ARTICLE) && contextMode === ContextMode.CREATE_SUB) {
-            this.initValuesByContext();
-        } else if (objectTypes.some((ot) => ot === KIXObjectType.TICKET)
-            && (contextMode === ContextMode.EDIT || contextMode === ContextMode.CREATE)) {
-            this.initValuesByForm();
-        }
-
         this.formSubscriber = {
             eventSubscriberId: 'ArticleEmailFromInput',
             eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
@@ -82,29 +71,28 @@ class Component extends FormInputComponent<number, ComponentState> {
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
-    private async initValuesByContext(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-            TicketDetailsContext.CONTEXT_ID
-        );
-
-        if (context) {
-            const ticket = await context.getObject<Ticket>();
-            if (ticket) {
-                this.initNodes(ticket.QueueID);
-            }
-        }
-    }
-
-    private async initValuesByForm(): Promise<void> {
+    public async setCurrentValue(): Promise<void> {
+        let queueId: number;
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const queueValue = await formInstance.getFormFieldValueByProperty<number>(TicketProperty.QUEUE_ID);
         if (queueValue && queueValue.value) {
-            this.initNodes(queueValue.value);
-        }
-    }
+            queueId = queueValue.value;
+        } else {
+            const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+                TicketDetailsContext.CONTEXT_ID
+            );
 
-    public async setCurrentValue(): Promise<void> {
-        return;
+            if (context) {
+                const ticket = await context.getObject<Ticket>();
+                if (ticket) {
+                    queueId = ticket.QueueID;
+                }
+            }
+        }
+
+        if (queueId) {
+            this.initNodes(queueId);
+        }
     }
 
     private async initNodes(queueId: number): Promise<void> {

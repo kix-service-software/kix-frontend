@@ -13,6 +13,9 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FormFieldValueHandler } from './FormFieldValueHandler';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { EventService } from './EventService';
+import { FormEvent } from './FormEvent';
 
 export class FormService {
 
@@ -60,11 +63,11 @@ export class FormService {
     }
 
     public async getFormInstance(
-        formId: string, cache: boolean = true, form?: FormConfiguration
+        formId: string, cache: boolean = true, form?: FormConfiguration, kixObject?: KIXObject
     ): Promise<FormInstance> {
         if (formId) {
             if (!this.formInstances.has(formId) || !cache) {
-                const formInstance = this.getNewFormInstance(formId, form);
+                const formInstance = this.getNewFormInstance(formId, form, kixObject);
                 this.formInstances.set(formId, formInstance);
             }
             return await this.formInstances.get(formId);
@@ -72,11 +75,12 @@ export class FormService {
         return;
     }
 
-    private getNewFormInstance(formId: string, form?: FormConfiguration): Promise<FormInstance> {
+    private getNewFormInstance(formId: string, form: FormConfiguration, kixObject: KIXObject): Promise<FormInstance> {
         return new Promise<FormInstance>(async (resolve, reject) => {
             this.deleteFormInstance(formId);
             const formInstance = new FormInstance();
-            await formInstance.initFormInstance(formId);
+            await formInstance.initFormInstance(formId, kixObject);
+            EventService.getInstance().publish(FormEvent.FORM_INITIALIZED, formInstance);
             resolve(formInstance);
         });
     }

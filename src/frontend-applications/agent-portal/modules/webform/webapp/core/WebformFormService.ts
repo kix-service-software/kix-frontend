@@ -33,6 +33,7 @@ import { TicketTypeProperty } from '../../../ticket/model/TicketTypeProperty';
 import { TicketState } from '../../../ticket/model/TicketState';
 import { TicketStateProperty } from '../../../ticket/model/TicketStateProperty';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class WebformFormService extends KIXObjectFormService {
 
@@ -55,7 +56,8 @@ export class WebformFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
     ): Promise<void> {
         const hasConfigPermissions = await this.checkPermissions('system/config');
         if (form) {

@@ -333,7 +333,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketEdit_Priority',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_PRIORITY),
-
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

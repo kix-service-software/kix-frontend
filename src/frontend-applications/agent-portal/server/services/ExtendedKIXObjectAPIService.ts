@@ -56,11 +56,11 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
     }
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return criteria;
+        return null;
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        return criteria;
+        return null;
     }
 
 }

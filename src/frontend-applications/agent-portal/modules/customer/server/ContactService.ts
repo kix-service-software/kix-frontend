@@ -219,7 +219,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         }
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.FULLTEXT
                 && !this.isUserProperty(f.property)
@@ -229,7 +229,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         return filterCriteria;
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const searchCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
                 && f.property !== KIXObjectProperty.VALID_ID

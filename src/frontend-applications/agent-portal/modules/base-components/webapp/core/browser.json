@@ -63,7 +63,6 @@
         "require ./IFormEvent",
         "require ./IFormFieldValidator",
         "require ./IImageDialogListener",
-        "require ./IKIXObjectFormService",
         "require ./IKIXObjectService",
         "require ./IKIXService",
         "require ./ILabelProvider",

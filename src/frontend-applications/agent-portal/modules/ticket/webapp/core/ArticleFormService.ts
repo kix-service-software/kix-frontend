@@ -38,6 +38,7 @@ import { Queue } from '../../model/Queue';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -222,11 +223,17 @@ export class ArticleFormService extends KIXObjectFormService {
         let field = new FormFieldConfiguration(
             'body-input',
             articleLabelText, ArticleProperty.BODY, 'rich-text-input',
-            true, helpText, [
-            new FormFieldOption(FormFieldOptions.AUTO_COMPLETE, new AutocompleteFormFieldOption([
-                new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
-            ]))
-        ], referencedValue ? new FormFieldValue(referencedValue) : null
+            true, helpText,
+            [
+                new FormFieldOption(
+                    FormFieldOptions.AUTO_COMPLETE,
+                    new AutocompleteFormFieldOption(
+                        [
+                            new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
+                        ]
+                    )
+                )
+            ], referencedValue ? new FormFieldValue(referencedValue) : null
         );
         if (!clear && formInstance) {
             const existingField = formInstance.getFormFieldByProperty(ArticleProperty.BODY);
@@ -430,10 +437,10 @@ export class ArticleFormService extends KIXObjectFormService {
 
     public async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: CreateTicketArticleOptions,
-        formContext?: FormContext
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         await this.addQueueSignature(parameter, createOptions);
-        return super.postPrepareValues(parameter, createOptions, formContext);
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
     public async addQueueSignature(
@@ -472,5 +479,63 @@ export class ArticleFormService extends KIXObjectFormService {
             const queueParam = parameter.find((p) => p[0] === TicketProperty.QUEUE_ID);
             return queueParam ? queueParam[1] : null;
         }
+    }
+
+    public async createFormFieldConfigurations(
+        formFields: FormFieldConfiguration[]
+    ): Promise<FormFieldConfiguration[]> {
+        const filterProperties = [
+            ArticleProperty.TO,
+            ArticleProperty.CC,
+            ArticleProperty.BCC,
+            ArticleProperty.FROM,
+            ArticleProperty.BODY,
+            ArticleProperty.SUBJECT,
+            ArticleProperty.ATTACHMENTS
+        ];
+        formFields = formFields.filter((f) => !filterProperties.some((fp) => f.property === fp));
+        for (const field of formFields) {
+            const label = await LabelService.getInstance().getPropertyText(field.property, KIXObjectType.ARTICLE);
+
+            switch (field.property) {
+                case ArticleProperty.FROM:
+                    field.inputComponent = 'article-email-from-input';
+                    field.label = label;
+                    break;
+                case ArticleProperty.TO:
+                case ArticleProperty.CC:
+                case ArticleProperty.BCC:
+                    field.inputComponent = 'article-email-recipient-input';
+                    field.label = label;
+                    break;
+                case ArticleProperty.BODY:
+                    field.inputComponent = 'rich-text-input';
+                    field.options = [
+                        new FormFieldOption(
+                            FormFieldOptions.AUTO_COMPLETE,
+                            new AutocompleteFormFieldOption(
+                                [
+                                    new AutocompleteOption(KIXObjectType.TEXT_MODULE, '::')
+                                ]
+                            )
+                        )
+                    ];
+                    field.label = label;
+                case ArticleProperty.ATTACHMENTS:
+                    field.inputComponent = 'attachment-input';
+                    field.label = label;
+                    break;
+                case ArticleProperty.CHANNEL_ID:
+                    field.inputComponent = 'channel-input';
+                    field.options = [
+                        new FormFieldOption('NO_CHANNEL', true)
+                    ];
+                    field.label = label;
+                    break;
+                default:
+            }
+        }
+
+        return formFields;
     }
 }

@@ -18,6 +18,7 @@ import { FormFieldConfiguration } from '../../../../../model/configuration/FormF
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { IdService } from '../../../../../model/IdService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 
 export class QueueFormService extends KIXObjectFormService {
 
@@ -59,7 +60,8 @@ export class QueueFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
             PAGES:

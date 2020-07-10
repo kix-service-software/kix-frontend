@@ -7,18 +7,13 @@
  * --
  */
 
-export enum MacroProperty {
+import { Context } from './Context';
+import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 
-    ID = 'ID',
+export class ContextExtension {
 
-    NAME = 'Name',
-
-    TYPE = 'Type',
-
-    ACTIONS = 'Actions',
-
-    EXEC_ORDER = 'ExecOrder',
-
-    EXEC = 'Exec'
+    public async getAdditionalActions(context: Context): Promise<AbstractAction[]> {
+        return;
+    }
 
 }

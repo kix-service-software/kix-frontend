@@ -12,7 +12,6 @@ import { AbstractComponentState } from '../../../../../modules/base-components/w
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public formId: string = 'ticket-edit-form',
         public buttonLabel: string = 'Translatable#Save'
     ) {
         super();

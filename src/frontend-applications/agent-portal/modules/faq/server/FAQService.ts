@@ -259,7 +259,7 @@ export class FAQService extends KIXObjectAPIService {
         }
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria.filter(
             (f) => f.property !== FAQArticleProperty.CUSTOMER_VISIBLE
         );

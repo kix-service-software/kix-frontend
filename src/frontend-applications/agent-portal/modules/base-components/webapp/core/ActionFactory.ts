@@ -15,6 +15,7 @@ import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 export class ActionFactory<T extends AbstractAction> {
 
     private actions: Map<string, new () => T> = new Map();
+    private actionInstances: Map<string, T> = new Map();
 
     private static INSTANCE: ActionFactory<AbstractAction> = null;
 
@@ -40,7 +41,9 @@ export class ActionFactory<T extends AbstractAction> {
     public async generateActions(actionIds: string[] = [], data?: any): Promise<AbstractAction[]> {
         const actions = [];
         for (const actionId of actionIds) {
-            if (this.actions.has(actionId)) {
+            if (this.actionInstances.has(actionId)) {
+                actions.push(this.actionInstances.get(actionId));
+            } else if (this.actions.has(actionId)) {
                 const actionPrototype = this.actions.get(actionId);
                 let action: IAction = new actionPrototype();
                 action.id = actionId;
@@ -65,6 +68,10 @@ export class ActionFactory<T extends AbstractAction> {
         }
 
         return actions;
+    }
+
+    public regsiterActionInstance(actionId: string, action: T): void {
+        this.actionInstances.set(actionId, action);
     }
 
 }

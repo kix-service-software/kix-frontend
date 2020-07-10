@@ -358,9 +358,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return value ? value[1] : undefined;
     }
 
-    protected async buildFilter(
+    public async buildFilter(
         criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
-    ): Promise<void> {
+    ): Promise<any> {
 
         const nonDynamicFieldCriteria = criteria.filter(
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
@@ -369,7 +369,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         let filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token);
         for (const service of this.extendedServices) {
             const extendedCriteria = await service.prepareAPIFilter(nonDynamicFieldCriteria, token);
-            filterCriteria = [...filterCriteria, ...extendedCriteria];
+            if (extendedCriteria) {
+                filterCriteria = [...filterCriteria, ...extendedCriteria];
+            }
         }
 
         if (filterCriteria && filterCriteria.length) {
@@ -381,7 +383,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
         for (const service of this.extendedServices) {
             const extendedCriteria = await service.prepareAPISearch(nonDynamicFieldCriteria, token);
-            searchCriteria = [...searchCriteria, ...extendedCriteria];
+            if (extendedCriteria) {
+                searchCriteria = [...searchCriteria, ...extendedCriteria];
+            }
         }
         const dynamicFieldCriteria = criteria.filter(
             (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
@@ -397,17 +401,19 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
             query.search = JSON.stringify(apiSearch);
         }
+
+        return query;
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria;
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria;
     }
 
-    private prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
+    public prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
         let objectFilter = {};
 
         const andFilter = filterCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {

@@ -15,12 +15,12 @@ import { PersonalSetting } from '../../model/PersonalSetting';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../modules/base-components/webapp/core/ServiceType';
-import { IKIXObjectFormService } from '../../../../modules/base-components/webapp/core/IKIXObjectFormService';
 import { EventService } from '../../../base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -83,7 +83,7 @@ export class AgentService extends KIXObjectService<User> {
     }
 
     public async setPreferencesByForm(formId: string): Promise<void> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
         );
         let parameter: Array<[string, any]>;

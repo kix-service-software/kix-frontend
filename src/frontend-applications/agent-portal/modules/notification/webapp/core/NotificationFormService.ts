@@ -27,6 +27,7 @@ import { Notification } from '../../model/Notification';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { IdService } from '../../../../model/IdService';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class NotificationFormService extends KIXObjectFormService {
 
@@ -60,7 +61,8 @@ export class NotificationFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, notification: Notification
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, notification: Notification
     ): Promise<void> {
         if (form) {
             const translationService = ServiceRegistry.getServiceInstance<TranslationService>(

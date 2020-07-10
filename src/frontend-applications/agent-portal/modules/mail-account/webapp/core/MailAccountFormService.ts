@@ -18,6 +18,7 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { DispatchingType } from '../../model/DispatchingType';
 import { IdService } from '../../../../model/IdService';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class MailAccountFormService extends KIXObjectFormService {
 
@@ -40,7 +41,8 @@ export class MailAccountFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
             PAGES:

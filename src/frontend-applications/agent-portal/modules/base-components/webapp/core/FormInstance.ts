@@ -10,7 +10,6 @@
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 import { ServiceRegistry } from './ServiceRegistry';
-import { IKIXObjectFormService } from './IKIXObjectFormService';
 import { ServiceType } from './ServiceType';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormValidationService } from './FormValidationService';
@@ -28,6 +27,8 @@ import { EventService } from './EventService';
 import { FormEvent } from './FormEvent';
 import { FormValuesChangedEventData } from './FormValuesChangedEventData';
 import { FormFactory } from './FormFactory';
+import { KIXObjectFormService } from './KIXObjectFormService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class FormInstance {
 
@@ -41,6 +42,9 @@ export class FormInstance {
 
     public provideFixedValue(property: string, value: FormFieldValue): void {
         this.fixedValues.set(property, value);
+        EventService.getInstance().publish(
+            FormEvent.FIXED_VALUE_CHANGED, { formInstance: this, property, value }
+        );
     }
 
     public getFixedValues(): Map<string, FormFieldValue> {
@@ -55,19 +59,19 @@ export class FormInstance {
         this.templateValues.set(property, value);
     }
 
-    public async initFormInstance(formId: string): Promise<void> {
+    public async initFormInstance(formId: string, kixObject: KIXObject): Promise<void> {
         this.form = await FormService.getInstance().getForm(formId);
         FormFactory.initForm(this.form);
-        await this.initFormFields();
+        await this.initFormFields(kixObject);
     }
 
-    private async initFormFields(): Promise<void> {
+    private async initFormFields(kixObject: KIXObject): Promise<void> {
         if (this.form) {
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                await service.initValues(this.form, this);
+                await service.initValues(this.form, this, kixObject);
             } else {
                 this.form.pages.forEach(
                     (p) => p.groups.forEach((g) => this.setDefaultValueAndParent(g.formFields))
@@ -133,7 +137,7 @@ export class FormInstance {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
             fields.splice(index, 1);
             this.deleteFieldValues(formField);
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
@@ -179,7 +183,7 @@ export class FormInstance {
         }
 
         if (Array.isArray(pageIds)) {
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             for (const pageId of pageIds) {
@@ -224,22 +228,26 @@ export class FormInstance {
         return fields;
     }
 
-    public async duplicateAndAddNewField(formField: FormFieldConfiguration): Promise<void> {
+    public async duplicateAndAddNewField(
+        formField: FormFieldConfiguration, withChildren: boolean = true
+    ): Promise<FormFieldConfiguration> {
         const fields: FormFieldConfiguration[] = await this.getFields(formField);
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                const newField = service.getNewFormField(formField);
+                const newField = service.getNewFormField(formField, null, withChildren);
                 fields.splice(index + 1, 0, newField);
                 this.setDefaultValueAndParent([newField], formField.parent);
                 await service.updateFields(fields, this);
 
                 EventService.getInstance().publish(FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent });
+                return newField;
             }
         }
+        return null;
     }
 
     public async addFieldChildren(
@@ -330,7 +338,8 @@ export class FormInstance {
         if (field) {
             return this.getFormFieldValue(field.instanceId);
         }
-        return null;
+
+        return this.fixedValues.get(property);
     }
 
     public getFormFieldByProperty(property: string): FormFieldConfiguration {
@@ -489,7 +498,7 @@ export class FormInstance {
 
                         this.sortValuesByFieldList(fields);
 
-                        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+                        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                             this.form.objectType, ServiceType.FORM
                         );
                         if (service) {

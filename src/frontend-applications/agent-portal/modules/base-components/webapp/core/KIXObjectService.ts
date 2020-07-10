@@ -18,7 +18,6 @@ import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 import { KIXObjectSocketClient } from './KIXObjectSocketClient';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
-import { IKIXObjectFormService } from './IKIXObjectFormService';
 import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { TreeNode } from './tree';
@@ -50,6 +49,7 @@ import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
 import { ContactProperty } from '../../../customer/model/ContactProperty';
 import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
+import { KIXObjectFormService } from './KIXObjectFormService';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
@@ -207,7 +207,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, object: KIXObject, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
         let parameter = [];
         if (service) {
             parameter = service.prepareCreateParameter(object);
@@ -230,7 +230,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
         const parameter: Array<[string, any]> = await service.getFormParameter(formId, false, createOptions);
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
@@ -291,7 +291,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         if (!objectId) {
             throw new Error(null, `Can not update "${objectType}". No objectId given`);
         }
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
         const parameter: Array<[string, any]> = await service.getFormParameter(formId, true);
 
         const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
