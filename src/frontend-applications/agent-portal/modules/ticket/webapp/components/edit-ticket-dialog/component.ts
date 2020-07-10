@@ -33,7 +33,7 @@ class Component extends AbstractEditDialog {
     }
 
     public async onMount(): Promise<void> {
-        super.onMount();
+        await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Cancel', 'Translatable#Save'

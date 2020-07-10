@@ -75,6 +75,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'object-reference-input', '/kix-module-base-components$0/webapp/components/object-reference-input', []
         ),
+        new UIComponent(
+            'object-search-input', '/kix-module-base-components$0/webapp/components/object-search-input', []
+        ),
         new UIComponent('overlay', '/kix-module-base-components$0/webapp/components/overlay', []),
         new UIComponent(
             'confirm-overlay', '/kix-module-base-components$0/webapp/components/overlay/confirm-overlay', []

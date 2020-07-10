@@ -20,12 +20,20 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export class TicketSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.TICKET);
         this.formManager = new TicketSearchFormManager();
+    }
+
+    public createFormManager(): SearchFormManager {
+        const newManager = new TicketSearchFormManager();
+
+        this.formManager.getExtendedFormManager().forEach((m) => newManager.addExtendedFormManager(m));
+        return newManager;
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {

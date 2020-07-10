@@ -12,7 +12,6 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 import { KIXObject } from '../../../../model/kix/KIXObject';
-import { IKIXObjectFormService } from '../../../base-components/webapp/core/IKIXObjectFormService';
 import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
@@ -39,6 +38,7 @@ import { ConfigItemProperty } from '../../../cmdb/model/ConfigItemProperty';
 import { KIXObjectService } from './KIXObjectService';
 import { IDynamicFieldFormUtil } from './IDynamicFieldFormUtil';
 import { ExtendedDynamicFieldFormUtil } from './ExtendedDynamicFieldFormUtil';
+import { KIXObjectFormService } from './KIXObjectFormService';
 
 export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
@@ -252,7 +252,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public async handleDynamicFieldValues(
-        formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService,
+        formFields: FormFieldConfiguration[], object: KIXObject, formService: KIXObjectFormService,
         formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);

@@ -16,7 +16,8 @@ export class ComponentState extends AbstractComponentState {
         public level: number = 0,
         public fields: FormFieldConfiguration[] = [],
         public dragStartInstanceId: string = null,
-        public dragStartIndex: number = null
+        public dragStartIndex: number = null,
+        public loading: boolean = false
     ) {
         super();
     }

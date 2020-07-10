@@ -19,6 +19,7 @@ import { InputFieldTypes } from '../../../../modules/base-components/webapp/core
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -193,6 +194,15 @@ export class TicketSearchFormManager extends SearchFormManager {
                 }
         }
         return nodes;
+    }
+
+    public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
+        if (newValue.property === KIXObjectProperty.CREATE_TIME) {
+            newValue.property = TicketProperty.CREATED;
+        } else if (newValue.property === KIXObjectProperty.CHANGE_TIME) {
+            newValue.property = TicketProperty.CHANGED;
+        }
+        super.setValue(newValue, silent);
     }
 
 }

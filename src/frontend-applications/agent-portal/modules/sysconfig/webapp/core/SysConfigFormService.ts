@@ -227,7 +227,7 @@ export class SysConfigFormService extends KIXObjectFormService {
 
     public async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
-        formContext?: FormContext
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
 
         const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
@@ -250,6 +250,6 @@ export class SysConfigFormService extends KIXObjectFormService {
                 && p[0] !== SysConfigOptionDefinitionProperty.DESCRIPTION;
         });
 
-        return super.postPrepareValues(parameter, createOptions, formContext);
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 }

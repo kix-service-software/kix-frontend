@@ -259,20 +259,7 @@ export class DynamicFormFieldValue {
     public async setCurrentValue(silent: boolean = true): Promise<void> {
         let currentValues: TreeNode[] = [];
         if (this.value.value) {
-            if (!this.isDropdown && this.value.objectType) {
-                const objects = await KIXObjectService.loadObjects(
-                    this.value.objectType, Array.isArray(this.value.value) ? this.value.value : [this.value.value]
-                );
-                let label;
-                let icon;
-                if (objects && objects.length) {
-                    for (const object of objects) {
-                        label = await LabelService.getInstance().getObjectText(object);
-                        icon = LabelService.getInstance().getObjectTypeIcon(object.KIXObjectType);
-                        currentValues.push(new TreeNode(object.ObjectId, label, icon));
-                    }
-                }
-            } else if (this.isDropdown && !this.isAutocomplete) {
+            if (this.isDropdown && !this.isAutocomplete) {
                 const valueNodes = this.valueTreeHandler.getTree();
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
                 for (const v of selectValues) {
@@ -325,6 +312,19 @@ export class DynamicFormFieldValue {
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                         this.time = DateTimeUtil.getKIXTimeString(date);
+                    }
+                }
+            } else if (!this.isDropdown && this.value.objectType) {
+                const objects = await KIXObjectService.loadObjects(
+                    this.value.objectType, Array.isArray(this.value.value) ? this.value.value : [this.value.value]
+                );
+                let label;
+                let icon;
+                if (objects && objects.length) {
+                    for (const object of objects) {
+                        label = await LabelService.getInstance().getObjectText(object);
+                        icon = LabelService.getInstance().getObjectTypeIcon(object.KIXObjectType);
+                        currentValues.push(new TreeNode(object.ObjectId, label, icon));
                     }
                 }
             } else if (!this.isSpecificInput) {

@@ -72,7 +72,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.REFRESH && data && data.tableId === this.state.row.getTable().getTableId()) {
+        if (eventId === TableEvent.REFRESH
+            && this.state.row
+            && data
+            && data.tableId === this.state.row.getTable().getTableId()
+        ) {
             this.setWidth();
         }
     }

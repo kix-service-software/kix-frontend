@@ -26,10 +26,15 @@ import { KIXObjectService } from '../../../base-components/webapp/core/KIXObject
 import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export abstract class SearchDefinition {
 
     public formManager: AbstractDynamicFormManager;
+
+    public createFormManager(): SearchFormManager {
+        return null;
+    }
 
     public constructor(public objectType: KIXObjectType | string) { }
 

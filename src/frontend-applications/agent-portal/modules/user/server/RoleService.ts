@@ -288,7 +288,7 @@ export class RoleService extends KIXObjectAPIService {
         return parameter;
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return [];
     }
 

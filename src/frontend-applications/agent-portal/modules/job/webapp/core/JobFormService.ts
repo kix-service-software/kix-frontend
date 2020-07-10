@@ -111,7 +111,8 @@ export class JobFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, job: Job
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, job: Job
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
             for (const p of form.pages) {
@@ -164,7 +165,7 @@ export class JobFormService extends KIXObjectFormService {
 
     public async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
-        formContext?: FormContext
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         const actionTypesParameter = parameter.filter((p) => p[0].startsWith(JobProperty.MACRO_ACTIONS));
         const actionAttributesParameter = parameter.filter((p) => p[0].match(/^ACTION###/));
@@ -209,7 +210,7 @@ export class JobFormService extends KIXObjectFormService {
         parameter.push([
             JobProperty.MACRO_ACTIONS, Array.from(actions.values())
         ]);
-        return super.postPrepareValues(parameter, createOptions, formContext);
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
     public async getFormFieldsForAction(

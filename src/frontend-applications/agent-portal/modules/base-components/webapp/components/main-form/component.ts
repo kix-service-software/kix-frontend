@@ -70,6 +70,7 @@ class FormComponent {
             this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));
         }
 
+        EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
         EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
@@ -105,6 +106,7 @@ class FormComponent {
                     (this as any).setStateDirty('formInstance');
                 }
             };
+            EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
             EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
             EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
             EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);

@@ -302,7 +302,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
         throw new Error('', 'Method not implemented.');
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria.filter((c) =>
             c.property !== ConfigItemProperty.CONFIG_ITEM_ID &&
             c.property !== ConfigItemProperty.NUMBER &&
@@ -313,7 +313,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
         );
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const newCriteria = criteria.filter((c) =>
             !c.property.startsWith('Data') &&
             !c.property.startsWith('CurrentVersion')

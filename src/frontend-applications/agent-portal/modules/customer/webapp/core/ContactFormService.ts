@@ -359,7 +359,7 @@ export class ContactFormService extends KIXObjectFormService {
 
     public async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
-        formContext?: FormContext
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         const service = ServiceRegistry.getServiceInstance<PersonalSettingsFormService>(
             KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
@@ -373,7 +373,7 @@ export class ContactFormService extends KIXObjectFormService {
         if (this.assignedUserId && formContext === FormContext.EDIT) {
             parameter.push([ContactProperty.ASSIGNED_USER_ID, this.assignedUserId]);
         }
-        return super.postPrepareValues(parameter, createOptions, formContext);
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
     private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {

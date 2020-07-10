@@ -24,7 +24,7 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
     public async handleFormFieldValues(
         formInstance: FormInstance, changedFieldValues: Array<[FormFieldConfiguration, FormFieldValue]>
     ): Promise<void> {
-        const contactValue = changedFieldValues.find((cv) => cv[0].property === TicketProperty.CONTACT_ID);
+        const contactValue = changedFieldValues.find((cv) => cv[0] && cv[0].property === TicketProperty.CONTACT_ID);
         if (contactValue) {
             let organisationId: number | string;
             if (contactValue[1].value) {
@@ -90,6 +90,5 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
             formInstance.getForm().pages[0].groups[0].formFields.push(pendingField);
         }
     }
-
 
 }

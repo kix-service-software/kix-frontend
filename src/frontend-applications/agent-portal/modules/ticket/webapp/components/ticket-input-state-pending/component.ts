@@ -10,11 +10,11 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
-import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
-import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<Date, ComponentState> {
 

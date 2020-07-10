@@ -386,7 +386,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         return await this.sendDeleteRequest<void>(token, clientRequestId, [uri], this.objectType);
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterProperties = [
             TicketProperty.TICKET_NUMBER,
             TicketProperty.TITLE,
@@ -420,7 +420,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         return filterCriteria;
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const searchProperties = [
             TicketProperty.TICKET_NUMBER,
             TicketProperty.TITLE,

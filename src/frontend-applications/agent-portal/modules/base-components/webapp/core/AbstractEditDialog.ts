@@ -57,10 +57,15 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
             this.objectType, [ContextMode.EDIT, ContextMode.EDIT_ADMIN]
         );
         if (dialogContext) {
-            this.state.formId = await FormService.getInstance().getFormIdByContext(
-                FormContext.EDIT, this.objectType
-            );
-            dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
+            const formId = dialogContext.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
+            if (formId) {
+                this.state.formId = formId;
+            } else {
+                this.state.formId = await FormService.getInstance().getFormIdByContext(
+                    FormContext.EDIT, this.objectType
+                );
+                dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_ID, this.state.formId);
+            }
         }
 
         EventService.getInstance().subscribe(ApplicationEvent.DIALOG_SUBMIT, {

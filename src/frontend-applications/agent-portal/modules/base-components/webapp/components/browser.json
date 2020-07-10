@@ -45,6 +45,7 @@
         "require ./object-information-widget",
         "require ./object-property-label",
         "require ./object-reference-input",
+        "require ./object-search-input",
         "require ./overlay",
         "require ./overlay/confirm-overlay",
         "require ./overlay/refresh-app-toast",

@@ -24,7 +24,7 @@ import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { Error } from '../../../../../../server/model/Error';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../../modules/base-components/webapp/core/ServiceType';
-import { IKIXObjectFormService } from '../../../../modules/base-components/webapp/core/IKIXObjectFormService';
+import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
 
 export class WebformService extends KIXObjectService<Webform> {
 
@@ -100,7 +100,7 @@ export class WebformService extends KIXObjectService<Webform> {
     }
 
     private async getWebformFromForm(formId: string): Promise<Webform> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.WEBFORM, ServiceType.FORM
         );
 
