@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { SystemAddressLabelProvider } from "../../core";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SystemAddress } from "../../../model/SystemAddress";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { SystemAddressLabelProvider } from '../../core';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { SystemAddress } from '../../../model/SystemAddress';
 
 export class ComponentState extends WidgetComponentState {
 

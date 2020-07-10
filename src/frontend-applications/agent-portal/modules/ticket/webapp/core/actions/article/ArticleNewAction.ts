@@ -7,23 +7,33 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { NewTicketArticleContext } from "../..";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../../model/ContextMode";
+import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { NewTicketArticleContext } from '../..';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../model/ContextMode';
+import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class ArticleNewAction extends AbstractAction {
-
-    public permissions = [
-        new UIComponentPermission('tickets/*/articles', [CRUD.CREATE])
-    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#New Article';
         this.icon = 'kix-icon-new-note';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async run(): Promise<void> {

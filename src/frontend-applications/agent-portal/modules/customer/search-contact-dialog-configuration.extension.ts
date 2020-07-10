@@ -7,28 +7,28 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { ContactSearchContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { HelpWidgetConfiguration } from "../../model/configuration/HelpWidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
-import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextMode } from "../../model/ContextMode";
-import { SearchForm } from "../../modules/base-components/webapp/core/SearchForm";
-import { FormContext } from "../../model/configuration/FormContext";
-import { SearchProperty } from "../search/model/SearchProperty";
-import { ContactProperty } from "./model/ContactProperty";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { ModuleConfigurationService } from "../../server/services/configuration";
-import { UserProperty } from "../user/model/UserProperty";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { ContactSearchContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { HelpWidgetConfiguration } from '../../model/configuration/HelpWidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContextMode } from '../../model/ContextMode';
+import { SearchForm } from '../../modules/base-components/webapp/core/SearchForm';
+import { FormContext } from '../../model/configuration/FormContext';
+import { SearchProperty } from '../search/model/SearchProperty';
+import { ContactProperty } from './model/ContactProperty';
+
+import { ModuleConfigurationService } from '../../server/services/configuration';
+import { UserProperty } from '../user/model/UserProperty';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -52,7 +52,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, false, false, 'kix-icon-textblocks'
         );
         configurations.push(helpWidget);
-
 
         const widget = new WidgetConfiguration(
             'contact-search-dialog-widget', 'Dialog Widget', ConfigurationType.Widget,

@@ -7,8 +7,8 @@
  * --
  */
 
-import { ConfiguredWidget } from "../../../../../model/configuration/ConfiguredWidget";
-import { ContextType } from "../../../../../model/ContextType";
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
+import { ContextType } from '../../../../../model/ContextType';
 
 export class ComponentState {
 

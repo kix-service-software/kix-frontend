@@ -7,23 +7,23 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { MailFilterDetailsContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { MailFilterProperty } from "./model/MailFilterProperty";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { SortOrder } from "../../model/SortOrder";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { MailFilterDetailsContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { MailFilterProperty } from './model/MailFilterProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { SortOrder } from '../../model/SortOrder';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { DisplayImageDescription } from "../../../../../../modules/base-components/webapp/core/DisplayImageDescription";
+import { DisplayImageDescription } from '../../../../../../modules/base-components/webapp/core/DisplayImageDescription';
 
 export class ComponentState {
 

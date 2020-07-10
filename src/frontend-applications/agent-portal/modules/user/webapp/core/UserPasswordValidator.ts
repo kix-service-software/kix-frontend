@@ -7,16 +7,16 @@
  * --
  */
 
-import { IFormFieldValidator } from "../../../../modules/base-components/webapp/core/IFormFieldValidator";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { PersonalSettingsProperty } from "../../model/PersonalSettingsProperty";
-import { ValidationResult } from "../../../../modules/base-components/webapp/core/ValidationResult";
-import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
-import { ValidationSeverity } from "../../../../modules/base-components/webapp/core/ValidationSeverity";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { AgentService } from ".";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from '../../../../modules/base-components/webapp/core/IFormFieldValidator';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { ValidationResult } from '../../../../modules/base-components/webapp/core/ValidationResult';
+import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
+import { ValidationSeverity } from '../../../../modules/base-components/webapp/core/ValidationSeverity';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { AgentService } from '.';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 
 export class UserPasswordValidator implements IFormFieldValidator {
 
@@ -42,14 +42,14 @@ export class UserPasswordValidator implements IFormFieldValidator {
 
                 if (!this.isDefined(passwordConfirm)) {
                     const errorString = await TranslationService.translate(
-                        "Translatable#You have to confirm your password."
+                        'Translatable#You have to confirm your password.'
                     );
                     return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
 
                 if (passwordConfirm.value !== password.value) {
                     const errorString = await TranslationService.translate(
-                        "Translatable#Passwords do not match."
+                        'Translatable#Passwords do not match.'
                     );
                     return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
@@ -62,14 +62,14 @@ export class UserPasswordValidator implements IFormFieldValidator {
 
                 if (!this.isDefined(currentPassword)) {
                     const errorString = await TranslationService.translate(
-                        "Translatable#You have to confirm your current password."
+                        'Translatable#You have to confirm your current password.'
                     );
                     return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
 
                 if (!await this.checkCurrentPassword(currentPassword.value)) {
                     const errorString = await TranslationService.translate(
-                        "Translatable#Your current password is wrong."
+                        'Translatable#Your current password is wrong.'
                     );
                     return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }

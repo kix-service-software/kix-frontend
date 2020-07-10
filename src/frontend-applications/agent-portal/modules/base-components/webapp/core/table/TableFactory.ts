@@ -7,18 +7,18 @@
  * --
  */
 
-import { ITableFactory } from "./ITableFactory";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable } from "./ITable";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { IColumn } from "./IColumn";
-import { IRow } from "./IRow";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { DataType } from "../../../../../model/DataType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { ExtendedTableFactory } from "./ExtendedTableFactory";
+import { ITableFactory } from './ITableFactory';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable } from './ITable';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { IColumn } from './IColumn';
+import { IRow } from './IRow';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { DataType } from '../../../../../model/DataType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ExtendedTableFactory } from './ExtendedTableFactory';
 
 export abstract class TableFactory implements ITableFactory {
 

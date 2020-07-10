@@ -7,11 +7,11 @@
  * --
  */
 
-import { IMainMenuExtension } from "../../server/extensions/IMainMenuExtension";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { SearchContext } from "./webapp/core/SearchContext";
+import { IMainMenuExtension } from '../../server/extensions/IMainMenuExtension';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { SearchContext } from './webapp/core/SearchContext';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IMainMenuExtension {
 
@@ -21,9 +21,9 @@ class Extension extends KIXExtension implements IMainMenuExtension {
 
     public primaryMenu: boolean = true;
 
-    public icon: string = "kix-icon-search";
+    public icon: string = 'kix-icon-search';
 
-    public text: string = "Translatable#Search";
+    public text: string = 'Translatable#Search';
 
     public permissions: UIComponentPermission[] = [];
 

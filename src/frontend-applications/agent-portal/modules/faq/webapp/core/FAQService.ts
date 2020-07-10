@@ -7,33 +7,33 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { FAQArticleProperty } from "../../model/FAQArticleProperty";
-import { FAQCategoryProperty } from "../../model/FAQCategoryProperty";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FAQCategory } from "../../model/FAQCategory";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
-import { FAQArticle } from "../../model/FAQArticle";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { FAQDetailsContext } from "./context/FAQDetailsContext";
-import { InlineContent } from "../../../../modules/base-components/webapp/core/InlineContent";
-import { FAQArticleAttachmentLoadingOptions } from "../../model/FAQArticleAttachmentLoadingOptions";
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { FAQVote } from "../../model/FAQVote";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../model/ContextMode";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { FAQArticleProperty } from '../../model/FAQArticleProperty';
+import { FAQCategoryProperty } from '../../model/FAQCategoryProperty';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FAQCategory } from '../../model/FAQCategory';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
+import { FAQArticle } from '../../model/FAQArticle';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { FAQDetailsContext } from './context/FAQDetailsContext';
+import { InlineContent } from '../../../../modules/base-components/webapp/core/InlineContent';
+import { FAQArticleAttachmentLoadingOptions } from '../../model/FAQArticleAttachmentLoadingOptions';
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { FAQVote } from '../../model/FAQVote';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../model/ContextMode';
 
 
 export class FAQService extends KIXObjectService {
@@ -50,7 +50,11 @@ export class FAQService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.FAQ_ARTICLE);
+        this.objectConstructors.set(KIXObjectType.FAQ_ARTICLE, [FAQArticle]);
+        this.objectConstructors.set(KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [Attachment]);
+        this.objectConstructors.set(KIXObjectType.FAQ_CATEGORY, [FAQCategory]);
+        this.objectConstructors.set(KIXObjectType.FAQ_VOTE, [FAQVote]);
     }
 
     public isServiceFor(type: KIXObjectType | string) {
@@ -63,7 +67,7 @@ export class FAQService extends KIXObjectService {
     }
 
     public getLinkObjectName(): string {
-        return "FAQArticle";
+        return 'FAQArticle';
     }
 
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
@@ -179,7 +183,7 @@ export class FAQService extends KIXObjectService {
 
                 const treeNode = new TreeNode(
                     category.ID, category.Name,
-                    new ObjectIcon(KIXObjectType.FAQ_CATEGORY, category.ID),
+                    new ObjectIcon(null, KIXObjectType.FAQ_CATEGORY, category.ID),
                     null,
                     subTree,
                     null, null, null, null, null, null, null,

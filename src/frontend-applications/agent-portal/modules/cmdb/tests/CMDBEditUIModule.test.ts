@@ -32,7 +32,6 @@ describe('CMDBEditUIModule', () => {
             await cmdbModule.register();
         });
 
-
         it('should register the new context for ConfigItemClass', () => {
             const descriptor = ContextFactory.getInstance().getContextDescriptor(NewConfigItemDialogContext.CONTEXT_ID);
             expect(descriptor).exist;

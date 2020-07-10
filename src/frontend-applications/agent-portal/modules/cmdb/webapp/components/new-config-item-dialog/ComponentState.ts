@@ -7,8 +7,8 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 export class ComponentState extends AbstractComponentState {
 

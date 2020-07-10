@@ -7,22 +7,22 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../model/ContextType";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { AbstractEditDialog } from "../../../../base-components/webapp/core/AbstractEditDialog";
-import { ContactDetailsContext } from "../../core";
-import { Contact } from "../../../model/Contact";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { ContactProperty } from "../../../model/ContactProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterType } from "../../../../../model/FilterType";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { UserDetailsContext } from "../../../../user/webapp/core/admin";
+import { ComponentState } from './ComponentState';
+
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractEditDialog } from '../../../../base-components/webapp/core/AbstractEditDialog';
+import { ContactDetailsContext } from '../../core';
+import { Contact } from '../../../model/Contact';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { ContactProperty } from '../../../model/ContactProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterType } from '../../../../../model/FilterType';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { UserDetailsContext } from '../../../../user/webapp/core/admin';
 
 class Component extends AbstractEditDialog {
 

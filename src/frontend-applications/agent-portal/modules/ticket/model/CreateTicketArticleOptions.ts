@@ -7,7 +7,7 @@
  * --
  */
 
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
 
 
 export class CreateTicketArticleOptions extends KIXObjectSpecificCreateOptions {

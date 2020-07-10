@@ -7,17 +7,18 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { DynamicField } from "../../model/DynamicField";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { DynamicField } from '../../model/DynamicField';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 
@@ -79,7 +80,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         value.PossibleValues = possibleValueArray;
                         value.TranslatableValues = Boolean(value.TranslatableValues === '1');
                     } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
-                        value.DefaultValue = JSON.parse(value.DefaultValue);
+                        value.DefaultValue = value.DefaultValue;
                     }
                 }
 
@@ -98,7 +99,8 @@ export class DynamicFieldFormService extends KIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
 
         const fieldTypeParameter = parameter.find((p) => p[0] === DynamicFieldProperty.FIELD_TYPE);
@@ -117,7 +119,7 @@ export class DynamicFieldFormService extends KIXObjectFormService {
             }
         }
 
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
 }

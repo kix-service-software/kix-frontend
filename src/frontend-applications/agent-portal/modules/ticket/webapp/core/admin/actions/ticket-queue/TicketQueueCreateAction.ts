@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../../server/model/rest/CRUD";
-import { QueueDialogUtil } from "../../QueueDialogUtil";
+import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
+import { QueueDialogUtil } from '../../QueueDialogUtil';
 
 export class TicketQueueCreateAction extends AbstractAction {
 

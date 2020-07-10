@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../modules/base-components/webapp/core/AbstractNewDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { SystemAddressDetailsContext } from "../../core";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { SystemAddressProperty } from "../../../model/SystemAddressProperty";
+import { ComponentState } from './ComponentState';
+import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { SystemAddressDetailsContext } from '../../core';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { SystemAddressProperty } from '../../../model/SystemAddressProperty';
 
 class Component extends AbstractNewDialog {
 

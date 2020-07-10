@@ -7,47 +7,76 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { IFormInstanceListener } from "../../../../../modules/base-components/webapp/core/IFormInstanceListener";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormContext } from "../../../../../model/configuration/FormContext";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Ticket } from "../../../model/Ticket";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { Organisation } from "../../../../customer/model/Organisation";
-import { Contact } from "../../../../customer/model/Contact";
+import { Context } from '../../../../../model/Context';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Ticket } from '../../../model/Ticket';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { Organisation } from '../../../../customer/model/Organisation';
+import { Contact } from '../../../../customer/model/Contact';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
 
-export class EditTicketDialogContext extends Context implements IFormInstanceListener {
+export class EditTicketDialogContext extends Context {
 
     public static CONTEXT_ID: string = 'edit-ticket-dialog-context';
-    public formListenerId: string;
 
     private contact: Contact;
     private organisation: Organisation;
 
     public async initContext(): Promise<void> {
-        const formiId = await FormService.getInstance().getFormIdByContext(FormContext.EDIT, KIXObjectType.TICKET);
-        this.formListenerId = 'EditTicketDialogContext';
-        await FormService.getInstance().registerFormInstanceListener(formiId, this);
+
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
+            eventSubscriberId: EditTicketDialogContext.CONTEXT_ID,
+            eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
+                if (eventId === FormEvent.VALUES_CHANGED) {
+                    this.setFormObject(data.formInstance.getForm().id);
+
+                    const organisationValue = data.changedValues.find(
+                        (cv) => cv[0] && cv[0].property === TicketProperty.ORGANISATION_ID
+                    );
+                    if (organisationValue) {
+                        this.handleOrganisation(organisationValue[1]);
+                    }
+
+                    const contactValue = data.changedValues.find(
+                        (cv) => cv[0] && cv[0].property === TicketProperty.CONTACT_ID
+                    );
+                    if (contactValue) {
+                        this.handleContact(contactValue[1]);
+                    }
+                }
+            }
+
+        });
     }
 
-    public updateForm(): void {
-        return;
-    }
+    private async setFormObject(formId: string): Promise<void> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+            KIXObjectType.TICKET, ServiceType.FORM
+        );
+        if (service) {
+            const newObject = {};
+            const parameter = await service.getFormParameter(formId);
+            parameter.forEach((p) => {
+                if (p[1] !== undefined) {
+                    newObject[p[0]] = p[1];
+                }
+            });
 
-    public async formValueChanged(
-        formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any
-    ): Promise<void> {
-        if (formField.property === TicketProperty.ORGANISATION_ID) {
-            this.handleOrganisation(value);
-        } else if (formField.property === TicketProperty.CONTACT_ID) {
-            this.handleContact(value);
+            const formObject = await KIXObjectService.createObjectInstance<any>(
+                KIXObjectType.TICKET, newObject
+            );
+            this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
         }
     }
 

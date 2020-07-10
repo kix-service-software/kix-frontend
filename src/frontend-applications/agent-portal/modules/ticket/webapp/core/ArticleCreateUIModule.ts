@@ -7,18 +7,18 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
+import { IUIModule } from '../../../../model/IUIModule';
+import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import {
     EmailRecipientValidator, TicketFormService, NewTicketArticleContext, ArticleNewAction,
     ArticleReplyAction, ArticleForwardAction
-} from ".";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
+} from '.';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 
 export class UIModule implements IUIModule {
 
@@ -27,7 +27,7 @@ export class UIModule implements IUIModule {
     public name: string = 'ArticleCreateUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

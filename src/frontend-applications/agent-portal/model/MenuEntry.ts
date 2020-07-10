@@ -7,7 +7,7 @@
  * --
  */
 
-import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
+import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 
 export class MenuEntry {
 

@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class ObjectIcon extends KIXObject<ObjectIcon> {
+export class ObjectIcon extends KIXObject {
 
     public ObjectId: string | number;
 
@@ -27,7 +27,7 @@ export class ObjectIcon extends KIXObject<ObjectIcon> {
     public Content: string;
 
     public constructor(
-        object?: string, id?: string | number, contentType?: string, content?: any, objectIcon?: ObjectIcon
+        objectIcon?: ObjectIcon, object?: string, id?: string | number, contentType?: string, content?: any
     ) {
         super(objectIcon);
 

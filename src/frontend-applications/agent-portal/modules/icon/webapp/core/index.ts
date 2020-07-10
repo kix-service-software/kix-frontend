@@ -7,6 +7,5 @@
  * --
  */
 
-export { ObjectIconBrowserFactory } from './ObjectIconBrowserFactory';
 export { ObjectIconService } from './ObjectIconService';
 export { UIModule as IconUIModule } from './IconUIModule';

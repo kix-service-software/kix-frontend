@@ -7,7 +7,7 @@
  * --
  */
 
-import { UIComponent } from "./UIComponent";
+import { UIComponent } from './UIComponent';
 
 export interface IKIXModuleExtension {
 

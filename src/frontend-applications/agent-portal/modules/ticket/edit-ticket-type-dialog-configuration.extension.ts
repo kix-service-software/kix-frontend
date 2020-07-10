@@ -7,29 +7,29 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { EditTicketTypeDialogContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextMode } from "../../model/ContextMode";
-import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
-import { TicketTypeProperty } from "./model/TicketTypeProperty";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { FormFieldValue } from "../../model/configuration/FormFieldValue";
-import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
-import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { FormContext } from "../../model/configuration/FormContext";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { ModuleConfigurationService } from "../../server/services/configuration";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { EditTicketTypeDialogContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContextMode } from '../../model/ContextMode';
+import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
+import { TicketTypeProperty } from './model/TicketTypeProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { FormFieldOption } from '../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { FormFieldValue } from '../../model/configuration/FormFieldValue';
+import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
+import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { ModuleConfigurationService } from '../../server/services/configuration';
+
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

@@ -7,30 +7,38 @@
  * --
  */
 
-import { IKIXObjectFormService } from "./IKIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ServiceType } from "./ServiceType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { ContextService } from "./ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "./LabelService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { InlineContent } from "./InlineContent";
-import { AuthenticationSocketClient } from "./AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { FormService } from "./FormService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
-import { IdService } from "../../../../model/IdService";
-import { IFormInstance } from "./IFormInstance";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ServiceType } from './ServiceType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { ContextService } from './ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from './LabelService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { InlineContent } from './InlineContent';
+import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormService } from './FormService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
+import { IdService } from '../../../../model/IdService';
+import { ExtendedKIXObjectFormService } from './ExtendedKIXObjectFormService';
+import { FormInstance } from './FormInstance';
+import { KIXObjectService } from './KIXObjectService';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
 
-export abstract class KIXObjectFormService implements IKIXObjectFormService {
+export abstract class KIXObjectFormService {
+
+    protected extendedFormServices: ExtendedKIXObjectFormService[] = [];
+
+    public addExtendedKIXObjectFormService(service: ExtendedKIXObjectFormService): void {
+        this.extendedFormServices.push(service);
+    }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
 
@@ -38,33 +46,43 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         return kixObjectServiceType === ServiceType.FORM;
     }
 
-    public async initValues(form: FormConfiguration, kixObject?: KIXObject): Promise<Map<string, FormFieldValue<any>>> {
+    public async initValues(
+        form: FormConfiguration, formInstance: FormInstance, kixObject?: KIXObject
+    ): Promise<void> {
         if (!kixObject) {
             const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
             if (dialogContext) {
                 kixObject = await dialogContext.getObject(form.objectType);
             }
         }
-        await this.prePrepareForm(form, kixObject);
+        await this.prePrepareForm(form, kixObject, formInstance);
 
-        const formFieldValues: Map<string, FormFieldValue<any>> = new Map();
+        const formFieldValues: Map<string, FormFieldValue<any>> = formInstance.getAllFormFieldValues();
         for (const p of form.pages) {
             for (const g of p.groups) {
-                await this.prepareFormFieldValues(g.formFields, kixObject, formFieldValues, form.formContext);
+                await this.prepareFormFieldValues(
+                    g.formFields, kixObject, formFieldValues, form.formContext, formInstance
+                );
             }
         }
 
-        await this.postPrepareForm(form, formFieldValues, kixObject);
-        return formFieldValues;
+        await this.postPrepareForm(form, formInstance, formFieldValues, kixObject);
+
+        (formInstance as any).formFieldValues = formFieldValues;
+        for (const extendedService of this.extendedFormServices) {
+            await extendedService.postInitValues(form, formInstance, kixObject);
+        }
     }
 
-    protected async prePrepareForm(form: FormConfiguration, kixObject?: KIXObject): Promise<void> {
+    protected async prePrepareForm(
+        form: FormConfiguration, kixObject: KIXObject, formInstance: FormInstance
+    ): Promise<void> {
         await DynamicFieldFormUtil.getInstance().configureDynamicFields(form);
     }
 
     protected async prepareFormFieldValues(
         formFields: FormFieldConfiguration[], kixObject: KIXObject, formFieldValues: Map<string, FormFieldValue<any>>,
-        formContext: FormContext
+        formContext: FormContext, formInstance: FormInstance
     ): Promise<void> {
         if (formContext === FormContext.NEW) {
             this.handleCountValues(formFields);
@@ -112,7 +130,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
             formFieldValues.set(f.instanceId, formFieldValue);
 
             if (f.children) {
-                this.prepareFormFieldValues(f.children, kixObject, formFieldValues, formContext);
+                await this.prepareFormFieldValues(f.children, kixObject, formFieldValues, formContext, formInstance);
             }
         }
     }
@@ -169,28 +187,9 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, kixObject: KIXObject
     ): Promise<void> {
-        return;
-    }
-
-    public async initOptions(form: FormConfiguration): Promise<void> {
-        let kixObject: KIXObject;
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (context && form.formContext && form.formContext === FormContext.EDIT) {
-            kixObject = await context.getObject();
-        }
-
-        for (const p of form.pages) {
-            for (const g of p.groups) {
-                await this.prepareFormFieldOptions(g.formFields, kixObject, form.formContext);
-            }
-        }
-    }
-
-    protected async prepareFormFieldOptions(
-        formFields: FormFieldConfiguration[], kixObject: KIXObject, formContext: FormContext
-    ) {
         return;
     }
 
@@ -232,7 +231,7 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                 const replaceString = `data:${contentItem.contentType};base64,${contentItem.content}`;
                 const contentIdLength = contentItem.contentId.length - 1;
                 const contentId = contentItem.contentId.substring(1, contentIdLength);
-                const regexpString = new RegExp('cid:' + contentId, "g");
+                const regexpString = new RegExp('cid:' + contentId, 'g');
                 newString = newString.replace(regexpString, replaceString);
             }
         }
@@ -260,17 +259,11 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         );
     }
 
-    public async updateForm(
-        formInstance: IFormInstance, form: FormConfiguration, formField: FormFieldConfiguration, value: any
-    ): Promise<void> {
+    public async updateFields(fields: FormFieldConfiguration[], formInstance: FormInstance): Promise<void> {
         return;
     }
 
-    public async updateFields(fields: FormFieldConfiguration[], formInstance: IFormInstance): Promise<void> {
-        return;
-    }
-
-    public async prepareFormFields(
+    public async getFormParameter(
         formId: string, forUpdate: boolean = false, createOptions?: KIXObjectSpecificCreateOptions
     ): Promise<Array<[string, any]>> {
         let parameter: Array<[string, any]> = [];
@@ -294,44 +287,96 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
                 if (property === KIXObjectProperty.DYNAMIC_FIELDS) {
                     parameter = await DynamicFieldFormUtil.getInstance().handleDynamicField(field, value, parameter);
                 } else {
-                    let preparedValue;
-                    if (forUpdate) {
-                        preparedValue = await this.prepareUpdateValue(property, value.value, formInstance);
-                    } else {
-                        preparedValue = await this.prepareCreateValue(property, value.value, formInstance);
-                        if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
-                            preparedValue[1] = null;
-                        }
-                    }
-                    if (preparedValue) {
-                        preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
-                    }
+                    await this.prepareValue(forUpdate, property, field, value, formInstance, parameter);
                 }
             }
 
             key = iterator.next();
         }
-        parameter = await this.postPrepareValues(parameter, createOptions, formInstance.getForm().formContext);
+
+        const fixedValues = formInstance.getFixedValues();
+        const fixedIterator = fixedValues.keys();
+        let fixedKey = fixedIterator.next();
+        while (fixedKey.value) {
+            const property = fixedKey.value;
+            const value = fixedValues.get(property);
+            const dfName = KIXObjectService.getDynamicFieldName(property);
+            if (dfName) {
+                await DynamicFieldFormUtil.getInstance().handleDynamicFieldByProperty(
+                    property, value, parameter
+                );
+            } else {
+                await this.prepareValue(forUpdate, property, null, value, formInstance, parameter);
+            }
+
+            fixedKey = fixedIterator.next();
+        }
+
+        const templateValues = formInstance.getTemplateValues();
+        const templateIterator = templateValues.keys();
+        let templateKey = templateIterator.next();
+        while (templateKey.value) {
+            const property = templateKey.value;
+            const field = formInstance.getFormFieldByProperty(property);
+            if (!field) {
+                const value = templateValues.get(property);
+                const dfName = KIXObjectService.getDynamicFieldName(property);
+                if (dfName) {
+                    await DynamicFieldFormUtil.getInstance().handleDynamicFieldByProperty(
+                        property, value[1], parameter
+                    );
+                } else {
+                    await this.prepareValue(forUpdate, property, null, value, formInstance, parameter);
+                }
+            }
+
+            templateKey = templateIterator.next();
+        }
+
+        parameter = await this.postPrepareValues(
+            parameter, createOptions, formInstance.getForm().formContext, formInstance
+        );
 
         return parameter;
     }
 
+    private async prepareValue(
+        forUpdate: boolean, property: string, field: FormFieldConfiguration, value: any, formInstance: FormInstance,
+        parameter: Array<[string, any]>
+    ): Promise<void> {
+        let preparedValue;
+        if (forUpdate) {
+            preparedValue = await this.prepareUpdateValue(property, field, value.value, formInstance);
+        } else {
+            preparedValue = await this.prepareCreateValue(property, field, value.value, formInstance);
+            if (property === 'ICON' && preparedValue[1] && !(preparedValue[1] as ObjectIcon).Content) {
+                preparedValue[1] = null;
+            }
+        }
+        if (preparedValue) {
+            preparedValue.forEach((pv) => parameter.push([pv[0], pv[1]]));
+        }
+    }
+
     public async prepareUpdateValue(
-        property: string, value: any, formInstance: IFormInstance
+        property: string, formField: FormFieldConfiguration, value: any, formInstance: FormInstance
     ): Promise<Array<[string, any]>> {
-        return await this.prepareCreateValue(property, value, formInstance);
+        return await this.prepareCreateValue(property, formField, value, formInstance);
     }
 
     public async prepareCreateValue(
-        property: string, value: any, formInstance: IFormInstance
+        property: string, formField: FormFieldConfiguration, value: any, formInstance: FormInstance
     ): Promise<Array<[string, any]>> {
         return [[property, value]];
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
-        formContext?: FormContext
+        parameter: Array<[string, any]>, createOptions: KIXObjectSpecificCreateOptions,
+        formContext: FormContext, formInstance: FormInstance
     ): Promise<Array<[string, any]>> {
+        for (const extendedService of this.extendedFormServices) {
+            parameter = await extendedService.postPrepareValues(parameter, createOptions, formContext);
+        }
         return parameter;
     }
 
@@ -387,24 +432,31 @@ export abstract class KIXObjectFormService implements IKIXObjectFormService {
         return foundField;
     }
 
-    public resetChildrenOnEmpty(formField: FormFieldConfiguration): void {
-        if (formField.children) {
-            const children = [];
-            for (const child of formField.children) {
-                const existingChildren = children.filter((c) => c.property === child.property);
-                if (
-                    !!!existingChildren.length
-                    || typeof child.countDefault !== 'number'
-                    || child.countDefault > existingChildren.length
-                ) {
-                    this.resetChildrenOnEmpty(child);
-                    if (typeof child.countDefault === 'number' && child.countDefault === 0) {
-                        child.empty = true;
+    public async createFormFieldConfigurations(
+        formFields: FormFieldConfiguration[]
+    ): Promise<FormFieldConfiguration[]> {
+        for (const ff of formFields) {
+            ff.label = ff.property;
+            ff.readonly = Boolean(ff.readonly);
+
+            if (ff.property === KIXObjectProperty.DYNAMIC_FIELDS && Array.isArray(ff.options)) {
+                const nameOption = ff.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+                if (nameOption) {
+                    const dynamicField = await KIXObjectService.loadDynamicField(nameOption.value);
+                    if (dynamicField) {
+                        ff.label = dynamicField.Label;
                     }
-                    children.push(child);
                 }
             }
-            formField.children = children;
         }
+
+        for (const extendedService of this.extendedFormServices) {
+            const extendedFields = await extendedService.createFormFieldConfigurations(formFields);
+            if (extendedFields) {
+                formFields = extendedFields;
+            }
+        }
+
+        return formFields;
     }
 }

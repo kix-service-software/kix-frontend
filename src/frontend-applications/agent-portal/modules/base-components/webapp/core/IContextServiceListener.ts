@@ -7,9 +7,9 @@
  * --
  */
 
-import { Context } from "vm";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
+import { Context } from 'vm';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 
 export interface IContextServiceListener {
 

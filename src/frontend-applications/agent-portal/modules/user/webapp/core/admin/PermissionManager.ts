@@ -9,15 +9,15 @@
 
 import {
     AbstractDynamicFormManager
-} from "../../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { InputFieldTypes } from "../../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
+} from '../../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import {
     DynamicFormOperationsType
-} from "../../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { PermissionType } from "../../../model/PermissionType";
+} from '../../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { PermissionType } from '../../../model/PermissionType';
 
 export class PermissionManager extends AbstractDynamicFormManager {
 

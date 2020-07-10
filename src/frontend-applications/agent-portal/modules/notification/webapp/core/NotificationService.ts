@@ -7,14 +7,20 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../system-address/model/SystemAddress";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { NotificationProperty } from "../../model/NotificationProperty";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../system-address/model/SystemAddress';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { NotificationProperty } from '../../model/NotificationProperty';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { Notification } from '../../model/Notification';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { NotificationFilterManager } from './NotificationFilterManager';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
 
@@ -28,6 +34,11 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
         return NotificationService.INSTANCE;
     }
 
+    private constructor() {
+        super(KIXObjectType.NOTIFICATION);
+        this.objectConstructors.set(KIXObjectType.NOTIFICATION, [Notification]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.NOTIFICATION;
     }
@@ -36,13 +47,100 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
         return 'Notification';
     }
 
+    public async loadObjects<O extends KIXObject>(
+        objectType: KIXObjectType | string, objectIds: Array<string | number>,
+        loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
+        cache: boolean = true, forceIds?: boolean
+    ): Promise<O[]> {
+        const notififactions = await super.loadObjects<Notification>(
+            objectType, objectIds, loadingOptions, objectLoadingOptions, cache, forceIds
+        );
+
+        for (const notification of notififactions) {
+            await this.prepareNotificationData(notification);
+        }
+
+        return notififactions as any[];
+    }
+
+    private async prepareNotificationData(notification: Notification): Promise<void> {
+        if (notification.Data) {
+            const filterProperties = await NotificationFilterManager.getInstance().getProperties();
+            notification.Filter = new Map();
+            for (const key in notification.Data) {
+                if (key && Array.isArray(notification.Data[key])) {
+                    const value = notification.Data[key];
+                    switch (key) {
+                        case NotificationProperty.DATA_VISIBLE_FOR_AGENT:
+                            notification.VisibleForAgent = Boolean(Number(value[0]));
+                            break;
+                        case NotificationProperty.DATA_VISIBLE_FOR_AGENT_TOOLTIP:
+                            notification.VisibleForAgentTooltip = value[0];
+                            break;
+                        case NotificationProperty.DATA_RECIPIENTS:
+                            notification.Recipients = value;
+                            break;
+                        case NotificationProperty.DATA_EVENTS:
+                            notification.Events = value;
+                            break;
+                        case NotificationProperty.DATA_RECIPIENT_AGENTS:
+                            notification.RecipientAgents = value.map((v) => Number(v));
+                            break;
+                        case NotificationProperty.DATA_RECIPIENT_EMAIL:
+                            notification.RecipientEmail = value[0].split(/,\s?/);
+                            break;
+                        case NotificationProperty.DATA_RECIPIENT_ROLES:
+                            notification.RecipientRoles = value.map((v) => Number(v));
+                            break;
+                        case NotificationProperty.DATA_RECIPIENT_SUBJECT:
+                            notification.RecipientSubject = Boolean(Number(value[0]));
+                            break;
+                        case NotificationProperty.DATA_SEND_DESPITE_OOO:
+                            notification.SendOnOutOfOffice = Boolean(Number(value[0]));
+                            break;
+                        case NotificationProperty.DATA_SEND_ONCE_A_DAY:
+                            notification.OncePerDay = Boolean(Number(value[0]));
+                            break;
+                        case NotificationProperty.DATA_CREATE_ARTICLE:
+                            notification.CreateArticle = Boolean(Number(value[0]));
+                            break;
+                        default:
+                            let property = key.replace('Ticket::', '');
+                            property = property.replace('Article::', '');
+                            property = property.replace(
+                                /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                            );
+                            if (filterProperties.some((p) => p[0] === property)) {
+                                let newValue;
+                                if (this.isStringProperty(property)) {
+                                    newValue = value[0];
+                                } else {
+                                    newValue = value.map((v) => !isNaN(Number(v)) ? Number(v) : v);
+                                }
+                                notification.Filter.set(property, newValue);
+                            }
+                    }
+                }
+            }
+        }
+    }
+
+    private isStringProperty(property: string): boolean {
+        return property === ArticleProperty.FROM
+            || property === ArticleProperty.TO
+            || property === ArticleProperty.CC
+            || property === ArticleProperty.BCC
+            || property === ArticleProperty.SUBJECT
+            || property === ArticleProperty.BODY;
+    }
+
+
     public async hasArticleEvent(events: string[]): Promise<boolean> {
         let hasArticleEvent = false;
         if (events) {
             const articleEventsConfig = await KIXObjectService.loadObjects<SysConfigOption>(
                 KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ARTICLE_EVENTS], null, null, true
             ).catch((error): SysConfigOption[] => []);
-
 
             if (articleEventsConfig && articleEventsConfig.length) {
                 const articleEvents = articleEventsConfig[0].Value as string[];

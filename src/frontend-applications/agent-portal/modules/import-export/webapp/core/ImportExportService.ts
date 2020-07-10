@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ImportExportTemplate } from "../../model/ImportExportTemplate";
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ImportExportTemplate } from '../../model/ImportExportTemplate';
 
 export class ImportExportService extends KIXObjectService<ImportExportTemplate> {
 
@@ -21,6 +21,11 @@ export class ImportExportService extends KIXObjectService<ImportExportTemplate> 
         }
 
         return ImportExportService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.IMPORT_EXPORT_TEMPLATE);
+        this.objectConstructors.set(KIXObjectType.IMPORT_EXPORT_TEMPLATE, [ImportExportTemplate]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

@@ -7,7 +7,7 @@
  * --
  */
 
-import { ITable, IRow, IColumn } from "../../core/table";
+import { ITable } from '../../core/table';
 
 export class ComponentState {
 

@@ -7,23 +7,21 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { HttpService } from "../../../server/services/HttpService";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { UserFactory } from "./UserFactory";
-import { UserPreferenceFactory } from "./UserPreferenceFactory";
-import { PreferencesLoadingOptions } from "../model/PreferencesLoadingOptions";
-import { User } from "../model/User";
-import { PersonalSettingsProperty } from "../model/PersonalSettingsProperty";
-import { SetPreferenceOptions } from "../model/SetPreferenceOptions";
-import { UserPreference } from "../model/UserPreference";
-import { Error } from "../../../../../server/model/Error";
-import { UserProperty } from "../model/UserProperty";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { HttpService } from '../../../server/services/HttpService';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { PreferencesLoadingOptions } from '../model/PreferencesLoadingOptions';
+import { User } from '../model/User';
+import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
+import { SetPreferenceOptions } from '../model/SetPreferenceOptions';
+import { UserPreference } from '../model/UserPreference';
+import { Error } from '../../../../../server/model/Error';
+import { UserProperty } from '../model/UserProperty';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -37,7 +35,7 @@ export class UserService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new UserFactory(), new UserPreferenceFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -58,7 +56,7 @@ export class UserService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.USER) {
             objects = await super.load(
-                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER
+                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER, User
             );
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences');
@@ -68,7 +66,8 @@ export class UserService extends KIXObjectAPIService {
             }
 
             objects = await super.load(
-                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
+                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE,
+                UserPreference
             );
         }
 
@@ -208,7 +207,7 @@ export class UserService extends KIXObjectAPIService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleIDs', false);
+        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', Number, false);
 
         const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
         const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));
@@ -276,7 +275,7 @@ export class UserService extends KIXObjectAPIService {
         }
         // TODO: für Komponente ggf. Fehlerliste übermitteln
         if (!!errors.length) {
-            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"), errors[0].StatusCode);
+            throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
     }
 

@@ -11,7 +11,6 @@ export * from './actions';
 export * from './table';
 
 export { ImportExportService } from './ImportExportService';
-export { ImportExportTemplateBrowserFactory } from './ImportExportTemplateBrowserFactory';
 export { ImportExportTemplateLabelProvider } from './ImportExportTemplateLabelProvider';
 export { ImportExportTemplateRunLabelProvider } from './ImportExportTemplateRunLabelProvider';
 export { UIModule as ImportExportUIModule } from './ImportExportUIModule';

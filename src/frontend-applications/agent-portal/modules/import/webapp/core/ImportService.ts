@@ -7,8 +7,8 @@
  * --
  */
 
-import { ImportManager } from "./ImportManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { ImportManager } from './ImportManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class ImportService {
 

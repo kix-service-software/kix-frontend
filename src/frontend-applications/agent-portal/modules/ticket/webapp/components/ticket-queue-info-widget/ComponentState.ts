@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { QueueLabelProvider } from "../../core";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { Queue } from "../../../model/Queue";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { QueueLabelProvider } from '../../core';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Queue } from '../../../model/Queue';
 
 export class ComponentState extends WidgetComponentState {
 

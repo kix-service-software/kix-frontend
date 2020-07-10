@@ -7,23 +7,23 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     TicketFormService, TicketBulkManager, PendingTimeValidator, EmailRecipientValidator,
     EditTicketDialogContext, TicketEditAction
-} from ".";
-import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { BulkService } from "../../../bulk/webapp/core";
+} from '.';
+import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { BulkService } from '../../../bulk/webapp/core';
 
 export class UIModule implements IUIModule {
 
@@ -32,7 +32,7 @@ export class UIModule implements IUIModule {
     public name: string = 'TicketUpdateUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {
@@ -41,7 +41,7 @@ export class UIModule implements IUIModule {
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
         FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
 
-        if (await this.checkPermissions('tickets/*', [CRUD.UPDATE])) {
+        if (await this.checkPermissions('tickets', [CRUD.CREATE])) {
             BulkService.getInstance().registerBulkManager(new TicketBulkManager());
         }
 

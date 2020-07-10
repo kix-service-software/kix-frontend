@@ -7,8 +7,8 @@
  * --
  */
 
-import { PODefinition } from "../server/model/PODefinition";
-import { KIXExtension } from "../../../server/model/KIXExtension";
+import { PODefinition } from '../server/model/PODefinition';
+
 
 export interface ILocaleExtension {
 

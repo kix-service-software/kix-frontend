@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
-import { Webform } from "./Webform";
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
+import { Webform } from './Webform';
 
 export class SaveWebformRequest implements ISocketRequest {
 

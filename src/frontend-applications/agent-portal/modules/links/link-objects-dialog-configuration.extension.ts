@@ -7,13 +7,13 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { LinkObjectDialogContext } from "./webapp/core/context/LinkObjectDialogContext";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { LinkObjectDialogContext } from './webapp/core/context/LinkObjectDialogContext';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

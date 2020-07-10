@@ -7,7 +7,7 @@
  * --
  */
 
-import { FormPageConfiguration } from "../../../../../../model/configuration/FormPageConfiguration";
+import { FormPageConfiguration } from '../../../../../../model/configuration/FormPageConfiguration';
 
 export class ComponentState {
 

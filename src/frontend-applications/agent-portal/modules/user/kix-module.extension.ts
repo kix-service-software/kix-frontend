@@ -7,11 +7,11 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 
-import { UIComponent } from "../../model/UIComponent";
+import { UIComponent } from '../../model/UIComponent';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IKIXModuleExtension {
 

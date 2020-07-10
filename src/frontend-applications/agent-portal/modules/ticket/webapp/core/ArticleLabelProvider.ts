@@ -17,7 +17,8 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Channel } from '../../model/Channel';
-import { User } from '../../../user/model/User';
+import { SenderType } from '../../model/SenderType';
+
 
 export class ArticleLabelProvider extends LabelProvider<Article> {
 
@@ -96,9 +97,12 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
             ? defaultValue : article[property];
         switch (property) {
             case ArticleProperty.SENDER_TYPE_ID:
-                if (article.senderType) {
-                    displayValue = article.senderType.Name;
-                }
+                const senderTypes = await KIXObjectService.loadObjects<SenderType>(
+                    KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
+                ).catch((error) => []);
+
+                displayValue = senderTypes && senderTypes.length ?
+                    typeof senderTypes[0] === 'object' ? senderTypes[0].Name : senderTypes[0] : null;
                 break;
             case ArticleProperty.TO:
                 displayValue = article.toList.length ? short
@@ -269,15 +273,21 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                     if (channels && channels.length && channels[0].Name === 'email') {
                         const mailIcon = article && article.isUnsent()
                             ? 'kix-icon-mail-warning'
-                            : new ObjectIcon('Channel', channelID);
+                            : new ObjectIcon(null, 'Channel', channelID);
                         let directionIcon = 'kix-icon-arrow-receive';
-                        if (article && article.senderType.Name === 'agent') {
+
+                        const senderTypes = await KIXObjectService.loadObjects<SenderType>(
+                            KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
+                        ).catch((error) => []);
+
+                        const senderType = senderTypes && senderTypes.length ? senderTypes[0] : '';
+                        if (article && senderType.Name === 'agent') {
                             directionIcon = 'kix-icon-arrow-outward';
                         }
                         icons.push(mailIcon);
                         icons.push(directionIcon);
                     } else {
-                        icons.push(new ObjectIcon('Channel', channelID));
+                        icons.push(new ObjectIcon(null, 'Channel', channelID));
                     }
                 }
                 break;

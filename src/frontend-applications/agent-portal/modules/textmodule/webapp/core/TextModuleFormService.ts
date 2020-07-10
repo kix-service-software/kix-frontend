@@ -7,13 +7,13 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TextModuleProperty } from "../../model/TextModuleProperty";
-import { TextModule } from "../../model/TextModule";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TextModuleProperty } from '../../model/TextModuleProperty';
+import { TextModule } from '../../model/TextModule';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class TextModuleFormService extends KIXObjectFormService {
 
@@ -57,7 +57,9 @@ export class TextModuleFormService extends KIXObjectFormService {
         return value;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case TextModuleProperty.KEYWORDS:
                 value = value ? value.split(/[,;\s]\s?/) : undefined;

@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "../../../modules/base-components/webapp/core/ISocketResponse";
-import { AdminModuleCategory } from "./AdminModuleCategory";
+import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
+import { AdminModuleCategory } from './AdminModuleCategory';
 
 export class AdminCategoriesResponse implements ISocketResponse {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { LabelValueGroup } from "../../../../../model/LabelValueGroup";
-import { Version } from "../../../model/Version";
-import { PreparedData } from "../../../model/PreparedData";
+import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
+import { Version } from '../../../model/Version';
+import { PreparedData } from '../../../model/PreparedData';
 
 
 export class ComponentState {

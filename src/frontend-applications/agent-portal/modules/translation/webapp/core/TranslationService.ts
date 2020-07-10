@@ -7,19 +7,19 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TranslationPattern } from "../../model/TranslationPattern";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { TranslationPatternProperty } from "../../model/TranslationPatternProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { Translation } from "../../model/Translation";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { AgentService } from "../../../user/webapp/core/AgentService";
-import { EventService } from "../../../base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TranslationPattern } from '../../model/TranslationPattern';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { TranslationPatternProperty } from '../../model/TranslationPatternProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { Translation } from '../../model/Translation';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
 
 export class TranslationService extends KIXObjectService<TranslationPattern> {
 
@@ -39,8 +39,11 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
     private userLanguage: string = null;
 
     private constructor() {
-        super();
+        super(KIXObjectType.TRANSLATION);
         this.init();
+
+        this.objectConstructors.set(KIXObjectType.TRANSLATION, [Translation]);
+        this.objectConstructors.set(KIXObjectType.TRANSLATION_PATTERN, [TranslationPattern]);
     }
 
     private async init(): Promise<void> {
@@ -164,7 +167,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
                 }
 
                 translationValue = this.format(translationValue, placeholderValues.map(
-                    (p) => (typeof p !== undefined && p !== null ? p : '').toString()
+                    (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
                 ));
             }
         }

@@ -7,31 +7,35 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { IKIXObjectService } from "./IKIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { TreeNode } from "./tree";
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { KIXObjectSpecificDeleteOptions } from "../../../../model/KIXObjectSpecificDeleteOptions";
-import { IAutofillConfiguration } from "./IAutofillConfiguration";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { ServiceType } from "./ServiceType";
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { IKIXObjectService } from './IKIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { TreeNode } from './tree';
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
+import { IAutofillConfiguration } from './IAutofillConfiguration';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { ServiceType } from './ServiceType';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
-    public loadObjects<O extends KIXObject<any>>(
+    public getObjectConstructors(): Array<new (object?: KIXObject) => KIXObject> {
+        return [];
+    }
+
+    public loadObjects<O extends KIXObject>(
         kixObjectType: string, objectIds: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions, cache?: boolean, forceIds?: boolean
     ): Promise<O[]> {
         return null;
     }
 
-
     public createObject(
-        kixObjectType: string, object: KIXObject<any>, createOptions: KIXObjectSpecificCreateOptions
+        kixObjectType: string, object: KIXObject, createOptions: KIXObjectSpecificCreateOptions
     ): Promise<string | number> {
         return null;
     }
@@ -79,19 +83,19 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return null;
     }
 
-    public getObjectUrl(object?: KIXObject<any>, objectId?: string | number): Promise<string> {
+    public getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         return null;
     }
 
     public prepareObjectTree(
-        objects: Array<KIXObject<any>>, showInvalid?: boolean, invalidClickable?: boolean,
+        objects: KIXObject[], showInvalid?: boolean, invalidClickable?: boolean,
         filterIds?: Array<string | number>
     ): Promise<TreeNode[]> {
         return null;
     }
 
     public getObjectRoutingConfiguration(
-        object?: KIXObject<any>): RoutingConfiguration {
+        object?: KIXObject): RoutingConfiguration {
         return null;
     }
 
@@ -104,6 +108,10 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
     }
 
     public isServiceType(kixObjectServiceType: ServiceType): boolean {
+        return null;
+    }
+
+    public getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
         return null;
     }
 

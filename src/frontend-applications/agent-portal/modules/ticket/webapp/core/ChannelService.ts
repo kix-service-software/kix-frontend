@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Channel } from "../../model/Channel";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Channel } from '../../model/Channel';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 
 export class ChannelService extends KIXObjectService<Channel> {
 
@@ -24,6 +24,11 @@ export class ChannelService extends KIXObjectService<Channel> {
         }
 
         return ChannelService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.CHANNEL);
+        this.objectConstructors.set(KIXObjectType.CHANNEL, [Channel]);
     }
 
     public async loadObjects<O extends KIXObject>(

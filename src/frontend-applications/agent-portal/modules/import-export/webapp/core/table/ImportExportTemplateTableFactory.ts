@@ -7,18 +7,18 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table, ToggleOptions } from "../../../../base-components/webapp/core/table";
-import { ImportExportTemplateTableContentProvider } from "./ImportExportTemplateTableContentProvider";
-import { ImportExportTemplateProperty } from "../../../model/ImportExportTemplateProperty";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DataType } from "../../../../../model/DataType";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
+import { ImportExportTemplateTableContentProvider } from './ImportExportTemplateTableContentProvider';
+import { ImportExportTemplateProperty } from '../../../model/ImportExportTemplateProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { DataType } from '../../../../../model/DataType';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 
 export class ImportExportTemplateTableFactory extends TableFactory {
 

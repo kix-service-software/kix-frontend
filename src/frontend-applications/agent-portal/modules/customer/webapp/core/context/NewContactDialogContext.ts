@@ -7,12 +7,12 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { ContactProperty } from "../../../model/ContactProperty";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { Context } from '../../../../../model/Context';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ContactProperty } from '../../../model/ContactProperty';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export class NewContactDialogContext extends Context {
 

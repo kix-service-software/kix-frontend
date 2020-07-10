@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { InputFieldTypes } from "../../../../../modules/base-components/webapp/core/InputFieldTypes";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
 
 export class ComponentState extends FormInputComponentState<string> {
 

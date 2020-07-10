@@ -68,10 +68,10 @@ export class Component {
     ): TreeNode {
         let activeNode = nodes.find((n) => n.id.ID === category.ID);
         if (!activeNode) {
-            for (let index = 0; index < nodes.length; index++) {
-                activeNode = this.getActiveNode(category, nodes[index].children);
+            for (const node of nodes) {
+                activeNode = this.getActiveNode(category, node.children);
                 if (activeNode) {
-                    nodes[index].expanded = true;
+                    node.expanded = true;
                     break;
                 }
             }

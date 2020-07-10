@@ -7,11 +7,11 @@
  * --
  */
 
-import { IConfiguration } from "../../../../../model/configuration/IConfiguration";
-import { ConfigurationType } from "../../../../../model/configuration/ConfigurationType";
-import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
-import { ConfigurationDefinition } from "../../../../../model/configuration/ConfigurationDefinition";
-import { ChartComponentConfiguration } from "../../../../charts/model/ChartComponentConfiguration";
+import { IConfiguration } from '../../../../../model/configuration/IConfiguration';
+import { ConfigurationType } from '../../../../../model/configuration/ConfigurationType';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { ConfigurationDefinition } from '../../../../../model/configuration/ConfigurationDefinition';
+import { ChartComponentConfiguration } from '../../../../charts/model/ChartComponentConfiguration';
 
 export class ConfigItemChartWidgetConfiguration implements IConfiguration {
 

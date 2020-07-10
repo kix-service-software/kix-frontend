@@ -7,25 +7,26 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { EditSysConfigDialogContext } from ".";
-import { SysConfigOptionDefinition } from "../../model/SysConfigOptionDefinition";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { ObjectReferenceOptions } from "../../../base-components/webapp/core/ObjectReferenceOptions";
-import { SysConfigOption } from "../../model/SysConfigOption";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { EditSysConfigDialogContext } from '.';
+import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { SysConfigOptionDefinitionProperty } from '../../model/SysConfigOptionDefinitionProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { SysConfigOption } from '../../model/SysConfigOption';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export class SysConfigFormService extends KIXObjectFormService {
 
@@ -81,8 +82,8 @@ export class SysConfigFormService extends KIXObjectFormService {
                     ),
                     new FormFieldConfiguration(
                         'sysconfig-edit-form-field-description',
-                        'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, null, false,
-                        'Translatable#Helptext_Admin_SysConfigEdit_Description',
+                        'Translatable#Description', SysConfigOptionDefinitionProperty.DESCRIPTION, 'text-area-input',
+                        false, 'Translatable#Helptext_Admin_SysConfigEdit_Description',
                         [
                             new FormFieldOption('SYSCONFIG_NAME', key.Name)
                         ],
@@ -125,7 +126,7 @@ export class SysConfigFormService extends KIXObjectFormService {
         return pages;
     }
 
-    public async initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>> {
+    public async initValues(form: FormConfiguration, formInstance: FormInstance): Promise<void> {
         const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
             EditSysConfigDialogContext.CONTEXT_ID
         );
@@ -135,13 +136,13 @@ export class SysConfigFormService extends KIXObjectFormService {
         );
 
         if (sysconfigKeys && sysconfigKeys.length) {
-            return super.initValues(form, null);
+            await super.initValues(form, null);
         } else {
             const sysConfigId = context ? context.getObjectId() : null;
             const sysConfigValues = sysConfigId
                 ? await KIXObjectService.loadObjects<SysConfigOptionDefinition>(
                     KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]) : null;
-            return super.initValues(form, sysConfigValues ? sysConfigValues[0] : null);
+            await super.initValues(form, formInstance, sysConfigValues ? sysConfigValues[0] : null);
         }
     }
 
@@ -171,16 +172,14 @@ export class SysConfigFormService extends KIXObjectFormService {
                 }
                 break;
             case SysConfigOptionDefinitionProperty.VALUE:
-                if (sysConfig.IsModified !== 1) {
-                    value = sysConfig.Default;
-                } else {
-                    const options = await KIXObjectService.loadObjects<SysConfigOption>(
-                        KIXObjectType.SYS_CONFIG_OPTION, [sysConfig.Name]
-                    );
 
-                    if (options && options.length) {
-                        value = options[0].Value;
-                    }
+                const options = await KIXObjectService.loadObjects<SysConfigOption>(
+                    KIXObjectType.SYS_CONFIG_OPTION, [sysConfig.Name]
+                );
+
+                if (options && options.length) {
+                    value = options[0].Value;
+                    formField.readonly = options[0].ReadOnly;
                 }
 
                 if (typeof value !== 'string' && typeof value !== 'number') {
@@ -227,7 +226,8 @@ export class SysConfigFormService extends KIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
 
         const defaultParameter = parameter.find((p) => p[0] === SysConfigOptionDefinitionProperty.DEFAULT);
@@ -244,6 +244,12 @@ export class SysConfigFormService extends KIXObjectFormService {
             valid[1] = null;
         }
 
-        return parameter;
+        parameter = parameter.filter((p) => {
+            return p[0] !== SysConfigOptionDefinitionProperty.DEFAULT
+                && p[0] !== SysConfigOptionDefinitionProperty.NAME
+                && p[0] !== SysConfigOptionDefinitionProperty.DESCRIPTION;
+        });
+
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 }

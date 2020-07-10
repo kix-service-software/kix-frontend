@@ -7,7 +7,7 @@
  * --
  */
 
-import { UIComponentPermission } from "./UIComponentPermission";
+import { UIComponentPermission } from './UIComponentPermission';
 
 export class UIComponent {
 

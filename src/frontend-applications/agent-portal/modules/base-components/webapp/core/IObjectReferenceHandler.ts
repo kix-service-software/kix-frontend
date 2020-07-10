@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 
 export interface IObjectReferenceHandler {
 

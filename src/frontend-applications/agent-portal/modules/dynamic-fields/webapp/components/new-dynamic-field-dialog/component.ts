@@ -7,9 +7,9 @@
  * --
  */
 
-import { AbstractNewDialog } from "../../../../base-components/webapp/core/AbstractNewDialog";
-import { ComponentState } from "../../../../admin/webapp/components/admin-module/ComponentState";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { AbstractNewDialog } from '../../../../base-components/webapp/core/AbstractNewDialog';
+import { ComponentState } from '../../../../admin/webapp/components/admin-module/ComponentState';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractNewDialog {
 

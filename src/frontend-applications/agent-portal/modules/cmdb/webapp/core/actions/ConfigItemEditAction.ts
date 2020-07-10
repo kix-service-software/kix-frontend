@@ -8,22 +8,32 @@
  */
 
 
-import { ConfigItemDialogUtil } from "../ConfigItemDialogUtil";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ConfigItem } from "../../../model/ConfigItem";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { ConfigItemDialogUtil } from '../ConfigItemDialogUtil';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ConfigItem } from '../../../model/ConfigItem';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class ConfigItemEditAction extends AbstractAction<ConfigItem> {
 
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
-        new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE])
-    ];
-
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
-        this.icon = "kix-icon-edit";
+        this.icon = 'kix-icon-edit';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`cmdb/configitems/${objectId}/versions`, [CRUD.CREATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async run(): Promise<void> {

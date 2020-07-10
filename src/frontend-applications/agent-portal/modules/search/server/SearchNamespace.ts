@@ -7,19 +7,19 @@
  * --
  */
 
-import { SocketNameSpace } from "../../../server/socket-namespaces/SocketNameSpace";
-import { SearchEvent } from "../model/SearchEvent";
-import { SaveSearchRequest } from "../model/SaveSearchRequest";
-import { SocketResponse } from "../../../modules/base-components/webapp/core/SocketResponse";
-import { UserService } from "../../user/server/UserService";
-import { User } from "../../user/model/User";
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { SocketEvent } from "../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
-import { LoadSearchResponse } from "../model/LoadSearchResponse";
-import { DeleteSearchRequest } from "../model/DeleteSearchRequest";
-import { ISocketResponse } from "../../../modules/base-components/webapp/core/ISocketResponse";
+import { SocketNameSpace } from '../../../server/socket-namespaces/SocketNameSpace';
+import { SearchEvent } from '../model/SearchEvent';
+import { SaveSearchRequest } from '../model/SaveSearchRequest';
+import { SocketResponse } from '../../../modules/base-components/webapp/core/SocketResponse';
+import { UserService } from '../../user/server/UserService';
+import { User } from '../../user/model/User';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
+import { LoadSearchResponse } from '../model/LoadSearchResponse';
+import { DeleteSearchRequest } from '../model/DeleteSearchRequest';
+import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
 
 import cookie = require('cookie');
 

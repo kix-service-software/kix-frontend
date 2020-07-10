@@ -7,16 +7,16 @@
  * --
  */
 
-import { KIXObjectAPIService } from "./KIXObjectAPIService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { SortOrder } from "../../model/SortOrder";
-import { ClientRegistration } from "../model/ClientRegistration";
-import { ClientRegistrationsResponse } from "../model/ClientRegistrationsResponse";
-import { LoggingService } from "../../../../server/services/LoggingService";
-import { CreateClientRegistrationResponse } from "../model/CreateClientRegistrationResponse";
-import { CreateClientRegistrationRequest } from "../model/CreateClientRegistrationRequest";
-import { CreateClientRegistration } from "../model/CreateClientRegistration";
-import { SystemInfo } from "../../model/SystemInfo";
+import { KIXObjectAPIService } from './KIXObjectAPIService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { SortOrder } from '../../model/SortOrder';
+import { ClientRegistration } from '../model/ClientRegistration';
+import { ClientRegistrationsResponse } from '../model/ClientRegistrationsResponse';
+import { LoggingService } from '../../../../server/services/LoggingService';
+import { CreateClientRegistrationResponse } from '../model/CreateClientRegistrationResponse';
+import { CreateClientRegistrationRequest } from '../model/CreateClientRegistrationRequest';
+import { CreateClientRegistration } from '../model/CreateClientRegistration';
+import { SystemInfo } from '../../model/SystemInfo';
 
 export class ClientRegistrationService extends KIXObjectAPIService {
 
@@ -33,8 +33,7 @@ export class ClientRegistrationService extends KIXObjectAPIService {
         super();
     }
 
-
-    protected RESOURCE_URI: string = "clientregistration";
+    protected RESOURCE_URI: string = 'clientregistration';
 
     public objectType: KIXObjectType | string = KIXObjectType.CLIENT_REGISTRATION;
 

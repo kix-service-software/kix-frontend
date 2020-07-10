@@ -7,10 +7,10 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { RoutingConfiguration } from "./RoutingConfiguration";
+import { IConfiguration } from './IConfiguration';
+import { ConfigurationType } from './ConfigurationType';
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { RoutingConfiguration } from './RoutingConfiguration';
 
 export class ObjectInformationWidgetConfiguration implements IConfiguration {
 

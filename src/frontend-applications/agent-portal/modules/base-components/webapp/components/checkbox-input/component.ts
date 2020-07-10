@@ -9,6 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -22,13 +23,13 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        await this.setCurrentValue();
     }
 
     public async setCurrentValue(): Promise<void> {
-        if (this.state.defaultValue && typeof this.state.defaultValue.value !== 'undefined') {
-            this.state.checked = Boolean(this.state.defaultValue.value);
-            super.provideValue(this.state.checked);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<boolean>(this.state.field.instanceId);
+        if (value) {
+            this.state.checked = Boolean(value.value);
         }
     }
 

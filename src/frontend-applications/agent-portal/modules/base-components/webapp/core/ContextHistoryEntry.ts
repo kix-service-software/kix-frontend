@@ -7,8 +7,8 @@
  * --
  */
 
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 
 export class ContextHistoryEntry {
 

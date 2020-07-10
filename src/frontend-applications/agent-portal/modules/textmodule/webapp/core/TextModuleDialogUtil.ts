@@ -7,11 +7,11 @@
  * --
  */
 
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { NewTextModuleDialogContext } from "./context";
-import { TextModule } from "../../model/TextModule";
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { NewTextModuleDialogContext } from './context';
+import { TextModule } from '../../model/TextModule';
 
 export class TextModuleDialogUtil {
 

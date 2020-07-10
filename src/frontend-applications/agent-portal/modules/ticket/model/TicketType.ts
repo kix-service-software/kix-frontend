@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class TicketType extends KIXObject<TicketType> {
+export class TicketType extends KIXObject {
 
   public KIXObjectType: KIXObjectType = KIXObjectType.TICKET_TYPE;
 

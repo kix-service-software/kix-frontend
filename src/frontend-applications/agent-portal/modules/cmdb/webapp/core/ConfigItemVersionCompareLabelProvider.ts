@@ -7,10 +7,10 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Version } from "../../model/Version";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Version } from '../../model/Version';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 
 export class ConfigItemVersionCompareLabelProvider extends LabelProvider<Version> {
 

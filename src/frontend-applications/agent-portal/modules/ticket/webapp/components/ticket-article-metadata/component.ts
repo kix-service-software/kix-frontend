@@ -60,7 +60,7 @@ class TicketArticleMetadataComponent {
 
         OverlayService.getInstance().openOverlay(
             OverlayType.INFO, instanceId,
-            new ComponentContent("article-receiver-list", { receiver: list }),
+            new ComponentContent('article-receiver-list', { receiver: list }),
             null, null, false,
             [
                 event.target.getBoundingClientRect().left + BrowserUtil.getBrowserFontsize(),

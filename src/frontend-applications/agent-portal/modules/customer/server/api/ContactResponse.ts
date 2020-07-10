@@ -7,7 +7,7 @@
  * --
  */
 
-import { Contact } from "../../model/Contact";
+import { Contact } from '../../model/Contact';
 
 export class ContactResponse {
 

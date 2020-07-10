@@ -7,7 +7,7 @@
  * --
  */
 
-import { OptionsResponseHeader } from "./OptionsResponseHeader";
+import { OptionsResponseHeader } from './OptionsResponseHeader';
 
 export class OptionsResponse {
 

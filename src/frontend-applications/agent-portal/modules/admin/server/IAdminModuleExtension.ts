@@ -7,7 +7,7 @@
  * --
  */
 
-import { AdminModuleCategory } from "../model/AdminModuleCategory";
+import { AdminModuleCategory } from '../model/AdminModuleCategory';
 
 export interface IAdminModuleExtension {
 

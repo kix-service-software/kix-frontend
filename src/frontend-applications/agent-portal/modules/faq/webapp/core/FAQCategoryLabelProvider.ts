@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { FAQCategory } from "../../model/FAQCategory";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FAQCategoryProperty } from "../../model/FAQCategoryProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { FAQCategory } from '../../model/FAQCategory';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FAQCategoryProperty } from '../../model/FAQCategoryProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
 
@@ -109,7 +109,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
     }
 
     public getObjectIcon(faqCategory: FAQCategory): string | ObjectIcon {
-        return faqCategory ? new ObjectIcon('FAQCategory', faqCategory.ID) : null;
+        return faqCategory ? new ObjectIcon(null, 'FAQCategory', faqCategory.ID) : null;
     }
 
     public async getObjectTooltip(faqCategory: FAQCategory, translatable: boolean = true): Promise<string> {
@@ -132,7 +132,7 @@ export class FAQCategoryLabelProvider extends LabelProvider<FAQCategory> {
         faqCategory: FAQCategory, property: string, value?: number | string
     ): Promise<Array<string | ObjectIcon>> {
         if (property === FAQCategoryProperty.ID || property === FAQCategoryProperty.ICON) {
-            return [new ObjectIcon('FAQCategory', faqCategory.ID)];
+            return [new ObjectIcon(null, 'FAQCategory', faqCategory.ID)];
         }
         return null;
     }

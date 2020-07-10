@@ -7,18 +7,18 @@
  * --
  */
 
-import { SocketClient } from "../../../../modules/base-components/webapp/core/SocketClient";
-import { SearchCache } from "../../model/SearchCache";
-import { IdService } from "../../../../model/IdService";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { SaveSearchRequest } from "../../model/SaveSearchRequest";
-import { SearchEvent } from "../../model/SearchEvent";
-import { ISocketResponse } from "../../../../modules/base-components/webapp/core/ISocketResponse";
-import { SocketEvent } from "../../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { LoadSearchResponse } from "../../model/LoadSearchResponse";
-import { ISocketRequest } from "../../../../modules/base-components/webapp/core/ISocketRequest";
-import { DeleteSearchRequest } from "../../model/DeleteSearchRequest";
+import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
+import { SearchCache } from '../../model/SearchCache';
+import { IdService } from '../../../../model/IdService';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { SaveSearchRequest } from '../../model/SaveSearchRequest';
+import { SearchEvent } from '../../model/SearchEvent';
+import { ISocketResponse } from '../../../../modules/base-components/webapp/core/ISocketResponse';
+import { SocketEvent } from '../../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { LoadSearchResponse } from '../../model/LoadSearchResponse';
+import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
+import { DeleteSearchRequest } from '../../model/DeleteSearchRequest';
 
 export class SearchSocketClient extends SocketClient {
 

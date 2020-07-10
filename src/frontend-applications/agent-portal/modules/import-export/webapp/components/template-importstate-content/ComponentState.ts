@@ -7,7 +7,7 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../base-components/webapp/core/AbstractComponentState";
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 
 export class ComponentState extends AbstractComponentState {

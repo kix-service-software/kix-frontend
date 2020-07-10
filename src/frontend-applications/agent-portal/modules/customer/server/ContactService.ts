@@ -7,25 +7,26 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { ContactFactory } from "./ContactFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { ContactProperty } from "../model/ContactProperty";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { CreateContact } from "./api/CreateContact";
-import { CreateContactResponse } from "./api/CreateContactResponse";
-import { CreateContactRequest } from "./api/CreateContactRequest";
-import { UpdateContact } from "./api/UpdateContact";
-import { UpdateContactResponse } from "./api/UpdateContactResponse";
-import { UpdateContactRequest } from "./api/UpdateContactRequest";
-import { Error } from "../../../../../server/model/Error";
-import { UserProperty } from "../../user/model/UserProperty";
-import { UserService } from "../../user/server/UserService";
-import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
-import { PersonalSettingsProperty } from "../../user/model/PersonalSettingsProperty";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { ContactProperty } from '../model/ContactProperty';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { CreateContact } from './api/CreateContact';
+import { CreateContactResponse } from './api/CreateContactResponse';
+import { CreateContactRequest } from './api/CreateContactRequest';
+import { UpdateContact } from './api/UpdateContact';
+import { UpdateContactResponse } from './api/UpdateContactResponse';
+import { UpdateContactRequest } from './api/UpdateContactRequest';
+import { Error } from '../../../../../server/model/Error';
+import { UserProperty } from '../../user/model/UserProperty';
+import { UserService } from '../../user/server/UserService';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
+import { Contact } from '../model/Contact';
+import { SearchOperator } from '../../search/model/SearchOperator';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -40,12 +41,12 @@ export class ContactAPIService extends KIXObjectAPIService {
         return ContactAPIService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "contacts";
+    protected RESOURCE_URI: string = 'contacts';
 
     public objectType: KIXObjectType = KIXObjectType.CONTACT;
 
     private constructor() {
-        super([new ContactFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -57,9 +58,14 @@ export class ContactAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         objectIds: string[], loadingOptions: KIXObjectLoadingOptions
     ): Promise<T[]> {
-        const objects = await super.load(
-            token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT
-        );
+        let objects = [];
+
+        if (objectType === KIXObjectType.CONTACT) {
+            objects = await super.load(
+                token, KIXObjectType.CONTACT, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.CONTACT,
+                Contact
+            );
+        }
 
         return objects;
     }
@@ -213,7 +219,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         }
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.FULLTEXT
                 && !this.isUserProperty(f.property)
@@ -223,10 +229,11 @@ export class ContactAPIService extends KIXObjectAPIService {
         return filterCriteria;
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const searchCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
                 && f.property !== KIXObjectProperty.VALID_ID
+                && f.operator !== SearchOperator.IN
         );
 
         const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);

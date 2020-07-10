@@ -7,11 +7,11 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { MailAccount } from "../../model/MailAccount";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { MailAccountProperty } from "../../model/MailAccountProperty";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { MailAccount } from '../../model/MailAccount';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { MailAccountProperty } from '../../model/MailAccountProperty';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 
 
 export class MailAccountService extends KIXObjectService<MailAccount> {
@@ -24,6 +24,11 @@ export class MailAccountService extends KIXObjectService<MailAccount> {
         }
 
         return MailAccountService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.MAIL_ACCOUNT);
+        this.objectConstructors.set(KIXObjectType.MAIL_ACCOUNT, [MailAccount]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

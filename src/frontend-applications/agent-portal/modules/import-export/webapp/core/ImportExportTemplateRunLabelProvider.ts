@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { ImportExportTemplateRun } from "../../model/ImportExportTemplateRun";
-import { ImportExportTemplateRunProperty } from "../../model/ImportExportTemplateRunProperty";
-import { DateTimeUtil } from "../../../base-components/webapp/core/DateTimeUtil";
+import { LabelProvider } from '../../../base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ImportExportTemplateRun } from '../../model/ImportExportTemplateRun';
+import { ImportExportTemplateRunProperty } from '../../model/ImportExportTemplateRunProperty';
+import { DateTimeUtil } from '../../../base-components/webapp/core/DateTimeUtil';
 
 export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportExportTemplateRun> {
 
@@ -124,7 +124,7 @@ export class ImportExportTemplateRunLabelProvider extends LabelProvider<ImportEx
     }
 
     public getObjectIcon(object: ImportExportTemplateRun): string | ObjectIcon {
-        return new ObjectIcon('ImportExportTemplateRun', object.ID);
+        return new ObjectIcon(null, 'ImportExportTemplateRun', object.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

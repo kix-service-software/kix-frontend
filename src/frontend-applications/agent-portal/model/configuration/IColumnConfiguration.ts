@@ -7,8 +7,8 @@
  * --
  */
 
-import { DataType } from "../DataType";
-import { IConfiguration } from "./IConfiguration";
+import { DataType } from '../DataType';
+import { IConfiguration } from './IConfiguration';
 
 export interface IColumnConfiguration extends IConfiguration {
 

@@ -7,21 +7,21 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { SwitchColumnOrderAction } from "./table/actions";
-import { PrintAction } from "../../../../modules/base-components/webapp/core/PrintAction";
-import { TableCSSHandlerRegistry } from "./table";
-import { InvalidObjectCSSHandler } from "./table/InvalidObjectCSSHandler";
-import { FormValidationService } from "./FormValidationService";
-import { ObjectReferenceCountValidator } from "./ObjectReferenceCountValidator";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { SwitchColumnOrderAction } from './table/actions';
+import { PrintAction } from '../../../../modules/base-components/webapp/core/PrintAction';
+import { TableCSSHandlerRegistry } from './table';
+import { InvalidObjectCSSHandler } from './table/InvalidObjectCSSHandler';
+import { FormValidationService } from './FormValidationService';
+import { ObjectReferenceCountValidator } from './ObjectReferenceCountValidator';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'BaseComponentsUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

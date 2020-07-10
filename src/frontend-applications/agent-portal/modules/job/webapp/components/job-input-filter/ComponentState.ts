@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { AbstractDynamicFormManager } from "../../../../base-components/webapp/core/dynamic-form";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
 
 export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {
 

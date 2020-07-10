@@ -7,19 +7,18 @@
  * --
  */
 
-import { Context } from "../../../../model/Context";
+import { Context } from '../../../../model/Context';
 
 export class KanbanContext extends Context {
 
     public static CONTEXT_ID: string = 'kanban';
-
 
     public getIcon(): string {
         return 'kix-icon-kanban';
     }
 
     public async getDisplayText(): Promise<string> {
-        return "Personal Kanban Board";
+        return 'Personal Kanban Board';
     }
 
 }

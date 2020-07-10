@@ -7,25 +7,25 @@
  * --
  */
 
-import { UserDetailsContext } from "../../context";
-import { UserTableContentProvider } from "./UserTableContentProvider";
-import { TableFactory } from "../../../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { UserProperty } from "../../../../../model/UserProperty";
+import { UserDetailsContext } from '../../context';
+import { UserTableContentProvider } from './UserTableContentProvider';
+import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { UserProperty } from '../../../../../model/UserProperty';
 import {
     DefaultColumnConfiguration
-} from "../../../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../../../model/DataType";
-import { KIXObjectProperty } from "../../../../../../../model/kix/KIXObjectProperty";
-import { TableHeaderHeight } from "../../../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../../../model/configuration/TableRowHeight";
-import { RoutingConfiguration } from "../../../../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../../../../model/ContextMode";
-import { ContactProperty } from "../../../../../../customer/model/ContactProperty";
-import { IColumnConfiguration } from "../../../../../../../model/configuration/IColumnConfiguration";
+} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../../../model/DataType';
+import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
+import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
+import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../../../../model/ContextMode';
+import { ContactProperty } from '../../../../../../customer/model/ContactProperty';
+import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
 
 export class UserTableFactory extends TableFactory {
 

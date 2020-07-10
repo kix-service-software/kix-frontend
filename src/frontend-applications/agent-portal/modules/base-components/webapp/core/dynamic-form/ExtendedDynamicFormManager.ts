@@ -7,18 +7,19 @@
  * --
  */
 
-import { IDynamicFormManager } from "./IDynamicFormManager";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { TreeNode } from "../tree";
-import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
-import { ValidationResult } from "../ValidationResult";
-import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
+import { IDynamicFormManager } from './IDynamicFormManager';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { TreeNode } from '../tree';
+import { DynamicFormOperationsType } from './DynamicFormOperationsType';
+import { ValidationResult } from '../ValidationResult';
+import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
 
     public objectType: string;
     public uniqueProperties: boolean;
     public resetOperator?: boolean;
+    public useOwnSearch?: boolean;
 
     public getValidDFTypes(): Array<DynamicFieldTypes | string> {
         return [];
@@ -64,7 +65,7 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public getSpecificInput(): string {
+    public getSpecificInput(property: string): string {
         return null;
     }
 
@@ -116,15 +117,15 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        return null;
-    }
-
     public validate(): Promise<ValidationResult[]> {
         return null;
     }
 
     public shouldAddEmptyField(): Promise<boolean> {
+        return null;
+    }
+
+    public searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]> {
         return null;
     }
 

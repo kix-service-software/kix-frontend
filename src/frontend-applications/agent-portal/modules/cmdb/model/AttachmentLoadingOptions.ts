@@ -7,7 +7,7 @@
  * --
  */
 
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
 
 export class AttachmentLoadingOptions extends KIXObjectSpecificLoadingOptions {
 

@@ -7,17 +7,17 @@
  * --
  */
 
-import { TableFactory } from "../../../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../../../base-components/webapp/core/table";
-import { TranslationLanguageTableContentProvider } from ".";
+import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../../../base-components/webapp/core/table';
+import { TranslationLanguageTableContentProvider } from '.';
 import {
     DefaultColumnConfiguration
-} from "../../../../../../../model/configuration/DefaultColumnConfiguration";
-import { TranslationLanguageProperty } from "../../../../../model/TranslationLanguageProperty";
-import { TableHeaderHeight } from "../../../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../../../model/configuration/TableRowHeight";
+} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { TranslationLanguageProperty } from '../../../../../model/TranslationLanguageProperty';
+import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
 
 export class TranslationLanguageTableFactory extends TableFactory {
 

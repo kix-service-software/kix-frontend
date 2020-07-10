@@ -7,49 +7,48 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
+import { IUIModule } from '../../../../model/IUIModule';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
 import {
     TicketService, TicketTypeService, TicketStateService,
     TicketPriorityService, QueueService, TicketFormService, ArticleFormService, PendingTimeValidator,
     EmailRecipientValidator, TicketSearchDefinition, TicketHistoryLabelProvider, TicketTypeLabelProvider,
     TicketPriorityLabelProvider, TicketStateLabelProvider, TicketStateTypeLabelProvider, QueueLabelProvider,
-    TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler,
-    TicketBrowserFactory, TicketHistoryBrowserFactory, ArticleBrowserFactory, TicketTypeBrowserFactory,
-    TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, QueueBrowserFactory,
-    FollowUpTypeBrowserFactory, ArticleZipAttachmentDownloadAction, TicketSearchAction, ShowUserTicketsAction,
+    TicketTableCSSHandler, ArticleTableCSSHandler,
+    ArticleZipAttachmentDownloadAction, TicketSearchAction, ShowUserTicketsAction,
     TicketWatchAction, TicketLockAction, TicketContext, TicketDetailsContext, TicketSearchContext, TicketListContext
-} from ".";
+} from '.';
 import { TicketTableFactory } from './table/TicketTableFactory';
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { FormValidationService } from "../../../../modules/base-components/webapp/core/FormValidationService";
-import { SearchService } from "../../../search/webapp/core";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TableFactoryService, TableCSSHandlerRegistry } from "../../../base-components/webapp/core/table";
-import { ArticleTableFactory } from "./table/ArticleTableFactory";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ChannelLabelProvider } from "./ChannelLabelProvider";
-import { ChannelBrowserFactory } from "./ChannelBrowserFactory";
-import { ArticleLabelProvider } from "./ArticleLabelProvider";
-import { TicketLabelProvider } from "./TicketLabelProvider";
-import { ChannelService } from "./ChannelService";
-import { TicketPlaceholderHandler } from "./TicketPlaceholderHandler";
-import { TicketPrintAction } from "./actions/TicketPrintAction";
-import { TicketsForAssetsHandler } from "./TicketsForAssetsHandler";
-import { SuggestedFAQHandler } from "./SuggestedFAQHandler";
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
+import { SearchService } from '../../../search/webapp/core';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TableFactoryService, TableCSSHandlerRegistry } from '../../../base-components/webapp/core/table';
+import { ArticleTableFactory } from './table/ArticleTableFactory';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ChannelLabelProvider } from './ChannelLabelProvider';
+import { ArticleLabelProvider } from './ArticleLabelProvider';
+import { TicketLabelProvider } from './TicketLabelProvider';
+import { ChannelService } from './ChannelService';
+import { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
+import { TicketPrintAction } from './actions/TicketPrintAction';
+import { TicketsForAssetsHandler } from './TicketsForAssetsHandler';
+import { SuggestedFAQHandler } from './SuggestedFAQHandler';
+import { TicketHistoryTableFactory } from './table';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { TicketFormFieldValueHandler } from './TicketFormFieldValueHandler';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'TicketReadUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 100;
@@ -92,31 +91,10 @@ export class UIModule implements IUIModule {
             KIXObjectType.ARTICLE, new ArticleTableCSSHandler()
         );
 
-        FactoryService.getInstance().registerFactory(KIXObjectType.TICKET, TicketBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(KIXObjectType.CHANNEL, ChannelBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TICKET_HISTORY, TicketHistoryBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(KIXObjectType.ARTICLE, ArticleBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(KIXObjectType.TICKET_TYPE, TicketTypeBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TICKET_PRIORITY, TicketPriorityBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TICKET_STATE, TicketStateBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TICKET_STATE_TYPE, TicketStateTypeBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.QUEUE, QueueBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.FOLLOW_UP_TYPE, FollowUpTypeBrowserFactory.getInstance()
-        );
-
         ServiceRegistry.registerObjectReferenceHandler('TicketsForAssetsHandler', new TicketsForAssetsHandler());
         ServiceRegistry.registerObjectReferenceHandler('SuggestedFAQHandler', new SuggestedFAQHandler());
+
+        FormService.getInstance().addFormFieldValueHandler(KIXObjectType.TICKET, new TicketFormFieldValueHandler());
 
         await this.registerContexts();
         this.registerTicketActions();

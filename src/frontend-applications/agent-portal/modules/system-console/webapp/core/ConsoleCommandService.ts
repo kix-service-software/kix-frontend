@@ -7,8 +7,9 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConsoleCommand } from '../../model/ConsoleCommand';
 
 export class ConsoleCommandService extends KIXObjectService {
 
@@ -22,7 +23,8 @@ export class ConsoleCommandService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CONSOLE_COMMAND);
+        this.objectConstructors.set(KIXObjectType.CONSOLE_COMMAND, [ConsoleCommand]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType): boolean {

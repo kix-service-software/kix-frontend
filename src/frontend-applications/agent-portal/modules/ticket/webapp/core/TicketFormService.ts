@@ -7,27 +7,29 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { TicketProperty } from "../../model/TicketProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TicketState } from "../../model/TicketState";
-import { StateType } from "../../model/StateType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ArticleProperty } from "../../model/ArticleProperty";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { TicketParameterUtil } from "./TicketParameterUtil";
-import { ArticleFormService } from "./ArticleFormService";
-import { IdService } from "../../../../model/IdService";
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { Contact } from "../../../customer/model/Contact";
-import { Organisation } from "../../../customer/model/Organisation";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { TicketProperty } from '../../model/TicketProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { TicketParameterUtil } from './TicketParameterUtil';
+import { ArticleFormService } from './ArticleFormService';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { Contact } from '../../../customer/model/Contact';
+import { Organisation } from '../../../customer/model/Organisation';
+import { Channel } from '../../model/Channel';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -47,65 +49,6 @@ export class TicketFormService extends KIXObjectFormService {
 
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.TICKET;
-    }
-
-    protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, ticket: Ticket
-    ): Promise<void> {
-        if (form && form.formContext === FormContext.EDIT) {
-            PAGES:
-            for (const p of form.pages) {
-                for (const g of p.groups) {
-                    for (const f of g.formFields) {
-                        if (f.property === TicketProperty.STATE_ID) {
-                            const stateId = formFieldValues.get(f.instanceId).value;
-                            if (stateId && this.showPendingTimeField(stateId)) {
-                                await this.setPendingTimeField(f, formFieldValues, ticket);
-                            }
-                            break PAGES;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    private async showPendingTimeField(stateId: number): Promise<boolean> {
-        let showPending = false;
-        if (
-            await this.checkPermissions('system/ticket/states')
-            && await this.checkPermissions('system/ticket/states/types')
-        ) {
-            const states = await KIXObjectService.loadObjects<TicketState>(
-                KIXObjectType.TICKET_STATE, null
-            );
-            const stateTypes = await KIXObjectService.loadObjects<StateType>(
-                KIXObjectType.TICKET_STATE_TYPE, null
-            );
-            const state = states.find((s) => s.ID === stateId);
-            if (state) {
-                const stateType = stateTypes.find((t) => t.ID === state.TypeID);
-                showPending = stateType && stateType.Name.toLocaleLowerCase().indexOf('pending') >= 0;
-            }
-        }
-        return showPending;
-    }
-
-    private async setPendingTimeField(
-        typeField: FormFieldConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, ticket?: Ticket
-    ): Promise<void> {
-        const label = await LabelService.getInstance().getPropertyText(
-            TicketProperty.PENDING_TIME, KIXObjectType.TICKET
-        );
-        const pendingField = new FormFieldConfiguration(
-            'pending-time-field',
-            label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
-            null, null, new FormFieldValue(ticket.PendingTime), undefined, undefined, undefined, undefined, undefined,
-            null, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, false
-        );
-        typeField.children.push(pendingField);
-        pendingField.instanceId = IdService.generateDateBasedId(pendingField.property);
-        formFieldValues.set(pendingField.instanceId, new FormFieldValue(ticket.PendingTime));
     }
 
     protected async getValue(
@@ -137,6 +80,12 @@ export class TicketFormService extends KIXObjectFormService {
                 if (ticket) {
                     value = ticket[TicketProperty.PENDING_TIME]
                         ? new Date(ticket[TicketProperty.PENDING_TIME]) : null;
+                }
+                break;
+            case ArticleProperty.CHANNEL_ID:
+                const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+                if (channels && channels.length) {
+                    value = channels[0].ID;
                 }
                 break;
             default:
@@ -171,9 +120,6 @@ export class TicketFormService extends KIXObjectFormService {
             case ArticleProperty.CHANNEL_ID:
                 hasPermissions = await this.checkPermissions('system/communication/channels');
                 break;
-            case ArticleProperty.ATTACHMENTS:
-                hasPermissions = await this.checkPermissions('tickets/*/articles/*/attachments', [CRUD.CREATE]);
-                break;
             case TicketProperty.LINK:
                 hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
                 break;
@@ -186,11 +132,15 @@ export class TicketFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         return await TicketParameterUtil.prepareValue(property, value);
     }
 
-    public async prepareUpdateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareUpdateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         return await TicketParameterUtil.prepareValue(property, value, true);
     }
 
@@ -198,9 +148,79 @@ export class TicketFormService extends KIXObjectFormService {
         return await TicketParameterUtil.getPredefinedParameter(forUpdate);
     }
 
-    public async postPrepareValues(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext, formInstance?: FormInstance
+    ): Promise<Array<[string, any]>> {
         await ArticleFormService.prototype.addQueueSignature(parameter);
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
+    }
+
+    public async createFormFieldConfigurations(
+        formFields: FormFieldConfiguration[]
+    ): Promise<FormFieldConfiguration[]> {
+        await super.createFormFieldConfigurations(formFields);
+
+        for (const field of formFields) {
+            const label = await LabelService.getInstance().getPropertyText(field.property, KIXObjectType.TICKET);
+
+            switch (field.property) {
+                case TicketProperty.CONTACT_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.CONTACT, true);
+                    field.label = label;
+                    break;
+                case TicketProperty.ORGANISATION_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.ORGANISATION);
+                    field.label = label;
+                    break;
+                case TicketProperty.TYPE_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_TYPE);
+                    field.label = label;
+                    break;
+                case TicketProperty.QUEUE_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.QUEUE);
+                    field.label = label;
+                    break;
+                case TicketProperty.OWNER_ID:
+                case TicketProperty.RESPONSIBLE_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.USER);
+                    field.label = label;
+                    break;
+                case TicketProperty.PRIORITY_ID:
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_PRIORITY);
+                    field.label = label;
+                    break;
+                case TicketProperty.STATE_ID:
+                    field.label = label;
+                    field.inputComponent = 'object-reference-input';
+                    field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_STATE);
+                    break;
+                default:
+                    field.label = label;
+            }
+        }
+
+        const articleFormService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+            KIXObjectType.ARTICLE, ServiceType.FORM
+        );
+        if (articleFormService) {
+            formFields = await articleFormService.createFormFieldConfigurations(formFields);
+        }
+
+        return formFields;
+    }
+
+    private getObjectReferenceOptions(objectType: KIXObjectType | string, autocomplete?: boolean): FormFieldOption[] {
+        return [
+            new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
+            new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete)
+        ];
     }
 
 }

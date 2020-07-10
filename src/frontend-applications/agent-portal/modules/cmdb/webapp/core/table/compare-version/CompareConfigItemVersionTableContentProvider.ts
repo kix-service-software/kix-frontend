@@ -7,19 +7,19 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../../base-components/webapp/core/table/TableContentProvider";
-import { Version } from "../../../../model/Version";
+import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
+import { Version } from '../../../../model/Version';
 import {
     ITable, IRowObject, RowObject, TableValue, ValueState
-} from "../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { AttributeDefinition } from "../../../../model/AttributeDefinition";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { SortUtil } from "../../../../../../model/SortUtil";
-import { PreparedData } from "../../../../model/PreparedData";
-import { DateTimeUtil } from "../../../../../../modules/base-components/webapp/core/DateTimeUtil";
+} from '../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { AttributeDefinition } from '../../../../model/AttributeDefinition';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { SortUtil } from '../../../../../../model/SortUtil';
+import { PreparedData } from '../../../../model/PreparedData';
+import { DateTimeUtil } from '../../../../../../modules/base-components/webapp/core/DateTimeUtil';
 
 export class CompareConfigItemVersionTableContentProvider extends TableContentProvider<Version> {
 
@@ -204,7 +204,6 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
 
         return false;
     }
-
 
     private getValueState(oldValue: string, versionValue: string): ValueState {
         if (versionValue === undefined) {

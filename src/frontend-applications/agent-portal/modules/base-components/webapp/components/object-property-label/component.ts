@@ -9,13 +9,13 @@
 
 import { ComponentState } from './ComponentState';
 import { ComponentInput } from './ComponentInput';
-import { ILabelProvider } from '../../../../../modules/base-components/webapp/core/ILabelProvider';
+
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { LabelService } from '../../core/LabelService';
 
-export class ObjectPropertyLabelComponent<T> {
+export class ObjectPropertyLabelComponent {
 
-    private state: ComponentState<T>;
+    private state: ComponentState;
 
     private object: any;
     private property: string;
@@ -24,7 +24,7 @@ export class ObjectPropertyLabelComponent<T> {
         this.state = new ComponentState();
     }
 
-    public onInput(input: ComponentInput<T>): void {
+    public onInput(input: ComponentInput): void {
         this.property = input.property;
         this.state.hasText = typeof input.showText !== 'undefined' ? input.showText : true;
         if (this.object !== input.object) {

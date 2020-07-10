@@ -7,18 +7,18 @@
  * --
  */
 
-import { SocketNameSpace } from "../../../server/socket-namespaces/SocketNameSpace";
-import { TicketEvent } from "../model/TicketEvent";
-import { LoadArticleAttachmentRequest } from "../model/LoadArticleAttachmentRequest";
-import { SocketResponse } from "../../../modules/base-components/webapp/core/SocketResponse";
-import { LoadArticleAttachmentResponse } from "../model/LoadArticleAttachmentResponse";
-import { SocketEvent } from "../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { LoadArticleZipAttachmentRequest } from "../model/LoadArticleZipAttachmentRequest";
-import { SetArticleSeenFlagRequest } from "../model/SetArticleSeenFlagRequest";
-import { TicketAPIService } from "./TicketService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { CacheService } from "../../../server/services/cache";
+import { SocketNameSpace } from '../../../server/socket-namespaces/SocketNameSpace';
+import { TicketEvent } from '../model/TicketEvent';
+import { LoadArticleAttachmentRequest } from '../model/LoadArticleAttachmentRequest';
+import { SocketResponse } from '../../../modules/base-components/webapp/core/SocketResponse';
+import { LoadArticleAttachmentResponse } from '../model/LoadArticleAttachmentResponse';
+import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { LoadArticleZipAttachmentRequest } from '../model/LoadArticleZipAttachmentRequest';
+import { SetArticleSeenFlagRequest } from '../model/SetArticleSeenFlagRequest';
+import { TicketAPIService } from './TicketService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { CacheService } from '../../../server/services/cache';
 
 import cookie = require('cookie');
 

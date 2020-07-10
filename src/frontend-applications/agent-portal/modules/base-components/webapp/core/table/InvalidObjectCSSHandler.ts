@@ -7,9 +7,9 @@
  * --
  */
 
-import { ITableCSSHandler } from "./ITableCSSHandler";
-import { TableValue } from "./TableValue";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { ITableCSSHandler } from './ITableCSSHandler';
+import { TableValue } from './TableValue';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export class InvalidObjectCSSHandler implements ITableCSSHandler {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { IAction } from "../../../../../modules/base-components/webapp/core/IAction";
+import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
 
 export class ComponentState {
 

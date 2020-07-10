@@ -7,7 +7,7 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../../../model/IKIXModuleExtension";
+import { IKIXModuleExtension } from '../../../../model/IKIXModuleExtension';
 
 export class LoadKIXModulesResponse {
 

@@ -7,25 +7,33 @@
  * --
  */
 
-import { SearchResultCategory } from "../../../search/webapp/core/SearchResultCategory";
-import { SearchDefinition } from "../../../search/webapp/core/SearchDefinition";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TicketSearchFormManager } from "./TicketSearchFormManager";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { TicketProperty } from "../../model/TicketProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { SearchResultCategory } from '../../../search/webapp/core/SearchResultCategory';
+import { SearchDefinition } from '../../../search/webapp/core/SearchDefinition';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TicketSearchFormManager } from './TicketSearchFormManager';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { TicketProperty } from '../../model/TicketProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export class TicketSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.TICKET);
         this.formManager = new TicketSearchFormManager();
+    }
+
+    public createFormManager(): SearchFormManager {
+        const newManager = new TicketSearchFormManager();
+
+        this.formManager.getExtendedFormManager().forEach((m) => newManager.addExtendedFormManager(m));
+        return newManager;
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {

@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "../../../modules/base-components/webapp/core/ISocketResponse";
-import { SearchCache } from "./SearchCache";
+import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
+import { SearchCache } from './SearchCache';
 
 export class LoadSearchResponse implements ISocketResponse {
 

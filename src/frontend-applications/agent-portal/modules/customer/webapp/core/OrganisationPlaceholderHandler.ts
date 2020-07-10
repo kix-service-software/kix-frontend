@@ -7,14 +7,14 @@
  * --
  */
 
-import { Organisation } from "../../model/Organisation";
-import { PlaceholderService } from "../../../../modules/base-components/webapp/core/PlaceholderService";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { AbstractPlaceholderHandler } from "../../../base-components/webapp/core/AbstractPlaceholderHandler";
+import { Organisation } from '../../model/Organisation';
+import { PlaceholderService } from '../../../../modules/base-components/webapp/core/PlaceholderService';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
 
 export class OrganisationPlaceholderHandler extends AbstractPlaceholderHandler {
 

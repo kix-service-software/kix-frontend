@@ -15,12 +15,11 @@ import { CRUD } from '../../../../../server/model/rest/CRUD';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
-import { FactoryService } from '../../base-components/webapp/core/FactoryService';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../base-components/webapp/core/table';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
-import { CMDBReadUIModule, CMDBService, ConfigItemFormService, ConfigItemBrowserFactory, ConfigItemHistoryBrowserFactory, ConfigItemClassBrowserFactory, ConfigItemImageBrowserFactory, ConfigItemTableFactory, ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext, CompareConfigItemVersionDialogContext } from '../webapp/core';
+import { CMDBReadUIModule, CMDBService, ConfigItemFormService, ConfigItemVersionTableFactory, CompareConfigItemVersionTableFactory, ConfigItemHistoryTableFactory, ConfigItemLabelProvider, ConfigItemClassLabelProvider, ConfigItemClassDefinitionLabelProvider, ConfigItemHistoryLabelProvider, ConfigItemVersionLabelProvider, ConfigItemVersionCompareLabelProvider, ConfigItemSearchDefinition, CMDBContext, ConfigItemDetailsContext, ConfigItemSearchContext, CompareConfigItemVersionDialogContext, ConfigItemTableFactory } from '../webapp/core';
 import { SearchService } from '../../search/webapp/core';
 import { PostproductivCSSHandler } from '../webapp/core/table/PostproductivCSSHandler';
 
@@ -52,30 +51,6 @@ describe('CMDBReadUIModule', () => {
                 const service = ServiceRegistry.getServiceInstance(KIXObjectType.CONFIG_ITEM, ServiceType.FORM);
                 expect(service).exist;
                 expect(service).instanceof(ConfigItemFormService);
-            });
-
-            it('should register ConfigItemBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.CONFIG_ITEM);
-                expect(factory).exist;
-                expect(factory).instanceof(ConfigItemBrowserFactory);
-            });
-
-            it('should register ConfigItemHistoryBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.CONFIG_ITEM_HISTORY);
-                expect(factory).exist;
-                expect(factory).instanceof(ConfigItemHistoryBrowserFactory);
-            });
-
-            it('should register ConfigItemClassBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.CONFIG_ITEM_CLASS);
-                expect(factory).exist;
-                expect(factory).instanceof(ConfigItemClassBrowserFactory);
-            });
-
-            it('should register ConfigItemImageBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.CONFIG_ITEM_IMAGE);
-                expect(factory).exist;
-                expect(factory).instanceof(ConfigItemImageBrowserFactory);
             });
 
             it('should register ConfigItemTableFactory', () => {

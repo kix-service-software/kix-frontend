@@ -7,11 +7,11 @@
  * --
  */
 
-import { IServiceExtension } from "../../server/extensions/IServiceExtension";
-import { ContactAPIService } from "./server/ContactService";
-import { OrganisationAPIService } from "./server/OrganisationService";
+import { IServiceExtension } from '../../server/extensions/IServiceExtension';
+import { ContactAPIService } from './server/ContactService';
+import { OrganisationAPIService } from './server/OrganisationService';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IServiceExtension {
 

@@ -7,32 +7,30 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     TicketTypeFormService, TicketPriorityFormService, TicketStateFormService, QueueFormService,
     TicketTypeService, TicketStateService, TicketPriorityService, QueueService, TicketTypeLabelProvider,
     TicketPriorityLabelProvider, TicketStateLabelProvider, TicketStateTypeLabelProvider, QueueLabelProvider,
     TicketPriorityTableFactory, TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory,
-    TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory,
-    QueueBrowserFactory, TicketTypeCreateAction, NewTicketTypeDialogContext, TicketTypeEditAction,
+    TicketTypeCreateAction, NewTicketTypeDialogContext, TicketTypeEditAction,
     EditTicketTypeDialogContext, TicketTypeTableDeleteAction, TicketTypeDetailsContext, TicketStateCreateAction,
     NewTicketStateDialogContext, TicketStateEditAction, EditTicketStateDialogContext, TicketStateTableDeleteAction,
     TicketStateDetailsContext, TicketPriorityCreateAction, NewTicketPriorityDialogContext, TicketPriorityEditAction,
     EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction, TicketPriorityDetailsContext,
     TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext, QueueDetailsContext
-} from ".";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ChannelLabelProvider } from "./ChannelLabelProvider";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { QueueDuplicateAction } from "./admin";
+} from '.';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ChannelLabelProvider } from './ChannelLabelProvider';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { QueueDuplicateAction } from './admin';
 
 export class UIModule implements IUIModule {
 
@@ -41,7 +39,7 @@ export class UIModule implements IUIModule {
     public name: string = 'TicketAdminUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {
@@ -66,18 +64,6 @@ export class UIModule implements IUIModule {
         TableFactoryService.getInstance().registerFactory(new TicketQueueTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketTypeTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketStateTableFactory());
-
-        FactoryService.getInstance().registerFactory(KIXObjectType.TICKET_TYPE, TicketTypeBrowserFactory.getInstance());
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TICKET_PRIORITY, TicketPriorityBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TICKET_STATE, TicketStateBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TICKET_STATE_TYPE, TicketStateTypeBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(KIXObjectType.QUEUE, QueueBrowserFactory.getInstance());
 
         await this.registerTicketTypeAdmin();
         await this.registerTicketStatesAdmin();

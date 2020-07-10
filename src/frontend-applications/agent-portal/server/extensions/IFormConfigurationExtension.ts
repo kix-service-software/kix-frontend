@@ -7,7 +7,7 @@
  * --
  */
 
-import { ExtendedFormFieldConfiguration } from "../../model/configuration/ExtendedFormFieldConfiguration";
+import { ExtendedFormFieldConfiguration } from '../../model/configuration/ExtendedFormFieldConfiguration';
 
 export interface IFormConfigurationExtension {
 

@@ -7,16 +7,16 @@
  * --
  */
 
-import { TableHeaderHeight } from "./TableHeaderHeight";
-import { TableRowHeight } from "./TableRowHeight";
-import { IColumnConfiguration } from "./IColumnConfiguration";
-import { IConfiguration } from "./IConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../KIXObjectLoadingOptions";
-import { RoutingConfiguration } from "./RoutingConfiguration";
-import { DialogRoutingConfiguration } from "./DialogRoutingConfiguration";
-import { ToggleOptions } from "../../modules/base-components/webapp/core/table";
+import { TableHeaderHeight } from './TableHeaderHeight';
+import { TableRowHeight } from './TableRowHeight';
+import { IColumnConfiguration } from './IColumnConfiguration';
+import { IConfiguration } from './IConfiguration';
+import { ConfigurationType } from './ConfigurationType';
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../KIXObjectLoadingOptions';
+import { RoutingConfiguration } from './RoutingConfiguration';
+import { DialogRoutingConfiguration } from './DialogRoutingConfiguration';
+import { ToggleOptions } from '../../modules/base-components/webapp/core/table';
 
 export class TableConfiguration implements IConfiguration {
 

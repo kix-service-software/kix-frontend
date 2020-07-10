@@ -171,7 +171,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }
 
         if (this.firstColumnIsFixed()) {
-            stateClass.push("fist-column-fixed");
+            stateClass.push('fist-column-fixed');
         }
 
         if (object) {

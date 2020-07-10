@@ -7,10 +7,10 @@
  * --
  */
 
-import { IWidgetContent } from "./IWidgetContent";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { IWidgetContent } from './IWidgetContent';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
-export class ComponentContent<T extends KIXObject<T>> implements IWidgetContent<T> {
+export class ComponentContent<T extends KIXObject> implements IWidgetContent<T> {
 
     public constructor(private componentId: string, private componentData: any, private actionobject?: T) { }
 

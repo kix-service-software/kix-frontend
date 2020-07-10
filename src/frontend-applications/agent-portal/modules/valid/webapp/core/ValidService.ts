@@ -7,11 +7,12 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ValidObject } from '../../model/ValidObject';
 
 export class ValidService extends KIXObjectService {
 
@@ -25,7 +26,8 @@ export class ValidService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.VALID_OBJECT);
+        this.objectConstructors.set(KIXObjectType.VALID_OBJECT, [ValidObject]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType | string): boolean {

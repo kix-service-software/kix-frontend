@@ -7,13 +7,13 @@
  * --
  */
 
-import { ISocketNamespaceRegistryExtension } from "./server/extensions/ISocketNamespaceRegistryExtension";
-import { NotificationNamespace } from "./server/socket-namespaces/NotificationNamespace";
-import { AuthenticationNamespace } from "./server/socket-namespaces/AuthenticationNamespace";
-import { ContextNamespace } from "./server/socket-namespaces/ContextNamespace";
-import { KIXModuleNamespace } from "./server/socket-namespaces/KIXModuleNamespace";
-import { KIXObjectNamespace } from "./server/socket-namespaces/KIXObjectNamespace";
-import { KIXExtension } from "../../server/model/KIXExtension";
+import { ISocketNamespaceRegistryExtension } from './server/extensions/ISocketNamespaceRegistryExtension';
+import { NotificationNamespace } from './server/socket-namespaces/NotificationNamespace';
+import { AuthenticationNamespace } from './server/socket-namespaces/AuthenticationNamespace';
+import { ContextNamespace } from './server/socket-namespaces/ContextNamespace';
+import { KIXModuleNamespace } from './server/socket-namespaces/KIXModuleNamespace';
+import { KIXObjectNamespace } from './server/socket-namespaces/KIXObjectNamespace';
+import { KIXExtension } from '../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements ISocketNamespaceRegistryExtension {
 

@@ -7,15 +7,15 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../base-components/webapp/core/table";
-import { TicketHistoryContentProvider } from "./TicketHistoryContentProvider";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { TicketHistoryProperty } from "../../../model/TicketHistoryProperty";
-import { DataType } from "../../../../../model/DataType";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { TicketHistoryContentProvider } from './TicketHistoryContentProvider';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { TicketHistoryProperty } from '../../../model/TicketHistoryProperty';
+import { DataType } from '../../../../../model/DataType';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 
 export class TicketHistoryTableFactory extends TableFactory {
 

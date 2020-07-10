@@ -7,26 +7,26 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { TranslationPattern } from "../model/TranslationPattern";
-import { Translation } from "../model/Translation";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { TranslationPatternProperty } from "../model/TranslationPatternProperty";
-import { TranslationLanguage } from "../model/TranslationLanguage";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { TranslationLanguageProperty } from "../model/TranslationLanguageProperty";
-import { PODefinition } from "../../../server/model/PODefinition";
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { IdService } from "../../../model/IdService";
-import { Error } from "../../../../../server/model/Error";
-import { UserService } from "../../user/server/UserService";
-import { PluginService } from "../../../../../server/services/PluginService";
-import { AgentPortalExtensions } from "../../../server/extensions/AgentPortalExtensions";
-import { ILocaleExtension } from "../../../model/ILocaleExtension";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { TranslationPattern } from '../model/TranslationPattern';
+import { Translation } from '../model/Translation';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { TranslationPatternProperty } from '../model/TranslationPatternProperty';
+import { TranslationLanguage } from '../model/TranslationLanguage';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { TranslationLanguageProperty } from '../model/TranslationLanguageProperty';
+import { PODefinition } from '../../../server/model/PODefinition';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { IdService } from '../../../model/IdService';
+import { Error } from '../../../../../server/model/Error';
+import { UserService } from '../../user/server/UserService';
+import { PluginService } from '../../../../../server/services/PluginService';
+import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
+import { ILocaleExtension } from '../../../model/ILocaleExtension';
 
 export class TranslationAPIService extends KIXObjectAPIService {
 
@@ -61,11 +61,11 @@ export class TranslationAPIService extends KIXObjectAPIService {
         if (objectType === KIXObjectType.TRANSLATION_PATTERN) {
             const uri = this.buildUri('system', this.RESOURCE_URI);
             objects = await super.load<TranslationPattern>(
-                token, objectType, uri, loadingOptions, objectIds, 'TranslationPattern'
+                token, objectType, uri, loadingOptions, objectIds, 'TranslationPattern', TranslationPattern
             );
         } else if (objectType === KIXObjectType.TRANSLATION) {
             objects = await super.load<Translation>(
-                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'Translation'
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'Translation', Translation
             );
         }
 
@@ -127,7 +127,8 @@ export class TranslationAPIService extends KIXObjectAPIService {
                 null, null, null, [TranslationPatternProperty.LANGUAGES]
             );
             const translations = await super.load<TranslationPattern>(
-                token, KIXObjectType.TRANSLATION_PATTERN, uri, loadingOptions, null, 'TranslationPattern'
+                token, KIXObjectType.TRANSLATION_PATTERN, uri, loadingOptions, null, 'TranslationPattern',
+                TranslationPattern
             );
             if (translations && translations.length) {
                 const languageParameter = parameter.filter((p) => p[0] !== TranslationPatternProperty.VALUE);
@@ -261,7 +262,7 @@ export class TranslationAPIService extends KIXObjectAPIService {
                     }
 
                     translationValue = this.format(translationValue, placeholderValues.map(
-                        (p) => (typeof p !== undefined && p !== null ? p : '').toString()
+                        (p) => (typeof p !== 'undefined' && p !== null ? p : '').toString()
                     ));
                 }
             }

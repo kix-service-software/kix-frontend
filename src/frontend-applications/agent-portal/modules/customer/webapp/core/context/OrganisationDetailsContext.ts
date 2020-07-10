@@ -7,13 +7,13 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { Organisation } from "../../../model/Organisation";
-import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { OrganisationContext } from ".";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { Context } from '../../../../../model/Context';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { Organisation } from '../../../model/Organisation';
+import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
+import { OrganisationContext } from '.';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class OrganisationDetailsContext extends Context {
 

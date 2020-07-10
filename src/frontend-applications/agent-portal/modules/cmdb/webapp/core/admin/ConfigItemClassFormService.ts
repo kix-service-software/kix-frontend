@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { ConfigItemClass } from "../../../model/ConfigItemClass";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ConfigItemClassProperty } from "../../../model/ConfigItemClassProperty";
+import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { ConfigItemClass } from '../../../model/ConfigItemClass';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ConfigItemClassProperty } from '../../../model/ConfigItemClassProperty';
 
 export class ConfigItemClassFormService extends KIXObjectFormService {
 

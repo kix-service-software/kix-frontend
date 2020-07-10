@@ -12,7 +12,6 @@ import { FormInputComponent } from '../../../../base-components/webapp/core/Form
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { IdService } from '../../../../../model/IdService';
 import { ArticleProperty } from '../../../model/ArticleProperty';
-import { IFormInstance } from '../../../../base-components/webapp/core/IFormInstance';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { Organisation } from '../../../../customer/model/Organisation';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
@@ -20,18 +19,15 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { OrganisationProperty } from '../../../../customer/model/OrganisationProperty';
 import { Contact } from '../../../../customer/model/Contact';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
 import { Ticket } from '../../../model/Ticket';
+import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
-    private formListendenerId: string;
-
     public onCreate(): void {
         this.state = new ComponentState();
-        this.formListendenerId = IdService.generateDateBasedId('customer-visible-input');
     }
 
     public onInput(input: any): void {
@@ -41,53 +37,25 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
         await this.setCurrentValue();
-        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-            formListenerId: this.formListendenerId,
-            updateForm: () => { return; },
-            formValueChanged: (formField: FormFieldConfiguration) => {
-                if (
-                    formField && (
-                        formField.property === ArticleProperty.TO ||
-                        formField.property === ArticleProperty.CC ||
-                        formField.property === ArticleProperty.BCC ||
-                        formField.property === ArticleProperty.CHANNEL_ID ||
-                        formField.property === TicketProperty.ORGANISATION_ID
-                    )
-                ) {
-                    this.updateCheckState();
-                }
-            }
-        });
     }
 
     public async onDestroy(): Promise<void> {
         super.onDestroy();
-        if (this.state.formId && this.formListendenerId) {
-            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListendenerId);
-        }
     }
 
     public async setCurrentValue(): Promise<void> {
-        if (this.state.defaultValue && typeof this.state.defaultValue.value !== 'undefined') {
-            this.state.checked = Boolean(this.state.defaultValue.value);
-            super.provideValue(this.state.checked);
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (Array.isArray(value.value)) {
+            this.state.checked = Boolean(value.value[0]);
+        } else {
+            this.state.checked = Boolean(value.value);
         }
     }
 
     public checkboxClicked(): void {
         this.state.checked = !this.state.checked;
         super.provideValue(this.state.checked);
-    }
-
-    private async updateCheckState(): Promise<void> {
-        const setCheckAndDisabled: boolean = await this.checkValues();
-        if (setCheckAndDisabled) {
-            this.state.checked = true;
-            super.provideValue(this.state.checked);
-            this.state.disabled = true;
-        } else {
-            this.state.disabled = false;
-        }
     }
 
     private async checkValues(): Promise<boolean> {
@@ -107,7 +75,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         return setCheckAndDisabled;
     }
 
-    private async getOrganisation(formInstance: IFormInstance): Promise<Organisation> {
+    private async getOrganisation(formInstance: FormInstance): Promise<Organisation> {
         let orgId;
         if (formInstance.getObjectType() === KIXObjectType.ARTICLE) {
             const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
@@ -136,7 +104,7 @@ class Component extends FormInputComponent<any, ComponentState> {
         return organisation;
     }
 
-    private async checkAddresses(formInstance: IFormInstance, contacts: Contact[]): Promise<boolean> {
+    private async checkAddresses(formInstance: FormInstance, contacts: Contact[]): Promise<boolean> {
         const addresses: string[] = [];
         for (const property of [ArticleProperty.TO, ArticleProperty.CC, ArticleProperty.BCC]) {
             const value = await formInstance.getFormFieldValueByProperty<string[]>(property);

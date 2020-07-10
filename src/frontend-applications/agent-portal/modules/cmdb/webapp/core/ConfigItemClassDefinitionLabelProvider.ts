@@ -7,17 +7,17 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { ConfigItemClassDefinition } from "../../model/ConfigItemClassDefinition";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ConfigItemClassDefinitionProperty } from "../../model/ConfigItemClassDefinitionProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { UserProperty } from "../../../user/model/UserProperty";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { ConfigItemClassDefinition } from '../../model/ConfigItemClassDefinition';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ConfigItemClassDefinitionProperty } from '../../model/ConfigItemClassDefinitionProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+
+
+
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+
+
 
 export class ConfigItemClassDefinitionLabelProvider extends LabelProvider<ConfigItemClassDefinition> {
 

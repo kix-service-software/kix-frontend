@@ -7,31 +7,29 @@
  * --
  */
 
-import { IKIXObjectService } from "./IKIXObjectService";
-import { HttpService } from "./HttpService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { IObjectFactory } from "../model/IObjectFactory";
-import { ObjectFactoryService } from "./ObjectFactoryService";
-import { KIXObject } from "../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../model/KIXObjectSpecificLoadingOptions";
-import { Error } from "../../../../server/model/Error";
-import { KIXObjectSpecificDeleteOptions } from "../../model/KIXObjectSpecificDeleteOptions";
-import { LoggingService } from "../../../../server/services/LoggingService";
-import { SortOrder } from "../../model/SortOrder";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { FilterType } from "../../model/FilterType";
-import { RequestObject } from "../../../../server/model/rest/RequestObject";
-import { KIXObjectSpecificCreateOptions } from "../../model/KIXObjectSpecificCreateOptions";
-import { Query } from "../../../../server/model/rest/Query";
-import { KIXObjectServiceRegistry } from "./KIXObjectServiceRegistry";
-import { ObjectIconLoadingOptions } from "../model/ObjectIconLoadingOptions";
-import { ObjectIcon } from "../../modules/icon/model/ObjectIcon";
-import { CreateLinkDescription } from "../../modules/links/server/api/CreateLinkDescription";
-import { CreateLink } from "../../modules/links/server/api/CreateLink";
-import { CreateLinkRequest } from "../../modules/links/server/api/CreateLinkRequest";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { ExtendedKIXObjectAPIService } from "./ExtendedKIXObjectAPIService";
+import { IKIXObjectService } from './IKIXObjectService';
+import { HttpService } from './HttpService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { KIXObject } from '../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
+import { Error } from '../../../../server/model/Error';
+import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
+import { LoggingService } from '../../../../server/services/LoggingService';
+import { SortOrder } from '../../model/SortOrder';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { FilterType } from '../../model/FilterType';
+import { RequestObject } from '../../../../server/model/rest/RequestObject';
+import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
+import { Query } from '../../../../server/model/rest/Query';
+import { KIXObjectServiceRegistry } from './KIXObjectServiceRegistry';
+import { ObjectIconLoadingOptions } from '../model/ObjectIconLoadingOptions';
+import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
+import { CreateLinkDescription } from '../../modules/links/server/api/CreateLinkDescription';
+import { CreateLink } from '../../modules/links/server/api/CreateLink';
+import { CreateLinkRequest } from '../../modules/links/server/api/CreateLinkRequest';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -44,10 +42,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     protected enableSearchQuery: boolean = true;
 
     protected extendedServices: ExtendedKIXObjectAPIService[] = [];
-
-    public constructor(factories: IObjectFactory[] = []) {
-        factories.forEach((f) => ObjectFactoryService.registerFactory(f));
-    }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
 
@@ -62,9 +56,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         throw new Error('-1', `Method loadObjects not implemented (${objectType})`);
     }
 
-    protected async load<O extends KIXObject | string = any>(
+    protected async load<O extends KIXObject | string | number = any>(
         token: string, objectType: KIXObjectType | string, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
-        objectIds: Array<number | string>, responseProperty: string, useCache?: boolean
+        objectIds: Array<number | string>, responseProperty: string,
+        // tslint:disable-next-line: ban-types
+        objectConstructor: new (object?: KIXObject) => O | String | Number,
+        useCache?: boolean
+        // tslint:disable-next-line: ban-types
     ): Promise<O[]> {
         const query = this.prepareQuery(loadingOptions);
         if (loadingOptions && loadingOptions.filter && loadingOptions.filter.length) {
@@ -94,26 +92,22 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             ? responseObject
             : [responseObject];
 
-        const result = [];
-        for (const o of objects) {
-            const object = await ObjectFactoryService.createObject(token, objectType, o);
-            result.push(object);
-        }
-
-        return result;
+        const result = objects.map((o) => new objectConstructor(o as KIXObject));
+        return result as any;
     }
 
     protected async executeUpdateOrCreateRequest<R = number>(
         token: string, clientRequestId: string, parameter: Array<[string, any]>, uri: string,
-        objectType: KIXObjectType | string, responseProperty: string, create: boolean = false
+        objectType: KIXObjectType | string, responseProperty: string, create: boolean = false,
+        cacheKeyPrefix: string = objectType
     ): Promise<R> {
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
 
-        const response = await this.sendRequest(token, clientRequestId, uri, object, objectType, create);
+        const response = await this.sendRequest(token, clientRequestId, uri, object, cacheKeyPrefix, create);
 
         const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
-        if (icon) {
+        if (icon && icon.Content) {
             icon.Object = objectType;
             icon.ObjectID = response[responseProperty];
             if (create) {
@@ -136,14 +130,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         createOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        throw new Error('', 'Method not implemented.');
     }
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType | string, parameter: Array<[string, string]>,
         objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        throw new Error('', 'Method not implemented.');
     }
 
     protected prepareQuery(loadingOptions: KIXObjectLoadingOptions): any {
@@ -157,7 +151,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             if (loadingOptions.sortOrder) {
                 query = { ...query, sort: loadingOptions.sortOrder };
             }
-
 
             let additionalIncludes = [];
             this.extendedServices.forEach(
@@ -250,7 +243,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected buildUri(...args): string {
-        return args.join("/");
+        return args.join('/');
     }
 
     public async deleteObject(
@@ -365,9 +358,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         return value ? value[1] : undefined;
     }
 
-    protected async buildFilter(
+    public async buildFilter(
         criteria: FilterCriteria[], objectProperty: string, query: any, token?: string
-    ): Promise<void> {
+    ): Promise<any> {
 
         const nonDynamicFieldCriteria = criteria.filter(
             (c) => !c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
@@ -376,7 +369,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         let filterCriteria = await this.prepareAPIFilter(nonDynamicFieldCriteria, token);
         for (const service of this.extendedServices) {
             const extendedCriteria = await service.prepareAPIFilter(nonDynamicFieldCriteria, token);
-            filterCriteria = [...filterCriteria, ...extendedCriteria];
+            if (extendedCriteria) {
+                filterCriteria = [...filterCriteria, ...extendedCriteria];
+            }
         }
 
         if (filterCriteria && filterCriteria.length) {
@@ -388,7 +383,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
         for (const service of this.extendedServices) {
             const extendedCriteria = await service.prepareAPISearch(nonDynamicFieldCriteria, token);
-            searchCriteria = [...searchCriteria, ...extendedCriteria];
+            if (extendedCriteria) {
+                searchCriteria = [...searchCriteria, ...extendedCriteria];
+            }
         }
         const dynamicFieldCriteria = criteria.filter(
             (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
@@ -404,17 +401,19 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
             query.search = JSON.stringify(apiSearch);
         }
+
+        return query;
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria;
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria;
     }
 
-    private prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
+    public prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
         let objectFilter = {};
 
         const andFilter = filterCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {

@@ -7,23 +7,23 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
-import { ContactDialogUtil } from "..";
+import { ContactDialogUtil } from '..';
 
 export class ContactEditAction extends AbstractAction {
 
     public permissions = [
-        new UIComponentPermission('contacts/*', [CRUD.UPDATE])
+        new UIComponentPermission('contacts', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
-        this.icon = "kix-icon-edit";
+        this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {

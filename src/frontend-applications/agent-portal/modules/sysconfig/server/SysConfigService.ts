@@ -7,22 +7,20 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { SysConfigOptionDefinitionFactory } from "./SysConfigOptionDefinitionFactory";
-import { SysConfigOptionFactory } from "./SysConfigOptionFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { SysConfigOption } from "../model/SysConfigOption";
-import { SysConfigOptionDefinition } from "../model/SysConfigOptionDefinition";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { Error } from "../../../../../server/model/Error";
-import { ModuleConfigurationService } from "../../../server/services/configuration";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { KIXObjectSpecificDeleteOptions } from "../../../model/KIXObjectSpecificDeleteOptions";
-import { SysConfigKey } from "../model/SysConfigKey";
-import { FilterCriteria } from "../../../model/FilterCriteria";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { SysConfigOption } from '../model/SysConfigOption';
+import { SysConfigOptionDefinition } from '../model/SysConfigOptionDefinition';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { Error } from '../../../../../server/model/Error';
+import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
+import { SysConfigKey } from '../model/SysConfigKey';
+import { FilterCriteria } from '../../../model/FilterCriteria';
 
 export class SysConfigService extends KIXObjectAPIService {
 
@@ -40,7 +38,7 @@ export class SysConfigService extends KIXObjectAPIService {
     public objectType: KIXObjectType | string = KIXObjectType.SYS_CONFIG_OPTION;
 
     private constructor() {
-        super([new SysConfigOptionFactory(), new SysConfigOptionDefinitionFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -57,13 +55,14 @@ export class SysConfigService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.SYS_CONFIG_OPTION) {
             objects = await super.load<SysConfigOption>(
-                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption'
+                token, KIXObjectType.SYS_CONFIG_OPTION, this.RESOURCE_URI, loadingOptions, objectIds, 'SysConfigOption',
+                SysConfigOption
             );
         } else if (objectType === KIXObjectType.SYS_CONFIG_OPTION_DEFINITION) {
             const uri = this.buildUri(this.RESOURCE_URI, 'definitions');
             objects = await super.load<SysConfigOptionDefinition>(
                 token, KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, uri,
-                loadingOptions, objectIds, 'SysConfigOptionDefinition'
+                loadingOptions, objectIds, 'SysConfigOptionDefinition', SysConfigOptionDefinition
             );
         }
 
@@ -140,7 +139,7 @@ export class SysConfigService extends KIXObjectAPIService {
         return stateTypes && !!stateTypes.length ? stateTypes : ['new', 'open', 'pending reminder', 'pending auto'];
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return [];
     }
 

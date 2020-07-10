@@ -7,10 +7,10 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { MailFilterMatch } from "../../../model/MailFilterMatch";
+import { ComponentState } from './ComponentState';
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { MailFilterMatch } from '../../../model/MailFilterMatch';
 
 class Component extends AbstractMarkoComponent {
 
@@ -36,8 +36,13 @@ class Component extends AbstractMarkoComponent {
     }
 
     public async onMount(): Promise<void> {
+        await super.onMount();
         this.state.valueTitle = await TranslationService.translate('Translatable#Pattern');
         this.state.negateTitle = await TranslationService.translate('Translatable#Negate');
+    }
+
+    public async setCurrentValue(): Promise<void> {
+        return;
     }
 
     public checkboxClicked(event: any): void {

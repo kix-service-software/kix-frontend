@@ -7,10 +7,10 @@
  * --
  */
 
-import { IServiceExtension } from "../../server/extensions/IServiceExtension";
-import { MailAccountService } from "./server/MailAccountService";
+import { IServiceExtension } from '../../server/extensions/IServiceExtension';
+import { MailAccountService } from './server/MailAccountService';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IServiceExtension {
 

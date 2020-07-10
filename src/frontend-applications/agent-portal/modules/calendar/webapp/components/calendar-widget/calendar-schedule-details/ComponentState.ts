@@ -7,10 +7,10 @@
  * --
  */
 
-import { Ticket } from "../../../../../ticket/model/Ticket";
-import { TicketLabelProvider } from "../../../../../ticket/webapp/core";
-import { ObjectIcon } from "../../../../../icon/model/ObjectIcon";
-import { RoutingConfiguration } from "../../../../../../model/configuration/RoutingConfiguration";
+import { Ticket } from '../../../../../ticket/model/Ticket';
+import { TicketLabelProvider } from '../../../../../ticket/webapp/core';
+import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
+import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
 
 export class ComponentState {
 

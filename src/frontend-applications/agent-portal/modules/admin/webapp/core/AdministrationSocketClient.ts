@@ -7,15 +7,15 @@
  * --
  */
 
-import { SocketClient } from "../../../../modules/base-components/webapp/core/SocketClient";
-import { AdminModuleCategory } from "../../model/AdminModuleCategory";
-import { IdService } from "../../../../model/IdService";
-import { AdministrationEvent } from "../../model/AdministrationEvent";
-import { AdminCategoriesResponse } from "../../model/AdminCategoriesResponse";
-import { SocketEvent } from "../../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { ISocketRequest } from "../../../../modules/base-components/webapp/core/ISocketRequest";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
+import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
+import { AdminModuleCategory } from '../../model/AdminModuleCategory';
+import { IdService } from '../../../../model/IdService';
+import { AdministrationEvent } from '../../model/AdministrationEvent';
+import { AdminCategoriesResponse } from '../../model/AdminCategoriesResponse';
+import { SocketEvent } from '../../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
 
 export class AdministrationSocketClient extends SocketClient {
 

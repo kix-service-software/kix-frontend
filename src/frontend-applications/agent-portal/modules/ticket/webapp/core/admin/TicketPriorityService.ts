@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TicketPriority } from "../../../model/TicketPriority";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TicketPriority } from '../../../model/TicketPriority';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 
 export class TicketPriorityService extends KIXObjectService<TicketPriority> {
 
@@ -24,6 +24,11 @@ export class TicketPriorityService extends KIXObjectService<TicketPriority> {
         }
 
         return TicketPriorityService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.TICKET_PRIORITY);
+        this.objectConstructors.set(KIXObjectType.TICKET_PRIORITY, [TicketPriority]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

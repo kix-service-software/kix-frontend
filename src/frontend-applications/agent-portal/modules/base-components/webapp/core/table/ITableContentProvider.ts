@@ -7,8 +7,8 @@
  * --
  */
 
-import { IRowObject } from "./IRowObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { IRowObject } from './IRowObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export interface ITableContentProvider<T = any> {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { UIComponentPermission } from "../../../model/UIComponentPermission";
-import { ObjectIcon } from "../../icon/model/ObjectIcon";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../../model/UIComponentPermission';
+import { ObjectIcon } from '../../icon/model/ObjectIcon';
 
 export class AdminModule {
 

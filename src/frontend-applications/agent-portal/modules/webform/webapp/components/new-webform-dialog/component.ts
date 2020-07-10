@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../modules/base-components/webapp/core/AbstractNewDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { WebformDetailsContext } from "../../core";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { WebformProperty } from "../../../model/WebformProperty";
+import { ComponentState } from './ComponentState';
+import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { WebformDetailsContext } from '../../core';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { WebformProperty } from '../../../model/WebformProperty';
 
 class Component extends AbstractNewDialog {
 

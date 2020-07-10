@@ -7,7 +7,7 @@
  * --
  */
 
-import { Error } from "../../../../../server/model/Error";
+import { Error } from '../../../../../server/model/Error';
 
 
 export class PermissionError extends Error {

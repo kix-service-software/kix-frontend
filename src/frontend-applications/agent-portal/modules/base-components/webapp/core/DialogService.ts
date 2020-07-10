@@ -7,21 +7,21 @@
  * --
  */
 
-import { IMainDialogListener } from "./IMainDialogListener";
-import { IOverlayDialogListener } from "./IOverlayDialogListener";
-import { IImageDialogListener } from "./IImageDialogListener";
-import { ConfiguredDialogWidget } from "../../../../model/configuration/ConfiguredDialogWidget";
-import { ContextService } from "./ContextService";
-import { ContextMode } from "../../../../model/ContextMode";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { ContextType } from "../../../../model/ContextType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { BrowserCacheService } from "./CacheService";
-import { DisplayImageDescription } from "./DisplayImageDescription";
-import { ContextFactory } from "./ContextFactory";
-import { EventService } from "./EventService";
-import { ApplicationEvent } from "./ApplicationEvent";
+import { IMainDialogListener } from './IMainDialogListener';
+import { IOverlayDialogListener } from './IOverlayDialogListener';
+import { IImageDialogListener } from './IImageDialogListener';
+import { ConfiguredDialogWidget } from '../../../../model/configuration/ConfiguredDialogWidget';
+import { ContextService } from './ContextService';
+import { ContextMode } from '../../../../model/ContextMode';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { ContextType } from '../../../../model/ContextType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { BrowserCacheService } from './CacheService';
+import { DisplayImageDescription } from './DisplayImageDescription';
+import { ContextFactory } from './ContextFactory';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
 
 export class DialogService {
 
@@ -209,7 +209,6 @@ export class DialogService {
         }
         return dialogs;
     }
-
 
     public setMainDialogTitle(title: string): void {
         if (this.mainDialogListener) {

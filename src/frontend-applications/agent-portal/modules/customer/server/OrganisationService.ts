@@ -7,19 +7,19 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { OrganisationFactory } from "./OrganisationFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { CreateOrganisation } from "./api/CreateOrganisation";
-import { CreateOrganisationResponse } from "./api/CreateOrganisationResponse";
-import { CreateOrganisationRequest } from "./api/CreateOrganisationRequest";
-import { UpdateOrganisation } from "./api/UpdateOrganisation";
-import { UpdateOrganisationResponse } from "./api/UpdateOrganisationResponse";
-import { UpdateOrganisationRequest } from "./api/UpdateOrganisationRequest";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { CreateOrganisation } from './api/CreateOrganisation';
+import { CreateOrganisationResponse } from './api/CreateOrganisationResponse';
+import { CreateOrganisationRequest } from './api/CreateOrganisationRequest';
+import { UpdateOrganisation } from './api/UpdateOrganisation';
+import { UpdateOrganisationResponse } from './api/UpdateOrganisationResponse';
+import { UpdateOrganisationRequest } from './api/UpdateOrganisationRequest';
+import { Error } from '../../../../../server/model/Error';
+import { Organisation } from '../model/Organisation';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 
@@ -39,7 +39,7 @@ export class OrganisationAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.ORGANISATION;
 
     private constructor() {
-        super([new OrganisationFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -52,9 +52,14 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         objectIds: string[], loadingOptions: KIXObjectLoadingOptions
     ): Promise<T[]> {
 
-        const objects = await super.load(
-            token, KIXObjectType.ORGANISATION, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.ORGANISATION
-        );
+        let objects = [];
+
+        if (objectType === KIXObjectType.ORGANISATION) {
+            objects = await super.load(
+                token, KIXObjectType.ORGANISATION, this.RESOURCE_URI, loadingOptions, objectIds,
+                KIXObjectType.ORGANISATION, Organisation
+            );
+        }
 
         return objects;
     }

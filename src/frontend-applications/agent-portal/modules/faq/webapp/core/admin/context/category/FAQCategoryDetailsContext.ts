@@ -7,14 +7,14 @@
  * --
  */
 
-import { Context } from "../../../../../../../model/Context";
-import { LabelService } from "../../../../../../../modules/base-components/webapp/core/LabelService";
-import { FAQCategory } from "../../../../../model/FAQCategory";
-import { BreadcrumbInformation } from "../../../../../../../model/BreadcrumbInformation";
-import { AdminContext } from "../../../../../../admin/webapp/core";
-import { KIXObject } from "../../../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../../../../../modules/translation/webapp/core/TranslationService";
+import { Context } from '../../../../../../../model/Context';
+import { LabelService } from '../../../../../../../modules/base-components/webapp/core/LabelService';
+import { FAQCategory } from '../../../../../model/FAQCategory';
+import { BreadcrumbInformation } from '../../../../../../../model/BreadcrumbInformation';
+import { AdminContext } from '../../../../../../admin/webapp/core';
+import { KIXObject } from '../../../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../../../../modules/translation/webapp/core/TranslationService';
 
 export class FAQCategoryDetailsContext extends Context {
 

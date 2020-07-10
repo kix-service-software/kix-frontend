@@ -7,9 +7,9 @@
  * --
  */
 
-import { ISocketRequest } from "./ISocketRequest";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectSpecificDeleteOptions } from "../../../../model/KIXObjectSpecificDeleteOptions";
+import { ISocketRequest } from './ISocketRequest';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 
 export class DeleteObjectRequest implements ISocketRequest {
 

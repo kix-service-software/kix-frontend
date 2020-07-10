@@ -7,7 +7,7 @@
  * --
  */
 
-import { CheckListInputType } from "./CheckListInputType";
+import { CheckListInputType } from './CheckListInputType';
 
 export class CheckListItem {
 

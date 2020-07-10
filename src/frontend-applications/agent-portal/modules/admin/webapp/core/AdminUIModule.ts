@@ -7,15 +7,15 @@
  * --
  */
 
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { AdministrationSocketClient } from "./AdministrationSocketClient";
-import { AdminContext } from "./AdminContext";
-import { ContextType } from "../../../../model/ContextType";
-import { IUIModule } from "../../../../model/IUIModule";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AdminModuleCategory } from "../../model/AdminModuleCategory";
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { AdministrationSocketClient } from './AdministrationSocketClient';
+import { AdminContext } from './AdminContext';
+import { ContextType } from '../../../../model/ContextType';
+import { IUIModule } from '../../../../model/IUIModule';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { AdminModuleCategory } from '../../model/AdminModuleCategory';
 
 export class UIModule implements IUIModule {
 
@@ -24,7 +24,7 @@ export class UIModule implements IUIModule {
     public name: string = 'AdminUIModule';
 
     public unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

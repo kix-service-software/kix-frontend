@@ -8,35 +8,34 @@
  */
 
 // tslint:disable:max-line-length
-import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { DynamicFormOperationsType } from "../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType";
-import { TicketProperty } from "../../../ticket/model/TicketProperty";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { JobProperty } from "../../model/JobProperty";
-import { JobService } from ".";
-import { ArticleProperty } from "../../../ticket/model/ArticleProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { TicketService } from "../../../ticket/webapp/core";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Organisation } from "../../../customer/model/Organisation";
-import { Contact } from "../../../customer/model/Contact";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { SortUtil } from "../../../../model/SortUtil";
-import { CMDBService } from "../../../cmdb/webapp/core";
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { DynamicFormOperationsType } from '../../../base-components/webapp/core/dynamic-form/DynamicFormOperationsType';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { JobProperty } from '../../model/JobProperty';
+import { JobService } from '.';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { TicketService } from '../../../ticket/webapp/core';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Organisation } from '../../../customer/model/Organisation';
+import { Contact } from '../../../customer/model/Contact';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../../../dynamic-fields/model/DynamicFieldProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SortUtil } from '../../../../model/SortUtil';
 // tslint:enable
 
 export class TicketJobFilterManager extends AbstractDynamicFormManager {
@@ -227,44 +226,6 @@ export class TicketJobFilterManager extends AbstractDynamicFormManager {
 
     public async isMultiselect(property: string): Promise<boolean> {
         return true;
-    }
-
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        const result = await super.searchValues(property, searchValue, limit);
-        if (result) {
-            return result;
-        }
-
-        let tree: TreeNode[];
-
-        switch (property) {
-            case TicketProperty.CONTACT_ID:
-                const contacts = await KIXObjectService.search(KIXObjectType.CONTACT, searchValue, limit);
-                tree = await KIXObjectService.prepareTree(contacts);
-                break;
-            case TicketProperty.ORGANISATION_ID:
-                const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
-                tree = await KIXObjectService.prepareTree(organisations);
-                break;
-            default:
-        }
-
-        if (!tree && CMDBService) {
-            const dfName = KIXObjectService.getDynamicFieldName(property);
-            if (dfName) {
-                const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                    const configItems = await CMDBService.searchConfigItems(searchValue, limit);
-                    tree = configItems.map(
-                        (ci) => new TreeNode(
-                            ci.ConfigItemID, ci.Name, 'kix-icon-ci'
-                        )
-                    );
-                }
-            }
-        }
-
-        return tree;
     }
 
 }

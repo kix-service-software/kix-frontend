@@ -7,15 +7,15 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { Job } from "../../../model/Job";
-import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { AdminContext } from "../../../../admin/webapp/core";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
+import { Context } from '../../../../../model/Context';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { Job } from '../../../model/Job';
+import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { AdminContext } from '../../../../admin/webapp/core';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 
 export class JobDetailsContext extends Context {
 

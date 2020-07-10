@@ -7,7 +7,7 @@
  * --
  */
 
-import { TreeNode } from ".";
+import { TreeNode } from '.';
 
 export class TreeUtil {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
-import { SearchCache } from "./SearchCache";
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
+import { SearchCache } from './SearchCache';
 
 export class SaveSearchRequest implements ISocketRequest {
 

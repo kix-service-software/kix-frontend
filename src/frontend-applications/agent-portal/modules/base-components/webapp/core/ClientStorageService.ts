@@ -30,9 +30,9 @@ export class ClientStorageService {
     public static getFrontendSocketUrl(): string {
         let socketUrl;
         if (typeof window !== 'undefined') {
-            socketUrl = ClientStorageService.getCookie("frontendSocketUrl");
+            socketUrl = ClientStorageService.getCookie('frontendSocketUrl');
 
-            if (!socketUrl || socketUrl === "") {
+            if (!socketUrl || socketUrl === '') {
                 // use current location as socket URL
                 socketUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
             }
@@ -43,7 +43,7 @@ export class ClientStorageService {
 
     public static getCookie(name: string): string {
         if (typeof document !== 'undefined') {
-            const nameEQ = name + "=";
+            const nameEQ = name + '=';
             const ca = decodeURIComponent(document.cookie).split(';');
             for (let c of ca) {
                 while (c.charAt(0) === ' ') {

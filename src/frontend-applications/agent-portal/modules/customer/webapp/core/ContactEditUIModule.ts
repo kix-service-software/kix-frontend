@@ -7,20 +7,20 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ContactImportManager } from "./ContactImportManager";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ContactImportManager } from './ContactImportManager';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import {
     NewContactDialogContext, EditContactDialogContext, ContactImportDialogContext,
     ContactCreateAction, ContactEditAction
-} from ".";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ImportService } from "../../../import/webapp/core/ImportService";
-import { ContactDuplicateAction } from "./actions/ContactDuplicateAction";
+} from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ImportService } from '../../../import/webapp/core/ImportService';
+import { ContactDuplicateAction } from './actions/ContactDuplicateAction';
 
 export class UIModule implements IUIModule {
 
@@ -29,7 +29,7 @@ export class UIModule implements IUIModule {
     public priority: number = 304;
 
     public unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {

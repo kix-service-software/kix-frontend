@@ -7,32 +7,43 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ITable } from "../../../../../../base-components/webapp/core/table";
-import { UIComponentPermission } from "../../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../../server/model/rest/CRUD";
-import { TranslationService } from "../../../TranslationService";
-import { ComponentContent } from "../../../../../../../modules/base-components/webapp/core/ComponentContent";
-import { ConfirmOverlayContent } from "../../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
-import { OverlayService } from "../../../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../../../modules/base-components/webapp/core/OverlayType";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { ToastContent } from "../../../../../../../modules/base-components/webapp/core/ToastContent";
+import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
+import { TranslationService } from '../../../TranslationService';
+import { ComponentContent } from '../../../../../../../modules/base-components/webapp/core/ComponentContent';
+import { ConfirmOverlayContent } from '../../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
+import { OverlayService } from '../../../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../../../modules/base-components/webapp/core/OverlayType';
+import { EventService } from '../../../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { ToastContent } from '../../../../../../../modules/base-components/webapp/core/ToastContent';
+import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
+import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TranslationTableDeleteAction extends AbstractAction<ITable> {
 
     public hasLink: boolean = false;
 
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/i18n/translations/*', [CRUD.DELETE])
-    ];
-
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';
         this.icon = 'kix-icon-trash';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`system/i18n/translations/${objectId}`, [CRUD.DELETE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public canRun(): boolean {

@@ -7,7 +7,8 @@
  * --
  */
 
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export interface IAction<T = any> {
 
@@ -15,7 +16,7 @@ export interface IAction<T = any> {
 
     text: string;
 
-    icon: string;
+    icon: string | ObjectIcon;
 
     data: T;
 

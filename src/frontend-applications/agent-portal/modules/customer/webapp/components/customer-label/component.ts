@@ -13,7 +13,7 @@ import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Organisation } from '../../../model/Organisation';
 import { Contact } from '../../../model/Contact';
 import { OrganisationProperty } from '../../../model/OrganisationProperty';
-import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+
 import { OrganisationDetailsContext, ContactDetailsContext } from '../../core';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ContactProperty } from '../../../model/ContactProperty';

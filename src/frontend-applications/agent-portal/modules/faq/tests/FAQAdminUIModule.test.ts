@@ -20,8 +20,6 @@ import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { TableFactoryService } from '../../base-components/webapp/core/table';
-import { FactoryService } from '../../base-components/webapp/core/FactoryService';
-import { FAQCategoryBrowserFactory } from '../webapp/core/FAQCategoryBrowserFactory';
 import { ServiceType } from '../../base-components/webapp/core/ServiceType';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
 import { CRUD } from '../../../../../server/model/rest/CRUD';
@@ -73,12 +71,6 @@ describe('FAQAdminUIModule', () => {
             const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.FAQ_CATEGORY);
             expect(provider).exist;
             expect(provider).instanceof(FAQCategoryLabelProvider);
-        });
-
-        it('Should register the FAQCategoryBrowserFactory', () => {
-            const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.FAQ_CATEGORY);
-            expect(factory).exist;
-            expect(factory).instanceof(FAQCategoryBrowserFactory);
         });
 
         it('Should register the FAQCategoryTableFactory', () => {

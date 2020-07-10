@@ -7,9 +7,9 @@
  * --
  */
 
-import { Context } from "../../../../model/Context";
-import { AdminModule } from "../../model/AdminModule";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { Context } from '../../../../model/Context';
+import { AdminModule } from '../../model/AdminModule';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class AdminContext extends Context {
 

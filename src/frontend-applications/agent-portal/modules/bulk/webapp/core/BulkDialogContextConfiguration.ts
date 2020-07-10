@@ -7,9 +7,9 @@
  * --
  */
 
-import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
-import { BulkDialogContext } from ".";
-import { ConfigurationType } from "../../../../model/configuration/ConfigurationType";
+import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
+import { BulkDialogContext } from '.';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
 
 export class BulkDialogContextConfiguration extends ContextConfiguration {
 

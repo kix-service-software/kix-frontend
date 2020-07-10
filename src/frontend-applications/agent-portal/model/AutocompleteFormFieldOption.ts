@@ -7,7 +7,7 @@
  * --
  */
 
-import { AutocompleteOption } from "./AutocompleteOption";
+import { AutocompleteOption } from './AutocompleteOption';
 
 export class AutocompleteFormFieldOption {
 

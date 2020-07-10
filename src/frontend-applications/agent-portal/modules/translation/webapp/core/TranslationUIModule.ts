@@ -8,45 +8,34 @@
  */
 
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import {
-    TranslationPatternLabelProvider, TranslationLanguageLabelProvider, TranslationBrowserFactory,
-    TranslationPatternBrowserFactory
-} from ".";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { TranslationCreateAction, TranslationCSVExportAction } from "./admin/actions";
-import { NewTranslationDialogContext, EditTranslationDialogContext } from "./admin/context";
-import { TranslationFormService } from "./admin/TranslationFormService";
-import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from "./admin/table";
-import { TranslationService } from "./TranslationService";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { TranslationPatternLabelProvider, TranslationLanguageLabelProvider } from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { TranslationCreateAction, TranslationCSVExportAction } from './admin/actions';
+import { NewTranslationDialogContext, EditTranslationDialogContext } from './admin/context';
+import { TranslationFormService } from './admin/TranslationFormService';
+import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from './admin/table';
+import { TranslationService } from './TranslationService';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'TranslationUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 9999;
 
     public async register(): Promise<void> {
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION, TranslationBrowserFactory.getInstance()
-        );
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.TRANSLATION_PATTERN, TranslationPatternBrowserFactory.getInstance()
-        );
-
         ServiceRegistry.registerServiceInstance(TranslationService.getInstance());
         ServiceRegistry.registerServiceInstance(TranslationFormService.getInstance());
 

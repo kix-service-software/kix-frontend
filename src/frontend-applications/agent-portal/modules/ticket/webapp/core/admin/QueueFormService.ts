@@ -7,17 +7,18 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { Queue } from "../../../model/Queue";
-import { FormContext } from "../../../../../model/configuration/FormContext";
-import { QueueProperty } from "../../../model/QueueProperty";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { IdService } from "../../../../../model/IdService";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
+import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { Queue } from '../../../model/Queue';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { QueueProperty } from '../../../model/QueueProperty';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { IdService } from '../../../../../model/IdService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormInstance } from '../../../../base-components/webapp/core/FormInstance';
 
 export class QueueFormService extends KIXObjectFormService {
 
@@ -59,7 +60,8 @@ export class QueueFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, queue: Queue
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
             PAGES:
@@ -99,7 +101,9 @@ export class QueueFormService extends KIXObjectFormService {
         formFieldValues.set(lockField.instanceId, new FormFieldValue(value));
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case QueueProperty.FOLLOW_UP_LOCK:
                 value = Number(value);

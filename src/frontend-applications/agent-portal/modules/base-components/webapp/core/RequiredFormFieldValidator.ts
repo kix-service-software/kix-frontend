@@ -7,13 +7,13 @@
  * --
  */
 
-import { IFormFieldValidator } from "./IFormFieldValidator";
-import { ValidationResult } from "./ValidationResult";
-import { FormService } from "./FormService";
-import { ValidationSeverity } from "./ValidationSeverity";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from './IFormFieldValidator';
+import { ValidationResult } from './ValidationResult';
+import { FormService } from './FormService';
+import { ValidationSeverity } from './ValidationSeverity';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 
 export class RequiredFormFieldValidator implements IFormFieldValidator {
 
@@ -39,7 +39,7 @@ export class RequiredFormFieldValidator implements IFormFieldValidator {
         } else {
             const fieldLabel = await TranslationService.translate(formField.label);
             const errorString = await TranslationService.translate(
-                "Translatable#Required field '{0}' has no value.", [fieldLabel]
+                'Translatable#Required field \'{0}\' has no value.', [fieldLabel]
             );
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }

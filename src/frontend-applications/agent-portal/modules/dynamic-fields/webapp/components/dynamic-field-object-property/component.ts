@@ -12,7 +12,7 @@ import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { ILabelProvider } from '../../../../base-components/webapp/core/ILabelProvider';
+
 import { Label } from '../../../../base-components/webapp/core/Label';
 import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
 import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
@@ -20,7 +20,7 @@ import { RoutingConfiguration } from '../../../../../model/configuration/Routing
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
 import { RoutingService } from '../../../../base-components/webapp/core/RoutingService';
-import { ConfigItemLabelProvider } from '../../../../cmdb/webapp/core';
+
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 

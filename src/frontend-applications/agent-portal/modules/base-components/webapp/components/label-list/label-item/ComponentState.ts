@@ -7,7 +7,7 @@
  * --
  */
 
-import { Label } from "../../../../../../modules/base-components/webapp/core/Label";
+import { Label } from '../../../../../../modules/base-components/webapp/core/Label';
 
 export class ComponentState {
 

@@ -36,7 +36,6 @@
         "require ./components/ticket-info-widget",
         "require ./components/ticket-input-contact",
         "require ./components/ticket-input-organisation",
-        "require ./components/ticket-input-state",
         "require ./components/ticket-input-state-pending",
         "require ./components/ticket-list-module",
         "require ./components/ticket-module",

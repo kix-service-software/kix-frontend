@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { SearchService } from "../SearchService";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { SearchService } from '../SearchService';
 import { SearchContext } from '../SearchContext';
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 
 export class LoadSearchAction extends AbstractAction {
 

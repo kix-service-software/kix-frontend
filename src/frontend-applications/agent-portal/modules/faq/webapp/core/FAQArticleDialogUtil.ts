@@ -7,11 +7,11 @@
  * --
  */
 
-import { FAQDetailsContext } from "./context/FAQDetailsContext";
-import { NewFAQArticleDialogContext, EditFAQArticleDialogContext } from "./context";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
+import { FAQDetailsContext } from './context/FAQDetailsContext';
+import { NewFAQArticleDialogContext, EditFAQArticleDialogContext } from './context';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
 
 export class FAQArticleDialogUtil {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { SliderContent } from "../../../model/SliderContent";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { SliderContent } from '../../../model/SliderContent';
 
 export class ComponentState extends WidgetComponentState {
 

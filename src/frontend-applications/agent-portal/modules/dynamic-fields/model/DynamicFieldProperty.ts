@@ -11,21 +11,21 @@ export enum DynamicFieldProperty {
 
     ID = 'ID',
 
-    DISPLAY_GROUP_ID = "DisplayGroupID",
+    DISPLAY_GROUP_ID = 'DisplayGroupID',
 
-    FIELD_TYPE = "FieldType",
+    FIELD_TYPE = 'FieldType',
 
-    FIELD_TYPE_DISPLAY_NAME = "FieldTypeDisplayName",
+    FIELD_TYPE_DISPLAY_NAME = 'FieldTypeDisplayName',
 
-    INTERNAL_FIELD = "InternalField",
+    INTERNAL_FIELD = 'InternalField',
 
-    LABEL = "Label",
+    LABEL = 'Label',
 
-    NAME = "Name",
+    NAME = 'Name',
 
-    OBJECT_TYPE = "ObjectType",
+    OBJECT_TYPE = 'ObjectType',
 
-    CONFIG = "Config",
+    CONFIG = 'Config',
 
     CUSTOMER_VISIBLE = 'CustomerVisible'
 

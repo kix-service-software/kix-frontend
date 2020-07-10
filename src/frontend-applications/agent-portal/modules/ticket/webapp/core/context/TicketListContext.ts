@@ -7,13 +7,13 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Ticket } from "../../../model/Ticket";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { Context } from '../../../../../model/Context';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+
+
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Ticket } from '../../../model/Ticket';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class TicketListContext extends Context {
 

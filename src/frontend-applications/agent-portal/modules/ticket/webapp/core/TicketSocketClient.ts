@@ -7,20 +7,20 @@
  * --
  */
 
-import { SocketClient } from "../../../../modules/base-components/webapp/core/SocketClient";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { IdService } from "../../../../model/IdService";
-import { SocketEvent } from "../../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { ISocketResponse } from "../../../../modules/base-components/webapp/core/ISocketResponse";
-import { LoadArticleAttachmentRequest } from "../../model/LoadArticleAttachmentRequest";
-import { TicketEvent } from "../../model/TicketEvent";
-import { LoadArticleAttachmentResponse } from "../../model/LoadArticleAttachmentResponse";
-import { LoadArticleZipAttachmentRequest } from "../../model/LoadArticleZipAttachmentRequest";
-import { SetArticleSeenFlagRequest } from "../../model/SetArticleSeenFlagRequest";
-import { BrowserCacheService } from "../../../../modules/base-components/webapp/core/CacheService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { IdService } from '../../../../model/IdService';
+import { SocketEvent } from '../../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { ISocketResponse } from '../../../../modules/base-components/webapp/core/ISocketResponse';
+import { LoadArticleAttachmentRequest } from '../../model/LoadArticleAttachmentRequest';
+import { TicketEvent } from '../../model/TicketEvent';
+import { LoadArticleAttachmentResponse } from '../../model/LoadArticleAttachmentResponse';
+import { LoadArticleZipAttachmentRequest } from '../../model/LoadArticleZipAttachmentRequest';
+import { SetArticleSeenFlagRequest } from '../../model/SetArticleSeenFlagRequest';
+import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class TicketSocketClient extends SocketClient {
 
@@ -80,7 +80,6 @@ export class TicketSocketClient extends SocketClient {
 
             this.socket.emit(TicketEvent.LOAD_ARTICLE_ATTACHMENT, request);
         });
-
 
         this.requestPromises.set(cacheKey, requestPromise);
         return await requestPromise;

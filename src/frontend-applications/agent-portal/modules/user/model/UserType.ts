@@ -9,8 +9,8 @@
 
 export enum UserType {
 
-    AGENT = "Agent",
+    AGENT = 'Agent',
 
-    CUSTOMER = "Customer"
+    CUSTOMER = 'Customer'
 
 }

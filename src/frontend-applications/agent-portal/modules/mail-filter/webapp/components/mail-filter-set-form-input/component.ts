@@ -7,14 +7,15 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { IdService } from "../../../../../model/IdService";
-import { MailFilterSetManager } from "../../core";
-import { MailFilterSet } from "../../../model/MailFilterSet";
-import { IDynamicFormManager } from "../../../../base-components/webapp/core/dynamic-form/IDynamicFormManager";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { IdService } from '../../../../../model/IdService';
+import { MailFilterSetManager } from '../../core';
+import { MailFilterSet } from '../../../model/MailFilterSet';
+import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form/IDynamicFormManager';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
@@ -32,35 +33,32 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount();
-        const matchManager = new MailFilterSetManager();
-        if (matchManager) {
-            matchManager.init();
-            await this.setCurrentNode(matchManager);
-            this.state.setManager = matchManager;
-            this.state.setManager.registerListener(this.formListenerId, () => {
-                if (this.matchFormTimeout) {
-                    clearTimeout(this.matchFormTimeout);
-                }
-                this.matchFormTimeout = setTimeout(async () => {
-                    const setValues: MailFilterSet[] = [];
-                    if (this.state.setManager.hasDefinedValues()) {
-                        const values = this.state.setManager.getEditableValues();
-                        values.forEach((v) => {
-                            if (v.property && v.value && v.value) {
-                                setValues.push(
-                                    new MailFilterSet(
-                                        v.property,
-                                        v.value
-                                    )
-                                );
-                            }
-                        });
-                    }
+        this.state.setManager = new MailFilterSetManager();
+        this.state.setManager.reset();
+        this.state.setManager.init();
+        this.state.setManager.registerListener(this.formListenerId, () => {
+            if (this.matchFormTimeout) {
+                clearTimeout(this.matchFormTimeout);
+            }
+            this.matchFormTimeout = setTimeout(async () => {
+                const setValues: MailFilterSet[] = [];
+                if (await this.state.setManager.hasDefinedValues()) {
+                    const values = await this.state.setManager.getEditableValues();
+                    values.forEach((v) => {
+                        if (v.property && v.value && v.value) {
+                            setValues.push(
+                                new MailFilterSet(
+                                    v.property,
+                                    v.value
+                                )
+                            );
+                        }
+                    });
                     super.provideValue(setValues);
-                }, 200);
-            });
-        }
+                }
+            }, 200);
+        });
+        await super.onMount();
     }
 
     public async onDestroy(): Promise<void> {
@@ -69,14 +67,15 @@ class Component extends FormInputComponent<any[], ComponentState> {
         }
     }
 
-    public async setCurrentNode(setManager: IDynamicFormManager): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
-            this.state.defaultValue.value.forEach((set: MailFilterSet) => {
-                setManager.setValue(
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = FormService.getInstance().getFormInstance(this.state.formId);
+        const value = (await formInstance).getFormFieldValue<string>(this.state.field.instanceId);
+        if (value && Array.isArray(value.value)) {
+            value.value.forEach((set: MailFilterSet) => {
+                this.state.setManager.setValue(
                     new ObjectPropertyValue(set.Key, null, set.Value, false, true, null, null, null, set.Key)
                 );
             });
-            super.provideValue(this.state.defaultValue.value);
         }
     }
 

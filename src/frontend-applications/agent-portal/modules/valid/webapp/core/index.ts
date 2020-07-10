@@ -7,7 +7,6 @@
  * --
  */
 
-export { ValidObjectBrowserFactory } from './ValidObjectBrowserFactory';
 export { ValidObjectLabelProvider } from './ValidObjectLabelProvider';
 export { ValidService } from './ValidService';
 export { UIModule as ValidUIModule } from './ValidUIModule';

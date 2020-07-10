@@ -154,7 +154,6 @@ describe('NotesNamespace Tests', () => {
             expect(response.event).equals(NotesEvent.SAVE_NOTES_FINISHED);
         });
 
-
         it('Should return error response if user not exists', async () => {
             const response: SocketResponse = await (NotesNamespace.getInstance() as any).saveNotes(
                 {

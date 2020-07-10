@@ -7,30 +7,30 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { LinkedObjectsWidgetConfiguration } from "../../model/configuration/LinkedObjectsWidgetConfiguration";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../model/ContextMode";
-import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
-import { TicketProperty } from "./model/TicketProperty";
-import { ContactProperty } from "../customer/model/ContactProperty";
-import { UserProperty } from "../user/model/UserProperty";
-import { OrganisationProperty } from "../customer/model/OrganisationProperty";
-import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
-import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { LinkedObjectsWidgetConfiguration } from '../../model/configuration/LinkedObjectsWidgetConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../model/ContextMode';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+import { TicketProperty } from './model/TicketProperty';
+import { ContactProperty } from '../customer/model/ContactProperty';
+import { UserProperty } from '../user/model/UserProperty';
+import { OrganisationProperty } from '../customer/model/OrganisationProperty';
+import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/core/ObjectReferenceWidgetConfiguration';
+import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -239,7 +239,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(suggestedFAQWidget);
 
-
         // Overlays
         const organisationInfoOverlay = new WidgetConfiguration(
             'ticket-details-organisation-overlay', 'Organisation Info Overlay', ConfigurationType.Widget,
@@ -259,7 +258,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, false, false, 'kix-icon-man-bubble', false
         );
         configurations.push(contactInfoOverlay);
-
 
         const toReceiverOverlay = new WidgetConfiguration(
             'ticket-details-to-receiver-overlay', 'To Receiver Overlay', ConfigurationType.Widget,
@@ -288,7 +286,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             false, false, 'kix-icon-attachement', false
         );
         configurations.push(articleAttachmentOverlay);
-
 
         const tableSettings = new TableWidgetConfiguration(
             'ticket-details-article-list-table-config', 'Article Table', ConfigurationType.TableWidget,
@@ -330,8 +327,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 ],
                 [
                     new ConfiguredWidget(
-                        'ticket-details-article-list-widget', 'ticket-details-article-list-widget', null,
-                        [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
+                        'ticket-details-article-list-widget', 'ticket-details-article-list-widget', null
                     )
                 ],
                 [
@@ -362,8 +358,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('links', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-history-widget', 'ticket-details-history-widget', null,
-                        [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
+                        'ticket-details-history-widget', 'ticket-details-history-widget', null
                     )
                 ]
             )

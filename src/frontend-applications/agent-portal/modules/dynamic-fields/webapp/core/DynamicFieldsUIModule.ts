@@ -7,36 +7,33 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../base-components/webapp/core/ServiceRegistry";
-import { DynamicFieldService } from "./DynamicFieldService";
-import { DynamicFieldBrowserFactory } from "./DynamicFieldBrowserFactory";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FactoryService } from "../../../base-components/webapp/core/FactoryService";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { DynamicFieldLabelProvider } from "./DynamicFieldLabelProvider";
-import { DynamicFieldTableFactory } from "./DynamicFieldTableFactory";
-import { ActionFactory } from "../../../base-components/webapp/core/ActionFactory";
-import { DynamicFieldCreateAction } from "./DynamicFieldCreateAction";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { NewDynamicFieldDialogContext } from "./NewDynamicFieldDialogContext";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
-import { DynamicFieldFormService } from "./DynamicFieldFormService";
-import { EditDynamicFieldDialogContext } from "./EditDynamicFieldDialogContext";
-import { PlaceholderService } from "../../../base-components/webapp/core/PlaceholderService";
-import { DynamicFieldValuePlaceholderHandler } from "./DynamicFieldValuePlaceholderHandler";
-import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
-import { FormValidationService } from "../../../base-components/webapp/core/FormValidationService";
-import { DynamicFieldTextValidator } from "./DynamicFieldTextValidator";
-import { DynamicFieldDateTimeValidator } from "./DynamicFieldDateTimeValidator";
-import { CMDBService } from "../../../cmdb/webapp/core";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../../cmdb/model/ConfigItemClass";
-import { DynamicFieldTypeBrowserFactory } from "./DynamicFieldTypeBrowserFactory";
-import { DynamicFieldTypeLabelProvider } from "./DynamicFieldTypeLabelProvider";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { DynamicFieldService } from './DynamicFieldService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { DynamicFieldLabelProvider } from './DynamicFieldLabelProvider';
+import { DynamicFieldTableFactory } from './DynamicFieldTableFactory';
+import { ActionFactory } from '../../../base-components/webapp/core/ActionFactory';
+import { DynamicFieldCreateAction } from './DynamicFieldCreateAction';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { NewDynamicFieldDialogContext } from './NewDynamicFieldDialogContext';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { DynamicFieldFormService } from './DynamicFieldFormService';
+import { EditDynamicFieldDialogContext } from './EditDynamicFieldDialogContext';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { DynamicFieldValuePlaceholderHandler } from './DynamicFieldValuePlaceholderHandler';
+import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
+import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
+import { DynamicFieldTextValidator } from './DynamicFieldTextValidator';
+import { DynamicFieldDateTimeValidator } from './DynamicFieldDateTimeValidator';
+import { CMDBService } from '../../../cmdb/webapp/core';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../../cmdb/model/ConfigItemClass';
+import { DynamicFieldTypeLabelProvider } from './DynamicFieldTypeLabelProvider';
 
 export class UIModule implements IUIModule {
 
@@ -45,7 +42,7 @@ export class UIModule implements IUIModule {
     public name: string = 'DynamicFieldsUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {
@@ -53,14 +50,6 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerServiceInstance(DynamicFieldFormService.getInstance());
 
         PlaceholderService.getInstance().registerPlaceholderHandler(DynamicFieldValuePlaceholderHandler.getInstance());
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.DYNAMIC_FIELD, DynamicFieldBrowserFactory.getInstance()
-        );
-
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.DYNAMIC_FIELD_TYPE, DynamicFieldTypeBrowserFactory.getInstance()
-        );
 
         TableFactoryService.getInstance().registerFactory(new DynamicFieldTableFactory());
 
@@ -102,54 +91,54 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForText(): void {
         const schema = {
-            $schema: "http://json-schema.org/draft-03/schema#",
-            type: "object",
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
             properties: {
                 CountMin: {
-                    title: "Count Min",
-                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Min',
+                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountMax: {
-                    title: "Count Max",
-                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Max',
+                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountDefault: {
-                    title: "Count Default",
-                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
-                    type: "integer",
+                    title: 'Count Default',
+                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    type: 'integer',
                     required: true
                 },
                 ItemSeparator: {
-                    title: "Item Separator",
-                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
-                    type: "string",
+                    title: 'Item Separator',
+                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    type: 'string',
                     required: false
                 },
                 DefaultValue: {
-                    title: "Default Value",
-                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
-                    type: "string",
+                    title: 'Default Value',
+                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
+                    type: 'string',
                     required: false
                 },
                 RegExList: {
-                    title: "RegEx List",
-                    description: "A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.",
-                    type: "array",
+                    title: 'RegEx List',
+                    description: 'A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.',
+                    type: 'array',
                     required: false,
                     items: {
-                        type: "object",
+                        type: 'object',
                         properties: {
                             Value: {
-                                title: "RegEx",
-                                type: "string"
+                                title: 'RegEx',
+                                type: 'string'
                             },
                             ErrorMessage: {
-                                title: "RegExErrorMessage",
-                                type: "string"
+                                title: 'RegExErrorMessage',
+                                type: 'string'
                             }
                         }
                     }
@@ -162,54 +151,54 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForTextArea(): void {
         const schema = {
-            $schema: "http://json-schema.org/draft-03/schema#",
-            type: "object",
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
             properties: {
                 CountMin: {
-                    title: "Count Min",
-                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Min',
+                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountMax: {
-                    title: "Count Max",
-                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Max',
+                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountDefault: {
-                    title: "Count Default",
-                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
-                    type: "integer",
+                    title: 'Count Default',
+                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    type: 'integer',
                     required: true
                 },
                 ItemSeparator: {
-                    title: "Item Separator",
-                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
-                    type: "string",
+                    title: 'Item Separator',
+                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    type: 'string',
                     required: false
                 },
                 DefaultValue: {
-                    title: "Default Value",
-                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
-                    type: "string",
+                    title: 'Default Value',
+                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
+                    type: 'string',
                     required: false
                 },
                 RegExList: {
-                    title: "RegEx List",
-                    description: "A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.",
-                    type: "array",
+                    title: 'RegEx List',
+                    description: 'A list of RegEx which are applied to values entered before submitting if field is shown in edit mode. The RegExError is shown if a RegEx does NOT match the value entered.',
+                    type: 'array',
                     required: false,
                     items: {
-                        type: "object",
+                        type: 'object',
                         properties: {
                             Value: {
-                                title: "RegEx",
-                                type: "string"
+                                title: 'RegEx',
+                                type: 'string'
                             },
                             ErrorMessage: {
-                                title: "RegExErrorMessage",
-                                type: "string"
+                                title: 'RegExErrorMessage',
+                                type: 'string'
                             }
                         }
                     }
@@ -222,59 +211,59 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForDate(): void {
         const schema = {
-            $schema: "http://json-schema.org/draft-03/schema#",
-            type: "object",
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
             properties: {
                 CountMin: {
-                    title: "Count Min",
-                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Min',
+                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountMax: {
-                    title: "Count Max",
-                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Max',
+                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountDefault: {
-                    title: "Count Default",
-                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
-                    type: "integer",
+                    title: 'Count Default',
+                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    type: 'integer',
                     required: true
                 },
                 ItemSeparator: {
-                    title: "Item Separator",
-                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
-                    type: "string",
+                    title: 'Item Separator',
+                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    type: 'string',
                     required: false
                 },
                 DefaultValue: {
-                    title: "Default Value",
-                    description: "This value defines the offset (in days) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time \"00:00:00\", hence enter 1 in order to initialize the field with \"tomorrows\" date.",
-                    type: "integer",
+                    title: 'Default Value',
+                    description: 'This value defines the offset (in days) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. Keep in mind that date-fields are normalized to time "00:00:00", hence enter 1 in order to initialize the field with "tomorrows" date.',
+                    type: 'integer',
                     required: false
                 },
                 YearsInFuture: {
-                    title: "Years in Future",
-                    description: "",
-                    type: "integer",
+                    title: 'Years in Future',
+                    description: '',
+                    type: 'integer',
                     required: false
                 },
                 YearsInPast: {
-                    title: "Years in Past",
-                    description: "",
-                    type: "integer",
+                    title: 'Years in Past',
+                    description: '',
+                    type: 'integer',
                     required: false
                 },
                 DateRestriction: {
-                    title: "Date Restriction",
-                    type: "string",
-                    default: "none",
+                    title: 'Date Restriction',
+                    type: 'string',
+                    default: 'none',
                     enum: [
-                        "none",
-                        "DisableFutureDates",
-                        "DisablePastDates"
+                        'none',
+                        'DisableFutureDates',
+                        'DisablePastDates'
                     ]
                 },
             }
@@ -284,59 +273,59 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForDateTime(): void {
         const schema = {
-            $schema: "http://json-schema.org/draft-03/schema#",
-            type: "object",
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
             properties: {
                 CountMin: {
-                    title: "Count Min",
-                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Min',
+                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountMax: {
-                    title: "Count Max",
-                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Max',
+                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountDefault: {
-                    title: "Count Default",
-                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
-                    type: "integer",
+                    title: 'Count Default',
+                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    type: 'integer',
                     required: true
                 },
                 ItemSeparator: {
-                    title: "Item Separator",
-                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
-                    type: "string",
+                    title: 'Item Separator',
+                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    type: 'string',
                     required: false
                 },
                 DefaultValue: {
-                    title: "Default Value",
-                    description: "This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with \"now+1h\" or enter 86400 if the field should be initialized with \"now+24h\".",
-                    type: "integer",
+                    title: 'Default Value',
+                    description: 'This value defines the offset (in seconds) to the very moment in which the field is initially displayed for input. Leave empty if the field should not hold any value upon first input. For instance, enter 3600 if the field should be initialized with "now+1h" or enter 86400 if the field should be initialized with "now+24h".',
+                    type: 'integer',
                     required: false
                 },
                 YearsInFuture: {
-                    title: "Years in Future",
-                    description: "",
-                    type: "integer",
+                    title: 'Years in Future',
+                    description: '',
+                    type: 'integer',
                     required: false
                 },
                 YearsInPast: {
-                    title: "Years in Past",
-                    description: "",
-                    type: "integer",
+                    title: 'Years in Past',
+                    description: '',
+                    type: 'integer',
                     required: false
                 },
                 DateRestriction: {
-                    title: "Date Restriction",
-                    type: "string",
-                    default: "none",
+                    title: 'Date Restriction',
+                    type: 'string',
+                    default: 'none',
                     enum: [
-                        "none",
-                        "DisableFutureDates",
-                        "DisablePastDates"
+                        'none',
+                        'DisableFutureDates',
+                        'DisablePastDates'
                     ]
                 },
             }
@@ -346,61 +335,61 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForSelection(): void {
         const schema = {
-            $schema: "http://json-schema.org/draft-03/schema#",
-            type: "object",
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
             properties: {
                 CountMin: {
-                    title: "Count Min",
-                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Min',
+                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountMax: {
-                    title: "Count Max",
-                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Max',
+                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountDefault: {
-                    title: "Count Default",
-                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
-                    type: "integer",
+                    title: 'Count Default',
+                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    type: 'integer',
                     required: true
                 },
                 ItemSeparator: {
-                    title: "Item Separator",
-                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
-                    type: "string",
+                    title: 'Item Separator',
+                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    type: 'string',
                     required: false
                 },
                 DefaultValue: {
-                    title: "Default Value",
-                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only. Use the key of the possible value.",
-                    type: "string",
+                    title: 'Default Value',
+                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only. Use the key of the possible value.',
+                    type: 'string',
                     required: false
                 },
                 TranslatableValues: {
                     title: 'Translatable Values',
                     description: '',
-                    type: "boolean",
-                    format: "checkbox",
+                    type: 'boolean',
+                    format: 'checkbox',
                     required: false
                 },
                 PossibleValues: {
-                    title: "Possible Values",
-                    description: "",
-                    type: "array",
+                    title: 'Possible Values',
+                    description: '',
+                    type: 'array',
                     required: false,
                     items: {
-                        type: "object",
+                        type: 'object',
                         properties: {
                             Key: {
-                                title: "Key",
-                                type: "string"
+                                title: 'Key',
+                                type: 'string'
                             },
                             Value: {
-                                title: "Value",
-                                type: "string"
+                                title: 'Value',
+                                type: 'string'
                             }
                         }
                     }
@@ -413,45 +402,45 @@ export class UIModule implements IUIModule {
 
     private registerSchemaForCheckList(): void {
         const schema = {
-            $schema: "http://json-schema.org/draft-03/schema#",
-            type: "object",
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
             definitions: {
                 CheckListItem: {
-                    title: "Checklist Item",
-                    description: "",
-                    type: "array",
+                    title: 'Checklist Item',
+                    description: '',
+                    type: 'array',
                     required: false,
                     items: {
-                        type: "object",
+                        type: 'object',
                         properties: {
                             id: {
-                                title: "Id",
-                                type: "string"
+                                title: 'Id',
+                                type: 'string'
                             },
                             title: {
-                                title: "Title",
-                                type: "string"
+                                title: 'Title',
+                                type: 'string'
                             },
                             description: {
-                                title: "Description",
-                                type: "string"
+                                title: 'Description',
+                                type: 'string'
                             },
                             input: {
-                                title: "Input",
-                                type: "string",
-                                default: "ChecklistState",
+                                title: 'Input',
+                                type: 'string',
+                                default: 'ChecklistState',
                                 enum: [
-                                    "Text",
-                                    "ChecklistState"
+                                    'Text',
+                                    'ChecklistState'
                                 ]
                             },
                             value: {
-                                title: "Value",
-                                type: "string"
+                                title: 'Value',
+                                type: 'string'
                             },
                             sub: {
-                                title: "Sub",
-                                $ref: "#/definitions/CheckListItem"
+                                title: 'Sub',
+                                $ref: '#/definitions/CheckListItem'
                             }
                         }
                     }
@@ -459,8 +448,8 @@ export class UIModule implements IUIModule {
             },
             properties: {
                 DefaultValue: {
-                    title: "Default Value",
-                    $ref: "#/definitions/CheckListItem"
+                    title: 'Default Value',
+                    $ref: '#/definitions/CheckListItem'
                 }
             }
         };
@@ -476,66 +465,66 @@ export class UIModule implements IUIModule {
         );
 
         const schema = {
-            $schema: "http://json-schema.org/draft-03/schema#",
-            type: "object",
+            $schema: 'http://json-schema.org/draft-03/schema#',
+            type: 'object',
             properties: {
                 CountMin: {
-                    title: "Count Min",
-                    description: "The minimum number of items which are available for input if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Min',
+                    description: 'The minimum number of items which are available for input if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountMax: {
-                    title: "Count Max",
-                    description: "The maximum number of array or selectable items for this field. if field is shown in edit mode.",
-                    type: "integer",
+                    title: 'Count Max',
+                    description: 'The maximum number of array or selectable items for this field. if field is shown in edit mode.',
+                    type: 'integer',
                     required: true
                 },
                 CountDefault: {
-                    title: "Count Default",
-                    description: "If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.",
-                    type: "integer",
+                    title: 'Count Default',
+                    description: 'If field is shown for display and no value is set, CountDefault numbers of inputs are displayed.',
+                    type: 'integer',
                     required: true
                 },
                 ItemSeparator: {
-                    title: "Item Separator",
-                    description: "If field contains multiple values, single values are concatenated by this separator symbol/s.",
-                    type: "string",
+                    title: 'Item Separator',
+                    description: 'If field contains multiple values, single values are concatenated by this separator symbol/s.',
+                    type: 'string',
                     required: false
                 },
                 DefaultValue: {
-                    title: "Default Value",
-                    description: "The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.",
-                    type: "string",
+                    title: 'Default Value',
+                    description: 'The initial value of the field if shown in edit mode for the first time. Applies to first item of array only.',
+                    type: 'string',
                     required: false
                 },
                 DeploymentStates: {
-                    type: "array",
-                    format: "select",
+                    type: 'array',
+                    format: 'select',
                     uniqueItems: true,
-                    description: "This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.",
+                    description: 'This configuration defines which Deployment States are subject to this selection. Please enter DeploymentStates.',
                     items: {
                         enumSource: [{
                             source: states.map((s) => {
                                 return { value: s.ItemID, title: s.Name };
                             }),
-                            title: "{{item.title}}",
-                            value: "{{item.value}}"
+                            title: '{{item.title}}',
+                            value: '{{item.value}}'
                         }]
                     }
                 },
                 ITSMConfigItemClasses: {
-                    type: "array",
-                    format: "select",
+                    type: 'array',
+                    format: 'select',
                     uniqueItems: true,
-                    description: "This configuration defines which Asset Classes are subject to this selection. Please enter Classes.",
+                    description: 'This configuration defines which Asset Classes are subject to this selection. Please enter Classes.',
                     items: {
                         enumSource: [{
                             source: classes.map((s) => {
                                 return { value: s.ID, title: s.Name };
                             }),
-                            title: "{{item.title}}",
-                            value: "{{item.value}}"
+                            title: '{{item.title}}',
+                            value: '{{item.value}}'
                         }]
                     }
                 }

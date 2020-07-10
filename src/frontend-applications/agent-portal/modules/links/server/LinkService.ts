@@ -7,19 +7,19 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { Error } from "../../../../../server/model/Error";
-import { CreateLink } from "./api/CreateLink";
-import { CreateLinkResponse } from "./api/CreateLinkResponse";
-import { CreateLinkRequest } from "./api/CreateLinkRequest";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { CreateLinkObjectOptions } from "./api/CreateLinkObjectOptions";
-import { LinkObjectProperty } from "../model/LinkObjectProperty";
-import { LinkType } from "../model/LinkType";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { Error } from '../../../../../server/model/Error';
+import { CreateLink } from './api/CreateLink';
+import { CreateLinkResponse } from './api/CreateLinkResponse';
+import { CreateLinkRequest } from './api/CreateLinkRequest';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { CreateLinkObjectOptions } from './api/CreateLinkObjectOptions';
+import { LinkObjectProperty } from '../model/LinkObjectProperty';
+import { LinkType } from '../model/LinkType';
 
 export class LinkAPIService extends KIXObjectAPIService {
 
@@ -32,7 +32,7 @@ export class LinkAPIService extends KIXObjectAPIService {
         return LinkAPIService.INSTANCE;
     }
 
-    protected RESOURCE_URI: string = "links";
+    protected RESOURCE_URI: string = 'links';
 
     public objectType: KIXObjectType = KIXObjectType.LINK;
 
@@ -55,7 +55,9 @@ export class LinkAPIService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.LINK_TYPE) {
             const baseUri = this.buildUri(this.RESOURCE_URI, 'types');
-            objects = await super.load(token, KIXObjectType.LINK_TYPE, baseUri, loadingOptions, objectIds, 'LinkType');
+            objects = await super.load(
+                token, KIXObjectType.LINK_TYPE, baseUri, loadingOptions, objectIds, 'LinkType', LinkType
+            );
         }
 
         return objects;
@@ -88,7 +90,7 @@ export class LinkAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        throw new Error('', 'Method not implemented.');
     }
 
     private async createLinkFromLinkObject(

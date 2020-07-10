@@ -7,14 +7,14 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { IdService } from "../../../../../model/IdService";
-import { MailFilterMatchManager } from "../../core";
-import { MailFilterMatch } from "../../../model/MailFilterMatch";
-import { IDynamicFormManager } from "../../../../base-components/webapp/core/dynamic-form/IDynamicFormManager";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { IdService } from '../../../../../model/IdService';
+import { MailFilterMatchManager } from '../../core';
+import { MailFilterMatch } from '../../../model/MailFilterMatch';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
@@ -32,36 +32,33 @@ class Component extends FormInputComponent<any[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        await super.onMount();
-        const matchManager = new MailFilterMatchManager();
-        if (matchManager) {
-            matchManager.init();
-            await this.setCurrentNode(matchManager);
-            this.state.matchManager = matchManager;
-            this.state.matchManager.registerListener(this.formListenerId, () => {
-                if (this.matchFormTimeout) {
-                    clearTimeout(this.matchFormTimeout);
+        this.state.matchManager = new MailFilterMatchManager();
+        this.state.matchManager.reset();
+        this.state.matchManager.init();
+        this.state.matchManager.registerListener(this.formListenerId, () => {
+            if (this.matchFormTimeout) {
+                clearTimeout(this.matchFormTimeout);
+            }
+            this.matchFormTimeout = setTimeout(async () => {
+                const matchValues: MailFilterMatch[] = [];
+                if (await this.state.matchManager.hasDefinedValues()) {
+                    const values = await this.state.matchManager.getEditableValues();
+                    values.forEach((v) => {
+                        if (v.property && v.value && (v.value as MailFilterMatch).Value) {
+                            matchValues.push(
+                                new MailFilterMatch(
+                                    v.property,
+                                    (v.value as MailFilterMatch).Value,
+                                    (v.value as MailFilterMatch).Not
+                                )
+                            );
+                        }
+                    });
                 }
-                this.matchFormTimeout = setTimeout(async () => {
-                    const matchValues: MailFilterMatch[] = [];
-                    if (this.state.matchManager.hasDefinedValues()) {
-                        const values = this.state.matchManager.getEditableValues();
-                        values.forEach((v) => {
-                            if (v.property && v.value && (v.value as MailFilterMatch).Value) {
-                                matchValues.push(
-                                    new MailFilterMatch(
-                                        v.property,
-                                        (v.value as MailFilterMatch).Value,
-                                        (v.value as MailFilterMatch).Not
-                                    )
-                                );
-                            }
-                        });
-                    }
-                    super.provideValue(matchValues);
-                }, 200);
-            });
-        }
+                super.provideValue(matchValues);
+            }, 200);
+        });
+        await super.onMount();
     }
 
     public async onDestroy(): Promise<void> {
@@ -70,16 +67,17 @@ class Component extends FormInputComponent<any[], ComponentState> {
         }
     }
 
-    public async setCurrentNode(matchManager: IDynamicFormManager): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
-            this.state.defaultValue.value.forEach((match: MailFilterMatch) => {
-                matchManager.setValue(
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<MailFilterMatch[]>(this.state.field.instanceId);
+        if (value && Array.isArray(value.value)) {
+            value.value.forEach((match: MailFilterMatch) => {
+                this.state.matchManager.setValue(
                     new ObjectPropertyValue(
                         match.Key, null, match, false, true, null, null, null, match.Key
                     )
                 );
             });
-            super.provideValue(this.state.defaultValue.value);
         }
     }
 

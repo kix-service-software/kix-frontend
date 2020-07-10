@@ -7,15 +7,15 @@
  * --
  */
 
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
-import { Context } from "../../../../model/Context";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { DynamicField } from "../../model/DynamicField";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
+import { Context } from '../../../../model/Context';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { DynamicField } from '../../model/DynamicField';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class EditDynamicFieldDialogContext extends Context {
 

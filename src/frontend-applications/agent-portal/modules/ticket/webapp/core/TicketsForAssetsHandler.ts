@@ -7,20 +7,20 @@
  * --
  */
 
-import { IObjectReferenceHandler } from "../../../base-components/webapp/core/IObjectReferenceHandler";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { TicketProperty } from "../../model/TicketProperty";
-import { FormService } from "../../../base-components/webapp/core/FormService";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core";
+import { IObjectReferenceHandler } from '../../../base-components/webapp/core/IObjectReferenceHandler';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { TicketProperty } from '../../model/TicketProperty';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core';
 
 export class TicketsForAssetsHandler implements IObjectReferenceHandler {
 
@@ -81,7 +81,7 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
             const formInstance = await FormService.getInstance().getFormInstance(formId);
             const filter: FilterCriteria[] = [];
             for (const p of config.properties) {
-                const formField = await formInstance.getFormFieldByProperty(p);
+                const formField = formInstance.getFormFieldByProperty(p);
                 if (formField) {
                     const value = await formInstance.getFormFieldValueByProperty(p);
                     if (value && value.value && Array.isArray(value.value) && value.value.length) {

@@ -7,16 +7,16 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { QueueFactory } from "./QueueFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { Error } from "../../../../../server/model/Error";
-import { FollowUpTypeFactory } from "./FollowUpTypeFactory";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { Error } from '../../../../../server/model/Error';
+import { Queue } from '../model/Queue';
+import { FollowUpType } from '../model/FollowUpType';
 
 export class QueueAPIService extends KIXObjectAPIService {
 
@@ -34,7 +34,7 @@ export class QueueAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.QUEUE;
 
     private constructor() {
-        super([new QueueFactory(), new FollowUpTypeFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -51,11 +51,14 @@ export class QueueAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.QUEUE) {
             const uri = this.buildUri(this.RESOURCE_URI);
-            objects = await super.load(token, KIXObjectType.QUEUE, uri, loadingOptions, objectIds, KIXObjectType.QUEUE);
+            objects = await super.load(
+                token, KIXObjectType.QUEUE, uri, loadingOptions, objectIds, KIXObjectType.QUEUE, Queue
+            );
         } else if (objectType === KIXObjectType.FOLLOW_UP_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'followuptypes');
             objects = await super.load(
-                token, KIXObjectType.FOLLOW_UP_TYPE, uri, loadingOptions, null, KIXObjectType.FOLLOW_UP_TYPE
+                token, KIXObjectType.FOLLOW_UP_TYPE, uri, loadingOptions, null, KIXObjectType.FOLLOW_UP_TYPE,
+                FollowUpType
             );
             if (objectIds && objectIds.length) {
                 objects = objects.filter((q) => objectIds.some((oid) => oid.toString() === q.ObjectId.toString()));

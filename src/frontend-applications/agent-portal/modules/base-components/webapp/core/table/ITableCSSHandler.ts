@@ -7,8 +7,8 @@
  * --
  */
 
-import { TableValue } from "./TableValue";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { TableValue } from './TableValue';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export interface ITableCSSHandler<T = KIXObject> {
 

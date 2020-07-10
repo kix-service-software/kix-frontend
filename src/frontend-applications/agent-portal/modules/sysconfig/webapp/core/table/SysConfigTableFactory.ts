@@ -7,19 +7,19 @@
  * --
  */
 
-import { SysConfigTableContentProvider } from "./SysConfigTableContentProvider";
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../base-components/webapp/core/table";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { SysConfigOptionDefinitionProperty } from "../../../model/SysConfigOptionDefinitionProperty";
-import { DataType } from "../../../../../model/DataType";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { DialogRoutingConfiguration } from "../../../../../model/configuration/DialogRoutingConfiguration";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { SysConfigTableContentProvider } from './SysConfigTableContentProvider';
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptionDefinitionProperty';
+import { DataType } from '../../../../../model/DataType';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class SysConfigTableFactory extends TableFactory {
 
@@ -46,7 +46,7 @@ export class SysConfigTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(null, null, null,
-                SysConfigOptionDefinitionProperty.NAME, true, false, true, false, 400, true, true, false,
+                SysConfigOptionDefinitionProperty.NAME, true, true, true, false, 400, true, true, false,
                 DataType.STRING, true, null, null, false
             ),
             new DefaultColumnConfiguration(null, null, null,

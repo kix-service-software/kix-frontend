@@ -7,17 +7,16 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { MailFilter } from "../model/MailFilter";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { MailFilterProperty } from "../model/MailFilterProperty";
-import { MailFilterFactory } from "./MailFilterFactory";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { MailFilter } from '../model/MailFilter';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { MailFilterProperty } from '../model/MailFilterProperty';
+import { Error } from '../../../../../server/model/Error';
 
 export class MailFilterAPIService extends KIXObjectAPIService {
 
@@ -35,7 +34,7 @@ export class MailFilterAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.MAIL_FILTER;
 
     private constructor() {
-        super([new MailFilterFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -51,7 +50,8 @@ export class MailFilterAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.MAIL_FILTER) {
             objects = await super.load<MailFilter>(
-                token, KIXObjectType.MAIL_FILTER, this.RESOURCE_URI, loadingOptions, objectIds, 'MailFilter'
+                token, KIXObjectType.MAIL_FILTER, this.RESOURCE_URI, loadingOptions, objectIds, 'MailFilter',
+                MailFilter
             );
         }
 

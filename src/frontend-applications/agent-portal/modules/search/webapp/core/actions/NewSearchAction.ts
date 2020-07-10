@@ -7,11 +7,11 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SearchService } from "../SearchService";
-import { CacheState } from "../../../model/CacheState";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { SearchService } from '../SearchService';
+import { CacheState } from '../../../model/CacheState';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class NewSearchAction extends AbstractAction {
 

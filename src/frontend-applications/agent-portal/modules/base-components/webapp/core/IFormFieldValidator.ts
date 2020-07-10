@@ -7,9 +7,9 @@
  * --
  */
 
-import { ValidationResult } from "./ValidationResult";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { ValidationResult } from './ValidationResult';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 
 export interface IFormFieldValidator {
 

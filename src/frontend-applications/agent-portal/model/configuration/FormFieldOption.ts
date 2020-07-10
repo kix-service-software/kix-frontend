@@ -7,8 +7,8 @@
  * --
  */
 
-import { DefaultSelectInputFormOption } from "./DefaultSelectInputFormOption";
-import { FormFieldOptions } from "./FormFieldOptions";
+import { DefaultSelectInputFormOption } from './DefaultSelectInputFormOption';
+import { FormFieldOptions } from './FormFieldOptions';
 
 export class FormFieldOption {
 

@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { JobTypes } from "./JobTypes";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { JobTypes } from './JobTypes';
 
 export class JobType extends KIXObject {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { FormFieldConfiguration } from "../../../../../../model/configuration/FormFieldConfiguration";
+import { AbstractComponentState } from '../../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
 
 export class ComponentState extends AbstractComponentState {
 

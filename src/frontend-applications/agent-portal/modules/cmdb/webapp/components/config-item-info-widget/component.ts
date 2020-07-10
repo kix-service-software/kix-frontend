@@ -7,16 +7,16 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { ConfigItemLabelProvider } from "../../core";
-import { IdService } from "../../../../../model/IdService";
-import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ConfigItem } from "../../../model/ConfigItem";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
-import { Context } from "../../../../../model/Context";
+import { ComponentState } from './ComponentState';
+import { ConfigItemLabelProvider } from '../../core';
+import { IdService } from '../../../../../model/IdService';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ConfigItem } from '../../../model/ConfigItem';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { Context } from '../../../../../model/Context';
 
 class Component {
 
@@ -79,7 +79,7 @@ class Component {
     }
 
     public getIcon(object: string, objectId: string): ObjectIcon {
-        return new ObjectIcon(object, objectId);
+        return new ObjectIcon(null, object, objectId);
     }
 }
 

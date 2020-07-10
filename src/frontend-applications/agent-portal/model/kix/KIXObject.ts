@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObjectType } from "./KIXObjectType";
-import { ConfiguredPermissions } from "../ConfiguredPermissions";
-import { Link } from "../../modules/links/model/Link";
-import { DynamicFieldValue } from "../../modules/dynamic-fields/model/DynamicFieldValue";
+import { KIXObjectType } from './KIXObjectType';
+import { ConfiguredPermissions } from '../ConfiguredPermissions';
+import { Link } from '../../modules/links/model/Link';
+import { DynamicFieldValue } from '../../modules/dynamic-fields/model/DynamicFieldValue';
 
-export abstract class KIXObject<T = any> {
+export abstract class KIXObject {
 
     public displayValues: Array<[string, string]>;
 

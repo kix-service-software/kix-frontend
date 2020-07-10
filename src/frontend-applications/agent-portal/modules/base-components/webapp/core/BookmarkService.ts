@@ -7,8 +7,8 @@
  * --
  */
 
-import { IBookmarkListener } from "./IBookmarkListener";
-import { Bookmark } from "../../../../model/Bookmark";
+import { IBookmarkListener } from './IBookmarkListener';
+import { Bookmark } from '../../../../model/Bookmark';
 
 export class BookmarkService {
 

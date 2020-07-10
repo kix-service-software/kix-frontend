@@ -7,12 +7,11 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public formId: string = 'ticket-edit-form',
         public buttonLabel: string = 'Translatable#Save'
     ) {
         super();

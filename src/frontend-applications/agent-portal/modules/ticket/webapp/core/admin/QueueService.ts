@@ -7,21 +7,21 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Queue } from "../../../model/Queue";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../../model/KIXObjectSpecificLoadingOptions";
-import { QueueProperty } from "../../../model/QueueProperty";
-import { TreeNode, TreeNodeProperty } from "../../../../base-components/webapp/core/tree";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { FollowUpType } from "../../../model/FollowUpType";
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Queue } from '../../../model/Queue';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
+import { QueueProperty } from '../../../model/QueueProperty';
+import { TreeNode, TreeNodeProperty } from '../../../../base-components/webapp/core/tree';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { FollowUpType } from '../../../model/FollowUpType';
 
 export class QueueService extends KIXObjectService<Queue> {
 
@@ -33,6 +33,12 @@ export class QueueService extends KIXObjectService<Queue> {
         }
 
         return QueueService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.QUEUE);
+        this.objectConstructors.set(KIXObjectType.QUEUE, [Queue]);
+        this.objectConstructors.set(KIXObjectType.FOLLOW_UP_TYPE, [FollowUpType]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
@@ -96,7 +102,7 @@ export class QueueService extends KIXObjectService<Queue> {
 
                 const treeNode = new TreeNode(
                     queue.QueueID, queue.Name,
-                    new ObjectIcon(KIXObjectType.QUEUE, queue.QueueID),
+                    new ObjectIcon(null, KIXObjectType.QUEUE, queue.QueueID),
                     null,
                     subTree,
                     null, null, null,
@@ -130,7 +136,6 @@ export class QueueService extends KIXObjectService<Queue> {
         return hasValidDescendants;
     }
 
-
     private async getTicketStats(queue: Queue): Promise<TreeNodeProperty[]> {
         const properties: TreeNodeProperty[] = [];
         if (queue.TicketStats) {
@@ -159,7 +164,7 @@ export class QueueService extends KIXObjectService<Queue> {
             null, null,
             withData ? [QueueProperty.SUB_QUEUES, 'TicketStats', 'Tickets'] : [QueueProperty.SUB_QUEUES],
             [QueueProperty.SUB_QUEUES],
-            withData ? [["TicketStats.StateType", 'Open']] : undefined
+            withData ? [['TicketStats.StateType', 'Open']] : undefined
         );
 
         return await KIXObjectService.loadObjects<Queue>(KIXObjectType.QUEUE, null, loadingOptions);

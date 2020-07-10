@@ -7,11 +7,11 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../../../base-components/webapp/core/table/TableContentProvider";
-import { FAQCategory } from "../../../../../model/FAQCategory";
-import { ITable, RowObject, TableValue } from "../../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
+import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { FAQCategory } from '../../../../../model/FAQCategory';
+import { ITable, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 
 export class FAQCategoryTableContentProvider extends TableContentProvider<FAQCategory> {
 

@@ -8,7 +8,7 @@
  */
 
 import { promisify } from 'util';
-import { RedisClient } from "redis";
+import { RedisClient } from 'redis';
 import { ICache } from './ICache';
 import { LoggingService } from '../../../../../server/services/LoggingService';
 import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
@@ -37,8 +37,8 @@ export class RedisCache implements ICache {
 
         this.connect();
 
-        this.redisClient.on("error", (err) => {
-            LoggingService.getInstance().error("REDIS Error: " + err);
+        this.redisClient.on('error', (err) => {
+            LoggingService.getInstance().error('REDIS Error: ' + err);
         });
 
         this.redisClient.on('reconnecting', () => {
@@ -126,7 +126,7 @@ export class RedisCache implements ICache {
         const port = config.REDIS_CACHE_PORT;
         const host = config.REDIS_CACHE_HOST;
 
-        const redis = require("redis");
+        const redis = require('redis');
 
         this.redisClient = redis.createClient({
             port,

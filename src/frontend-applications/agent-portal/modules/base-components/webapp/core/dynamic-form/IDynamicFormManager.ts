@@ -7,12 +7,12 @@
  * --
  */
 
-import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { InputFieldTypes } from "../InputFieldTypes";
-import { TreeNode } from "../tree";
-import { ValidationResult } from "../ValidationResult";
+import { DynamicFormOperationsType } from './DynamicFormOperationsType';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { InputFieldTypes } from '../InputFieldTypes';
+import { TreeNode } from '../tree';
+import { ValidationResult } from '../ValidationResult';
 
 export interface IDynamicFormManager {
 
@@ -21,6 +21,12 @@ export interface IDynamicFormManager {
     uniqueProperties: boolean;
 
     resetOperator?: boolean;
+
+    resetValue?: boolean;
+
+    useOwnSearch?: boolean;
+
+    searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]>;
 
     registerListener(listenerId: string, callback: () => void): void;
 
@@ -42,7 +48,7 @@ export interface IDynamicFormManager {
 
     getObjectReferenceObjectType(property: string): Promise<KIXObjectType | string>;
 
-    getSpecificInput(): string;
+    getSpecificInput(property: string): string;
 
     getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>>;
 
@@ -68,9 +74,8 @@ export interface IDynamicFormManager {
 
     isMultiselect(property: string): Promise<boolean>;
 
-    searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]>;
-
     validate(): Promise<ValidationResult[]>;
 
     shouldAddEmptyField(): Promise<boolean>;
+
 }

@@ -131,7 +131,7 @@ export class Server implements IServer {
     public async initHttpServer(): Promise<void> {
         const httpPort = this.serverConfig.HTTP_PORT || 3000;
         const httpServer = http.createServer(this.application).listen(httpPort, () => {
-            LoggingService.getInstance().info("KIX (HTTP) running on *:" + httpPort);
+            LoggingService.getInstance().info('KIX (HTTP) running on *:' + httpPort);
         });
 
         if (this.serverConfig.USE_SSL) {
@@ -148,7 +148,7 @@ export class Server implements IServer {
             await SocketService.getInstance().initialize(httpsServer);
 
             httpsServer.listen(httpsPort, () => {
-                LoggingService.getInstance().info("KIX (HTTPS) running on *:" + httpsPort);
+                LoggingService.getInstance().info('KIX (HTTPS) running on *:' + httpsPort);
             });
         } else {
             await SocketService.getInstance().initialize(httpServer);

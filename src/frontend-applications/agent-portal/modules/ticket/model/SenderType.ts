@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class SenderType extends KIXObject<SenderType> {
+export class SenderType extends KIXObject {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.SENDER_TYPE;
 

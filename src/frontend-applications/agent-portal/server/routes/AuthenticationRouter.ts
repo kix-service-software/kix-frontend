@@ -11,7 +11,7 @@ import { Request, Response } from 'express';
 import path = require('path');
 
 import { KIXRouter } from './KIXRouter';
-import * as Bowser from "bowser";
+import * as Bowser from 'bowser';
 import { ReleaseInfoUtil } from '../../../../server/ReleaseInfoUtil';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';
@@ -19,7 +19,7 @@ import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { SysConfigKey } from '../../modules/sysconfig/model/SysConfigKey';
 import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
 import { PluginService } from '../../../../server/services/PluginService';
-import { IFrontendServerExtension } from '../../../../server/model/IFrontendServerExtension';
+
 import { IMarkoApplication } from '../extensions/IMarkoApplication';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { LoggingService } from '../../../../server/services/LoggingService';
@@ -41,16 +41,16 @@ export class AuthenticationRouter extends KIXRouter {
     }
 
     protected initialize(): void {
-        this.router.get("/", this.login.bind(this));
-        this.router.get("/logout", this.logout.bind(this));
+        this.router.get('/', this.login.bind(this));
+        this.router.get('/logout', this.logout.bind(this));
     }
 
     public getContextId(): string {
-        return "authentication";
+        return 'authentication';
     }
 
     public getBaseRoute(): string {
-        return "/auth";
+        return '/auth';
     }
 
     public async logout(req: Request, res: Response): Promise<void> {

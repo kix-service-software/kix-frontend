@@ -126,7 +126,6 @@ class Component {
             this.predefinedFilter = filter;
             this.textFilterValue = textFilterValue;
 
-            const name = this.predefinedFilter ? this.predefinedFilter.name : null;
             const predefinedCriteria = this.predefinedFilter ? this.predefinedFilter.criteria : [];
             const newFilter = [...predefinedCriteria, ...this.additionalFilterCriteria];
 

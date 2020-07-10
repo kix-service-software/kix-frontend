@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { TicketState } from "../../model/TicketState";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TicketStateProperty } from "../../model/TicketStateProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { TicketState } from '../../model/TicketState';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TicketStateProperty } from '../../model/TicketStateProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class TicketStateLabelProvider extends LabelProvider<TicketState> {
 
@@ -80,7 +80,7 @@ export class TicketStateLabelProvider extends LabelProvider<TicketState> {
     }
 
     public getObjectIcon(ticketState?: TicketState): string | ObjectIcon {
-        return new ObjectIcon('TicketState', ticketState.ID);
+        return new ObjectIcon(null, 'TicketState', ticketState.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -103,7 +103,7 @@ export class TicketStateLabelProvider extends LabelProvider<TicketState> {
         ticketState: TicketState, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === TicketStateProperty.ID || property === 'ICON') {
-            return [new ObjectIcon('TicketState', ticketState.ID)];
+            return [new ObjectIcon(null, 'TicketState', ticketState.ID)];
         }
         return null;
     }

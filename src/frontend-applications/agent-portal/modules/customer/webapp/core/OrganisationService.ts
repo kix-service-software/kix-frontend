@@ -7,20 +7,20 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Organisation } from "../../model/Organisation";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { OrganisationDetailsContext } from ".";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Organisation } from '../../model/Organisation';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { OrganisationDetailsContext } from '.';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -34,12 +34,17 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         return OrganisationService.INSTANCE;
     }
 
+    private constructor() {
+        super(KIXObjectType.ORGANISATION);
+        this.objectConstructors.set(KIXObjectType.ORGANISATION, [Organisation]);
+    }
+
     public isServiceFor(kixObjectType: KIXObjectType) {
         return kixObjectType === KIXObjectType.ORGANISATION;
     }
 
     public getLinkObjectName(): string {
-        return "Person";
+        return 'Person';
     }
 
     public async loadObjects<O extends KIXObject>(
