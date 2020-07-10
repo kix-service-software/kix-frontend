@@ -67,6 +67,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                 );
                             }
                         });
+                        super.provideValue(permissionDescriptions, true);
                     }
                 }, 200);
             });
