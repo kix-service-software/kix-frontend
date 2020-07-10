@@ -21,9 +21,7 @@ export class UserEditAction extends AbstractAction {
 
     public permissions = [
         new UIComponentPermission('contacts', [CRUD.CREATE]),
-        new UIComponentPermission('contacts/*', [CRUD.UPDATE]),
-        new UIComponentPermission('system/users', [CRUD.CREATE]),
-        new UIComponentPermission('system/users/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/users', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

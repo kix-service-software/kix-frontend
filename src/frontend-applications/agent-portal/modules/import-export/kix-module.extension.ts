@@ -28,9 +28,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('import-export-component', '/kix-module-import-export$0/webapp/core/ImportExportUIModule', [
             new UIComponentPermission(
                 'system/importexport/templates', [CRUD.READ]
-            ),
-            new UIComponentPermission(
-                'system/importexport/templates/*/runs', [CRUD.CREATE]
             )
         ])
     ];

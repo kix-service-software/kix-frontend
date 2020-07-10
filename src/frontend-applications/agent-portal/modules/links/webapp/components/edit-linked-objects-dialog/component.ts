@@ -81,9 +81,7 @@ class Component {
                 [new UIComponentPermission('links', [CRUD.CREATE])]
             );
 
-            this.state.allowDelete = await AuthenticationSocketClient.getInstance().checkPermissions(
-                [new UIComponentPermission('links/*', [CRUD.DELETE])]
-            );
+            this.state.allowDelete = this.state.allowCreate;
 
             this.mainObject = await context.getObject();
 

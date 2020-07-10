@@ -31,9 +31,6 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 KIXObjectType.MAIL_ACCOUNT, 'admin-mail-accounts', [
                                 new UIComponentPermission(
                                     'system/communication/mailaccounts', [CRUD.CREATE], true
-                                ),
-                                new UIComponentPermission(
-                                    'system/communication/mailaccounts/*', [CRUD.UPDATE], true
                                 )
                             ]
                             )

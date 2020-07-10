@@ -14,16 +14,26 @@ import { ContextService } from '../../../../../../../modules/base-components/web
 import { TicketTypeDetailsContext, EditTicketTypeDialogContext } from '../..';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../../../model/ContextMode';
+import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TicketTypeEditAction extends AbstractAction {
-
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/ticket/types/*', [CRUD.UPDATE])
-    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`system/ticket/types/${objectId}`, [CRUD.UPDATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async run(): Promise<void> {

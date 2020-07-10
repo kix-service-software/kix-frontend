@@ -120,9 +120,6 @@ export class TicketFormService extends KIXObjectFormService {
             case ArticleProperty.CHANNEL_ID:
                 hasPermissions = await this.checkPermissions('system/communication/channels');
                 break;
-            case ArticleProperty.ATTACHMENTS:
-                hasPermissions = await this.checkPermissions('tickets/*/articles/*/attachments', [CRUD.CREATE]);
-                break;
             case TicketProperty.LINK:
                 hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
                 break;

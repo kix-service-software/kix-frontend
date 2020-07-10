@@ -25,8 +25,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 new AdminModule(
                     null, 'faq-categories', 'Translatable#FAQ Categories', null,
                     KIXObjectType.FAQ_CATEGORY, 'faq-admin-categories', [
-                    new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true)
                 ]
                 )
             ])

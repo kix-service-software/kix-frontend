@@ -25,8 +25,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 new AdminModule(
                     null, 'dynamic-fields', 'Translatable#Dynamic Fields', null,
                     KIXObjectType.FAQ_CATEGORY, 'admin-dynamic-fields', [
-                    new UIComponentPermission('system/dynamicfields', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/dynamicfields/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/dynamicfields', [CRUD.CREATE], true)
                 ]
                 )
             ])

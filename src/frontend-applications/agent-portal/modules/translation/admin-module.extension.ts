@@ -26,8 +26,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                         null, 'translations', 'Translatable#Translations', null,
                         KIXObjectType.TRANSLATION, 'i18n-admin-translations',
                         [
-                            new UIComponentPermission('system/i18n/translations', [CRUD.CREATE], true),
-                            new UIComponentPermission('system/i18n/translations/*', [CRUD.UPDATE], true)
+                            new UIComponentPermission('system/i18n/translations', [CRUD.CREATE], true)
                         ]
                     )
                 ])

@@ -26,15 +26,13 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public initComponents: UIComponent[] = [
         new UIComponent('cmdb-admin-module-component', '/kix-module-cmdb$0/webapp/core/CMDBAdminUIModule', [
-            new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE], true),
             new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE], true)
         ]),
         new UIComponent('cmdb-module-read-component', '/kix-module-cmdb$0/webapp/core/CMDBReadUIModule', [
             new UIComponentPermission('cmdb/configitems', [CRUD.READ])
         ]),
         new UIComponent('cmdb-module-edit-component', '/kix-module-cmdb$0/webapp/core/CMDBEditUIModule', [
-            new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE]),
-            new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
+            new UIComponentPermission('cmdb/configitems', [CRUD.CREATE]),
             new UIComponentPermission('system/cmdb/classes', [CRUD.READ])
         ])
     ];

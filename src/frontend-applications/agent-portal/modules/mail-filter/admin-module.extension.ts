@@ -32,9 +32,6 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 [
                                     new UIComponentPermission(
                                         'system/communication/mailfilters', [CRUD.CREATE], true
-                                    ),
-                                    new UIComponentPermission(
-                                        'system/communication/mailfilters/*', [CRUD.UPDATE], true
                                     )
                                 ]
                             )

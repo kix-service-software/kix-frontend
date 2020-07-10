@@ -29,8 +29,7 @@ export class TicketWatchAction extends AbstractAction<Ticket> {
 
     public permissions = [
         new UIComponentPermission('tickets', [CRUD.READ]),
-        new UIComponentPermission('watchers', [CRUD.CREATE]),
-        new UIComponentPermission('watchers/*', [CRUD.DELETE])
+        new UIComponentPermission('watchers', [CRUD.CREATE])
     ];
 
     private isWatching: boolean = false;

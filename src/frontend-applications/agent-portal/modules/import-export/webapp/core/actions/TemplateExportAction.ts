@@ -24,16 +24,27 @@ import { CreateImportExportTemplateRunOptions } from '../../../model/CreateImpor
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
 import { ImportExportTemplate } from '../../../model/ImportExportTemplate';
 import { ConfigItemClass } from '../../../../cmdb/model/ConfigItemClass';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TemplateExportAction extends AbstractAction {
-
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('/system/importexport/templates/*/runs', [CRUD.CREATE])
-    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Export';
         this.icon = 'kix-icon-export';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`/system/importexport/templates/${objectId}/runs`, [CRUD.CREATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public canRun(): boolean {

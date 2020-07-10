@@ -18,7 +18,7 @@ import { ContactDialogUtil } from '..';
 export class ContactEditAction extends AbstractAction {
 
     public permissions = [
-        new UIComponentPermission('contacts/*', [CRUD.UPDATE])
+        new UIComponentPermission('contacts', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

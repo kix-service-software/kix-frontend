@@ -18,7 +18,7 @@ import { ContextMode } from '../../../../../model/ContextMode';
 export class JobEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/automation/jobs/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/automation/jobs', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

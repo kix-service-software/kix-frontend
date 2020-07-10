@@ -107,8 +107,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 ],
                 [
                     new ConfiguredWidget(
-                        'config-item-details-version-widget', 'config-item-details-version-widget', null,
-                        [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]
+                        'config-item-details-version-widget', 'config-item-details-version-widget', null
                     )
                 ],
                 [
@@ -126,8 +125,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('links', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'config-item-details-history-widget', 'config-item-details-history-widget', null,
-                        [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
+                        'config-item-details-history-widget', 'config-item-details-history-widget', null
                     )
                 ]
             )

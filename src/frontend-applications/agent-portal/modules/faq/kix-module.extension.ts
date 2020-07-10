@@ -36,12 +36,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             new UIComponentPermission('faq/articles', [CRUD.READ])
         ]),
         new UIComponent('faq-edit-module-component', '/kix-module-faq$0/webapp/core/ui-modules/FAQEditUIModule', [
-            new UIComponentPermission('faq/articles', [CRUD.CREATE]),
-            new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
+            new UIComponentPermission('faq/articles', [CRUD.CREATE])
         ]),
         new UIComponent('faq-admin-module-component', '/kix-module-faq$0/webapp/core/ui-modules/FAQAdminUIModule', [
-            new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true),
-            new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE], true)
+            new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true)
         ]),
     ];
 

@@ -41,7 +41,7 @@ export class UIModule implements IUIModule {
         FormValidationService.getInstance().registerValidator(new PendingTimeValidator());
         FormValidationService.getInstance().registerValidator(new EmailRecipientValidator());
 
-        if (await this.checkPermissions('tickets/*', [CRUD.UPDATE])) {
+        if (await this.checkPermissions('tickets', [CRUD.CREATE])) {
             BulkService.getInstance().registerBulkManager(new TicketBulkManager());
         }
 

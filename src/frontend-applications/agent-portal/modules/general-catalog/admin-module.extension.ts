@@ -26,8 +26,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                     null, 'general-catalog', 'Translatable#General Catalog', null,
                     KIXObjectType.GENERAL_CATALOG_ITEM, 'admin-general-catalog',
                     [
-                        new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true),
-                        new UIComponentPermission('system/generalcatalog/*', [CRUD.UPDATE], true)
+                        new UIComponentPermission('system/generalcatalog', [CRUD.CREATE], true)
                     ]
                 )
             ])

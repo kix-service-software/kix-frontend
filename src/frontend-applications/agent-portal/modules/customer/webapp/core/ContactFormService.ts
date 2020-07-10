@@ -115,7 +115,7 @@ export class ContactFormService extends KIXObjectFormService {
     private async getAccessGroup(): Promise<FormGroupConfiguration> {
         let accessGroup: FormGroupConfiguration;
         const hasUserCreatePermission = await this.checkPermissions('system/users', [CRUD.CREATE]);
-        const hasUserUpdatePermission = await this.checkPermissions('system/users/*', [CRUD.UPDATE]);
+        const hasUserUpdatePermission = await this.checkPermissions('system/users', [CRUD.CREATE]);
 
         if (hasUserCreatePermission && hasUserUpdatePermission) {
             const accessValue: FormFieldValue = new FormFieldValue([]);

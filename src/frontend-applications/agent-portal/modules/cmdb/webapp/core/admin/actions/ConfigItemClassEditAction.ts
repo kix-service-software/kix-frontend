@@ -18,7 +18,7 @@ import { ContextMode } from '../../../../../../model/ContextMode';
 export class ConfigItemClassEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

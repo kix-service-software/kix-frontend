@@ -25,15 +25,13 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 new AdminModule(
                     null, 'users', 'Translatable#Users', null,
                     KIXObjectType.USER, 'user-admin-users', [
-                    new UIComponentPermission('system/users', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/users/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/users', [CRUD.CREATE], true)
                 ]
                 ),
                 new AdminModule(
                     null, 'roles', 'Translatable#Roles/Permissions', null,
                     KIXObjectType.ROLE, 'user-admin-roles', [
-                    new UIComponentPermission('system/roles', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/roles/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/roles', [CRUD.CREATE], true)
                 ]
                 ),
             ])
