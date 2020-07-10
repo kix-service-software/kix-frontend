@@ -109,8 +109,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('links', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'faq-article-history-widget', 'faq-article-history-widget', null,
-                        [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
+                        'faq-article-history-widget', 'faq-article-history-widget', null
                     )
                 ]
 

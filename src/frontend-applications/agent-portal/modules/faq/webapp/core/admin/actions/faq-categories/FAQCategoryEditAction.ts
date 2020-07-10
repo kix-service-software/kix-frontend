@@ -18,7 +18,7 @@ import { ContextMode } from '../../../../../../../model/ContextMode';
 export class FAQCategoryEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/faq/categories', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

@@ -327,8 +327,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 ],
                 [
                     new ConfiguredWidget(
-                        'ticket-details-article-list-widget', 'ticket-details-article-list-widget', null,
-                        [new UIComponentPermission('tickets/*/articles', [CRUD.READ])]
+                        'ticket-details-article-list-widget', 'ticket-details-article-list-widget', null
                     )
                 ],
                 [
@@ -359,8 +358,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('links', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-history-widget', 'ticket-details-history-widget', null,
-                        [new UIComponentPermission('tickets/*/history', [CRUD.READ])]
+                        'ticket-details-history-widget', 'ticket-details-history-widget', null
                     )
                 ]
             )

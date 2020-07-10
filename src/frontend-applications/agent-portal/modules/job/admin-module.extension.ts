@@ -28,8 +28,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                         null, 'jobs', 'Translatable#Jobs', null,
                         KIXObjectType.JOB, 'admin-jobs',
                         [
-                            new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true),
-                            new UIComponentPermission('system/automation/jobs/*', [CRUD.UPDATE], true)
+                            new UIComponentPermission('system/automation/jobs', [CRUD.CREATE], true)
                         ]
                     )
                 ]

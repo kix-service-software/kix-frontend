@@ -32,10 +32,8 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 [
                                     new UIComponentPermission(
                                         'system/communication/systemaddresses', [CRUD.CREATE], true
-                                    ),
-                                    new UIComponentPermission(
-                                        'system/communication/systemaddresses/*', [CRUD.UPDATE], true
                                     )
+
                                 ]
                             )
                         ]

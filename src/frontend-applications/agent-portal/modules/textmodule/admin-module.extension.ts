@@ -25,8 +25,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 new AdminModule(
                     null, 'text-modules', 'Translatable#Text Modules', null,
                     KIXObjectType.TEXT_MODULE, 'ticket-admin-text-modules', [
-                    new UIComponentPermission('system/textmodules', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/textmodules/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/textmodules', [CRUD.CREATE], true)
                 ]
                 )
             ]

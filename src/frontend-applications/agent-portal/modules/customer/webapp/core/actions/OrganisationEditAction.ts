@@ -15,7 +15,7 @@ import { OrganisationDialogUtil } from '../OrganisationDialogUtil';
 export class OrganisationEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('organisations/*', [CRUD.UPDATE])
+        new UIComponentPermission('organisations', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

@@ -15,7 +15,7 @@ import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 export class FAQArticleEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
+        new UIComponentPermission('faq/articles', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

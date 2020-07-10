@@ -136,8 +136,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget'),
                     new ConfiguredWidget(
-                        'job-details-run-history-widget', 'job-details-run-history-widget', null,
-                        [new UIComponentPermission('system/automation/jobs/*/runs', [CRUD.READ])]
+                        'job-details-run-history-widget', 'job-details-run-history-widget', null
                     )
                 ]
             )
