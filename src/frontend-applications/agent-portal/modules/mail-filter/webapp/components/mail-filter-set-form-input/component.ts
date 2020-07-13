@@ -54,8 +54,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
                             );
                         }
                     });
-                    super.provideValue(setValues);
                 }
+                super.provideValue(setValues);
             }, 200);
         });
         await super.onMount();
