@@ -101,16 +101,23 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         const newTicketDialogContext = await ContextService.getInstance().getContext<NewTicketDialogContext>(
             NewTicketDialogContext.CONTEXT_ID
         );
+
         let contactId: number | string = null;
+
         if (newTicketDialogContext) {
             contactId = newTicketDialogContext.getAdditionalInformation(`${KIXObjectType.CONTACT}-ID`);
+            if (contactId) {
+                super.provideValue(contactId);
+            }
         }
 
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const contactValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
 
-        if (contactId || (contactValue && contactValue.value)) {
-            contactId = contactId || Array.isArray(contactValue.value) ? contactValue.value[0] : contactValue.value;
+        contactId = contactId
+            ? contactId
+            : Array.isArray(contactValue.value) ? contactValue.value[0] : contactValue.value;
+        if (contactId) {
             if (!isNaN(Number(contactId))) {
                 const currentNode = await this.getContactNode(Number(contactId));
                 if (currentNode) {

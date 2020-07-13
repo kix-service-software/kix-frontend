@@ -46,10 +46,12 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async setCurrentValue(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
-        if (Array.isArray(value.value)) {
-            this.state.checked = Boolean(value.value[0]);
-        } else {
-            this.state.checked = Boolean(value.value);
+        if (value) {
+            if (Array.isArray(value.value)) {
+                this.state.checked = Boolean(value.value[0]);
+            } else {
+                this.state.checked = Boolean(value.value);
+            }
         }
     }
 
