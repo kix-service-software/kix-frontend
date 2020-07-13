@@ -71,7 +71,7 @@ export class MacroActionLabelProvider extends LabelProvider {
                             KIXObjectType.MACRO_ACTION_TYPE, [value], null, { id: type }, true
                         ).catch((error): MacroActionType[] => []);
                         if (macroActionTypes && !!macroActionTypes.length) {
-                            displayValue = macroActionTypes[0].DisplayName;
+                            displayValue = await TranslationService.translate(macroActionTypes[0].DisplayName);
                         }
                     }
                 }
