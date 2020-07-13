@@ -170,7 +170,7 @@ class LinkDialogComponent {
                 : null;
 
             const objects = await SearchService.getInstance().executeSearch(
-                this.state.formId, excludeObjects
+                this.state.formId, null, excludeObjects
             );
 
             const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(
