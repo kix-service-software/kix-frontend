@@ -57,23 +57,19 @@ export class TicketFormService extends KIXObjectFormService {
     ): Promise<any> {
         switch (property) {
             case TicketProperty.CONTACT_ID:
-                if (formContext === FormContext.NEW) {
-                    value = ticket ? ticket.ContactID : null;
-                    if (!value) {
-                        const context = ContextService.getInstance().getActiveContext();
-                        const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
-                        value = contact ? contact.ID : null;
-                    }
+                value = ticket ? ticket.ContactID : null;
+                if (!value) {
+                    const context = ContextService.getInstance().getActiveContext();
+                    const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                    value = contact ? contact.ID : null;
                 }
                 break;
             case TicketProperty.ORGANISATION_ID:
-                if (formContext === FormContext.NEW) {
-                    value = ticket ? ticket.OrganisationID : null;
-                    if (!value) {
-                        const context = ContextService.getInstance().getActiveContext();
-                        const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
-                        value = organisation ? organisation.ID : null;
-                    }
+                value = ticket ? ticket.OrganisationID : null;
+                if (!value) {
+                    const context = ContextService.getInstance().getActiveContext();
+                    const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
+                    value = organisation ? organisation.ID : null;
                 }
                 break;
             case TicketProperty.PENDING_TIME:
