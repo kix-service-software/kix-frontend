@@ -57,18 +57,15 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     private async load(): Promise<void> {
-        let nodes = await this.loadNodes();
-        const nodesWithTranslation: Array<[TreeNode, string]> = [];
-        for (const node of nodes) {
-            const translatedLabel = await TranslationService.translate(node.label);
-            nodesWithTranslation.push([node, translatedLabel]);
-        }
-        nodes = nodesWithTranslation.sort((a, b) => {
-            return SortUtil.compareString(a[1], b[1]);
-        }).map((nwt) => nwt[0]);
-
         const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
         if (treeHandler) {
+            const nodes = await this.loadNodes();
+            for (const node of nodes) {
+                node.label = await TranslationService.translate(node.label);
+            }
+            nodes.sort((a, b) => {
+                return SortUtil.compareString(a.label, b.label);
+            });
             treeHandler.setTree(nodes);
         }
     }
