@@ -201,7 +201,7 @@ class Component implements ISearchFormListener {
         const hint = await TranslationService.translate('Translatable#Search');
         DialogService.getInstance().setMainDialogLoading(true, hint, true);
 
-        const result = await SearchService.getInstance().executeSearch<KIXObject>(this.formId)
+        const result = await SearchService.getInstance().executeSearch<KIXObject>(null, this.objectType)
             .catch((error: Error) => {
                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });

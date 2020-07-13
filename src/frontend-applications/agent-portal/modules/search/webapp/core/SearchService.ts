@@ -92,26 +92,26 @@ export class SearchService {
     }
 
     public async executeSearch<T extends KIXObject = KIXObject>(
-        formId: string, excludeObjects?: KIXObject[]
+        formId: string, objectType: KIXObjectType | string, excludeObjects?: KIXObject[]
     ): Promise<T[]> {
         let objects;
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
-        if (formInstance) {
-            const objectType = formInstance.getObjectType();
-            const searchDefinition = this.getSearchDefinition(objectType);
 
-            if (formInstance instanceof SearchFormInstance) {
-                const criteria = formInstance.getCriteria().filter(
-                    (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
-                );
+        if (!formId) {
+            const criteria = SearchFormInstance.getInstance().getCriteria().filter(
+                (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
+            );
 
-                const cacheName = this.searchCache && this.searchCache.status === CacheState.VALID
-                    ? this.searchCache.name
-                    : null;
-                this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
-                objects = await this.doSearch();
-                this.provideResult(objectType);
-            } else {
+            const cacheName = this.searchCache && this.searchCache.status === CacheState.VALID
+                ? this.searchCache.name
+                : null;
+            this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
+            objects = await this.doSearch();
+            this.provideResult(objectType);
+        } else {
+            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            if (formInstance) {
+                const formObjectType = formInstance.getObjectType();
+                const searchDefinition = this.getSearchDefinition(formObjectType);
                 const formFieldValues = formInstance.getAllFormFieldValues();
                 let criteria = [];
 
@@ -153,10 +153,10 @@ export class SearchService {
                 });
 
                 const loadingOptions = searchDefinition.getLoadingOptions(criteria);
-                objects = await KIXObjectService.loadObjects(objectType, null, loadingOptions, null, false);
+                objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
+            } else {
+                throw new Error('No form found: ' + formId);
             }
-        } else {
-            throw new Error('No form found: ' + formId);
         }
 
         return (objects as any);
