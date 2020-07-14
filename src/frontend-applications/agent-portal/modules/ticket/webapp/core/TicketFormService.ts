@@ -198,7 +198,6 @@ export class TicketFormService extends KIXObjectFormService {
                     field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_STATE);
                     break;
                 default:
-                    field.label = label;
             }
         }
 
