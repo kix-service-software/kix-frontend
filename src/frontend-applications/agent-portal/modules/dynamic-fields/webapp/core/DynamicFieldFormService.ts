@@ -119,6 +119,11 @@ export class DynamicFieldFormService extends KIXObjectFormService {
             }
         }
 
+        const visibleParameter = parameter.find((p) => p[0] === DynamicFieldProperty.CUSTOMER_VISIBLE);
+        if (visibleParameter) {
+            visibleParameter[1] = Boolean(visibleParameter[1]);
+        }
+
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
