@@ -216,11 +216,13 @@ export class FormInstance {
             fields = parent.children;
         } else {
             for (const page of this.form.pages) {
-                const group = page.groups.find(
-                    (g) => g.formFields.some((f) => f.instanceId === formField.instanceId)
-                );
-                if (group) {
-                    fields = group.formFields;
+                for (const group of page.groups) {
+                    fields = this.findFormFieldList(group.formFields, formField.instanceId);
+                    if (fields) {
+                        break;
+                    }
+                }
+                if (fields) {
                     break;
                 }
             }
@@ -389,6 +391,26 @@ export class FormInstance {
         }
 
         return field;
+    }
+
+    private findFormFieldList(fields: FormFieldConfiguration[], formFieldInstanceId: string): FormFieldConfiguration[] {
+        let foundFields: FormFieldConfiguration[];
+        if (fields) {
+            const field = fields.find((f) => f.instanceId === formFieldInstanceId);
+
+            if (!field) {
+                for (const f of fields) {
+                    foundFields = this.findFormFieldList(f.children, formFieldInstanceId);
+                    if (foundFields) {
+                        return foundFields;
+                    }
+                }
+            } else {
+                foundFields = fields;
+            }
+        }
+
+        return foundFields;
     }
 
     private findFormFieldByProperty(fields: FormFieldConfiguration[] = [], property: string): FormFieldConfiguration {
