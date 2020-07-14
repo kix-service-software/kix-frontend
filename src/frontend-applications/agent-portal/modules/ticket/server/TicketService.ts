@@ -435,7 +435,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.STATE_ID,
             TicketProperty.QUEUE_ID,
             TicketProperty.PRIORITY_ID,
-            TicketProperty.LOCK_ID,
             TicketProperty.OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
             TicketProperty.STATE_TYPE
