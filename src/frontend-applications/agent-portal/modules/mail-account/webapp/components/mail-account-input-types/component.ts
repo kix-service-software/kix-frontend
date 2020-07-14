@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeService, TreeHandler } from '../../../../base-components/webapp/core/tree';
 import { MailAccountService } from '../../core';
 import { MailAccountProperty } from '../../../model/MailAccountProperty';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
@@ -18,20 +18,25 @@ import { LabelService } from '../../../../../modules/base-components/webapp/core
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { IdService } from '../../../../../model/IdService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
     private typeID: string;
+    public treeId: string;
 
     public onCreate(): void {
-        this.state = new ComponentState();
+        this.treeId = IdService.generateDateBasedId('mail-account-input-types-'),
+            this.state = new ComponentState();
         this.state.loadNodes = this.load.bind(this);
     }
 
-    public async load(): Promise<TreeNode[]> {
+    public async load(): Promise<void> {
         const nodes = await MailAccountService.getInstance().getTreeNodes(MailAccountProperty.TYPE);
-        this.handleIMAPFolderField();
-        return nodes;
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes, null, true);
+        }
     }
 
     public onInput(input: any): void {
@@ -48,11 +53,32 @@ class Component extends FormInputComponent<string, ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        const treeHandler = new TreeHandler([], null, null, false);
+        TreeService.getInstance().registerTreeHandler(this.treeId, treeHandler);
+        await this.load();
         await super.onMount();
         this.state.prepared = true;
     }
 
+    public async onDestroy(): Promise<void> {
+        super.onDestroy();
+        TreeService.getInstance().removeTreeHandler(this.treeId);
+    }
+
     public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const formValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.treeId);
+        if (formValue && treeHandler) {
+            const nodes = treeHandler.getTree();
+            const currentNode = nodes.find((n) => n.id === formValue.value);
+            if (currentNode) {
+                currentNode.selected = true;
+                this.typeID = currentNode.id;
+            }
+
+            treeHandler.setSelection([currentNode], true, true, true);
+        }
         return;
     }
 
