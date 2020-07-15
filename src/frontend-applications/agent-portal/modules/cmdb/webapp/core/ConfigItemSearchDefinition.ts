@@ -40,6 +40,12 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         this.formManager = new ConfigItemSearchFormManager();
     }
 
+    protected extendedDefinitions: SearchDefinition[] = [];
+
+    public addExtendedDefinitions(definition: SearchDefinition): void {
+        this.extendedDefinitions.push(definition);
+    }
+
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
             criteria, null, null,
@@ -253,7 +259,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             property, classParameter ? classParameter[1] : null
         );
 
-        if (input) {
+        if (input && value) {
             if (input.Type === 'GeneralCatalog') {
                 const items = await this.getGeneralCatalogItems(input);
                 const item = items.find((i) => i.ItemID === value);
@@ -285,6 +291,13 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                 displayValue = await DateTimeUtil.getLocalDateString(displayValue);
             } else if (input.Type === 'DateTime') {
                 displayValue = await DateTimeUtil.getLocalDateTimeString(displayValue);
+            } else {
+                for (const definition of this.extendedDefinitions) {
+                    const extendedValue = await definition.getDisplaySearchValue(property, parameter, value, type);
+                    if (extendedValue) {
+                        displayValue = extendedValue;
+                    }
+                }
             }
         }
 
