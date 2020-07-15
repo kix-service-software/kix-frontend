@@ -154,7 +154,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     ): Promise<string> {
         let displayValue;
 
-        if (property.match(this.dFRegEx)) {
+        if (property && property.match(this.dFRegEx)) {
             const dfName = property.replace(this.dFRegEx, '$1');
             let fieldValue: DynamicFieldValue;
             if (object[KIXObjectProperty.DYNAMIC_FIELDS]) {
