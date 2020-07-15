@@ -130,6 +130,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
             const type = await ConfigItemClassAttributeUtil.getAttributeType(
                 property, classParameter ? classParameter.value : null
             );
+
             if (type === 'Date') {
                 operations = dateTimeOperators;
             } else if (type === 'DateTime') {
@@ -142,6 +143,10 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                 || type === 'Contact'
             ) {
                 operations = numberOperators;
+            } else {
+
+                // use type rather than property
+                operations = await super.getOperations(type);
             }
         }
 
@@ -173,10 +178,12 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                 return InputFieldTypes.OBJECT_REFERENCE;
             } else if (type === 'Organisation' || type === 'Contact') {
                 return InputFieldTypes.OBJECT_REFERENCE;
+            } else {
+
+                // use type rather than property
+                return super.getInputType(type);
             }
         }
-
-        return InputFieldTypes.TEXT;
     }
 
     private isDropDown(property: string): boolean {
@@ -225,6 +232,10 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                             KIXObjectType.CONFIG_ITEM, objectIds
                         );
                         return await KIXObjectService.prepareTree(items);
+                    } else {
+
+                        // use type rather than property
+                        return await super.getTreeNodes(input.Type);
                     }
                 }
         }
