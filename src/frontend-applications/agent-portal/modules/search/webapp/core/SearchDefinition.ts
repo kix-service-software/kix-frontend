@@ -32,6 +32,12 @@ export abstract class SearchDefinition {
 
     public formManager: AbstractDynamicFormManager;
 
+    protected extendedDefinitions: SearchDefinition[] = [];
+
+    public addExtendedDefinitions(definition: SearchDefinition): void {
+        this.extendedDefinitions.push(definition);
+    }
+
     public createFormManager(): SearchFormManager {
         return null;
     }
@@ -51,7 +57,17 @@ export abstract class SearchDefinition {
     public async getDisplaySearchValue(
         property: string, parameter: Array<[string, any]>, value: any, type: FilterDataType
     ): Promise<string> {
-        return await LabelService.getInstance().getPropertyValueDisplayText(this.objectType, property, value);
+        let displayValue;
+        for (const definition of this.extendedDefinitions) {
+            const extendedValue = await definition.getDisplaySearchValue(property, parameter, value, type);
+            if (extendedValue) {
+                displayValue = extendedValue;
+            }
+        }
+
+        return displayValue ? displayValue : await LabelService.getInstance().getPropertyValueDisplayText(
+            this.objectType, property, value
+        );
     }
 
     public async searchValues(
