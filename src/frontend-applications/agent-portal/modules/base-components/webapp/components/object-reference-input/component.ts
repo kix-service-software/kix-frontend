@@ -193,6 +193,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     }
                 }
             }
+            treeHandler.selectNone(true);
             treeHandler.setSelection(selectedNodes, true, true, true);
         } else if (treeHandler) {
             treeHandler.setSelection([], true, true, true);

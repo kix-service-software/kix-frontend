@@ -259,9 +259,10 @@ export class TreeHandler {
         this.setSelection(nodes, true);
     }
 
-    public selectNone(): void {
+    public selectNone(silent: boolean = false): void {
         const nodes = TreeUtil.getVisibleNodes(this.tree, this.filterValue);
-        this.setSelection(nodes, false);
+        this.selectedNodes = [];
+        this.setSelection(nodes, false, silent);
     }
 
     public getSelectedNodes(): TreeNode[] {
