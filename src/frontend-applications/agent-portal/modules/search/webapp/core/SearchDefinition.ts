@@ -65,9 +65,9 @@ export abstract class SearchDefinition {
             }
         }
 
-        return displayValue ? displayValue : await LabelService.getInstance().getPropertyValueDisplayText(
-            this.objectType, property, value
-        );
+        return displayValue
+            ? displayValue
+            : await LabelService.getInstance().getPropertyValueDisplayText(this.objectType, property, value);
     }
 
     public async searchValues(
