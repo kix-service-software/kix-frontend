@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeService, TreeHandler } from '../../../../base-components/webapp/core/tree';
 import { JobService } from '../../core';
 import { JobProperty } from '../../../model/JobProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -18,13 +18,8 @@ import { FormService } from '../../../../base-components/webapp/core/FormService
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
-    public async setCurrentValue(): Promise<void> {
-        return;
-    }
-
     public onCreate(): void {
         this.state = new ComponentState();
-        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -41,35 +36,48 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        const treeHandler = new TreeHandler([], null, null, true);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+        await this.load();
         await super.onMount();
+        this.state.prepared = true;
     }
 
-    private async load(): Promise<TreeNode[]> {
+    private async load(): Promise<void> {
         const nodes = await JobService.getInstance().getTreeNodes(
             JobProperty.EXEC_PLAN_EVENTS
         );
-        this.setCurrentNode(nodes);
-        return nodes;
+
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes, null, true);
+        }
     }
 
-    public async setCurrentNode(nodes: TreeNode[]): Promise<void> {
+    public async setCurrentValue(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const value = formInstance.getFormFieldValue<string[] | string>(this.state.field.instanceId);
         if (value) {
-            let currentNodes = [];
-            if (Array.isArray(value.value)) {
-                currentNodes = nodes.filter(
-                    (eventNode) => (value.value as string[]).some((eventName) => eventName === eventNode.id)
-                );
-            } else {
-                const node = nodes.find(
-                    (eventNode) => eventNode.id === value.value
-                );
-                currentNodes = node ? [node] : [];
-            }
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            if (treeHandler) {
+                const nodes = treeHandler.getTree();
+                let selectedNodes = [];
+                if (Array.isArray(value.value)) {
+                    selectedNodes = nodes.filter(
+                        (eventNode) => (value.value as string[]).some((eventName) => eventName === eventNode.id)
+                    );
+                } else {
+                    const node = nodes.find(
+                        (eventNode) => eventNode.id === value.value
+                    );
+                    selectedNodes = node ? [node] : [];
+                }
 
-            currentNodes.forEach((n) => n.selected = true);
-            this.provideToContext(currentNodes);
+                selectedNodes.forEach((n) => n.selected = true);
+
+                this.provideToContext(selectedNodes);
+                treeHandler.setSelection(selectedNodes, true, true, true);
+            }
         }
     }
 
