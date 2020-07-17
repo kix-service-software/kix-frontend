@@ -178,7 +178,13 @@ export class SysConfigFormService extends KIXObjectFormService {
                 );
 
                 if (options && options.length) {
-                    value = options[0].Value;
+
+                    // if value is null and option is invalid, uses values from definition else use this value
+                    // (check if null-value and invalid comes first, because value could be from config-file)
+                    value = options[0].Value === null && sysConfig.ValidID !== 1
+                        ? !sysConfig.IsModified || sysConfig.Value === null || sysConfig.Value === '' // 0 is valid
+                            ? sysConfig.Default : sysConfig.Value
+                        : options[0].Value;
                     formField.readonly = options[0].ReadOnly;
                 }
 
