@@ -187,7 +187,14 @@ class SysConfigContentProvider extends TableContentProvider {
         for (const column of columns) {
             let tableValue: TableValue;
             if (column.property === SysConfigOptionDefinitionProperty.VALUE) {
-                let value = option && option.Value ? option.Value : '';
+
+                // if no option or value is null and option is invalid, uses values from definition
+                // (check if null-value and invalid comes first, because value could be from config-file)
+                let value = !option || (option.Value === null && definition.ValidID !== 1)
+                    ? !definition.IsModified || definition.Value === null || definition.Value === '' // 0 is valid
+                        ? definition.Default : definition.Value
+                    : option.Value;
+
                 if (
                     value !== '' &&
                     (definition.Type === SysConfigOptionType.HASH || definition.Type === SysConfigOptionType.ARRAY)
