@@ -228,7 +228,7 @@ export class HttpService {
 
     private buildRequestUrl(resource: string): string {
         let encodedResource = encodeURI(resource);
-        encodedResource = encodedResource.replace('###', '%23%23%23');
+        encodedResource = encodedResource.replace(/###/g, '%23%23%23');
         return `${this.apiURL}/${encodedResource}`;
     }
 
