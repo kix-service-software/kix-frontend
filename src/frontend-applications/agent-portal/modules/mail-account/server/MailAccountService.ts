@@ -58,7 +58,7 @@ export class MailAccountService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.MAIL_ACCOUNT_TYPE) {
             const uri = this.buildUri('system', 'communication', 'mailaccounts', 'types');
             objects = await super.load<string>(
-                token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType', String
+                token, KIXObjectType.MAIL_ACCOUNT_TYPE, uri, null, null, 'MailAccountType'
             );
         }
 
