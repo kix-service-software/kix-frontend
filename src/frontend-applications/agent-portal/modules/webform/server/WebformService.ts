@@ -224,7 +224,7 @@ export class WebformService {
                     }
                     if (!file.content) {
                         return await TranslationAPIService.getInstance().translate(
-                            'Translatable#Could not load file \'{0}\'.',
+                            'Translatable#Could not load file {0}.',
                             [file.name], language
                         );
                     }

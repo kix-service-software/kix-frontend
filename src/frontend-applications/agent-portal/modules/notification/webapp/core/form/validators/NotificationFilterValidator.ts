@@ -74,7 +74,7 @@ export class NotificationFilterValidator implements IFormFieldValidator {
     private async createValidationResult(property: string): Promise<ValidationResult> {
         const label = await LabelService.getInstance().getPropertyText(property, KIXObjectType.ARTICLE);
         const errorString = await TranslationService.translate(
-            'Translatable#Required field \'{0}\' has no value.', [label]
+            'Translatable#Required field {0} has no value.', [label]
         );
         return new ValidationResult(ValidationSeverity.ERROR, errorString);
     }

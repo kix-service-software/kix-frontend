@@ -67,7 +67,7 @@ export class ObjectReferenceCountValidator implements IFormFieldValidator {
                 'Translatable#At least {0} values must be selected', [countMin]
             );
             const errorString = await TranslationService.translate(
-                'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
             );
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }
@@ -78,7 +78,7 @@ export class ObjectReferenceCountValidator implements IFormFieldValidator {
                 'Translatable#A maximum of {0} values can be selected.', [countMax]
             );
             const errorString = await TranslationService.translate(
-                'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
             );
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }
@@ -89,7 +89,7 @@ export class ObjectReferenceCountValidator implements IFormFieldValidator {
                 'Translatable#A maximum of 1 value can be selected. (SingleSelect)', [countMax]
             );
             const errorString = await TranslationService.translate(
-                'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
             );
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }

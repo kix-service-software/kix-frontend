@@ -30,7 +30,7 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
         return false;
     }
 
-    public async  validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const formFieldValue = formInstance.getFormFieldValue<string>(formField.instanceId);
 
@@ -39,7 +39,7 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
         } else {
             const fieldLabel = await TranslationService.translate(formField.label);
             const errorString = await TranslationService.translate(
-                'Translatable#Required field \'{0}\' is no JSON.', [fieldLabel]
+                'Translatable#Required field {0} is no JSON.', [fieldLabel]
             );
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }

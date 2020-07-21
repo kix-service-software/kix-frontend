@@ -103,7 +103,7 @@ export class DynamicFieldTextValidator implements IFormFieldValidator {
                 const fieldLabel = await TranslationService.translate(label);
                 const errorMessage = await TranslationService.translate(regexEntry.ErrorMessage);
                 const errorString = await TranslationService.translate(
-                    'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                    'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
                 );
                 return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }

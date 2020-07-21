@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         DialogService.getInstance().setMainDialogHint(
             // tslint:disable-next-line:max-line-length
-            'Translatable#For keyboard navigation, press \'Ctrl\' to switch focus to dialog. See manual for more detailed information.'
+            'Translatable#For keyboard navigation, press Ctrl to switch focus to dialog. See manual for more detailed information.'
         );
 
         this.state.translations = await TranslationService.createTranslationObject([
