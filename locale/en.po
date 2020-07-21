@@ -131,7 +131,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-msgid "All agents subscribed to the ticket's queue"
+msgid "All agents subscribed to the tickets queue"
 msgstr ""
 
 msgid "All agents with read permissions for the ticket"
@@ -249,7 +249,7 @@ msgstr "Assign Team"
 msgid "At least {0} values must be selected"
 msgstr ""
 
-msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 
 msgid "Attachments"
@@ -533,7 +533,7 @@ msgstr ""
 msgid "Could not handle request."
 msgstr ""
 
-msgid "Could not load file '{0}'."
+msgid "Could not load file {0}."
 msgstr ""
 
 msgid "Country"
@@ -1013,7 +1013,7 @@ msgstr ""
 msgid "Field"
 msgstr ""
 
-msgid "Field '{0}' has an invalid value ({1})."
+msgid "Field {0} has an invalid value ({1})."
 msgstr ""
 
 msgid "Field Information"
@@ -1055,7 +1055,7 @@ msgid "Force"
 msgstr ""
 
 msgid ""
-"For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual "
+"For keyboard navigation, press Ctrl to switch focus to dialog. See manual "
 "for more detailed information."
 msgstr ""
 
@@ -2482,6 +2482,9 @@ msgstr ""
 msgid "Let's go"
 msgstr ""
 
+msgid "Lets go"
+msgstr ""
+
 msgid "link {0}"
 msgstr "Link {0}"
 
@@ -3115,6 +3118,9 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
+msgid "Readonly"
+msgstr ""
+
 msgid "Recently Closed"
 msgstr ""
 
@@ -3175,10 +3181,10 @@ msgstr ""
 msgid "Reply all"
 msgstr ""
 
-msgid "Required field '{0}' has no value."
+msgid "Required field {0} has no value."
 msgstr ""
 
-msgid "Required field '{0}' is no JSON."
+msgid "Required field {0} is no JSON."
 msgstr ""
 
 msgid "Reset"
@@ -3512,9 +3518,6 @@ msgid "Team"
 msgstr ""
 
 msgid "Team Backlog"
-msgstr ""
-
-msgid "Templates"
 msgstr ""
 
 msgid "Text"
@@ -3863,7 +3866,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-msgid "Value of field '{0}' is too long (max: {1})."
+msgid "Value of field {0} is too long (max: {1})."
 msgstr ""
 
 msgid "Value successfully created."

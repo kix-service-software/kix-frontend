@@ -131,7 +131,9 @@ msgstr "Agenten"
 msgid "All"
 msgstr "Alle"
 
-msgid "All agents subscribed to the ticket's queue"
+#, fuzzy
+#| msgid "All agents subscribed to the ticket's queue"
+msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
 msgid "All agents with read permissions for the ticket"
@@ -257,7 +259,10 @@ msgstr "Zuordnung zu Team"
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
-msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+#, fuzzy
+#| msgid ""
+#| "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
 "enthalten."
@@ -545,7 +550,9 @@ msgstr "Kopie von {0}"
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
-msgid "Could not load file '{0}'."
+#, fuzzy
+#| msgid "Could not load file '{0}'."
+msgid "Could not load file {0}."
 msgstr "Datei '{0}' konnte nicht geladen werden."
 
 msgid "Country"
@@ -1025,7 +1032,9 @@ msgstr "Jetzt abrufen"
 msgid "Field"
 msgstr "Feld"
 
-msgid "Field '{0}' has an invalid value ({1})."
+#, fuzzy
+#| msgid "Field '{0}' has an invalid value ({1})."
+msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
 msgid "Field Information"
@@ -1068,8 +1077,12 @@ msgstr "Tickets werden gesperrt"
 msgid "Force"
 msgstr "Erzwingen"
 
+#, fuzzy
+#| msgid ""
+#| "For keyboard navigation, press 'Ctrl' to switch focus to dialog. See "
+#| "manual for more detailed information."
 msgid ""
-"For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual "
+"For keyboard navigation, press Ctrl to switch focus to dialog. See manual "
 "for more detailed information."
 msgstr ""
 "Durch Drücken von 'Strg' kann der Fokus der Tastatursteuerung auf den Dialog "
@@ -2613,6 +2626,11 @@ msgstr "Legende"
 msgid "Let's go"
 msgstr "Los geht's"
 
+#, fuzzy
+#| msgid "Let's go"
+msgid "Lets go"
+msgstr "Los geht's"
+
 msgid "link {0}"
 msgstr "{0} verknüpfen"
 
@@ -3250,6 +3268,11 @@ msgstr "Bewertung"
 msgid "Read"
 msgstr "Lesen"
 
+#, fuzzy
+#| msgid "Read"
+msgid "Readonly"
+msgstr "Lesen"
+
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
@@ -3310,10 +3333,14 @@ msgstr "Antworten"
 msgid "Reply all"
 msgstr "Allen antworten"
 
-msgid "Required field '{0}' has no value."
+#, fuzzy
+#| msgid "Required field '{0}' has no value."
+msgid "Required field {0} has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
-msgid "Required field '{0}' is no JSON."
+#, fuzzy
+#| msgid "Required field '{0}' is no JSON."
+msgid "Required field {0} is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
 
 msgid "Reset"
@@ -3650,9 +3677,6 @@ msgstr "Team"
 
 msgid "Team Backlog"
 msgstr "Team Backlog"
-
-msgid "Templates"
-msgstr "Vorlagen"
 
 msgid "Text"
 msgstr "Text"
@@ -4007,7 +4031,9 @@ msgstr "Gültigkeit"
 msgid "Value"
 msgstr "Wert"
 
-msgid "Value of field '{0}' is too long (max: {1})."
+#, fuzzy
+#| msgid "Value of field '{0}' is too long (max: {1})."
+msgid "Value of field {0} is too long (max: {1})."
 msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
 
 msgid "Value successfully created."
@@ -4105,6 +4131,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Templates"
+#~ msgstr "Vorlagen"
 
 #~ msgid "Calendar"
 #~ msgstr "Kalender"
