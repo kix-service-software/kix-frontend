@@ -2623,12 +2623,12 @@ msgstr "Nachname"
 msgid "Legend"
 msgstr "Legende"
 
-msgid "Let's go"
-msgstr "Los geht's"
-
 #, fuzzy
 #| msgid "Let's go"
 msgid "Lets go"
+msgstr "Los geht's"
+
+msgid "Let's go"
 msgstr "Los geht's"
 
 msgid "link {0}"

@@ -2479,10 +2479,10 @@ msgstr ""
 msgid "Legend"
 msgstr ""
 
-msgid "Let's go"
+msgid "Lets go"
 msgstr ""
 
-msgid "Lets go"
+msgid "Let's go"
 msgstr ""
 
 msgid "link {0}"
