@@ -300,7 +300,8 @@ export class ArticleFormService extends KIXObjectFormService {
             property = ArticleProperty.TO;
             label = 'Translatable#To';
             actions = [ArticleProperty.CC, ArticleProperty.BCC];
-            referencedValue = await this.getToFieldValue(dialogContext);
+            const toValue = await this.getToFieldValue(dialogContext);
+            referencedValue = toValue ? [toValue] : null;
         }
 
         let field = new FormFieldConfiguration(
