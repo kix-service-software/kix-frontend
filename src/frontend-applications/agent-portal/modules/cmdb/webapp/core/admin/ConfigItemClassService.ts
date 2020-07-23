@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../../model/ConfigItemClass";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../../model/ConfigItemClass';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 
 export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {
@@ -25,7 +25,8 @@ export class ConfigItemClassService extends KIXObjectService<ConfigItemClass> {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CONFIG_ITEM_CLASS);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_CLASS, [ConfigItemClass]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

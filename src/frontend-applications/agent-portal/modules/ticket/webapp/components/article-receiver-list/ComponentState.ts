@@ -7,7 +7,7 @@
  * --
  */
 
-import { ArticleReceiver } from "../../../model/ArticleReceiver";
+import { ArticleReceiver } from '../../../model/ArticleReceiver';
 
 export class ComponentState {
 

@@ -6,12 +6,11 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.action on-click("doAction") title=state.text>
     <${state.action.hasLink ? "a" : ""}
         href=("?actionId=" + state.action.id + "&data=" + state.actionData)
         on-click("linkClicked")>
-        <span class=state.action.icon/>
+        <icon icon=state.action.icon/>
     </>
     <if(state.displayText)>
         <${state.action.hasLink ? "a" : ""}

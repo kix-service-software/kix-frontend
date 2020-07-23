@@ -73,8 +73,8 @@ class Component {
         const inciStateHash = new PreparedData();
         inciStateHash.Key = version.InciState;
         inciStateHash.Label = version.isCurrentVersion
-            ? "Translatable#Current Incident state"
-            : "Translatable#Incident state";
+            ? 'Translatable#Current Incident state'
+            : 'Translatable#Incident state';
         inciStateHash.DisplayValue = version.isCurrentVersion
             ? version.CurInciState
             : version.InciState;
@@ -83,8 +83,8 @@ class Component {
         const deplStateHash = new PreparedData();
         deplStateHash.Key = version.DeplState;
         deplStateHash.Label = version.isCurrentVersion
-            ? "Translatable#Current deployment state"
-            : "Translatable#Deployment state";
+            ? 'Translatable#Current deployment state'
+            : 'Translatable#Deployment state';
         deplStateHash.DisplayValue = version.isCurrentVersion
             ? version.CurDeplState
             : version.DeplState;

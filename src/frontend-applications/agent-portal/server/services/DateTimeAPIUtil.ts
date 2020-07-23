@@ -7,7 +7,7 @@
  * --
  */
 
-import { TranslationAPIService } from "../../modules/translation/server/TranslationService";
+import { TranslationAPIService } from '../../modules/translation/server/TranslationService';
 
 export class DateTimeAPIUtil {
 
@@ -80,6 +80,9 @@ export class DateTimeAPIUtil {
     public static getKIXDateString(date: Date): string {
         let kixDateString;
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const year = date.getFullYear();
             const month = DateTimeAPIUtil.padZero(date.getMonth() + 1);
             const day = DateTimeAPIUtil.padZero(date.getDate());
@@ -91,6 +94,9 @@ export class DateTimeAPIUtil {
     public static getKIXTimeString(date: Date, short: boolean = true): string {
         let kixTimeString;
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const hours = DateTimeAPIUtil.padZero(date.getHours());
             const minutes = DateTimeAPIUtil.padZero(date.getMinutes());
             const seconds = DateTimeAPIUtil.padZero(date.getSeconds());
@@ -104,6 +110,9 @@ export class DateTimeAPIUtil {
 
     public static getTimestampNumbersOnly(date: Date, withSeconds?: boolean): string {
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const year = date.getFullYear();
             const month = DateTimeAPIUtil.padZero(date.getMonth() + 1);
             const day = DateTimeAPIUtil.padZero(date.getDate());

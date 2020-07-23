@@ -8,41 +8,41 @@
  */
 
 // tslint:disable: max-line-length
-import { SocketNameSpace } from "./SocketNameSpace";
-import { KIXModulesEvent } from "../../modules/base-components/webapp/core/KIXModulesEvent";
-import { LoadKIXModulesRequest } from "../../modules/base-components/webapp/core/LoadKIXModulesRequest";
-import { SocketResponse } from "../../modules/base-components/webapp/core/SocketResponse";
-import { PluginService } from "../../../../server/services/PluginService";
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
-import { LoadKIXModulesResponse } from "../../modules/base-components/webapp/core/LoadKIXModulesResponse";
-import { SocketEvent } from "../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../modules/base-components/webapp/core/SocketErrorResponse";
-import { LoadFormConfigurationsRequest } from "../../modules/base-components/webapp/core/LoadFormConfigurationsRequest";
-import { ModuleConfigurationService } from "../services/configuration";
-import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { FormConfigurationResolver } from "../services/configuration/FormConfigurationResolver";
-import { LoggingService } from "../../../../server/services/LoggingService";
-import { LoadFormConfigurationsResponse } from "../../modules/base-components/webapp/core/LoadFormConfigurationsResponse";
-import { ISocketRequest } from "../../modules/base-components/webapp/core/ISocketRequest";
-import { LoadReleaseInfoResponse } from "../../modules/base-components/webapp/core/LoadReleaseInfoResponse";
-import { Socket } from "socket.io";
-import { AgentPortalExtensions } from "../extensions/AgentPortalExtensions";
-import { ReleaseInfoUtil } from "../../../../server/ReleaseInfoUtil";
-import { KIXModuleFactory } from "../extensions/KIXModuleFactory";
-import { LoadFormConfigurationRequest } from "../../modules/base-components/webapp/core/LoadFormConfigurationRequest";
-import { LoadFormConfigurationResponse } from "../../modules/base-components/webapp/core/LoadFormConfigurationResponse";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { SysConfigOptionProperty } from "../../modules/sysconfig/model/SysConfigOptionProperty";
-import { SearchOperator } from "../../modules/search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { SysConfigService } from "../../modules/sysconfig/server/SysConfigService";
-import { SysConfigOption } from "../../modules/sysconfig/model/SysConfigOption";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { CacheService } from "../services/cache";
-import { ISocketResponse } from "../../modules/base-components/webapp/core/ISocketResponse";
+import { SocketNameSpace } from './SocketNameSpace';
+import { KIXModulesEvent } from '../../modules/base-components/webapp/core/KIXModulesEvent';
+import { LoadKIXModulesRequest } from '../../modules/base-components/webapp/core/LoadKIXModulesRequest';
+import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
+import { PluginService } from '../../../../server/services/PluginService';
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { LoadKIXModulesResponse } from '../../modules/base-components/webapp/core/LoadKIXModulesResponse';
+import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
+import { LoadFormConfigurationsRequest } from '../../modules/base-components/webapp/core/LoadFormConfigurationsRequest';
+import { ModuleConfigurationService } from '../services/configuration';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormConfigurationResolver } from '../services/configuration/FormConfigurationResolver';
+import { LoggingService } from '../../../../server/services/LoggingService';
+import { LoadFormConfigurationsResponse } from '../../modules/base-components/webapp/core/LoadFormConfigurationsResponse';
+import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
+import { LoadReleaseInfoResponse } from '../../modules/base-components/webapp/core/LoadReleaseInfoResponse';
+import { Socket } from 'socket.io';
+import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
+import { ReleaseInfoUtil } from '../../../../server/ReleaseInfoUtil';
+import { KIXModuleFactory } from '../extensions/KIXModuleFactory';
+import { LoadFormConfigurationRequest } from '../../modules/base-components/webapp/core/LoadFormConfigurationRequest';
+import { LoadFormConfigurationResponse } from '../../modules/base-components/webapp/core/LoadFormConfigurationResponse';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { SysConfigOptionProperty } from '../../modules/sysconfig/model/SysConfigOptionProperty';
+import { SearchOperator } from '../../modules/search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';
+import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { CacheService } from '../services/cache';
+import { ISocketResponse } from '../../modules/base-components/webapp/core/ISocketResponse';
 // tslint:enable
 
 import cookie = require('cookie');
@@ -197,7 +197,6 @@ export class KIXModuleNamespace extends SocketNameSpace {
             new LoadFormConfigurationResponse(data.requestId, form)
         );
     }
-
 
     private async loadReleaseInfo(data: ISocketRequest): Promise<SocketResponse<LoadReleaseInfoResponse>> {
         const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();

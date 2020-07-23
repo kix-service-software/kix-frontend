@@ -7,8 +7,8 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { ContextType } from "../../../../../model/ContextType";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { ContextType } from '../../../../../model/ContextType';
 
 export class ComponentState extends WidgetComponentState {
 

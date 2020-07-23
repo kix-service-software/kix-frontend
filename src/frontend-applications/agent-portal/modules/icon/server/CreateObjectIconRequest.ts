@@ -7,7 +7,7 @@
  * --
  */
 
-import { CreateObjectIcon } from "./CreateObjectIcon";
+import { CreateObjectIcon } from './CreateObjectIcon';
 
 export class CreateObjectIconRequest {
 

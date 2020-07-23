@@ -7,19 +7,19 @@
  * --
  */
 
-import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
-import { ConfigItem } from "../../../model/ConfigItem";
-import { ChartDataSets } from "chart.js";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { GeneralCatalogItem } from "../../../../general-catalog/model/GeneralCatalogItem";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { ConfigItem } from '../../../model/ConfigItem';
+import { ChartDataSets } from 'chart.js';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { GeneralCatalogItem } from '../../../../general-catalog/model/GeneralCatalogItem';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class ConfigItemChartFactory {
 
@@ -70,12 +70,12 @@ export class ConfigItemChartFactory {
                 {
                     label: 'Warning',
                     data: [],
-                    backgroundColor: "#ffed00"
+                    backgroundColor: '#ffed00'
                 },
                 {
                     label: 'Incident',
                     data: [],
-                    backgroundColor: "#e31e24"
+                    backgroundColor: '#e31e24'
                 }
             ];
 
@@ -141,16 +141,16 @@ export class ConfigItemChartFactory {
 
     private getPredefinedColors(): string[] {
         return [
-            "rgb(91,91,91)",
-            "rgb(4,82,125)",
-            "rgb(0,141,210)",
-            "rgb(129,189,223)",
-            "rgb(160,230,200)",
-            "rgb(130,200,38)",
-            "rgb(0,152,70)",
-            "rgb(227,30,36)",
-            "rgb(239,127,26)",
-            "rgb(254,204,0)"
+            'rgb(91,91,91)',
+            'rgb(4,82,125)',
+            'rgb(0,141,210)',
+            'rgb(129,189,223)',
+            'rgb(160,230,200)',
+            'rgb(130,200,38)',
+            'rgb(0,152,70)',
+            'rgb(227,30,36)',
+            'rgb(239,127,26)',
+            'rgb(254,204,0)'
         ];
     }
 

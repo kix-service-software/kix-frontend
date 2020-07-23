@@ -7,12 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { SysConfigOptionDefinition } from "../../model/SysConfigOptionDefinition";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SysConfigOptionDefinitionProperty } from '../../model/SysConfigOptionDefinitionProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { SysConfigOptionProperty } from '../../model/SysConfigOptionProperty';
 
 export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinition> {
 
@@ -29,6 +30,9 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
         switch (property) {
             case SysConfigOptionDefinitionProperty.IS_MODIFIED:
                 displayValue = value === 1 ? 'Translatable#Modified' : '';
+                break;
+            case SysConfigOptionProperty.READONLY:
+                displayValue = value === 1 ? 'Translatable#yes' : 'no';
                 break;
             case SysConfigOptionDefinitionProperty.VALUE:
                 displayValue = JSON.stringify(value);
@@ -61,6 +65,9 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
                 break;
             case SysConfigOptionDefinitionProperty.IS_MODIFIED:
                 displayValue = 'Translatable#Modified';
+                break;
+            case SysConfigOptionProperty.READONLY:
+                displayValue = 'Translatable#Readonly';
                 break;
             case SysConfigOptionDefinitionProperty.CONTEXT:
                 displayValue = 'Translatable#Context';
@@ -100,7 +107,7 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
             case SysConfigOptionDefinitionProperty.VALUE:
                 displayValue = sysConfig.IsModified === 1
                     ? sysConfig.Value : sysConfig.Default;
-                displayValue = sysConfig.Type === "Hash"
+                displayValue = sysConfig.Type === 'Hash'
                     ? JSON.stringify(displayValue) : displayValue;
                 break;
             default:
@@ -135,7 +142,7 @@ export class SysConfigLabelProvider extends LabelProvider<SysConfigOptionDefinit
     }
 
     public getObjectIcon(object: SysConfigOptionDefinition): string | ObjectIcon {
-        return new ObjectIcon('SysConfig', object.Name);
+        return new ObjectIcon(null, 'SysConfig', object.Name);
     }
 
     public async getObjectTooltip(object: SysConfigOptionDefinition): Promise<string> {

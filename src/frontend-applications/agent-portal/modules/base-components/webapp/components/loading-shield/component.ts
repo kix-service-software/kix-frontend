@@ -24,7 +24,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async update(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
+            'Translatable#Cancel', 'Translatable#Save'
         ]);
     }
 

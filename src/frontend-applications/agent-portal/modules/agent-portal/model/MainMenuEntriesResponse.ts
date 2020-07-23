@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "../../../modules/base-components/webapp/core/ISocketResponse";
-import { MenuEntry } from "../../../model/MenuEntry";
+import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
+import { MenuEntry } from '../../../model/MenuEntry';
 
 export class MainMenuEntriesResponse implements ISocketResponse {
 

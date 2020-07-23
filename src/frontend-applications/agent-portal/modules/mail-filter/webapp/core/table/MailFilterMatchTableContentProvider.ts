@@ -7,15 +7,15 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { MailFilterMatch } from "../../../model/MailFilterMatch";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { MailFilter } from "../../../model/MailFilter";
-import { SortUtil } from "../../../../../model/SortUtil";
-import { DataType } from "../../../../../model/DataType";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { MailFilterMatch } from '../../../model/MailFilterMatch';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { MailFilter } from '../../../model/MailFilter';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { DataType } from '../../../../../model/DataType';
 
 export class MailFilterMatchTableContentProvider extends TableContentProvider<MailFilterMatch> {
 

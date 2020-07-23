@@ -7,14 +7,14 @@
  * --
  */
 
-import { IAdminModuleExtension } from "../admin/server/IAdminModuleExtension";
-import { AdminModuleCategory } from "../admin/model/AdminModuleCategory";
-import { AdminModule } from "../admin/model/AdminModule";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
+import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
+import { AdminModule } from '../admin/model/AdminModule';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
@@ -25,8 +25,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 new AdminModule(
                     null, 'text-modules', 'Translatable#Text Modules', null,
                     KIXObjectType.TEXT_MODULE, 'ticket-admin-text-modules', [
-                    new UIComponentPermission('system/textmodules', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/textmodules/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/textmodules', [CRUD.CREATE], true)
                 ]
                 )
             ]

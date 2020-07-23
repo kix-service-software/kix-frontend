@@ -7,18 +7,18 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ITable, IRowObject, RowObject, TableValue } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { JobDetailsContext } from "..";
-import { Job } from "../../../model/Job";
-import { MacroAction } from "../../../model/MacroAction";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { MacroActionType } from "../../../model/MacroActionType";
-import { MacroActionTypeOption } from "../../../model/MacroActionTypeOption";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { JobDetailsContext } from '..';
+import { Job } from '../../../model/Job';
+import { MacroAction } from '../../../model/MacroAction';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { MacroActionType } from '../../../model/MacroActionType';
+import { MacroActionTypeOption } from '../../../model/MacroActionTypeOption';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 export class MacroActionTableContentProvider extends TableContentProvider<any> {
 
@@ -53,7 +53,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
                         }
                     }
 
-                    o["preparedParameters"] = await this.getPreparedParameters(o, job.Macros[0].Type);
+                    o['preparedParameters'] = await this.getPreparedParameters(o, job.Macros[0].Type);
 
                     await this.prepareSpecificValues(values, o);
 

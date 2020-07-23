@@ -7,12 +7,12 @@
  * --
  */
 
-import { FormConfiguration } from "../../../model/configuration/FormConfiguration";
-import { FormPageConfiguration } from "../../../model/configuration/FormPageConfiguration";
-import { FormGroupConfiguration } from "../../../model/configuration/FormGroupConfiguration";
-import { FormFieldConfiguration } from "../../../model/configuration/FormFieldConfiguration";
-import { ResolverUtil } from "./ResolverUtil";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
+import { FormConfiguration } from '../../../model/configuration/FormConfiguration';
+import { FormPageConfiguration } from '../../../model/configuration/FormPageConfiguration';
+import { FormGroupConfiguration } from '../../../model/configuration/FormGroupConfiguration';
+import { FormFieldConfiguration } from '../../../model/configuration/FormFieldConfiguration';
+import { ResolverUtil } from './ResolverUtil';
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
 
 export class FormConfigurationResolver {
 

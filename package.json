@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node dist/server/index.js",
-    "build": "gulp",
+    "build": "./node_modules/.bin/gulp",
     "test-cucumber": "rm -Rf dist/ && tsc && cp -R features/ dist/ && ./node_modules/cucumber/bin/cucumber-js dist/features/ -f allure-cucumber-reporter.js",
     "test-cucumber-dev": "rm -Rf dist/ && tsc && cp -R features/ dist/  && ./node_modules/cucumber/bin/cucumber-js dist/features/",
     "test": "export http_proxy= && export https_proxy= && export NODE_ENV=test && sleep 1 && mocha --reporter mocha-allure2-reporter --compilers ts:ts-node/register --require source-map-support/register --full-trace --bail tests/**/*.test.ts src/**/*.test.ts",

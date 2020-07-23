@@ -7,7 +7,7 @@
  * --
  */
 
-import { Environment } from "./model/Environment";
+import { Environment } from './model/Environment';
 
 export class ServerUtil {
 

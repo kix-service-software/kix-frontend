@@ -132,11 +132,11 @@ class WidgetComponent implements IEventSubscriber {
         let typeClass: string;
 
         if (this.state.isDialog) {
-            typeClass = "dialog-widget";
+            typeClass = 'dialog-widget';
         } else {
             switch (type) {
                 case WidgetType.DIALOG:
-                    typeClass = "dialog-widget";
+                    typeClass = 'dialog-widget';
                     break;
                 case WidgetType.OVERLAY_DIALOG:
                     typeClass = 'overlay-dialog-widget';

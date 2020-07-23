@@ -505,7 +505,6 @@ describe('Browser / Components / TreeHandler', () => {
     describe('select/deselect multiple nodes via shift + End + Up + Down and deselct all with Pos1 (without filter)', () => {
         let treeHandler: TreeHandler;
 
-
         before(() => {
             const tree = [
                 new TreeNode('id1', 'label1', null, null, [

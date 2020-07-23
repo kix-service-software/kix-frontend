@@ -7,23 +7,23 @@
  * --
  */
 
-import { IFormFieldValidator } from "../../../../../../modules/base-components/webapp/core/IFormFieldValidator";
-import { FormFieldConfiguration } from "../../../../../../model/configuration/FormFieldConfiguration";
-import { ArticleProperty } from "../../../../model/ArticleProperty";
-import { ValidationResult } from "../../../../../../modules/base-components/webapp/core/ValidationResult";
-import { FormService } from "../../../../../../modules/base-components/webapp/core/FormService";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../../model/ContextType";
-import { ContextMode } from "../../../../../../model/ContextMode";
-import { TicketProperty } from "../../../../model/TicketProperty";
-import { FormFieldValue } from "../../../../../../model/configuration/FormFieldValue";
-import { ValidationSeverity } from "../../../../../../modules/base-components/webapp/core/ValidationSeverity";
-import { FormValidationService } from "../../../../../../modules/base-components/webapp/core/FormValidationService";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../../../system-address/model/SystemAddress";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { DynamicField } from "../../../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from '../../../../../../modules/base-components/webapp/core/IFormFieldValidator';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { ArticleProperty } from '../../../../model/ArticleProperty';
+import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
+import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../../model/ContextType';
+import { ContextMode } from '../../../../../../model/ContextMode';
+import { TicketProperty } from '../../../../model/TicketProperty';
+import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';
+import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
+import { FormValidationService } from '../../../../../../modules/base-components/webapp/core/FormValidationService';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
 
 export class EmailRecipientValidator implements IFormFieldValidator {
 
@@ -70,7 +70,7 @@ export class EmailRecipientValidator implements IFormFieldValidator {
         } else if (checkToValue) {
             return new ValidationResult(
                 ValidationSeverity.ERROR,
-                "Translatable#At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+                'Translatable#At least one of the fields To, Cc or Bcc must contain an entry.'
             );
         }
 
@@ -83,7 +83,7 @@ export class EmailRecipientValidator implements IFormFieldValidator {
 
     private async checkEmail(value: string[]): Promise<ValidationResult> {
         if (value && !!value.length) {
-            const mailAddresses = value;
+            const mailAddresses = Array.isArray(value) ? value : [value];
             for (const mail of mailAddresses) {
                 if (!FormValidationService.getInstance().isValidEmail(mail)) {
                     const errorString = await TranslationService.translate(

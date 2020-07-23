@@ -7,16 +7,15 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { SystemAddressFactory } from "./SystemAddressFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { SystemAddress } from "../model/SystemAddress";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { SystemAddress } from '../model/SystemAddress';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { Error } from '../../../../../server/model/Error';
 
 export class SystemAddressService extends KIXObjectAPIService {
 
@@ -34,7 +33,7 @@ export class SystemAddressService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.SYSTEM_ADDRESS;
 
     private constructor() {
-        super([new SystemAddressFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -50,7 +49,8 @@ export class SystemAddressService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.SYSTEM_ADDRESS) {
             objects = await super.load<SystemAddress>(
-                token, KIXObjectType.SYSTEM_ADDRESS, this.RESOURCE_URI, loadingOptions, objectIds, 'SystemAddress'
+                token, KIXObjectType.SYSTEM_ADDRESS, this.RESOURCE_URI, loadingOptions, objectIds, 'SystemAddress',
+                SystemAddress
             );
         }
 

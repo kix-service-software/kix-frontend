@@ -7,8 +7,8 @@
  * --
  */
 
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 export class ComponentState {
 

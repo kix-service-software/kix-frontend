@@ -7,8 +7,8 @@
  * --
  */
 
-import { TreeNode } from "../../core/tree";
-import { IdService } from "../../../../../model/IdService";
+import { TreeNode } from '../../core/tree';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState {
 

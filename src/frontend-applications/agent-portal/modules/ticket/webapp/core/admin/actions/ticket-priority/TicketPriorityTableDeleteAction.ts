@@ -7,18 +7,18 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ITable } from "../../../../../../base-components/webapp/core/table";
-import { TranslationService } from "../../../../../../../modules/translation/webapp/core/TranslationService";
-import { ComponentContent } from "../../../../../../../modules/base-components/webapp/core/ComponentContent";
-import { ConfirmOverlayContent } from "../../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
-import { OverlayService } from "../../../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../../../modules/base-components/webapp/core/OverlayType";
-import { EventService } from "../../../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { ToastContent } from "../../../../../../../modules/base-components/webapp/core/ToastContent";
+import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { TranslationService } from '../../../../../../../modules/translation/webapp/core/TranslationService';
+import { ComponentContent } from '../../../../../../../modules/base-components/webapp/core/ComponentContent';
+import { ConfirmOverlayContent } from '../../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
+import { OverlayService } from '../../../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../../../modules/base-components/webapp/core/OverlayType';
+import { EventService } from '../../../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { ToastContent } from '../../../../../../../modules/base-components/webapp/core/ToastContent';
 
 export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
 
@@ -26,7 +26,7 @@ export class TicketPriorityTableDeleteAction extends AbstractAction<ITable> {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Delete';
-        this.icon = "kix-icon-trash";
+        this.icon = 'kix-icon-trash';
     }
 
     public canRun(): boolean {

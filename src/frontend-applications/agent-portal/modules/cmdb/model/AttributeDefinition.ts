@@ -7,7 +7,7 @@
  * --
  */
 
-import { InputDefinition } from "./InputDefinition";
+import { InputDefinition } from './InputDefinition';
 
 export class AttributeDefinition {
 

@@ -7,27 +7,24 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { Ticket } from "../../../model/Ticket";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { TicketDetailsContext } from "..";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { BrowserCacheService } from "../../../../../modules/base-components/webapp/core/CacheService";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Ticket } from '../../../model/Ticket';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { TicketDetailsContext } from '..';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { BrowserCacheService } from '../../../../../modules/base-components/webapp/core/CacheService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TicketLockAction extends AbstractAction<Ticket> {
 
     public hasLink: boolean = false;
-
-    public permissions = [
-        new UIComponentPermission('tickets/*', [CRUD.UPDATE])
-    ];
 
     private currentLockId: number;
 
@@ -36,16 +33,25 @@ export class TicketLockAction extends AbstractAction<Ticket> {
         this.icon = 'kix-icon-lock-close';
     }
 
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return this.data && this.data.OwnerID !== 1 && show;
+    }
+
     public async setData(ticket: Ticket): Promise<void> {
         this.data = ticket;
 
         this.text = ticket.LockID === 1 ? 'Translatable#Lock' : 'Translatable#Unlock';
         this.icon = ticket.LockID === 1 ? 'kix-icon-lock-close' : 'kix-icon-lock-open';
         this.currentLockId = ticket.LockID;
-    }
-
-    public async canShow(): Promise<boolean> {
-        return this.data && this.data.OwnerID !== 1;
     }
 
     public async run(): Promise<void> {

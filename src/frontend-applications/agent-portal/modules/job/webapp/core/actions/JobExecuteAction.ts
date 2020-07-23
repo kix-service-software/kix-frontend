@@ -7,22 +7,22 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { Job } from "../../../model/Job";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { ConfirmOverlayContent } from "../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { JobProperty } from "../../../model/JobProperty";
-import { ToastContent } from "../../../../../modules/base-components/webapp/core/ToastContent";
-import { Error } from "../../../../../../../server/model/Error";
-import { StringContent } from "../../../../../modules/base-components/webapp/core/StringContent";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { Job } from '../../../model/Job';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { ConfirmOverlayContent } from '../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { JobProperty } from '../../../model/JobProperty';
+import { ToastContent } from '../../../../../modules/base-components/webapp/core/ToastContent';
+import { Error } from '../../../../../../../server/model/Error';
+import { StringContent } from '../../../../../modules/base-components/webapp/core/StringContent';
 
 export class JobExecuteAction extends AbstractAction {
 

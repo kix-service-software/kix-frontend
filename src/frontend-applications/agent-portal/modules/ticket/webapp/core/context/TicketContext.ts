@@ -7,20 +7,20 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
-import { SearchProperty } from "../../../../search/model/SearchProperty";
+import { Context } from '../../../../../model/Context';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
+import { SearchProperty } from '../../../../search/model/SearchProperty';
 
 export class TicketContext extends Context {
 

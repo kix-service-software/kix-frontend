@@ -7,8 +7,8 @@
  * --
  */
 
-import { TreeNodeProperty } from "./TreeNodeProperty";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { TreeNodeProperty } from './TreeNodeProperty';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class TreeNode {
     public constructor(

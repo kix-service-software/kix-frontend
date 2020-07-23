@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableHeaderHeight, TableRowHeight } from "../../../../base-components/webapp/core/table";
-import { IdService } from "../../../../../model/IdService";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableHeaderHeight, TableRowHeight } from '../../../../base-components/webapp/core/table';
+import { IdService } from '../../../../../model/IdService';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 
 export class ComponentState {
 

@@ -7,18 +7,20 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { ArticleProperty } from "../../../model/ArticleProperty";
-import { TicketDetailsContext } from "../../core";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { AbstractEditDialog } from "../../../../base-components/webapp/core/AbstractEditDialog";
+import { ComponentState } from './ComponentState';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { TicketDetailsContext } from '../../core';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { AbstractEditDialog } from '../../../../base-components/webapp/core/AbstractEditDialog';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 
 class Component extends AbstractEditDialog {
+
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -31,29 +33,30 @@ class Component extends AbstractEditDialog {
     }
 
     public async onMount(): Promise<void> {
-        super.onMount();
+        await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
+            'Translatable#Cancel', 'Translatable#Save'
         ]);
 
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        if (formInstance) {
-            formInstance.registerListener({
-                formListenerId: 'new-article-dialog-listener',
-                formValueChanged:
-                    async (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
-                        if (formField.property === ArticleProperty.CHANNEL_ID) {
-                            if (value && value.value === 2) {
-                                this.state.buttonLabel = 'Translatable#Send';
-                            } else {
-                                this.state.buttonLabel = 'Translatable#Save';
-                            }
-                        }
-                    },
-                updateForm: () => { return; }
-            });
-        }
+        this.formSubscriber = {
+            eventSubscriberId: 'EditTicketDialog',
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                const channelValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === ArticleProperty.CHANNEL_ID
+                );
+
+                if (channelValue && channelValue[1]) {
+                    const channelId = channelValue[1].value;
+                    if (channelId === 2) {
+                        this.state.buttonLabel = 'Translatable#Send';
+                    } else {
+                        this.state.buttonLabel = 'Translatable#Save';
+                    }
+                }
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async cancel(): Promise<void> {
@@ -62,6 +65,7 @@ class Component extends AbstractEditDialog {
 
     public async onDestroy(): Promise<void> {
         super.onDestroy();
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public async submit(): Promise<void> {

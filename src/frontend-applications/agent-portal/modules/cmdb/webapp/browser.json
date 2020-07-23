@@ -1,6 +1,5 @@
 {
     "dependencies": [
-        "require ./components/ci-class-input",
         "require ./components/cmdb-admin-ci-classes",
         "require ./components/cmdb-module",
         "require ./components/compare-config-item-version-dialog",
@@ -18,7 +17,6 @@
         "require ./components/edit-config-item-class-dialog",
         "require ./components/edit-config-item-dialog",
         "require ./components/edit-general-catalog-dialog",
-        "require ./components/general-catalog-class-input",
         "require ./components/go-to-version-cell",
         "require ./components/new-config-item-class-dialog",
         "require ./components/new-config-item-dialog",

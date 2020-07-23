@@ -75,7 +75,7 @@ class LinkDialogComponent {
         this.selectedObjects = [];
 
         this.state.translations = await TranslationService.createTranslationObject(
-            ["Translatable#Link to", "Translatable#Search"]
+            ['Translatable#Link to', 'Translatable#Search']
         );
 
         WidgetService.getInstance().setWidgetType('link-object-dialog-form-widget', WidgetType.GROUP);
@@ -140,8 +140,9 @@ class LinkDialogComponent {
             formId = nodes[0].id.toString();
             this.linkLabel = nodes[0].label;
             const formInstance = await FormService.getInstance().getFormInstance(formId, false);
-            context.setObjectList(this.objectType, []);
-            formInstance.reset();
+            if (formInstance) {
+                context.setObjectList(formInstance.getObjectType(), []);
+            }
         } else {
             this.state.table = null;
             formId = null;
@@ -169,7 +170,7 @@ class LinkDialogComponent {
                 : null;
 
             const objects = await SearchService.getInstance().executeSearch(
-                this.state.formId, excludeObjects
+                this.state.formId, null, excludeObjects
             );
 
             const context = await ContextService.getInstance().getContext<LinkObjectDialogContext>(

@@ -7,17 +7,18 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { MailAccount } from "../../model/MailAccount";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { MailAccountProperty } from "../../model/MailAccountProperty";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { DispatchingType } from "../../model/DispatchingType";
-import { IdService } from "../../../../model/IdService";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { MailAccount } from '../../model/MailAccount';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { MailAccountProperty } from '../../model/MailAccountProperty';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { DispatchingType } from '../../model/DispatchingType';
+import { IdService } from '../../../../model/IdService';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class MailAccountFormService extends KIXObjectFormService {
 
@@ -40,7 +41,8 @@ export class MailAccountFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, mailAccount: MailAccount
     ): Promise<void> {
         if (form && form.formContext === FormContext.EDIT) {
             PAGES:
@@ -104,7 +106,9 @@ export class MailAccountFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         switch (property) {
             case MailAccountProperty.TRUSTED:
                 value = Number(value);

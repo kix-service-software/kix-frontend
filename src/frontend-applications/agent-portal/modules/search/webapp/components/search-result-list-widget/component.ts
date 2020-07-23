@@ -7,27 +7,27 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { IKIXObjectSearchListener } from "../../core/IKIXObjectSearchListener";
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { SearchService } from "../../core/SearchService";
-import { WidgetService } from "../../../../../modules/base-components/webapp/core/WidgetService";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
+import { ComponentState } from './ComponentState';
+import { IKIXObjectSearchListener } from '../../core/IKIXObjectSearchListener';
+import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { SearchService } from '../../core/SearchService';
+import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import {
     TableEvent, TableFactoryService, TableHeaderHeight, TableRowHeight, TableEventData, ITable
-} from "../../../../base-components/webapp/core/table";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SearchCache } from "../../../model/SearchCache";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { SearchProperty } from "../../../model/SearchProperty";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
-import { SearchResultCategory } from "../../core/SearchResultCategory";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { TicketProperty } from "../../../../ticket/model/TicketProperty";
+} from '../../../../base-components/webapp/core/table';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SearchCache } from '../../../model/SearchCache';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { SearchProperty } from '../../../model/SearchProperty';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
+import { SearchResultCategory } from '../../core/SearchResultCategory';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -71,7 +71,7 @@ class Component implements IKIXObjectSearchListener {
         this.searchResultCategoryChanged(null);
     }
 
-    public searchFinished<T extends KIXObject = KIXObject>(): void {
+    public searchFinished(): void {
         const cache = SearchService.getInstance().getSearchCache();
         if (cache) {
             this.state.noSearch = false;

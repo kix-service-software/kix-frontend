@@ -32,9 +32,9 @@ import {
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
-import { LinkObjectProperty } from '../../../model/LinkObjectProperty';
-import { SearchOperator } from '../../../../search/model/SearchOperator';
+
+
+
 import { LinkType } from '../../../model/LinkType';
 import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
@@ -72,7 +72,7 @@ class Component {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Assign Link", "Translatable#Delete Link", "Translatable#Submit"
+            'Translatable#Cancel', 'Translatable#Assign Link', 'Translatable#Delete Link', 'Translatable#Submit'
         ]);
 
         if (context) {
@@ -81,9 +81,7 @@ class Component {
                 [new UIComponentPermission('links', [CRUD.CREATE])]
             );
 
-            this.state.allowDelete = await AuthenticationSocketClient.getInstance().checkPermissions(
-                [new UIComponentPermission('links/*', [CRUD.DELETE])]
-            );
+            this.state.allowDelete = this.state.allowCreate;
 
             this.mainObject = await context.getObject();
 
@@ -334,7 +332,6 @@ class Component {
         this.state.table.setRowsSelectableByObject(this.deleteLinkObjects, false);
         this.state.table.setRowObjectValueState(this.deleteLinkObjects, ValueState.HIGHLIGHT_REMOVED);
     }
-
 
     public cancel(): void {
         DialogService.getInstance().closeMainDialog();

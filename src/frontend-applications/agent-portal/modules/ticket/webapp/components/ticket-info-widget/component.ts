@@ -85,7 +85,7 @@ class Component {
         }
 
         if (this.state.ticket) {
-            const isPending = await TicketService.getInstance().hasPendingState(this.state.ticket);
+            const isPending = await TicketService.isPendingState(this.state.ticket.StateID);
             const isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
 
             if (!isPending) {
@@ -121,7 +121,7 @@ class Component {
     }
 
     public getIcon(object: string, objectId: string): ObjectIcon {
-        return new ObjectIcon(object, objectId);
+        return new ObjectIcon(null, object, objectId);
     }
 
     private async initContact(context: Context): Promise<void> {

@@ -170,7 +170,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         let minWidth: number = (2.5 * this.browserFontSize);
 
         if (headerColumn) {
-            const minWidthString = getComputedStyle(headerColumn).getPropertyValue("min-width");
+            const minWidthString = getComputedStyle(headerColumn).getPropertyValue('min-width');
             if (minWidthString) {
                 minWidth = Number(minWidthString.replace('px', ''));
             }

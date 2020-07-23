@@ -33,7 +33,7 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Description", "Translatable#Comment"
+            'Translatable#Description', 'Translatable#Comment'
         ]);
 
         const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
@@ -92,7 +92,7 @@ class Component {
         if (laneWidget) {
             const content = laneWidget.querySelector('.widget-content');
             if (content) {
-                content.style.maxHeight = "unset";
+                content.style.maxHeight = 'unset';
             }
         }
     }

@@ -7,12 +7,12 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
-import { UIComponent } from "../../model/UIComponent";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { UIComponent } from '../../model/UIComponent';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IKIXModuleExtension {
 
@@ -26,15 +26,13 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
 
     public initComponents: UIComponent[] = [
         new UIComponent('cmdb-admin-module-component', '/kix-module-cmdb$0/webapp/core/CMDBAdminUIModule', [
-            new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE], true),
             new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE], true)
         ]),
         new UIComponent('cmdb-module-read-component', '/kix-module-cmdb$0/webapp/core/CMDBReadUIModule', [
             new UIComponentPermission('cmdb/configitems', [CRUD.READ])
         ]),
         new UIComponent('cmdb-module-edit-component', '/kix-module-cmdb$0/webapp/core/CMDBEditUIModule', [
-            new UIComponentPermission('cmdb/configitems/*', [CRUD.UPDATE]),
-            new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.CREATE]),
+            new UIComponentPermission('cmdb/configitems', [CRUD.CREATE]),
             new UIComponentPermission('system/cmdb/classes', [CRUD.READ])
         ])
     ];
@@ -72,7 +70,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'config-item-version-details', '/kix-module-cmdb$0/webapp/components/config-item-version-details', []
         ),
-        new UIComponent('ci-class-input', '/kix-module-cmdb$0/webapp/components/ci-class-input', []),
         new UIComponent('config-item-info-widget', '/kix-module-cmdb$0/webapp/components/config-item-info-widget', []),
         new UIComponent(
             'config-item-history-widget', '/kix-module-cmdb$0/webapp/components/config-item-history-widget', []

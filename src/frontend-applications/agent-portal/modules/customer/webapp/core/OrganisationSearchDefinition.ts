@@ -7,13 +7,13 @@
  * --
  */
 
-import { OrganisationService } from "./OrganisationService";
-import { OrganisationSearchFormManager } from "./OrganisationSearchFormManager";
-import { SearchDefinition, SearchResultCategory } from "../../../search/webapp/core";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { SearchProperty } from "../../../search/model/SearchProperty";
+import { OrganisationService } from './OrganisationService';
+import { OrganisationSearchFormManager } from './OrganisationSearchFormManager';
+import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class OrganisationSearchDefinition extends SearchDefinition {
 

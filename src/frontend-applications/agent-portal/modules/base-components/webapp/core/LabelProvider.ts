@@ -7,27 +7,27 @@
  * --
  */
 
-import { ILabelProvider } from "./ILabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { KIXObjectService } from "./KIXObjectService";
-import { ValidObject } from "../../../valid/model/ValidObject";
-import { User } from "../../../user/model/User";
-import { DateTimeUtil } from "./DateTimeUtil";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { DynamicFieldFormUtil } from "./DynamicFieldFormUtil";
-import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
-import { ConfigItem } from "../../../cmdb/model/ConfigItem";
-import { LabelService } from "./LabelService";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { ExtendedLabelProvider } from "./ExtendedLabelProvider";
-import { Label } from "./Label";
+import { ILabelProvider } from './ILabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { KIXObjectService } from './KIXObjectService';
+import { ValidObject } from '../../../valid/model/ValidObject';
+import { User } from '../../../user/model/User';
+import { DateTimeUtil } from './DateTimeUtil';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { DynamicFieldFormUtil } from './DynamicFieldFormUtil';
+import { ConfigItemProperty } from '../../../cmdb/model/ConfigItemProperty';
+import { ConfigItem } from '../../../cmdb/model/ConfigItem';
+import { LabelService } from './LabelService';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { ExtendedLabelProvider } from './ExtendedLabelProvider';
+import { Label } from './Label';
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -45,7 +45,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public isLabelProviderFor(object: T): boolean {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public isLabelProviderForType(objectType: KIXObjectType | string): boolean {
@@ -154,7 +154,7 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     ): Promise<string> {
         let displayValue;
 
-        if (property.match(this.dFRegEx)) {
+        if (property && property.match(this.dFRegEx)) {
             const dfName = property.replace(this.dFRegEx, '$1');
             let fieldValue: DynamicFieldValue;
             if (object[KIXObjectProperty.DYNAMIC_FIELDS]) {

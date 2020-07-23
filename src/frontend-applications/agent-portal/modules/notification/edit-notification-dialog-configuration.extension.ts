@@ -7,32 +7,32 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { EditNotificationDialogContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextMode } from "../../model/ContextMode";
-import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
-import { NotificationProperty } from "./model/NotificationProperty";
-import { FormFieldValue } from "../../model/configuration/FormFieldValue";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { DefaultSelectInputFormOption } from "../../model/configuration/DefaultSelectInputFormOption";
-import { TreeNode } from "../base-components/webapp/core/tree";
-import { NotificationRecipientTypes } from "./model/NotificationRecipientTypes";
-import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
-import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { FormContext } from "../../model/configuration/FormContext";
-import { ModuleConfigurationService } from "../../server/services/configuration";
-import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { EditNotificationDialogContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContextMode } from '../../model/ContextMode';
+import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
+import { NotificationProperty } from './model/NotificationProperty';
+import { FormFieldValue } from '../../model/configuration/FormFieldValue';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { FormFieldOption } from '../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
+import { DefaultSelectInputFormOption } from '../../model/configuration/DefaultSelectInputFormOption';
+import { TreeNode } from '../base-components/webapp/core/tree';
+import { NotificationRecipientTypes } from './model/NotificationRecipientTypes';
+import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
+import { ModuleConfigurationService } from '../../server/services/configuration';
+import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -48,7 +48,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             false, false, 'kix-icon-edit'
         );
         configurations.push(editDialogWidget);
-
 
         configurations.push(
             new ContextConfiguration(
@@ -180,7 +179,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                             ),
                             new TreeNode(
                                 NotificationRecipientTypes.AGENT_MY_QUEUES,
-                                "Translatable#All agents subscribed to the ticket's queue"
+                                'Translatable#All agents subscribed to the tickets queue'
                             ),
                             new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact')
                         ]),

@@ -7,7 +7,7 @@
  * --
  */
 
-import { SearchResultCategory } from "./SearchResultCategory";
+import { SearchResultCategory } from './SearchResultCategory';
 
 export interface IKIXObjectSearchListener {
 

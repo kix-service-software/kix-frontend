@@ -7,14 +7,14 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { Article } from "../../../model/Article";
-import { Ticket } from "../../../model/Ticket";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { ArticleProperty } from "../../../model/ArticleProperty";
-import { ArticleLoadingOptions } from "../../../model/ArticleLoadingOptions";
+import { ComponentState } from './ComponentState';
+import { Article } from '../../../model/Article';
+import { Ticket } from '../../../model/Ticket';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 
 export class TicketArticleDetailsComponent {
 

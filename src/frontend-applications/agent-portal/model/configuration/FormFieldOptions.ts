@@ -21,6 +21,8 @@ export enum FormFieldOptions {
 
     MIN_DATE = 'MIN_DATE',
 
-    MAX_DATE = 'MAX_DATE'
+    MAX_DATE = 'MAX_DATE',
+
+    OBJECT_TYPE = 'OBJECT_TYPE'
 
 }

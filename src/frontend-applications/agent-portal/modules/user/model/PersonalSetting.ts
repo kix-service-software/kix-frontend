@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormFieldValue } from "../../../model/configuration/FormFieldValue";
-import { FormFieldOption } from "../../../model/configuration/FormFieldOption";
+import { FormFieldValue } from '../../../model/configuration/FormFieldValue';
+import { FormFieldOption } from '../../../model/configuration/FormFieldOption';
 
 export class PersonalSetting {
 

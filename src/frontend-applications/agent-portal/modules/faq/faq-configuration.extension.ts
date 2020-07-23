@@ -110,27 +110,27 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-fulltext',
-                "Translatable#Full Text", SearchProperty.FULLTEXT, null, false,
-                "Translatable#Helptext_FAQ_Link_FullText"
+                'Translatable#Full Text', SearchProperty.FULLTEXT, null, false,
+                'Translatable#Helptext_FAQ_Link_FullText'
             )
         );
         configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-number',
-                "Translatable#FAQ#", FAQArticleProperty.NUMBER, null, false, "Translatable#Helptext_FAQ_Link_Number"
+                'Translatable#FAQ#', FAQArticleProperty.NUMBER, null, false, 'Translatable#Helptext_FAQ_Link_Number'
             )
         );
         configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-title',
-                'Translatable#Title', FAQArticleProperty.TITLE, null, false, "Translatable#Helptext_FAQ_Link_Title"
+                'Translatable#Title', FAQArticleProperty.TITLE, null, false, 'Translatable#Helptext_FAQ_Link_Title'
             )
         );
         configurations.push(
             new FormFieldConfiguration(
                 'faq-article-link-form-field-category',
-                "Category", FAQArticleProperty.CATEGORY_ID, 'object-reference-input', false,
-                "Translatable#Helptext_FAQ_Link_Category",
+                'Category', FAQArticleProperty.CATEGORY_ID, 'object-reference-input', false,
+                'Translatable#Helptext_FAQ_Link_Category',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.FAQ_CATEGORY),
                     new FormFieldOption(ObjectReferenceOptions.USE_OBJECT_SERVICE, true),

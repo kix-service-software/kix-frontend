@@ -7,13 +7,13 @@
  * --
  */
 
-import { ICell } from "./ICell";
-import { IRow } from "./IRow";
-import { LabelService } from "../LabelService";
-import { TableValue } from "./TableValue";
-import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
-import { FilterUtil } from "../FilterUtil";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
+import { ICell } from './ICell';
+import { IRow } from './IRow';
+import { LabelService } from '../LabelService';
+import { TableValue } from './TableValue';
+import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { FilterUtil } from '../FilterUtil';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
 export class Cell implements ICell {
 

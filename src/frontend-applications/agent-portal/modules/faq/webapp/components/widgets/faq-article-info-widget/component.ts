@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import { FAQLabelProvider } from '../../../core';
 import { FAQDetailsContext } from '../../../core/context/FAQDetailsContext';
 import { IdService } from '../../../../../../model/IdService';
-import { FAQArticleProperty } from '../../../../model/FAQArticleProperty';
+
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { FAQArticle } from '../../../../model/FAQArticle';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';

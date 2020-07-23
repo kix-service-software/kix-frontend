@@ -7,17 +7,17 @@
  * --
  */
 
-import { IKIXObjectSearchListener } from "../../core/IKIXObjectSearchListener";
-import { ComponentState } from "./ComponentState";
-import { SearchService } from "../../core/SearchService";
-import { WidgetService } from "../../../../../modules/base-components/webapp/core/WidgetService";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { SearchOperatorUtil } from "../../core/SearchOperatorUtil";
-import { SortUtil } from "../../../../../model/SortUtil";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
+import { IKIXObjectSearchListener } from '../../core/IKIXObjectSearchListener';
+import { ComponentState } from './ComponentState';
+import { SearchService } from '../../core/SearchService';
+import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { Label } from '../../../../../modules/base-components/webapp/core/Label';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { SearchOperatorUtil } from '../../core/SearchOperatorUtil';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 
 class Component implements IKIXObjectSearchListener {
 
@@ -32,7 +32,7 @@ class Component implements IKIXObjectSearchListener {
     public async onMount(): Promise<void> {
         SearchService.getInstance().registerListener(this);
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#New Search", "Translatable#Edit Search"
+            'Translatable#New Search', 'Translatable#Edit Search'
         ]);
 
         await this.prepareActions();

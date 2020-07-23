@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../modules/base-components/webapp/core/AbstractNewDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { TicketTypeDetailsContext } from "../../core";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { TicketTypeProperty } from "../../../model/TicketTypeProperty";
+import { ComponentState } from './ComponentState';
+import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { TicketTypeDetailsContext } from '../../core';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { TicketTypeProperty } from '../../../model/TicketTypeProperty';
 
 class Component extends AbstractNewDialog {
 

@@ -7,17 +7,17 @@
  * --
  */
 
-import { SocketNameSpace } from "./SocketNameSpace";
-import { SocketEvent } from "../../modules/base-components/webapp/core/SocketEvent";
-import { AuthenticationEvent } from "../../modules/base-components/webapp/core/AuthenticationEvent";
-import { LoginRequest } from "../../modules/base-components/webapp/core/LoginRequest";
-import { SocketResponse } from "../../modules/base-components/webapp/core/SocketResponse";
-import { AuthenticationService } from "../services/AuthenticationService";
-import { AuthenticationResult } from "../../modules/base-components/webapp/core/AuthenticationResult";
-import { ISocketRequest } from "../../modules/base-components/webapp/core/ISocketRequest";
-import { SocketErrorResponse } from "../../modules/base-components/webapp/core/SocketErrorResponse";
-import { PermissionCheckRequest } from "../../modules/base-components/webapp/core/PermissionCheckRequest";
-import { PermissionService } from "../services/PermissionService";
+import { SocketNameSpace } from './SocketNameSpace';
+import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
+import { AuthenticationEvent } from '../../modules/base-components/webapp/core/AuthenticationEvent';
+import { LoginRequest } from '../../modules/base-components/webapp/core/LoginRequest';
+import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
+import { AuthenticationService } from '../services/AuthenticationService';
+import { AuthenticationResult } from '../../modules/base-components/webapp/core/AuthenticationResult';
+import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
+import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
+import { PermissionCheckRequest } from '../../modules/base-components/webapp/core/PermissionCheckRequest';
+import { PermissionService } from '../services/PermissionService';
 
 import cookie = require('cookie');
 

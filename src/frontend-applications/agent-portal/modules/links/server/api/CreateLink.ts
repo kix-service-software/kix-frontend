@@ -7,7 +7,7 @@
  * --
  */
 
-import { RequestObject } from "../../../../../../server/model/rest/RequestObject";
+import { RequestObject } from '../../../../../../server/model/rest/RequestObject';
 
 export class CreateLink extends RequestObject {
 
@@ -17,11 +17,11 @@ export class CreateLink extends RequestObject {
         type: string
     ) {
         super();
-        this.applyProperty("SourceObject", sourceObject);
-        this.applyProperty("SourceKey", sourceKey);
-        this.applyProperty("TargetObject", targetObject);
-        this.applyProperty("TargetKey", targetKey);
-        this.applyProperty("Type", type);
+        this.applyProperty('SourceObject', sourceObject);
+        this.applyProperty('SourceKey', sourceKey);
+        this.applyProperty('TargetObject', targetObject);
+        this.applyProperty('TargetKey', targetKey);
+        this.applyProperty('Type', type);
     }
 
 }

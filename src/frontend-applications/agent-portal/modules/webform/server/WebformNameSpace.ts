@@ -8,15 +8,15 @@
  */
 
 import { Socket } from 'socket.io';
-import { SocketNameSpace } from "../../../server/socket-namespaces/SocketNameSpace";
-import { WebformEvent } from "../model/WebformEvent";
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
-import { SocketResponse } from "../../../modules/base-components/webapp/core/SocketResponse";
-import { WebformService } from "./WebformService";
-import { LoadWebformsResponse } from "../model/LoadWebformsResponse";
-import { SaveWebformRequest } from "../model/SaveWebformRequest";
-import { UserService } from "../../user/server/UserService";
-import { CreateObjectResponse } from "../../../modules/base-components/webapp/core/CreateObjectResponse";
+import { SocketNameSpace } from '../../../server/socket-namespaces/SocketNameSpace';
+import { WebformEvent } from '../model/WebformEvent';
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
+import { SocketResponse } from '../../../modules/base-components/webapp/core/SocketResponse';
+import { WebformService } from './WebformService';
+import { LoadWebformsResponse } from '../model/LoadWebformsResponse';
+import { SaveWebformRequest } from '../model/SaveWebformRequest';
+import { UserService } from '../../user/server/UserService';
+import { CreateObjectResponse } from '../../../modules/base-components/webapp/core/CreateObjectResponse';
 
 import cookie = require('cookie');
 

@@ -7,44 +7,44 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { CMDBContext } from "./webapp/core/context/CMDBContext";
-import { ConfigItemChartWidgetConfiguration } from "./webapp/core/charts/ConfigItemChartWidgetConfiguration";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { ChartComponentConfiguration } from "../charts/model/ChartComponentConfiguration";
-import { ConfigItemProperty } from "./model/ConfigItemProperty";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { KIXObjectPropertyFilter } from "../../model/KIXObjectPropertyFilter";
-import { TableFilterCriteria } from "../../model/TableFilterCriteria";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
-import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
-import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { VersionProperty } from "./model/VersionProperty";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { GeneralCatalogItemProperty } from "../general-catalog/model/GeneralCatalogItemProperty";
-import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
-import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { FormContext } from "../../model/configuration/FormContext";
-import { CMDBAPIService } from "./server/CMDBService";
-import { ModuleConfigurationService } from "../../server/services/configuration";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { CMDBContext } from './webapp/core/context/CMDBContext';
+import { ConfigItemChartWidgetConfiguration } from './webapp/core/charts/ConfigItemChartWidgetConfiguration';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { ChartComponentConfiguration } from '../charts/model/ChartComponentConfiguration';
+import { ConfigItemProperty } from './model/ConfigItemProperty';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { KIXObjectPropertyFilter } from '../../model/KIXObjectPropertyFilter';
+import { TableFilterCriteria } from '../../model/TableFilterCriteria';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
+import { FormFieldOption } from '../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { VersionProperty } from './model/VersionProperty';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { GeneralCatalogItemProperty } from '../general-catalog/model/GeneralCatalogItemProperty';
+import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
+import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
+import { CMDBAPIService } from './server/CMDBService';
+import { ModuleConfigurationService } from '../../server/services/configuration';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -69,16 +69,16 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     labels: [],
                     datasets: [{
                         backgroundColor: [
-                            "rgb(91, 91, 91)",
-                            "rgb(4, 83, 125)",
-                            "rgb(0, 141, 210)",
-                            "rgb(129, 189, 223)",
-                            "rgb(160, 230, 200)",
-                            "rgb(130, 200, 38)",
-                            "rgb(0, 152, 70)",
-                            "rgb(227, 30, 36)",
-                            "rgb(239, 127, 26)",
-                            "rgb(254, 204, 0)"
+                            'rgb(91, 91, 91)',
+                            'rgb(4, 83, 125)',
+                            'rgb(0, 141, 210)',
+                            'rgb(129, 189, 223)',
+                            'rgb(160, 230, 200)',
+                            'rgb(130, 200, 38)',
+                            'rgb(0, 152, 70)',
+                            'rgb(227, 30, 36)',
+                            'rgb(239, 127, 26)',
+                            'rgb(254, 204, 0)'
                         ]
                     }]
                 },
@@ -127,16 +127,16 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         data: [],
                         fill: true,
                         backgroundColor: [
-                            "rgb(91, 91, 91)",
-                            "rgb(4, 83, 125)",
-                            "rgb(0, 141, 210)",
-                            "rgb(129, 189, 223)",
-                            "rgb(160, 230, 200)",
-                            "rgb(130, 200, 38)",
-                            "rgb(0, 152, 70)",
-                            "rgb(227, 30, 36)",
-                            "rgb(239, 127, 26)",
-                            "rgb(254, 204, 0)"
+                            'rgb(91, 91, 91)',
+                            'rgb(4, 83, 125)',
+                            'rgb(0, 141, 210)',
+                            'rgb(129, 189, 223)',
+                            'rgb(160, 230, 200)',
+                            'rgb(130, 200, 38)',
+                            'rgb(0, 152, 70)',
+                            'rgb(227, 30, 36)',
+                            'rgb(239, 127, 26)',
+                            'rgb(254, 204, 0)'
                         ]
                     }]
                 },
@@ -175,16 +175,16 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 data: {
                     datasets: [{
                         backgroundColor: [
-                            "rgb(91, 91, 91)",
-                            "rgb(4, 83, 125)",
-                            "rgb(0, 141, 210)",
-                            "rgb(129, 189, 223)",
-                            "rgb(160, 230, 200)",
-                            "rgb(130, 200, 38)",
-                            "rgb(0, 152, 70)",
-                            "rgb(227, 30, 36)",
-                            "rgb(239, 127, 26)",
-                            "rgb(254, 204, 0)"
+                            'rgb(91, 91, 91)',
+                            'rgb(4, 83, 125)',
+                            'rgb(0, 141, 210)',
+                            'rgb(129, 189, 223)',
+                            'rgb(160, 230, 200)',
+                            'rgb(130, 200, 38)',
+                            'rgb(0, 152, 70)',
+                            'rgb(227, 30, 36)',
+                            'rgb(239, 127, 26)',
+                            'rgb(254, 204, 0)'
                         ]
                     }]
                 },
@@ -235,7 +235,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                     ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.EQUALS, ds.ItemID
                 )
             ])));
-
 
         const tableWidgetConfig = new TableWidgetConfiguration(
             'cmdb-dashboard-ci-table-widget', 'CI Table Widget', ConfigurationType.TableWidget,

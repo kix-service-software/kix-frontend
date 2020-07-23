@@ -35,7 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        this.state.translations = TranslationService.createTranslationObject(["Translatable#Execute"]);
+        this.state.translations = TranslationService.createTranslationObject(['Translatable#Execute']);
     }
 
     public commandChanged(nodes: TreeNode[]): void {
@@ -112,13 +112,25 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         } else if (this.command) {
             let helpText = `Command:\t\t ${this.command.Command}\n\n`;
             helpText += `Description:\t\t ${this.command.Description}\n\n`;
-            helpText += `Arguments:\t\t ${this.command.Arguments.join(', ')}\n\n`;
+            helpText += `Arguments:\n\n`;
+            for (const argument of this.command.Arguments) {
+                helpText += `\tName:\t\t${argument.Name}\n`;
+                helpText += `\tDescription:\t${argument.Description}\n`;
+                helpText += `\tRequired:\t${argument.Required || 0}\n\n`;
+            }
             helpText += `Parameters:\n\n`;
             for (const parameter of this.command.Parameters) {
                 helpText += `\tName:\t\t${parameter.Name}\n`;
                 helpText += `\tDescription:\t${parameter.Description}\n`;
-                helpText += `\tHasValue:\t${parameter.HasValue}\n`;
-                helpText += `\tRequired:\t${parameter.Required}\n\n`;
+                helpText += `\tHasValue:\t${parameter.HasValue || 0}\n`;
+                helpText += `\tRequired:\t${parameter.Required || 0}\n\n`;
+            }
+            if (this.command.AdditionalHelp) {
+                helpText += `Additional help:\n\n\t`;
+                helpText += this.command.AdditionalHelp.replace(/\n/g, '\n\t')
+                    .replace(/<\/?yellow>/g, '"')
+                    .replace(/<green>/g, '>>').replace(/<\/green>/g, '<<');
+                helpText += `\n\n`;
             }
 
             this.state.output = helpText;
@@ -128,8 +140,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private listCommands(): void {
-        const commands = this.commands.map((c) => `\t${c.Command}\n`);
-        this.state.output = `Commands:\n\n${commands.join('')}`;
+        const commands = this.commands.map((c) => `\t${c.Command} \n`);
+        this.state.output = `Commands: \n\n${commands.join('')} `;
     }
 
 }

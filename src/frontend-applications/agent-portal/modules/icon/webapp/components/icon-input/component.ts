@@ -16,6 +16,7 @@ import { OverlayService } from '../../../../../modules/base-components/webapp/co
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ObjectIcon } from '../../../model/ObjectIcon';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<any, ComponentState> {
 
@@ -41,7 +42,7 @@ class Component extends FormInputComponent<any, ComponentState> {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Select image file"
+            'Translatable#Select image file'
         ]);
 
         await super.onMount();
@@ -58,8 +59,10 @@ class Component extends FormInputComponent<any, ComponentState> {
     }
 
     public async setCurrentValue(): Promise<void> {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.icon = this.state.defaultValue.value;
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<string | ObjectIcon>(this.state.field.instanceId);
+        if (value) {
+            this.state.icon = value.value;
         }
     }
 
@@ -113,7 +116,7 @@ class Component extends FormInputComponent<any, ComponentState> {
             const content = await BrowserUtil.readFile(files[0]);
 
             setTimeout(() => {
-                this.state.icon = new ObjectIcon(
+                this.state.icon = new ObjectIcon(null,
                     null, null,
                     files[0].type,
                     content

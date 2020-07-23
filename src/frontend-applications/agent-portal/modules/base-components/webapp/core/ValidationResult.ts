@@ -7,7 +7,7 @@
  * --
  */
 
-import { ValidationSeverity } from "./ValidationSeverity";
+import { ValidationSeverity } from './ValidationSeverity';
 
 export class ValidationResult {
 

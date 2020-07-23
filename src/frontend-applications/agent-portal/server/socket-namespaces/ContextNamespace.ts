@@ -7,35 +7,35 @@
  * --
  */
 
-import { SocketNameSpace } from "./SocketNameSpace";
-import { ContextEvent } from "../../modules/base-components/webapp/core/ContextEvent";
+import { SocketNameSpace } from './SocketNameSpace';
+import { ContextEvent } from '../../modules/base-components/webapp/core/ContextEvent';
 import {
     LoadContextConfigurationRequest
-} from "../../modules/base-components/webapp/core/LoadContextConfigurationRequest";
-import { SocketResponse } from "../../modules/base-components/webapp/core/SocketResponse";
+} from '../../modules/base-components/webapp/core/LoadContextConfigurationRequest';
+import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
 import {
     LoadContextConfigurationResponse
-} from "../../modules/base-components/webapp/core/LoadContextConfigurationResponse";
-import { SocketErrorResponse } from "../../modules/base-components/webapp/core/SocketErrorResponse";
-import { ModuleConfigurationService } from "../services/configuration";
-import { SocketEvent } from "../../modules/base-components/webapp/core/SocketEvent";
-import { PermissionService } from "../services/PermissionService";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ContextConfigurationResolver } from "../services/configuration/ContextConfigurationResolver";
-import { SysConfigService } from "../../modules/sysconfig/server/SysConfigService";
-import { SysConfigOptionProperty } from "../../modules/sysconfig/model/SysConfigOptionProperty";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { SearchOperator } from "../../modules/search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { SysConfigOption } from "../../modules/sysconfig/model/SysConfigOption";
-import { CacheService } from "../services/cache";
-import { ISocketResponse } from "../../modules/base-components/webapp/core/ISocketResponse";
-import { ISocketRequest } from "../../modules/base-components/webapp/core/ISocketRequest";
-import { LoggingService } from "../../../../server/services/LoggingService";
+} from '../../modules/base-components/webapp/core/LoadContextConfigurationResponse';
+import { SocketErrorResponse } from '../../modules/base-components/webapp/core/SocketErrorResponse';
+
+import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEvent';
+import { PermissionService } from '../services/PermissionService';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ContextConfigurationResolver } from '../services/configuration/ContextConfigurationResolver';
+import { SysConfigService } from '../../modules/sysconfig/server/SysConfigService';
+import { SysConfigOptionProperty } from '../../modules/sysconfig/model/SysConfigOptionProperty';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { SearchOperator } from '../../modules/search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { SysConfigOption } from '../../modules/sysconfig/model/SysConfigOption';
+import { CacheService } from '../services/cache';
+import { ISocketResponse } from '../../modules/base-components/webapp/core/ISocketResponse';
+import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
+import { LoggingService } from '../../../../server/services/LoggingService';
 
 import cookie = require('cookie');
 

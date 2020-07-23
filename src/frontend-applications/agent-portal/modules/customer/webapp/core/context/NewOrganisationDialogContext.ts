@@ -7,10 +7,10 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
+import { Context } from '../../../../../model/Context';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 
 export class NewOrganisationDialogContext extends Context {
 

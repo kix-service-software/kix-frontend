@@ -7,12 +7,12 @@
  * --
  */
 
-import { IMainMenuExtension } from "../../server/extensions/IMainMenuExtension";
-import { CMDBContext, ConfigItemDetailsContext } from "./webapp/core";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IMainMenuExtension } from '../../server/extensions/IMainMenuExtension';
+import { CMDBContext, ConfigItemDetailsContext } from './webapp/core';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IMainMenuExtension {
 
@@ -22,9 +22,9 @@ class Extension extends KIXExtension implements IMainMenuExtension {
 
     public primaryMenu: boolean = true;
 
-    public icon: string = "kix-icon-cmdb";
+    public icon: string = 'kix-icon-cmdb';
 
-    public text: string = "Translatable#CMDB";
+    public text: string = 'Translatable#CMDB';
 
     public permissions: UIComponentPermission[] = [
         new UIComponentPermission('cmdb/configitems', [CRUD.READ])

@@ -7,9 +7,9 @@
  * --
  */
 
-import { TableExportUtil } from "../../../../base-components/webapp/core/table";
-import { FAQCategoryProperty } from "../../../model/FAQCategoryProperty";
-import { CSVExportAction } from "../../../../import/webapp/core/actions";
+import { TableExportUtil } from '../../../../base-components/webapp/core/table';
+import { FAQCategoryProperty } from '../../../model/FAQCategoryProperty';
+import { CSVExportAction } from '../../../../import/webapp/core/actions';
 
 export class FAQCategoryCSVExportAction extends CSVExportAction {
 

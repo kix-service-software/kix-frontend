@@ -9,14 +9,14 @@
 
 export enum FAQArticleHistoryProperty {
 
-    ID = "ID",
+    ID = 'ID',
 
-    ARTICLE_ID = "ArticleID",
+    ARTICLE_ID = 'ArticleID',
 
-    NAME = "Name",
+    NAME = 'Name',
 
-    CREATED_BY = "CreatedBy",
+    CREATED_BY = 'CreatedBy',
 
-    CREATED = "Created"
+    CREATED = 'Created'
 
 }

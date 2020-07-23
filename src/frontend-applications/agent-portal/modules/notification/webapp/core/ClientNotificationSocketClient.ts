@@ -7,13 +7,13 @@
  * --
  */
 
-import { SocketClient } from "../../../../modules/base-components/webapp/core/SocketClient";
-import { NotificationEvent } from "../../../../model/NotificationEvent";
-import { ObjectUpdatedEventData } from "../../../../model/ObjectUpdatedEventData";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { NotificationHandler } from "../../../../modules/base-components/webapp/core/NotificationHandler";
-import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
-import { BrowserCacheService } from "../../../../modules/base-components/webapp/core/CacheService";
+import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
+import { NotificationEvent } from '../../../../model/NotificationEvent';
+import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { NotificationHandler } from '../../../../modules/base-components/webapp/core/NotificationHandler';
+import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
+import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 
 export class ClientNotificationSocketClient extends SocketClient {
 

@@ -7,13 +7,12 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { LogFileFactory } from "./LogFileFactory";
-import { LogFile } from "../model/LogFile";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { LogFile } from '../model/LogFile';
 
 export class LogFileService extends KIXObjectAPIService {
 
@@ -27,7 +26,7 @@ export class LogFileService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new LogFileFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -47,7 +46,7 @@ export class LogFileService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.LOG_FILE) {
             objects = await super.load<LogFile>(
-                token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds, 'LogFile', false
+                token, KIXObjectType.LOG_FILE, this.RESOURCE_URI, loadingOptions, objectIds, 'LogFile', LogFile, false
             );
         }
 

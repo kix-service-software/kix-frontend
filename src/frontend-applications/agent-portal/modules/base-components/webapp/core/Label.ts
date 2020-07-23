@@ -7,9 +7,9 @@
  * --
  */
 
-import { LabelService } from "./LabelService";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelService } from './LabelService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class Label {
 

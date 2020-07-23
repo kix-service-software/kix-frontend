@@ -7,9 +7,9 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { ITable } from "../../../../base-components/webapp/core/table";
-import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { ITable } from '../../../../base-components/webapp/core/table';
+
 
 
 export class ComponentState extends AbstractComponentState {

@@ -7,43 +7,43 @@
  * --
  */
 
-import { ModuleConfigurationService } from "../../server/services/configuration";
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { NewTicketDialogContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { ConfiguredDialogWidget } from "../../model/configuration/ConfiguredDialogWidget";
-import { ContextMode } from "../../model/ContextMode";
-import { FormFieldConfiguration } from "../../model/configuration/FormFieldConfiguration";
-import { TicketProperty } from "./model/TicketProperty";
-import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { QueueProperty } from "./model/QueueProperty";
-import { ArticleProperty } from "./model/ArticleProperty";
-import { FormFieldValue } from "../../model/configuration/FormFieldValue";
-import { FormGroupConfiguration } from "../../model/configuration/FormGroupConfiguration";
-import { FormPageConfiguration } from "../../model/configuration/FormPageConfiguration";
-import { FormConfiguration } from "../../model/configuration/FormConfiguration";
-import { FormContext } from "../../model/configuration/FormContext";
-import { OrganisationProperty } from "../customer/model/OrganisationProperty";
-import { UserProperty } from "../user/model/UserProperty";
-import { ContactProperty } from "../customer/model/ContactProperty";
-import { ObjectReferenceWidgetConfiguration } from "../base-components/webapp/core/ObjectReferenceWidgetConfiguration";
-import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
-import { DynamicFormFieldOption } from "../dynamic-fields/webapp/core";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { ModuleConfigurationService } from '../../server/services/configuration';
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { NewTicketDialogContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { ConfiguredDialogWidget } from '../../model/configuration/ConfiguredDialogWidget';
+import { ContextMode } from '../../model/ContextMode';
+import { FormFieldConfiguration } from '../../model/configuration/FormFieldConfiguration';
+import { TicketProperty } from './model/TicketProperty';
+import { FormFieldOption } from '../../model/configuration/FormFieldOption';
+import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { QueueProperty } from './model/QueueProperty';
+import { ArticleProperty } from './model/ArticleProperty';
+import { FormFieldValue } from '../../model/configuration/FormFieldValue';
+import { FormGroupConfiguration } from '../../model/configuration/FormGroupConfiguration';
+import { FormPageConfiguration } from '../../model/configuration/FormPageConfiguration';
+import { FormConfiguration } from '../../model/configuration/FormConfiguration';
+import { FormContext } from '../../model/configuration/FormContext';
+import { OrganisationProperty } from '../customer/model/OrganisationProperty';
+import { UserProperty } from '../user/model/UserProperty';
+import { ContactProperty } from '../customer/model/ContactProperty';
+import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/core/ObjectReferenceWidgetConfiguration';
+import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
+import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -103,7 +103,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             null, false, false, 'kix-icon-man-bubble', false
         );
         configurations.push(contactInfoSidebar);
-
 
         const ticketsForAssetsWidget = new WidgetConfiguration(
             'ticket-new-dialog-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
@@ -315,8 +314,21 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'ticket-new-form-field-state',
-                'Translatable#State', TicketProperty.STATE_ID, 'ticket-input-state', true,
-                'Translatable#Helptext_Tickets_TicketCreate_State', null,
+                'Translatable#State', TicketProperty.STATE_ID, 'object-reference-input', true,
+                'Translatable#Helptext_Tickets_TicketCreate_State',
+                [
+                    new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.TICKET_STATE),
+                    new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                        new KIXObjectLoadingOptions(
+                            [
+                                new FilterCriteria(
+                                    KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                    FilterType.AND, 1
+                                )
+                            ]
+                        )
+                    )
+                ],
                 new FormFieldValue(2)
             )
         );

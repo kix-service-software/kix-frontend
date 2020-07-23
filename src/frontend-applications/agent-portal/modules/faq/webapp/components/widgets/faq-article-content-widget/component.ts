@@ -50,8 +50,8 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Symptom", "Translatable#Cause", "Translatable#Solution", "Translatable#Comment",
-            "Translatable#Number of ratings"
+            'Translatable#Symptom', 'Translatable#Cause', 'Translatable#Solution', 'Translatable#Comment',
+            'Translatable#Number of ratings'
         ]);
 
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
@@ -100,7 +100,7 @@ class Component {
 
     public getRatingTooltip(): string {
         const count = this.state.faqArticle.Votes ? this.state.faqArticle.Votes.length : 0;
-        return `${this.state.translations["Translatable#Number of ratings"]}: ${count}`;
+        return `${this.state.translations['Translatable#Number of ratings']}: ${count}`;
     }
 
     public getIcon(attachment: Attachment): ObjectIcon {
@@ -108,7 +108,7 @@ class Component {
         const idx = fileName.lastIndexOf('.');
         if (idx >= 0) {
             const extension = fileName.substring(idx + 1, fileName.length);
-            return new ObjectIcon("Filetype", extension);
+            return new ObjectIcon(null, 'Filetype', extension);
         }
         return null;
     }

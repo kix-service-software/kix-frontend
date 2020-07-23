@@ -7,12 +7,11 @@
  * --
  */
 
-import { IConfiguration } from "../../../model/configuration/IConfiguration";
-import { ModuleConfigurationService } from "./ModuleConfigurationService";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
+import { IConfiguration } from '../../../model/configuration/IConfiguration';
+
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
 
 export class ResolverUtil {
-
 
     public static async loadConfigurations<T extends IConfiguration>(
         token: string, ids: string[], configurations: T[], sysConfigOptions: SysConfigOption[]

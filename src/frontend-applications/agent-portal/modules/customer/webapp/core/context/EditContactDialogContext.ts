@@ -7,7 +7,7 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
+import { Context } from '../../../../../model/Context';
 
 export class EditContactDialogContext extends Context {
 

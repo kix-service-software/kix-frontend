@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class ComponentInput {
 

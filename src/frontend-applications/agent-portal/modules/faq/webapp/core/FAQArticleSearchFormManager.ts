@@ -7,22 +7,22 @@
  * --
  */
 
-import { FAQService } from "./FAQService";
+import { FAQService } from './FAQService';
 import {
     AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { FAQArticleProperty } from "../../model/FAQArticleProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { SearchDefinition, SearchOperatorUtil } from "../../../search/webapp/core";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
+} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { FAQArticleProperty } from '../../model/FAQArticleProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 
 
 export class FAQArticleSearchFormManager extends AbstractDynamicFormManager {

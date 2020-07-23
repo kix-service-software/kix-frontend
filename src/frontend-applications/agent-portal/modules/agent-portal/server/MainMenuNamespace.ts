@@ -7,20 +7,20 @@
  * --
  */
 
-import { SocketNameSpace } from "../../../server/socket-namespaces/SocketNameSpace";
-import { MainMenuEvent } from "../model/MainMenuEvent";
-import { MainMenuEntriesRequest } from "../model/MainMenuEntriesRequest";
-import { SocketResponse } from "../../../modules/base-components/webapp/core/SocketResponse";
-import { IMainMenuExtension } from "../../../server/extensions/IMainMenuExtension";
-import { MainMenuConfiguration } from "../../../model/MainMenuConfiguration";
-import { PluginService } from "../../../../../server/services/PluginService";
-import { AgentPortalExtensions } from "../../../server/extensions/AgentPortalExtensions";
-import { ModuleConfigurationService } from "../../../server/services/configuration";
-import { MainMenuEntriesResponse } from "../model/MainMenuEntriesResponse";
-import { SocketEvent } from "../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { MenuEntry } from "../../../model/MenuEntry";
-import { PermissionService } from "../../../server/services/PermissionService";
+import { SocketNameSpace } from '../../../server/socket-namespaces/SocketNameSpace';
+import { MainMenuEvent } from '../model/MainMenuEvent';
+import { MainMenuEntriesRequest } from '../model/MainMenuEntriesRequest';
+import { SocketResponse } from '../../../modules/base-components/webapp/core/SocketResponse';
+import { IMainMenuExtension } from '../../../server/extensions/IMainMenuExtension';
+import { MainMenuConfiguration } from '../../../model/MainMenuConfiguration';
+import { PluginService } from '../../../../../server/services/PluginService';
+import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
+import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { MainMenuEntriesResponse } from '../model/MainMenuEntriesResponse';
+import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { MenuEntry } from '../../../model/MenuEntry';
+import { PermissionService } from '../../../server/services/PermissionService';
 
 import cookie = require('cookie');
 

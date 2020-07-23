@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { MacroAction } from "./MacroAction";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { MacroAction } from './MacroAction';
 
 export class Macro extends KIXObject {
 
@@ -26,6 +26,8 @@ export class Macro extends KIXObject {
     public ExecOrder: number[];
 
     public Actions: MacroAction[];
+
+    public ExecuteMacro: any;
 
     public constructor(macro?: Macro) {
         super(macro);

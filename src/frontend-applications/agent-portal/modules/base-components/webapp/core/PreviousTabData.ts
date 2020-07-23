@@ -7,7 +7,7 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class PreviousTabData {
 

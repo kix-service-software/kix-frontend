@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractComponentState } from "./AbstractComponentState";
-import { WidgetConfiguration } from "../../../../model/configuration/WidgetConfiguration";
-import { ContextType } from "../../../../model/ContextType";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { AbstractComponentState } from './AbstractComponentState';
+import { WidgetConfiguration } from '../../../../model/configuration/WidgetConfiguration';
+import { ContextType } from '../../../../model/ContextType';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export abstract class WidgetComponentState extends AbstractComponentState {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { ConfigItem } from "../../model/ConfigItem";
+import { ConfigItem } from '../../model/ConfigItem';
 
 export class ConfigItemsResponse {
 

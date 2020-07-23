@@ -43,19 +43,36 @@ class EditorComponent {
     }
 
     private async update(input: any): Promise<void> {
-        this.useReadonlyStyle = typeof input.useReadonlyStyle ? input.useReadonlyStyle : false;
+        this.useReadonlyStyle = typeof input.useReadonlyStyle !== 'undefined' ? input.useReadonlyStyle : false;
         if (await this.isEditorReady()) {
             if (input.addValue) {
                 this.editor.insertHtml(input.addValue);
-            } else if (input.value) {
-                const contentString = this.replaceInlineContent(input.value, input.inlineContent);
+            }
+
+            if (input.value !== null) {
+                const contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
                 this.editor.setData(contentString, () => {
                     this.editor.updateElement();
                 });
             }
+
             if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
                 this.state.readOnly = input.readOnly;
                 this.editor.setReadOnly(this.state.readOnly);
+            }
+
+            if (this.useReadonlyStyle) {
+                if (await this.isEditorReady()) {
+                    setTimeout(() => {
+                        const element = document.getElementById('cke_' + this.state.id);
+                        if (element) {
+                            const iframe = element.getElementsByTagName('iframe')[0];
+                            iframe.contentWindow.document.body.style.backgroundColor = 'transparent';
+                            iframe.classList.remove('cke_wysiwyg_frame', 'cke_reset');
+                            iframe.classList.add('readonly-ck-editor');
+                        }
+                    }, 500);
+                }
             }
         }
         this.state.invalid = typeof input.invalid !== 'undefined' ? input.invalid : false;
@@ -129,20 +146,6 @@ class EditorComponent {
                         }
                     });
                 });
-
-                if (this.useReadonlyStyle) {
-                    if (await this.isEditorReady()) {
-                        setTimeout(() => {
-                            const element = document.getElementById('cke_' + this.state.id);
-                            if (element) {
-                                const iframe = element.getElementsByTagName('iframe')[0];
-                                iframe.contentWindow.document.body.style.backgroundColor = 'transparent';
-                                iframe.classList.remove('cke_wysiwyg_frame', 'cke_reset');
-                                iframe.classList.add('readonly-ck-editor');
-                            }
-                        }, 500);
-                    }
-                }
             }
 
             if (await this.isEditorReady()) {
@@ -251,7 +254,7 @@ class EditorComponent {
         if (inlineContent) {
             for (const contentItem of inlineContent) {
                 if (contentItem.contentId && contentItem.contentType) {
-                    const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), "'");
+                    const contentType = contentItem.contentType.replace(new RegExp('"', 'g'), '\'');
                     const replaceString = `data:${contentType};base64,${contentItem.content}`;
                     const contentIdLength = contentItem.contentId.length - 1;
                     const contentId = contentItem.contentId.substring(1, contentIdLength);

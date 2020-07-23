@@ -7,30 +7,24 @@
  * --
  */
 
-import { AbstractEditDialog } from "../../../../../modules/base-components/webapp/core/AbstractEditDialog";
-import { ComponentState } from "./ComponentState";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EditSysConfigDialogContext } from "../../core";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { SysConfigOptionDefinitionProperty } from "../../../model/SysConfigOptionDefinitionProperty";
-import { EventService } from "../../../../base-components/webapp/core/EventService";
-import { SysconfigEvent } from "../../core/SysconfigEvent";
-import { DialogService } from "../../../../base-components/webapp/core/DialogService";
-import { BrowserUtil } from "../../../../base-components/webapp/core/BrowserUtil";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { SysConfigOptionDefinition } from "../../../model/SysConfigOptionDefinition";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { ValidationSeverity } from "../../../../base-components/webapp/core/ValidationSeverity";
-import { SysConfigOptionProperty } from "../../../model/SysConfigOptionProperty";
+import { AbstractEditDialog } from '../../../../../modules/base-components/webapp/core/AbstractEditDialog';
+import { ComponentState } from './ComponentState';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EditSysConfigDialogContext } from '../../core';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptionDefinitionProperty';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { SysconfigEvent } from '../../core/SysconfigEvent';
+import { DialogService } from '../../../../base-components/webapp/core/DialogService';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ValidationSeverity } from '../../../../base-components/webapp/core/ValidationSeverity';
+import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 
 class Component extends AbstractEditDialog {
-
-    private formId: string;
-
-    public onInput(input: any) {
-        this.formId = input.formId;
-    }
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -118,13 +112,13 @@ class Component extends AbstractEditDialog {
     }
     public async reset(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const sysConfigValueField = await formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
+        const sysConfigValueField = formInstance.getFormFieldByProperty(SysConfigOptionDefinitionProperty.VALUE);
         const defaultValue = await formInstance.getFormFieldValueByProperty(SysConfigOptionDefinitionProperty.DEFAULT);
         if (sysConfigValueField && defaultValue) {
-            formInstance.provideFormFieldValue(sysConfigValueField.instanceId, defaultValue.value);
+            formInstance.provideFormFieldValues([[sysConfigValueField.instanceId, defaultValue.value]], null);
         }
 
-        const sysConfigValidField = await formInstance.getFormFieldByProperty(KIXObjectProperty.VALID_ID);
+        const sysConfigValidField = formInstance.getFormFieldByProperty(KIXObjectProperty.VALID_ID);
         const context = ContextService.getInstance().getActiveContext();
         if (sysConfigValidField && context) {
             const sysConfigId = await context.getObjectId();
@@ -132,7 +126,9 @@ class Component extends AbstractEditDialog {
                 KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, [sysConfigId]
             ) : null;
             if (optionDefs && optionDefs[0]) {
-                formInstance.provideFormFieldValue(sysConfigValidField.instanceId, optionDefs[0].DefaultValidID);
+                formInstance.provideFormFieldValues(
+                    [[sysConfigValidField.instanceId, optionDefs[0].DefaultValidID]], null
+                );
             }
         }
     }

@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Channel } from "../../model/Channel";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ChannelProperty } from "../../model/ChannelProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Channel } from '../../model/Channel';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ChannelProperty } from '../../model/ChannelProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class ChannelLabelProvider extends LabelProvider<Channel> {
 

@@ -14,12 +14,13 @@ import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export abstract class AbstractAction<T = any> implements IAction<T> {
 
     public id: string;
     public text: string;
-    public icon: string;
+    public icon: string | ObjectIcon;
     public data: T;
     public hasLink: boolean = true;
 

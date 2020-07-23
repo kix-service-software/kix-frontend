@@ -7,14 +7,14 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { MailAccount } from "../../model/MailAccount";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { MailAccountProperty } from "../../model/MailAccountProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { DispatchingType } from "../../model/DispatchingType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { MailAccount } from '../../model/MailAccount';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { MailAccountProperty } from '../../model/MailAccountProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { DispatchingType } from '../../model/DispatchingType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
 
@@ -142,7 +142,7 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
     }
 
     public getObjectIcon(object: MailAccount): string | ObjectIcon {
-        return new ObjectIcon('MailAccount', object.ID);
+        return new ObjectIcon(null, 'MailAccount', object.ID);
     }
 
     public async getObjectTooltip(object: MailAccount, translatable: boolean = true): Promise<string> {
@@ -160,7 +160,6 @@ export class MailAccountLabelProvider extends LabelProvider<MailAccount> {
         }
         return plural ? 'Email Accounts' : 'Email Account';
     }
-
 
     public async getIcons(object: MailAccount, property: string): Promise<Array<string | ObjectIcon>> {
         const icons = [];

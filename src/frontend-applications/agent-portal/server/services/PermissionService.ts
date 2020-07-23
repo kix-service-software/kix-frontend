@@ -7,11 +7,11 @@
  * --
  */
 
-import { UIComponent } from "../../model/UIComponent";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { HttpService } from "./HttpService";
+import { UIComponent } from '../../model/UIComponent';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { HttpService } from './HttpService';
 
 export class PermissionService {
 
@@ -48,7 +48,6 @@ export class PermissionService {
         const overlays = await this.checkConfiguration(token, configuration.overlays);
         const others = await this.checkConfiguration(token, configuration.others);
         const dialogs = await this.checkConfiguration(token, configuration.dialogs);
-
 
         return new ContextConfiguration(
             configuration.id, configuration.name, configuration.type,

@@ -7,17 +7,18 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { DynamicField } from "../../model/DynamicField";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { DynamicFieldTypes } from "../../model/DynamicFieldTypes";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { DynamicField } from '../../model/DynamicField';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { DynamicFieldTypes } from '../../model/DynamicFieldTypes';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class DynamicFieldFormService extends KIXObjectFormService {
 
@@ -67,13 +68,15 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                 }
 
                 if (dynamicField && f.property === DynamicFieldProperty.CONFIG) {
+
+                    // do not overwrite original config
+                    value = Object.assign({}, value);
                     if (dynamicField.FieldType === DynamicFieldTypes.SELECTION) {
-                        const oldPossibleValues = value.PossibleValues;
                         const possibleValueArray = [];
-                        Object.keys(oldPossibleValues).forEach((key) => {
+                        Object.keys(value.PossibleValues).forEach((key) => {
                             const newPossibleValues = {};
                             newPossibleValues['Key'] = key;
-                            newPossibleValues['Value'] = oldPossibleValues[key];
+                            newPossibleValues['Value'] = value.PossibleValues[key];
                             possibleValueArray.push(newPossibleValues);
                         });
                         value.PossibleValues = possibleValueArray;
@@ -82,7 +85,6 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                         value.DefaultValue = JSON.parse(value.DefaultValue);
                     }
                 }
-
                 formFieldValue = dynamicField && formContext === FormContext.EDIT
                     ? new FormFieldValue(value)
                     : new FormFieldValue(value, f.defaultValue ? f.defaultValue.valid : undefined);
@@ -98,7 +100,8 @@ export class DynamicFieldFormService extends KIXObjectFormService {
     }
 
     public async postPrepareValues(
-        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
 
         const fieldTypeParameter = parameter.find((p) => p[0] === DynamicFieldProperty.FIELD_TYPE);
@@ -117,7 +120,12 @@ export class DynamicFieldFormService extends KIXObjectFormService {
             }
         }
 
-        return parameter;
+        const visibleParameter = parameter.find((p) => p[0] === DynamicFieldProperty.CUSTOMER_VISIBLE);
+        if (visibleParameter) {
+            visibleParameter[1] = Boolean(visibleParameter[1]);
+        }
+
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
 }

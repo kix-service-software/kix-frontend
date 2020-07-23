@@ -7,8 +7,8 @@
  * --
  */
 
-import { TableFilterCriteria } from "./TableFilterCriteria";
-import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
+import { TableFilterCriteria } from './TableFilterCriteria';
+import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 
 export class KIXObjectPropertyFilter {
 

@@ -7,26 +7,30 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../model/ContextType";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { TicketDetailsContext } from "../../core";
-import { Ticket } from "../../../model/Ticket";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Queue } from "../../../model/Queue";
-import { AgentService } from "../../../../user/webapp/core";
-import { SystemAddress } from "../../../../system-address/model/SystemAddress";
-import { TreeNode, TreeHandler } from "../../../../base-components/webapp/core/tree";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../model/ContextType';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { TicketDetailsContext } from '../../core';
+import { Ticket } from '../../../model/Ticket';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Queue } from '../../../model/Queue';
+import { AgentService } from '../../../../user/webapp/core';
+import { SystemAddress } from '../../../../system-address/model/SystemAddress';
+import { TreeNode, TreeHandler } from '../../../../base-components/webapp/core/tree';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
+import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 class Component extends FormInputComponent<number, ComponentState> {
+
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -48,54 +52,47 @@ class Component extends FormInputComponent<number, ComponentState> {
     public async onMount(): Promise<void> {
         await super.onMount();
 
-        const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-        const objectTypes = context.getDescriptor().kixObjectTypes;
-        const contextMode = context.getDescriptor().contextMode;
-
-        if (objectTypes.some((ot) => ot === KIXObjectType.ARTICLE) && contextMode === ContextMode.CREATE_SUB) {
-            this.initValuesByContext();
-        } else if (objectTypes.some((ot) => ot === KIXObjectType.TICKET)
-            && (contextMode === ContextMode.EDIT || contextMode === ContextMode.CREATE)) {
-            this.initValuesByForm();
-        }
-    }
-
-    private async initValuesByContext(): Promise<void> {
-        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-            TicketDetailsContext.CONTEXT_ID
-        );
-
-        if (context) {
-            const ticket = await context.getObject<Ticket>();
-            if (ticket) {
-                this.initNodes(ticket.QueueID);
+        this.formSubscriber = {
+            eventSubscriberId: 'ArticleEmailFromInput',
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                const queueValue = data.changedValues.find(
+                    (cv) => cv[0] && cv[0].property === TicketProperty.QUEUE_ID
+                );
+                if (queueValue && queueValue[1] && queueValue[1].value) {
+                    this.initNodes(queueValue[1].value);
+                }
             }
-        }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
-    private async initValuesByForm(): Promise<void> {
+    public async onDestroy(): Promise<void> {
+        super.onDestroy();
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+    }
+
+    public async setCurrentValue(): Promise<void> {
+        let queueId: number;
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const queueValue = await formInstance.getFormFieldValueByProperty<number>(TicketProperty.QUEUE_ID);
         if (queueValue && queueValue.value) {
-            this.initNodes(queueValue.value);
+            queueId = queueValue.value;
+        } else {
+            const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+                TicketDetailsContext.CONTEXT_ID
+            );
+
+            if (context) {
+                const ticket = await context.getObject<Ticket>();
+                if (ticket) {
+                    queueId = ticket.QueueID;
+                }
+            }
         }
 
-        formInstance.registerListener({
-            formListenerId: 'article-email-from-input',
-            formValueChanged: async (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
-                if (formField && formField.property === TicketProperty.QUEUE_ID) {
-                    if (!value) {
-                        value = await formInstance.getFormFieldValueByProperty(TicketProperty.QUEUE_ID);
-                    }
-
-                    if (value && value.value) {
-                        this.initNodes(value.value);
-                    }
-
-                }
-            },
-            updateForm: () => { return; }
-        });
+        if (queueId) {
+            this.initNodes(queueId);
+        }
     }
 
     private async initNodes(queueId: number): Promise<void> {
@@ -135,7 +132,7 @@ class Component extends FormInputComponent<number, ComponentState> {
                 )
             ));
 
-            const formList = (this as any).getComponent("article-email-from-input");
+            const formList = (this as any).getComponent('article-email-from-input');
             if (formList) {
                 const treeHandler: TreeHandler = formList.getTreeHandler();
                 if (treeHandler) {
@@ -143,8 +140,6 @@ class Component extends FormInputComponent<number, ComponentState> {
                     treeHandler.setSelection([nodes[0]], true);
                 }
             }
-
-            this.nodesChanged([nodes[0]]);
         }
     }
 

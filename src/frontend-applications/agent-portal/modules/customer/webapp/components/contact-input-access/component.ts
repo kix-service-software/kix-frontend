@@ -7,17 +7,17 @@
  * --
  */
 
-import { FormInputComponent } from "../../../../base-components/webapp/core/FormInputComponent";
-import { ComponentState } from "./ComponentState";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { FormService } from "../../../../base-components/webapp/core/FormService";
-import { ServiceRegistry } from "../../../../base-components/webapp/core/ServiceRegistry";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ServiceType } from "../../../../base-components/webapp/core/ServiceType";
-import { SortUtil } from "../../../../../model/SortUtil";
-import { ContactFormService } from "../../core";
-import { UserProperty } from "../../../../user/model/UserProperty";
+import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
+import { ComponentState } from './ComponentState';
+import { TreeNode, TreeHandler, TreeService } from '../../../../base-components/webapp/core/tree';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
+import { SortUtil } from '../../../../../model/SortUtil';
+import { ContactFormService } from '../../core';
+import { UserProperty } from '../../../../user/model/UserProperty';
 
 class Component extends FormInputComponent<string[], ComponentState> {
 
@@ -25,7 +25,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -34,7 +33,12 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        const treeHandler = new TreeHandler([], null, null, true);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+        await this.load();
         await super.onMount();
+
+        this.state.prepared = true;
     }
 
     public async update(): Promise<void> {
@@ -45,35 +49,37 @@ class Component extends FormInputComponent<string[], ComponentState> {
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
-    private async load(): Promise<TreeNode[]> {
+    private async load(): Promise<void> {
         const nodes = await this.getNodes();
-        this.setCurrentNode(nodes);
-        return nodes.sort((a, b) => {
+        nodes.sort((a, b) => {
             return SortUtil.compareString(a[1], b[1]);
         });
 
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes, null, true);
+        }
     }
 
-    private setCurrentNode(nodes: TreeNode[]): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            let currentNodes: TreeNode[];
-            if (Array.isArray(this.state.defaultValue.value)) {
-                currentNodes = nodes.filter(
-                    (eventNode) => this.state.defaultValue.value.some((v) => v === eventNode.id)
-                );
-            } else {
-                currentNodes = nodes.filter(
-                    (eventNode) => eventNode.id === this.state.defaultValue.value
-                );
-            }
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<number[] | number>(this.state.field.instanceId);
+        if (value) {
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            if (treeHandler) {
+                const nodes = treeHandler.getTree();
+                let selectedNodes = [];
+                if (Array.isArray(value.value)) {
+                    selectedNodes = nodes.filter(
+                        (eventNode) => (value.value as number[]).some((v) => v === eventNode.id)
+                    );
+                } else {
+                    selectedNodes = nodes.filter(
+                        (eventNode) => eventNode.id === value.value
+                    );
+                }
 
-            if (currentNodes) {
-                currentNodes.forEach((n) => n.selected = true);
-                super.provideValue(currentNodes.map((n) => n.id), true);
-
-                this.currentAccesses = currentNodes;
-                this.setFields(false);
-
+                treeHandler.setSelection(selectedNodes, true, true, true);
             }
         }
     }
@@ -81,7 +87,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
     public nodesChanged(nodes: TreeNode[]): void {
         this.currentAccesses = nodes ? nodes : [];
         super.provideValue(nodes ? nodes.map((n) => n.id) : null);
-
         this.setFields();
     }
 
@@ -97,9 +102,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
                     const childFields = await formService.getFormFieldsForAccess(
                         this.currentAccesses.map((n) => n.id), this.state.formId
                     );
-                    formInstance.addNewFormField(this.state.field, childFields, true);
+                    formInstance.addFieldChildren(this.state.field, childFields, true);
                 } else {
-                    formInstance.addNewFormField(this.state.field, [], true);
+                    formInstance.addFieldChildren(this.state.field, [], true);
                 }
             }
         }

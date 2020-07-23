@@ -7,16 +7,16 @@
  * --
  */
 
-import { IInitialDataExtension } from "../../model/IInitialDataExtension";
-import { ObjectIconLoadingOptions } from "../../server/model/ObjectIconLoadingOptions";
-import { ObjectIconService } from "../icon/server/ObjectIconService";
-import { ConfigurationService } from "../../../../server/services/ConfigurationService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ObjectIcon } from "../icon/model/ObjectIcon";
-import { LoggingService } from "../../../../server/services/LoggingService";
+import { IInitialDataExtension } from '../../model/IInitialDataExtension';
+import { ObjectIconLoadingOptions } from '../../server/model/ObjectIconLoadingOptions';
+import { ObjectIconService } from '../icon/server/ObjectIconService';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { ObjectIcon } from '../icon/model/ObjectIcon';
+import { LoggingService } from '../../../../server/services/LoggingService';
 
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IInitialDataExtension {
 
@@ -37,7 +37,7 @@ class Extension extends KIXExtension implements IInitialDataExtension {
                     __dirname + '/../../static/img/kix-logo.png',
                     { encoding: 'base64' }
                 );
-                const logo = new ObjectIcon('agent-portal-logo', 'agent-portal-logo', 'image/png', image);
+                const logo = new ObjectIcon(null, 'agent-portal-logo', 'agent-portal-logo', 'image/png', image);
                 await ObjectIconService.getInstance().createIcons(serverConfig.BACKEND_API_TOKEN, '', logo)
                     .catch((e) => LoggingService.getInstance().error(e));
             } catch (e) {

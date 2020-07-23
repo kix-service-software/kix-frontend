@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class SysConfigOption extends KIXObject<SysConfigOption> {
+export class SysConfigOption extends KIXObject {
 
     public ObjectId: string | number;
 
@@ -24,6 +24,8 @@ export class SysConfigOption extends KIXObject<SysConfigOption> {
 
     public ContextMetadata: string;
 
+    public ReadOnly: boolean;
+
     public constructor(sysConfigOption?: SysConfigOption) {
         super();
         if (sysConfigOption) {
@@ -32,6 +34,7 @@ export class SysConfigOption extends KIXObject<SysConfigOption> {
             this.Value = sysConfigOption.Value;
             this.Context = sysConfigOption.Context;
             this.ContextMetadata = sysConfigOption.ContextMetadata;
+            this.ReadOnly = Boolean(sysConfigOption.ReadOnly);
         }
     }
 

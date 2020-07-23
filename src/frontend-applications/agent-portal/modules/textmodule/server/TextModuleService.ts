@@ -7,15 +7,14 @@
  * --
  */
 
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { TextModuleFactory } from "./TextModuleFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { Error } from "../../../../../server/model/Error";
-import { TextModule } from "../model/TextModule";
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { Error } from '../../../../../server/model/Error';
+import { TextModule } from '../model/TextModule';
 
 export class TextModuleAPIService extends KIXObjectAPIService {
 
@@ -33,7 +32,7 @@ export class TextModuleAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.TEXT_MODULE;
 
     private constructor() {
-        super([new TextModuleFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -50,7 +49,9 @@ export class TextModuleAPIService extends KIXObjectAPIService {
         switch (objectType) {
             case KIXObjectType.TEXT_MODULE:
                 objects = await super.load<TextModule>(
-                    token, KIXObjectType.TEXT_MODULE, this.RESOURCE_URI, loadingOptions, objectIds, 'TextModule');
+                    token, KIXObjectType.TEXT_MODULE, this.RESOURCE_URI, loadingOptions, objectIds, 'TextModule',
+                    TextModule
+                );
                 break;
             default:
         }

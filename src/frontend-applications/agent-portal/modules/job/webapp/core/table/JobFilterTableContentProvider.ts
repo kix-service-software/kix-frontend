@@ -7,20 +7,20 @@
  * --
  */
 
-import { JobDetailsContext } from "../context";
-import { JobFilterTableProperty } from "./JobFilterTableProperty";
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { Job } from "../../../model/Job";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { TicketProperty } from "../../../../ticket/model/TicketProperty";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
-import { ILabelProvider } from "../../../../base-components/webapp/core/ILabelProvider";
-import { DynamicFieldValue } from "../../../../dynamic-fields/model/DynamicFieldValue";
+import { JobDetailsContext } from '../context';
+import { JobFilterTableProperty } from './JobFilterTableProperty';
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { Job } from '../../../model/Job';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+
+import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 
 export class JobFilterTableContentProvider extends TableContentProvider<any> {
 

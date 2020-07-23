@@ -7,25 +7,30 @@
  * --
  */
 
-import { IDynamicFormManager } from "./IDynamicFormManager";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { InputFieldTypes } from "../InputFieldTypes";
-import { TreeNode } from "../tree";
-import { DynamicFormOperationsType } from "./DynamicFormOperationsType";
-import { AuthenticationSocketClient } from "../AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { ValidationResult } from "../ValidationResult";
-import { DynamicFieldTypes } from "../../../../dynamic-fields/model/DynamicFieldTypes";
-import { KIXObjectService } from "../KIXObjectService";
-import { ExtendedDynamicFormManager } from "./ExtendedDynamicFormManager";
-import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { ConfigItemProperty } from "../../../../cmdb/model/ConfigItemProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
+import { IDynamicFormManager } from './IDynamicFormManager';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { InputFieldTypes } from '../InputFieldTypes';
+import { TreeNode } from '../tree';
+import { DynamicFormOperationsType } from './DynamicFormOperationsType';
+import { AuthenticationSocketClient } from '../AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ValidationResult } from '../ValidationResult';
+import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
+import { KIXObjectService } from '../KIXObjectService';
+import { ExtendedDynamicFormManager } from './ExtendedDynamicFormManager';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../../../../dynamic-fields/model/DynamicFieldProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ServiceRegistry } from '../ServiceRegistry';
+import { IKIXObjectService } from '../IKIXObjectService';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -40,13 +45,74 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     protected readPermissions: Map<string, boolean> = new Map();
 
     public resetOperator: boolean = true;
+    public resetValue: boolean = true;
 
-    public abstract async getProperties(): Promise<Array<[string, string]>>;
+    public useOwnSearch: boolean = false;
+    public validDFTypes = [];
+
+    public async getProperties(): Promise<Array<[string, string]>> {
+        let properties = [];
+
+        for (const manager of this.extendedFormManager) {
+            const extendedProperties = await manager.getProperties();
+            if (extendedProperties) {
+                properties = [...properties, ...extendedProperties];
+            }
+        }
+
+        if (await this.checkReadPermissions('/system/dynamicfields')) {
+            let validTypes = this.validDFTypes;
+            this.extendedFormManager.forEach((m) => validTypes = [...validTypes, ...m.getValidDFTypes()]);
+
+            const loadingOptions = new KIXObjectLoadingOptions(
+                [
+                    new FilterCriteria(
+                        DynamicFieldProperty.OBJECT_TYPE, SearchOperator.EQUALS,
+                        FilterDataType.STRING, FilterType.AND, this.objectType
+                    ),
+                    new FilterCriteria(
+                        DynamicFieldProperty.FIELD_TYPE, SearchOperator.IN,
+                        FilterDataType.STRING, FilterType.AND,
+                        [
+                            DynamicFieldTypes.TEXT,
+                            DynamicFieldTypes.TEXT_AREA,
+                            DynamicFieldTypes.DATE,
+                            DynamicFieldTypes.DATE_TIME,
+                            DynamicFieldTypes.SELECTION,
+                            DynamicFieldTypes.CI_REFERENCE,
+                            DynamicFieldTypes.TICKET_REFERENCE,
+                            ...validTypes
+                        ]
+                    ),
+                    new FilterCriteria(
+                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS,
+                        FilterDataType.NUMERIC, FilterType.AND, 1
+                    )
+                ]
+            );
+            const fields = await KIXObjectService.loadObjects<DynamicField>(
+                KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
+            );
+
+            if (fields) {
+                for (const field of fields) {
+                    const translated = await TranslationService.translate(field.Label);
+                    properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
+                }
+            }
+        }
+
+        return properties.filter((p, index) => properties.indexOf(p) === index);
+    }
 
     protected extendedFormManager: ExtendedDynamicFormManager[] = [];
 
     public addExtendedFormManager(manager: ExtendedDynamicFormManager): void {
         this.extendedFormManager.push(manager);
+    }
+
+    public getExtendedFormManager(): ExtendedDynamicFormManager[] {
+        return this.extendedFormManager;
     }
 
     public registerListener(listenerId: string, callback: () => void): void {
@@ -76,11 +142,16 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
     }
 
-    public hasDefinedValues(): boolean {
-        return !!this.getEditableValues().length;
+    public async searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]> {
+        return [];
     }
 
-    public async setValue(newValue: ObjectPropertyValue): Promise<void> {
+    public async hasDefinedValues(): Promise<boolean> {
+        const editableValues = await this.getEditableValues();
+        return !!editableValues.length;
+    }
+
+    public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
         const index = this.values.findIndex((bv) => bv.id === newValue.id);
         if (index !== -1) {
             this.values[index].property = newValue.property;
@@ -93,7 +164,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
         await this.checkProperties();
         await this.validate();
-        this.notifyListeners();
+        if (!silent) {
+            this.notifyListeners();
+        }
     }
 
     public async removeValue(importValue: ObjectPropertyValue): Promise<void> {
@@ -129,9 +202,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return null;
     }
 
-    public getSpecificInput(): string {
+    public getSpecificInput(property: string): string {
         for (const extendedManager of this.extendedFormManager) {
-            const result = extendedManager.getSpecificInput();
+            const result = extendedManager.getSpecificInput(property);
             if (result) {
                 return result;
             }
@@ -152,7 +225,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public async isHiddenProperty(property: string): Promise<boolean> {
         return false;
     }
-
 
     public async getPropertiesPlaceholder(): Promise<string> {
         for (const extendedManager of this.extendedFormManager) {
@@ -219,26 +291,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return operator;
     }
 
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        for (const extendedManager of this.extendedFormManager) {
-            const tree = await extendedManager.searchValues(property, searchValue, limit);
-            if (tree) {
-                return tree;
-            } else {
-                const dfName = KIXObjectService.getDynamicFieldName(property);
-                if (dfName) {
-                    const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-                    if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                        return await this.getCIReferenceTree(dynamicField, searchValue, limit);
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public getEditableValues(): ObjectPropertyValue[] {
+    public async getEditableValues(): Promise<ObjectPropertyValue[]> {
         return [...this.values];
     }
 
@@ -291,7 +344,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public async isMultiselect(property: string): Promise<boolean> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = extendedManager.isMultiselect(property);
+            const result = await extendedManager.isMultiselect(property);
             if (result !== undefined && result !== null) {
                 return result;
             }
@@ -302,7 +355,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
             if (
-                field && field.FieldType === DynamicFieldTypes.SELECTION &&
+                field &&
+                (
+                    field.FieldType === DynamicFieldTypes.SELECTION ||
+                    field.FieldType === DynamicFieldTypes.TICKET_REFERENCE ||
+                    field.FieldType === DynamicFieldTypes.CI_REFERENCE
+                ) &&
                 field.Config && Number(field.Config.CountMax) > 1
             ) {
                 isMultiSelect = true;
@@ -325,7 +383,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     inputFieldType = InputFieldTypes.DATE_TIME;
                 } else if (field.FieldType === DynamicFieldTypes.SELECTION) {
                     inputFieldType = InputFieldTypes.DROPDOWN;
-                } else if (field.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                } else if (
+                    field.FieldType === DynamicFieldTypes.CI_REFERENCE ||
+                    field.FieldType === DynamicFieldTypes.TICKET_REFERENCE
+                ) {
                     inputFieldType = InputFieldTypes.OBJECT_REFERENCE;
                 }
             }
@@ -344,36 +405,13 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return this.readPermissions.get(resource);
     }
 
-    protected async getCIReferenceTree(
-        dynamicField: DynamicField, searchValue: string, limit?: number
-    ): Promise<TreeNode[]> {
-        const filter = [];
-
-        if (dynamicField.Config) {
-            const classes = dynamicField.Config.ITSMConfigItemClasses;
-            if (classes && Array.isArray(classes) && classes.length) {
-                filter.push(new FilterCriteria(
-                    ConfigItemProperty.CLASS_ID, SearchOperator.IN,
-                    FilterDataType.NUMERIC, FilterType.AND, classes.map((c) => Number(c))
-                ));
-            }
-
-            const depStates = dynamicField.Config.DeploymentStates;
-            if (depStates && Array.isArray(depStates) && depStates.length) {
-                filter.push(new FilterCriteria(
-                    ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.IN,
-                    FilterDataType.NUMERIC, FilterType.AND, depStates.map((d) => Number(d))
-                ));
-            }
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType = this.objectType;
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(this.objectType);
+        if (service) {
+            objectType = await service.getObjectTypeForProperty(property);
         }
-
-        const configItems = await KIXObjectService.search(KIXObjectType.CONFIG_ITEM, searchValue, limit, filter);
-
-        let tree: TreeNode[] = [];
-        if (Array.isArray(configItems)) {
-            tree = await KIXObjectService.prepareTree(configItems);
-        }
-        return tree;
+        return objectType;
     }
 
 }

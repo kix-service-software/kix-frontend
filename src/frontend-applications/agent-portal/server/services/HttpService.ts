@@ -124,11 +124,13 @@ export class HttpService {
         };
 
         const errors = [];
-        for (const resource of resources) {
-            await this.executeRequest<T>(resource, token, clientRequestId, options)
-                .catch((error: Error) => errors.push(error));
-        }
+        const executePromises = [];
+        resources.forEach((resource) => executePromises.push(
+            this.executeRequest<T>(resource, token, clientRequestId, options)
+                .catch((error: Error) => errors.push(error))
+        ));
 
+        await Promise.all(executePromises);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
         return errors;
     }
@@ -226,7 +228,7 @@ export class HttpService {
 
     private buildRequestUrl(resource: string): string {
         let encodedResource = encodeURI(resource);
-        encodedResource = encodedResource.replace('###', '%23%23%23');
+        encodedResource = encodedResource.replace(/###/g, '%23%23%23');
         return `${this.apiURL}/${encodedResource}`;
     }
 

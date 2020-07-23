@@ -7,7 +7,7 @@
  * --
  */
 
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class DateTimeUtil {
 
@@ -73,13 +73,19 @@ export class DateTimeUtil {
         return isNegative ? '- ' + ageResult : ageResult;
     }
 
-    public static getKIXDateTimeString(date: Date): string {
+    public static getKIXDateTimeString(date: Date | string): string {
+        if (typeof date === 'string') {
+            date = new Date(date);
+        }
         return `${DateTimeUtil.getKIXDateString(date)} ${DateTimeUtil.getKIXTimeString(date, false)}`;
     }
 
     public static getKIXDateString(date: Date): string {
         let kixDateString;
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const year = date.getFullYear();
             const month = DateTimeUtil.padZero(date.getMonth() + 1);
             const day = DateTimeUtil.padZero(date.getDate());
@@ -88,11 +94,17 @@ export class DateTimeUtil {
         return kixDateString;
     }
 
-    public static getKIXTimeString(date: Date, short: boolean = true): string {
+    public static getKIXTimeString(date: Date, short: boolean = true, roundHalfHour?: boolean): string {
         let kixTimeString;
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const hours = DateTimeUtil.padZero(date.getHours());
-            const minutes = DateTimeUtil.padZero(date.getMinutes());
+            let minutes = DateTimeUtil.padZero(date.getMinutes());
+            if (roundHalfHour) {
+                minutes = Number(minutes) <= 15 || Number(minutes) >= 30 ? '00' : '30';
+            }
             const seconds = DateTimeUtil.padZero(date.getSeconds());
             kixTimeString = `${hours}:${minutes}`;
             if (!short) {
@@ -104,6 +116,9 @@ export class DateTimeUtil {
 
     public static getTimestampNumbersOnly(date: Date, withSeconds?: boolean): string {
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const year = date.getFullYear();
             const month = DateTimeUtil.padZero(date.getMonth() + 1);
             const day = DateTimeUtil.padZero(date.getDate());

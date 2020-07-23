@@ -7,7 +7,7 @@
  * --
  */
 
-import { ClientStorageService } from "./ClientStorageService";
+import { ClientStorageService } from './ClientStorageService';
 
 declare var io: any;
 
@@ -22,7 +22,7 @@ export abstract class SocketClient {
 
         let socket;
         if (typeof io !== 'undefined') {
-            socket = io.connect(socketUrl + "/" + namespace, options);
+            socket = io.connect(socketUrl + '/' + namespace, options);
             socket.on('error', (error) => {
                 console.error(namespace);
                 console.error(error);
@@ -43,7 +43,6 @@ export abstract class SocketClient {
                 console.error(namespace);
                 console.warn('Reconnect attempt');
             });
-
 
             socket.on('reconnect_error', (error) => {
                 console.error(namespace);

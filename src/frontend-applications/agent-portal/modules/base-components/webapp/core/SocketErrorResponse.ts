@@ -7,7 +7,7 @@
  * --
  */
 
-import { ISocketResponse } from "./ISocketResponse";
+import { ISocketResponse } from './ISocketResponse';
 
 export class SocketErrorResponse implements ISocketResponse {
 

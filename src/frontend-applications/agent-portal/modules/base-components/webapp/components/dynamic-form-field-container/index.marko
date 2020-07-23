@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.prepared)>
     <for|dynamicValue, index| of=state.dynamicValues>
         <div.dynamic-form-field-value
@@ -55,6 +54,7 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             canRemoveNode=(!dynamicValue.readonly || dynamicValue.changeable)
                             readonly=dynamicValue.readonly
                             multiselect=dynamicValue.isMultiselect
+                            freeText=dynamicValue.isFreeText
                             invalid=!dynamicValue.value.valid
                             autoCompleteConfiguration=dynamicValue.autoCompleteConfiguration
                             searchCallback=dynamicValue.autoCompleteCallback
@@ -128,7 +128,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             value=dynamicValue.value.value
                             disabled=(dynamicValue.readonly && !dynamicValue.changeable)
                             options=dynamicValue.inputOptions
-                            on-change("setSpecificValue", dynamicValue)/>
+                            on-change("setSpecificValue", dynamicValue)
+                            on-valueChanged("setSpecificValue", dynamicValue)/>
                     </else-if>
                     <else>
                         <input.input-style

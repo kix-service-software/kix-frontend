@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "./ISocketResponse";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
+import { ISocketResponse } from './ISocketResponse';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 
 export class LoadFormConfigurationResponse implements ISocketResponse {
 

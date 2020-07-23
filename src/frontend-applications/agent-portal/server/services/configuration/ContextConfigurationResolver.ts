@@ -8,17 +8,17 @@
  */
 
 
-import { ModuleConfigurationService } from "./ModuleConfigurationService";
-import { TableWidgetConfigurationResolver } from "./TableWidgetConfigurationResolver";
-import { TableConfigurationResolver } from "./TableConfigurationResolver";
-import { IConfigurationResolver } from "./IConfigurationResolver";
-import { ContextConfiguration } from "../../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../../model/configuration/ConfiguredWidget";
-import { WidgetConfiguration } from "../../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
-import { ChartWidgetConfigurationResolver } from "./ChartWidgetConfigurationResolver";
-import { SysConfigOption } from "../../../modules/sysconfig/model/SysConfigOption";
-import { ResolverUtil } from "./ResolverUtil";
+
+import { TableWidgetConfigurationResolver } from './TableWidgetConfigurationResolver';
+import { TableConfigurationResolver } from './TableConfigurationResolver';
+import { IConfigurationResolver } from './IConfigurationResolver';
+import { ContextConfiguration } from '../../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../../model/configuration/ConfiguredWidget';
+import { WidgetConfiguration } from '../../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../../model/configuration/ConfigurationType';
+import { ChartWidgetConfigurationResolver } from './ChartWidgetConfigurationResolver';
+import { SysConfigOption } from '../../../modules/sysconfig/model/SysConfigOption';
+import { ResolverUtil } from './ResolverUtil';
 
 export class ContextConfigurationResolver {
 

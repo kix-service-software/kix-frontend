@@ -7,9 +7,9 @@
  * --
  */
 
-import { ConfigurationType } from "./ConfigurationType";
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { IConfiguration } from "./IConfiguration";
+import { ConfigurationType } from './ConfigurationType';
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { IConfiguration } from './IConfiguration';
 
 export class LinkedObjectsWidgetConfiguration implements IConfiguration {
 

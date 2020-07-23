@@ -9,7 +9,6 @@
 
 import { ComponentState } from './ComponentState';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { IdService } from '../../../../../model/IdService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
 import { KIXObjectFormService } from '../../../../../modules/base-components/webapp/core/KIXObjectFormService';
@@ -18,11 +17,15 @@ import { FormInstance } from '../../../../../modules/base-components/webapp/core
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFormFieldOption } from '../../../../dynamic-fields/webapp/core';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { EventService } from '../../core/EventService';
+import { FormEvent } from '../../core/FormEvent';
 
 class FieldContainerComponent {
 
     private state: ComponentState;
     private formId: string;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -37,13 +40,24 @@ class FieldContainerComponent {
     public async onMount(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Add", "Translatable#Delete"
+            'Translatable#Add', 'Translatable#Delete'
         ]);
-        formInstance.registerListener({
-            updateForm: () => (this as any).setStateDirty('fields'),
-            formValueChanged: () => { return; },
-            formListenerId: IdService.generateDateBasedId('form-field-container')
-        });
+
+        this.formSubscriber = {
+            eventSubscriberId: 'FieldContainer',
+            eventPublished: (data: any, eventId: string) => {
+                (this as any).setStateDirty('fields');
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+        EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
     }
 
     private async initFields(fields: FormFieldConfiguration[]): Promise<void> {
@@ -137,7 +151,7 @@ class FieldContainerComponent {
         if (field.empty) {
             formInstance.setFieldEmptyState(field, false);
         } else {
-            formInstance.addFormField(field);
+            formInstance.duplicateAndAddNewField(field);
         }
         (this as any).setStateDirty('fields');
     }
@@ -176,7 +190,7 @@ class FieldContainerComponent {
     public async handleDrop(index: number, event) {
         event.stopPropagation();
         event.preventDefault();
-        const formInstance = await FormService.getInstance().getFormInstance<FormInstance>(this.formId);
+        const formInstance = await FormService.getInstance().getFormInstance(this.formId);
         if (formInstance && this.state.dragStartInstanceId) {
             formInstance.changeFieldOrder(this.state.dragStartInstanceId, index);
         }

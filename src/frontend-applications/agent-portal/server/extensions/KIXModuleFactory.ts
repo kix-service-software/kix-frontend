@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
-import { PermissionService } from "../services/PermissionService";
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { PermissionService } from '../services/PermissionService';
 
 export class KIXModuleFactory {
 

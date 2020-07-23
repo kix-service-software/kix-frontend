@@ -7,13 +7,13 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../../../base-components/webapp/core/table/TableContentProvider";
-import { TranslationPattern } from "../../../../../model/TranslationPattern";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TranslationPatternProperty } from "../../../../../model/TranslationPatternProperty";
+import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TranslationPattern } from '../../../../../model/TranslationPattern';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TranslationPatternProperty } from '../../../../../model/TranslationPatternProperty';
 
 export class TranslationPatternTableContentProvider extends TableContentProvider<TranslationPattern> {
 

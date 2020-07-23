@@ -7,15 +7,15 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
 
-import { UIComponent } from "../../model/UIComponent";
+import { UIComponent } from '../../model/UIComponent';
 
-import { UIComponentPermission } from "../../model/UIComponentPermission";
+import { UIComponentPermission } from '../../model/UIComponentPermission';
 
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IKIXModuleExtension {
 
@@ -36,12 +36,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             new UIComponentPermission('faq/articles', [CRUD.READ])
         ]),
         new UIComponent('faq-edit-module-component', '/kix-module-faq$0/webapp/core/ui-modules/FAQEditUIModule', [
-            new UIComponentPermission('faq/articles', [CRUD.CREATE]),
-            new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
+            new UIComponentPermission('faq/articles', [CRUD.CREATE])
         ]),
         new UIComponent('faq-admin-module-component', '/kix-module-faq$0/webapp/core/ui-modules/FAQAdminUIModule', [
-            new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true),
-            new UIComponentPermission('system/faq/categories/*', [CRUD.UPDATE], true)
+            new UIComponentPermission('system/faq/categories', [CRUD.CREATE], true)
         ]),
     ];
 

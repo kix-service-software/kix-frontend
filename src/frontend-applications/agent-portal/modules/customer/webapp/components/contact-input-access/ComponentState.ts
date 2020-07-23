@@ -7,14 +7,15 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../base-components/webapp/core/FormInputComponentState";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState extends FormInputComponentState<string[]> {
 
     public constructor(
         public placeholder: string = '',
-        public loadNodes: () => Promise<TreeNode[]> = null
+        public treeId: string = IdService.generateDateBasedId('contact-input-access'),
+        public prepared: boolean = false
     ) {
         super();
     }

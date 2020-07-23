@@ -75,6 +75,19 @@
         }
     }
 
+    .sub-field-container {
+
+        &:not(:last-child) {
+            margin-bottom: @margin-small;
+        }
+
+        >.form-field {
+            >.field-label {
+                font-weight: normal;
+            }
+        }
+    }
+
     >.group-widget,
     >div>.group-widget {
         background-color: unset;

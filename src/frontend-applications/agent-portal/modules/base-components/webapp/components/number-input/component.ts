@@ -11,6 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { NumberInputOptions } from '../../../../../modules/base-components/webapp/core/NumberInputOptions';
+import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -36,7 +37,6 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.setCurrentValue();
     }
 
     private async prepareOptions(): Promise<void> {
@@ -72,11 +72,11 @@ class Component extends FormInputComponent<string, ComponentState> {
         }
     }
 
-    public setCurrentValue(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentValue = this.state.defaultValue.value;
-            (this as any).emit('valueChanged', this.state.currentValue);
-            super.provideValue(this.state.currentValue);
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        if (value) {
+            this.state.currentValue = value.value;
         }
     }
 

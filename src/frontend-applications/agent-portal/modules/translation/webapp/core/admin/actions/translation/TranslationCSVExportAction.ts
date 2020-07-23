@@ -7,18 +7,18 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ITable } from "../../../../../../base-components/webapp/core/table";
-import { TranslationService } from "../../../TranslationService";
-import { TranslationPattern } from "../../../../../model/TranslationPattern";
+import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { TranslationService } from '../../../TranslationService';
+import { TranslationPattern } from '../../../../../model/TranslationPattern';
 
 export class TranslationCSVExportAction extends AbstractAction<ITable> {
 
     public hasLink: boolean = false;
 
     public async initAction(): Promise<void> {
-        this.text = "Translatable#CSV-Export";
-        this.icon = "kix-icon-export";
+        this.text = 'Translatable#CSV-Export';
+        this.icon = 'kix-icon-export';
     }
 
     public canRun(): boolean {
@@ -34,7 +34,7 @@ export class TranslationCSVExportAction extends AbstractAction<ITable> {
         if (this.canRun()) {
 
             const languages = await TranslationService.getInstance().getLanguages();
-            let csvString = '"Pattern";' + languages.map((l) => '"' + l[0] + '"').join(';') + "\n";
+            let csvString = '"Pattern";' + languages.map((l) => '"' + l[0] + '"').join(';') + '\n';
 
             const selectedRows = this.data.getSelectedRows();
 
@@ -55,12 +55,12 @@ export class TranslationCSVExportAction extends AbstractAction<ITable> {
                     }
                     translationStrings.push(translationString);
                 }
-                csvString += translationStrings.join(';') + "\n";
+                csvString += translationStrings.join(';') + '\n';
             }
 
             if (window.navigator.msSaveOrOpenBlob) {
                 const blob = new Blob([csvString]);
-                window.navigator.msSaveBlob(blob, "Export.csv");
+                window.navigator.msSaveBlob(blob, 'Export.csv');
             } else {
                 const element = document.createElement('a');
                 element.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(csvString);

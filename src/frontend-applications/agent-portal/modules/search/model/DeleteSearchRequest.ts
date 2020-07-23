@@ -7,7 +7,7 @@
  * --
  */
 
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
 
 export class DeleteSearchRequest implements ISocketRequest {
 

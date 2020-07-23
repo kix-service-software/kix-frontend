@@ -7,8 +7,8 @@
  * --
  */
 
-import { Article } from "../../../model/Article";
-import { ArticleLabelProvider } from "../../core";
+import { Article } from '../../../model/Article';
+import { ArticleLabelProvider } from '../../core';
 
 export class ComponentState {
 

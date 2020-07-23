@@ -7,17 +7,17 @@
  * --
  */
 
-import { AbstractAction } from "../../../base-components/webapp/core/AbstractAction";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SysConfigOptionDefinitionProperty } from "../../model/SysConfigOptionDefinitionProperty";
-import { SysConfigOptionDefinition } from "../../model/SysConfigOptionDefinition";
-import { ApplicationEvent } from "../../../base-components/webapp/core/ApplicationEvent";
-import { EventService } from "../../../base-components/webapp/core/EventService";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { BrowserUtil } from "../../../base-components/webapp/core/BrowserUtil";
-import { SysconfigEvent } from "./SysconfigEvent";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { AbstractAction } from '../../../base-components/webapp/core/AbstractAction';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SysConfigOptionDefinitionProperty } from '../../model/SysConfigOptionDefinitionProperty';
+import { SysConfigOptionDefinition } from '../../model/SysConfigOptionDefinition';
+import { ApplicationEvent } from '../../../base-components/webapp/core/ApplicationEvent';
+import { EventService } from '../../../base-components/webapp/core/EventService';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../../base-components/webapp/core/BrowserUtil';
+import { SysconfigEvent } from './SysconfigEvent';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class SysconfigTableResetAction extends AbstractAction {
 

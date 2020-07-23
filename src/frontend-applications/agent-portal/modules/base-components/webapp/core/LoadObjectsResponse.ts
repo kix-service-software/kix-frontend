@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketResponse } from "./ISocketResponse";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { ISocketResponse } from './ISocketResponse';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class LoadObjectsResponse<T extends KIXObject> implements ISocketResponse {
 

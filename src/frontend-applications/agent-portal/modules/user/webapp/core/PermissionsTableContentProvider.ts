@@ -7,14 +7,14 @@
  * --
  */
 
-import { TableContentProvider } from "../../../base-components/webapp/core/table/TableContentProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { Role } from "../../model/Role";
-import { Permission } from "../../model/Permission";
+import { TableContentProvider } from '../../../base-components/webapp/core/table/TableContentProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { Role } from '../../model/Role';
+import { Permission } from '../../model/Permission';
 
 export class PermissionsTableContentProvider extends TableContentProvider<Permission> {
 

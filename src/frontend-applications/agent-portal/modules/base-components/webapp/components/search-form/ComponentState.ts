@@ -7,9 +7,9 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { ITable } from "../../core/table";
-import { IDynamicFormManager } from "../../core/dynamic-form/IDynamicFormManager";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { ITable } from '../../core/table';
+import { IDynamicFormManager } from '../../core/dynamic-form/IDynamicFormManager';
 
 export class ComponentState extends AbstractComponentState {
 

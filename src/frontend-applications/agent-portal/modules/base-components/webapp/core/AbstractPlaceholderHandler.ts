@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { IPlaceholderHandler } from "./IPlaceholderHandler";
-import { PlaceholderService } from "./PlaceholderService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { IPlaceholderHandler } from './IPlaceholderHandler';
+import { PlaceholderService } from './PlaceholderService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class AbstractPlaceholderHandler implements IPlaceholderHandler {
 

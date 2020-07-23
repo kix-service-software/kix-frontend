@@ -7,8 +7,8 @@
  * --
  */
 
-import { RequestObject } from "../../../../../../server/model/rest/RequestObject";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
+import { RequestObject } from '../../../../../../server/model/rest/RequestObject';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class CreateMacroAction extends RequestObject {
 
@@ -17,8 +17,8 @@ export class CreateMacroAction extends RequestObject {
         validId: number, comment?: string
     ) {
         super();
-        this.applyProperty("Type", type);
-        this.applyProperty("Parameters", parameters);
+        this.applyProperty('Type', type);
+        this.applyProperty('Parameters', parameters);
         this.applyProperty(KIXObjectProperty.VALID_ID, validId);
         this.applyProperty(KIXObjectProperty.COMMENT, comment);
     }

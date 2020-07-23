@@ -7,9 +7,9 @@
  * --
  */
 
-import { IMarkoApplication } from "../../server/extensions/IMarkoApplication";
+import { IMarkoApplication } from '../../server/extensions/IMarkoApplication';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IMarkoApplication {
 

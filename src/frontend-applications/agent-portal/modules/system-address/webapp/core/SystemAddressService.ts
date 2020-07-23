@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../model/SystemAddress";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../model/SystemAddress';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class SystemAddressService extends KIXObjectService<SystemAddress> {
 
@@ -21,6 +21,11 @@ export class SystemAddressService extends KIXObjectService<SystemAddress> {
         }
 
         return SystemAddressService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.SYSTEM_ADDRESS);
+        this.objectConstructors.set(KIXObjectType.SYSTEM_ADDRESS, [SystemAddress]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

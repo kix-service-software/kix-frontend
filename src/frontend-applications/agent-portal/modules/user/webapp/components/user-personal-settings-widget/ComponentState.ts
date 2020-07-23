@@ -7,11 +7,11 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UserLabelProvider } from "../../core/UserLabelProvider";
-import { User } from "../../../model/User";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UserLabelProvider } from '../../core/UserLabelProvider';
+import { User } from '../../../model/User';
+import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 
 export class ComponentState extends WidgetComponentState {
 

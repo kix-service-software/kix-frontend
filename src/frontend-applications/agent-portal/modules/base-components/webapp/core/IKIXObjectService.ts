@@ -7,18 +7,18 @@
  * --
  */
 
-import { TreeNode } from "./tree";
-import { IAutofillConfiguration } from "./IAutofillConfiguration";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { IKIXService } from "./IKIXService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { KIXObjectSpecificDeleteOptions } from "../../../../model/KIXObjectSpecificDeleteOptions";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
+import { TreeNode } from './tree';
+import { IAutofillConfiguration } from './IAutofillConfiguration';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { IKIXService } from './IKIXService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 
 export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIXService {
 
@@ -68,5 +68,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
     ): Promise<TreeNode[]>;
 
     getObjectRoutingConfiguration(object?: KIXObject): RoutingConfiguration;
+
+    getObjectTypeForProperty(property: string): Promise<KIXObjectType | string>;
 
 }

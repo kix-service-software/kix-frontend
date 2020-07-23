@@ -7,12 +7,12 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
-import { UIComponent } from "../../model/UIComponent";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { UIComponent } from '../../model/UIComponent';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IKIXModuleExtension {
 
@@ -28,9 +28,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('import-export-component', '/kix-module-import-export$0/webapp/core/ImportExportUIModule', [
             new UIComponentPermission(
                 'system/importexport/templates', [CRUD.READ]
-            ),
-            new UIComponentPermission(
-                'system/importexport/templates/*/runs', [CRUD.CREATE]
             )
         ])
     ];

@@ -7,12 +7,12 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { FormContext } from "../../../../../model/configuration/FormContext";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
+import { ComponentState } from './ComponentState';
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { FormContext } from '../../../../../model/configuration/FormContext';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -28,8 +28,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async cancel(): Promise<void> {
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        formInstance.reset();
         DialogService.getInstance().closeMainDialog();
     }
 

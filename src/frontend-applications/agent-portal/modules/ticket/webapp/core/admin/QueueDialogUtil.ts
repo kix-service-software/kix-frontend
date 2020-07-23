@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { NewQueueDialogContext } from "./context/ticket-queue/NewQueueDialogContext";
-import { QueueDetailsContext, EditQueueDialogContext } from "./context";
-import { Queue } from "../../../model/Queue";
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { NewQueueDialogContext } from './context/ticket-queue/NewQueueDialogContext';
+import { QueueDetailsContext, EditQueueDialogContext } from './context';
+import { Queue } from '../../../model/Queue';
 
 export class QueueDialogUtil {
 

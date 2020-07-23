@@ -7,20 +7,17 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { NewTicketArticleContext } from "../..";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../../model/ContextMode";
+import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { NewTicketArticleContext } from '../..';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../model/ContextMode';
+import { AuthenticationSocketClient } from '../../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class ArticleForwardAction extends AbstractAction {
-
-    public permissions = [
-        new UIComponentPermission('tickets/*/articles', [CRUD.CREATE])
-    ];
 
     private articleId: number = null;
 
@@ -29,6 +26,19 @@ export class ArticleForwardAction extends AbstractAction {
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Forward';
         this.icon = 'kix-icon-mail-forward-outline';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`tickets/${objectId}/articles`, [CRUD.CREATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async setData(data: any): Promise<void> {

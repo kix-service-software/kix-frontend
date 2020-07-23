@@ -7,16 +7,14 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { CheckboxOption } from "./CheckboxOption";
-import { AbstractMarkoComponent } from "../../../../base-components/webapp/core/AbstractMarkoComponent";
-import { PermissionFormData } from "../../../../base-components/webapp/core/PermissionFormData";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { PermissionProperty } from "../../../model/PermissionProperty";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { PermissionType } from "../../../model/PermissionType";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { LabelService } from "../../../../base-components/webapp/core/LabelService";
+import { ComponentState } from './ComponentState';
+import { CheckboxOption } from './CheckboxOption';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { PermissionFormData } from '../../../../base-components/webapp/core/PermissionFormData';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { PermissionProperty } from '../../../model/PermissionProperty';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 
 class Component extends AbstractMarkoComponent {
 
@@ -53,7 +51,6 @@ class Component extends AbstractMarkoComponent {
     }
 
     private async setCheckboxOptions(input: any): Promise<void> {
-        const options = await this.getOptions(input);
         this.state.checkboxOptions = [
             new CheckboxOption(PermissionProperty.CREATE),
             new CheckboxOption(PermissionProperty.READ),
@@ -61,35 +58,6 @@ class Component extends AbstractMarkoComponent {
             new CheckboxOption(PermissionProperty.DELETE),
             new CheckboxOption(PermissionProperty.DENY),
         ];
-    }
-
-    private async getOptions(input: any): Promise<boolean[]> {
-        let showRequired: boolean = true;
-        let requiredIsReadonly: boolean = false;
-        let checkPermissionType: boolean = true;
-        if (input.options && !!input.options.length) {
-            const requiredOption = input.options.find(
-                (o) => o[0] === 'showRequired'
-            );
-            showRequired = requiredOption ? requiredOption[1] : true;
-            const permissionTypeOption = input.options.find(
-                (o) => o[0] === 'checkPermissionType'
-            );
-            checkPermissionType = permissionTypeOption ? permissionTypeOption[1] : true;
-        }
-        if (checkPermissionType) {
-            const permissionTypes = await KIXObjectService.loadObjects<PermissionType>(KIXObjectType.PERMISSION_TYPE);
-            const staticTypes = permissionTypes.filter((pt) => pt.Name !== 'Resource' && pt.Name !== 'Object');
-            if (
-                !staticTypes || !!!staticTypes.length
-                || !input.propertyId || !staticTypes.some(
-                    (st) => st.ID.toString() === input.propertyId.toString()
-                )
-            ) {
-                requiredIsReadonly = true;
-            }
-        }
-        return [showRequired, requiredIsReadonly];
     }
 
     private async prepareTitles(): Promise<void> {

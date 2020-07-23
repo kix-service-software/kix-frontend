@@ -7,17 +7,17 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Queue } from "../../model/Queue";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { QueueProperty } from "../../model/QueueProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../system-address/model/SystemAddress";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { FollowUpType } from "../../model/FollowUpType";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Queue } from '../../model/Queue';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { QueueProperty } from '../../model/QueueProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../system-address/model/SystemAddress';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { FollowUpType } from '../../model/FollowUpType';
 
 export class QueueLabelProvider extends LabelProvider<Queue> {
 
@@ -192,7 +192,7 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
     }
 
     public getObjectIcon(queue?: Queue): string | ObjectIcon {
-        return new ObjectIcon('Queue', queue.QueueID);
+        return new ObjectIcon(null, 'Queue', queue.QueueID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -215,10 +215,10 @@ export class QueueLabelProvider extends LabelProvider<Queue> {
         queue: Queue, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === QueueProperty.QUEUE_ID || property === 'ICON') {
-            return [new ObjectIcon('Queue', queue.QueueID)];
+            return [new ObjectIcon(null, 'Queue', queue.QueueID)];
         }
         if (property === QueueProperty.FOLLOW_UP_ID) {
-            return [new ObjectIcon('FollowUpType', value)];
+            return [new ObjectIcon(null, 'FollowUpType', value)];
         }
         return null;
     }

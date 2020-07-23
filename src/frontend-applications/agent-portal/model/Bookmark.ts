@@ -7,8 +7,8 @@
  * --
  */
 
-import { UIComponentPermission } from "./UIComponentPermission";
-import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
+import { UIComponentPermission } from './UIComponentPermission';
+import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 
 export class Bookmark {
 

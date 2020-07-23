@@ -7,10 +7,10 @@
  * --
  */
 
-import { IWidgetContent } from "./IWidgetContent";
-import { OverlayType } from "./OverlayType";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { IWidgetContent } from './IWidgetContent';
+import { OverlayType } from './OverlayType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class OverlayService {
 
@@ -28,7 +28,7 @@ export class OverlayService {
     private constructor() { }
 
     private overlayComponentListener:
-        <T extends KIXObject<T>>(
+        <T extends KIXObject>(
             type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string, icon: string | ObjectIcon,
             closeButton: boolean, position: [number, number], listenerId: string, large: boolean,
             toastTimeoutMillis?: number, autoClose?: boolean
@@ -36,7 +36,7 @@ export class OverlayService {
 
     public registerOverlayComponentListener(
         listener:
-            <T extends KIXObject<T>>(
+            <T extends KIXObject>(
                 type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string,
                 icon: string | ObjectIcon, closeButton: boolean, position: [number, number],
                 listenerId: string, large: boolean, toastTimeoutMillis?: number, autoClose?: boolean
@@ -53,7 +53,7 @@ export class OverlayService {
         this.overlayListener.delete(listenerId);
     }
 
-    public openOverlay<T extends KIXObject<T>>(
+    public openOverlay<T extends KIXObject>(
         type: OverlayType, instanceId: string, content: IWidgetContent<T>, title: string, icon?: string | ObjectIcon,
         closeButton: boolean = false, position?: [number, number], listenerId?: string, large?: boolean,
         toastTimeoutMillis?: number, autoClose: boolean = true

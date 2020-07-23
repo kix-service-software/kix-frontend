@@ -8,23 +8,23 @@
  */
 
 
-import { QueueDetailsContext } from "../../context";
-import { TableFactory } from "../../../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../../../base-components/webapp/core/table";
-import { TicketQueueTableContentProvider } from "./TicketQueueTableContentProvider";
-import { QueueProperty } from "../../../../../model/QueueProperty";
-import { KIXObjectProperty } from "../../../../../../../model/kix/KIXObjectProperty";
-import { TableHeaderHeight } from "../../../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../../../model/configuration/TableRowHeight";
-import { RoutingConfiguration } from "../../../../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../../../../model/ContextMode";
-import { IColumnConfiguration } from "../../../../../../../model/configuration/IColumnConfiguration";
+import { QueueDetailsContext } from '../../context';
+import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../../../base-components/webapp/core/table';
+import { TicketQueueTableContentProvider } from './TicketQueueTableContentProvider';
+import { QueueProperty } from '../../../../../model/QueueProperty';
+import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
+import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../../../model/configuration/TableRowHeight';
+import { RoutingConfiguration } from '../../../../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../../../../model/ContextMode';
+import { IColumnConfiguration } from '../../../../../../../model/configuration/IColumnConfiguration';
 import {
     DefaultColumnConfiguration
-} from "../../../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../../../model/DataType";
+} from '../../../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../../../model/DataType';
 
 export class TicketQueueTableFactory extends TableFactory {
 

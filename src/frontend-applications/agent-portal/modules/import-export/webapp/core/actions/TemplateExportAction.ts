@@ -7,33 +7,44 @@
  * --
  */
 
-import { AbstractAction } from "../../../../base-components/webapp/core/AbstractAction";
-import { EventService } from "../../../../base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../base-components/webapp/core/ApplicationEvent";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { Row } from "../../../../base-components/webapp/core/table";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { OverlayService } from "../../../../base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../base-components/webapp/core/OverlayType";
-import { StringContent } from "../../../../base-components/webapp/core/StringContent";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { ImportExportTemplateRunProperty } from "../../../model/ImportExportTemplateRunProperty";
-import { ImportExportTemplateRunTypes } from "../../../model/ImportExportTemplateRunTypes";
-import { CreateImportExportTemplateRunOptions } from "../../../model/CreateImportExportTemplateRunOptions";
-import { BrowserUtil } from "../../../../base-components/webapp/core/BrowserUtil";
-import { ImportExportTemplate } from "../../../model/ImportExportTemplate";
-import { ConfigItemClass } from "../../../../cmdb/model/ConfigItemClass";
+import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../base-components/webapp/core/ApplicationEvent';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Row } from '../../../../base-components/webapp/core/table';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../base-components/webapp/core/OverlayType';
+import { StringContent } from '../../../../base-components/webapp/core/StringContent';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { ImportExportTemplateRunProperty } from '../../../model/ImportExportTemplateRunProperty';
+import { ImportExportTemplateRunTypes } from '../../../model/ImportExportTemplateRunTypes';
+import { CreateImportExportTemplateRunOptions } from '../../../model/CreateImportExportTemplateRunOptions';
+import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { ImportExportTemplate } from '../../../model/ImportExportTemplate';
+import { ConfigItemClass } from '../../../../cmdb/model/ConfigItemClass';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TemplateExportAction extends AbstractAction {
-
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('/system/importexport/templates/*/runs', [CRUD.CREATE])
-    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Export';
         this.icon = 'kix-icon-export';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`/system/importexport/templates/${objectId}/runs`, [CRUD.CREATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public canRun(): boolean {

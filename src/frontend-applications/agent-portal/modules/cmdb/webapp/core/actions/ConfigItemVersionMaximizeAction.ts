@@ -7,7 +7,7 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
 export class ConfigItemVersionMaximizeAction extends AbstractAction {
 

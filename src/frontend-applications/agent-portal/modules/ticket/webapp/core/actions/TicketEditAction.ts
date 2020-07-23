@@ -7,21 +7,32 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { Ticket } from "../../../model/Ticket";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { TicketDialogUtil } from "..";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Ticket } from '../../../model/Ticket';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { TicketDialogUtil } from '..';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TicketEditAction extends AbstractAction<Ticket> {
 
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('tickets/*', [CRUD.UPDATE])
-    ];
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`tickets/${objectId}`, [CRUD.UPDATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
+    }
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
-        this.icon = "kix-icon-edit";
+        this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {

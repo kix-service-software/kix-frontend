@@ -7,7 +7,7 @@
  * --
  */
 
-import { IColumn } from "../../../core/table";
+import { IColumn } from '../../../core/table';
 
 export class ComponentState {
 

@@ -7,8 +7,8 @@
  * --
  */
 
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { ObjectIcon } from "../../modules/icon/model/ObjectIcon";
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 
 export interface IMainMenuExtension {
 

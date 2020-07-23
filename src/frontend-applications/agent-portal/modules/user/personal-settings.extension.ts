@@ -7,24 +7,24 @@
  * --
  */
 
-import { IPersonalSettingsExtension } from "../../server/extensions/IPersonalSettingsExtension";
-import { PersonalSetting } from "./model/PersonalSetting";
-import { PersonalSettingsProperty } from "./model/PersonalSettingsProperty";
-import { FormFieldOption } from "../../model/configuration/FormFieldOption";
-import { FormFieldOptions } from "../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../modules/base-components/webapp/core/InputFieldTypes";
-import { ObjectReferenceOptions } from "../../modules/base-components/webapp/core/ObjectReferenceOptions";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { QueueProperty } from "../ticket/model/QueueProperty";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { NotificationProperty } from "../notification/model/NotificationProperty";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
+import { IPersonalSettingsExtension } from '../../server/extensions/IPersonalSettingsExtension';
+import { PersonalSetting } from './model/PersonalSetting';
+import { PersonalSettingsProperty } from './model/PersonalSettingsProperty';
+import { FormFieldOption } from '../../model/configuration/FormFieldOption';
+import { FormFieldOptions } from '../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../modules/base-components/webapp/core/InputFieldTypes';
+import { ObjectReferenceOptions } from '../../modules/base-components/webapp/core/ObjectReferenceOptions';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { QueueProperty } from '../ticket/model/QueueProperty';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { NotificationProperty } from '../notification/model/NotificationProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IPersonalSettingsExtension {
 

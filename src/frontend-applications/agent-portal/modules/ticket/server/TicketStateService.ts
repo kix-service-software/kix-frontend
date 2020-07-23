@@ -7,18 +7,16 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { TicketStateFactory } from "./TicketStateFactory";
-import { TicketStateTypeFactory } from "./TicketStateTypeFactory";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { TicketState } from "../model/TicketState";
-import { StateType } from "../model/StateType";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { Error } from "../../../../../server/model/Error";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { TicketState } from '../model/TicketState';
+import { StateType } from '../model/StateType';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { Error } from '../../../../../server/model/Error';
 
 export class TicketStateAPIService extends KIXObjectAPIService {
 
@@ -36,7 +34,7 @@ export class TicketStateAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.TICKET_STATE;
 
     private constructor() {
-        super([new TicketStateFactory(), new TicketStateTypeFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -53,12 +51,13 @@ export class TicketStateAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.TICKET_STATE) {
             objects = await super.load<TicketState>(
-                token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketState'
+                token, KIXObjectType.TICKET_STATE, this.RESOURCE_URI, loadingOptions, objectIds, 'TicketState',
+                TicketState
             );
         } else if (objectType === KIXObjectType.TICKET_STATE_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objects = await super.load<StateType>(
-                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, 'StateType'
+                token, KIXObjectType.TICKET_STATE_TYPE, uri, loadingOptions, objectIds, 'StateType', StateType
             );
         }
 

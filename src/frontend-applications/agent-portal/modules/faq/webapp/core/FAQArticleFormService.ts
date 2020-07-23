@@ -7,15 +7,15 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { FAQArticle } from "../../model/FAQArticle";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FAQArticleProperty } from "../../model/FAQArticleProperty";
-import { FAQService } from ".";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { FAQArticle } from '../../model/FAQArticle';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FAQArticleProperty } from '../../model/FAQArticleProperty';
+import { FAQService } from '.';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 
 export class FAQArticleFormService extends KIXObjectFormService {
 
@@ -66,9 +66,6 @@ export class FAQArticleFormService extends KIXObjectFormService {
             case FAQArticleProperty.CATEGORY_ID:
                 hasPermissions = await this.checkPermissions('system/faq/categories');
                 break;
-            case FAQArticleProperty.ATTACHMENTS:
-                hasPermissions = await this.checkPermissions('faq/articles/*/attachments', [CRUD.CREATE]);
-                break;
             case FAQArticleProperty.LINK:
                 hasPermissions = await this.checkPermissions('links', [CRUD.CREATE]);
                 break;
@@ -77,7 +74,9 @@ export class FAQArticleFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (property === FAQArticleProperty.ATTACHMENTS) {
             if (value && value.length) {

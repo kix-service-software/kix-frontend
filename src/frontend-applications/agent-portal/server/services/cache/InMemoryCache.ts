@@ -7,8 +7,8 @@
  * --
  */
 
-import { ICache } from "./ICache";
-import { LoggingService } from "../../../../../server/services/LoggingService";
+import { ICache } from './ICache';
+import { LoggingService } from '../../../../../server/services/LoggingService';
 
 export class InMemoryCache implements ICache {
 

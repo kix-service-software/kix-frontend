@@ -7,7 +7,7 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
+import { Context } from '../../../../../model/Context';
 
 export class OrganisationImportDialogContext extends Context {
 

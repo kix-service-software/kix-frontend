@@ -7,7 +7,7 @@
  * --
  */
 
-import { IRow } from "../../../../core/table";
+import { IRow } from '../../../../core/table';
 
 
 export class ComponentState {

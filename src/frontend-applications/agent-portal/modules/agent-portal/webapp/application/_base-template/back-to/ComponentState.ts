@@ -7,7 +7,7 @@
  * --
  */
 
-import { ContextHistoryEntry } from "../../../../../../modules/base-components/webapp/core/ContextHistoryEntry";
+import { ContextHistoryEntry } from '../../../../../../modules/base-components/webapp/core/ContextHistoryEntry';
 
 export class ComponentState {
 

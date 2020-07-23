@@ -7,8 +7,8 @@
  * --
  */
 
-import { ReleaseInfo } from "../frontend-applications/agent-portal/model/ReleaseInfo";
-import { SystemInfo } from "../frontend-applications/agent-portal/model/SystemInfo";
+import { ReleaseInfo } from '../frontend-applications/agent-portal/model/ReleaseInfo';
+import { SystemInfo } from '../frontend-applications/agent-portal/model/SystemInfo';
 
 export class ReleaseInfoUtil {
 

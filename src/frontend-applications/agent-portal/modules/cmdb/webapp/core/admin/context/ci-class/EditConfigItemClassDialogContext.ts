@@ -7,14 +7,14 @@
  * --
  */
 
-import { Context } from "../../../../../../../model/Context";
-import { ContextDescriptor } from "../../../../../../../model/ContextDescriptor";
-import { ContextConfiguration } from "../../../../../../../model/configuration/ContextConfiguration";
-import { KIXObject } from "../../../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../../../../model/ConfigItemClass";
+import { Context } from '../../../../../../../model/Context';
+import { ContextDescriptor } from '../../../../../../../model/ContextDescriptor';
+import { ContextConfiguration } from '../../../../../../../model/configuration/ContextConfiguration';
+import { KIXObject } from '../../../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../../../../model/ConfigItemClass';
 
 export class EditConfigItemClassDialogContext extends Context {
 

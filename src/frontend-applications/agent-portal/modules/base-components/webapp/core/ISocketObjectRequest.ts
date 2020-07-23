@@ -7,8 +7,8 @@
  * --
  */
 
-import { ISocketRequest } from "./ISocketRequest";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { ISocketRequest } from './ISocketRequest';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export interface ISocketObjectRequest extends ISocketRequest {
 

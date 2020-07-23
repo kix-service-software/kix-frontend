@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Role } from "../../model/Role";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { RoleProperty } from "../../model/RoleProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Role } from '../../model/Role';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { RoleProperty } from '../../model/RoleProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
 
 export class RoleLabelProvider extends LabelProvider<Role> {
 
@@ -74,7 +74,7 @@ export class RoleLabelProvider extends LabelProvider<Role> {
     }
 
     public getObjectIcon(role?: Role): string | ObjectIcon {
-        return new ObjectIcon('Role', role.ID);
+        return new ObjectIcon(null, 'Role', role.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -97,7 +97,7 @@ export class RoleLabelProvider extends LabelProvider<Role> {
         role: Role, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === RoleProperty.ID) {
-            return [new ObjectIcon('Role', role.ID)];
+            return [new ObjectIcon(null, 'Role', role.ID)];
         }
         return null;
     }

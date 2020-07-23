@@ -148,7 +148,7 @@ class Component {
                         this.state.expanded = false;
                         this.treeHandler.active = false;
 
-                        const hiddenInput = (this as any).getEl("hidden-form-list-input");
+                        const hiddenInput = (this as any).getEl('hidden-form-list-input');
                         if (hiddenInput && holdFocus) {
                             hiddenInput.focus();
                         }

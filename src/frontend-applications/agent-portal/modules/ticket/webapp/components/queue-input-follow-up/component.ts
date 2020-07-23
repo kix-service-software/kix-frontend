@@ -7,17 +7,17 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { QueueService } from "../../core";
-import { QueueProperty } from "../../../model/QueueProperty";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../../model/configuration/FormFieldValue";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { QueueService } from '../../core';
+import { QueueProperty } from '../../../model/QueueProperty';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 
 class Component extends FormInputComponent<number, ComponentState> {
 
@@ -49,6 +49,10 @@ class Component extends FormInputComponent<number, ComponentState> {
         return nodes;
     }
 
+    public async setCurrentValue(): Promise<void> {
+        return;
+    }
+
     protected async setCurrentNode(nodes: TreeNode[]): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const defaultValue = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
@@ -57,7 +61,6 @@ class Component extends FormInputComponent<number, ComponentState> {
                 const node = nodes.find((n) => n.id === defaultValue.value);
                 if (node) {
                     node.selected = true;
-                    this.followUpChanged([node]);
                 }
             }
         }
@@ -77,7 +80,7 @@ class Component extends FormInputComponent<number, ComponentState> {
         const showLockField = value && value.value && value.value === 1;
 
         if (field && !showLockField) {
-            formInstance.removeFormField(field, this.state.field);
+            formInstance.removeFormField(field);
         } else if (!field && showLockField) {
             const label = await LabelService.getInstance().getPropertyText(
                 QueueProperty.FOLLOW_UP_LOCK, KIXObjectType.QUEUE
@@ -88,7 +91,7 @@ class Component extends FormInputComponent<number, ComponentState> {
                 'Translatable#Helptext_Admin_QueueCreate_FollowUpTicketLock', null,
                 new FormFieldValue(true)
             );
-            formInstance.addNewFormField(this.state.field, [field]);
+            formInstance.addFieldChildren(this.state.field, [field]);
         }
     }
 

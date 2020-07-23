@@ -7,8 +7,8 @@
  * --
  */
 
-import { Context } from "../../../../model/Context";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { Context } from '../../../../model/Context';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class BulkDialogContext extends Context {
 

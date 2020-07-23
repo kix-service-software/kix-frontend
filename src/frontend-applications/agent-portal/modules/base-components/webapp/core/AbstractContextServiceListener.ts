@@ -7,10 +7,10 @@
  * --
  */
 
-import { IContextServiceListener } from "./IContextServiceListener";
-import { IdService } from "../../../../model/IdService";
-import { Context } from "vm";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
+import { IContextServiceListener } from './IContextServiceListener';
+import { IdService } from '../../../../model/IdService';
+import { Context } from 'vm';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 
 export abstract class AbstractContextServiceListener implements IContextServiceListener {
 

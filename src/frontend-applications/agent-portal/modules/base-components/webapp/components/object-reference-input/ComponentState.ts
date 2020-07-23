@@ -7,10 +7,10 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { TreeNode } from "../../core/tree";
-import { IdService } from "../../../../../model/IdService";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode } from '../../core/tree';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState extends FormInputComponentState<string | number> {
 
@@ -19,7 +19,6 @@ export class ComponentState extends FormInputComponentState<string | number> {
         public isLoading: boolean = false,
         public searchCallback: (limit: number, searchValue: string) => Promise<TreeNode[]> = null,
         public placeholder: string = '',
-        public loadNodes: () => Promise<TreeNode[]> = null,
         public multiselect: boolean = false,
         public treeId: string = IdService.generateDateBasedId('object-reference-input-'),
         public prepared: boolean = false,

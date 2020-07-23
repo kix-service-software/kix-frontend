@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { ILabelProvider } from "../../../../../modules/base-components/webapp/core/ILabelProvider";
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+
 
 export class ComponentState {
 

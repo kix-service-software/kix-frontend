@@ -7,26 +7,26 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { TicketListContext } from "./webapp/core";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { TableConfiguration } from "../../model/configuration/TableConfiguration";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { TableHeaderHeight } from "../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../model/configuration/TableRowHeight";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { ToggleOptions } from "../base-components/webapp/core/table";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { TicketListContext } from './webapp/core';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../model/configuration/TableRowHeight';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { ToggleOptions } from '../base-components/webapp/core/table';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 

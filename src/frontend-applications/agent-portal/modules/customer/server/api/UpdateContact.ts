@@ -7,8 +7,8 @@
  * --
  */
 
-import { RequestObject } from "../../../../../../server/model/rest/RequestObject";
-import { ContactProperty } from "../../model/ContactProperty";
+import { RequestObject } from '../../../../../../server/model/rest/RequestObject';
+
 
 
 export class UpdateContact extends RequestObject {

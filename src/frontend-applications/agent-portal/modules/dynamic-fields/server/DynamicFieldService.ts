@@ -7,22 +7,22 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { DynamicFieldFactory } from "./DynamicFieldFactory";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { Error } from "../../../../../server/model/Error";
-import { DynamicField } from "../model/DynamicField";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../model/DynamicFieldProperty";
-import { SearchOperator } from "../../search/model/SearchOperator";
-import { FilterDataType } from "../../../model/FilterDataType";
-import { FilterType } from "../../../model/FilterType";
-import { KIXObjectService } from "../../base-components/webapp/core/KIXObjectService";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { Error } from '../../../../../server/model/Error';
+import { DynamicField } from '../model/DynamicField';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../model/DynamicFieldProperty';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { FilterType } from '../../../model/FilterType';
+import { DynamicFieldType } from '../model/DynamicFieldType';
+
 
 
 export class DynamicFieldAPIService extends KIXObjectAPIService {
@@ -41,7 +41,7 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new DynamicFieldFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -58,12 +58,12 @@ export class DynamicFieldAPIService extends KIXObjectAPIService {
 
         if (objectType === KIXObjectType.DYNAMIC_FIELD) {
             objects = await super.load(
-                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'DynamicField'
+                token, objectType, this.RESOURCE_URI, loadingOptions, objectIds, 'DynamicField', DynamicField
             );
         } else if (objectType === KIXObjectType.DYNAMIC_FIELD_TYPE) {
             const uri = this.buildUri(this.RESOURCE_URI, 'types');
             objects = await super.load(
-                token, objectType, uri, loadingOptions, objectIds, 'DynamicFieldType'
+                token, objectType, uri, loadingOptions, objectIds, 'DynamicFieldType', DynamicFieldType
             );
         }
 

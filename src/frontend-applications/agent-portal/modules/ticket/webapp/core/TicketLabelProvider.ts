@@ -7,26 +7,25 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TicketProperty } from "../../model/TicketProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Queue } from "../../model/Queue";
-import { TicketState } from "../../model/TicketState";
-import { TicketPriority } from "../../model/TicketPriority";
-import { TicketType } from "../../model/TicketType";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { User } from "../../../user/model/User";
-import { AgentService } from "../../../user/webapp/core";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { UserProperty } from "../../../user/model/UserProperty";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TicketProperty } from '../../model/TicketProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Queue } from '../../model/Queue';
+import { TicketState } from '../../model/TicketState';
+import { TicketPriority } from '../../model/TicketPriority';
+import { TicketType } from '../../model/TicketType';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { User } from '../../../user/model/User';
+import { AgentService } from '../../../user/webapp/core';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { UserProperty } from '../../../user/model/UserProperty';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -122,8 +121,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.RESPONSIBLE_ID:
-            case KIXObjectProperty.CREATE_BY:
-            case KIXObjectProperty.CHANGE_BY:
                 if (value) {
                     const users = await KIXObjectService.loadObjects<User>(
                         KIXObjectType.USER, [value],
@@ -395,7 +392,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 returnString = ticketHook + ticketHookDivider + ticket.TicketNumber;
             }
             if (title) {
-                returnString += (id ? " - " : '') + ticket.Title;
+                returnString += (id ? ' - ' : '') + ticket.Title;
             }
 
         } else {
@@ -440,7 +437,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
 
         switch (property) {
             case TicketProperty.PRIORITY_ID:
-                icons.push(new ObjectIcon('Priority', value));
+                icons.push(new ObjectIcon(null, 'Priority', value));
                 break;
             case TicketProperty.UNSEEN:
                 if (ticket && ticket.Unseen === 1) {
@@ -448,7 +445,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.TYPE_ID:
-                icons.push(new ObjectIcon('TicketType', value));
+                icons.push(new ObjectIcon(null, 'TicketType', value));
                 break;
             case TicketProperty.CONTACT_ID:
             case TicketProperty.CONTACT:
@@ -465,13 +462,13 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER));
                 break;
             case TicketProperty.QUEUE_ID:
-                icons.push(new ObjectIcon('Queue', value));
+                icons.push(new ObjectIcon(null, 'Queue', value));
                 break;
             case TicketProperty.STATE_ID:
-                icons.push(new ObjectIcon('TicketState', value));
+                icons.push(new ObjectIcon(null, 'TicketState', value));
                 break;
             case TicketProperty.SERVICE_ID:
-                icons.push(new ObjectIcon(TicketProperty.SERVICE_ID, value));
+                icons.push(new ObjectIcon(null, TicketProperty.SERVICE_ID, value));
                 break;
             case TicketProperty.LOCK_ID:
                 value === 2

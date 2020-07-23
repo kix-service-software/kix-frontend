@@ -7,41 +7,43 @@
  * --
  */
 
-import { CMDBService } from "./CMDBService";
+import { CMDBService } from './CMDBService';
 import {
     AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { VersionProperty } from "../../model/VersionProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ConfigItemClassAttributeUtil } from ".";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { SearchDefinition, SearchOperatorUtil } from "../../../search/webapp/core";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Organisation } from "../../../customer/model/Organisation";
-import { Contact } from "../../../customer/model/Contact";
-import { ConfigItem } from "../../model/ConfigItem";
-import { InputDefinition } from "../../model/InputDefinition";
-import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalogItem";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
+} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { VersionProperty } from '../../model/VersionProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ConfigItemClassAttributeUtil } from '.';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Organisation } from '../../../customer/model/Organisation';
+import { Contact } from '../../../customer/model/Contact';
+import { ConfigItem } from '../../model/ConfigItem';
+import { InputDefinition } from '../../model/InputDefinition';
+import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
 export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.CONFIG_ITEM;
 
     protected readPermissions: Map<string, boolean> = new Map();
+
+    public useOwnSearch: boolean = true;
 
     public async getProperties(): Promise<Array<[string, string]>> {
         const properties: Array<[string, string]> = [
@@ -128,6 +130,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
             const type = await ConfigItemClassAttributeUtil.getAttributeType(
                 property, classParameter ? classParameter.value : null
             );
+
             if (type === 'Date') {
                 operations = dateTimeOperators;
             } else if (type === 'DateTime') {
@@ -140,6 +143,10 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                 || type === 'Contact'
             ) {
                 operations = numberOperators;
+            } else {
+
+                // use type rather than property
+                operations = await super.getOperations(type);
             }
         }
 
@@ -171,10 +178,12 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                 return InputFieldTypes.OBJECT_REFERENCE;
             } else if (type === 'Organisation' || type === 'Contact') {
                 return InputFieldTypes.OBJECT_REFERENCE;
+            } else {
+
+                // use type rather than property
+                return super.getInputType(type);
             }
         }
-
-        return InputFieldTypes.TEXT;
     }
 
     private isDropDown(property: string): boolean {
@@ -207,7 +216,8 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                     if (input.Type === 'GeneralCatalog') {
                         const items = await this.getGeneralCatalogItems(input, objectIds);
                         return items.map((item) => new TreeNode(
-                            item.ItemID, item.Name, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
+                            item.ItemID, item.Name,
+                            new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, item.ObjectId)
                         ));
                     } else if (input.Type === 'Organisation' && objectIds) {
                         const organisations = await KIXObjectService.loadObjects<Organisation>(
@@ -222,6 +232,10 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
                             KIXObjectType.CONFIG_ITEM, objectIds
                         );
                         return await KIXObjectService.prepareTree(items);
+                    } else {
+
+                        // use type rather than property
+                        return await super.getTreeNodes(input.Type);
                     }
                 }
         }
@@ -237,7 +251,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         return true;
     }
 
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
+    public async searchObjectTree(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
         let tree = [];
 
         const classParameter = this.values.find((p) => p.property === ConfigItemProperty.CLASS_ID);
@@ -248,7 +262,7 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         if (input.Type === 'CIClassReference') {
             const configItems = await this.loadConfigItems(input, searchValue, limit);
             tree = configItems.map(
-                (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(ci.KIXObjectType, ci.ConfigItemID))
+                (ci) => new TreeNode(ci.ConfigItemID, ci.Name, new ObjectIcon(null, ci.KIXObjectType, ci.ConfigItemID))
             );
         } else if (input.Type === 'Organisation') {
             const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);

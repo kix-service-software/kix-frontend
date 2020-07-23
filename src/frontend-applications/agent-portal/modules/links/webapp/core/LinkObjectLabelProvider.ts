@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { LinkObject } from "../../model/LinkObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { LinkObjectProperty } from "../../model/LinkObjectProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { LinkObject } from '../../model/LinkObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { LinkObjectProperty } from '../../model/LinkObjectProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 
 export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
@@ -109,7 +109,7 @@ export class LinkObjectLabelProvider extends LabelProvider<LinkObject> {
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
-        let displayValue = plural ? "Linked Objects" : "Linked Object";
+        let displayValue = plural ? 'Linked Objects' : 'Linked Object';
         if (translatable) {
             displayValue = await TranslationService.translate(displayValue);
         }

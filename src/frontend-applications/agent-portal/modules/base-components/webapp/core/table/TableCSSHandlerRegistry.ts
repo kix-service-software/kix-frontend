@@ -7,8 +7,8 @@
  * --
  */
 
-import { ITableCSSHandler } from "./ITableCSSHandler";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { ITableCSSHandler } from './ITableCSSHandler';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class TableCSSHandlerRegistry {
 

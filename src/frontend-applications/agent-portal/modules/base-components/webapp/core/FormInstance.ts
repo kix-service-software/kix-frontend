@@ -7,125 +7,109 @@
  * --
  */
 
-import { IFormInstance } from "./IFormInstance";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
-import { IFormInstanceListener } from "./IFormInstanceListener";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { ServiceRegistry } from "./ServiceRegistry";
-import { IKIXObjectFormService } from "./IKIXObjectFormService";
-import { ServiceType } from "./ServiceType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormValidationService } from "./FormValidationService";
-import { ValidationSeverity } from "./ValidationSeverity";
-import { ContextService } from "./ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { FactoryService } from "./FactoryService";
-import { AdditionalContextInformation } from "./AdditionalContextInformation";
-import { ValidationResult } from "./ValidationResult";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { KIXObjectService } from "./KIXObjectService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
-import { IdService } from "../../../../model/IdService";
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ServiceRegistry } from './ServiceRegistry';
+import { ServiceType } from './ServiceType';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormValidationService } from './FormValidationService';
+import { ValidationSeverity } from './ValidationSeverity';
+import { ValidationResult } from './ValidationResult';
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectService } from './KIXObjectService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
+import { IdService } from '../../../../model/IdService';
+import { FormService } from './FormService';
+import { EventService } from './EventService';
+import { FormEvent } from './FormEvent';
+import { FormValuesChangedEventData } from './FormValuesChangedEventData';
+import { FormFactory } from './FormFactory';
+import { KIXObjectFormService } from './KIXObjectFormService';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
-export class FormInstance implements IFormInstance {
+export class FormInstance {
 
     private formFieldValues: Map<string, FormFieldValue<any>> = new Map();
+    private fixedValues: Map<string, FormFieldValue<any>> = new Map();
 
-    private autoCompleteConfiguration: AutoCompleteConfiguration;
+    private templateValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = new Map();
+    private savedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = null;
 
-    private listeners: IFormInstanceListener[] = [];
+    private form: FormConfiguration;
 
-    public constructor(public form: FormConfiguration) { }
-
-    public async initFormInstance(): Promise<void> {
-        await this.initFormFieldValues();
-        this.initAutoCompleteConfiguration();
-        this.initFormStructure();
-        await this.initFormFieldOptions();
+    public provideFixedValue(property: string, value: FormFieldValue): void {
+        this.fixedValues.set(property, value);
+        EventService.getInstance().publish(
+            FormEvent.FIXED_VALUE_CHANGED, { formInstance: this, property, value }
+        );
     }
 
-    private async initFormFieldValues(): Promise<void> {
+    public getFixedValues(): Map<string, FormFieldValue> {
+        return this.fixedValues;
+    }
+
+    public getTemplateValues(): Map<string, [FormFieldConfiguration, FormFieldValue<any>]> {
+        return this.templateValues;
+    }
+
+    public provideTemplateValue(property: string, value: [FormFieldConfiguration, FormFieldValue]): void {
+        this.templateValues.set(property, value);
+    }
+
+    public async initFormInstance(formId: string, kixObject: KIXObject): Promise<void> {
+        this.form = await FormService.getInstance().getForm(formId);
+        FormFactory.initForm(this.form);
+        await this.initFormFields(kixObject);
+    }
+
+    private async initFormFields(kixObject: KIXObject): Promise<void> {
         if (this.form) {
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                this.formFieldValues = await service.initValues(this.form);
+                await service.initValues(this.form, this, kixObject);
             } else {
                 this.form.pages.forEach(
-                    (p) => p.groups.forEach((g) => this.initValues(g.formFields))
+                    (p) => p.groups.forEach((g) => this.setDefaultValueAndParent(g.formFields))
                 );
             }
         }
     }
 
-    private initValues(formFields: FormFieldConfiguration[]): void {
+    private setDefaultValueAndParent(formFields: FormFieldConfiguration[], parent?: FormFieldConfiguration): void {
         formFields.forEach((f) => {
+            f.parent = parent;
+
             if (!f.instanceId) {
                 f.instanceId = IdService.generateDateBasedId(f.property);
             }
-            this.formFieldValues.set(f.instanceId, f.defaultValue
-                ? new FormFieldValue(f.defaultValue.value, f.defaultValue.valid)
-                : new FormFieldValue(null)
-            );
 
-            if (f.children) {
-                this.initValues(f.children);
+            if (this.templateValues.has(f.property)) {
+                const value = this.templateValues.get(f.property);
+                if (Array.isArray(value)) {
+                    this.formFieldValues.set(f.instanceId, value[1]);
+                    f.visible = value[0].visible;
+                    f.readonly = value[0].readonly;
+                }
+            } else {
+                this.formFieldValues.set(f.instanceId, f.defaultValue
+                    ? new FormFieldValue(f.defaultValue.value, f.defaultValue.valid)
+                    : new FormFieldValue(null)
+                );
             }
-        });
-    }
 
-    private initAutoCompleteConfiguration(): void {
-        this.autoCompleteConfiguration = this.form && this.form.autoCompleteConfiguration ?
-            this.form.autoCompleteConfiguration : new AutoCompleteConfiguration();
-    }
-
-    private initFormStructure(): void {
-        this.form.pages.forEach(
-            (p) => p.groups.forEach((g) => this.initStructure(g.formFields))
-        );
-    }
-
-    private async initFormFieldOptions(): Promise<void> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
-            this.form.objectType, ServiceType.FORM
-        );
-        if (service) {
-            await service.initOptions(this.form);
-        }
-    }
-
-    private initStructure(formFields: FormFieldConfiguration[], parent?: FormFieldConfiguration): void {
-        formFields.forEach((f) => {
-            f.parent = parent;
             if (f.children) {
-                this.initStructure(f.children, f);
+                this.setDefaultValueAndParent(f.children, f);
             }
         });
     }
 
     public getForm(): FormConfiguration {
         return this.form;
-    }
-
-    public registerListener(listener: IFormInstanceListener): void {
-        const listenerIndex = this.listeners.findIndex((l) => l.formListenerId === listener.formListenerId);
-        if (listenerIndex !== -1) {
-            this.listeners[listenerIndex] = listener;
-        } else {
-            this.listeners.push(listener);
-        }
-    }
-
-    public removeListener(listenerId: string): void {
-        const listenerIndex = this.listeners.findIndex((l) => l.formListenerId === listenerId);
-        if (listenerIndex !== -1) {
-            this.listeners.splice(listenerIndex, 1);
-        }
     }
 
     public hasValues(): boolean {
@@ -140,43 +124,56 @@ export class FormInstance implements IFormInstance {
         return false;
     }
 
-    public async provideFormField(newFormField: FormFieldConfiguration): Promise<void> {
-        const parent = await this.getFormField(newFormField.parent.instanceId);
-        parent.children.push(newFormField);
-        await this.provideFormFieldValue(newFormField.instanceId, null);
-    }
-
-    public async removeFormField(formField: FormFieldConfiguration, parent?: FormFieldConfiguration): Promise<void> {
+    public async removeFormField(formField: FormFieldConfiguration): Promise<void> {
         let fields: FormFieldConfiguration[];
-        if (parent) {
-            fields = parent.children;
+
+        if (formField.parent) {
+            fields = formField.parent.children;
         } else {
             fields = await this.getFields(formField);
         }
+
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
             fields.splice(index, 1);
-            this.deleteValuesRecursive(formField);
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            this.deleteFieldValues(formField);
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
                 await service.updateFields(fields, this);
             }
-            this.listeners.forEach((l) => l.updateForm());
+
+            EventService.getInstance().publish(FormEvent.FIELD_REMOVED, { formInstance: this, formField });
         }
     }
 
     public setFieldEmptyState(formField: FormFieldConfiguration, empty: boolean = true): void {
         formField.empty = empty;
         if (empty) {
-            this.deleteValuesRecursive(formField);
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
-                this.form.objectType, ServiceType.FORM
-            );
-            if (service) {
-                service.resetChildrenOnEmpty(formField);
+            this.deleteFieldValues(formField);
+            this.setFieldChildrenEmpty(formField);
+        }
+    }
+
+    private setFieldChildrenEmpty(formField: FormFieldConfiguration): void {
+        if (formField.children) {
+            const fields = [];
+            for (const child of formField.children) {
+                const existingFields = fields.filter((c) => c.property === child.property);
+                if (
+                    existingFields.length
+                    || typeof child.countDefault !== 'number'
+                    || child.countDefault > existingFields.length
+                ) {
+                    this.setFieldChildrenEmpty(child);
+                    if (typeof child.countDefault === 'number' && child.countDefault === 0) {
+                        child.empty = true;
+                    }
+                    fields.push(child);
+                }
             }
+            formField.children = fields;
         }
     }
 
@@ -186,7 +183,7 @@ export class FormInstance implements IFormInstance {
         }
 
         if (Array.isArray(pageIds)) {
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             for (const pageId of pageIds) {
@@ -199,7 +196,7 @@ export class FormInstance implements IFormInstance {
                     const deletedPage = this.form.pages.splice(index, 1);
                     if (deletedPage[0].groups.length) {
                         for (const group of deletedPage[0].groups) {
-                            group.formFields.forEach((f) => this.deleteValuesRecursive(f));
+                            group.formFields.forEach((f) => this.deleteFieldValues(f));
                             if (service) {
                                 await service.updateFields(group.formFields, this);
                             }
@@ -207,7 +204,8 @@ export class FormInstance implements IFormInstance {
                     }
                 }
             }
-            this.listeners.forEach((l) => l.updateForm());
+
+            EventService.getInstance().publish(FormEvent.FORM_PAGES_REMOVED, { formInstance: this, pageIds });
         }
     }
 
@@ -218,11 +216,13 @@ export class FormInstance implements IFormInstance {
             fields = parent.children;
         } else {
             for (const page of this.form.pages) {
-                const group = page.groups.find(
-                    (g) => g.formFields.some((f) => f.instanceId === formField.instanceId)
-                );
-                if (group) {
-                    fields = group.formFields;
+                for (const group of page.groups) {
+                    fields = this.findFormFieldList(group.formFields, formField.instanceId);
+                    if (fields) {
+                        break;
+                    }
+                }
+                if (fields) {
                     break;
                 }
             }
@@ -230,111 +230,104 @@ export class FormInstance implements IFormInstance {
         return fields;
     }
 
-    public async addFormField(formField: FormFieldConfiguration): Promise<void> {
+    public async duplicateAndAddNewField(
+        formField: FormFieldConfiguration, withChildren: boolean = true
+    ): Promise<FormFieldConfiguration> {
         const fields: FormFieldConfiguration[] = await this.getFields(formField);
         if (Array.isArray(fields)) {
             const index = fields.findIndex((c) => c.instanceId === formField.instanceId);
-            const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+            const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                 this.form.objectType, ServiceType.FORM
             );
             if (service) {
-                const newField = service.getNewFormField(formField);
+                const newField = service.getNewFormField(formField, null, withChildren);
                 fields.splice(index + 1, 0, newField);
-                this.initValues([newField]);
+                this.setDefaultValueAndParent([newField], formField.parent);
                 await service.updateFields(fields, this);
-                this.listeners.forEach((l) => l.updateForm());
+
+                EventService.getInstance().publish(FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent });
+                return newField;
             }
         }
+        return null;
     }
 
-    public addNewFormField(
-        parent: FormFieldConfiguration, newFields: FormFieldConfiguration[], clearChildren: boolean = false
-    ): void {
+    public async addFieldChildren(
+        parent: FormFieldConfiguration, children: FormFieldConfiguration[], clearChildren: boolean = false
+    ): Promise<void> {
         if (parent) {
+            parent = await this.getFormField(parent.instanceId);
             if (!parent.children) {
                 parent.children = [];
             }
             if (clearChildren) {
-                parent.children.forEach((c) => this.deleteValuesRecursive(c));
+                parent.children.forEach((c) => this.deleteFieldValues(c));
                 parent.children = [];
             }
-            newFields.forEach((f) => {
-                f.parent = parent;
-                parent.children.push(f);
-            });
-            this.initValues(newFields);
-            this.listeners.forEach((l) => l.updateForm());
+            children.forEach((f) => parent.children.push(f));
+            this.setDefaultValueAndParent(children, parent);
+
+            EventService.getInstance().publish(FormEvent.FIELD_CHILDREN_ADDED, { formInstance: this, parent });
         }
     }
 
     public addPage(page: FormPageConfiguration, index?: number): void {
         if (page) {
+
             if (page.groups.length) {
-                page.groups.forEach((g) => {
-                    if (g.formFields.length) {
-                        this.initStructure(g.formFields);
-                        this.initValues(g.formFields);
-                    }
-                });
+                page.groups.forEach((g) => this.setDefaultValueAndParent(g.formFields));
             }
+
             if (!isNaN(index)) {
                 this.form.pages.splice(index, 0, page);
             } else {
                 this.form.pages.push(page);
             }
-            this.listeners.forEach((l) => l.updateForm());
+
+            EventService.getInstance().publish(FormEvent.FORM_PAGE_ADDED, { formInstance: this, page });
         }
     }
 
-    private deleteValuesRecursive(formField: FormFieldConfiguration): void {
+    private deleteFieldValues(formField: FormFieldConfiguration): void {
         this.formFieldValues.delete(formField.instanceId);
         if (formField.children) {
-            formField.children.forEach((c) => this.deleteValuesRecursive(c));
+            formField.children.forEach((c) => this.deleteFieldValues(c));
         }
     }
 
-    public async provideFormFieldValue<T>(formFieldInstanceId: string, value: T, silent?: boolean): Promise<void> {
-        if (!this.formFieldValues.has(formFieldInstanceId)) {
-            this.formFieldValues.set(formFieldInstanceId, new FormFieldValue(value));
-        }
-
-        const formFieldValue = this.formFieldValues.get(formFieldInstanceId);
-
-        const oldValue = formFieldValue.value;
-        formFieldValue.value = value;
-
-        const formField = await this.getFormField(formFieldInstanceId);
-        if (this.form.validation) {
-            const result = await FormValidationService.getInstance().validate(formField, this.form.id);
-            formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
-        }
-
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
-            this.form.objectType, ServiceType.FORM
-        );
-        if (service) {
-            await service.updateForm(this, this.form, formField, formFieldValue.value);
-
-            // TODO: not really performant
-            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-            if (dialogContext) {
-                const newObject = {};
-                const params = await service.prepareFormFields(this.form.id);
-                params.forEach((p) => {
-                    if (p[1] !== undefined) {
-                        newObject[p[0]] = p[1];
-                    }
-                });
-
-                const formObject = await FactoryService.getInstance().create<any>(this.form.objectType, newObject);
-
-                dialogContext.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
+    public async provideFormFieldValues<T>(
+        values: Array<[string, T]>, originInstanceId: string, silent?: boolean
+    ): Promise<void> {
+        const changedFieldValues: Array<[FormFieldConfiguration, FormFieldValue]> = [];
+        for (const newValue of values) {
+            const instanceId = newValue[0];
+            const value = newValue[1];
+            if (!this.formFieldValues.has(instanceId)) {
+                this.formFieldValues.set(instanceId, new FormFieldValue(value));
             }
+
+            const formFieldValue = this.formFieldValues.get(instanceId);
+            formFieldValue.value = value;
+
+            const formField = await this.getFormField(instanceId);
+            if (this.form.validation) {
+                const result = await FormValidationService.getInstance().validate(formField, this.form.id);
+                formFieldValue.valid = result.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
+            }
+            changedFieldValues.push([formField, formFieldValue]);
         }
 
         if (!silent) {
-            this.listeners.forEach((l) => l.formValueChanged(formField, formFieldValue, oldValue));
-            this.listeners.forEach((l) => l.updateForm());
+            EventService.getInstance().publish(
+                FormEvent.VALUES_CHANGED, new FormValuesChangedEventData(this, changedFieldValues, originInstanceId)
+            );
+
+            const valueHandler = FormService.getInstance().getFormFieldValueHandler(this.form.objectType);
+            if (valueHandler) {
+                for (const handler of valueHandler) {
+                    handler.handleFormFieldValues(this, changedFieldValues);
+                }
+            }
         }
     }
 
@@ -347,10 +340,11 @@ export class FormInstance implements IFormInstance {
         if (field) {
             return this.getFormFieldValue(field.instanceId);
         }
-        return null;
+
+        return this.fixedValues.get(property);
     }
 
-    public async getFormFieldByProperty(property: string): Promise<FormFieldConfiguration> {
+    public getFormFieldByProperty(property: string): FormFieldConfiguration {
         for (const p of this.form.pages) {
             for (const g of p.groups) {
                 const field = this.findFormFieldByProperty(g.formFields, property);
@@ -363,19 +357,12 @@ export class FormInstance implements IFormInstance {
         return null;
     }
 
-    public getAutoCompleteConfiguration(): AutoCompleteConfiguration {
-        return this.autoCompleteConfiguration;
-    }
-
-    public reset(): void {
-        this.initFormFieldValues();
-    }
-
+    // TODO: Deprecated
     public getAllFormFieldValues(): Map<string, FormFieldValue<any>> {
         return this.formFieldValues;
     }
 
-    public async getFormField(formFieldInstanceId: string): Promise<FormFieldConfiguration> {
+    public getFormField(formFieldInstanceId: string): FormFieldConfiguration {
         for (const p of this.form.pages) {
             for (const g of p.groups) {
                 const field = this.findFormField(g.formFields, formFieldInstanceId);
@@ -386,17 +373,6 @@ export class FormInstance implements IFormInstance {
         }
 
         return null;
-    }
-
-    public async validateField(field: FormFieldConfiguration): Promise<ValidationResult> {
-        let result;
-        const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);
-        const formFieldValue = this.getFormFieldValue(field.instanceId);
-        if (formFieldValue) {
-            formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
-            result = fieldResult;
-        }
-        return result;
     }
 
     private findFormField(fields: FormFieldConfiguration[], formFieldInstanceId: string): FormFieldConfiguration {
@@ -417,6 +393,26 @@ export class FormInstance implements IFormInstance {
         return field;
     }
 
+    private findFormFieldList(fields: FormFieldConfiguration[], formFieldInstanceId: string): FormFieldConfiguration[] {
+        let foundFields: FormFieldConfiguration[];
+        if (fields) {
+            const field = fields.find((f) => f.instanceId === formFieldInstanceId);
+
+            if (!field) {
+                for (const f of fields) {
+                    foundFields = this.findFormFieldList(f.children, formFieldInstanceId);
+                    if (foundFields) {
+                        return foundFields;
+                    }
+                }
+            } else {
+                foundFields = fields;
+            }
+        }
+
+        return foundFields;
+    }
+
     private findFormFieldByProperty(fields: FormFieldConfiguration[] = [], property: string): FormFieldConfiguration {
         let field = fields.find((f) => f.property === property);
 
@@ -432,7 +428,6 @@ export class FormInstance implements IFormInstance {
         }
 
         if (!field) {
-
             for (const f of fields) {
                 const foundField = f.children && f.children.length ?
                     this.findFormFieldByProperty(f.children, property) : null;
@@ -456,7 +451,8 @@ export class FormInstance implements IFormInstance {
                     result = [...result, ...groupResult];
                 }
             }
-            this.listeners.forEach((l) => l.updateForm());
+
+            EventService.getInstance().publish(FormEvent.FORM_VALIDATED, { formInstance: this, result });
         }
         return result;
     }
@@ -470,7 +466,22 @@ export class FormInstance implements IFormInstance {
                 result = [...result, ...groupResult];
             }
 
-            this.listeners.forEach((l) => l.updateForm());
+            EventService.getInstance().publish(FormEvent.FORM_PAGE_VALIDATED, { formInstance: this, page, result });
+        }
+        return result;
+    }
+
+    public async validateField(field: FormFieldConfiguration): Promise<ValidationResult[]> {
+        let result: ValidationResult[];
+        const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);
+        const formFieldValue = this.getFormFieldValue(field.instanceId);
+        if (formFieldValue) {
+            formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
+            result = fieldResult;
+            if ((!field.empty || field.asStructure) && field.children && !!field.children.length) {
+                const childrenResult = await this.validateFields(field.children);
+                result = [...result, ...childrenResult];
+            }
         }
         return result;
     }
@@ -478,15 +489,9 @@ export class FormInstance implements IFormInstance {
     private async validateFields(fields: FormFieldConfiguration[]): Promise<ValidationResult[]> {
         let result = [];
         for (const field of fields) {
-            const fieldResult = await FormValidationService.getInstance().validate(field, this.form.id);
-            const formFieldValue = this.getFormFieldValue(field.instanceId);
-            if (formFieldValue) {
-                formFieldValue.valid = fieldResult.findIndex((vr) => vr.severity === ValidationSeverity.ERROR) === -1;
-                result = [...result, ...fieldResult];
-                if ((!field.empty || field.asStructure) && field.children && !!field.children.length) {
-                    const childrenResult = await this.validateFields(field.children);
-                    result = [...result, ...childrenResult];
-                }
+            const r = await this.validateField(field);
+            if (Array.isArray(r)) {
+                result = [...result, ...r];
             }
         }
         return result;
@@ -515,14 +520,14 @@ export class FormInstance implements IFormInstance {
 
                         this.sortValuesByFieldList(fields);
 
-                        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+                        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
                             this.form.objectType, ServiceType.FORM
                         );
                         if (service) {
                             await service.updateFields(fields, this);
                         }
 
-                        this.listeners.forEach((l) => l.updateForm());
+                        EventService.getInstance().publish(FormEvent.FORM_FIELD_ORDER_CHANGED, { formInstance: this });
                     }
                 }
             }
@@ -538,6 +543,39 @@ export class FormInstance implements IFormInstance {
                 this.sortValuesByFieldList(f.children);
             }
         });
+    }
+
+    public hasSavedValues(): boolean {
+        return this.savedValues !== null;
+    }
+
+    public saveValueState(idsToSave: string[]): void {
+        this.savedValues = new Map();
+        this.formFieldValues.forEach(
+            (value, key) => {
+                if (idsToSave.some((id) => id === key)) {
+                    const field = this.getFormField(key);
+                    this.savedValues.set(key, [{ ...field }, value.value]);
+                }
+            }
+        );
+    }
+
+    public loadValueState(): void {
+        const values = [];
+        if (this.savedValues) {
+            this.savedValues.forEach((value, key) => {
+                const field = this.getFormField(key);
+                if (field) {
+                    field.visible = value[0].visible;
+                    field.readonly = value[0].readonly;
+                }
+                values.push([key, value[1]]);
+            });
+        }
+        this.templateValues.clear();
+        this.savedValues = null;
+        this.provideFormFieldValues(values, null);
     }
 
 }

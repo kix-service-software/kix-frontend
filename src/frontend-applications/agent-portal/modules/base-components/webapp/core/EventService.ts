@@ -7,7 +7,7 @@
  * --
  */
 
-import { IEventSubscriber } from "./IEventSubscriber";
+import { IEventSubscriber } from './IEventSubscriber';
 
 export class EventService {
 

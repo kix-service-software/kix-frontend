@@ -13,7 +13,7 @@ import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptio
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import {
-    ToggleOptions, Table, ITable, IRowObject, RowObject, TableValue, TableFactoryService, TableEvent, TableEventData
+    ITable, IRowObject, RowObject, TableValue, TableFactoryService, TableEvent, TableEventData
 } from '../../../../base-components/webapp/core/table';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
@@ -34,6 +34,7 @@ import { IEventSubscriber } from '../../../../base-components/webapp/core/IEvent
 import { SysconfigEvent } from '../../core/SysconfigEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../model/SysConfigOption';
+import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -53,7 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
 
-        this.state.translations = await TranslationService.createTranslationObject(["Translatable#SysConfig"]);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#SysConfig']);
 
         this.state.prepared = true;
     }
@@ -184,10 +185,27 @@ class SysConfigContentProvider extends TableContentProvider {
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
-            let tableValue;
+            let tableValue: TableValue;
             if (column.property === SysConfigOptionDefinitionProperty.VALUE) {
-                const value = option.Value ? option.Value : '';
+
+                // if no option or value is null and option is invalid, uses values from definition
+                // (check if null-value and invalid comes first, because value could be from config-file)
+                let value = !option || (option.Value === null && definition.ValidID !== 1)
+                    ? !definition.IsModified || definition.Value === null || definition.Value === '' // 0 is valid
+                        ? definition.Default : definition.Value
+                    : option.Value;
+
+                if (
+                    value !== '' &&
+                    (definition.Type === SysConfigOptionType.HASH || definition.Type === SysConfigOptionType.ARRAY)
+                ) {
+                    value = JSON.stringify(value);
+                }
                 tableValue = new TableValue(column.property, value, value);
+            } else if (column.property === SysConfigOptionDefinitionProperty.NAME) {
+                const icons = option && option.ReadOnly ? ['kix-icon-lock-close'] : [];
+                tableValue = await this.getTableValue(definition, column.property, column);
+                tableValue.displayIcons = icons;
             } else {
                 tableValue = await this.getTableValue(definition, column.property, column);
             }

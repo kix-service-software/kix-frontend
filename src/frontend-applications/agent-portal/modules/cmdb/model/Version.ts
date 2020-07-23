@@ -7,12 +7,12 @@
  * --
  */
 
-import { PreparedData } from "./PreparedData";
-import { ConfigItemClassDefinition } from "./ConfigItemClassDefinition";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { PreparedData } from './PreparedData';
+import { ConfigItemClassDefinition } from './ConfigItemClassDefinition';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class Version extends KIXObject<Version> {
+export class Version extends KIXObject {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_VERSION;
 

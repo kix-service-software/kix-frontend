@@ -7,25 +7,25 @@
  * --
  */
 
-import { ContactService } from "./ContactService";
+import { ContactService } from './ContactService';
 import {
     AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { ContactProperty } from "../../model/ContactProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { SearchDefinition, SearchOperatorUtil } from "../../../search/webapp/core";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Organisation } from "../../model/Organisation";
-import { UserProperty } from "../../../user/model/UserProperty";
+} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { ContactProperty } from '../../model/ContactProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Organisation } from '../../model/Organisation';
+import { UserProperty } from '../../../user/model/UserProperty';
 
 export class ContactSearchFormManager extends AbstractDynamicFormManager {
 
@@ -130,15 +130,6 @@ export class ContactSearchFormManager extends AbstractDynamicFormManager {
                 nodes = await ContactService.getInstance().getTreeNodes(property, true);
         }
         return nodes;
-    }
-
-    public async searchValues(property: string, searchValue: string, limit: number): Promise<TreeNode[]> {
-        let tree = [];
-        if (property === ContactProperty.PRIMARY_ORGANISATION_ID) {
-            const organisations = await KIXObjectService.search(KIXObjectType.ORGANISATION, searchValue, limit);
-            tree = await KIXObjectService.prepareTree(organisations);
-        }
-        return tree;
     }
 
 }

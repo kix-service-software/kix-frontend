@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { CompareConfigItemVersionDialogContext } from "../../core";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
-import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
+import { ComponentState } from './ComponentState';
+import { CompareConfigItemVersionDialogContext } from '../../core';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
+import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 
 class Component {
 
@@ -28,7 +28,7 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Close Dialog"
+            'Translatable#Close Dialog'
         ]);
 
         this.context = await ContextService.getInstance().getContext<CompareConfigItemVersionDialogContext>(

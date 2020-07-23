@@ -7,11 +7,11 @@
  * --
  */
 
-import { IRow } from "./IRow";
-import { TableValue } from "./TableValue";
-import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
+import { IRow } from './IRow';
+import { TableValue } from './TableValue';
+import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
 export interface ICell {
 

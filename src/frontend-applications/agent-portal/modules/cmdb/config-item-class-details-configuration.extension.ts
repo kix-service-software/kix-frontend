@@ -7,24 +7,24 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { TableConfiguration } from "../../model/configuration/TableConfiguration";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { TableHeaderHeight } from "../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../model/configuration/TableRowHeight";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { ConfigItemClassDefinitionProperty } from "./model/ConfigItemClassDefinitionProperty";
-import { SortOrder } from "../../model/SortOrder";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { ToggleOptions } from "../base-components/webapp/core/table";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../model/configuration/TableRowHeight';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { ConfigItemClassDefinitionProperty } from './model/ConfigItemClassDefinitionProperty';
+import { SortOrder } from '../../model/SortOrder';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { ToggleOptions } from '../base-components/webapp/core/table';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -53,7 +53,6 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new ConfigurationDefinition('ci-class-details-tab-widget-config', ConfigurationType.TabWidget)
         );
         configurations.push(tabLane);
-
 
         const tableConfig = new TableConfiguration(
             'ci-class-details-version-table-config', 'Table Config', ConfigurationType.Table,

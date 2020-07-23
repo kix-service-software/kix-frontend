@@ -7,26 +7,29 @@
  * --
  */
 
-import { IContextListener } from "../modules/base-components/webapp/core/IContextListener";
-import { KIXObjectType } from "./kix/KIXObjectType";
-import { KIXObject } from "./kix/KIXObject";
-import { ContextDescriptor } from "./ContextDescriptor";
-import { ContextConfiguration } from "./configuration/ContextConfiguration";
-import { AdditionalContextInformation } from "../modules/base-components/webapp/core/AdditionalContextInformation";
-import { ConfiguredWidget } from "./configuration/ConfiguredWidget";
-import { WidgetConfiguration } from "./configuration/WidgetConfiguration";
-import { WidgetType } from "./configuration/WidgetType";
-import { ContextMode } from "./ContextMode";
-import { FormContext } from "./configuration/FormContext";
-import { FormService } from "../modules/base-components/webapp/core/FormService";
-import { BreadcrumbInformation } from "./BreadcrumbInformation";
-import { KIXObjectService } from "../modules/base-components/webapp/core/KIXObjectService";
-import { ObjectIcon } from "../modules/icon/model/ObjectIcon";
-import { EventService } from "../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../modules/base-components/webapp/core/ApplicationEvent";
-import { ClientStorageService } from "../modules/base-components/webapp/core/ClientStorageService";
-import { KIXObjectLoadingOptions } from "./KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "./KIXObjectSpecificLoadingOptions";
+import { IContextListener } from '../modules/base-components/webapp/core/IContextListener';
+import { KIXObjectType } from './kix/KIXObjectType';
+import { KIXObject } from './kix/KIXObject';
+import { ContextDescriptor } from './ContextDescriptor';
+import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { AdditionalContextInformation } from '../modules/base-components/webapp/core/AdditionalContextInformation';
+import { ConfiguredWidget } from './configuration/ConfiguredWidget';
+import { WidgetConfiguration } from './configuration/WidgetConfiguration';
+import { WidgetType } from './configuration/WidgetType';
+import { ContextMode } from './ContextMode';
+import { FormContext } from './configuration/FormContext';
+import { FormService } from '../modules/base-components/webapp/core/FormService';
+import { BreadcrumbInformation } from './BreadcrumbInformation';
+import { KIXObjectService } from '../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
+import { EventService } from '../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../modules/base-components/webapp/core/ApplicationEvent';
+import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
+import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
+import { ContextExtension } from './ContextExtension';
+import { ContextService } from '../modules/base-components/webapp/core/ContextService';
+import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 
 export abstract class Context {
 
@@ -56,7 +59,7 @@ export abstract class Context {
         if (this.descriptor) {
             EventService.getInstance().subscribe(ApplicationEvent.OBJECT_UPDATED, {
                 eventSubscriberId: this.descriptor.contextId + '-update-listener',
-                eventPublished: (data: any) => {
+                eventPublished: async (data: any) => {
                     if (data && data.objectType) {
                         if (this.objectLists.has(data.objectType)) {
                             this.deleteObjectList(data.objectType);
@@ -66,7 +69,7 @@ export abstract class Context {
                             && Array.isArray(this.descriptor.kixObjectTypes)
                             && this.descriptor.kixObjectTypes.some((t) => t === data.objectType)
                         ) {
-                            this.getObject(data.objectType, true);
+                            await this.getObject(data.objectType, true);
                         }
                     }
                 }
@@ -78,6 +81,23 @@ export abstract class Context {
         return;
     }
 
+    public async getAdditionalActions(): Promise<AbstractAction[]> {
+        let actions: AbstractAction[] = [];
+        for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
+            const extendedActions = await extension.getAdditionalActions(this);
+            if (Array.isArray(extendedActions)) {
+                const addionalActions = [];
+                for (const a of extendedActions) {
+                    if (await a.canShow()) {
+                        addionalActions.push(a);
+                    }
+                }
+                actions = [...actions, ...addionalActions];
+            }
+        }
+        return actions;
+    }
+
     public addObjectDependency(objectType: KIXObjectType | string): void {
         const type = this.descriptor.kixObjectTypes.find((ot) => ot === objectType);
         if (!type) {
@@ -86,7 +106,7 @@ export abstract class Context {
     }
 
     public getIcon(): string | ObjectIcon {
-        return "kix-icon-unknown";
+        return 'kix-icon-unknown';
     }
 
     public async getDisplayText(short: boolean = false): Promise<string> {
@@ -172,9 +192,9 @@ export abstract class Context {
         }
     }
 
-    public async setObjectId(objectId: string | number): Promise<void> {
+    public async setObjectId(objectId: string | number, objectType: KIXObjectType | string): Promise<void> {
         this.objectId = objectId;
-        await this.getObject(undefined, true);
+        await this.getObject(objectType, true);
     }
 
     public getObjectId(): string | number {

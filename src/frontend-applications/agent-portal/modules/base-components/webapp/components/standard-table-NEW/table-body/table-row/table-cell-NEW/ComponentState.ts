@@ -7,8 +7,8 @@
  * --
  */
 
-import { RoutingConfiguration } from "../../../../../../../../model/configuration/RoutingConfiguration";
-import { DialogRoutingConfiguration } from "../../../../../../../../model/configuration/DialogRoutingConfiguration";
+import { RoutingConfiguration } from '../../../../../../../../model/configuration/RoutingConfiguration';
+import { DialogRoutingConfiguration } from '../../../../../../../../model/configuration/DialogRoutingConfiguration';
 
 export class ComponentState {
 

@@ -7,7 +7,7 @@
  * --
  */
 
-import { ITable } from "./ITable";
+import { ITable } from './ITable';
 
 export class TableEventData {
 

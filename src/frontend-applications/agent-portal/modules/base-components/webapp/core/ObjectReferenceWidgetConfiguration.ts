@@ -7,9 +7,9 @@
  * --
  */
 
-import { IConfiguration } from "../../../../model/configuration/IConfiguration";
-import { ConfigurationType } from "../../../../model/configuration/ConfigurationType";
-import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
+import { IConfiguration } from '../../../../model/configuration/IConfiguration';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
+import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
 
 export class ObjectReferenceWidgetConfiguration implements IConfiguration {
 

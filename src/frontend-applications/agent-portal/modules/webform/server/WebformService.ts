@@ -7,28 +7,28 @@
  * --
  */
 
-import { Webform } from "../model/Webform";
-import { ModuleConfigurationService } from "../../../server/services/configuration";
-import { DateTimeUtil } from "../../../modules/base-components/webapp/core/DateTimeUtil";
-import { KIXIntegrationRouter } from "./KIXIntegrationRouter";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { CreateWebformTicketRequest } from "../model/CreateWebformTicketRequest";
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { AuthenticationService } from "../../../server/services/AuthenticationService";
-import { IdService } from "../../../model/IdService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { TicketProperty } from "../../ticket/model/TicketProperty";
-import { ArticleProperty } from "../../ticket/model/ArticleProperty";
-import { Attachment } from "../../../model/kix/Attachment";
-import { SysConfigService } from "../../sysconfig/server/SysConfigService";
-import { SysConfigOption } from "../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../sysconfig/model/SysConfigKey";
-import { Error } from "../../../../../server/model/Error";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { TranslationAPIService } from "../../translation/server/TranslationService";
+import { Webform } from '../model/Webform';
+import { ModuleConfigurationService } from '../../../server/services/configuration';
+import { DateTimeUtil } from '../../../modules/base-components/webapp/core/DateTimeUtil';
+import { KIXIntegrationRouter } from './KIXIntegrationRouter';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { CreateWebformTicketRequest } from '../model/CreateWebformTicketRequest';
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { AuthenticationService } from '../../../server/services/AuthenticationService';
+import { IdService } from '../../../model/IdService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { TicketProperty } from '../../ticket/model/TicketProperty';
+import { ArticleProperty } from '../../ticket/model/ArticleProperty';
+import { Attachment } from '../../../model/kix/Attachment';
+import { SysConfigService } from '../../sysconfig/server/SysConfigService';
+import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
+import { Error } from '../../../../../server/model/Error';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { TranslationAPIService } from '../../translation/server/TranslationService';
 
 import addrparser = require('address-rfc2822');
-import { SysConfigAccessLevel } from "../../sysconfig/model/SysConfigAccessLevel";
+import { SysConfigAccessLevel } from '../../sysconfig/model/SysConfigAccessLevel';
 
 export class WebformService {
 
@@ -104,7 +104,6 @@ export class WebformService {
         }).catch((error: Error) => {
             LoggingService.getInstance().error(error.Message, error);
         });
-
 
         return webform.ObjectId;
     }
@@ -218,14 +217,14 @@ export class WebformService {
                 for (const file of filesWithContent) {
                     if (maxSize && file.size > maxSize) {
                         const error = file.name + ': ' + await TranslationAPIService.getInstance().translate(
-                            "Translatable#is to large (max {0}).",
+                            'Translatable#is to large (max {0}).',
                             [this.getFileSize(maxSize)], language
                         );
                         return error;
                     }
                     if (!file.content) {
                         return await TranslationAPIService.getInstance().translate(
-                            "Translatable#Could not load file '{0}'.",
+                            'Translatable#Could not load file {0}.',
                             [file.name], language
                         );
                     }
@@ -276,7 +275,7 @@ export class WebformService {
     public async getFileTooBigErrorMsg(form: Webform, language?: string) {
         const maxSize = await this.getMaxFileSize();
         return await TranslationAPIService.getInstance().translate(
-            "Translatable#is to large (max {0}).", [this.getFileSize(maxSize)], language
+            'Translatable#is to large (max {0}).', [this.getFileSize(maxSize)], language
         );
     }
 
@@ -300,13 +299,13 @@ export class WebformService {
     // TODO: copied from AttachmentUtil
     private getFileSize(fileSize: number, decPlaces: number = 1): string {
         let sizeString = fileSize + ' Byte';
-        const siteUnits = ["kB", "MB", "GB"];
+        const siteUnits = ['kB', 'MB', 'GB'];
         for (
             let newSize = fileSize / 1000, sizeUnit = 0;
             newSize >= 1 && sizeUnit < 3;
             newSize /= 1000, sizeUnit++
         ) {
-            sizeString = newSize.toFixed(decPlaces) + " " + siteUnits[sizeUnit];
+            sizeString = newSize.toFixed(decPlaces) + ' ' + siteUnits[sizeUnit];
         }
         return sizeString;
     }

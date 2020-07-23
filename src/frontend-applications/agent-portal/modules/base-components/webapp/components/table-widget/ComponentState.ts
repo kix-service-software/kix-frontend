@@ -7,11 +7,11 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { ITable } from "../../core/table";
-import { KIXObjectPropertyFilter } from "../../../../../model/KIXObjectPropertyFilter";
-import { IAction } from "../../../../../modules/base-components/webapp/core/IAction";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { ITable } from '../../core/table';
+import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
+import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class ComponentState extends WidgetComponentState {
 

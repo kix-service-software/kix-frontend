@@ -29,6 +29,12 @@ export class BrowserCacheService {
 
     private cache: Map<string, any> = new Map();
 
+    private dependencies: Map<string, string[]> = new Map();
+
+    public addDependencies(key: string, dependencies: string[]): void {
+        this.dependencies.set(key, dependencies);
+    }
+
     private keyIndex: Map<string, string[]> = new Map();
 
     public has(key: string, cacheKeyPrefix?: string): boolean {
@@ -115,6 +121,13 @@ export class BrowserCacheService {
             cacheKeyPrefixes.push(KIXObjectType.TICKET_TYPE);
         } else {
             cacheKeyPrefixes.push(objectNamespace);
+        }
+
+        if (this.dependencies.has(cacheKeyPrefixes[0])) {
+            cacheKeyPrefixes = [
+                ...cacheKeyPrefixes,
+                ...this.dependencies.get(cacheKeyPrefixes[0])
+            ];
         }
 
         switch (cacheKeyPrefixes[0]) {

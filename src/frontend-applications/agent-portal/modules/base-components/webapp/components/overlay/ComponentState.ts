@@ -7,12 +7,12 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { IdService } from "../../../../../model/IdService";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { IdService } from '../../../../../model/IdService';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class ComponentState extends AbstractComponentState {
 

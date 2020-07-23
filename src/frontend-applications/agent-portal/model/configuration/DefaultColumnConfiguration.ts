@@ -7,9 +7,9 @@
  * --
  */
 
-import { IColumnConfiguration } from "./IColumnConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
-import { DataType } from "../DataType";
+import { IColumnConfiguration } from './IColumnConfiguration';
+import { ConfigurationType } from './ConfigurationType';
+import { DataType } from '../DataType';
 
 export class DefaultColumnConfiguration implements IColumnConfiguration {
 

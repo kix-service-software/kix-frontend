@@ -7,7 +7,7 @@
  * --
  */
 
-import { ContextType } from "../../../../../model/ContextType";
+import { ContextType } from '../../../../../model/ContextType';
 
 export class ComponentInput {
 

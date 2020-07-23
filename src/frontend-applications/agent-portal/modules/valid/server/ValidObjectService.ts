@@ -7,13 +7,12 @@
  * --
  */
 
-import { ValidObjectFactory } from "./ValidObjectFactory";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { ValidObject } from "../model/ValidObject";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { ValidObject } from '../model/ValidObject';
 
 export class ValidObjectService extends KIXObjectAPIService {
 
@@ -27,7 +26,7 @@ export class ValidObjectService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new ValidObjectFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -47,7 +46,7 @@ export class ValidObjectService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.VALID_OBJECT) {
             objects = await super.load<ValidObject>(
-                token, KIXObjectType.VALID_OBJECT, this.RESOURCE_URI, loadingOptions, objectIds, 'Valid'
+                token, KIXObjectType.VALID_OBJECT, this.RESOURCE_URI, loadingOptions, objectIds, 'Valid', ValidObject
             );
         }
 

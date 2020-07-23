@@ -7,12 +7,12 @@
  * --
  */
 
-import { EditWebformDialogContext } from "../context/EditWebformDialogContext";
-import { WebformDetailsContext } from "../context";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { EditWebformDialogContext } from '../context/EditWebformDialogContext';
+import { WebformDetailsContext } from '../context';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class WebformEditAction extends AbstractAction {
 

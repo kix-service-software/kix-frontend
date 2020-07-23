@@ -7,20 +7,20 @@
  * --
  */
 
-import { FAQArticleDialogUtil } from "../FAQArticleDialogUtil";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { FAQArticleDialogUtil } from '../FAQArticleDialogUtil';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
 export class FAQArticleEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('faq/articles/*', [CRUD.UPDATE])
+        new UIComponentPermission('faq/articles', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
-        this.icon = "kix-icon-edit";
+        this.icon = 'kix-icon-edit';
     }
 
     public async run(): Promise<void> {

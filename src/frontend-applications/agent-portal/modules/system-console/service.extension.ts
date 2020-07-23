@@ -7,10 +7,10 @@
  * --
  */
 
-import { IServiceExtension } from "../../server/extensions/IServiceExtension";
-import { ConsoleCommandService } from "./server/ConsoleCommandService";
+import { IServiceExtension } from '../../server/extensions/IServiceExtension';
+import { ConsoleCommandService } from './server/ConsoleCommandService';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IServiceExtension {
 

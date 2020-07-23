@@ -7,14 +7,14 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { MailFilter } from "../../../model/MailFilter";
-import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { AdminContext } from "../../../../admin/webapp/core";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { Context } from '../../../../../model/Context';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { MailFilter } from '../../../model/MailFilter';
+import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AdminContext } from '../../../../admin/webapp/core';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class MailFilterDetailsContext extends Context {
 

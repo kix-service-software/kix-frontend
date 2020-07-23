@@ -29,6 +29,9 @@ import { IObjectReferenceHandler } from '../../core/IObjectReferenceHandler';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
 import { IdService } from '../../../../../model/IdService';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { FormEvent } from '../../core/FormEvent';
+import { FormValuesChangedEventData } from '../../core/FormValuesChangedEventData';
 
 class Component {
 
@@ -38,6 +41,7 @@ class Component {
     private config: ObjectReferenceWidgetConfiguration;
     private loadTimeout: any;
     private listenerId: string;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -70,6 +74,7 @@ class Component {
     public onDestroy(): void {
         const context = ContextService.getInstance().getActiveContext();
         context.unregisterListener(this.listenerId);
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     private async initWidget(context: Context): Promise<void> {
@@ -87,13 +92,31 @@ class Component {
                         }
                     });
                 } else if (context.getDescriptor().contextType === ContextType.DIALOG) {
-                    this.formValueChanged(null, null, null);
                     const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-                    FormService.getInstance().registerFormInstanceListener(formId, {
-                        formListenerId: 'reference-object-widget-form-listener-' + this.handler.name,
-                        formValueChanged: this.formValueChanged.bind(this),
-                        updateForm: () => null
-                    });
+
+                    this.formSubscriber = {
+                        eventSubscriberId: IdService.generateDateBasedId('ReferencedObjectWidget'),
+                        eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                            for (const cv of data.changedValues) {
+                                if (this.handler.isPossibleFormField(cv[0], this.config.handlerConfiguration)) {
+                                    if (this.loadTimeout) {
+                                        window.clearTimeout(this.loadTimeout);
+                                        this.loadTimeout = null;
+                                    }
+
+                                    this.loadTimeout = setTimeout(async () => {
+                                        const object = await context.getObject();
+                                        const objects = await this.handler.determineObjectsByForm(
+                                            formId, object, this.config.handlerConfiguration
+                                        );
+                                        this.createTable(this.handler.objectType, objects);
+                                        this.loadTimeout = null;
+                                    }, 300);
+                                }
+                            }
+                        }
+                    };
+                    EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
                 }
             }
         }
@@ -105,28 +128,6 @@ class Component {
             ? await this.handler.determineObjects(object, this.config.handlerConfiguration)
             : [];
         this.createTable(this.handler.objectType, objects);
-    }
-
-    private async formValueChanged(
-        formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any
-    ): Promise<void> {
-        if (this.handler.isPossibleFormField(formField, this.config.handlerConfiguration)) {
-            if (this.loadTimeout) {
-                window.clearTimeout(this.loadTimeout);
-                this.loadTimeout = null;
-            }
-
-            this.loadTimeout = setTimeout(async () => {
-                const context = ContextService.getInstance().getActiveContext();
-                const object = await context.getObject();
-                const formId = context.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
-                const objects = await this.handler.determineObjectsByForm(
-                    formId, object, this.config.handlerConfiguration
-                );
-                this.createTable(this.handler.objectType, objects);
-                this.loadTimeout = null;
-            }, 300);
-        }
     }
 
     private createTable(objectType: KIXObjectType, objects: KIXObject[]): void {

@@ -7,8 +7,8 @@
  * --
  */
 
-import { RequestObject } from "../../../../../../server/model/rest/RequestObject";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
+import { RequestObject } from '../../../../../../server/model/rest/RequestObject';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
 
 export class UpdateOrganisation extends RequestObject {
 

@@ -34,7 +34,7 @@ class Component {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Large View"
+            'Translatable#Large View'
         ]);
 
         const context = ContextService.getInstance().getActiveContext();

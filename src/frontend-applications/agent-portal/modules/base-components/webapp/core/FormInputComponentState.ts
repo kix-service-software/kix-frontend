@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractComponentState } from "./AbstractComponentState";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
+import { AbstractComponentState } from './AbstractComponentState';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export class FormInputComponentState<T> extends AbstractComponentState {
 
@@ -18,7 +18,6 @@ export class FormInputComponentState<T> extends AbstractComponentState {
         public fieldId: string = null,
         public field: FormFieldConfiguration = null,
         public formId: string = null,
-        public defaultValue: FormFieldValue<T> = null,
         public invalid: boolean = false,
         public formContext: FormContext = null,
         public prepared: boolean = false

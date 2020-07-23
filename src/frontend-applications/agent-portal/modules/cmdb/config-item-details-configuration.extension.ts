@@ -7,23 +7,23 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { ConfigItemDetailsContext } from "./webapp/core/context/ConfigItemDetailsContext";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { LinkedObjectsWidgetConfiguration } from "../../model/configuration/LinkedObjectsWidgetConfiguration";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { ConfigItemDetailsContext } from './webapp/core/context/ConfigItemDetailsContext';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { LinkedObjectsWidgetConfiguration } from '../../model/configuration/LinkedObjectsWidgetConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -56,7 +56,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const configItemHistoryWidget = new WidgetConfiguration(
             'config-item-details-history-widget', 'History', ConfigurationType.Widget,
-            "config-item-history-widget", "Translatable#History", [], null,
+            'config-item-history-widget', 'Translatable#History', [], null,
             new ConfigurationDefinition('config-item-history-config', ConfigurationType.Table),
             false, false, null, false
         );
@@ -87,7 +87,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         const configItemVersionLane = new WidgetConfiguration(
             'config-item-details-version-widget', 'Version Widget', ConfigurationType.Widget,
-            'table-widget', "Translatable#Overview Versions",
+            'table-widget', 'Translatable#Overview Versions',
             ['config-item-version-compare-action'],
             new ConfigurationDefinition('config-item-details-version-list-table-widget', ConfigurationType.TableWidget),
             null, false, true, WidgetSize.BOTH, true
@@ -107,8 +107,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 ],
                 [
                     new ConfiguredWidget(
-                        'config-item-details-version-widget', 'config-item-details-version-widget', null,
-                        [new UIComponentPermission('cmdb/configitems/*/versions', [CRUD.READ])]
+                        'config-item-details-version-widget', 'config-item-details-version-widget', null
                     )
                 ],
                 [
@@ -126,8 +125,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('links', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'config-item-details-history-widget', 'config-item-details-history-widget', null,
-                        [new UIComponentPermission('cmdb/configitems/*/history', [CRUD.READ])]
+                        'config-item-details-history-widget', 'config-item-details-history-widget', null
                     )
                 ]
             )

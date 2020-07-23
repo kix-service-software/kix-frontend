@@ -7,7 +7,7 @@
  * --
  */
 
-import { ArticleProperty } from "./ArticleProperty";
+import { ArticleProperty } from './ArticleProperty';
 
 export class ArticleReceiver {
     public constructor(

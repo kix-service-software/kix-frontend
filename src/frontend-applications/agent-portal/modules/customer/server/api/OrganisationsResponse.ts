@@ -7,7 +7,7 @@
  * --
  */
 
-import { Organisation } from "../../model/Organisation";
+import { Organisation } from '../../model/Organisation';
 
 export class OrganisationsResponse {
 

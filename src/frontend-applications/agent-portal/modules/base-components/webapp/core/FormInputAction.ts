@@ -7,7 +7,7 @@
  * --
  */
 
-import { Label } from "./Label";
+import { Label } from './Label';
 
 export class FormInputAction {
 

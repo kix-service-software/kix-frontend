@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectFormService } from "../../../base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+
+import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class FAQArticleVoteFormService extends KIXObjectFormService {
 

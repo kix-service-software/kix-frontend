@@ -9,42 +9,43 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
-import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
+import { IEventSubscriber } from '../../../../../base-components/webapp/core/IEventSubscriber';
+import { EventService } from '../../../../../base-components/webapp/core/EventService';
+import { FormEvent } from '../../../../../base-components/webapp/core/FormEvent';
+import { FormValuesChangedEventData } from '../../../../../base-components/webapp/core/FormValuesChangedEventData';
 
 class Component {
 
     private state: ComponentState;
-    private formListenerId: string;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
     public onInput(input: any): void {
-        this.formListenerId = 'LinkableObjectsSearchButton';
         this.state.formId = input.formId;
     }
 
     public async onMount(): Promise<void> {
-        this.state.translations = await TranslationService.createTranslationObject(["Translatable#Start search"]);
-        await FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-            formListenerId: this.formListenerId,
-            formValueChanged: async () => {
-                const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-                if (formInstance) {
-                    this.state.canSearch = formInstance.hasValues();
-                }
-            },
-            updateForm: () => { return; }
-        });
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Start search']);
+        this.formSubscriber = {
+            eventSubscriberId: 'LinkableObjectSearchButton',
+            eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
+                this.state.canSearch = data.formInstance.hasValues();
+            }
+        };
+        EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
-    public async onDestroy(): Promise<void> {
-        FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }
 
     public executeSearch(): void {
-        (this as any).emit('executeSearch');
+        if (this.state.canSearch) {
+            (this as any).emit('executeSearch');
+        }
     }
 }
 

@@ -7,31 +7,33 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { Webform } from "../../model/Webform";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { WebformProperty } from "../../model/WebformProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { Queue } from "../../../ticket/model/Queue";
-import { QueueProperty } from "../../../ticket/model/QueueProperty";
-import { TicketPriority } from "../../../ticket/model/TicketPriority";
-import { TicketPriorityProperty } from "../../../ticket/model/TicketPriorityProperty";
-import { TicketType } from "../../../ticket/model/TicketType";
-import { TicketTypeProperty } from "../../../ticket/model/TicketTypeProperty";
-import { TicketState } from "../../../ticket/model/TicketState";
-import { TicketStateProperty } from "../../../ticket/model/TicketStateProperty";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { Webform } from '../../model/Webform';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { WebformProperty } from '../../model/WebformProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { User } from '../../../user/model/User';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { Queue } from '../../../ticket/model/Queue';
+import { QueueProperty } from '../../../ticket/model/QueueProperty';
+import { TicketPriority } from '../../../ticket/model/TicketPriority';
+import { TicketPriorityProperty } from '../../../ticket/model/TicketPriorityProperty';
+import { TicketType } from '../../../ticket/model/TicketType';
+import { TicketTypeProperty } from '../../../ticket/model/TicketTypeProperty';
+import { TicketState } from '../../../ticket/model/TicketState';
+import { TicketStateProperty } from '../../../ticket/model/TicketStateProperty';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class WebformFormService extends KIXObjectFormService {
 
@@ -54,7 +56,8 @@ export class WebformFormService extends KIXObjectFormService {
     }
 
     protected async postPrepareForm(
-        form: FormConfiguration, formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
+        form: FormConfiguration, formInstance: FormInstance,
+        formFieldValues: Map<string, FormFieldValue<any>>, webform: Webform
     ): Promise<void> {
         const hasConfigPermissions = await this.checkPermissions('system/config');
         if (form) {
@@ -209,7 +212,9 @@ export class WebformFormService extends KIXObjectFormService {
         return stateId;
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (value) {
             if (property === WebformProperty.USER_LOGIN) {

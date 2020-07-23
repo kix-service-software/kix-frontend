@@ -7,8 +7,8 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { FormFieldConfiguration } from "../../../../../model/configuration/FormFieldConfiguration";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 export class ComponentState extends AbstractComponentState {
 
@@ -16,7 +16,8 @@ export class ComponentState extends AbstractComponentState {
         public level: number = 0,
         public fields: FormFieldConfiguration[] = [],
         public dragStartInstanceId: string = null,
-        public dragStartIndex: number = null
+        public dragStartIndex: number = null,
+        public loading: boolean = false
     ) {
         super();
     }
