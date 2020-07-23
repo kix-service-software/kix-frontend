@@ -7,13 +7,12 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { Channel } from "../model/Channel";
-import { ChannelFactory } from "./ChannelFactory";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { Channel } from '../model/Channel';
 
 export class ChannelAPIService extends KIXObjectAPIService {
 
@@ -31,7 +30,7 @@ export class ChannelAPIService extends KIXObjectAPIService {
     public objectType: KIXObjectType = KIXObjectType.CHANNEL;
 
     private constructor() {
-        super([new ChannelFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -47,7 +46,7 @@ export class ChannelAPIService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.CHANNEL) {
             objects = await super.load<Channel>(
-                token, KIXObjectType.CHANNEL, this.RESOURCE_URI, loadingOptions, objectIds, 'Channel'
+                token, KIXObjectType.CHANNEL, this.RESOURCE_URI, loadingOptions, objectIds, 'Channel', Channel
             );
         }
 

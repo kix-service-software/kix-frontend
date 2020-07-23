@@ -7,7 +7,7 @@
  * --
  */
 
-import { RequestObject } from "../../../../../../server/model/rest/RequestObject";
+import { RequestObject } from '../../../../../../server/model/rest/RequestObject';
 
 export class CreateConfigItemClassDefinition extends RequestObject {
 

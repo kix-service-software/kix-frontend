@@ -7,7 +7,6 @@
  * --
  */
 
-export { DynamicFieldBrowserFactory } from './DynamicFieldBrowserFactory';
 export { DynamicFieldLabelProvider } from './DynamicFieldLabelProvider';
 export { DynamicFieldTableContentProvider } from './DynamicFieldTableContentProvider';
 export { DynamicFieldTableFactory } from './DynamicFieldTableFactory';

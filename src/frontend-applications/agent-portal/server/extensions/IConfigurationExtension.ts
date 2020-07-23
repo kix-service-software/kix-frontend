@@ -7,7 +7,7 @@
  * --
  */
 
-import { IConfiguration } from "../../model/configuration/IConfiguration";
+import { IConfiguration } from '../../model/configuration/IConfiguration';
 
 export interface IConfigurationExtension {
 

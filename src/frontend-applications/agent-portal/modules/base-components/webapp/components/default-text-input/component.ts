@@ -12,6 +12,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -44,14 +45,13 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.setCurrentValue();
     }
 
-    public setCurrentValue(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value !== null) {
-            this.state.currentValue = this.state.defaultValue.value;
-            (this as any).emit('valueChanged', this.state.currentValue);
-            super.provideValue(this.state.currentValue);
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        if (value) {
+            this.state.currentValue = value.value;
         }
     }
 

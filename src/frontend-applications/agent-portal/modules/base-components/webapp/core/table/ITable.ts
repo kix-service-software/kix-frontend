@@ -7,17 +7,17 @@
  * --
  */
 
-import { IRow } from "./IRow";
-import { IColumn } from "./IColumn";
-import { ITableContentProvider } from "./ITableContentProvider";
-import { IRowObject } from "./IRowObject";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { SelectionState } from "./SelectionState";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ValueState } from "./ValueState";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
-import { SortOrder } from "../../../../../model/SortOrder";
+import { IRow } from './IRow';
+import { IColumn } from './IColumn';
+import { ITableContentProvider } from './ITableContentProvider';
+import { IRowObject } from './IRowObject';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { SelectionState } from './SelectionState';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ValueState } from './ValueState';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 export interface ITable {
 

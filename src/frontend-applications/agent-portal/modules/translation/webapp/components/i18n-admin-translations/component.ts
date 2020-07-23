@@ -57,7 +57,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
 
-        this.state.translations = await TranslationService.createTranslationObject(["Translatable#Translations"]);
+        this.state.translations = await TranslationService.createTranslationObject(['Translatable#Translations']);
 
         this.state.prepared = true;
     }

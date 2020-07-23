@@ -7,13 +7,13 @@
  * --
  */
 
-import { Version } from "../../model/Version";
-import { ConfigItemImage } from "../../model/ConfigItemImage";
-import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { CreateConfigItemVersionUtil } from "./CreateConfigItemVersionUtil";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
+import { Version } from '../../model/Version';
+import { ConfigItemImage } from '../../model/ConfigItemImage';
+import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { CreateConfigItemVersionUtil } from './CreateConfigItemVersionUtil';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 
 export class CreateConfigItemUtil {
 

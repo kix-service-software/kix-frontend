@@ -7,18 +7,18 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Article } from "./Article";
-import { TicketHistory } from "./TicketHistory";
-import { SortUtil } from "../../../model/SortUtil";
-import { ArticleProperty } from "./ArticleProperty";
-import { DataType } from "../../../model/DataType";
-import { SortOrder } from "../../../model/SortOrder";
-import { Watcher } from "./Watcher";
-import { Link } from "../../links/model/Link";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Article } from './Article';
+import { TicketHistory } from './TicketHistory';
+import { SortUtil } from '../../../model/SortUtil';
+import { ArticleProperty } from './ArticleProperty';
+import { DataType } from '../../../model/DataType';
+import { SortOrder } from '../../../model/SortOrder';
+import { Watcher } from './Watcher';
+import { Link } from '../../links/model/Link';
 
-export class Ticket extends KIXObject<Ticket> {
+export class Ticket extends KIXObject {
 
     public ObjectId: string | number;
 

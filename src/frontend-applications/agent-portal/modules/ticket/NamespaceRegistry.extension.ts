@@ -7,9 +7,9 @@
  * --
  */
 
-import { ISocketNamespaceRegistryExtension } from "../../server/extensions/ISocketNamespaceRegistryExtension";
-import { TicketNamespace } from "./server/TicketNamespace";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { ISocketNamespaceRegistryExtension } from '../../server/extensions/ISocketNamespaceRegistryExtension';
+import { TicketNamespace } from './server/TicketNamespace';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements ISocketNamespaceRegistryExtension {
 

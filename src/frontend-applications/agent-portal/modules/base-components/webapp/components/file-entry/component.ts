@@ -35,7 +35,7 @@ class ArticleAttachmentComponent {
     private getIcon(attachment: any): ObjectIcon {
         const contentType = attachment.ContentType;
         if (contentType) {
-            return new ObjectIcon('MIMEType', contentType);
+            return new ObjectIcon(null, 'MIMEType', contentType);
         }
         return null;
     }

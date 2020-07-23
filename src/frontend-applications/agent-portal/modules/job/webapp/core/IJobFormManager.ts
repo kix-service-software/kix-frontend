@@ -7,13 +7,13 @@
  * --
  */
 
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
-import { Job } from "../../model/Job";
-import { MacroAction } from "../../model/MacroAction";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form";
-import { ExecPlanTypes } from "../../model/ExecPlanTypes";
-import { FormContext } from "../../../../model/configuration/FormContext";
+import { FormPageConfiguration } from '../../../../model/configuration/FormPageConfiguration';
+import { Job } from '../../model/Job';
+import { MacroAction } from '../../model/MacroAction';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
+import { ExecPlanTypes } from '../../model/ExecPlanTypes';
+import { FormContext } from '../../../../model/configuration/FormContext';
 
 export interface IJobFormManager {
 
@@ -23,7 +23,9 @@ export interface IJobFormManager {
 
     getPages(formContext: FormContext): Promise<FormPageConfiguration[]>;
 
-    getValue(property: string, value: any, job: Job, formContext: FormContext): Promise<any>;
+    getValue(
+        property: string, formField: FormFieldConfiguration, value: any, job: Job, formContext: FormContext
+    ): Promise<any>;
 
     getFormFieldsForAction(
         actionType: string, actionFieldInstanceId: string, type: string, action?: MacroAction
@@ -33,7 +35,7 @@ export interface IJobFormManager {
 
     supportPlan(planType: ExecPlanTypes): boolean;
 
-    prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>>;
+    prepareCreateValue(property: string, formField: FormFieldConfiguration, value: any): Promise<Array<[string, any]>>;
 
     updateFields(fields: FormFieldConfiguration[]): Promise<void>;
 

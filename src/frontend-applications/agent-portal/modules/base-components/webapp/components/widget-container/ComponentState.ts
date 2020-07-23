@@ -7,7 +7,7 @@
  * --
  */
 
-import { ConfiguredWidget } from "../../../../../model/configuration/ConfiguredWidget";
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 
 
 export class ComponentState {

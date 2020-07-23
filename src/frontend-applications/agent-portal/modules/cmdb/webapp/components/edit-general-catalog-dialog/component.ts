@@ -7,14 +7,12 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractEditDialog } from "../../../../../modules/base-components/webapp/core/AbstractEditDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EditGeneralCatalogDialogContext } from "../../../../general-catalog/webapp/core";
+import { ComponentState } from './ComponentState';
+import { AbstractEditDialog } from '../../../../../modules/base-components/webapp/core/AbstractEditDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EditGeneralCatalogDialogContext } from '../../../../general-catalog/webapp/core';
 
 class Component extends AbstractEditDialog {
-
-    private formId: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -24,10 +22,6 @@ class Component extends AbstractEditDialog {
             KIXObjectType.GENERAL_CATALOG_ITEM,
             EditGeneralCatalogDialogContext.CONTEXT_ID
         );
-    }
-
-    public onInput(input: any) {
-        this.formId = input.formId;
     }
 
     public async onMount(): Promise<void> {

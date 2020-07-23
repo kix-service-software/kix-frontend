@@ -7,17 +7,17 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table } from "../../../../base-components/webapp/core/table";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../model/DataType";
-import { ImportExportTemplateRunProperty } from "../../../model/ImportExportTemplateRunProperty";
-import { ImportExportTemplateRunTableContentProvider } from "./ImportExportTemplateRunTableContentProvider";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../model/DataType';
+import { ImportExportTemplateRunProperty } from '../../../model/ImportExportTemplateRunProperty';
+import { ImportExportTemplateRunTableContentProvider } from './ImportExportTemplateRunTableContentProvider';
 
 export class ImportExportTemplateRunTableFactory extends TableFactory {
 

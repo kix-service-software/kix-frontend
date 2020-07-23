@@ -7,10 +7,10 @@
  * --
  */
 
-import { TableContentProvider } from "../../../base-components/webapp/core/table/TableContentProvider";
-import { ITable } from "../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { TableContentProvider } from '../../../base-components/webapp/core/table/TableContentProvider';
+import { ITable } from '../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class WebformTableContentProvider extends TableContentProvider {
 

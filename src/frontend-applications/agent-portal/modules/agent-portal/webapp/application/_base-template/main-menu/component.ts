@@ -52,7 +52,6 @@ class KIXMenuComponent {
         if (entries) {
             await this.updateEntries(entries.primaryMenuEntries, entries.secondaryMenuEntries);
 
-
             this.state.showText = entries.showText;
         }
     }

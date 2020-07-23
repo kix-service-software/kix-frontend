@@ -7,9 +7,9 @@
  * --
  */
 
-import { SliderContent } from "./SliderContent";
-import { IConfiguration } from "../../../model/configuration/IConfiguration";
-import { ConfigurationType } from "../../../model/configuration/ConfigurationType";
+import { SliderContent } from './SliderContent';
+import { IConfiguration } from '../../../model/configuration/IConfiguration';
+import { ConfigurationType } from '../../../model/configuration/ConfigurationType';
 
 export class SliderWidgetConfiguration implements IConfiguration {
 

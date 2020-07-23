@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { GeneralCatalogItem } from "../../model/GeneralCatalogItem";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { GeneralCatalogItemProperty } from "../../model/GeneralCatalogItemProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { GeneralCatalogItem } from '../../model/GeneralCatalogItem';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { GeneralCatalogItemProperty } from '../../model/GeneralCatalogItemProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogItem> {
 
@@ -87,6 +87,6 @@ export class GeneralCatalogLabelProvider extends LabelProvider<GeneralCatalogIte
     }
 
     public getObjectIcon(catlogItem?: GeneralCatalogItem): string | ObjectIcon {
-        return new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, catlogItem.ItemID);
+        return new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, catlogItem.ItemID);
     }
 }

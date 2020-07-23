@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class LinkType extends KIXObject<LinkType> {
+export class LinkType extends KIXObject {
 
     public KIXObjectType: KIXObjectType | string = KIXObjectType.LINK_TYPE;
 

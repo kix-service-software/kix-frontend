@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { ContactDialogUtil } from "..";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ContactDialogUtil } from '..';
 
 export class ContactCreateAction extends AbstractAction {
 

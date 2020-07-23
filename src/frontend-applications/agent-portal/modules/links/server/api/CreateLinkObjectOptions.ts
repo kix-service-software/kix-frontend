@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 
 export class CreateLinkObjectOptions extends KIXObjectSpecificCreateOptions {

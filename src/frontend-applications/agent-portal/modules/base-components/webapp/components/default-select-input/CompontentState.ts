@@ -7,16 +7,15 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { IdService } from "../../../../../model/IdService";
-import { TreeNode } from "../../core/tree";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { IdService } from '../../../../../model/IdService';
+import { TreeNode } from '../../core/tree';
 
 export class CompontentState extends FormInputComponentState<string | number | string[] | number[]> {
 
     public constructor(
         public treeId: string = IdService.generateDateBasedId('default-select-input-'),
         public prepared: boolean = false,
-        public loadNodes: () => Promise<TreeNode[]> = null,
         public asMultiselect: boolean = false,
         public placeholder: string = ''
     ) {

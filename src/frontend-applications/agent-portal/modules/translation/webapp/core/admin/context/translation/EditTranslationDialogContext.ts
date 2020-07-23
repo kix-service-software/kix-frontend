@@ -7,15 +7,15 @@
  * --
  */
 
-import { Context } from "../../../../../../../model/Context";
-import { ContextDescriptor } from "../../../../../../../model/ContextDescriptor";
-import { ContextConfiguration } from "../../../../../../../model/configuration/ContextConfiguration";
-import { KIXObject } from "../../../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { TranslationPatternProperty } from "../../../../../model/TranslationPatternProperty";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TranslationPattern } from "../../../../../model/TranslationPattern";
+import { Context } from '../../../../../../../model/Context';
+import { ContextDescriptor } from '../../../../../../../model/ContextDescriptor';
+import { ContextConfiguration } from '../../../../../../../model/configuration/ContextConfiguration';
+import { KIXObject } from '../../../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { TranslationPatternProperty } from '../../../../../model/TranslationPatternProperty';
+import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TranslationPattern } from '../../../../../model/TranslationPattern';
 
 export class EditTranslationDialogContext extends Context {
 

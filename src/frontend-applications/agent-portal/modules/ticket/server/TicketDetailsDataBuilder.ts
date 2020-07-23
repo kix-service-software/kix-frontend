@@ -7,46 +7,46 @@
  * --
  */
 
-import { Ticket } from "../model/Ticket";
-import { IdService } from "../../../model/IdService";
-import { TicketAPIService } from "./TicketService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { TicketProperty } from "../model/TicketProperty";
-import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
-import { ModuleConfigurationService } from "../../../server/services/configuration";
+import { Ticket } from '../model/Ticket';
+import { IdService } from '../../../model/IdService';
+import { TicketAPIService } from './TicketService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { TicketProperty } from '../model/TicketProperty';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { ModuleConfigurationService } from '../../../server/services/configuration';
 import {
     ObjectInformationWidgetConfiguration
-} from "../../../model/configuration/ObjectInformationWidgetConfiguration";
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { ArticleProperty } from "../model/ArticleProperty";
-import { QueueAPIService } from "./QueueService";
-import { TicketStateAPIService } from "./TicketStateService";
-import { TicketPriorityAPIService } from "./TicketPriorityService";
-import { TicketTypeAPIService } from "./TicketTypeService";
-import { OrganisationAPIService } from "../../customer/server/OrganisationService";
-import { ContactAPIService } from "../../customer/server/ContactService";
-import { UserService } from "../../user/server/UserService";
-import { TranslationAPIService } from "../../translation/server/TranslationService";
-import { DateTimeAPIUtil } from "../../../server/services/DateTimeAPIUtil";
-import { SysConfigOption } from "../../sysconfig/model/SysConfigOption";
-import { SysConfigService } from "../../sysconfig/server/SysConfigService";
-import { SysConfigKey } from "../../sysconfig/model/SysConfigKey";
-import { SearchProperty } from "../../search/model/SearchProperty";
-import { Article } from "../model/Article";
-import { InlineContent } from "../../base-components/webapp/core/InlineContent";
-import { Attachment } from "../../../model/kix/Attachment";
-import { DynamicFieldValue } from "../../dynamic-fields/model/DynamicFieldValue";
-import { TicketDetailsDFDataBuilder } from "./TicketDetailsDFDataBuilder";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { Contact } from "../../customer/model/Contact";
-import { Organisation } from "../../customer/model/Organisation";
-import { User } from "../../user/model/User";
-import { UserProperty } from "../../user/model/UserProperty";
-import { Queue } from "../model/Queue";
-import { TicketState } from "../model/TicketState";
-import { TicketPriority } from "../model/TicketPriority";
-import { TicketType } from "../model/TicketType";
+} from '../../../model/configuration/ObjectInformationWidgetConfiguration';
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { ArticleProperty } from '../model/ArticleProperty';
+import { QueueAPIService } from './QueueService';
+import { TicketStateAPIService } from './TicketStateService';
+import { TicketPriorityAPIService } from './TicketPriorityService';
+import { TicketTypeAPIService } from './TicketTypeService';
+import { OrganisationAPIService } from '../../customer/server/OrganisationService';
+import { ContactAPIService } from '../../customer/server/ContactService';
+import { UserService } from '../../user/server/UserService';
+import { TranslationAPIService } from '../../translation/server/TranslationService';
+import { DateTimeAPIUtil } from '../../../server/services/DateTimeAPIUtil';
+import { SysConfigOption } from '../../sysconfig/model/SysConfigOption';
+import { SysConfigService } from '../../sysconfig/server/SysConfigService';
+import { SysConfigKey } from '../../sysconfig/model/SysConfigKey';
+import { SearchProperty } from '../../search/model/SearchProperty';
+import { Article } from '../model/Article';
+import { InlineContent } from '../../base-components/webapp/core/InlineContent';
+import { Attachment } from '../../../model/kix/Attachment';
+import { DynamicFieldValue } from '../../dynamic-fields/model/DynamicFieldValue';
+import { TicketDetailsDFDataBuilder } from './TicketDetailsDFDataBuilder';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { Contact } from '../../customer/model/Contact';
+import { Organisation } from '../../customer/model/Organisation';
+import { User } from '../../user/model/User';
+import { UserProperty } from '../../user/model/UserProperty';
+import { Queue } from '../model/Queue';
+import { TicketState } from '../model/TicketState';
+import { TicketPriority } from '../model/TicketPriority';
+import { TicketType } from '../model/TicketType';
 
 export class TicketDetailsDataBuilder {
 

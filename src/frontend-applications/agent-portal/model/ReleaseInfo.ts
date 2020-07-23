@@ -7,7 +7,7 @@
  * --
  */
 
-import { SystemInfo } from "./SystemInfo";
+import { SystemInfo } from './SystemInfo';
 
 export class ReleaseInfo {
 

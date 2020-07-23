@@ -7,14 +7,14 @@
  * --
  */
 
-import { InMemoryCache } from "./InMemoryCache";
-import { RedisCache } from "./RedisCache";
+import { InMemoryCache } from './InMemoryCache';
+import { RedisCache } from './RedisCache';
 
 import md5 = require('md5');
-import { ConfigurationService } from "../../../../../server/services/ConfigurationService";
-import { ObjectUpdatedEventData } from "../../../model/ObjectUpdatedEventData";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { LoggingService } from "../../../../../server/services/LoggingService";
+import { ConfigurationService } from '../../../../../server/services/ConfigurationService';
+import { ObjectUpdatedEventData } from '../../../model/ObjectUpdatedEventData';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { LoggingService } from '../../../../../server/services/LoggingService';
 
 export class CacheService {
 
@@ -30,9 +30,14 @@ export class CacheService {
     private useRedisCache: boolean = false;
     private useInMemoryCache: boolean = false;
     private ignorePrefixes: string[] = [];
+    private dependencies: Map<string, string[]> = new Map();
 
     private constructor() {
         this.init();
+    }
+
+    public addDependencies(key: string, dependencies: string[]): void {
+        this.dependencies.set(key, dependencies);
     }
 
     public init(): void {
@@ -110,6 +115,13 @@ export class CacheService {
             cacheKeyPrefixes.push(KIXObjectType.TICKET_TYPE);
         } else {
             cacheKeyPrefixes.push(objectNamespace);
+        }
+
+        if (this.dependencies.has(cacheKeyPrefixes[0])) {
+            cacheKeyPrefixes = [
+                ...cacheKeyPrefixes,
+                ...this.dependencies.get(cacheKeyPrefixes[0])
+            ];
         }
 
         switch (cacheKeyPrefixes[0]) {

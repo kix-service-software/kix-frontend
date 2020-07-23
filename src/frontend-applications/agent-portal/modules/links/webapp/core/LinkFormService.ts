@@ -7,8 +7,8 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class LinkFormService extends KIXObjectFormService {
 

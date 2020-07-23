@@ -7,19 +7,19 @@
  * --
  */
 
-import { IFormFieldValidator } from "../../../../../../modules/base-components/webapp/core/IFormFieldValidator";
-import { FormFieldConfiguration } from "../../../../../../model/configuration/FormFieldConfiguration";
-import { NotificationProperty } from "../../../../model/NotificationProperty";
-import { ValidationResult } from "../../../../../../modules/base-components/webapp/core/ValidationResult";
-import { FormService } from "../../../../../../modules/base-components/webapp/core/FormService";
-import { ValidationSeverity } from "../../../../../../modules/base-components/webapp/core/ValidationSeverity";
-import { FormFieldValue } from "../../../../../../model/configuration/FormFieldValue";
-import { FormValidationService } from "../../../../../../modules/base-components/webapp/core/FormValidationService";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SystemAddress } from "../../../../../system-address/model/SystemAddress";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { DynamicField } from "../../../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from '../../../../../../modules/base-components/webapp/core/IFormFieldValidator';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { NotificationProperty } from '../../../../model/NotificationProperty';
+import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
+import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
+import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
+import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';
+import { FormValidationService } from '../../../../../../modules/base-components/webapp/core/FormValidationService';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SystemAddress } from '../../../../../system-address/model/SystemAddress';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
 
 export class NotificationEmailRecipientValidator implements IFormFieldValidator {
 
@@ -51,7 +51,7 @@ export class NotificationEmailRecipientValidator implements IFormFieldValidator 
 
     private async checkEmail(value: string[]): Promise<ValidationResult> {
         if (value && !!value.length) {
-            const mailAddresses = value;
+            const mailAddresses = Array.isArray(value) ? value : [value];
             for (const mail of mailAddresses) {
                 if (!FormValidationService.getInstance().isValidEmail(mail)) {
                     const errorString = await TranslationService.translate(

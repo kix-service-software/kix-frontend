@@ -7,17 +7,17 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SearchService } from "../SearchService";
-import { TranslationService } from "../../../../translation/webapp/core/TranslationService";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { ConfirmOverlayContent } from "../../../../../modules/base-components/webapp/core/ConfirmOverlayContent";
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { Error } from "../../../../../../../server/model/Error";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { SearchService } from '../SearchService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { ConfirmOverlayContent } from '../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { Error } from '../../../../../../../server/model/Error';
 
 export class DeleteSearchAction extends AbstractAction {
 

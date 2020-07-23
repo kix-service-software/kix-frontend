@@ -7,9 +7,9 @@
  * --
  */
 
-import { IConfiguration } from "../../../../model/configuration/IConfiguration";
-import { ConfigurationType } from "../../../../model/configuration/ConfigurationType";
-import { KanbanColumn } from "./KanbanColumn";
+import { IConfiguration } from '../../../../model/configuration/IConfiguration';
+import { ConfigurationType } from '../../../../model/configuration/ConfigurationType';
+import { KanbanColumn } from './KanbanColumn';
 
 export class KanbanConfiguration implements IConfiguration {
 

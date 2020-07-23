@@ -7,26 +7,26 @@
  * --
  */
 
-import { IContextServiceListener } from "./IContextServiceListener";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { ContextFactory } from "./ContextFactory";
-import { DialogService } from "./DialogService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { BrowserHistoryState } from "./BrowserHistoryState";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { RoutingService } from "./RoutingService";
-import { ContextHistory } from "./ContextHistory";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { AdditionalContextInformation } from "./AdditionalContextInformation";
-import { FormService } from "./FormService";
-import { TableFactoryService } from "./table/TableFactoryService";
-import { ContextHistoryEntry } from "./ContextHistoryEntry";
-import { ContextConfiguration } from "../../../../model/configuration/ContextConfiguration";
-import { ContextSocketClient } from "./ContextSocketClient";
-import { Context } from "../../../../model/Context";
-
+import { IContextServiceListener } from './IContextServiceListener';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { ContextFactory } from './ContextFactory';
+import { DialogService } from './DialogService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { BrowserHistoryState } from './BrowserHistoryState';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { RoutingService } from './RoutingService';
+import { ContextHistory } from './ContextHistory';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { FormService } from './FormService';
+import { TableFactoryService } from './table/TableFactoryService';
+import { ContextHistoryEntry } from './ContextHistoryEntry';
+import { ContextConfiguration } from '../../../../model/configuration/ContextConfiguration';
+import { ContextSocketClient } from './ContextSocketClient';
+import { Context } from '../../../../model/Context';
+import { ContextExtension } from '../../../../model/ContextExtension';
 
 export class ContextService {
 
@@ -44,6 +44,22 @@ export class ContextService {
     private activeMainContext: Context;
     private activeDialogContext: Context;
     private activeContextType: ContextType = ContextType.MAIN;
+
+    private contextExtensions: Map<string, ContextExtension[]> = new Map();
+
+    public addExtendedContext(contextId: string, extension: ContextExtension): void {
+        if (!this.contextExtensions.has(contextId)) {
+            this.contextExtensions.set(contextId, []);
+        }
+        this.contextExtensions.get(contextId).push(extension);
+    }
+
+    public getContextExtensions(contextId: string): ContextExtension[] {
+        if (this.contextExtensions.has(contextId)) {
+            return this.contextExtensions.get(contextId);
+        }
+        return [];
+    }
 
     public registerListener(listener: IContextServiceListener): void {
         this.serviceListener.set(listener.constexServiceListenerId, listener);
@@ -73,8 +89,10 @@ export class ContextService {
         if (context && context.getDescriptor().contextType === ContextType.MAIN) {
 
             if (context.getDescriptor().contextMode === ContextMode.DETAILS) {
-                context.setObjectId(objectId);
+                context.setObjectId(objectId, kixObjectType);
             }
+
+            await context.initContext();
 
             this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
 
@@ -162,9 +180,9 @@ export class ContextService {
         }
 
         if (objectId) {
-            await context.setObjectId(objectId);
+            await context.setObjectId(objectId, objectType);
         } else if (context.getObjectId()) {
-            await context.setObjectId(context.getObjectId());
+            await context.setObjectId(context.getObjectId(), objectType);
         }
 
         if (formId) {

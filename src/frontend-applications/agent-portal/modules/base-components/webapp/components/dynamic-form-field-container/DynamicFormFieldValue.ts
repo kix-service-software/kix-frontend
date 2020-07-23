@@ -7,20 +7,21 @@
  * --
  */
 
-import { AutoCompleteConfiguration } from "../../../../../model/configuration/AutoCompleteConfiguration";
-import { TreeNode, TreeHandler, TreeService, TreeUtil } from "../../core/tree";
-import { IDynamicFormManager } from "../../core/dynamic-form/IDynamicFormManager";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { IdService } from "../../../../../model/IdService";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { DynamicFormOperationsType } from "../../core/dynamic-form/DynamicFormOperationsType";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { InputFieldTypes } from "../../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
-import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { LabelProvider } from "../../core/LabelProvider";
+import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { TreeNode, TreeHandler, TreeService, TreeUtil } from '../../core/tree';
+import { IDynamicFormManager } from '../../core/dynamic-form/IDynamicFormManager';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { IdService } from '../../../../../model/IdService';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { DynamicFormOperationsType } from '../../core/dynamic-form/DynamicFormOperationsType';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ObjectReferenceOptions } from '../../core/ObjectReferenceOptions';
+
 
 export class DynamicFormFieldValue {
 
@@ -40,6 +41,7 @@ export class DynamicFormFieldValue {
 
     public isMultiselect: boolean = false;
     public isAutocomplete: boolean = false;
+    public isFreeText: boolean = false;
 
     public isBetween: boolean = false;
 
@@ -207,7 +209,9 @@ export class DynamicFormFieldValue {
     public async setOperator(operator: string): Promise<void> {
         this.value.operator = operator;
         this.isBetween = this.value.operator === SearchOperator.BETWEEN;
-        await this.createValueInput();
+        if (this.manager.resetValue) {
+            await this.createValueInput();
+        }
     }
 
     private async createValueInput(): Promise<void> {
@@ -224,6 +228,9 @@ export class DynamicFormFieldValue {
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isMultiselect = await this.manager.isMultiselect(property);
+            this.isFreeText = this.inputOptions
+                ? this.inputOptions.some((o) => o[0] === ObjectReferenceOptions.FREETEXT && Boolean(o[1]))
+                : false;
 
             this.valueTreeHandler.setMultiSelect(this.isMultiselect);
             if (this.isAutocomplete) {
@@ -236,12 +243,11 @@ export class DynamicFormFieldValue {
 
             this.isSpecificInput = inputType === 'SPECIFIC';
             if (this.isSpecificInput) {
-                const specificInputType = this.manager.getSpecificInput();
+                const specificInputType = this.manager.getSpecificInput(property);
                 if (specificInputType) {
                     this.specificInputType = KIXModulesService.getComponentTemplate(specificInputType);
                 }
             }
-
 
             if (this.value.property && this.isDropdown) {
                 const valueNodes = await this.manager.getTreeNodes(this.value.property);
@@ -251,22 +257,9 @@ export class DynamicFormFieldValue {
     }
 
     public async setCurrentValue(silent: boolean = true): Promise<void> {
-        const currentValues: TreeNode[] = [];
+        let currentValues: TreeNode[] = [];
         if (this.value.value) {
-            if (!this.isDropdown && this.value.objectType) {
-                const objects = await KIXObjectService.loadObjects(
-                    this.value.objectType, Array.isArray(this.value.value) ? this.value.value : [this.value.value]
-                );
-                let label;
-                let icon;
-                if (objects && objects.length) {
-                    for (const object of objects) {
-                        label = await LabelService.getInstance().getObjectText(object);
-                        icon = LabelService.getInstance().getObjectTypeIcon(object.KIXObjectType);
-                        currentValues.push(new TreeNode(object.ObjectId, label, icon));
-                    }
-                }
-            } else if (this.isDropdown && !this.isAutocomplete) {
+            if (this.isDropdown && !this.isAutocomplete) {
                 const valueNodes = this.valueTreeHandler.getTree();
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
                 for (const v of selectValues) {
@@ -277,8 +270,15 @@ export class DynamicFormFieldValue {
                 }
             } else if (this.isDropdown && this.isAutocomplete) {
                 const selectValues = Array.isArray(this.value.value) ? this.value.value : [this.value.value];
-                const nodes = await this.manager.getTreeNodes(this.value.property, selectValues);
-                this.valueTreeHandler.setSelection(nodes, true, false, true);
+                currentValues = await this.manager.getTreeNodes(this.value.property, selectValues);
+                this.valueTreeHandler.setTree(currentValues);
+                if (this.isFreeText) {
+                    this.valueTreeHandler.setSelection(
+                        selectValues
+                            .filter((sv) => !currentValues.some((cv) => cv.id.toString() === sv.toString()))
+                            .map((v) => new TreeNode(v, v)), true, true, true, false
+                    );
+                }
             } else if (this.isDate) {
                 if (this.isBetween) {
                     const date = new Date(this.value.value[0]);
@@ -314,7 +314,20 @@ export class DynamicFormFieldValue {
                         this.time = DateTimeUtil.getKIXTimeString(date);
                     }
                 }
-            } else {
+            } else if (!this.isDropdown && this.value.objectType) {
+                const objects = await KIXObjectService.loadObjects(
+                    this.value.objectType, Array.isArray(this.value.value) ? this.value.value : [this.value.value]
+                );
+                let label;
+                let icon;
+                if (objects && objects.length) {
+                    for (const object of objects) {
+                        label = await LabelService.getInstance().getObjectText(object);
+                        icon = LabelService.getInstance().getObjectTypeIcon(object.KIXObjectType);
+                        currentValues.push(new TreeNode(object.ObjectId, label, icon));
+                    }
+                }
+            } else if (!this.isSpecificInput) {
                 this.value.value = Array.isArray(this.value.value) ? this.value.value[0] : this.value.value;
             }
         }
@@ -357,7 +370,6 @@ export class DynamicFormFieldValue {
         this.betweenEndTime = value;
     }
 
-
     public getValue(): ObjectPropertyValue {
         const currentValue = { ...this.value };
         if (this.isDate) {
@@ -388,7 +400,16 @@ export class DynamicFormFieldValue {
     }
 
     public async doAutocompleteSearch(limit: number, searchValue: string): Promise<TreeNode[]> {
-        return this.manager.searchValues(this.value.property, searchValue, limit) || [];
+        let tree: TreeNode[];
+        if (this.manager.useOwnSearch) {
+            tree = await this.manager.searchObjectTree(this.value.property, searchValue, limit);
+        } else {
+            tree = await KIXObjectService.searchObjectTree(
+                this.manager.objectType, this.value.property, searchValue, limit
+            );
+        }
+
+        return tree;
     }
 
 }

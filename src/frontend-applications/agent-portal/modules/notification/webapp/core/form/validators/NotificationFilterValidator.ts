@@ -7,21 +7,21 @@
  * --
  */
 
-import { IFormFieldValidator } from "../../../../../../modules/base-components/webapp/core/IFormFieldValidator";
-import { FormFieldConfiguration } from "../../../../../../model/configuration/FormFieldConfiguration";
-import { NotificationProperty } from "../../../../model/NotificationProperty";
-import { ValidationResult } from "../../../../../../modules/base-components/webapp/core/ValidationResult";
-import { FormService } from "../../../../../../modules/base-components/webapp/core/FormService";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../../../model/ContextType";
-import { NotificationService } from "../..";
-import { ArticleProperty } from "../../../../../ticket/model/ArticleProperty";
-import { ValidationSeverity } from "../../../../../../modules/base-components/webapp/core/ValidationSeverity";
-import { FormFieldValue } from "../../../../../../model/configuration/FormFieldValue";
-import { LabelService } from "../../../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../../../../modules/translation/webapp/core/TranslationService";
-import { DynamicField } from "../../../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from '../../../../../../modules/base-components/webapp/core/IFormFieldValidator';
+import { FormFieldConfiguration } from '../../../../../../model/configuration/FormFieldConfiguration';
+import { NotificationProperty } from '../../../../model/NotificationProperty';
+import { ValidationResult } from '../../../../../../modules/base-components/webapp/core/ValidationResult';
+import { FormService } from '../../../../../../modules/base-components/webapp/core/FormService';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../../../model/ContextType';
+import { NotificationService } from '../..';
+import { ArticleProperty } from '../../../../../ticket/model/ArticleProperty';
+import { ValidationSeverity } from '../../../../../../modules/base-components/webapp/core/ValidationSeverity';
+import { FormFieldValue } from '../../../../../../model/configuration/FormFieldValue';
+import { LabelService } from '../../../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { DynamicField } from '../../../../../dynamic-fields/model/DynamicField';
 
 export class NotificationFilterValidator implements IFormFieldValidator {
 
@@ -74,7 +74,7 @@ export class NotificationFilterValidator implements IFormFieldValidator {
     private async createValidationResult(property: string): Promise<ValidationResult> {
         const label = await LabelService.getInstance().getPropertyText(property, KIXObjectType.ARTICLE);
         const errorString = await TranslationService.translate(
-            "Translatable#Required field '{0}' has no value.", [label]
+            'Translatable#Required field {0} has no value.', [label]
         );
         return new ValidationResult(ValidationSeverity.ERROR, errorString);
     }

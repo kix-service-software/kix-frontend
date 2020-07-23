@@ -7,7 +7,7 @@
  * --
  */
 
-import { NotesSocketClient } from "./NotesSocketClient";
+import { NotesSocketClient } from './NotesSocketClient';
 
 export class NotesService {
 

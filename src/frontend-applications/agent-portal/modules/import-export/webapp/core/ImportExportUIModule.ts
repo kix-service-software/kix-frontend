@@ -7,19 +7,16 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../base-components/webapp/core/ServiceRegistry";
-import { FactoryService } from "../../../base-components/webapp/core/FactoryService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { ImportExportService } from "./ImportExportService";
-import { ImportExportTemplateBrowserFactory } from "./ImportExportTemplateBrowserFactory";
-import { ImportExportTemplateLabelProvider } from "./ImportExportTemplateLabelProvider";
-import { ActionFactory } from "../../../base-components/webapp/core/ActionFactory";
-import { TemplateImportAction, TemplateExportAction } from "./actions";
-import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from "./table";
-import { ImportExportTemplateRunLabelProvider } from "./ImportExportTemplateRunLabelProvider";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { ImportExportService } from './ImportExportService';
+import { ImportExportTemplateLabelProvider } from './ImportExportTemplateLabelProvider';
+import { ActionFactory } from '../../../base-components/webapp/core/ActionFactory';
+import { TemplateImportAction, TemplateExportAction } from './actions';
+import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from './table';
+import { ImportExportTemplateRunLabelProvider } from './ImportExportTemplateRunLabelProvider';
 
 
 export class UIModule implements IUIModule {
@@ -29,15 +26,12 @@ export class UIModule implements IUIModule {
     public name: string = 'ImportExportUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public async register(): Promise<void> {
         ServiceRegistry.registerServiceInstance(ImportExportService.getInstance());
 
-        FactoryService.getInstance().registerFactory(
-            KIXObjectType.IMPORT_EXPORT_TEMPLATE, ImportExportTemplateBrowserFactory.getInstance()
-        );
         TableFactoryService.getInstance().registerFactory(new ImportExportTemplateTableFactory());
         LabelService.getInstance().registerLabelProvider(new ImportExportTemplateLabelProvider());
 

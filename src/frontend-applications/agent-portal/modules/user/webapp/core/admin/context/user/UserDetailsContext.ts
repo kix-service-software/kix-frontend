@@ -7,18 +7,18 @@
  * --
  */
 
-import { Context } from "../../../../../../../model/Context";
-import { LabelService } from "../../../../../../../modules/base-components/webapp/core/LabelService";
-import { User } from "../../../../../model/User";
-import { BreadcrumbInformation } from "../../../../../../../model/BreadcrumbInformation";
-import { AdminContext } from "../../../../../../admin/webapp/core";
-import { KIXObject } from "../../../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { UserProperty } from "../../../../../model/UserProperty";
-import { TranslationService } from "../../../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Role } from "../../../../../model/Role";
+import { Context } from '../../../../../../../model/Context';
+import { LabelService } from '../../../../../../../modules/base-components/webapp/core/LabelService';
+import { User } from '../../../../../model/User';
+import { BreadcrumbInformation } from '../../../../../../../model/BreadcrumbInformation';
+import { AdminContext } from '../../../../../../admin/webapp/core';
+import { KIXObject } from '../../../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { UserProperty } from '../../../../../model/UserProperty';
+import { TranslationService } from '../../../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Role } from '../../../../../model/Role';
 
 export class UserDetailsContext extends Context {
 
@@ -50,7 +50,6 @@ export class UserDetailsContext extends Context {
             const roles = await KIXObjectService.loadObjects<Role>(KIXObjectType.ROLE, user.RoleIDs);
             this.setObjectList(KIXObjectType.ROLE, roles, true);
         }
-
 
         if (reload) {
             this.listeners.forEach(

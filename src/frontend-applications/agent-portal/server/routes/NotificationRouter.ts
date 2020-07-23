@@ -31,12 +31,12 @@ export class NotificationRouter extends KIXRouter {
     }
 
     public getBaseRoute(): string {
-        return "/notifications";
+        return '/notifications';
     }
 
     protected initialize(): void {
         this.router.post(
-            "/",
+            '/',
             AuthenticationService.getInstance().isCallbackAuthenticated.bind(AuthenticationService.getInstance()),
             this.handleRequest.bind(this));
     }

@@ -7,8 +7,8 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 export class ComponentState extends WidgetComponentState {
 

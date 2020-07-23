@@ -7,19 +7,19 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { AgentService } from "./AgentService";
-import { PersonalSettingsProperty } from "../../model/PersonalSettingsProperty";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { NotificationProperty } from "../../../notification/model/NotificationProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { Notification } from "../../../notification/model/Notification";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { AgentService } from './AgentService';
+import { PersonalSettingsProperty } from '../../model/PersonalSettingsProperty';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { NotificationProperty } from '../../../notification/model/NotificationProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { Notification } from '../../../notification/model/Notification';
 
 export class PersonalSettingsFormService extends KIXObjectFormService {
 
@@ -89,7 +89,9 @@ export class PersonalSettingsFormService extends KIXObjectFormService {
         return value;
     }
 
-    public async postPrepareValues(parameter: Array<[string, any]>): Promise<Array<[string, any]>> {
+    public async postPrepareValues(
+        parameter: Array<[string, any]>
+    ): Promise<Array<[string, any]>> {
 
         const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
         if (queuesParameter) {

@@ -7,9 +7,9 @@
  * --
  */
 
-import { ITableCSSHandler, TableValue } from "../../../base-components/webapp/core/table";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { Permission } from "../../model/Permission";
+import { ITableCSSHandler, TableValue } from '../../../base-components/webapp/core/table';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { Permission } from '../../model/Permission';
 
 export class PermissionTableCSSHandler implements ITableCSSHandler<Permission> {
 

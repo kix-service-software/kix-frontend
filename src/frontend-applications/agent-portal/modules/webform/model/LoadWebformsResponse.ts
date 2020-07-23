@@ -7,7 +7,7 @@
  * --
  */
 
-import { Webform } from "./Webform";
+import { Webform } from './Webform';
 
 export class LoadWebformsResponse {
 

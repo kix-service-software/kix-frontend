@@ -17,6 +17,8 @@ export enum MacroProperty {
 
     ACTIONS = 'Actions',
 
-    EXEC_ORDER = 'ExecOrder'
+    EXEC_ORDER = 'ExecOrder',
+
+    EXEC = 'Exec'
 
 }

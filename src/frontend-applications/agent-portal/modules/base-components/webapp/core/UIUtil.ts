@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextService } from "./ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextService } from './ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
 
 export class UIUtil {
 

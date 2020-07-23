@@ -27,8 +27,8 @@ class Component {
         this.state.contentWidgets = context.getContent();
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Search",
-            "Translatable#Help"
+            'Translatable#Search',
+            'Translatable#Help'
         ]);
 
         this.state.placeholder = await TranslationService.translate(

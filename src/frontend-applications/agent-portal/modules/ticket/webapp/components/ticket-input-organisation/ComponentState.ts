@@ -7,8 +7,9 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState extends FormInputComponentState<number> {
 
@@ -16,7 +17,7 @@ export class ComponentState extends FormInputComponentState<number> {
         public primaryOrganisationId: number = null,
         public hasContact: boolean = false,
         public placeholder: string = '',
-        public loadNodes: () => Promise<TreeNode[]> = null
+        public treeId: string = IdService.generateDateBasedId('ticket-input-organisation')
     ) {
         super();
     }

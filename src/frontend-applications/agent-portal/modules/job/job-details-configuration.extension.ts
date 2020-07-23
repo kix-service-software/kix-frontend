@@ -7,24 +7,24 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { ObjectInformationWidgetConfiguration } from "../../model/configuration/ObjectInformationWidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { JobProperty } from "./model/JobProperty";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { SortOrder } from "../../model/SortOrder";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { JobProperty } from './model/JobProperty';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -136,8 +136,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredWidget('job-details-info-widget', 'job-details-info-widget'),
                     new ConfiguredWidget(
-                        'job-details-run-history-widget', 'job-details-run-history-widget', null,
-                        [new UIComponentPermission('system/automation/jobs/*/runs', [CRUD.READ])]
+                        'job-details-run-history-widget', 'job-details-run-history-widget', null
                     )
                 ]
             )

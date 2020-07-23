@@ -11,9 +11,7 @@ import { ComponentState } from './ComponentState';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
-import {
-    AuthenticationSocketClient
-} from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
@@ -36,12 +34,16 @@ class ArticleInputAttachmentComponent extends FormInputComponent<CreateLinkDescr
         await super.onMount();
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Assign Links"
+            'Translatable#Assign Links'
         ]);
 
         this.state.allowCreate = await AuthenticationSocketClient.getInstance().checkPermissions([
             new UIComponentPermission('links', [CRUD.READ, CRUD.CREATE])
         ]);
+    }
+
+    public async setCurrentValue(): Promise<void> {
+        return;
     }
 
     public async openDialog(): Promise<void> {

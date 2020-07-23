@@ -7,11 +7,11 @@
  * --
  */
 
-import { RoutingConfiguration } from "./RoutingConfiguration";
-import { ContextType } from "../ContextType";
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { ContextMode } from "../ContextMode";
-import { ObjectIcon } from "../../modules/icon/model/ObjectIcon";
+import { RoutingConfiguration } from './RoutingConfiguration';
+import { ContextType } from '../ContextType';
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { ContextMode } from '../ContextMode';
+import { ObjectIcon } from '../../modules/icon/model/ObjectIcon';
 
 export class DialogRoutingConfiguration extends RoutingConfiguration {
 

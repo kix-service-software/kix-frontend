@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { SystemAddress } from "../../model/SystemAddress";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class SystemAddressFormService extends KIXObjectFormService {
 

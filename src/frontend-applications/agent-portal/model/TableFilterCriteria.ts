@@ -7,7 +7,7 @@
  * --
  */
 
-import { SearchOperator } from "../modules/search/model/SearchOperator";
+import { SearchOperator } from '../modules/search/model/SearchOperator';
 
 export class TableFilterCriteria {
 

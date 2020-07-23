@@ -7,24 +7,24 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { Organisation } from "../../model/Organisation";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { SortUtil } from "../../../../model/SortUtil";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { OrganisationService } from ".";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ImportManager, ImportPropertyOperator } from "../../../import/webapp/core";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { Organisation } from '../../model/Organisation';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { SortUtil } from '../../../../model/SortUtil';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { OrganisationService } from '.';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ImportManager, ImportPropertyOperator } from '../../../import/webapp/core';
 
 export class OrganisationImportManager extends ImportManager {
 

@@ -12,7 +12,6 @@ import { FormService } from '../../../../../modules/base-components/webapp/core/
 import { FormContext } from '../../../../../model/configuration/FormContext';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { IdService } from '../../../../../model/IdService';
 import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 import { FormInstance } from '../../../../../modules/base-components/webapp/core/FormInstance';
 import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
@@ -23,6 +22,8 @@ import { OverlayType } from '../../../../../modules/base-components/webapp/core/
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { EventService } from '../../core/EventService';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { FormEvent } from '../../core/FormEvent';
 
 
 class FormComponent {
@@ -31,6 +32,7 @@ class FormComponent {
     private changePageTimeout: any;
     private keyListenerElement: any;
     private keyListener: any;
+    private formSubscriber: IEventSubscriber;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(input.formId);
@@ -67,6 +69,12 @@ class FormComponent {
         if (this.keyListenerElement) {
             this.keyListenerElement.removeEventListener('keydown', this.keyDown.bind(this));
         }
+
+        EventService.getInstance().unsubscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
+        EventService.getInstance().unsubscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
     }
 
     public keyDown(event: any): void {
@@ -90,14 +98,20 @@ class FormComponent {
             this.state.loading = false;
 
             this.prepareMultiGroupHandling();
-            this.state.formInstance.registerListener({
-                updateForm: () => {
+
+            this.formSubscriber = {
+                eventSubscriberId: this.state.formId,
+                eventPublished: (data: any, eventId: string) => {
                     this.setNeeded();
                     (this as any).setStateDirty('formInstance');
-                },
-                formValueChanged: () => { return; },
-                formListenerId: IdService.generateDateBasedId('main-form-listener')
-            });
+                }
+            };
+            EventService.getInstance().subscribe(FormEvent.FORM_FIELD_ORDER_CHANGED, this.formSubscriber);
+            EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+            EventService.getInstance().subscribe(FormEvent.FIELD_CHILDREN_ADDED, this.formSubscriber);
+            EventService.getInstance().subscribe(FormEvent.FIELD_REMOVED, this.formSubscriber);
+            EventService.getInstance().subscribe(FormEvent.FORM_PAGE_ADDED, this.formSubscriber);
+            EventService.getInstance().subscribe(FormEvent.FORM_PAGES_REMOVED, this.formSubscriber);
         }
     }
 

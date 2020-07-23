@@ -7,10 +7,10 @@
  * --
  */
 
-import { ConfiguredWidget } from "./ConfiguredWidget";
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { ContextMode } from "../ContextMode";
-import { UIComponentPermission } from "../UIComponentPermission";
+import { ConfiguredWidget } from './ConfiguredWidget';
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { ContextMode } from '../ContextMode';
+import { UIComponentPermission } from '../UIComponentPermission';
 
 export class ConfiguredDialogWidget extends ConfiguredWidget {
 

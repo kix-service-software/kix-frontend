@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { ContextType } from "../../../../../model/ContextType";
-import { IAction } from "../../../../../modules/base-components/webapp/core/IAction";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { ContextType } from '../../../../../model/ContextType';
+import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
 
 export class ComponentState extends AbstractComponentState {
 

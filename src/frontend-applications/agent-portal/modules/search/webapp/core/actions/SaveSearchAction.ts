@@ -7,11 +7,11 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { SearchService } from "../SearchService";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { SearchService } from '../SearchService';
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 
 export class SaveSearchAction extends AbstractAction {
 

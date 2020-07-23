@@ -7,24 +7,23 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { ConfigItem } from "../../model/ConfigItem";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalogItem";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { VersionProperty } from "../../model/VersionProperty";
-import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { Label } from "../../../base-components/webapp/core/Label";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { ConfigItem } from '../../model/ConfigItem';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { VersionProperty } from '../../model/VersionProperty';
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { Label } from '../../../base-components/webapp/core/Label';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
 
 export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
@@ -39,10 +38,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
     ): Promise<string> {
         let displayValue = '';
         switch (property) {
-            case ConfigItemProperty.CREATE_TIME:
-            case ConfigItemProperty.CHANGE_TIME:
-                displayValue = await DateTimeUtil.getLocalDateTimeString(value);
-                break;
             case ConfigItemProperty.CLASS_ID:
                 const ciClasses = await KIXObjectService.loadObjects<ConfigItemClass>(
                     KIXObjectType.CONFIG_ITEM_CLASS, [value], null
@@ -73,7 +68,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 }
                 break;
             default:
-                displayValue = value;
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {
@@ -149,14 +144,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
             case ConfigItemProperty.CUR_INCI_STATE_ID:
                 displayValue = configItem.CurInciState;
                 break;
-            case ConfigItemProperty.CREATE_BY:
-                displayValue = configItem.createdBy ? configItem.createdBy.Contact ?
-                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.CreateBy;
-                break;
-            case ConfigItemProperty.CHANGE_BY:
-                displayValue = configItem.changedBy ? configItem.createdBy.Contact ?
-                    configItem.createdBy.Contact.Fullname : configItem.createdBy.UserLogin : configItem.ChangeBy;
-                break;
             case ConfigItemProperty.NAME:
                 displayValue = configItem.Name;
                 break;
@@ -166,8 +153,6 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
                 break;
             case ConfigItemProperty.CLASS_ID:
             case ConfigItemProperty.CLASS:
-            case ConfigItemProperty.CHANGE_TIME:
-            case ConfigItemProperty.CREATE_TIME:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
                 break;
             default:
@@ -254,10 +239,10 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
         switch (property) {
             case ConfigItemProperty.CUR_DEPL_STATE_ID:
-                icons.push(new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, value));
+                icons.push(new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, value));
                 break;
             case ConfigItemProperty.CUR_INCI_STATE_ID:
-                icons.push(new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, value));
+                icons.push(new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, value));
                 break;
             default:
         }
@@ -281,7 +266,7 @@ export class ConfigItemLabelProvider extends LabelProvider<ConfigItem> {
 
                 const labels = [];
                 for (const ci of configItems) {
-                    const ciIcon = new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
+                    const ciIcon = new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ci.ClassID);
                     const incidentIcons = await LabelService.getInstance().getIcons(
                         ci, ConfigItemProperty.CUR_INCI_STATE_ID
                     );

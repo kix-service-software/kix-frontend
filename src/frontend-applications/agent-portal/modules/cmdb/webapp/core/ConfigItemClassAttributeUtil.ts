@@ -7,19 +7,18 @@
  * --
  */
 
-import { DataType } from "../../../../model/DataType";
-import { AttributeDefinition } from "../../model/AttributeDefinition";
-import { InputDefinition } from "../../model/InputDefinition";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { ConfigItemClassProperty } from "../../model/ConfigItemClassProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { SortUtil } from "../../../../model/SortUtil";
+import { DataType } from '../../../../model/DataType';
+import { AttributeDefinition } from '../../model/AttributeDefinition';
+import { InputDefinition } from '../../model/InputDefinition';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { SortUtil } from '../../../../model/SortUtil';
 
 export class ConfigItemClassAttributeUtil {
-
 
     public static async getMergedClassAttributeIds(
         classIds?: number | number[]
@@ -75,7 +74,7 @@ export class ConfigItemClassAttributeUtil {
     private static getPath(attributes: AttributeDefinition[], key: string, parent: string = ''): string {
         for (const attribute of attributes) {
             if (attribute.Key === key) {
-                return `${parent}.${attribute.Key}`;
+                return parent ? `${parent}.${attribute.Key}` : attribute.Key;
             }
 
             if (attribute.Sub) {

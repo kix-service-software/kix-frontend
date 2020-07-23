@@ -7,8 +7,8 @@
  * --
  */
 
-import { IRow } from "../../../../../core/table";
-import { IAction } from "../../../../../../../../modules/base-components/webapp/core/IAction";
+import { IRow } from '../../../../../core/table';
+import { IAction } from '../../../../../../../../modules/base-components/webapp/core/IAction';
 
 export class ComponentState {
 

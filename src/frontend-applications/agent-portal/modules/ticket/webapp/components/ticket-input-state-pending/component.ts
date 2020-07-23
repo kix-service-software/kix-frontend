@@ -7,9 +7,14 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../../modules/base-components/webapp/core/FormInputComponent";
-import { DateTimeUtil } from "../../../../../modules/base-components/webapp/core/DateTimeUtil";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
+import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
 
 class Component extends FormInputComponent<Date, ComponentState> {
 
@@ -23,17 +28,31 @@ class Component extends FormInputComponent<Date, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-
-        this.setCurrentValues();
+        this.setCurrentValue();
     }
 
-    protected setCurrentValues(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            const pendingDate = new Date(this.state.defaultValue.value);
-            this.state.selectedDate = DateTimeUtil.getKIXDateString(pendingDate);
-            this.state.selectedTime = DateTimeUtil.getKIXTimeString(pendingDate);
-            this.setValue();
+    public async setCurrentValue(): Promise<void> {
+        let date = new Date();
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (value.value) {
+            date = new Date(value.value);
+        } else {
+            let offset = 86400;
+
+            const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
+            ).catch((error): SysConfigOption[] => []);
+
+            if (Array.isArray(offsetConfig) && offsetConfig[0].Value) {
+                offset = offsetConfig[0].Value;
+            }
+
+            date.setSeconds(date.getSeconds() + Number(offset));
         }
+
+        this.state.selectedDate = DateTimeUtil.getKIXDateString(date);
+        this.state.selectedTime = DateTimeUtil.getKIXTimeString(date, true, true);
     }
 
     public dateChanged(event: any): void {

@@ -100,9 +100,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.actions = [];
         if (config && object) {
-            this.state.actions = await ActionFactory.getInstance().generateActions(
-                config.actions, object
-            );
+
+            const objectActions = await context.getAdditionalActions();
+            const configuredActions = await ActionFactory.getInstance().generateActions(config.actions, object);
+            this.state.actions = [...objectActions, ...configuredActions];
 
             const generalActions = await ActionFactory.getInstance().generateActions(
                 config.generalActions, object

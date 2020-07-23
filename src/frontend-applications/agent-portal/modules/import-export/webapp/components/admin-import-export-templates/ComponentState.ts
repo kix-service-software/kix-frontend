@@ -7,19 +7,19 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ImportExportTemplateProperty } from "../../../model/ImportExportTemplateProperty";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { TableRowHeight, TableHeaderHeight } from "../../../../base-components/webapp/core/table";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterType } from "../../../../../model/FilterType";
-import { FilterDataType } from "../../../../../model/FilterDataType";
+import { IdService } from '../../../../../model/IdService';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ImportExportTemplateProperty } from '../../../model/ImportExportTemplateProperty';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { TableRowHeight, TableHeaderHeight } from '../../../../base-components/webapp/core/table';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterType } from '../../../../../model/FilterType';
+import { FilterDataType } from '../../../../../model/FilterDataType';
 
 export class ComponentState {
     public constructor(

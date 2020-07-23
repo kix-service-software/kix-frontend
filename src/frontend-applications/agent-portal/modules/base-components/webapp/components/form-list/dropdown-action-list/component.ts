@@ -7,8 +7,8 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { FormInputAction } from "../../../../../../modules/base-components/webapp/core/FormInputAction";
+import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { FormInputAction } from '../../../../../../modules/base-components/webapp/core/FormInputAction';
 
 class Component extends AbstractMarkoComponent {
 

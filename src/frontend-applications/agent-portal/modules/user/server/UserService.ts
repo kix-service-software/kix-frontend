@@ -7,23 +7,21 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { HttpService } from "../../../server/services/HttpService";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { UserFactory } from "./UserFactory";
-import { UserPreferenceFactory } from "./UserPreferenceFactory";
-import { PreferencesLoadingOptions } from "../model/PreferencesLoadingOptions";
-import { User } from "../model/User";
-import { PersonalSettingsProperty } from "../model/PersonalSettingsProperty";
-import { SetPreferenceOptions } from "../model/SetPreferenceOptions";
-import { UserPreference } from "../model/UserPreference";
-import { Error } from "../../../../../server/model/Error";
-import { UserProperty } from "../model/UserProperty";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { HttpService } from '../../../server/services/HttpService';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { PreferencesLoadingOptions } from '../model/PreferencesLoadingOptions';
+import { User } from '../model/User';
+import { PersonalSettingsProperty } from '../model/PersonalSettingsProperty';
+import { SetPreferenceOptions } from '../model/SetPreferenceOptions';
+import { UserPreference } from '../model/UserPreference';
+import { Error } from '../../../../../server/model/Error';
+import { UserProperty } from '../model/UserProperty';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -37,7 +35,7 @@ export class UserService extends KIXObjectAPIService {
     }
 
     private constructor() {
-        super([new UserFactory(), new UserPreferenceFactory()]);
+        super();
         KIXObjectServiceRegistry.registerServiceInstance(this);
     }
 
@@ -58,7 +56,7 @@ export class UserService extends KIXObjectAPIService {
         let objects = [];
         if (objectType === KIXObjectType.USER) {
             objects = await super.load(
-                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER
+                token, KIXObjectType.USER, this.RESOURCE_URI, loadingOptions, objectIds, KIXObjectType.USER, User
             );
         } else if (objectType === KIXObjectType.USER_PREFERENCE) {
             let uri = this.buildUri('session', 'user', 'preferences');
@@ -68,7 +66,8 @@ export class UserService extends KIXObjectAPIService {
             }
 
             objects = await super.load(
-                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE
+                token, KIXObjectType.USER_PREFERENCE, uri, loadingOptions, objectIds, KIXObjectType.USER_PREFERENCE,
+                UserPreference
             );
         }
 
@@ -166,7 +165,9 @@ export class UserService extends KIXObjectAPIService {
 
             const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
             if (roleIds) {
-                await this.updateUserRoles(token, clientRequestId, roleIds, userId);
+                await this.updateUserRoles(
+                    token, clientRequestId, Array.isArray(roleIds) ? roleIds : [roleIds], userId
+                );
             }
 
             const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
@@ -208,15 +209,18 @@ export class UserService extends KIXObjectAPIService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load(token, null, baseUri, null, null, 'RoleIDs', false);
+        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', null, false);
 
-        const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
-        const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));
+        const rolesToDelete = existingRoleIds ? existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r)) : [];
+        const rolesToCreate = existingRoleIds
+            ? roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r))
+            : roleIds;
 
-        for (const roleId of rolesToDelete) {
-            const deleteUri = this.buildUri(baseUri, roleId);
-            await this.sendDeleteRequest(token, clientReqeustId, [deleteUri], KIXObjectType.USER)
-                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        if (rolesToDelete && rolesToDelete.length) {
+            const deleteUris = rolesToDelete.map((roleId) => this.buildUri(baseUri, roleId));
+            const errors: Error[] = await this.sendDeleteRequest(token, clientReqeustId, deleteUris, KIXObjectType.USER)
+                .catch((error) => [error]);
+            errors.forEach((e) => LoggingService.getInstance().error(`${e.Code}: ${e.Message}`, e));
         }
 
         for (const roleId of rolesToCreate) {
@@ -276,7 +280,7 @@ export class UserService extends KIXObjectAPIService {
         }
         // TODO: für Komponente ggf. Fehlerliste übermitteln
         if (!!errors.length) {
-            throw new Error(errors[0].Code, errors.map((e) => e.Message).join("\n"), errors[0].StatusCode);
+            throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
     }
 

@@ -7,11 +7,11 @@
  * --
  */
 
-import { AttributeDefinition } from "./AttributeDefinition";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { AttributeDefinition } from './AttributeDefinition';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class ConfigItemClassDefinition extends KIXObject<ConfigItemClassDefinition> {
+export class ConfigItemClassDefinition extends KIXObject {
 
     public KIXObjectType: KIXObjectType = KIXObjectType.CONFIG_ITEM_CLASS_DEFINITION;
 

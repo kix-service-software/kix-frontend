@@ -7,17 +7,14 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { IEventSubscriber } from "../../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { WebformDetailsContext } from "../../core";
-import { Webform } from "../../../model/Webform";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { WebformDetailsContext } from '../../core';
+import { Webform } from '../../../model/Webform';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
-
-    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();

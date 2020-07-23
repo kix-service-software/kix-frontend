@@ -7,14 +7,14 @@
  * --
  */
 
-import { IAdminModuleExtension } from "../admin/server/IAdminModuleExtension";
-import { AdminModuleCategory } from "../admin/model/AdminModuleCategory";
-import { AdminModule } from "../admin/model/AdminModule";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
+import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
+import { AdminModule } from '../admin/model/AdminModule';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
@@ -31,9 +31,6 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 KIXObjectType.MAIL_ACCOUNT, 'admin-mail-accounts', [
                                 new UIComponentPermission(
                                     'system/communication/mailaccounts', [CRUD.CREATE], true
-                                ),
-                                new UIComponentPermission(
-                                    'system/communication/mailaccounts/*', [CRUD.UPDATE], true
                                 )
                             ]
                             )

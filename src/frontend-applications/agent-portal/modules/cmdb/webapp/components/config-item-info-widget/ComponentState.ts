@@ -7,10 +7,10 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { ConfigItem } from "../../../model/ConfigItem";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { Label } from "../../../../../modules/base-components/webapp/core/Label";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { ConfigItem } from '../../../model/ConfigItem';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { Label } from '../../../../../modules/base-components/webapp/core/Label';
 
 export class ComponentState extends WidgetComponentState {
 

@@ -7,13 +7,13 @@
  * --
  */
 
-import { ITable } from ".";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { IColumn } from "./IColumn";
-import { IRow } from "./IRow";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
+import { ITable } from '.';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { IColumn } from './IColumn';
+import { IRow } from './IRow';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 export interface ITableFactory {
 

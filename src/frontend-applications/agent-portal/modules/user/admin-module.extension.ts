@@ -7,14 +7,14 @@
  * --
  */
 
-import { IAdminModuleExtension } from "../admin/server/IAdminModuleExtension";
-import { AdminModuleCategory } from "../admin/model/AdminModuleCategory";
-import { AdminModule } from "../admin/model/AdminModule";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
+import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
+import { AdminModule } from '../admin/model/AdminModule';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
@@ -25,15 +25,13 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 new AdminModule(
                     null, 'users', 'Translatable#Users', null,
                     KIXObjectType.USER, 'user-admin-users', [
-                    new UIComponentPermission('system/users', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/users/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/users', [CRUD.CREATE], true)
                 ]
                 ),
                 new AdminModule(
                     null, 'roles', 'Translatable#Roles/Permissions', null,
                     KIXObjectType.ROLE, 'user-admin-roles', [
-                    new UIComponentPermission('system/roles', [CRUD.CREATE], true),
-                    new UIComponentPermission('system/roles/*', [CRUD.UPDATE], true)
+                    new UIComponentPermission('system/roles', [CRUD.CREATE], true)
                 ]
                 ),
             ])

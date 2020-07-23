@@ -7,12 +7,12 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
-import { UIComponent } from "../../model/UIComponent";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { UIComponent } from '../../model/UIComponent';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IKIXModuleExtension {
 
@@ -37,7 +37,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ]),
         new UIComponent('contact-edit-module-component', '/kix-module-customer$0/webapp/core/ContactEditUIModule', [
             new UIComponentPermission('contacts', [CRUD.CREATE]),
-            new UIComponentPermission('contacts/*', [CRUD.UPDATE])
         ]),
         new UIComponent(
             'organisation-read-module-component', '/kix-module-customer$0/webapp/core/OrganisationReadUIModule',
@@ -47,7 +46,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             'organisation-edit-module-component', '/kix-module-customer$0/webapp/core/OrganisationEditUIModule',
             [
                 new UIComponentPermission('organisations', [CRUD.CREATE]),
-                new UIComponentPermission('organisations/*', [CRUD.UPDATE])
             ]
         )
     ];

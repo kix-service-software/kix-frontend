@@ -7,24 +7,24 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { Webform } from "../../model/Webform";
-import { WebformProperty } from "../../model/WebformProperty";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Queue } from "../../../ticket/model/Queue";
-import { TicketState } from "../../../ticket/model/TicketState";
-import { TicketPriority } from "../../../ticket/model/TicketPriority";
-import { TicketType } from "../../../ticket/model/TicketType";
-import { User } from "../../../user/model/User";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Webform } from '../../model/Webform';
+import { WebformProperty } from '../../model/WebformProperty';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Queue } from '../../../ticket/model/Queue';
+import { TicketState } from '../../../ticket/model/TicketState';
+import { TicketPriority } from '../../../ticket/model/TicketPriority';
+import { TicketType } from '../../../ticket/model/TicketType';
+import { User } from '../../../user/model/User';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class WebformLabelProvider extends LabelProvider {
 
@@ -218,16 +218,16 @@ export class WebformLabelProvider extends LabelProvider {
 
         switch (property) {
             case WebformProperty.PRIORITY_ID:
-                icons.push(new ObjectIcon('Priority', value));
+                icons.push(new ObjectIcon(null, 'Priority', value));
                 break;
             case WebformProperty.TYPE_ID:
-                icons.push(new ObjectIcon('TicketType', value));
+                icons.push(new ObjectIcon(null, 'TicketType', value));
                 break;
             case WebformProperty.QUEUE_ID:
-                icons.push(new ObjectIcon('Queue', value));
+                icons.push(new ObjectIcon(null, 'Queue', value));
                 break;
             case WebformProperty.STATE_ID:
-                icons.push(new ObjectIcon('TicketState', value));
+                icons.push(new ObjectIcon(null, 'TicketState', value));
                 break;
             default:
         }

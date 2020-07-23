@@ -7,15 +7,15 @@
  * --
  */
 
-import { IServiceExtension } from "../../server/extensions/IServiceExtension";
-import { TicketAPIService } from "./server/TicketService";
-import { QueueAPIService } from "./server/QueueService";
-import { TicketPriorityAPIService } from "./server/TicketPriorityService";
-import { TicketStateAPIService } from "./server/TicketStateService";
-import { TicketTypeAPIService } from "./server/TicketTypeService";
-import { ChannelAPIService } from "./server/ChannelService";
+import { IServiceExtension } from '../../server/extensions/IServiceExtension';
+import { TicketAPIService } from './server/TicketService';
+import { QueueAPIService } from './server/QueueService';
+import { TicketPriorityAPIService } from './server/TicketPriorityService';
+import { TicketStateAPIService } from './server/TicketStateService';
+import { TicketTypeAPIService } from './server/TicketTypeService';
+import { ChannelAPIService } from './server/ChannelService';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IServiceExtension {
 

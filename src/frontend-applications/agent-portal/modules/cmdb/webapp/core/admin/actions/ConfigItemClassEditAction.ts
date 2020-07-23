@@ -7,18 +7,18 @@
  * --
  */
 
-import { EditConfigItemClassDialogContext, ConfigItemClassDetailsContext } from "../context";
-import { AbstractAction } from "../../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../../../model/ContextMode";
+import { EditConfigItemClassDialogContext, ConfigItemClassDetailsContext } from '../context';
+import { AbstractAction } from '../../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../../../model/ContextMode';
 
 export class ConfigItemClassEditAction extends AbstractAction {
 
     public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE])
+        new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE])
     ];
 
     public async initAction(): Promise<void> {

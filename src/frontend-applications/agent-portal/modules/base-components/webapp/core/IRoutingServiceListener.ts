@@ -7,7 +7,7 @@
  * --
  */
 
-import { ComponentRouter } from "../../../../model/ComponentRouter";
+import { ComponentRouter } from '../../../../model/ComponentRouter';
 
 export interface IRoutingServiceListener {
 

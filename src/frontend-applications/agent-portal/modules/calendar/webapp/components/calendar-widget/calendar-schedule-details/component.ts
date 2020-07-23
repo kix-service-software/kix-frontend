@@ -50,7 +50,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.icon = icons && icons.length ? icons[0] : 'kix-icon-unknown';
 
-
         this.state.prepared = true;
     }
 

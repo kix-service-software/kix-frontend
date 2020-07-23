@@ -32,8 +32,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.editorTimeout = setTimeout(async () => {
             if (webform) {
                 this.state.translations = await TranslationService.createTranslationObject([
-                    "Translatable#Include this code into the <head> area of your webpage.",
-                    "Translatable#Place this code wherever you want to open the webform dialog."
+                    'Translatable#Include this code into the <head> area of your webpage.',
+                    'Translatable#Place this code wherever you want to open the webform dialog.'
                 ]);
                 // tslint:disable: max-line-length
                 this.state.headCode =

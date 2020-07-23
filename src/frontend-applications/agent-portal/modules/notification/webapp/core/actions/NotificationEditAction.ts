@@ -15,16 +15,26 @@ import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../model/ContextMode';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class NotificationEditAction extends AbstractAction {
-
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/communication/notifications/*', [CRUD.UPDATE])
-    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';
         this.icon = 'kix-icon-edit';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`system/communication/notifications/${objectId}`, [CRUD.UPDATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async run(): Promise<void> {

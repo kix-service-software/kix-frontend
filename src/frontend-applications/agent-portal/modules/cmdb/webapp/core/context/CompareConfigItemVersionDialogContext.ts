@@ -7,16 +7,16 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { Version } from "../../../model/Version";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../../model/DataType";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ConfigItemDetailsContext } from ".";
-import { ConfigItem } from "../../../model/ConfigItem";
+import { Context } from '../../../../../model/Context';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { Version } from '../../../model/Version';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../../model/DataType';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ConfigItemDetailsContext } from '.';
+import { ConfigItem } from '../../../model/ConfigItem';
 
 export class CompareConfigItemVersionDialogContext extends Context {
 

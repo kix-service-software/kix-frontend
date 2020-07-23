@@ -7,14 +7,14 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ITable, IRowObject, RowObject, TableValue } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { JobRun } from "../../../model/JobRun";
-import { KIXObjectService } from "../../../../base-components/webapp/core/KIXObjectService";
-import { JobRunProperty } from "../../../model/JobRunProperty";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { JobRun } from '../../../model/JobRun';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { JobRunProperty } from '../../../model/JobRunProperty';
 
 export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
 

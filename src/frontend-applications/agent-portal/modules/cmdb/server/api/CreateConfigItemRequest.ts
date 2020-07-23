@@ -7,7 +7,7 @@
  * --
  */
 
-import { CreateConfigItem } from "./CreateConfigItem";
+import { CreateConfigItem } from './CreateConfigItem';
 
 export class CreateConfigItemRequest {
 

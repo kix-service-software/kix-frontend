@@ -7,29 +7,40 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchResultCategory } from "./SearchResultCategory";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterType } from "../../../../model/FilterType";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { ObjectPropertyValue } from "../../../../model/ObjectPropertyValue";
-import { SearchOperator } from "../../model/SearchOperator";
-import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
-import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
-import { AbstractDynamicFormManager } from "../../../base-components/webapp/core/dynamic-form";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchResultCategory } from './SearchResultCategory';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterType } from '../../../../model/FilterType';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { SearchOperator } from '../../model/SearchOperator';
+import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
+import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
+import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export abstract class SearchDefinition {
 
     public formManager: AbstractDynamicFormManager;
+
+    protected extendedDefinitions: SearchDefinition[] = [];
+
+    public addExtendedDefinitions(definition: SearchDefinition): void {
+        this.extendedDefinitions.push(definition);
+    }
+
+    public createFormManager(): SearchFormManager {
+        return null;
+    }
 
     public constructor(public objectType: KIXObjectType | string) { }
 
@@ -46,7 +57,17 @@ export abstract class SearchDefinition {
     public async getDisplaySearchValue(
         property: string, parameter: Array<[string, any]>, value: any, type: FilterDataType
     ): Promise<string> {
-        return await LabelService.getInstance().getPropertyValueDisplayText(this.objectType, property, value);
+        let displayValue;
+        for (const definition of this.extendedDefinitions) {
+            const extendedValue = await definition.getDisplaySearchValue(property, parameter, value, type);
+            if (extendedValue) {
+                displayValue = extendedValue;
+            }
+        }
+
+        return displayValue
+            ? displayValue
+            : await LabelService.getInstance().getPropertyValueDisplayText(this.objectType, property, value);
     }
 
     public async searchValues(

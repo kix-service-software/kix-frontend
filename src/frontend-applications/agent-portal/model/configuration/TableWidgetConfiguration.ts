@@ -7,13 +7,13 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
-import { KIXObjectType } from "../kix/KIXObjectType";
-import { SortOrder } from "../SortOrder";
-import { ConfigurationDefinition } from "./ConfigurationDefinition";
-import { KIXObjectPropertyFilter } from "../KIXObjectPropertyFilter";
-import { TableConfiguration } from "./TableConfiguration";
+import { IConfiguration } from './IConfiguration';
+import { ConfigurationType } from './ConfigurationType';
+import { KIXObjectType } from '../kix/KIXObjectType';
+import { SortOrder } from '../SortOrder';
+import { ConfigurationDefinition } from './ConfigurationDefinition';
+import { KIXObjectPropertyFilter } from '../KIXObjectPropertyFilter';
+import { TableConfiguration } from './TableConfiguration';
 
 export class TableWidgetConfiguration implements IConfiguration {
 

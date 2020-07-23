@@ -7,7 +7,7 @@
  * --
  */
 
-import { TreeHandler } from "./TreeHandler";
+import { TreeHandler } from './TreeHandler';
 
 export class TreeService {
 
@@ -21,7 +21,6 @@ export class TreeService {
     }
 
     private constructor() { }
-
 
     private handler: Map<string, TreeHandler> = new Map();
 

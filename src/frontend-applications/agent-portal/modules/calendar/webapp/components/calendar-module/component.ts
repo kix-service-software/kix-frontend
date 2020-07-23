@@ -7,10 +7,10 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { CalendarContext } from "../../core";
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { CalendarContext } from '../../core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

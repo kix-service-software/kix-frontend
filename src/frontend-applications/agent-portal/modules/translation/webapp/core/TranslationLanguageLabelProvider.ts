@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { TranslationLanguage } from "../../model/TranslationLanguage";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationLanguageProperty } from "../../model/TranslationLanguageProperty";
-import { TranslationService } from "./TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { TranslationLanguage } from '../../model/TranslationLanguage';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationLanguageProperty } from '../../model/TranslationLanguageProperty';
+import { TranslationService } from './TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 
 export class TranslationLanguageLabelProvider extends LabelProvider<TranslationLanguage> {
@@ -74,7 +74,7 @@ export class TranslationLanguageLabelProvider extends LabelProvider<TranslationL
     }
 
     public getObjectIcon(language?: TranslationLanguage): string | ObjectIcon {
-        return language ? new ObjectIcon('TranslationLanguage', language.ObjectId) : null;
+        return language ? new ObjectIcon(null, 'TranslationLanguage', language.ObjectId) : null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -98,7 +98,7 @@ export class TranslationLanguageLabelProvider extends LabelProvider<TranslationL
         language: TranslationLanguage, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === TranslationLanguageProperty.TRANSLATION_ID) {
-            return [new ObjectIcon('TranslationLanguage', language.ObjectId)];
+            return [new ObjectIcon(null, 'TranslationLanguage', language.ObjectId)];
         }
         return null;
     }

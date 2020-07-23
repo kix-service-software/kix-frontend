@@ -7,38 +7,38 @@
  * --
  */
 
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { IKIXObjectFormService } from "../../../base-components/webapp/core/IKIXObjectFormService";
-import { DynamicFormFieldOption } from "../../../dynamic-fields/webapp/core/DynamicFormFieldOption";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { DynamicFieldValue } from "../../../dynamic-fields/model/DynamicFieldValue";
-import { InputFieldTypes } from "./InputFieldTypes";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { DateTimeUtil } from "./DateTimeUtil";
-import { ObjectReferenceOptions } from "./ObjectReferenceOptions";
-import { TreeNode } from "./tree";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { FormValidationService } from "./FormValidationService";
-import { ValidationResult } from "./ValidationResult";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { CheckListInputType } from "../../../dynamic-fields/webapp/core/CheckListInputType";
-import { CheckListItem } from "../../../dynamic-fields/webapp/core/CheckListItem";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterType } from "../../../../model/FilterType";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { ConfigItemProperty } from "../../../cmdb/model/ConfigItemProperty";
-import { KIXObjectService } from "./KIXObjectService";
-import { IDynamicFieldFormUtil } from "./IDynamicFieldFormUtil";
-import { ExtendedDynamicFieldFormUtil } from "./ExtendedDynamicFieldFormUtil";
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { DynamicFormFieldOption } from '../../../dynamic-fields/webapp/core/DynamicFormFieldOption';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { DynamicFieldValue } from '../../../dynamic-fields/model/DynamicFieldValue';
+import { InputFieldTypes } from './InputFieldTypes';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { DateTimeUtil } from './DateTimeUtil';
+import { ObjectReferenceOptions } from './ObjectReferenceOptions';
+import { TreeNode } from './tree';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { FormValidationService } from './FormValidationService';
+import { ValidationResult } from './ValidationResult';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { CheckListInputType } from '../../../dynamic-fields/webapp/core/CheckListInputType';
+import { CheckListItem } from '../../../dynamic-fields/webapp/core/CheckListItem';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterType } from '../../../../model/FilterType';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { ConfigItemProperty } from '../../../cmdb/model/ConfigItemProperty';
+import { KIXObjectService } from './KIXObjectService';
+import { IDynamicFieldFormUtil } from './IDynamicFieldFormUtil';
+import { ExtendedDynamicFieldFormUtil } from './ExtendedDynamicFieldFormUtil';
+import { KIXObjectFormService } from './KIXObjectFormService';
 
 export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
 
@@ -232,7 +232,6 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             }
         }
 
-
         field.options.push(new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.CONFIG_ITEM));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.MULTISELECT, isMultiSelect));
         field.options.push(new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true));
@@ -253,7 +252,7 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     }
 
     public async handleDynamicFieldValues(
-        formFields: FormFieldConfiguration[], object: KIXObject, formService: IKIXObjectFormService,
+        formFields: FormFieldConfiguration[], object: KIXObject, formService: KIXObjectFormService,
         formFieldValues: Map<string, FormFieldValue<any>>
     ): Promise<void> {
         const fields = [...formFields].filter((f) => f.property === KIXObjectProperty.DYNAMIC_FIELDS);
@@ -334,45 +333,58 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
     public async handleDynamicField(
         field: FormFieldConfiguration, value: FormFieldValue, parameter: Array<[string, any]>
     ): Promise<Array<[string, any]>> {
+        const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
+        if (fieldNameOption) {
+            const setValue = field.empty ? null : value.value;
+            this.setDFParameterValue(fieldNameOption.value, setValue, parameter);
+        }
+        return parameter;
+    }
+
+    public async handleDynamicFieldByProperty(
+        property: string, value: FormFieldValue, parameter: Array<[string, any]>
+    ): Promise<Array<[string, any]>> {
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const setValue = value ? value.value : null;
+            await this.setDFParameterValue(dfName, setValue, parameter);
+        }
+        return parameter;
+    }
+
+    private async setDFParameterValue(dfName: string, value: any, parameter: Array<[string, any]>): Promise<void> {
         let dfParameter = parameter.find((p) => p[0] === KIXObjectProperty.DYNAMIC_FIELDS);
         if (!dfParameter) {
             dfParameter = [KIXObjectProperty.DYNAMIC_FIELDS, []];
             parameter.push(dfParameter);
         }
 
-        const fieldNameOption = field.options.find((o) => o.option === DynamicFormFieldOption.FIELD_NAME);
-        if (fieldNameOption) {
-            let setValue = field.empty ? null : value.value;
-            let notArray = false;
-
-            const dynamicField = await KIXObjectService.loadDynamicField(fieldNameOption.value);
-            if (dynamicField) {
-                const fieldType = dynamicField.FieldType;
-                if (setValue && (fieldType === DynamicFieldTypes.DATE || fieldType === DynamicFieldTypes.DATE_TIME)) {
-                    setValue = DateTimeUtil.getKIXDateTimeString(setValue);
-                } else if (setValue && fieldType === DynamicFieldTypes.CHECK_LIST) {
-                    setValue = JSON.stringify(setValue);
-                    notArray = true;
-                }
-            }
-
-            let dfValue = dfParameter[1].find((p) => p.Name === fieldNameOption.value);
-            if (!dfValue) {
-                dfValue = {
-                    Name: fieldNameOption.value,
-                    Value: []
-                };
-                dfParameter[1].push(dfValue);
-            }
-
-            if (notArray || Array.isArray(setValue)) {
-                dfValue.Value = setValue;
-            } else if (setValue && !dfValue.Value.some((v) => v === setValue)) {
-                dfValue.Value.push(setValue);
+        let notArray = false;
+        const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+        if (dynamicField) {
+            const fieldType = dynamicField.FieldType;
+            if (value && (fieldType === DynamicFieldTypes.DATE || fieldType === DynamicFieldTypes.DATE_TIME)) {
+                value = DateTimeUtil.getKIXDateTimeString(value);
+            } else if (value && fieldType === DynamicFieldTypes.CHECK_LIST) {
+                value = JSON.stringify(value);
+                notArray = true;
             }
         }
 
-        return parameter;
+        let dfValue = dfParameter[1].find((p) => p.Name === dfName);
+        if (!dfValue) {
+            dfValue = {
+                Name: dfName,
+                Value: []
+            };
+            dfParameter[1].push(dfValue);
+        }
+
+        if (notArray || Array.isArray(value)) {
+            dfValue.Value = value;
+        } else if (value && !dfValue.Value.some((v) => v === value)) {
+            dfValue.Value.push(value);
+        }
     }
 
     public async validateDFValue(dfName: string, value: any): Promise<ValidationResult[]> {

@@ -14,9 +14,7 @@ import { Context } from '../../../../../model/Context';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { RoutingService } from '../../../../../modules/base-components/webapp/core/RoutingService';
-import {
-    AuthenticationSocketClient
-} from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { AuthenticationSocketClient } from '../../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { IUIModule } from '../../../../../model/IUIModule';
 import { ClientNotificationSocketClient } from '../../../../notification/webapp/core/ClientNotificationSocketClient';
@@ -161,8 +159,8 @@ class Component {
         const modules = KIXModulesService.getInstance().getModules();
 
         const uiModules: IUIModule[] = [];
-        for (let i = 0; i < modules.length; i++) {
-            for (const c of modules[i].initComponents) {
+        for (const mod of modules) {
+            for (const c of mod.initComponents) {
                 try {
                     const component = require(c.componentPath);
                     if (component && component.UIModule) {

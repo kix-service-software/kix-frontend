@@ -7,9 +7,9 @@
  * --
  */
 
-import { RowObject } from "./RowObject";
-import { TableValue } from "./TableValue";
-import { ValueState } from "./ValueState";
+import { RowObject } from './RowObject';
+import { TableValue } from './TableValue';
+import { ValueState } from './ValueState';
 
 export interface IRowObject<T = any> {
 

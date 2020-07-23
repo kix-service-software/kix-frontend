@@ -7,14 +7,14 @@
  * --
  */
 
-import { IAdminModuleExtension } from "../admin/server/IAdminModuleExtension";
-import { AdminModuleCategory } from "../admin/model/AdminModuleCategory";
-import { AdminModule } from "../admin/model/AdminModule";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IAdminModuleExtension } from '../admin/server/IAdminModuleExtension';
+import { AdminModuleCategory } from '../admin/model/AdminModuleCategory';
+import { AdminModule } from '../admin/model/AdminModule';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IAdminModuleExtension {
 
@@ -27,8 +27,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                         null, 'cmdb-classes', 'Translatable#CI Classes', null,
                         KIXObjectType.CONFIG_ITEM_CLASS, 'cmdb-admin-ci-classes',
                         [
-                            new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE], true),
-                            new UIComponentPermission('system/cmdb/classes/*', [CRUD.UPDATE], true)
+                            new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE], true)
                         ]
                     )
                 ])

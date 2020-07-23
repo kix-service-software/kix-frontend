@@ -7,20 +7,20 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { IAutofillConfiguration } from "../../../../modules/base-components/webapp/core/IAutofillConfiguration";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { TextModuleProperty } from "../../model/TextModuleProperty";
-import { TextModule } from "../../model/TextModule";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { IAutofillConfiguration } from '../../../../modules/base-components/webapp/core/IAutofillConfiguration';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { TextModuleProperty } from '../../model/TextModuleProperty';
+import { TextModule } from '../../model/TextModule';
 
 export class TextModuleService extends KIXObjectService {
 
@@ -34,7 +34,8 @@ export class TextModuleService extends KIXObjectService {
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.TEXT_MODULE);
+        this.objectConstructors.set(KIXObjectType.TEXT_MODULE, [TextModule]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

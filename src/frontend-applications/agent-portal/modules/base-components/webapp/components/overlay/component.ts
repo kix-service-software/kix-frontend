@@ -7,21 +7,21 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
-import { WidgetService } from "../../../../../modules/base-components/webapp/core/WidgetService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { WidgetType } from "../../../../../model/configuration/WidgetType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../../modules/base-components/webapp/core/ActionFactory";
-import { KIXModulesService } from "../../../../../modules/base-components/webapp/core/KIXModulesService";
-import { ToastContent } from "../../../../../modules/base-components/webapp/core/ToastContent";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { ComponentState } from './ComponentState';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
+import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { WidgetType } from '../../../../../model/configuration/WidgetType';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
+import { ToastContent } from '../../../../../modules/base-components/webapp/core/ToastContent';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 class OverlayComponent {
 
@@ -41,7 +41,7 @@ class OverlayComponent {
     public async onMount(): Promise<void> {
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Close Overlay"
+            'Translatable#Close Overlay'
         ]);
 
         OverlayService.getInstance().registerOverlayComponentListener(this.openOverlay.bind(this));
@@ -67,7 +67,7 @@ class OverlayComponent {
         this.keepShow = true;
     }
 
-    private openOverlay<T extends KIXObject<T>>(
+    private openOverlay<T extends KIXObject>(
         type: OverlayType, widgetInstanceId: string, content: ComponentContent<T>, title: string,
         icon: string | ObjectIcon, closeButton: boolean, position: [number, number],
         newListenerId: string, large: boolean, toastTimeoutMillis: number = 2000, autoClose: boolean = true
@@ -86,7 +86,7 @@ class OverlayComponent {
                 firstClick = false;
                 this.keepShow = false;
             };
-            document.addEventListener("click", this.clickListener, false);
+            document.addEventListener('click', this.clickListener, false);
         }
 
         setTimeout(async () => {
@@ -164,7 +164,7 @@ class OverlayComponent {
 
     private closeOverlay(): void {
         this.state.show = false;
-        document.removeEventListener("click", this.clickListener, false);
+        document.removeEventListener('click', this.clickListener, false);
         document.removeEventListener('mouseup', this.mouseUp.bind(this), false);
         document.removeEventListener('mousemove', this.mouseMove.bind(this), false);
         if (this.toastTimeout) {

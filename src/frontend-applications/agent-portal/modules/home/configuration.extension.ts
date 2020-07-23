@@ -7,34 +7,34 @@
  * --
  */
 
-import { HomeContext } from "./webapp/core";
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { FilterCriteria } from "../../model/FilterCriteria";
-import { SearchOperator } from "../search/model/SearchOperator";
-import { FilterDataType } from "../../model/FilterDataType";
-import { FilterType } from "../../model/FilterType";
-import { ChartComponentConfiguration } from "../charts/model/ChartComponentConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
-import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { TicketChartWidgetConfiguration } from "../ticket/webapp/core";
-import { TicketProperty } from "../ticket/model/TicketProperty";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../model/configuration/TableConfiguration";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { SortOrder } from "../../model/SortOrder";
-import { DefaultColumnConfiguration } from "../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../model/DataType";
-import { ToggleOptions } from "../base-components/webapp/core/table";
-import { KIXObjectProperty } from "../../model/kix/KIXObjectProperty";
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { HomeContext } from './webapp/core';
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { ChartComponentConfiguration } from '../charts/model/ChartComponentConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { TicketChartWidgetConfiguration } from '../ticket/webapp/core';
+import { TicketProperty } from '../ticket/model/TicketProperty';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { SortOrder } from '../../model/SortOrder';
+import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../model/DataType';
+import { ToggleOptions } from '../base-components/webapp/core/table';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -70,16 +70,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                     datasets: [
                         {
                             backgroundColor: [
-                                "rgb(91, 91, 91)",
-                                "rgb(4, 83, 125)",
-                                "rgb(0, 141, 210)",
-                                "rgb(129, 189, 223)",
-                                "rgb(160, 230, 200)",
-                                "rgb(130, 200, 38)",
-                                "rgb(0, 152, 70)",
-                                "rgb(227, 30, 36)",
-                                "rgb(239, 127, 26)",
-                                "rgb(254, 204, 0)"
+                                'rgb(91, 91, 91)',
+                                'rgb(4, 83, 125)',
+                                'rgb(0, 141, 210)',
+                                'rgb(129, 189, 223)',
+                                'rgb(160, 230, 200)',
+                                'rgb(130, 200, 38)',
+                                'rgb(0, 152, 70)',
+                                'rgb(227, 30, 36)',
+                                'rgb(239, 127, 26)',
+                                'rgb(254, 204, 0)'
                             ]
                         }
                     ]
@@ -108,7 +108,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(chart1);
 
-
         const chartConfig2 = new ChartComponentConfiguration(
             'home-dashboard-ticket-chart-widget-states-config', 'States Chart', ConfigurationType.Chart,
             {
@@ -124,16 +123,16 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         {
                             fill: true,
                             backgroundColor: [
-                                "rgb(91, 91, 91)",
-                                "rgb(4, 83, 125)",
-                                "rgb(0, 141, 210)",
-                                "rgb(129, 189, 223)",
-                                "rgb(160, 230, 200)",
-                                "rgb(130, 200, 38)",
-                                "rgb(0, 152, 70)",
-                                "rgb(227, 30, 36)",
-                                "rgb(239, 127, 26)",
-                                "rgb(254, 204, 0)"
+                                'rgb(91, 91, 91)',
+                                'rgb(4, 83, 125)',
+                                'rgb(0, 141, 210)',
+                                'rgb(129, 189, 223)',
+                                'rgb(160, 230, 200)',
+                                'rgb(130, 200, 38)',
+                                'rgb(0, 152, 70)',
+                                'rgb(227, 30, 36)',
+                                'rgb(239, 127, 26)',
+                                'rgb(254, 204, 0)'
                             ]
                         }
                     ]
@@ -179,7 +178,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 },
                 data: {
                     datasets: [{
-                        backgroundColor: "rgb(91, 91, 91)"
+                        backgroundColor: 'rgb(91, 91, 91)'
                     }]
                 },
             }

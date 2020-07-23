@@ -7,22 +7,22 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { BulkDialogContext } from ".";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { BulkAction } from "./BulkAction";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { BulkDialogContext } from '.';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { BulkAction } from './BulkAction';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'BulkUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

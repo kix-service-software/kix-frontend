@@ -7,17 +7,17 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../../../base-components/webapp/core/table/TableContentProvider";
-import { TranslationLanguage } from "../../../../../model/TranslationLanguage";
-import { ITable, IRowObject, TableValue, RowObject } from "../../../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../../../../modules/base-components/webapp/core/ContextService";
-import { TranslationPattern } from "../../../../../model/TranslationPattern";
-import { SortUtil } from "../../../../../../../model/SortUtil";
-import { TranslationLanguageProperty } from "../../../../../model/TranslationLanguageProperty";
-import { DataType } from "../../../../../../../model/DataType";
-import { SortOrder } from "../../../../../../../model/SortOrder";
+import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
+import { TranslationLanguage } from '../../../../../model/TranslationLanguage';
+import { ITable, IRowObject, TableValue, RowObject } from '../../../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
+import { TranslationPattern } from '../../../../../model/TranslationPattern';
+import { SortUtil } from '../../../../../../../model/SortUtil';
+import { TranslationLanguageProperty } from '../../../../../model/TranslationLanguageProperty';
+import { DataType } from '../../../../../../../model/DataType';
+import { SortOrder } from '../../../../../../../model/SortOrder';
 
 export class TranslationLanguageTableContentProvider extends TableContentProvider<TranslationLanguage> {
 

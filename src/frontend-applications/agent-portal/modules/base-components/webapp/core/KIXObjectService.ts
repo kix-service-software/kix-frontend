@@ -7,53 +7,71 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ServiceType } from "./ServiceType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { ServiceRegistry } from "./ServiceRegistry";
-import { ComponentContent } from "./ComponentContent";
-import { OverlayService } from "./OverlayService";
-import { OverlayType } from "./OverlayType";
-import { KIXObjectSocketClient } from "./KIXObjectSocketClient";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { IKIXObjectFormService } from "./IKIXObjectFormService";
-import { KIXObjectSpecificDeleteOptions } from "../../../../model/KIXObjectSpecificDeleteOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { TreeNode } from "./tree";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { User } from "../../../user/model/User";
-import { ValidObject } from "../../../valid/model/ValidObject";
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { IAutofillConfiguration } from "./IAutofillConfiguration";
-import { AuthenticationSocketClient } from "./AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { LabelService } from "./LabelService";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { IKIXObjectService } from "./IKIXObjectService";
-import { Error } from "../../../../../../server/model/Error";
-import { DynamicFieldProperty } from "../../../dynamic-fields/model/DynamicFieldProperty";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { DynamicFieldTypes } from "../../../dynamic-fields/model/DynamicFieldTypes";
-import { ConfigItem } from "../../../cmdb/model/ConfigItem";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { SortUtil } from "../../../../model/SortUtil";
-import { DataType } from "../../../../model/DataType";
-import { ExtendedKIXObjectService } from "./ExtendedKIXObjectService";
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ServiceType } from './ServiceType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ServiceRegistry } from './ServiceRegistry';
+import { ComponentContent } from './ComponentContent';
+import { OverlayService } from './OverlayService';
+import { OverlayType } from './OverlayType';
+import { KIXObjectSocketClient } from './KIXObjectSocketClient';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { TreeNode } from './tree';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { User } from '../../../user/model/User';
+import { ValidObject } from '../../../valid/model/ValidObject';
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { IAutofillConfiguration } from './IAutofillConfiguration';
+import { AuthenticationSocketClient } from './AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { LabelService } from './LabelService';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { IKIXObjectService } from './IKIXObjectService';
+import { Error } from '../../../../../../server/model/Error';
+import { DynamicFieldProperty } from '../../../dynamic-fields/model/DynamicFieldProperty';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { DynamicFieldTypes } from '../../../dynamic-fields/model/DynamicFieldTypes';
+import { ConfigItem } from '../../../cmdb/model/ConfigItem';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { SortUtil } from '../../../../model/SortUtil';
+import { DataType } from '../../../../model/DataType';
+import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
+import { TicketProperty } from '../../../ticket/model/TicketProperty';
+import { ContactProperty } from '../../../customer/model/ContactProperty';
+import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
+import { KIXObjectFormService } from './KIXObjectFormService';
 
 export abstract class KIXObjectService<T extends KIXObject = KIXObject> implements IKIXObjectService<T> {
 
     private extendedServices: ExtendedKIXObjectService[] = [];
 
+    // tslint:disable-next-line: ban-types
+    protected objectConstructors: Map<KIXObjectType | string, Array<new (object?: KIXObject) => KIXObject>> = new Map();
+
     public addExtendedService(service: ExtendedKIXObjectService): void {
         this.extendedServices.push(service);
+    }
+
+    public addObjectConstructor(objectType: KIXObjectType | string, oc: new (object?: KIXObject) => KIXObject): void {
+        if (!this.objectConstructors.has(objectType)) {
+            this.objectConstructors.set(objectType, []);
+        }
+
+        this.objectConstructors.get(objectType).push(oc);
+    }
+
+    protected constructor(public objectType: KIXObjectType | string) {
+
     }
 
     public abstract isServiceFor(kixObjectType: KIXObjectType | string): boolean;
@@ -64,6 +82,23 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public isServiceType(kixObjectServiceType: ServiceType): boolean {
         return kixObjectServiceType === ServiceType.OBJECT;
+    }
+
+    public static createObjectInstance<O>(objectType: KIXObjectType | string, object: O): O {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
+        if (service) {
+            object = service.createObjectInstance(objectType, object);
+        } else {
+            const errorMessage = `No service registered for object type ${objectType}`;
+            console.warn(errorMessage);
+        }
+        return object;
+    }
+
+    protected createObjectInstance<O>(objectType: KIXObjectType | string, object: O): O {
+        const objectConstructors = this.getObjectConstructors(objectType);
+        objectConstructors.forEach((c) => object = new c(object));
+        return object;
     }
 
     public static async loadObjects<T extends KIXObject>(
@@ -104,21 +139,41 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions,
         cache: boolean = true, forceIds?: boolean
     ): Promise<O[]> {
+        const objectConstructors = this.getObjectConstructors(objectType);
+
         let objects = [];
         if (objectIds) {
             if (objectIds.length) {
                 const loadedObjects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                    objectType, objectIds, loadingOptions, objectLoadingOptions, cache
+                    objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
                 );
                 objects = loadedObjects;
             }
         } else {
             objects = await KIXObjectSocketClient.getInstance().loadObjects<T>(
-                objectType, objectIds, loadingOptions, objectLoadingOptions, cache
+                objectType, objectConstructors, objectIds, loadingOptions, objectLoadingOptions, cache
             );
         }
 
         return objects;
+    }
+
+    protected getObjectConstructors(objectType: KIXObjectType | string): any[] {
+        let objectConstructors = [];
+        if (this.objectConstructors.has(objectType)) {
+            objectConstructors = this.objectConstructors.get(objectType);
+        }
+
+        for (const extendedService of this.extendedServices) {
+            const extendedConstructors = extendedService.getObjectConstructors();
+            if (Array.isArray(extendedConstructors)) {
+                objectConstructors = [
+                    ...objectConstructors,
+                    ...extendedConstructors
+                ];
+            }
+        }
+        return objectConstructors;
     }
 
     public static async createObject(
@@ -152,7 +207,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, object: KIXObject, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
         let parameter = [];
         if (service) {
             parameter = service.prepareCreateParameter(object);
@@ -175,8 +230,8 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, formId: string, createOptions?: KIXObjectSpecificCreateOptions,
         cacheKeyPrefix: string = objectType
     ): Promise<string | number> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
-        const parameter: Array<[string, any]> = await service.prepareFormFields(formId, false, createOptions);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
+        const parameter: Array<[string, any]> = await service.getFormParameter(formId, false, createOptions);
         const objectId = await KIXObjectSocketClient.getInstance().createObject(
             objectType, parameter, createOptions, cacheKeyPrefix
         );
@@ -236,8 +291,8 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         if (!objectId) {
             throw new Error(null, `Can not update "${objectType}". No objectId given`);
         }
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(objectType, ServiceType.FORM);
-        const parameter: Array<[string, any]> = await service.prepareFormFields(formId, true);
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(objectType, ServiceType.FORM);
+        const parameter: Array<[string, any]> = await service.getFormParameter(formId, true);
 
         const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
             objectType, parameter, objectId, cacheKeyPrefix
@@ -584,4 +639,45 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         }
         return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
     }
+
+    public static async searchObjectTree(
+        objectType: KIXObjectType | string, property: string, searchValue: string, limit: number
+    ): Promise<TreeNode[]> {
+
+        const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
+        if (service) {
+            const objectTypeForSearch = await service.getObjectTypeForProperty(property);
+            const objects = await KIXObjectService.search(objectTypeForSearch, searchValue, limit);
+            return KIXObjectService.prepareTree(objects);
+        }
+    }
+
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType = this.objectType;
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            const dynamicField = await KIXObjectService.loadDynamicField(dfName);
+            if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                objectType = KIXObjectType.CONFIG_ITEM;
+            } else if (dynamicField.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
+                objectType = KIXObjectType.TICKET;
+            }
+        } else {
+            switch (property) {
+                case TicketProperty.CONTACT_ID:
+                case ArticleProperty.TO:
+                case ArticleProperty.CC:
+                case ArticleProperty.BCC:
+                    objectType = KIXObjectType.CONTACT;
+                    break;
+                case TicketProperty.ORGANISATION_ID:
+                case ContactProperty.PRIMARY_ORGANISATION_ID:
+                    objectType = KIXObjectType.ORGANISATION;
+                    break;
+                default:
+            }
+        }
+        return objectType;
+    }
+
 }

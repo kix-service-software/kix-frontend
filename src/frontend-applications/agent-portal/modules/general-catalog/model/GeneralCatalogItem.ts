@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class GeneralCatalogItem extends KIXObject<GeneralCatalogItem> {
+export class GeneralCatalogItem extends KIXObject {
     public ObjectId: string | number;
 
     public KIXObjectType: KIXObjectType = KIXObjectType.GENERAL_CATALOG_ITEM;

@@ -7,15 +7,15 @@
  * --
  */
 
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { DynamicField } from "../../model/DynamicField";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { LabelService } from "../../../base-components/webapp/core/LabelService";
-import { DynamicFieldType } from "../../model/DynamicFieldType";
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { DynamicField } from '../../model/DynamicField';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { DynamicFieldType } from '../../model/DynamicFieldType';
 
 export class DynamicFieldService extends KIXObjectService<DynamicField> {
 
@@ -30,6 +30,12 @@ export class DynamicFieldService extends KIXObjectService<DynamicField> {
         }
 
         return DynamicFieldService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.DYNAMIC_FIELD);
+        this.objectConstructors.set(KIXObjectType.DYNAMIC_FIELD, [DynamicField]);
+        this.objectConstructors.set(KIXObjectType.DYNAMIC_FIELD_TYPE, [DynamicFieldType]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

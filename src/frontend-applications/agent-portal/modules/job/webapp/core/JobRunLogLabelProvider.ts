@@ -7,11 +7,11 @@
  * --
  */
 
-import { LabelProvider } from "../../../base-components/webapp/core/LabelProvider";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { JobRunLog } from "../../model/JobRunLog";
-import { JobRunLogProperty } from "../../model/JobRunLogProperty";
+import { LabelProvider } from '../../../base-components/webapp/core/LabelProvider';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { JobRunLog } from '../../model/JobRunLog';
+import { JobRunLogProperty } from '../../model/JobRunLogProperty';
 
 export class JobRunLogLabelProvider extends LabelProvider {
 

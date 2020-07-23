@@ -7,10 +7,10 @@
  * --
  */
 
-import { IMigration } from "./IMigration";
-import { ReleaseInfoUtil } from "../../../server/ReleaseInfoUtil";
-import { LoggingService } from "../../../server/services/LoggingService";
-import { ConfigurationService } from "../../../server/services/ConfigurationService";
+import { IMigration } from './IMigration';
+import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
+import { LoggingService } from '../../../server/services/LoggingService';
+import { ConfigurationService } from '../../../server/services/ConfigurationService';
 
 export class MigrationService {
 

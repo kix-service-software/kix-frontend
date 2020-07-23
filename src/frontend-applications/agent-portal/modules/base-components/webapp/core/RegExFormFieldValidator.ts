@@ -7,13 +7,13 @@
  * --
  */
 
-import { IFormFieldValidator } from "./IFormFieldValidator";
-import { FormService } from "./FormService";
-import { ValidationResult } from "./ValidationResult";
-import { ValidationSeverity } from "./ValidationSeverity";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { DynamicField } from "../../../dynamic-fields/model/DynamicField";
+import { IFormFieldValidator } from './IFormFieldValidator';
+import { FormService } from './FormService';
+import { ValidationResult } from './ValidationResult';
+import { ValidationSeverity } from './ValidationSeverity';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 
 export class RegExFormFieldValidator implements IFormFieldValidator {
 
@@ -37,7 +37,7 @@ export class RegExFormFieldValidator implements IFormFieldValidator {
                 const fieldLabel = await TranslationService.translate(formField.label);
                 const errorMessage = await TranslationService.translate(formField.regExErrorMessage);
                 const errorString = await TranslationService.translate(
-                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+                    'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
                 );
                 return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }

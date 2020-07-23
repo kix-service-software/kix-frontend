@@ -46,3 +46,4 @@ class Startup {
 }
 
 const startup = new Startup();
+LoggingService.getInstance().info('Startup Server', startup);

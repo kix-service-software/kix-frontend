@@ -7,8 +7,8 @@
  * --
  */
 
-import { ValueState } from "./ValueState";
-import { ObjectIcon } from "../../../../icon/model/ObjectIcon";
+import { ValueState } from './ValueState';
+import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
 export class TableValue {
 

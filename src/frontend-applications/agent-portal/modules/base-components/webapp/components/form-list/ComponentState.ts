@@ -7,10 +7,10 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { TreeNode } from "../../core/tree";
-import { FormInputAction } from "../../../../../modules/base-components/webapp/core/FormInputAction";
+import { IdService } from '../../../../../model/IdService';
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { TreeNode } from '../../core/tree';
+import { FormInputAction } from '../../../../../modules/base-components/webapp/core/FormInputAction';
 
 export class ComponentState extends AbstractComponentState {
 

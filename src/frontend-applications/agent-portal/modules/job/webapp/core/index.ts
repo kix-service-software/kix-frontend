@@ -11,7 +11,6 @@ export * from './actions';
 export * from './context';
 export * from './table';
 
-export { JobBrowserFactory } from './JobBrowserFactory';
 export { JobFormService } from './JobFormService';
 export { JobLabelProvider } from './JobLabelProvider';
 export { JobService } from './JobService';

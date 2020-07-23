@@ -7,14 +7,14 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { ComponentInput } from "./ComponentInput";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { SysConfigOption } from "../../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../../sysconfig/model/SysConfigKey";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXModulesSocketClient } from "../../../../../modules/base-components/webapp/core/KIXModulesSocketClient";
-import { ReleaseInfo } from "../../../../../model/ReleaseInfo";
+import { ComponentState } from './ComponentState';
+import { ComponentInput } from './ComponentInput';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { SysConfigOption } from '../../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../../sysconfig/model/SysConfigKey';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXModulesSocketClient } from '../../../../../modules/base-components/webapp/core/KIXModulesSocketClient';
+import { ReleaseInfo } from '../../../../../model/ReleaseInfo';
 
 class Component {
 
@@ -63,8 +63,8 @@ class Component {
 
     private initTranslations(): void {
         this.translations = new Map();
-        this.translations.set("A product by c.a.p.e. IT GmbH", "Ein Produkt der c.a.p.e. IT GmbH");
-        this.translations.set("Imprint", "Impressum");
+        this.translations.set('A product by c.a.p.e. IT GmbH', 'Ein Produkt der c.a.p.e. IT GmbH');
+        this.translations.set('Imprint', 'Impressum');
     }
 
     public getString(pattern: string): string {

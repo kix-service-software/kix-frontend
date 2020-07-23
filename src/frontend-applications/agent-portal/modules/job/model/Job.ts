@@ -7,13 +7,13 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Macro } from "./Macro";
-import { ArticleProperty } from "../../ticket/model/ArticleProperty";
-import { ExecPlan } from "./ExecPlan";
-import { KIXObjectProperty } from "../../../model/kix/KIXObjectProperty";
-import { JobTypes } from "./JobTypes";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Macro } from './Macro';
+import { ArticleProperty } from '../../ticket/model/ArticleProperty';
+import { ExecPlan } from './ExecPlan';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
+import { JobTypes } from './JobTypes';
 
 export class Job extends KIXObject {
 
@@ -52,6 +52,14 @@ export class Job extends KIXObject {
             this.ExecPlans = job.ExecPlans ? job.ExecPlans.map((e) => new ExecPlan(e)) : [];
             this.LastExecutionTime = job.LastExecutionTime;
             this.Filter = job.Filter;
+
+            this.Macros = job.Macros
+                ? job.Macros.map((a) => new Macro(a))
+                : null;
+
+            this.ExecPlans = job.ExecPlans
+                ? job.ExecPlans.map((ep) => new ExecPlan(ep))
+                : null;
 
             if (job.Filter) {
                 const newFilter = {};

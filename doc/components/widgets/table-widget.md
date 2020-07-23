@@ -12,7 +12,7 @@ This is the base component for a widget with a table in the content.
 | -------------- | :--------: | :---------------------: | --------------------------------------------------------------------------------------------------------------------------- |
 | instanceId     |    yes     |         String          | the unique identifier of the widget instance (used to load configuration and to determine the widget type from the context) |
 | content        |  optional  |   component template    | A template which should be rendered in the widget content.                                                                  |
-| icon           |  optional  | String or KIXObjectType | The icon which is shown in the widget title (`kix-icon-ticket` or `new ObjectIcon('Priority', 3)`)                          |
+| icon           |  optional  | String or KIXObjectType | The icon which is shown in the widget title (`kix-icon-ticket` or `new ObjectIcon(null, 'Priority', 3)`)                          |
 | title          |  optional  |         String          | The title which is shown in the widget header.                                                                              |
 | headerContent  |  optional  |   component template    | A template which should be rendered in the widget header next to the title.                                                 |
 | headerFilter   |  optional  |   component template    | A template which should be rendered in the widget header at the place of the filter.                                        |

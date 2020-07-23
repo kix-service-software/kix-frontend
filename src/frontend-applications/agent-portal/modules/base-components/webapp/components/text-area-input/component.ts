@@ -11,9 +11,7 @@ import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { IdService } from '../../../../../model/IdService';
-import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
@@ -39,30 +37,17 @@ class Component extends FormInputComponent<string, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.setCurrentValue();
-        FormService.getInstance().registerFormInstanceListener(this.state.formId, {
-            formListenerId: this.formListenerId,
-            updateForm: () => { return; },
-            formValueChanged: (formField: FormFieldConfiguration, value: FormFieldValue<any>, oldValue: any) => {
-                if (formField.instanceId === this.state.field.instanceId) {
-                    this.state.currentValue = value.value;
-                }
-            }
-        });
     }
 
     public async onDestroy(): Promise<void> {
         super.onDestroy();
-        if (this.state.formId && this.formListenerId) {
-            FormService.getInstance().removeFormInstanceListener(this.state.formId, this.formListenerId);
-        }
     }
 
-    public setCurrentValue(): void {
-        if (this.state.defaultValue && this.state.defaultValue.value) {
-            this.state.currentValue = this.state.defaultValue.value;
-            (this as any).emit('valueChanged', this.state.currentValue);
-            super.provideValue(this.state.currentValue);
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
+        if (value) {
+            this.state.currentValue = value.value;
         }
     }
 

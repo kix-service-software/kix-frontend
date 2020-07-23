@@ -7,29 +7,39 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { MailAccountDetailsContext } from "..";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { ApplicationEvent } from "../../../../../modules/base-components/webapp/core/ApplicationEvent";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { MailAccountProperty } from "../../../model/MailAccountProperty";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { Error } from "../../../../../../../server/model/Error";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { MailAccountDetailsContext } from '..';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { MailAccountProperty } from '../../../model/MailAccountProperty';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { Error } from '../../../../../../../server/model/Error';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class MailAccountFetchAction extends AbstractAction {
-
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('system/communication/mailaccounts/*', [CRUD.UPDATE])
-    ];
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Fetch now';
         this.icon = 'kix-icon-arrow-refresh';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`system/communication/mailaccounts/${objectId}`, [CRUD.UPDATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async run(): Promise<void> {

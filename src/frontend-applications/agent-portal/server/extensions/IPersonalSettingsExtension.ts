@@ -7,7 +7,7 @@
  * --
  */
 
-import { PersonalSetting } from "../../modules/user/model/PersonalSetting";
+import { PersonalSetting } from '../../modules/user/model/PersonalSetting';
 
 export interface IPersonalSettingsExtension {
 

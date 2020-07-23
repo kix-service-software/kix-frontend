@@ -7,9 +7,9 @@
  * --
  */
 
-import { AbstractComponentState } from "../../../../../modules/base-components/webapp/core/AbstractComponentState";
-import { ITable } from "../../../../base-components/webapp/core/table";
-import { BulkManager } from "../../core/BulkManager";
+import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { ITable } from '../../../../base-components/webapp/core/table';
+import { BulkManager } from '../../core/BulkManager';
 
 export class ComponentState extends AbstractComponentState {
 

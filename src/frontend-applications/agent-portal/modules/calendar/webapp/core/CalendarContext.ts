@@ -7,20 +7,19 @@
  * --
  */
 
-import { Context } from "../../../../model/Context";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { Context } from '../../../../model/Context';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class CalendarContext extends Context {
 
     public static CONTEXT_ID: string = 'calendar';
-
 
     public getIcon(): string {
         return 'kix-icon-calendar';
     }
 
     public async getDisplayText(): Promise<string> {
-        return await TranslationService.translate("Translatable#Personal Ticket Calendar");
+        return await TranslationService.translate('Translatable#Personal Ticket Calendar');
     }
 
 }

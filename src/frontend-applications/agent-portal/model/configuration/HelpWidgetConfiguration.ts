@@ -7,8 +7,8 @@
  * --
  */
 
-import { IConfiguration } from "./IConfiguration";
-import { ConfigurationType } from "./ConfigurationType";
+import { IConfiguration } from './IConfiguration';
+import { ConfigurationType } from './ConfigurationType';
 
 export class HelpWidgetConfiguration implements IConfiguration {
 

@@ -7,12 +7,12 @@
  * --
  */
 
-import { AbstractAction } from "../../../base-components/webapp/core/AbstractAction";
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ITable } from "../../../base-components/webapp/core/table";
-import { EditSysConfigDialogContext } from "./context";
+import { AbstractAction } from '../../../base-components/webapp/core/AbstractAction';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ITable } from '../../../base-components/webapp/core/table';
+import { EditSysConfigDialogContext } from './context';
 
 export class SysconfigEditAction extends AbstractAction<ITable> {
 

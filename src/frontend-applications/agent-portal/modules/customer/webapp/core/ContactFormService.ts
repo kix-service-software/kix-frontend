@@ -7,42 +7,41 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { ContactProperty } from "../../model/ContactProperty";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormGroupConfiguration } from "../../../../model/configuration/FormGroupConfiguration";
-import { FormFieldOption } from "../../../../model/configuration/FormFieldOption";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../../base-components/webapp/core/InputFieldTypes";
-import { FormService } from "../../../base-components/webapp/core/FormService";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { IFormInstance } from "../../../base-components/webapp/core/IFormInstance";
-import { ObjectReferenceOptions } from "../../../base-components/webapp/core/ObjectReferenceOptions";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { PersonalSettingsProperty } from "../../../user/model/PersonalSettingsProperty";
-import { QueueProperty } from "../../../ticket/model/QueueProperty";
-import { NotificationProperty } from "../../../notification/model/NotificationProperty";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { User } from "../../../user/model/User";
-import { ContextService } from "../../../base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { ServiceRegistry } from "../../../base-components/webapp/core/ServiceRegistry";
-import { PersonalSettingsFormService } from "../../../user/webapp/core";
-import { ServiceType } from "../../../base-components/webapp/core/ServiceType";
-import { Contact } from "../../model/Contact";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { Role } from "../../../user/model/Role";
-import { RoleProperty } from "../../../user/model/RoleProperty";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { ContactProperty } from '../../model/ContactProperty';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
+import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../../base-components/webapp/core/InputFieldTypes';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { PersonalSettingsProperty } from '../../../user/model/PersonalSettingsProperty';
+import { QueueProperty } from '../../../ticket/model/QueueProperty';
+import { NotificationProperty } from '../../../notification/model/NotificationProperty';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { User } from '../../../user/model/User';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { PersonalSettingsFormService } from '../../../user/webapp/core';
+import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
+import { Contact } from '../../model/Contact';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { RoleProperty } from '../../../user/model/RoleProperty';
+import { Role } from '../../../user/model/Role';
+import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
 export class ContactFormService extends KIXObjectFormService {
 
@@ -77,7 +76,7 @@ export class ContactFormService extends KIXObjectFormService {
         return hasPermissions;
     }
 
-    public async initValues(form: FormConfiguration): Promise<Map<string, FormFieldValue<any>>> {
+    public async initValues(form: FormConfiguration, formInstance: FormInstance): Promise<void> {
         this.editUserId = null;
         this.isAgentDialog = false;
         let contact: Contact;
@@ -94,7 +93,7 @@ export class ContactFormService extends KIXObjectFormService {
             }
         }
 
-        return await super.initValues(form, contact);
+        await super.initValues(form, formInstance, contact);
     }
 
     protected async prePrepareForm(form: FormConfiguration, contact: Contact): Promise<void> {
@@ -116,7 +115,7 @@ export class ContactFormService extends KIXObjectFormService {
     private async getAccessGroup(): Promise<FormGroupConfiguration> {
         let accessGroup: FormGroupConfiguration;
         const hasUserCreatePermission = await this.checkPermissions('system/users', [CRUD.CREATE]);
-        const hasUserUpdatePermission = await this.checkPermissions('system/users/*', [CRUD.UPDATE]);
+        const hasUserUpdatePermission = await this.checkPermissions('system/users', [CRUD.CREATE]);
 
         if (hasUserCreatePermission && hasUserUpdatePermission) {
             const accessValue: FormFieldValue = new FormFieldValue([]);
@@ -186,7 +185,7 @@ export class ContactFormService extends KIXObjectFormService {
         return fields;
     }
 
-    private async addLoginField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async addLoginField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.USER_LOGIN)
             : null;
@@ -197,7 +196,7 @@ export class ContactFormService extends KIXObjectFormService {
         );
     }
 
-    private async addPasswordField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async addPasswordField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         return new FormFieldConfiguration(
             'contact-form-field-password',
             'Translatable#Password', UserProperty.USER_PASSWORD, null, !Boolean(this.assignedUserId),
@@ -210,7 +209,7 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async addRolesField(
-        accesses: string[], formInstance?: IFormInstance
+        accesses: string[], formInstance?: FormInstance
     ): Promise<FormFieldConfiguration> {
         if (accesses && accesses.some((a) => a === UserProperty.IS_AGENT)) {
             let value = formInstance
@@ -255,7 +254,7 @@ export class ContactFormService extends KIXObjectFormService {
     }
 
     private async addPreferencesFields(
-        accesses: string[], formInstance?: IFormInstance
+        accesses: string[], formInstance?: FormInstance
     ): Promise<FormFieldConfiguration> {
         const languageField = await this.getLanguageField(formInstance);
 
@@ -275,7 +274,7 @@ export class ContactFormService extends KIXObjectFormService {
         return preferencesField;
     }
 
-    private async getLanguageField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async getLanguageField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.USER_LANGUAGE)
             : null;
@@ -286,7 +285,7 @@ export class ContactFormService extends KIXObjectFormService {
         return languageField;
     }
 
-    private async getQueueField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async getQueueField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.MY_QUEUES)
             : null;
@@ -311,7 +310,7 @@ export class ContactFormService extends KIXObjectFormService {
         return queueField;
     }
 
-    private async getNotifiactionField(formInstance?: IFormInstance): Promise<FormFieldConfiguration> {
+    private async getNotifiactionField(formInstance?: FormInstance): Promise<FormFieldConfiguration> {
         const value = formInstance
             ? await formInstance.getFormFieldValueByProperty(UserProperty.NOTIFICATIONS)
             : null;
@@ -337,7 +336,9 @@ export class ContactFormService extends KIXObjectFormService {
         );
     }
 
-    public async prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public async prepareCreateValue(
+        property: string, formField: FormFieldConfiguration, value: any
+    ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         if (property === UserProperty.USER_ACCESS) {
             const isAgent = Array.isArray(value) ? Number(value.some((v) => v === UserProperty.IS_AGENT)) : 0;
@@ -358,7 +359,7 @@ export class ContactFormService extends KIXObjectFormService {
 
     public async postPrepareValues(
         parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
-        formContext?: FormContext
+        formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         const service = ServiceRegistry.getServiceInstance<PersonalSettingsFormService>(
             KIXObjectType.PERSONAL_SETTINGS, ServiceType.FORM
@@ -372,13 +373,18 @@ export class ContactFormService extends KIXObjectFormService {
         if (this.assignedUserId && formContext === FormContext.EDIT) {
             parameter.push([ContactProperty.ASSIGNED_USER_ID, this.assignedUserId]);
         }
-        return parameter;
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
     private prepareParameter(parameter: Array<[string, any]>): Array<[string, any]> {
         const queuesParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.MY_QUEUES);
         if (queuesParameter) {
             queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
+        }
+
+        const roleIdsParameter = parameter.find((p) => p[0] === UserProperty.ROLE_IDS);
+        if (roleIdsParameter) {
+            roleIdsParameter[1] = Array.isArray(roleIdsParameter[1]) ? roleIdsParameter[1] : [roleIdsParameter[1]];
         }
 
         const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);

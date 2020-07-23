@@ -7,11 +7,11 @@
  * --
  */
 
-import { FAQArticle } from "./FAQArticle";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { FAQArticle } from './FAQArticle';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class FAQCategory extends KIXObject<FAQCategory> {
+export class FAQCategory extends KIXObject {
 
     public ObjectId: string | number;
 

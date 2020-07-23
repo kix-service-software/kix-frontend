@@ -7,21 +7,21 @@
  * --
  */
 
-import { SocketNameSpace } from "../../../server/socket-namespaces/SocketNameSpace";
-import { ISocketRequest } from "../../../modules/base-components/webapp/core/ISocketRequest";
-import { SocketResponse } from "../../../modules/base-components/webapp/core/SocketResponse";
-import { PersonalSetting } from "../model/PersonalSetting";
-import { PersonalSettingsResponse } from "../../../modules/base-components/webapp/core/PersonalSettingsResponse";
-import { SocketEvent } from "../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { SetPreferencesRequest } from "../../../modules/base-components/webapp/core/SetPreferencesRequest";
-import { UserService } from "./UserService";
-import { SetPreferencesResponse } from "../../../modules/base-components/webapp/core/SetPreferencesResponse";
-import { GetCurrentUserRequest } from "../../../modules/base-components/webapp/core/GetCurrentUserRequest";
-import { User } from "../model/User";
-import { GetCurrentUserResponse } from "../../../modules/base-components/webapp/core/GetCurrentUserResponse";
-import { PersonalSettingsService } from "./PersonalSettingsService";
-import { AgentEvent } from "../webapp/core";
+import { SocketNameSpace } from '../../../server/socket-namespaces/SocketNameSpace';
+import { ISocketRequest } from '../../../modules/base-components/webapp/core/ISocketRequest';
+import { SocketResponse } from '../../../modules/base-components/webapp/core/SocketResponse';
+import { PersonalSetting } from '../model/PersonalSetting';
+import { PersonalSettingsResponse } from '../../../modules/base-components/webapp/core/PersonalSettingsResponse';
+import { SocketEvent } from '../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { SetPreferencesRequest } from '../../../modules/base-components/webapp/core/SetPreferencesRequest';
+import { UserService } from './UserService';
+import { SetPreferencesResponse } from '../../../modules/base-components/webapp/core/SetPreferencesResponse';
+import { GetCurrentUserRequest } from '../../../modules/base-components/webapp/core/GetCurrentUserRequest';
+import { User } from '../model/User';
+import { GetCurrentUserResponse } from '../../../modules/base-components/webapp/core/GetCurrentUserResponse';
+import { PersonalSettingsService } from './PersonalSettingsService';
+import { AgentEvent } from '../webapp/core';
 
 import cookie = require('cookie');
 

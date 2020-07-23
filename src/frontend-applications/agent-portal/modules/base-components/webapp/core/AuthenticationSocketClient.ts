@@ -7,19 +7,19 @@
  * --
  */
 
-import { SocketClient } from "./SocketClient";
-import { AuthenticationEvent } from "./AuthenticationEvent";
-import { AuthenticationResult } from "./AuthenticationResult";
-import { ClientStorageService } from "./ClientStorageService";
-import { LoginRequest } from "./LoginRequest";
-import { ISocketRequest } from "./ISocketRequest";
-import { ISocketResponse } from "./ISocketResponse";
-import { PermissionCheckRequest } from "./PermissionCheckRequest";
-import { IdService } from "../../../../model/IdService";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
+import { SocketClient } from './SocketClient';
+import { AuthenticationEvent } from './AuthenticationEvent';
+import { AuthenticationResult } from './AuthenticationResult';
+import { ClientStorageService } from './ClientStorageService';
+import { LoginRequest } from './LoginRequest';
+import { ISocketRequest } from './ISocketRequest';
+import { ISocketResponse } from './ISocketResponse';
+import { PermissionCheckRequest } from './PermissionCheckRequest';
+import { IdService } from '../../../../model/IdService';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
-import { BrowserCacheService } from "./CacheService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { BrowserCacheService } from './CacheService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class AuthenticationSocketClient extends SocketClient {
 

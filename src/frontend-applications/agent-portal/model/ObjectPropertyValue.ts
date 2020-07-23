@@ -7,10 +7,10 @@
  * --
  */
 
-import { SearchOperator } from "../modules/search/model/SearchOperator";
-import { KIXObject } from "./kix/KIXObject";
-import { KIXObjectType } from "./kix/KIXObjectType";
-import { IdService } from "./IdService";
+import { SearchOperator } from '../modules/search/model/SearchOperator';
+import { KIXObject } from './kix/KIXObject';
+import { KIXObjectType } from './kix/KIXObjectType';
+import { IdService } from './IdService';
 
 export class ObjectPropertyValue {
 

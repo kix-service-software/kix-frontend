@@ -8,12 +8,12 @@
  */
 
 
-import { TicketDetailsContext, EditTicketDialogContext, NewTicketDialogContext } from "./context";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { Ticket } from "../../model/Ticket";
-import { Contact } from "../../../customer/model/Contact";
+import { TicketDetailsContext, EditTicketDialogContext, NewTicketDialogContext } from './context';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { Ticket } from '../../model/Ticket';
+import { Contact } from '../../../customer/model/Contact';
 
 
 export class TicketDialogUtil {
@@ -43,20 +43,21 @@ export class TicketDialogUtil {
         );
     }
 
-    public static async editTicket(ticketId?: string | number): Promise<void> {
+    public static async editTicket(ticketId?: number, formId?: string, deleteForm: boolean = true): Promise<void> {
         if (!ticketId) {
             const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
                 TicketDetailsContext.CONTEXT_ID
             );
 
             if (context) {
-                ticketId = context.getObjectId();
+                ticketId = Number(context.getObjectId());
             }
         }
 
         if (ticketId) {
             ContextService.getInstance().setDialogContext(
-                EditTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.EDIT, ticketId
+                EditTicketDialogContext.CONTEXT_ID, KIXObjectType.TICKET, ContextMode.EDIT, ticketId,
+                null, null, null, null, formId, deleteForm
             );
         }
     }

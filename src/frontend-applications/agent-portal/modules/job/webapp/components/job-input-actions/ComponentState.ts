@@ -7,14 +7,13 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
 
 export class ComponentState extends FormInputComponentState<string> {
 
     public constructor(
         public placeholder: string = '',
-        public loadNodes: () => Promise<TreeNode[]> = null
     ) {
         super();
     }

@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { TranslationPattern } from "../../model/TranslationPattern";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TranslationPatternProperty } from "../../model/TranslationPatternProperty";
-import { TranslationService } from "./TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { TranslationPattern } from '../../model/TranslationPattern';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TranslationPatternProperty } from '../../model/TranslationPatternProperty';
+import { TranslationService } from './TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class TranslationPatternLabelProvider extends LabelProvider<TranslationPattern> {
 
@@ -86,7 +86,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
     }
 
     public getObjectIcon(translation?: TranslationPattern): string | ObjectIcon {
-        return translation ? new ObjectIcon('Translation', translation.ObjectId) : null;
+        return translation ? new ObjectIcon(null, 'Translation', translation.ObjectId) : null;
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {
@@ -110,7 +110,7 @@ export class TranslationPatternLabelProvider extends LabelProvider<TranslationPa
         translation: TranslationPattern, property: string, value?: string | number
     ): Promise<Array<string | ObjectIcon>> {
         if (property === 'ICON') {
-            return [new ObjectIcon('Translation', translation.ObjectId)];
+            return [new ObjectIcon(null, 'Translation', translation.ObjectId)];
         }
         return null;
     }

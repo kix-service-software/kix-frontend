@@ -7,7 +7,7 @@
  * --
  */
 
-import { Permission } from "../modules/user/model/Permission";
+import { Permission } from '../modules/user/model/Permission';
 
 export class ConfiguredPermissions {
 

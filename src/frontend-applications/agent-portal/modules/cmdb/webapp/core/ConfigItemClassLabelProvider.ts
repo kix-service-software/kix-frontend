@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ConfigItemClassProperty } from "../../model/ConfigItemClassProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ConfigItemClassProperty } from '../../model/ConfigItemClassProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 
 export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass> {
@@ -102,9 +102,8 @@ export class ConfigItemClassLabelProvider extends LabelProvider<ConfigItemClass>
         return plural ? 'CI Classes' : 'CI Class';
     }
 
-
     public getObjectIcon(ciClass?: ConfigItemClass): string | ObjectIcon {
-        return new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID);
+        return new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, ciClass.ID);
     }
 
     public async getIcons(

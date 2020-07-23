@@ -7,15 +7,15 @@
  * --
  */
 
-import { ObjectUpdatedEventData } from "../../../../model/ObjectUpdatedEventData";
-import { ContextService } from "./ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { AgentSocketClient } from "../../../user/webapp/core/AgentSocketClient";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { BrowserUtil } from "./BrowserUtil";
-import { ContextMode } from "../../../../model/ContextMode";
-import { Context } from "../../../../model/Context";
-import { AdditionalContextInformation } from "./AdditionalContextInformation";
+import { ObjectUpdatedEventData } from '../../../../model/ObjectUpdatedEventData';
+import { ContextService } from './ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { AgentSocketClient } from '../../../user/webapp/core/AgentSocketClient';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { BrowserUtil } from './BrowserUtil';
+import { ContextMode } from '../../../../model/ContextMode';
+import { Context } from '../../../../model/Context';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
 
 export class NotificationHandler {
 
@@ -89,9 +89,9 @@ export class NotificationHandler {
         const objects = namespace.split('.');
         if (objects.length > 1) {
             if (objects[0] === 'FAQ') {
-                if (objects[1] === "Category") {
+                if (objects[1] === 'Category') {
                     return KIXObjectType.FAQ_CATEGORY;
-                } else if (objects[1] === "Article") {
+                } else if (objects[1] === 'Article') {
                     return KIXObjectType.FAQ_ARTICLE;
                 }
             } else if (objects[0] === 'CMDB') {

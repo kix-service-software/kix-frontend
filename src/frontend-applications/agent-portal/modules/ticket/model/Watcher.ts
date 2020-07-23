@@ -7,10 +7,10 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class Watcher extends KIXObject<Watcher> {
+export class Watcher extends KIXObject {
 
     public ObjectId: string | number;
 

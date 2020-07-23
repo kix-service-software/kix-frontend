@@ -7,14 +7,14 @@
  * --
  */
 
-import { IService } from "./IService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { KIXObject } from "../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectSpecificCreateOptions } from "../../model/KIXObjectSpecificCreateOptions";
-import { KIXObjectSpecificDeleteOptions } from "../../model/KIXObjectSpecificDeleteOptions";
-import { Error } from "../../../../server/model/Error";
+import { IService } from './IService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { KIXObject } from '../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectSpecificCreateOptions } from '../../model/KIXObjectSpecificCreateOptions';
+import { KIXObjectSpecificDeleteOptions } from '../../model/KIXObjectSpecificDeleteOptions';
+import { Error } from '../../../../server/model/Error';
 
 export interface IKIXObjectService extends IService {
 

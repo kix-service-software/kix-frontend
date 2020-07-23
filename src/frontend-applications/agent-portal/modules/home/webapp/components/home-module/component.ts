@@ -7,9 +7,9 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { HomeContext } from "../../core/HomeContext";
+import { ComponentState } from './ComponentState';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { HomeContext } from '../../core/HomeContext';
 
 class HomeComponent {
 

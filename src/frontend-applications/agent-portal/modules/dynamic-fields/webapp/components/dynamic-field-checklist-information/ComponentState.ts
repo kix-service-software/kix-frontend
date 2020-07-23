@@ -7,9 +7,9 @@
  * --
  */
 
-import { DynamicField } from "../../../model/DynamicField";
-import { CheckListItem } from "../../core/CheckListItem";
-import { ITable } from "../../../../base-components/webapp/core/table";
+import { DynamicField } from '../../../model/DynamicField';
+import { CheckListItem } from '../../core/CheckListItem';
+import { ITable } from '../../../../base-components/webapp/core/table';
 
 export class ComponentState {
 

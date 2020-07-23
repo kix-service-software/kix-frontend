@@ -7,42 +7,41 @@
  * --
  */
 
-import { KIXObjectAPIService } from "../../../server/services/KIXObjectAPIService";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { KIXObjectServiceRegistry } from "../../../server/services/KIXObjectServiceRegistry";
-import { GeneralCatalogItem } from "../../general-catalog/model/GeneralCatalogItem";
-import { KIXObjectLoadingOptions } from "../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../model/FilterCriteria";
-import { SearchOperator } from "../../search/model/SearchOperator";
-import { FilterDataType } from "../../../model/FilterDataType";
-import { FilterType } from "../../../model/FilterType";
-import { KIXObjectSpecificLoadingOptions } from "../../../model/KIXObjectSpecificLoadingOptions";
-import { ConfigItemProperty } from "../model/ConfigItemProperty";
-import { ConfigItemVersionLoadingOptions } from "../model/ConfigItemVersionLoadingOptions";
-import { ImagesLoadingOptions } from "../model/ImagesLoadingOptions";
-import { ConfigItem } from "../model/ConfigItem";
-import { ConfigItemResponse } from "./api/ConfigItemResponse";
-import { ConfigItemsResponse } from "./api/ConfigItemsResponse";
-import { ConfigItemImage } from "../model/ConfigItemImage";
-import { ConfigItemImageResponse } from "./api/ConfigItemImageResponse";
-import { ConfigItemImagesResponse } from "./api/ConfigItemImagesResponse";
-import { ConfigItemAttachment } from "../model/ConfigItemAttachment";
-import { ConfigItemAttachmentResponse } from "./api/ConfigItemAttachmentResponse";
-import { ConfigItemAttachmentsResponse } from "./api/ConfigItemAttachmentsResponse";
-import { KIXObjectSpecificCreateOptions } from "../../../model/KIXObjectSpecificCreateOptions";
-import { CreateConfigItemVersionOptions } from "../model/CreateConfigItemVersionOptions";
-import { CreateConfigItemVersion } from "./api/CreateConfigItemVersion";
-import { CreateConfigItemVersionResponse } from "./api/CreateConfigItemVersionResponse";
-import { CreateConfigItemVersionRequest } from "./api/CreateConfigItemVersionRequest";
-import { CreateConfigItem } from "./api/CreateConfigItem";
-import { CreateConfigItemResponse } from "./api/CreateConfigItemResponse";
-import { CreateConfigItemRequest } from "./api/CreateConfigItemRequest";
-import { LoggingService } from "../../../../../server/services/LoggingService";
-import { ConfigItemFactory } from "./ConfigItemFactory";
-import { ConfigItemImageFactory } from "./ConfigItemImageFactory";
-import { Error } from "../../../../../server/model/Error";
-import { AttachmentLoadingOptions } from "../model/AttachmentLoadingOptions";
-import { VersionProperty } from "../model/VersionProperty";
+import { KIXObjectAPIService } from '../../../server/services/KIXObjectAPIService';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { KIXObjectServiceRegistry } from '../../../server/services/KIXObjectServiceRegistry';
+import { GeneralCatalogItem } from '../../general-catalog/model/GeneralCatalogItem';
+import { KIXObjectLoadingOptions } from '../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { FilterType } from '../../../model/FilterType';
+import { KIXObjectSpecificLoadingOptions } from '../../../model/KIXObjectSpecificLoadingOptions';
+import { ConfigItemProperty } from '../model/ConfigItemProperty';
+import { ConfigItemVersionLoadingOptions } from '../model/ConfigItemVersionLoadingOptions';
+import { ImagesLoadingOptions } from '../model/ImagesLoadingOptions';
+import { ConfigItem } from '../model/ConfigItem';
+import { ConfigItemResponse } from './api/ConfigItemResponse';
+import { ConfigItemsResponse } from './api/ConfigItemsResponse';
+import { ConfigItemImage } from '../model/ConfigItemImage';
+import { ConfigItemImageResponse } from './api/ConfigItemImageResponse';
+import { ConfigItemImagesResponse } from './api/ConfigItemImagesResponse';
+import { ConfigItemAttachment } from '../model/ConfigItemAttachment';
+import { ConfigItemAttachmentResponse } from './api/ConfigItemAttachmentResponse';
+import { ConfigItemAttachmentsResponse } from './api/ConfigItemAttachmentsResponse';
+import { KIXObjectSpecificCreateOptions } from '../../../model/KIXObjectSpecificCreateOptions';
+import { CreateConfigItemVersionOptions } from '../model/CreateConfigItemVersionOptions';
+import { CreateConfigItemVersion } from './api/CreateConfigItemVersion';
+import { CreateConfigItemVersionResponse } from './api/CreateConfigItemVersionResponse';
+import { CreateConfigItemVersionRequest } from './api/CreateConfigItemVersionRequest';
+import { CreateConfigItem } from './api/CreateConfigItem';
+import { CreateConfigItemResponse } from './api/CreateConfigItemResponse';
+import { CreateConfigItemRequest } from './api/CreateConfigItemRequest';
+import { LoggingService } from '../../../../../server/services/LoggingService';
+import { Error } from '../../../../../server/model/Error';
+import { AttachmentLoadingOptions } from '../model/AttachmentLoadingOptions';
+import { Version } from '../model/Version';
+
 
 export class CMDBAPIService extends KIXObjectAPIService {
 
@@ -105,7 +104,8 @@ export class CMDBAPIService extends KIXObjectAPIService {
                         'versions'
                     );
                     objects = await super.load(
-                        token, KIXObjectType.CONFIG_ITEM_VERSION, uri, loadingOptions, objectIds, 'ConfigItemVersion'
+                        token, KIXObjectType.CONFIG_ITEM_VERSION, uri, loadingOptions, objectIds, 'ConfigItemVersion',
+                        Version
                     );
                 }
                 break;
@@ -164,7 +164,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
             configItems = response.ConfigItem;
         }
 
-        return configItems.map((ci) => ConfigItemFactory.create(ci));
+        return configItems.map((ci) => new ConfigItem(ci));
     }
 
     private async getImages(
@@ -215,12 +215,11 @@ export class CMDBAPIService extends KIXObjectAPIService {
                 images = response.Image;
             }
 
-            return images.map((cii) => ConfigItemImageFactory.create(cii));
+            return images.map((cii) => new ConfigItemImage(cii));
         } else {
             throw new Error('', 'No config item id given!');
         }
     }
-
 
     private async getAttachments(
         token: string, attachmentIds: Array<number | string>, loadingOptions: KIXObjectLoadingOptions,
@@ -300,10 +299,10 @@ export class CMDBAPIService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        throw new Error('', "Method not implemented.");
+        throw new Error('', 'Method not implemented.');
     }
 
-    protected async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         return criteria.filter((c) =>
             c.property !== ConfigItemProperty.CONFIG_ITEM_ID &&
             c.property !== ConfigItemProperty.NUMBER &&
@@ -314,7 +313,7 @@ export class CMDBAPIService extends KIXObjectAPIService {
         );
     }
 
-    protected async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const newCriteria = criteria.filter((c) =>
             !c.property.startsWith('Data') &&
             !c.property.startsWith('CurrentVersion')

@@ -7,16 +7,16 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { CSVExportAction, ImportAction } from "./actions";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { CSVExportAction, ImportAction } from './actions';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'ImportUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

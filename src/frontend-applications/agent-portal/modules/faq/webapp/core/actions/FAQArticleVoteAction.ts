@@ -7,29 +7,40 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
 
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class FAQArticleVoteAction extends AbstractAction {
 
     public hasLink: boolean = false;
 
-    public permissions: UIComponentPermission[] = [
-        new UIComponentPermission('faq/articles/*/votes', [CRUD.CREATE])
-    ];
-
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Rate';
         this.icon = 'kix-icon-star-fully';
+    }
+
+    public async canShow(): Promise<boolean> {
+        let show = false;
+        const context = ContextService.getInstance().getActiveContext();
+        const objectId = context.getObjectId();
+
+        const permissions = [
+            new UIComponentPermission(`faq/articles/${objectId}/votes`, [CRUD.CREATE])
+        ];
+
+        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
+        return show;
     }
 
     public async run(event: any): Promise<void> {

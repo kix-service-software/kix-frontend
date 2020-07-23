@@ -7,13 +7,13 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { UIComponentPermission } from "../../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
-import { OrganisationDialogUtil } from "../OrganisationDialogUtil";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ContextService } from "../../../../base-components/webapp/core/ContextService";
-import { Organisation } from "../../../model/Organisation";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { OrganisationDialogUtil } from '../OrganisationDialogUtil';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { Organisation } from '../../../model/Organisation';
 
 export class OrganisationDuplicateAction extends AbstractAction {
 

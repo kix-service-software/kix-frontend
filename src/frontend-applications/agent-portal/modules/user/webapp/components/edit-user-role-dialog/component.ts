@@ -7,22 +7,22 @@
  * --
  */
 
-import { AbstractMarkoComponent } from "../../../../../modules/base-components/webapp/core/AbstractMarkoComponent";
-import { ComponentState } from "./ComponentState";
-import { DialogService } from "../../../../../modules/base-components/webapp/core/DialogService";
-import { FormService } from "../../../../../modules/base-components/webapp/core/FormService";
-import { ValidationSeverity } from "../../../../../modules/base-components/webapp/core/ValidationSeverity";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { RoleDetailsContext } from "../../core/admin";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { BrowserUtil } from "../../../../../modules/base-components/webapp/core/BrowserUtil";
-import { ValidationResult } from "../../../../../modules/base-components/webapp/core/ValidationResult";
-import { ComponentContent } from "../../../../../modules/base-components/webapp/core/ComponentContent";
-import { OverlayService } from "../../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../../modules/base-components/webapp/core/OverlayType";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Error } from "../../../../../../../server/model/Error";
+import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { ComponentState } from './ComponentState';
+import { DialogService } from '../../../../../modules/base-components/webapp/core/DialogService';
+import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
+import { ValidationSeverity } from '../../../../../modules/base-components/webapp/core/ValidationSeverity';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { RoleDetailsContext } from '../../core/admin';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
+import { ValidationResult } from '../../../../../modules/base-components/webapp/core/ValidationResult';
+import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
+import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Error } from '../../../../../../../server/model/Error';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -32,9 +32,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         // tslint:disable-next-line:max-line-length
-        DialogService.getInstance().setMainDialogHint("Translatable#For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual for more detailed information.");
+        DialogService.getInstance().setMainDialogHint('Translatable#For keyboard navigation, press Ctrl to switch focus to dialog. See manual for more detailed information.');
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Save"
+            'Translatable#Cancel', 'Translatable#Save'
         ]);
     }
 
@@ -77,7 +77,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }, 300);
     }
-
 
     public showValidationError(result: ValidationResult[]): void {
         const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);

@@ -7,34 +7,34 @@
  * --
  */
 
-import { ITable } from "./ITable";
-import { Row } from "./Row";
-import { Column } from "./Column";
-import { IColumn } from "./IColumn";
-import { ITableContentProvider } from "./ITableContentProvider";
-import { IRowObject } from "./IRowObject";
-import { IRow } from "./IRow";
-import { IColumnConfiguration } from "../../../../../model/configuration/IColumnConfiguration";
-import { TableSortUtil } from "./TableSortUtil";
-import { SelectionState } from "./SelectionState";
-import { TableEvent } from "./TableEvent";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { TableValue } from "./TableValue";
-import { ValueState } from "./ValueState";
-import { TableEventData } from "./TableEventData";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { EventService } from "../EventService";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { KIXObjectService } from "../KIXObjectService";
-import { DynamicField } from "../../../../dynamic-fields/model/DynamicField";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../../../dynamic-fields/model/DynamicFieldProperty";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { DynamicFieldService } from "../../../../dynamic-fields/webapp/core/DynamicFieldService";
+import { ITable } from './ITable';
+import { Row } from './Row';
+import { Column } from './Column';
+import { IColumn } from './IColumn';
+import { ITableContentProvider } from './ITableContentProvider';
+import { IRowObject } from './IRowObject';
+import { IRow } from './IRow';
+import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
+import { TableSortUtil } from './TableSortUtil';
+import { SelectionState } from './SelectionState';
+import { TableEvent } from './TableEvent';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { TableValue } from './TableValue';
+import { ValueState } from './ValueState';
+import { TableEventData } from './TableEventData';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { EventService } from '../EventService';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { KIXObjectService } from '../KIXObjectService';
+import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../../../../dynamic-fields/model/DynamicFieldProperty';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+
 
 export class Table implements ITable {
 

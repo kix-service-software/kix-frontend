@@ -7,17 +7,17 @@
  * --
  */
 
-import { IdService } from "../../../../../model/IdService";
-import { WidgetConfiguration } from "../../../../../model/configuration/WidgetConfiguration";
-import { TableWidgetConfiguration } from "../../../../../model/configuration/TableWidgetConfiguration";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { ContactProperty } from "../../../../customer/model/ContactProperty";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { UserProperty } from "../../../model/UserProperty";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
+import { IdService } from '../../../../../model/IdService';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { ContactProperty } from '../../../../customer/model/ContactProperty';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { UserProperty } from '../../../model/UserProperty';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 
 export class ComponentState {
 

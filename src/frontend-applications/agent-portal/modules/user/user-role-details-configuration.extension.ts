@@ -7,24 +7,24 @@
  * --
  */
 
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { RoleDetailsContext } from "./webapp/core/admin";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { WidgetSize } from "../../model/configuration/WidgetSize";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { TableConfiguration } from "../../model/configuration/TableConfiguration";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { TableWidgetConfiguration } from "../../model/configuration/TableWidgetConfiguration";
-import { PermissionProperty } from "./model/PermissionProperty";
-import { SortOrder } from "../../model/SortOrder";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { RoleDetailsContext } from './webapp/core/admin';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { WidgetSize } from '../../model/configuration/WidgetSize';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { PermissionProperty } from './model/PermissionProperty';
+import { SortOrder } from '../../model/SortOrder';
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 

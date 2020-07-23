@@ -7,16 +7,16 @@
  * --
  */
 
-import { ContextHistoryEntry } from "./ContextHistoryEntry";
-import { ContextService } from "./ContextService";
-import { BrowserHistoryState } from "./BrowserHistoryState";
-import { DialogService } from "./DialogService";
-import { RoutingService } from "./RoutingService";
-import { ContextType } from "../../../../model/ContextType";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { Context } from "../../../../model/Context";
-import { EventService } from "./EventService";
-import { ContextUIEvent } from "./ContextUIEvent";
+import { ContextHistoryEntry } from './ContextHistoryEntry';
+import { ContextService } from './ContextService';
+import { BrowserHistoryState } from './BrowserHistoryState';
+import { DialogService } from './DialogService';
+import { RoutingService } from './RoutingService';
+import { ContextType } from '../../../../model/ContextType';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { Context } from '../../../../model/Context';
+import { EventService } from './EventService';
+import { ContextUIEvent } from './ContextUIEvent';
 
 export class ContextHistory {
 

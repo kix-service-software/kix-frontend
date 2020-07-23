@@ -7,11 +7,11 @@
  * --
  */
 
-import { TreeNode } from "../../../../base-components/webapp/core/tree";
-import { ITable } from "../../../../base-components/webapp/core/table";
-import { LinkTypeDescription } from "../../../model/LinkTypeDescription";
-import { CreateLinkDescription } from "../../../server/api/CreateLinkDescription";
-import { IdService } from "../../../../../model/IdService";
+import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { ITable } from '../../../../base-components/webapp/core/table';
+import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
+import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState {
 

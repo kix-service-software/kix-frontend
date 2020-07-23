@@ -7,8 +7,8 @@
  * --
  */
 
-import { ITable } from "./table";
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { ITable } from './table';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export interface IActionListener {
 

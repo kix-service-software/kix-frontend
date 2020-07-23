@@ -7,10 +7,10 @@
  * --
  */
 
-import { MailFilterMatch } from "./MailFilterMatch";
-import { MailFilterSet } from "./MailFilterSet";
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
+import { MailFilterMatch } from './MailFilterMatch';
+import { MailFilterSet } from './MailFilterSet';
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
 export class MailFilter extends KIXObject {
 

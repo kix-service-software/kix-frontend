@@ -18,7 +18,7 @@ import { DataType } from '../../../../../../model/DataType';
 import { SortOrder } from '../../../../../../model/SortOrder';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
 import { SortUtil } from '../../../../../../model/SortUtil';
-import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
+
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 

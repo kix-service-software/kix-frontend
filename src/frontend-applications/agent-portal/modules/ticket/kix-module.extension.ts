@@ -7,12 +7,12 @@
  * --
  */
 
-import { IKIXModuleExtension } from "../../model/IKIXModuleExtension";
-import { UIComponent } from "../../model/UIComponent";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { IKIXModuleExtension } from '../../model/IKIXModuleExtension';
+import { UIComponent } from '../../model/UIComponent';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IKIXModuleExtension {
 
@@ -28,13 +28,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('ticket-admin-module-component', '/kix-module-ticket$0/webapp/core/TicketAdminUIModule',
             [
                 new UIComponentPermission('system/ticket/queues', [CRUD.CREATE], true),
-                new UIComponentPermission('system/ticket/queues/*', [CRUD.UPDATE], true),
                 new UIComponentPermission('system/ticket/types', [CRUD.CREATE], true),
-                new UIComponentPermission('system/ticket/types/*', [CRUD.UPDATE], true),
                 new UIComponentPermission('system/ticket/states', [CRUD.CREATE], true),
-                new UIComponentPermission('system/ticket/states/*', [CRUD.UPDATE], true),
-                new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE], true),
-                new UIComponentPermission('system/ticket/priorities/*', [CRUD.UPDATE], true)
+                new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE], true)
             ]
         ),
         new UIComponent('ticket-read-module-component', '/kix-module-ticket$0/webapp/core/TicketReadUIModule',
@@ -49,15 +45,12 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent('ticket-update-module-component', '/kix-module-ticket$0/webapp/core/TicketUpdateUIModule',
             [
-                new UIComponentPermission('tickets/*', [CRUD.UPDATE]),
+                new UIComponentPermission('tickets', [CRUD.CREATE]),
             ]
         ),
         new UIComponent(
             'ticket-article-create-module-component',
-            '/kix-module-ticket$0/webapp/core/ArticleCreateUIModule',
-            [
-                new UIComponentPermission('tickets/*/articles', [CRUD.CREATE])
-            ]
+            '/kix-module-ticket$0/webapp/core/ArticleCreateUIModule', []
         )
     ];
 
@@ -143,7 +136,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'ticket-input-organisation', '/kix-module-ticket$0/webapp/components/ticket-input-organisation', []
         ),
-        new UIComponent('ticket-input-state', '/kix-module-ticket$0/webapp/components/ticket-input-state', []),
         new UIComponent(
             'ticket-input-state-pending', '/kix-module-ticket$0/webapp/components/ticket-input-state-pending', []
         ),

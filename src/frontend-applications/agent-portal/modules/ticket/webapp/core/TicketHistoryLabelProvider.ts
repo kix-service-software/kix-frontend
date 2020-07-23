@@ -7,13 +7,13 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { TicketHistory } from "../../model/TicketHistory";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TicketHistoryProperty } from "../../model/TicketHistoryProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { TicketHistory } from '../../model/TicketHistory';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TicketHistoryProperty } from '../../model/TicketHistoryProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 
 export class TicketHistoryLabelProvider extends LabelProvider<TicketHistory> {
 

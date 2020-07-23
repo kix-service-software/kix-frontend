@@ -7,9 +7,9 @@
  * --
  */
 
-import { WidgetComponentState } from "../../../../../modules/base-components/webapp/core/WidgetComponentState";
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ITable } from "../../../../base-components/webapp/core/table";
+import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ITable } from '../../../../base-components/webapp/core/table';
 
 
 export class ComponentState extends WidgetComponentState {

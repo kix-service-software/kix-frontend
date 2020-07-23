@@ -7,18 +7,18 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { TableEvent, ITable, Table, ToggleOptions } from "../../../../base-components/webapp/core/table";
-import { ArticleTableToggleSubscriber } from "./ArticleTableToggleSubscriber";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ArticleTableContentProvider } from ".";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { ArticleProperty } from "../../../model/ArticleProperty";
-import { DataType } from "../../../../../model/DataType";
-import { TableHeaderHeight } from "../../../../../model/configuration/TableHeaderHeight";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { TableEvent, ITable, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
+import { ArticleTableToggleSubscriber } from './ArticleTableToggleSubscriber';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ArticleTableContentProvider } from '.';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { DataType } from '../../../../../model/DataType';
+import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 
 export class ArticleTableFactory extends TableFactory {
 

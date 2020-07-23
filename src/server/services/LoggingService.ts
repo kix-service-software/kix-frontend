@@ -82,6 +82,7 @@ export class LoggingService {
                 const winstonMeta = { ...meta };
                 this.kixLogger.info(message, winstonMeta);
             } else {
+                // tslint:disable-next-line: no-console
                 console.log(message);
             }
         }
@@ -93,6 +94,7 @@ export class LoggingService {
                 const winstonMeta = { ...meta };
                 this.kixLogger.debug(message, winstonMeta);
             } else {
+                // tslint:disable-next-line: no-console
                 console.log(message);
             }
         }
@@ -150,7 +152,7 @@ export class LoggingService {
                         }),
                         winston.format.printf((info) => {
                             const {
-                                timestamp, level, message, ...args
+                                timestamp, level, message
                             } = info;
 
                             return `${timestamp} - ${level}: ${message}`;

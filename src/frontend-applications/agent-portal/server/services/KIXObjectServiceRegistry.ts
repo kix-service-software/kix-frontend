@@ -7,8 +7,8 @@
  * --
  */
 
-import { IKIXObjectService } from "./IKIXObjectService";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
+import { IKIXObjectService } from './IKIXObjectService';
+import { KIXObjectType } from '../../model/kix/KIXObjectType';
 
 export class KIXObjectServiceRegistry {
 

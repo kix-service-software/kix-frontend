@@ -9,7 +9,7 @@
 
 import {
     AbstractComponentState
-} from "../../../../../../../modules/base-components/webapp/core/AbstractComponentState";
+} from '../../../../../../../modules/base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 

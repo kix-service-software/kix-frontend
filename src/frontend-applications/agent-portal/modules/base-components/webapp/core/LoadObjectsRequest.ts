@@ -7,10 +7,10 @@
  * --
  */
 
-import { ISocketRequest } from "./ISocketRequest";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
+import { ISocketRequest } from './ISocketRequest';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 
 export class LoadObjectsRequest implements ISocketRequest {
 

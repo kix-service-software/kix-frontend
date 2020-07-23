@@ -7,31 +7,31 @@
  * --
  */
 
-import { SearchDefinition, SearchResultCategory } from "../../../search/webapp/core";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ConfigItemSearchFormManager } from "./ConfigItemSearchFormManager";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { VersionProperty } from "../../model/VersionProperty";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { ConfigItemClassAttributeUtil } from ".";
-import { IColumnConfiguration } from "../../../../model/configuration/IColumnConfiguration";
-import { AttributeDefinition } from "../../model/AttributeDefinition";
-import { DefaultColumnConfiguration } from "../../../../model/configuration/DefaultColumnConfiguration";
-import { DataType } from "../../../../model/DataType";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItem } from "../../model/ConfigItem";
-import { Organisation } from "../../../customer/model/Organisation";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { Contact } from "../../../customer/model/Contact";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { InputDefinition } from "../../model/InputDefinition";
-import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalogItem";
+import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ConfigItemSearchFormManager } from './ConfigItemSearchFormManager';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { VersionProperty } from '../../model/VersionProperty';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { ConfigItemClassAttributeUtil } from '.';
+import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
+import { AttributeDefinition } from '../../model/AttributeDefinition';
+import { DefaultColumnConfiguration } from '../../../../model/configuration/DefaultColumnConfiguration';
+import { DataType } from '../../../../model/DataType';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItem } from '../../model/ConfigItem';
+import { Organisation } from '../../../customer/model/Organisation';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { Contact } from '../../../customer/model/Contact';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { InputDefinition } from '../../model/InputDefinition';
+import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 
@@ -145,9 +145,9 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
                                 searchCriteria.property, classIds
                             );
 
-                            if (type === "Date") {
+                            if (type === 'Date') {
                                 attributeCriteria.type = FilterDataType.DATE;
-                            } else if (type === "DateTime") {
+                            } else if (type === 'DateTime') {
                                 attributeCriteria.type = FilterDataType.DATETIME;
                             }
                             newCriteria.push(attributeCriteria);
@@ -163,7 +163,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
         switch (property) {
             case ConfigItemProperty.NAME:
                 criteria.push(new FilterCriteria(
-                    "CurrentVersion." + property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value
+                    'CurrentVersion.' + property, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.AND, value
                 ));
                 break;
             case ConfigItemProperty.NUMBER:
@@ -253,7 +253,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             property, classParameter ? classParameter[1] : null
         );
 
-        if (input) {
+        if (input && value) {
             if (input.Type === 'GeneralCatalog') {
                 const items = await this.getGeneralCatalogItems(input);
                 const item = items.find((i) => i.ItemID === value);

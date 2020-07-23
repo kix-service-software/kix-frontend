@@ -7,34 +7,34 @@
  * --
  */
 
-import { KIXObjectFormService } from "../../../../modules/base-components/webapp/core/KIXObjectFormService";
-import { ConfigItem } from "../../model/ConfigItem";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ContextType } from "../../../../model/ContextType";
-import { ConfigItemFormFactory } from ".";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { VersionProperty } from "../../model/VersionProperty";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalogItem";
-import { PreparedData } from "../../model/PreparedData";
-import { FormFieldOptions } from "../../../../model/configuration/FormFieldOptions";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { Contact } from "../../../customer/model/Contact";
-import { Organisation } from "../../../customer/model/Organisation";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
+import { KIXObjectFormService } from '../../../../modules/base-components/webapp/core/KIXObjectFormService';
+import { ConfigItem } from '../../model/ConfigItem';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { ConfigItemFormFactory } from '.';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { VersionProperty } from '../../model/VersionProperty';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
+import { PreparedData } from '../../model/PreparedData';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+
+
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class ConfigItemFormService extends KIXObjectFormService {
 

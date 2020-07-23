@@ -7,18 +7,18 @@
  * --
  */
 
-import { TableFactory } from "../../../../base-components/webapp/core/table/TableFactory";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { TableConfiguration } from "../../../../../model/configuration/TableConfiguration";
-import { ITable, Table, ToggleOptions } from "../../../../base-components/webapp/core/table";
-import { ConfigItemTableContentProvider } from "./ConfigItemTableContentProvider";
-import { DefaultColumnConfiguration } from "../../../../../model/configuration/DefaultColumnConfiguration";
-import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
-import { DataType } from "../../../../../model/DataType";
-import { TableRowHeight } from "../../../../../model/configuration/TableRowHeight";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { ConfigItemDetailsContext } from "..";
-import { ContextMode } from "../../../../../model/ContextMode";
+import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
+import { ITable, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
+import { ConfigItemTableContentProvider } from './ConfigItemTableContentProvider';
+import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { DataType } from '../../../../../model/DataType';
+import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { ConfigItemDetailsContext } from '..';
+import { ContextMode } from '../../../../../model/ContextMode';
 
 export class ConfigItemTableFactory extends TableFactory {
 
@@ -68,7 +68,6 @@ export class ConfigItemTableFactory extends TableFactory {
             new DefaultColumnConfiguration(
                 null, null, null, ConfigItemProperty.CHANGE_BY, true, false, true, false, 150, true, true)
         ];
-
 
         if (!tableConfiguration) {
             tableConfiguration = new TableConfiguration(null, null, null,

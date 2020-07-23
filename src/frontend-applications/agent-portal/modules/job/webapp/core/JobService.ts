@@ -7,19 +7,20 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { JobProperty } from "../../model/JobProperty";
-import { SysConfigOption } from "../../../sysconfig/model/SysConfigOption";
-import { SysConfigKey } from "../../../sysconfig/model/SysConfigKey";
-import { MacroActionType } from "../../model/MacroActionType";
-import { Job } from "../../model/Job";
-import { ExecPlan } from "../../model/ExecPlan";
-import { Macro } from "../../model/Macro";
-import { JobType } from "../../model/JobType";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { JobProperty } from '../../model/JobProperty';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
+import { MacroActionType } from '../../model/MacroActionType';
+import { Job } from '../../model/Job';
+import { ExecPlan } from '../../model/ExecPlan';
+import { Macro } from '../../model/Macro';
+import { JobType } from '../../model/JobType';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { JobRun } from '../../model/JobRun';
 
 export class JobService extends KIXObjectService<Job> {
 
@@ -31,6 +32,16 @@ export class JobService extends KIXObjectService<Job> {
         }
 
         return JobService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.JOB);
+        this.objectConstructors.set(KIXObjectType.JOB, [Job]);
+        this.objectConstructors.set(KIXObjectType.JOB_TYPE, [JobType]);
+        this.objectConstructors.set(KIXObjectType.JOB_RUN, [JobRun]);
+        this.objectConstructors.set(KIXObjectType.EXEC_PLAN, [ExecPlan]);
+        this.objectConstructors.set(KIXObjectType.MACRO, [Macro]);
+        this.objectConstructors.set(KIXObjectType.MACRO_ACTION_TYPE, [MacroActionType]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

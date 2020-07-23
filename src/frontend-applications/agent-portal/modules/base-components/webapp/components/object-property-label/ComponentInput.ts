@@ -7,16 +7,16 @@
  * --
  */
 
-import { ILabelProvider } from "../../../../../modules/base-components/webapp/core/ILabelProvider";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
+import { ILabelProvider } from '../../../../../modules/base-components/webapp/core/ILabelProvider';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 
-export class ComponentInput<T> {
+export class ComponentInput {
 
     public object: any;
 
     public property: string;
 
-    public labelProvider: ILabelProvider<T>;
+    public labelProvider: ILabelProvider;
 
     public info: any;
 

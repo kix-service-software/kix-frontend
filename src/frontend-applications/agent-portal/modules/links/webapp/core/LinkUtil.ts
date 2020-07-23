@@ -7,17 +7,16 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { LinkObject } from "../../model/LinkObject";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { LinkType } from "../../model/LinkType";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { Link } from "../../model/Link";
-import { CreateLinkDescription } from "../../server/api/CreateLinkDescription";
-import { FactoryService } from "../../../../modules/base-components/webapp/core/FactoryService";
-import { LinkTypeDescription } from "../../model/LinkTypeDescription";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { LinkObject } from '../../model/LinkObject';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { LinkType } from '../../model/LinkType';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { Link } from '../../model/Link';
+import { CreateLinkDescription } from '../../server/api/CreateLinkDescription';
+import { LinkTypeDescription } from '../../model/LinkTypeDescription';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 
 export class LinkUtil {
 
@@ -116,7 +115,7 @@ export class LinkUtil {
                             );
                     });
 
-                    const newLinkedObject = await FactoryService.getInstance().create(linkedObjectType, linkedObject);
+                    const newLinkedObject = new LinkObject(linkedObject as LinkObject);
                     newLinkedObject.LinkTypeName = link.Type;
 
                     if (linkType) {

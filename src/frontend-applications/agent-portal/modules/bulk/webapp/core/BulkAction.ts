@@ -7,18 +7,18 @@
  * --
  */
 
-import { AbstractAction } from "../../../../modules/base-components/webapp/core/AbstractAction";
-import { ITable } from "../../../base-components/webapp/core/table";
-import { IEventSubscriber } from "../../../../modules/base-components/webapp/core/IEventSubscriber";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { IdService } from "../../../../model/IdService";
-import { BulkService, BulkDialogContext } from ".";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { EventService } from "../../../../modules/base-components/webapp/core/EventService";
-import { DialogEvents } from "../../../../modules/base-components/webapp/core/DialogEvents";
-import { ContextMode } from "../../../../model/ContextMode";
-import { DialogEventData } from "../../../../modules/base-components/webapp/core/DialogEventData";
+import { AbstractAction } from '../../../../modules/base-components/webapp/core/AbstractAction';
+import { ITable } from '../../../base-components/webapp/core/table';
+import { IEventSubscriber } from '../../../../modules/base-components/webapp/core/IEventSubscriber';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { IdService } from '../../../../model/IdService';
+import { BulkService, BulkDialogContext } from '.';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { EventService } from '../../../../modules/base-components/webapp/core/EventService';
+import { DialogEvents } from '../../../../modules/base-components/webapp/core/DialogEvents';
+import { ContextMode } from '../../../../model/ContextMode';
+import { DialogEventData } from '../../../../modules/base-components/webapp/core/DialogEventData';
 
 
 export class BulkAction extends AbstractAction<ITable> implements IEventSubscriber {

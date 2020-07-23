@@ -7,18 +7,12 @@
  * --
  */
 
-import { AbstractEditDialog } from "../../../../../modules/base-components/webapp/core/AbstractEditDialog";
-import { ComponentState } from "./ComponentState";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { EditDynamicFieldDialogContext } from "../../core/EditDynamicFieldDialogContext";
+import { AbstractEditDialog } from '../../../../../modules/base-components/webapp/core/AbstractEditDialog';
+import { ComponentState } from './ComponentState';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { EditDynamicFieldDialogContext } from '../../core/EditDynamicFieldDialogContext';
 
 class Component extends AbstractEditDialog {
-
-    private formId: string;
-
-    public onInput(input: any) {
-        this.formId = input.formId;
-    }
 
     public onCreate(): void {
         this.state = new ComponentState();

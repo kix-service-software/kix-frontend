@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObject } from "../../../../model/kix/KIXObject";
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
-export interface IWidgetContent<T extends KIXObject<T>> {
+export interface IWidgetContent<T extends KIXObject> {
 
     getValue(): string;
 

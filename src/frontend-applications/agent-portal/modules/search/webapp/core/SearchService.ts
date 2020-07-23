@@ -7,29 +7,29 @@
  * --
  */
 
-import { SearchCache } from "../../model/SearchCache";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ITable } from "../../../base-components/webapp/core/table";
-import { SearchDefinition } from "./SearchDefinition";
-import { SearchResultCategory } from "./SearchResultCategory";
-import { IKIXObjectSearchListener } from "./IKIXObjectSearchListener";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { SearchContext } from "./SearchContext";
-import { FormService } from "../../../../modules/base-components/webapp/core/FormService";
-import { SearchFormInstance } from "../../../../modules/base-components/webapp/core/SearchFormInstance";
-import { CacheState } from "../../model/CacheState";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { SearchProperty } from "../../model/SearchProperty";
-import { SearchSocketClient } from "./SearchSocketClient";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
-import { Bookmark } from "../../../../model/Bookmark";
-import { SortUtil } from "../../../../model/SortUtil";
-import { BookmarkService } from "../../../../modules/base-components/webapp/core/BookmarkService";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
+import { SearchCache } from '../../model/SearchCache';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ITable } from '../../../base-components/webapp/core/table';
+import { SearchDefinition } from './SearchDefinition';
+import { SearchResultCategory } from './SearchResultCategory';
+import { IKIXObjectSearchListener } from './IKIXObjectSearchListener';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { SearchContext } from './SearchContext';
+import { FormService } from '../../../../modules/base-components/webapp/core/FormService';
+import { SearchFormInstance } from '../../../../modules/base-components/webapp/core/SearchFormInstance';
+import { CacheState } from '../../model/CacheState';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { SearchProperty } from '../../model/SearchProperty';
+import { SearchSocketClient } from './SearchSocketClient';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
+import { Bookmark } from '../../../../model/Bookmark';
+import { SortUtil } from '../../../../model/SortUtil';
+import { BookmarkService } from '../../../../modules/base-components/webapp/core/BookmarkService';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class SearchService {
 
@@ -72,8 +72,8 @@ export class SearchService {
         }
     }
 
-    public getFormResultTable<T extends KIXObject>(objectType: KIXObjectType | string): ITable {
-        let tableConfig;
+    public getFormResultTable(objectType: KIXObjectType | string): ITable {
+        let tableConfig: ITable;
         if (this.formTableConfigs.has(objectType)) {
             tableConfig = this.formTableConfigs.get(objectType);
         }
@@ -92,26 +92,26 @@ export class SearchService {
     }
 
     public async executeSearch<T extends KIXObject = KIXObject>(
-        formId: string, excludeObjects?: KIXObject[]
+        formId: string, objectType: KIXObjectType | string, excludeObjects?: KIXObject[]
     ): Promise<T[]> {
         let objects;
-        const formInstance = await FormService.getInstance().getFormInstance(formId);
-        if (formInstance) {
-            const objectType = formInstance.getObjectType();
-            const searchDefinition = this.getSearchDefinition(objectType);
 
-            if (formInstance instanceof SearchFormInstance) {
-                const criteria = formInstance.getCriteria().filter(
-                    (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
-                );
+        if (!formId) {
+            const criteria = SearchFormInstance.getInstance().getCriteria().filter(
+                (c) => typeof c.value !== 'undefined' && c.value !== null && c.value !== ''
+            );
 
-                const cacheName = this.searchCache && this.searchCache.status === CacheState.VALID
-                    ? this.searchCache.name
-                    : null;
-                this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
-                objects = await this.doSearch();
-                this.provideResult(objectType);
-            } else {
+            const cacheName = this.searchCache && this.searchCache.status === CacheState.VALID
+                ? this.searchCache.name
+                : null;
+            this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
+            objects = await this.doSearch();
+            this.provideResult(objectType);
+        } else {
+            const formInstance = await FormService.getInstance().getFormInstance(formId);
+            if (formInstance) {
+                const formObjectType = formInstance.getObjectType();
+                const searchDefinition = this.getSearchDefinition(formObjectType);
                 const formFieldValues = formInstance.getAllFormFieldValues();
                 let criteria = [];
 
@@ -153,10 +153,10 @@ export class SearchService {
                 });
 
                 const loadingOptions = searchDefinition.getLoadingOptions(criteria);
-                objects = await KIXObjectService.loadObjects(objectType, null, loadingOptions, null, false);
+                objects = await KIXObjectService.loadObjects(formObjectType, null, loadingOptions, null, false);
+            } else {
+                throw new Error('No form found: ' + formId);
             }
-        } else {
-            throw new Error("No form found: " + formId);
         }
 
         return (objects as any);

@@ -7,22 +7,22 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { ConfigItemClass } from "../../../model/ConfigItemClass";
-import { TranslationService } from "../../../../../modules/translation/webapp/core/TranslationService";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { ConfigItemProperty } from "../../../model/ConfigItemProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { ServiceRegistry } from "../../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { CMDBService } from "..";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { ContextUIEvent } from "../../../../base-components/webapp/core/ContextUIEvent";
-import { EventService } from "../../../../base-components/webapp/core/EventService";
+import { Context } from '../../../../../model/Context';
+import { ConfigItemClass } from '../../../model/ConfigItemClass';
+import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { ServiceRegistry } from '../../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { CMDBService } from '..';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
+import { EventService } from '../../../../base-components/webapp/core/EventService';
 
 export class CMDBContext extends Context {
 

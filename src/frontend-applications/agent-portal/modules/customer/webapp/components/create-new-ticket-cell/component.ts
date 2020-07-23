@@ -40,7 +40,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-
     public labelClicked(event: any): void {
         event.stopPropagation();
         event.preventDefault();

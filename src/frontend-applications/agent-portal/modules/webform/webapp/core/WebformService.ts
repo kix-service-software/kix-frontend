@@ -7,24 +7,24 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Webform } from "../../model/Webform";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { WebformSocketClient } from ".";
-import { KIXObjectSpecificCreateOptions } from "../../../../model/KIXObjectSpecificCreateOptions";
-import { ComponentContent } from "../../../../modules/base-components/webapp/core/ComponentContent";
-import { OverlayService } from "../../../../modules/base-components/webapp/core/OverlayService";
-import { OverlayType } from "../../../../modules/base-components/webapp/core/OverlayType";
-import { WebformProperty } from "../../model/WebformProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { User } from "../../../user/model/User";
-import { Error } from "../../../../../../server/model/Error";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { ServiceType } from "../../../../modules/base-components/webapp/core/ServiceType";
-import { IKIXObjectFormService } from "../../../../modules/base-components/webapp/core/IKIXObjectFormService";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Webform } from '../../model/Webform';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { WebformSocketClient } from '.';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
+import { ComponentContent } from '../../../../modules/base-components/webapp/core/ComponentContent';
+import { OverlayService } from '../../../../modules/base-components/webapp/core/OverlayService';
+import { OverlayType } from '../../../../modules/base-components/webapp/core/OverlayType';
+import { WebformProperty } from '../../model/WebformProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+
+import { Error } from '../../../../../../server/model/Error';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { ServiceType } from '../../../../modules/base-components/webapp/core/ServiceType';
+import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
 
 export class WebformService extends KIXObjectService<Webform> {
 
@@ -36,6 +36,11 @@ export class WebformService extends KIXObjectService<Webform> {
         }
 
         return WebformService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.WEBFORM);
+        this.objectConstructors.set(KIXObjectType.WEBFORM, [Webform]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
@@ -95,11 +100,11 @@ export class WebformService extends KIXObjectService<Webform> {
     }
 
     private async getWebformFromForm(formId: string): Promise<Webform> {
-        const service = ServiceRegistry.getServiceInstance<IKIXObjectFormService>(
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.WEBFORM, ServiceType.FORM
         );
 
-        const parameter: Array<[string, any]> = await service.prepareFormFields(formId);
+        const parameter: Array<[string, any]> = await service.getFormParameter(formId);
         return new Webform(null,
             this.getParameterValue(parameter, WebformProperty.BUTTON_LABEL),
             this.getParameterValue(parameter, WebformProperty.TITLE),

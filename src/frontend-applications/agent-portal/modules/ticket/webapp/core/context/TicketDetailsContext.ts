@@ -7,17 +7,17 @@
  * --
  */
 
-import { Context } from "../../../../../model/Context";
-import { LabelService } from "../../../../../modules/base-components/webapp/core/LabelService";
-import { Ticket } from "../../../model/Ticket";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { BreadcrumbInformation } from "../../../../../model/BreadcrumbInformation";
-import { TicketContext } from "./TicketContext";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { TicketProperty } from "../../../model/TicketProperty";
-import { KIXObjectProperty } from "../../../../../model/kix/KIXObjectProperty";
+import { Context } from '../../../../../model/Context';
+import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
+import { Ticket } from '../../../model/Ticket';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformation';
+import { TicketContext } from './TicketContext';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { TicketProperty } from '../../../model/TicketProperty';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 export class TicketDetailsContext extends Context {
 

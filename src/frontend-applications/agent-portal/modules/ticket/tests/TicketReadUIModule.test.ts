@@ -12,7 +12,7 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
-import { TicketReadUIModule, TicketContext, TicketDetailsContext, TicketSearchContext, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketBrowserFactory, TicketHistoryBrowserFactory, ArticleBrowserFactory, TicketTypeBrowserFactory, TicketPriorityBrowserFactory, TicketStateBrowserFactory, TicketStateTypeBrowserFactory, QueueBrowserFactory, FollowUpTypeBrowserFactory, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService } from '../webapp/core';
+import { TicketReadUIModule, TicketContext, TicketDetailsContext, TicketSearchContext, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService } from '../webapp/core';
 import { TicketTableFactory } from '../webapp/core/table/TicketTableFactory'
 import { TicketPlaceholderHandler } from '../webapp/core/TicketPlaceholderHandler';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
@@ -21,8 +21,6 @@ import { SearchService } from '../../search/webapp/core';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { TableFactoryService, TableCSSHandlerRegistry } from '../../base-components/webapp/core/table';
 import { ArticleTableFactory } from '../webapp/core/table/ArticleTableFactory';
-import { FactoryService } from '../../base-components/webapp/core/FactoryService';
-import { ChannelBrowserFactory } from '../webapp/core/ChannelBrowserFactory';
 import { LabelService } from '../../base-components/webapp/core/LabelService';
 import { ChannelLabelProvider } from '../webapp/core/ChannelLabelProvider';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';
@@ -151,69 +149,6 @@ describe('TicketReadUIModule', () => {
                 const provider = LabelService.getInstance().getLabelProviderForType(KIXObjectType.QUEUE);
                 expect(provider).exist;
                 expect(provider).instanceof(QueueLabelProvider);
-            });
-        });
-
-        describe('Check factories', () => {
-
-            it('Should register the TicketBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.TICKET);
-                expect(factory).exist;
-                expect(factory).instanceof(TicketBrowserFactory);
-            });
-
-            it('Should register the ChannelBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.CHANNEL);
-                expect(factory).exist;
-                expect(factory).instanceof(ChannelBrowserFactory);
-            });
-
-            it('Should register the TicketHistoryBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.TICKET_HISTORY);
-                expect(factory).exist;
-                expect(factory).instanceof(TicketHistoryBrowserFactory);
-            });
-
-            it('Should register the ArticleBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.ARTICLE);
-                expect(factory).exist;
-                expect(factory).instanceof(ArticleBrowserFactory);
-            });
-
-            it('Should register the TicketTypeBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.TICKET_TYPE);
-                expect(factory).exist;
-                expect(factory).instanceof(TicketTypeBrowserFactory);
-            });
-
-            it('Should register the TicketPriorityBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.TICKET_PRIORITY);
-                expect(factory).exist;
-                expect(factory).instanceof(TicketPriorityBrowserFactory);
-            });
-
-            it('Should register the TicketStateBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.TICKET_STATE);
-                expect(factory).exist;
-                expect(factory).instanceof(TicketStateBrowserFactory);
-            });
-
-            it('Should register the TicketStateTypeBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.TICKET_STATE_TYPE);
-                expect(factory).exist;
-                expect(factory).instanceof(TicketStateTypeBrowserFactory);
-            });
-
-            it('Should register the QueueBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.QUEUE);
-                expect(factory).exist;
-                expect(factory).instanceof(QueueBrowserFactory);
-            });
-
-            it('Should register the FollowUpTypeBrowserFactory', () => {
-                const factory = (FactoryService.getInstance() as any).fatcories.get(KIXObjectType.FOLLOW_UP_TYPE);
-                expect(factory).exist;
-                expect(factory).instanceof(FollowUpTypeBrowserFactory);
             });
         });
 

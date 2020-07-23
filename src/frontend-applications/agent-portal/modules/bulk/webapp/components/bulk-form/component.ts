@@ -53,15 +53,17 @@ class Component {
     public onInput(input: any): void {
         this.state.bulkManager = input.bulkManager;
         this.state.bulkManager.registerListener('bulk-dialog-listener', () => {
-            this.state.canRun = this.state.bulkManager.hasDefinedValues() && !!this.state.bulkManager.objects.length;
+            this.state.bulkManager.hasDefinedValues().then((hasDefinedValues) => {
+                return this.state.canRun = hasDefinedValues && !!this.state.bulkManager.objects.length;
+            });
         });
     }
 
     public async onMount(): Promise<void> {
         this.createTable();
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Cancel", "Translatable#Reset data", "Translatable#Close Dialog",
-            "Translatable#Execute now", "Translatable#Attributes to be edited"
+            'Translatable#Cancel', 'Translatable#Reset data', 'Translatable#Close Dialog',
+            'Translatable#Execute now', 'Translatable#Attributes to be edited'
         ]);
     }
 
@@ -124,7 +126,7 @@ class Component {
                             const rows = this.state.table.getSelectedRows();
                             const objects = rows.map((r) => r.getRowObject().getObject());
                             this.state.bulkManager.objects = objects;
-                            this.state.canRun = this.state.bulkManager.hasDefinedValues() && !!objects.length;
+                            this.state.canRun = await this.state.bulkManager.hasDefinedValues() && !!objects.length;
                             await this.prepareTitle();
                         }
                     }
@@ -159,7 +161,7 @@ class Component {
         } else {
 
             const objects = this.state.bulkManager.objects;
-            const editableValues = this.state.bulkManager.getEditableValues();
+            const editableValues = await this.state.bulkManager.getEditableValues();
 
             const title = await TranslationService.translate('Translatable#Execute now?');
             const question = await TranslationService.translate(

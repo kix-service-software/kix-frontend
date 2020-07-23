@@ -7,22 +7,22 @@
  * --
  */
 
-import { SocketClient } from "../../../../modules/base-components/webapp/core/SocketClient";
-import { User } from "../../model/User";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { IdService } from "../../../../model/IdService";
-import { GetCurrentUserRequest } from "../../../../modules/base-components/webapp/core/GetCurrentUserRequest";
-import { ClientStorageService } from "../../../../modules/base-components/webapp/core/ClientStorageService";
-import { AgentEvent } from "./AgentEvent";
-import { GetCurrentUserResponse } from "../../../../modules/base-components/webapp/core/GetCurrentUserResponse";
-import { SocketEvent } from "../../../../modules/base-components/webapp/core/SocketEvent";
-import { SocketErrorResponse } from "../../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { PersonalSetting } from "../../model/PersonalSetting";
-import { PersonalSettingsResponse } from "../../../../modules/base-components/webapp/core/PersonalSettingsResponse";
-import { ISocketRequest } from "../../../../modules/base-components/webapp/core/ISocketRequest";
-import { SetPreferencesRequest } from "../../../../modules/base-components/webapp/core/SetPreferencesRequest";
-import { SetPreferencesResponse } from "../../../../modules/base-components/webapp/core/SetPreferencesResponse";
-import { BrowserCacheService } from "../../../../modules/base-components/webapp/core/CacheService";
+import { SocketClient } from '../../../../modules/base-components/webapp/core/SocketClient';
+import { User } from '../../model/User';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { IdService } from '../../../../model/IdService';
+import { GetCurrentUserRequest } from '../../../../modules/base-components/webapp/core/GetCurrentUserRequest';
+import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { AgentEvent } from './AgentEvent';
+import { GetCurrentUserResponse } from '../../../../modules/base-components/webapp/core/GetCurrentUserResponse';
+import { SocketEvent } from '../../../../modules/base-components/webapp/core/SocketEvent';
+import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { PersonalSetting } from '../../model/PersonalSetting';
+import { PersonalSettingsResponse } from '../../../../modules/base-components/webapp/core/PersonalSettingsResponse';
+import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
+import { SetPreferencesRequest } from '../../../../modules/base-components/webapp/core/SetPreferencesRequest';
+import { SetPreferencesResponse } from '../../../../modules/base-components/webapp/core/SetPreferencesResponse';
+import { BrowserCacheService } from '../../../../modules/base-components/webapp/core/CacheService';
 
 export class AgentSocketClient extends SocketClient {
 
@@ -77,7 +77,7 @@ export class AgentSocketClient extends SocketClient {
                         if (result.requestId === requestId) {
                             window.clearTimeout(timeout);
                             BrowserCacheService.getInstance().set(
-                                KIXObjectType.CURRENT_USER, result.currentUser, KIXObjectType.CURRENT_USER
+                                KIXObjectType.CURRENT_USER, new User(result.currentUser), KIXObjectType.CURRENT_USER
                             );
                             this.currentUserRequestPromise = null;
                             resolve(result.currentUser);

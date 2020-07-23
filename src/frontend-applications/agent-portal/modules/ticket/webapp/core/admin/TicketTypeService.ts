@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
-import { TicketType } from "../../../model/TicketType";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../../model/KIXObjectSpecificLoadingOptions";
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { TicketType } from '../../../model/TicketType';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../../model/KIXObjectSpecificLoadingOptions';
 
 
 export class TicketTypeService extends KIXObjectService<TicketType> {
@@ -25,6 +25,11 @@ export class TicketTypeService extends KIXObjectService<TicketType> {
         }
 
         return TicketTypeService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.TICKET_TYPE);
+        this.objectConstructors.set(KIXObjectType.TICKET_TYPE, [TicketType]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

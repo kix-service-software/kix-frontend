@@ -7,22 +7,22 @@
  * --
  */
 
-import { OrganisationService } from "./OrganisationService";
+import { OrganisationService } from './OrganisationService';
 import {
     AbstractDynamicFormManager
-} from "../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { OrganisationProperty } from "../../model/OrganisationProperty";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { AuthenticationSocketClient } from "../../../../modules/base-components/webapp/core/AuthenticationSocketClient";
-import { UIComponentPermission } from "../../../../model/UIComponentPermission";
-import { CRUD } from "../../../../../../server/model/rest/CRUD";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { SearchDefinition, SearchOperatorUtil } from "../../../search/webapp/core";
-import { InputFieldTypes } from "../../../../modules/base-components/webapp/core/InputFieldTypes";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
+} from '../../../base-components/webapp/core/dynamic-form/AbstractDynamicFormManager';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { OrganisationProperty } from '../../model/OrganisationProperty';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { AuthenticationSocketClient } from '../../../../modules/base-components/webapp/core/AuthenticationSocketClient';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { SearchDefinition, SearchOperatorUtil } from '../../../search/webapp/core';
+import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 
 export class OrganisationSearchFormManager extends AbstractDynamicFormManager {
 

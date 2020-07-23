@@ -86,7 +86,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     private async prepareTitle(user: User): Promise<void> {
-        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : "";
+        let title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : '';
         title = await TranslationService.translate(title);
         const count = user.RoleIDs ? user.RoleIDs.length : 0;
         this.state.title = `${title} (${count})`;

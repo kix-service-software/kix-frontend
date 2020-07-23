@@ -7,8 +7,8 @@
  * --
  */
 
-import { IMarkoComponent } from "./IMarkoComponent";
-import { AbstractComponentState } from "./AbstractComponentState";
+import { IMarkoComponent } from './IMarkoComponent';
+import { AbstractComponentState } from './AbstractComponentState';
 
 export abstract class AbstractMarkoComponent<CS = AbstractComponentState, I = any> implements IMarkoComponent<CS, I> {
 

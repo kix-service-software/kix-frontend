@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { Version } from "../../model/Version";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { VersionProperty } from "../../model/VersionProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { Version } from '../../model/Version';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { VersionProperty } from '../../model/VersionProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 
 export class ConfigItemVersionLabelProvider extends LabelProvider<Version> {
 

@@ -7,29 +7,29 @@
  * --
  */
 
-import { IUIModule } from "../../../../model/IUIModule";
-import { ServiceRegistry } from "../../../../modules/base-components/webapp/core/ServiceRegistry";
-import { LinkService } from "./LinkService";
-import { TableFactoryService } from "../../../base-components/webapp/core/table";
+import { IUIModule } from '../../../../model/IUIModule';
+import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
+import { LinkService } from './LinkService';
+import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import {
     LinkObjectTableFactory, LinkObjectLabelProvider, LinkedObjectsEditAction,
     LinkObjectDialogContext, EditLinkedObjectsDialogContext
-} from ".";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ActionFactory } from "../../../../modules/base-components/webapp/core/ActionFactory";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextType } from "../../../../model/ContextType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { LinkFormService } from "./LinkFormService";
+} from '.';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { LinkFormService } from './LinkFormService';
 
 export class UIModule implements IUIModule {
 
     public name: string = 'LinkUIUIModule';
 
     public async unRegister(): Promise<void> {
-        throw new Error("Method not implemented.");
+        throw new Error('Method not implemented.');
     }
 
     public priority: number = 800;

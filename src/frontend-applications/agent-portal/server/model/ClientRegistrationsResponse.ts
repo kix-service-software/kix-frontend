@@ -7,7 +7,7 @@
  * --
  */
 
-import { ClientRegistration } from "./ClientRegistration";
+import { ClientRegistration } from './ClientRegistration';
 
 export class ClientRegistrationsResponse {
 

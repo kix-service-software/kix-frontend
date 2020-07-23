@@ -7,14 +7,14 @@
  * --
  */
 
-import { ContextSocketClient } from "./ContextSocketClient";
-import { AdditionalContextInformation } from "./AdditionalContextInformation";
-import { FormService } from "./FormService";
-import { ContextDescriptor } from "../../../../model/ContextDescriptor";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { ContextMode } from "../../../../model/ContextMode";
-import { ContextType } from "../../../../model/ContextType";
-import { Context } from "../../../../model/Context";
+import { ContextSocketClient } from './ContextSocketClient';
+import { AdditionalContextInformation } from './AdditionalContextInformation';
+import { FormService } from './FormService';
+import { ContextDescriptor } from '../../../../model/ContextDescriptor';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ContextType } from '../../../../model/ContextType';
+import { Context } from '../../../../model/Context';
 
 export class ContextFactory {
 
@@ -146,7 +146,6 @@ export class ContextFactory {
                 );
                 if (configuration) {
                     context = new descriptor.contextClass(descriptor, objectId, configuration);
-                    context.initContext();
                 }
             }
 

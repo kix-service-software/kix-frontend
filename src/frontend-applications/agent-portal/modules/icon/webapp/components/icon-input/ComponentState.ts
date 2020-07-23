@@ -7,8 +7,8 @@
  * --
  */
 
-import { FormInputComponentState } from "../../../../../modules/base-components/webapp/core/FormInputComponentState";
-import { ObjectIcon } from "../../../model/ObjectIcon";
+import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { ObjectIcon } from '../../../model/ObjectIcon';
 
 export class ComponentState extends FormInputComponentState<any> {
 

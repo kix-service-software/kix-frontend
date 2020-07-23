@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { ConfigItemLabelProvider } from '../../core';
+
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 
 class Component {

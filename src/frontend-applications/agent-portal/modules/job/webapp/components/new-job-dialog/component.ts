@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../modules/base-components/webapp/core/AbstractNewDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { JobDetailsContext } from "../../core";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { JobProperty } from "../../../model/JobProperty";
+import { ComponentState } from './ComponentState';
+import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { JobDetailsContext } from '../../core';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { JobProperty } from '../../../model/JobProperty';
 
 class Component extends AbstractNewDialog {
 

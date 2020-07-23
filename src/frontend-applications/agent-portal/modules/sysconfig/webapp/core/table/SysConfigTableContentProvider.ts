@@ -7,20 +7,20 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { SysConfigOptionDefinition } from "../../../model/SysConfigOptionDefinition";
-import { ITable, IRowObject, RowObject, TableValue } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { SysConfigOption } from "../../../model/SysConfigOption";
-import { SysConfigKey } from "../../../model/SysConfigKey";
-import { FilterCriteria } from "../../../../../model/FilterCriteria";
-import { SysConfigOptionDefinitionProperty } from "../../../model/SysConfigOptionDefinitionProperty";
-import { SearchOperator } from "../../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../../model/FilterDataType";
-import { FilterType } from "../../../../../model/FilterType";
-import { AdminContext } from "../../../../admin/webapp/core";
-import { KIXObjectService } from "../../../../../modules/base-components/webapp/core/KIXObjectService";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
+import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SysConfigOption } from '../../../model/SysConfigOption';
+import { SysConfigKey } from '../../../model/SysConfigKey';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptionDefinitionProperty';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../model/FilterType';
+import { AdminContext } from '../../../../admin/webapp/core';
+import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
 

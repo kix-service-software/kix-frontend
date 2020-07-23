@@ -7,17 +7,15 @@
  * --
  */
 
-import { KIXModulesSocketClient } from "./KIXModulesSocketClient";
-import { FormFactory } from "./FormFactory";
-import { BrowserUtil } from "./BrowserUtil";
-import { IFormInstance } from "./IFormInstance";
-import { SearchFormInstance } from "./SearchFormInstance";
-import { SearchForm } from "./SearchForm";
-import { FormInstance } from "./FormInstance";
-import { IFormInstanceListener } from "./IFormInstanceListener";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXModulesSocketClient } from './KIXModulesSocketClient';
+import { FormInstance } from './FormInstance';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormFieldValueHandler } from './FormFieldValueHandler';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { EventService } from './EventService';
+import { FormEvent } from './FormEvent';
 
 export class FormService {
 
@@ -30,12 +28,25 @@ export class FormService {
         return FormService.INSTANCE;
     }
 
-    private formInstances: Map<string, Promise<IFormInstance>> = new Map();
+    private formInstances: Map<string, Promise<FormInstance>> = new Map();
+
+    private formFieldValueHandler: Map<KIXObjectType | string, FormFieldValueHandler[]> = new Map();
 
     private forms: FormConfiguration[] = [];
     private formIDsWithContext: Array<[FormContext, KIXObjectType | string, string]> = null;
 
     private constructor() { }
+
+    public addFormFieldValueHandler(objectType: KIXObjectType | string, handler: FormFieldValueHandler): void {
+        if (!this.formFieldValueHandler.has(objectType)) {
+            this.formFieldValueHandler.set(objectType, []);
+        }
+        this.formFieldValueHandler.get(objectType).push(handler);
+    }
+
+    public getFormFieldValueHandler(objectType: KIXObjectType | string): FormFieldValueHandler[] {
+        return this.formFieldValueHandler.get(objectType);
+    }
 
     public async loadFormConfigurations(): Promise<void> {
         const formConfigurations = await KIXModulesSocketClient.getInstance().loadFormConfigurations();
@@ -51,40 +62,26 @@ export class FormService {
         }
     }
 
-    public async getFormInstance<T extends IFormInstance>(
-        formId: string, cache: boolean = true, form?: FormConfiguration
-    ): Promise<T> {
+    public async getFormInstance(
+        formId: string, cache: boolean = true, form?: FormConfiguration, kixObject?: KIXObject
+    ): Promise<FormInstance> {
         if (formId) {
             if (!this.formInstances.has(formId) || !cache) {
-                const formInstance = this.getNewFormInstance(formId, form);
+                const formInstance = this.getNewFormInstance(formId, form, kixObject);
                 this.formInstances.set(formId, formInstance);
             }
-            return await this.formInstances.get(formId) as T;
+            return await this.formInstances.get(formId);
         }
         return;
     }
 
-    private getNewFormInstance(formId: string, form?: FormConfiguration): Promise<IFormInstance> {
-        return new Promise<IFormInstance>(async (resolve, reject) => {
+    private getNewFormInstance(formId: string, form: FormConfiguration, kixObject: KIXObject): Promise<FormInstance> {
+        return new Promise<FormInstance>(async (resolve, reject) => {
             this.deleteFormInstance(formId);
-            if (!form) {
-                const configuredForm = await this.getForm(formId);
-                if (configuredForm) {
-                    form = { ...configuredForm };
-                } else {
-                    BrowserUtil.openErrorOverlay(`No form configuration found for id ${formId}`);
-                    reject();
-                }
-            }
-
-            FormFactory.initForm(form);
-            if (form.formContext === FormContext.SEARCH) {
-                resolve(new SearchFormInstance((form as SearchForm)));
-            } else {
-                const formInstance = new FormInstance(form);
-                await formInstance.initFormInstance();
-                resolve(formInstance);
-            }
+            const formInstance = new FormInstance();
+            await formInstance.initFormInstance(formId, kixObject);
+            EventService.getInstance().publish(FormEvent.FORM_INITIALIZED, formInstance);
+            resolve(formInstance);
         });
     }
 
@@ -93,7 +90,7 @@ export class FormService {
         if (!form) {
             form = await KIXModulesSocketClient.getInstance().loadFormConfiguration(formId);
         }
-        return form;
+        return { ...form };
     }
 
     public deleteFormInstance(formId: string): void {
@@ -115,22 +112,6 @@ export class FormService {
             formId = formIdByContext[2];
         }
         return formId;
-    }
-
-    public async registerFormInstanceListener(formId: string, listener: IFormInstanceListener): Promise<void> {
-        const formInstance = await this.getFormInstance(formId);
-        if (formInstance) {
-            formInstance.registerListener(listener);
-        }
-    }
-
-    public async removeFormInstanceListener(formId: string, listenerId: string): Promise<void> {
-        if (this.formInstances.has(formId)) {
-            const formInstance = await this.getFormInstance(formId);
-            if (formInstance) {
-                formInstance.removeListener(listenerId);
-            }
-        }
     }
 
 }

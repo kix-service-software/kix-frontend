@@ -7,27 +7,38 @@
  * --
  */
 
-import { IFormInstance } from "./IFormInstance";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { ISearchFormListener } from "./ISearchFormListener";
-import { SearchForm } from "./SearchForm";
-import { FormConfiguration } from "../../../../model/configuration/FormConfiguration";
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { FormFieldValue } from "../../../../model/configuration/FormFieldValue";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { IFormInstanceListener } from "./IFormInstanceListener";
-import { ValidationResult } from "./ValidationResult";
-import { AutoCompleteConfiguration } from "../../../../model/configuration/AutoCompleteConfiguration";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { FormPageConfiguration } from "../../../../model/configuration/FormPageConfiguration";
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { ISearchFormListener } from './ISearchFormListener';
+import { SearchForm } from './SearchForm';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { FormService } from './FormService';
 
-export class SearchFormInstance implements IFormInstance {
+export class SearchFormInstance {
+
+    private static INSTANCE: SearchFormInstance;
+
+    public static getInstance(): SearchFormInstance {
+        if (!SearchFormInstance.INSTANCE) {
+            SearchFormInstance.INSTANCE = new SearchFormInstance();
+        }
+        return SearchFormInstance.INSTANCE;
+    }
+
+    private constructor() { }
+
+    private form: FormConfiguration;
 
     private filterCriteria: FilterCriteria[] = [];
 
     private listeners: ISearchFormListener[] = [];
 
-    public constructor(public form: SearchForm) { }
+    public async setForm(formId: string): Promise<void> {
+        this.form = await FormService.getInstance().getForm(formId);
+    }
 
     public getForm(): FormConfiguration {
         return this.form;
@@ -54,40 +65,6 @@ export class SearchFormInstance implements IFormInstance {
         this.filterCriteria = [];
     }
 
-    public async provideFormField(formField: FormFieldConfiguration): Promise<void> {
-        return;
-    }
-
-    public removeFormField(formField: FormFieldConfiguration): void {
-        return;
-    }
-
-    public setFieldEmptyState(formField: FormFieldConfiguration, empty?: boolean): void {
-        return;
-    }
-
-    public removePages(pageIds: string[]): Promise<void> {
-        return;
-    }
-
-    public addFormField(formField: FormFieldConfiguration): void {
-        return;
-    }
-
-    public addPage(page: FormPageConfiguration, index?: number): void {
-        return;
-    }
-
-    public addNewFormField(
-        parent: FormFieldConfiguration, newFields: FormFieldConfiguration[], clearChildren?: boolean
-    ): void {
-        return;
-    }
-
-    public provideFormFieldValue<T>(fieldId: string, value: T): void {
-        return;
-    }
-
     public getFormFieldValue<T>(
         fieldId: string
     ): FormFieldValue<T> {
@@ -95,14 +72,6 @@ export class SearchFormInstance implements IFormInstance {
         if (criteria) {
             return new FormFieldValue<any>(criteria.value, true);
         }
-    }
-
-    public async getFormFieldValueByProperty<T>(property: string): Promise<FormFieldValue<T>> {
-        return null;
-    }
-
-    public async getFormFieldByProperty(property: string): Promise<FormFieldConfiguration> {
-        return null;
     }
 
     public getCriteria(): FilterCriteria[] {
@@ -144,26 +113,6 @@ export class SearchFormInstance implements IFormInstance {
         if (listenerIndex !== -1) {
             this.listeners.splice(listenerIndex, 1);
         }
-    }
-
-    public registerListener(listener: IFormInstanceListener): void {
-        return;
-    }
-
-    public removeListener(listenerId: string): void {
-        return;
-    }
-
-    public async validateForm(): Promise<ValidationResult[]> {
-        return [];
-    }
-
-    public async validateField(field: FormFieldConfiguration): Promise<ValidationResult> {
-        return;
-    }
-
-    public getAutoCompleteConfiguration(): AutoCompleteConfiguration {
-        return new AutoCompleteConfiguration();
     }
 
     public getFormContext(): FormContext {

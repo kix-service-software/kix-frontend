@@ -7,11 +7,11 @@
  * --
  */
 
-import { TableContentProvider } from "../../../../base-components/webapp/core/table/TableContentProvider";
-import { ImportExportTemplate } from "../../../model/ImportExportTemplate";
-import { ITable } from "../../../../base-components/webapp/core/table";
-import { KIXObjectLoadingOptions } from "../../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
+import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
+import { ImportExportTemplate } from '../../../model/ImportExportTemplate';
+import { ITable } from '../../../../base-components/webapp/core/table';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class ImportExportTemplateTableContentProvider extends TableContentProvider<ImportExportTemplate> {
 

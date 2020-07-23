@@ -7,41 +7,44 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { KIXObjectSpecificLoadingOptions } from "../../../../model/KIXObjectSpecificLoadingOptions";
-import { ArticleProperty } from "../../model/ArticleProperty";
-import { TicketProperty } from "../../model/TicketProperty";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { TicketSocketClient } from "./TicketSocketClient";
-import { QueueService, } from "./admin/QueueService";
-import { TicketDetailsContext } from "./context/TicketDetailsContext";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchProperty } from "../../../search/model/SearchProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { TicketType } from "../../model/TicketType";
-import { TicketPriority } from "../../model/TicketPriority";
-import { TicketState } from "../../model/TicketState";
-import { User } from "../../../user/model/User";
-import { TableFilterCriteria } from "../../../../model/TableFilterCriteria";
-import { AgentService } from "../../../user/webapp/core/AgentService";
-import { StateType } from "../../model/StateType";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { Article } from "../../model/Article";
-import { InlineContent } from "../../../../modules/base-components/webapp/core/InlineContent";
-import { Channel } from "../../model/Channel";
-import { ChannelProperty } from "../../model/ChannelProperty";
-import { UserProperty } from "../../../user/model/UserProperty";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../model/ContextMode";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { TicketProperty } from '../../model/TicketProperty';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { TicketSocketClient } from './TicketSocketClient';
+import { QueueService, } from './admin/QueueService';
+import { TicketDetailsContext } from './context/TicketDetailsContext';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchProperty } from '../../../search/model/SearchProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { TicketType } from '../../model/TicketType';
+import { TicketPriority } from '../../model/TicketPriority';
+import { TicketState } from '../../model/TicketState';
+import { User } from '../../../user/model/User';
+import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { AgentService } from '../../../user/webapp/core/AgentService';
+import { StateType } from '../../model/StateType';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { Article } from '../../model/Article';
+import { InlineContent } from '../../../../modules/base-components/webapp/core/InlineContent';
+import { Channel } from '../../model/Channel';
+import { ChannelProperty } from '../../model/ChannelProperty';
+import { UserProperty } from '../../../user/model/UserProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../model/ContextMode';
+import { SenderType } from '../../model/SenderType';
+import { Lock } from '../../model/Lock';
+import { Watcher } from '../../model/Watcher';
 
 export class TicketService extends KIXObjectService<Ticket> {
 
@@ -53,6 +56,15 @@ export class TicketService extends KIXObjectService<Ticket> {
         }
 
         return TicketService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.TICKET);
+        this.objectConstructors.set(KIXObjectType.TICKET, [Ticket]);
+        this.objectConstructors.set(KIXObjectType.ARTICLE, [Article]);
+        this.objectConstructors.set(KIXObjectType.SENDER_TYPE, [SenderType]);
+        this.objectConstructors.set(KIXObjectType.LOCK, [Lock]);
+        this.objectConstructors.set(KIXObjectType.WATCHER, [Watcher]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
@@ -86,7 +98,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     }
 
     public getLinkObjectName(): string {
-        return "Ticket";
+        return 'Ticket';
     }
 
     public async loadArticleAttachment(ticketId: number, articleId: number, attachmentId: number): Promise<Attachment> {
@@ -200,9 +212,16 @@ export class TicketService extends KIXObjectService<Ticket> {
                     } else {
                         loadingOptions.includes = [UserProperty.CONTACT];
                     }
+
+                    if (Array.isArray(loadingOptions.query)) {
+                        loadingOptions.query.push(['requiredPermission', 'TicketRead,TicketUpdate']);
+                    } else {
+                        loadingOptions.query = [['requiredPermission', 'TicketRead,TicketUpdate']];
+                    }
                 } else {
                     loadingOptions = new KIXObjectLoadingOptions(
-                        null, null, null, [UserProperty.CONTACT]
+                        null, null, null, [UserProperty.CONTACT], null,
+                        [['requiredPermission', 'TicketRead,TicketUpdate']]
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(
@@ -241,6 +260,30 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(1, 'agent'));
                 nodes.push(new TreeNode(2, 'system'));
                 nodes.push(new TreeNode(3, 'external'));
+                break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                nodes.push(new TreeNode(0, 'No'));
+                nodes.push(new TreeNode(1, 'Yes'));
+                break;
+            case ArticleProperty.TO:
+            case ArticleProperty.CC:
+            case ArticleProperty.BCC:
+            case TicketProperty.CONTACT_ID:
+                if (Array.isArray(filterIds)) {
+                    const contactIds = filterIds.filter((id) => !isNaN(Number(id))).map((id) => Number(id));
+                    const contacts = await KIXObjectService.loadObjects(
+                        KIXObjectType.CONTACT, contactIds, null, null, true
+                    );
+                    nodes = await KIXObjectService.prepareTree(contacts);
+                }
+                break;
+            case TicketProperty.ORGANISATION_ID:
+                if (Array.isArray(filterIds)) {
+                    const organisations = await KIXObjectService.loadObjects(
+                        KIXObjectType.ORGANISATION, filterIds
+                    );
+                    nodes = await KIXObjectService.prepareTree(organisations);
+                }
                 break;
             default:
                 nodes = await super.getTreeNodes(property, showInvalid, invalidClickable, filterIds);
@@ -285,11 +328,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         return ids;
     }
 
-    public async hasPendingState(ticket: Ticket): Promise<boolean> {
-        return this.isPendingState(ticket.StateID);
-    }
-
-    public async isPendingState(stateId: number): Promise<boolean> {
+    public static async isPendingState(stateId: number): Promise<boolean> {
         let pending = false;
 
         const states = await KIXObjectService.loadObjects<TicketState>(
@@ -309,6 +348,7 @@ export class TicketService extends KIXObjectService<Ticket> {
 
         return pending;
     }
+
 
     public async getObjectUrl(object?: KIXObject, objectId?: string | number): Promise<string> {
         const id = object ? object.ObjectId : objectId;

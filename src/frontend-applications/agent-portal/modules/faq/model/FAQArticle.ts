@@ -7,15 +7,15 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { User } from "../../user/model/User";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Attachment } from "../../../model/kix/Attachment";
-import { FAQHistory } from "./FAQHistory";
-import { FAQVote } from "./FAQVote";
-import { Link } from "../../links/model/Link";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { User } from '../../user/model/User';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Attachment } from '../../../model/kix/Attachment';
+import { FAQHistory } from './FAQHistory';
+import { FAQVote } from './FAQVote';
+import { Link } from '../../links/model/Link';
 
-export class FAQArticle extends KIXObject<FAQArticle> {
+export class FAQArticle extends KIXObject {
 
     public ObjectId: string | number;
 

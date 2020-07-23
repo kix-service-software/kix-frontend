@@ -7,12 +7,12 @@
  * --
  */
 
-import { AdminModuleCategory } from "../model/AdminModuleCategory";
-import { PluginService } from "../../../../../server/services/PluginService";
-import { IAdminModuleExtension } from "./IAdminModuleExtension";
-import { AdminModule } from "../model/AdminModule";
-import { PermissionService } from "../../../server/services/PermissionService";
-import { AgentPortalExtensions } from "../../../server/extensions/AgentPortalExtensions";
+import { AdminModuleCategory } from '../model/AdminModuleCategory';
+import { PluginService } from '../../../../../server/services/PluginService';
+import { IAdminModuleExtension } from './IAdminModuleExtension';
+import { AdminModule } from '../model/AdminModule';
+import { PermissionService } from '../../../server/services/PermissionService';
+import { AgentPortalExtensions } from '../../../server/extensions/AgentPortalExtensions';
 
 export class AdminModuleService {
 

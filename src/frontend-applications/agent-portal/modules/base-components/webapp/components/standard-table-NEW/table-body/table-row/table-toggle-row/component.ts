@@ -8,9 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import {
-    AbstractMarkoComponent
-} from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ToggleOptions, TableEvent, TableEventData } from '../../../../../core/table';
 import { ContextService } from '../../../../../../../../modules/base-components/webapp/core/ContextService';
@@ -60,7 +58,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
             scrollInformationChanged: () => { return; },
             additionalInformationChanged: () => { return; }
         });
-        window.addEventListener("resize", this.setWidth.bind(this), false);
+        window.addEventListener('resize', this.setWidth.bind(this), false);
         this.eventSubscriberId = listenerId;
         EventService.getInstance().subscribe(TableEvent.REFRESH, this);
 
@@ -69,12 +67,16 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public onDestroy(): void {
-        window.removeEventListener("resize", this.setWidth.bind(this), false);
+        window.removeEventListener('resize', this.setWidth.bind(this), false);
         EventService.getInstance().unsubscribe(TableEvent.REFRESH, this);
     }
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
-        if (eventId === TableEvent.REFRESH && data && data.tableId === this.state.row.getTable().getTableId()) {
+        if (eventId === TableEvent.REFRESH
+            && this.state.row
+            && data
+            && data.tableId === this.state.row.getTable().getTableId()
+        ) {
             this.setWidth();
         }
     }
@@ -105,7 +107,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public calculateToggleContentMinHeight(index: number): string {
-        const minHeight = "10em"; // TODO: echten Wert ermitteln .toggle-row > td >.content
+        const minHeight = '10em'; // TODO: echten Wert ermitteln .toggle-row > td >.content
         setTimeout(async () => {
             if (this.state.actions && this.state.actions.length > 5) {
                 const root = (this as any).getEl();
@@ -113,7 +115,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                     const actionList = root.querySelector('ul.toggle-actions');
                     if (actionList) {
                         const computedHeight = getComputedStyle(actionList).height;
-                        const rowContent = (this as any).getEl("row-toggle-content");
+                        const rowContent = (this as any).getEl('row-toggle-content');
                         if (rowContent && computedHeight) {
                             rowContent.style.minHeight = computedHeight;
                         }

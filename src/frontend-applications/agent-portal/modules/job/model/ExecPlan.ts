@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { ExecPlanParameter } from "./ExecPlanParameter";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { ExecPlanParameter } from './ExecPlanParameter';
 
 export class ExecPlan extends KIXObject {
 

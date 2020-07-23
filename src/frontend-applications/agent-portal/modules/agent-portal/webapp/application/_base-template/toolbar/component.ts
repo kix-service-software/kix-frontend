@@ -58,7 +58,7 @@ class Component {
         this.state.ownedTicketsCount = user.Tickets.Owned.length;
 
         this.state.translations = await TranslationService.createTranslationObject([
-            "Translatable#Personal Kanban Board", "Translatable#Personal Ticket Calendar"
+            'Translatable#Personal Kanban Board', 'Translatable#Personal Ticket Calendar'
         ]);
 
         const myTicketsNewArticles = await TranslationService.translate('Translatable#My tickets with new articles');
@@ -98,7 +98,6 @@ class Component {
                 user.Tickets.Watched.map((id) => Number(id))
             ));
 
-
             group3.push(new ToolbarAction(
                 'kix-icon-lock-close', myLockedTicketsNewArticles, true, user.Tickets.OwnedAndLockedAndUnseen.length,
                 actionId, user.Tickets.OwnedAndLockedAndUnseen.map((id) => Number(id))
@@ -127,7 +126,6 @@ class Component {
         );
         RoutingService.getInstance().routeToContext(routingCOnfiguration, null);
     }
-
 
     public showKanban(): void {
         const routingCOnfiguration = new RoutingConfiguration('kanban', KIXObjectType.ANY, ContextMode.DASHBOARD, null);

@@ -7,13 +7,13 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { AbstractNewDialog } from "../../../../../modules/base-components/webapp/core/AbstractNewDialog";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { RoutingConfiguration } from "../../../../../model/configuration/RoutingConfiguration";
-import { NotificationDetailsContext } from "../../core";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { NotificationProperty } from "../../../model/NotificationProperty";
+import { ComponentState } from './ComponentState';
+import { AbstractNewDialog } from '../../../../../modules/base-components/webapp/core/AbstractNewDialog';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
+import { NotificationDetailsContext } from '../../core';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { NotificationProperty } from '../../../model/NotificationProperty';
 
 class Component extends AbstractNewDialog {
 

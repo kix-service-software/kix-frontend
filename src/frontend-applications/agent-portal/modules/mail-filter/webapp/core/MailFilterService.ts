@@ -7,9 +7,9 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { MailFilter } from "../../model/MailFilter";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { MailFilter } from '../../model/MailFilter';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class MailFilterService extends KIXObjectService<MailFilter> {
 
@@ -21,6 +21,11 @@ export class MailFilterService extends KIXObjectService<MailFilter> {
         }
 
         return MailFilterService.INSTANCE;
+    }
+
+    private constructor() {
+        super(KIXObjectType.MAIL_FILTER);
+        this.objectConstructors.set(KIXObjectType.MAIL_FILTER, [MailFilter]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

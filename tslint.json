@@ -3,7 +3,7 @@
         "tslint:recommended"
     ],
     "rules": {
-        "no-misused-new": false,
+        "no-unused-variable": true,
         "member-ordering": false,
         "arrow-parens": true,
         "indent": [
@@ -13,7 +13,11 @@
         ],
         "max-line-length": [
             true,
-            120
+            {
+                "limit": 120,
+                "ignore-pattern": "^import |^export {(.*?)}",
+                "check-strings": false
+            }
         ],
         "new-parens": true,
         "no-arg": true,
@@ -21,12 +25,14 @@
         "no-conditional-assignment": true,
         "no-consecutive-blank-lines": false,
         "quotemark": [
+            true,
             "single"
         ],
         "trailing-comma": [
             false
         ],
         "no-console": [
+            true,
             "log"
         ],
         "object-literal-sort-keys": [
@@ -49,7 +55,9 @@
             "always"
         ],
         "variable-name": [
-            "check-format"
+            true,
+            "check-format",
+            "allow-pascal-case"
         ],
         "triple-equals": [
             true
@@ -58,13 +66,13 @@
         "no-var-keyword": true,
         "no-shadowed-variable": true,
         "space-before-function-paren": [
-            "error",
+            true,
             {
                 "anonymous": "always",
                 "asyncArrow": "always"
             }
         ],
-        "prefer-for-of": false
+        "prefer-for-of": true
     },
     "jsRules": {
         "max-line-length": [

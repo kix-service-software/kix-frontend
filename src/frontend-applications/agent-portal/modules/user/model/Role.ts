@@ -7,12 +7,12 @@
  * --
  */
 
-import { KIXObject } from "../../../model/kix/KIXObject";
-import { KIXObjectType } from "../../../model/kix/KIXObjectType";
-import { Permission } from "./Permission";
-import { RoleUsageContextTypes } from "./RoleUsageContextTypes";
+import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { Permission } from './Permission';
+import { RoleUsageContextTypes } from './RoleUsageContextTypes';
 
-export class Role extends KIXObject<Role> {
+export class Role extends KIXObject {
 
     public KIXObjectType: KIXObjectType | string = KIXObjectType.ROLE;
 

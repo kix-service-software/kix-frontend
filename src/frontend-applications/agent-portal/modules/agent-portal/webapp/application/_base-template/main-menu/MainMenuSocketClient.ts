@@ -7,14 +7,14 @@
  * --
  */
 
-import { SocketClient } from "../../../../../../modules/base-components/webapp/core/SocketClient";
-import { SocketEvent } from "../../../../../../modules/base-components/webapp/core/SocketEvent";
-import { ClientStorageService } from "../../../../../../modules/base-components/webapp/core/ClientStorageService";
-import { IdService } from "../../../../../../model/IdService";
-import { MainMenuEvent } from "../../../../model/MainMenuEvent";
-import { MainMenuEntriesResponse } from "../../../../model/MainMenuEntriesResponse";
-import { SocketErrorResponse } from "../../../../../../modules/base-components/webapp/core/SocketErrorResponse";
-import { MainMenuEntriesRequest } from "../../../../model/MainMenuEntriesRequest";
+import { SocketClient } from '../../../../../../modules/base-components/webapp/core/SocketClient';
+import { SocketEvent } from '../../../../../../modules/base-components/webapp/core/SocketEvent';
+import { ClientStorageService } from '../../../../../../modules/base-components/webapp/core/ClientStorageService';
+import { IdService } from '../../../../../../model/IdService';
+import { MainMenuEvent } from '../../../../model/MainMenuEvent';
+import { MainMenuEntriesResponse } from '../../../../model/MainMenuEntriesResponse';
+import { SocketErrorResponse } from '../../../../../../modules/base-components/webapp/core/SocketErrorResponse';
+import { MainMenuEntriesRequest } from '../../../../model/MainMenuEntriesRequest';
 
 export class MainMenuSocketClient extends SocketClient {
 
@@ -30,7 +30,7 @@ export class MainMenuSocketClient extends SocketClient {
 
     private constructor() {
         super();
-        this.socket = this.createSocket("main-menu");
+        this.socket = this.createSocket('main-menu');
         this.initSocketListener();
     }
 
@@ -41,7 +41,7 @@ export class MainMenuSocketClient extends SocketClient {
         });
 
         this.socket.on(SocketEvent.CONNECT_TIMEOUT, () => {
-            console.error("Timeout");
+            console.error('Timeout');
             this.socket.close();
         });
 

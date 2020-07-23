@@ -7,30 +7,31 @@
  * --
  */
 
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { ConfigItem } from "../../model/ConfigItem";
-import { ConfigItemImage } from "../../model/ConfigItemImage";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { CreateConfigItemUtil } from "./CreateConfigItemUtil";
-import { CreateConfigItemVersionUtil } from "./CreateConfigItemVersionUtil";
-import { CreateConfigItemVersionOptions } from "../../model/CreateConfigItemVersionOptions";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { ConfigItemProperty } from "../../model/ConfigItemProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { VersionProperty } from "../../model/VersionProperty";
-import { GeneralCatalogItem } from "../../../general-catalog/model/GeneralCatalogItem";
-import { TreeNode } from "../../../base-components/webapp/core/tree";
-import { ConfigItemClass } from "../../model/ConfigItemClass";
-import { LabelService } from "../../../../modules/base-components/webapp/core/LabelService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
-import { KIXObject } from "../../../../model/kix/KIXObject";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { ConfigItemDetailsContext } from ".";
-import { RoutingConfiguration } from "../../../../model/configuration/RoutingConfiguration";
-import { ContextMode } from "../../../../model/ContextMode";
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { ConfigItem } from '../../model/ConfigItem';
+import { ConfigItemImage } from '../../model/ConfigItemImage';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { CreateConfigItemUtil } from './CreateConfigItemUtil';
+import { CreateConfigItemVersionUtil } from './CreateConfigItemVersionUtil';
+import { CreateConfigItemVersionOptions } from '../../model/CreateConfigItemVersionOptions';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { ConfigItemProperty } from '../../model/ConfigItemProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
+import { ConfigItemClass } from '../../model/ConfigItemClass';
+import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
+import { KIXObject } from '../../../../model/kix/KIXObject';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { ConfigItemDetailsContext } from '.';
+import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
+import { ContextMode } from '../../../../model/ContextMode';
+import { ConfigItemAttachment } from '../../model/ConfigItemAttachment';
+import { Version } from '../../model/Version';
 
 export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> {
 
@@ -45,7 +46,12 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
     }
 
     private constructor() {
-        super();
+        super(KIXObjectType.CONFIG_ITEM);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM, [ConfigItem]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_VERSION, [Version]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_IMAGE, [ConfigItemImage]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_CLASS, [ConfigItemClass]);
+        this.objectConstructors.set(KIXObjectType.CONFIG_ITEM_ATTACHMENT, [ConfigItemAttachment]);
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {
@@ -201,7 +207,7 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
                 for (const i of items) {
                     const text = await LabelService.getInstance().getObjectText(i);
                     nodes.push(new TreeNode(
-                        i.ItemID, text, new ObjectIcon(KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
+                        i.ItemID, text, new ObjectIcon(null, KIXObjectType.GENERAL_CATALOG_ITEM, i.ItemID),
                         undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,
                         i.ValidID === 1 || invalidClickable,
@@ -245,26 +251,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         }
     }
 
-    public static async searchConfigItems(searchValue: string, limit?: number) {
-        const filter = [
-            new FilterCriteria(
-                ConfigItemProperty.NUMBER, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                ConfigItemProperty.NAME, SearchOperator.CONTAINS,
-                FilterDataType.STRING, FilterType.OR, searchValue
-            )
-        ];
-
-        const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit, [ConfigItemProperty.CURRENT_VERSION]);
-
-        const configItems = await KIXObjectService.loadObjects<ConfigItem>(
-            KIXObjectType.CONFIG_ITEM, null, loadingOptions
-        );
-        return configItems;
-    }
-
     public getObjectRoutingConfiguration(object: KIXObject): RoutingConfiguration {
         if (object && object.KIXObjectType === KIXObjectType.CONFIG_ITEM_VERSION) {
             return null;
@@ -275,7 +261,6 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
             ContextMode.DETAILS, ConfigItemProperty.CONFIG_ITEM_ID
         );
     }
-
 
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         searchValue = `*${searchValue}*`;
@@ -292,4 +277,18 @@ export class CMDBService extends KIXObjectService<ConfigItem | ConfigItemImage> 
         ];
     }
 
+    public async getObjectTypeForProperty(property: string): Promise<KIXObjectType | string> {
+        let objectType;
+
+        switch (property) {
+            case 'OwnerContact':
+                objectType = KIXObjectType.CONTACT;
+                break;
+            case 'OwnerOrganisation':
+                objectType = KIXObjectType.ORGANISATION;
+                break;
+            default:
+        }
+        return objectType;
+    }
 }

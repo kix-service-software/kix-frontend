@@ -7,16 +7,16 @@
  * --
  */
 
-import { AbstractAction } from "../../../../../modules/base-components/webapp/core/AbstractAction";
-import { ITable } from "../../../../base-components/webapp/core/table";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { IdService } from "../../../../../model/IdService";
-import { ImportService } from "../";
-import { ContextService } from "../../../../../modules/base-components/webapp/core/ContextService";
-import { ContextMode } from "../../../../../model/ContextMode";
-import { EventService } from "../../../../../modules/base-components/webapp/core/EventService";
-import { DialogEvents } from "../../../../../modules/base-components/webapp/core/DialogEvents";
-import { DialogEventData } from "../../../../../modules/base-components/webapp/core/DialogEventData";
+import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
+import { ITable } from '../../../../base-components/webapp/core/table';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { IdService } from '../../../../../model/IdService';
+import { ImportService } from '../';
+import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { ContextMode } from '../../../../../model/ContextMode';
+import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
+import { DialogEvents } from '../../../../../modules/base-components/webapp/core/DialogEvents';
+import { DialogEventData } from '../../../../../modules/base-components/webapp/core/DialogEventData';
 
 export class ImportAction extends AbstractAction<ITable> {
 

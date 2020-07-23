@@ -7,23 +7,23 @@
  * --
  */
 
-import { FormFieldConfiguration } from "../../../../model/configuration/FormFieldConfiguration";
-import { TranslationService } from "../../../translation/webapp/core/TranslationService";
-import { IFormFieldValidator } from "../../../base-components/webapp/core/IFormFieldValidator";
-import { ValidationResult } from "../../../base-components/webapp/core/ValidationResult";
-import { FormService } from "../../../base-components/webapp/core/FormService";
-import { ValidationSeverity } from "../../../base-components/webapp/core/ValidationSeverity";
-import { KIXObjectProperty } from "../../../../model/kix/KIXObjectProperty";
-import { DynamicFormFieldOption } from "./DynamicFormFieldOption";
-import { DynamicField } from "../../model/DynamicField";
-import { KIXObjectService } from "../../../base-components/webapp/core/KIXObjectService";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { DynamicFieldProperty } from "../../model/DynamicFieldProperty";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
+import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
+import { IFormFieldValidator } from '../../../base-components/webapp/core/IFormFieldValidator';
+import { ValidationResult } from '../../../base-components/webapp/core/ValidationResult';
+import { FormService } from '../../../base-components/webapp/core/FormService';
+import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { DynamicFormFieldOption } from './DynamicFormFieldOption';
+import { DynamicField } from '../../model/DynamicField';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
 export class DynamicFieldTextValidator implements IFormFieldValidator {
 
@@ -103,7 +103,7 @@ export class DynamicFieldTextValidator implements IFormFieldValidator {
                 const fieldLabel = await TranslationService.translate(label);
                 const errorMessage = await TranslationService.translate(regexEntry.ErrorMessage);
                 const errorString = await TranslationService.translate(
-                    "Translatable#Field '{0}' has an invalid value ({1}).", [fieldLabel, errorMessage]
+                    'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
                 );
                 return new ValidationResult(ValidationSeverity.ERROR, errorString);
             }

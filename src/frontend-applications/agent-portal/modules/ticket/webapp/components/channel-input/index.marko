@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.channels)>
     <div.channel-list>
         <for|channel| of=state.channels>
@@ -14,7 +13,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 on-click("channelClicked", channel)
                 title=component.getDisplayText(channel)
                 class={
-                                active: component.isActive(channel)
+                                active: component.isActive(channel),
+                                readonly: state.field.readonly
                             }>
                 <span.channel-icon>
                     <icon icon=component.getIcon(channel)/>

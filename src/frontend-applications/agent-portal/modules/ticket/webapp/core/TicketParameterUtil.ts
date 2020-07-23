@@ -7,23 +7,23 @@
  * --
  */
 
-import { TicketProperty } from "../../model/TicketProperty";
-import { DateTimeUtil } from "../../../../modules/base-components/webapp/core/DateTimeUtil";
-import { ArticleProperty } from "../../model/ArticleProperty";
-import { ContextService } from "../../../../modules/base-components/webapp/core/ContextService";
-import { Ticket } from "../../model/Ticket";
-import { KIXObjectService } from "../../../../modules/base-components/webapp/core/KIXObjectService";
-import { Lock } from "../../model/Lock";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { KIXObjectLoadingOptions } from "../../../../model/KIXObjectLoadingOptions";
-import { FilterCriteria } from "../../../../model/FilterCriteria";
-import { SearchOperator } from "../../../search/model/SearchOperator";
-import { FilterDataType } from "../../../../model/FilterDataType";
-import { FilterType } from "../../../../model/FilterType";
-import { SenderType } from "../../model/SenderType";
-import { ContextType } from "../../../../model/ContextType";
-import { Attachment } from "../../../../model/kix/Attachment";
-import { BrowserUtil } from "../../../../modules/base-components/webapp/core/BrowserUtil";
+import { TicketProperty } from '../../model/TicketProperty';
+import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { Ticket } from '../../model/Ticket';
+import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
+import { Lock } from '../../model/Lock';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
+import { SenderType } from '../../model/SenderType';
+import { ContextType } from '../../../../model/ContextType';
+import { Attachment } from '../../../../model/kix/Attachment';
+import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
 
 export class TicketParameterUtil {
 
@@ -69,6 +69,7 @@ export class TicketParameterUtil {
                         }
                     }
                 }
+                parameter.push([property, Array.isArray(value) ? value[0] : value]);
             } else if (
                 (
                     property === ArticleProperty.TO
@@ -78,6 +79,25 @@ export class TicketParameterUtil {
                 && Array.isArray(value)
             ) {
                 parameter.push([property, value.join(',')]);
+            } else if (property === TicketProperty.CONTACT_ID
+                || property === TicketProperty.PRIORITY_ID
+                || property === TicketProperty.STATE_ID
+                || property === TicketProperty.TYPE_ID
+                || property === TicketProperty.QUEUE_ID
+            ) {
+                parameter.push([property, Array.isArray(value) ? value[0] : value]);
+            } else if (property === ArticleProperty.CHANNEL_ID) {
+                if (Array.isArray(value)) {
+                    parameter.push([property, Number(value[0])]);
+                } else {
+                    parameter.push([property, Number(value)]);
+                }
+            } else if (property === ArticleProperty.CUSTOMER_VISIBLE) {
+                if (Array.isArray(value)) {
+                    parameter.push([property, Number(value[0])]);
+                } else {
+                    parameter.push([property, Number(value)]);
+                }
             } else {
                 parameter.push([property, value]);
             }

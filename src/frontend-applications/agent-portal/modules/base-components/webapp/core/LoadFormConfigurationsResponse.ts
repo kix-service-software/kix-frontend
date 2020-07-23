@@ -7,9 +7,9 @@
  * --
  */
 
-import { ISocketResponse } from "./ISocketResponse";
-import { FormContext } from "../../../../model/configuration/FormContext";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
+import { ISocketResponse } from './ISocketResponse';
+import { FormContext } from '../../../../model/configuration/FormContext';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class LoadFormConfigurationsResponse implements ISocketResponse {
 

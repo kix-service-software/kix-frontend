@@ -7,21 +7,21 @@
  * --
  */
 
-import { FAQDetailsContext } from "./webapp/core/context/FAQDetailsContext";
-import { IConfigurationExtension } from "../../server/extensions/IConfigurationExtension";
-import { IConfiguration } from "../../model/configuration/IConfiguration";
-import { WidgetConfiguration } from "../../model/configuration/WidgetConfiguration";
-import { ConfigurationType } from "../../model/configuration/ConfigurationType";
-import { TabWidgetConfiguration } from "../../model/configuration/TabWidgetConfiguration";
-import { ConfigurationDefinition } from "../../model/configuration/ConfigurationDefinition";
-import { LinkedObjectsWidgetConfiguration } from "../../model/configuration/LinkedObjectsWidgetConfiguration";
-import { KIXObjectType } from "../../model/kix/KIXObjectType";
-import { ContextConfiguration } from "../../model/configuration/ContextConfiguration";
-import { ConfiguredWidget } from "../../model/configuration/ConfiguredWidget";
-import { UIComponentPermission } from "../../model/UIComponentPermission";
-import { CRUD } from "../../../../server/model/rest/CRUD";
+import { FAQDetailsContext } from './webapp/core/context/FAQDetailsContext';
+import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
+import { IConfiguration } from '../../model/configuration/IConfiguration';
+import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
+import { ConfigurationType } from '../../model/configuration/ConfigurationType';
+import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfiguration';
+import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
+import { LinkedObjectsWidgetConfiguration } from '../../model/configuration/LinkedObjectsWidgetConfiguration';
 
-import { KIXExtension } from "../../../../server/model/KIXExtension";
+import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
+import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
+import { UIComponentPermission } from '../../model/UIComponentPermission';
+import { CRUD } from '../../../../server/model/rest/CRUD';
+
+import { KIXExtension } from '../../../../server/model/KIXExtension';
 
 class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -109,8 +109,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                         [new UIComponentPermission('links', [CRUD.READ])]
                     ),
                     new ConfiguredWidget(
-                        'faq-article-history-widget', 'faq-article-history-widget', null,
-                        [new UIComponentPermission('faq/articles/*/history', [CRUD.READ])]
+                        'faq-article-history-widget', 'faq-article-history-widget', null
                     )
                 ]
 

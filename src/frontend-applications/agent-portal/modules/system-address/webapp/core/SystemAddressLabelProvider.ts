@@ -7,12 +7,12 @@
  * --
  */
 
-import { LabelProvider } from "../../../../modules/base-components/webapp/core/LabelProvider";
-import { SystemAddress } from "../../model/SystemAddress";
-import { KIXObjectType } from "../../../../model/kix/KIXObjectType";
-import { SystemAddressProperty } from "../../model/SystemAddressProperty";
-import { TranslationService } from "../../../../modules/translation/webapp/core/TranslationService";
-import { ObjectIcon } from "../../../icon/model/ObjectIcon";
+import { LabelProvider } from '../../../../modules/base-components/webapp/core/LabelProvider';
+import { SystemAddress } from '../../model/SystemAddress';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { SystemAddressProperty } from '../../model/SystemAddressProperty';
+import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 
 export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
 
@@ -79,7 +79,7 @@ export class SystemAddressLabelProvider extends LabelProvider<SystemAddress> {
     }
 
     public getObjectIcon(object: SystemAddress): string | ObjectIcon {
-        return new ObjectIcon('SystemAddress', object.ID);
+        return new ObjectIcon(null, 'SystemAddress', object.ID);
     }
 
     public async getObjectName(plural?: boolean, translatable: boolean = true): Promise<string> {

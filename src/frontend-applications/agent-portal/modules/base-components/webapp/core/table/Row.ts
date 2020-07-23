@@ -7,24 +7,24 @@
  * --
  */
 
-import { IRow } from "./IRow";
-import { IRowObject } from "./IRowObject";
-import { ICell } from "./ICell";
-import { Cell } from "./Cell";
-import { ITable } from "./ITable";
-import { TableEvent } from "./TableEvent";
-import { RowObject } from "./RowObject";
-import { TableValue } from "./TableValue";
-import { ValueState } from "./ValueState";
-import { TableEventData } from "./TableEventData";
-import { TableSortUtil } from "./TableSortUtil";
-import { IdService } from "../../../../../model/IdService";
-import { TableFilterCriteria } from "../../../../../model/TableFilterCriteria";
-import { KIXObject } from "../../../../../model/kix/KIXObject";
-import { KIXObjectService } from "../KIXObjectService";
-import { EventService } from "../EventService";
-import { SortOrder } from "../../../../../model/SortOrder";
-import { DataType } from "../../../../../model/DataType";
+import { IRow } from './IRow';
+import { IRowObject } from './IRowObject';
+import { ICell } from './ICell';
+import { Cell } from './Cell';
+import { ITable } from './ITable';
+import { TableEvent } from './TableEvent';
+import { RowObject } from './RowObject';
+import { TableValue } from './TableValue';
+import { ValueState } from './ValueState';
+import { TableEventData } from './TableEventData';
+import { TableSortUtil } from './TableSortUtil';
+import { IdService } from '../../../../../model/IdService';
+import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
+import { KIXObjectService } from '../KIXObjectService';
+import { EventService } from '../EventService';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { DataType } from '../../../../../model/DataType';
 
 export class Row<T = any> implements IRow<T> {
 

@@ -7,11 +7,11 @@
  * --
  */
 
-import { ContextMode } from "./ContextMode";
-import { ContextType } from "./ContextType";
-import { Context } from "./Context";
-import { KIXObjectType } from "./kix/KIXObjectType";
-import { ContextConfiguration } from "./configuration/ContextConfiguration";
+import { ContextMode } from './ContextMode';
+import { ContextType } from './ContextType';
+import { Context } from './Context';
+import { KIXObjectType } from './kix/KIXObjectType';
+import { ContextConfiguration } from './configuration/ContextConfiguration';
 
 export class ContextDescriptor {
 

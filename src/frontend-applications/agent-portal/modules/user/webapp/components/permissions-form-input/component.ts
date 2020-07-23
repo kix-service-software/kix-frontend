@@ -7,18 +7,19 @@
  * --
  */
 
-import { ComponentState } from "./ComponentState";
-import { FormInputComponent } from "../../../../base-components/webapp/core/FormInputComponent";
-import { IdService } from "../../../../../model/IdService";
-import { PermissionManager } from "../../core/admin";
-import { CreatePermissionDescription } from "../../../server/CreatePermissionDescription";
-import { PermissionFormData } from "../../../../base-components/webapp/core/PermissionFormData";
-import { IDynamicFormManager } from "../../../../base-components/webapp/core/dynamic-form";
-import { Permission } from "../../../model/Permission";
-import { ObjectPropertyValue } from "../../../../../model/ObjectPropertyValue";
-import { LabelService } from "../../../../base-components/webapp/core/LabelService";
-import { KIXObjectType } from "../../../../../model/kix/KIXObjectType";
-import { CRUD } from "../../../../../../../server/model/rest/CRUD";
+import { ComponentState } from './ComponentState';
+import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
+import { IdService } from '../../../../../model/IdService';
+import { PermissionManager } from '../../core/admin';
+import { CreatePermissionDescription } from '../../../server/CreatePermissionDescription';
+import { PermissionFormData } from '../../../../base-components/webapp/core/PermissionFormData';
+import { IDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
+import { Permission } from '../../../model/Permission';
+import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends FormInputComponent<any[], ComponentState> {
 
@@ -48,8 +49,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 }
                 this.permissionFormTimeout = setTimeout(async () => {
                     const permissionDescriptions: CreatePermissionDescription[] = [];
-                    if (this.state.permissionManager.hasDefinedValues()) {
-                        const values = this.state.permissionManager.getEditableValues();
+                    if (await this.state.permissionManager.hasDefinedValues()) {
+                        const values = await this.state.permissionManager.getEditableValues();
                         values.forEach((v) => {
                             const crudValue = this.getPermissionValueFromCRUD(v.value);
                             if (v.property && v.operator) {
@@ -66,8 +67,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
                                 );
                             }
                         });
+                        super.provideValue(permissionDescriptions, true);
                     }
-                    super.provideValue(permissionDescriptions);
                 }, 200);
             });
         }
@@ -79,10 +80,16 @@ class Component extends FormInputComponent<any[], ComponentState> {
         }
     }
 
+    public async setCurrentValue(): Promise<void> {
+        return;
+    }
+
     public async setCurrentNode(permissionManager: IDynamicFormManager): Promise<void> {
         const permissionDescriptions: CreatePermissionDescription[] = [];
-        if (this.state.defaultValue && this.state.defaultValue.value && Array.isArray(this.state.defaultValue.value)) {
-            this.state.defaultValue.value.forEach((permission: Permission) => {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
+        if (value && Array.isArray(value.value)) {
+            value.value.forEach((permission: Permission) => {
                 permissionManager.setValue(
                     new ObjectPropertyValue(
                         permission.TypeID.toString(), permission.Target, this.getPermissionFormData(permission), false,
@@ -102,7 +109,6 @@ class Component extends FormInputComponent<any[], ComponentState> {
                 );
             });
         }
-        super.provideValue(permissionDescriptions);
     }
 
     private async prepareTitles(): Promise<void> {
