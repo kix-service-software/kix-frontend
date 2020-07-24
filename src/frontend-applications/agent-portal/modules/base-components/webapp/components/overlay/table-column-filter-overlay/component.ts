@@ -29,9 +29,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        this.column = input.column;
-        this.state.filterText = null;
-        this.update();
+        if (!this.column || this.column !== input.column) {
+            this.column = input.column;
+            this.state.filterText = null;
+            this.update();
+        }
     }
 
     private async update(): Promise<void> {
