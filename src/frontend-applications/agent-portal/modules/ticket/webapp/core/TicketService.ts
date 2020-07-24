@@ -43,7 +43,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../model/ContextMode';
 import { SenderType } from '../../model/SenderType';
-import { Lock } from '../../model/Lock';
+import { TicketLock } from '../../model/TicketLock';
 import { Watcher } from '../../model/Watcher';
 
 export class TicketService extends KIXObjectService<Ticket> {
@@ -63,7 +63,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         this.objectConstructors.set(KIXObjectType.TICKET, [Ticket]);
         this.objectConstructors.set(KIXObjectType.ARTICLE, [Article]);
         this.objectConstructors.set(KIXObjectType.SENDER_TYPE, [SenderType]);
-        this.objectConstructors.set(KIXObjectType.LOCK, [Lock]);
+        this.objectConstructors.set(KIXObjectType.TICKET_LOCK, [TicketLock]);
         this.objectConstructors.set(KIXObjectType.WATCHER, [Watcher]);
     }
 
@@ -71,7 +71,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE
-            || kixObjectType === KIXObjectType.LOCK
+            || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER;
     }
 
@@ -83,8 +83,8 @@ export class TicketService extends KIXObjectService<Ticket> {
         let superLoad = false;
         if (objectType === KIXObjectType.SENDER_TYPE) {
             objects = await super.loadObjects<O>(KIXObjectType.SENDER_TYPE, null, loadingOptions);
-        } else if (objectType === KIXObjectType.LOCK) {
-            objects = await super.loadObjects<O>(KIXObjectType.LOCK, null, loadingOptions);
+        } else if (objectType === KIXObjectType.TICKET_LOCK) {
+            objects = await super.loadObjects<O>(KIXObjectType.TICKET_LOCK, null, loadingOptions);
         } else {
             superLoad = true;
             objects = await super.loadObjects<O>(objectType, objectIds, loadingOptions, objectLoadingOptions);

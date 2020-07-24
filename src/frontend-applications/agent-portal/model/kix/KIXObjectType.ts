@@ -21,8 +21,6 @@ export enum KIXObjectType {
 
     SENDER_TYPE = 'SENDER_TYPE',
 
-    LOCK = 'LOCK',
-
     CLIENT_REGISTRATION = 'CLIENT_REGISTRATION',
 
     CONFIG_ITEM = 'ConfigItem',
@@ -130,6 +128,8 @@ export enum KIXObjectType {
     TEXT_MODULE = 'TextModule',
 
     TICKET = 'Ticket',
+
+    TICKET_LOCK = 'Lock',
 
     TICKET_HISTORY = 'History',
 

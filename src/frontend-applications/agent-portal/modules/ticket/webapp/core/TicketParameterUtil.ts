@@ -13,7 +13,7 @@ import { ArticleProperty } from '../../model/ArticleProperty';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { Ticket } from '../../model/Ticket';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { Lock } from '../../model/Lock';
+import { TicketLock } from '../../model/TicketLock';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -59,8 +59,8 @@ export class TicketParameterUtil {
                     if (context) {
                         const ticket = context.getObject<Ticket>();
 
-                        const locks = await KIXObjectService.loadObjects<Lock>(
-                            KIXObjectType.LOCK, null
+                        const locks = await KIXObjectService.loadObjects<TicketLock>(
+                            KIXObjectType.TICKET_LOCK, null
                         );
 
                         const lock = locks.find((tl) => tl.Name === 'lock');
