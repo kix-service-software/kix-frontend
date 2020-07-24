@@ -83,6 +83,9 @@ export class DateTimeUtil {
     public static getKIXDateString(date: Date): string {
         let kixDateString;
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const year = date.getFullYear();
             const month = DateTimeUtil.padZero(date.getMonth() + 1);
             const day = DateTimeUtil.padZero(date.getDate());
@@ -94,6 +97,9 @@ export class DateTimeUtil {
     public static getKIXTimeString(date: Date, short: boolean = true, roundHalfHour?: boolean): string {
         let kixTimeString;
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const hours = DateTimeUtil.padZero(date.getHours());
             let minutes = DateTimeUtil.padZero(date.getMinutes());
             if (roundHalfHour) {
@@ -110,6 +116,9 @@ export class DateTimeUtil {
 
     public static getTimestampNumbersOnly(date: Date, withSeconds?: boolean): string {
         if (date) {
+            if (typeof date === 'string') {
+                date = new Date(date);
+            }
             const year = date.getFullYear();
             const month = DateTimeUtil.padZero(date.getMonth() + 1);
             const day = DateTimeUtil.padZero(date.getDate());

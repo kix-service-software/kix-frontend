@@ -57,7 +57,7 @@ export class GeneralCatalogService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.GENERAL_CATALOG_CLASS) {
             const uri = this.buildUri('system', 'generalcatalog', 'classes');
             objects = await super.load<string>(
-                token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass', String
+                token, KIXObjectType.GENERAL_CATALOG_CLASS, uri, null, null, 'GeneralCatalogClass'
             );
         }
 

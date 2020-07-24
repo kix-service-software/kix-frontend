@@ -9,7 +9,7 @@
 
 import { FormInputComponent } from '../../../../base-components/webapp/core/FormInputComponent';
 import { ComponentState } from './ComponentState';
-import { TreeNode } from '../../../../base-components/webapp/core/tree';
+import { TreeNode, TreeHandler, TreeService } from '../../../../base-components/webapp/core/tree';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { FormService } from '../../../../base-components/webapp/core/FormService';
 import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
@@ -25,7 +25,6 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
     public onCreate(): void {
         this.state = new ComponentState();
-        this.state.loadNodes = this.load.bind(this);
     }
 
     public onInput(input: any): void {
@@ -34,7 +33,12 @@ class Component extends FormInputComponent<string[], ComponentState> {
     }
 
     public async onMount(): Promise<void> {
+        const treeHandler = new TreeHandler([], null, null, true);
+        TreeService.getInstance().registerTreeHandler(this.state.treeId, treeHandler);
+        await this.load();
         await super.onMount();
+
+        this.state.prepared = true;
     }
 
     public async update(): Promise<void> {
@@ -45,38 +49,37 @@ class Component extends FormInputComponent<string[], ComponentState> {
         this.state.placeholder = await TranslationService.translate(placeholderText);
     }
 
-    private async load(): Promise<TreeNode[]> {
+    private async load(): Promise<void> {
         const nodes = await this.getNodes();
-        this.setCurrentNode(nodes);
-        return nodes.sort((a, b) => {
+        nodes.sort((a, b) => {
             return SortUtil.compareString(a[1], b[1]);
         });
+
+        const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+        if (treeHandler) {
+            treeHandler.setTree(nodes, null, true);
+        }
     }
 
     public async setCurrentValue(): Promise<void> {
-        return;
-    }
-
-    private async setCurrentNode(nodes: TreeNode[]): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const value = formInstance.getFormFieldValue<number[] | number>(this.state.field.instanceId);
         if (value) {
-            let currentNodes: TreeNode[];
-            if (Array.isArray(value.value)) {
-                currentNodes = nodes.filter(
-                    (eventNode) => (value.value as number[]).some((v) => v === eventNode.id)
-                );
-            } else {
-                currentNodes = nodes.filter(
-                    (eventNode) => eventNode.id === value.value
-                );
-            }
+            const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
+            if (treeHandler) {
+                const nodes = treeHandler.getTree();
+                let selectedNodes = [];
+                if (Array.isArray(value.value)) {
+                    selectedNodes = nodes.filter(
+                        (eventNode) => (value.value as number[]).some((v) => v === eventNode.id)
+                    );
+                } else {
+                    selectedNodes = nodes.filter(
+                        (eventNode) => eventNode.id === value.value
+                    );
+                }
 
-            if (currentNodes) {
-                currentNodes.forEach((n) => n.selected = true);
-                this.currentAccesses = currentNodes;
-                this.setFields(false);
-
+                treeHandler.setSelection(selectedNodes, true, true, true);
             }
         }
     }

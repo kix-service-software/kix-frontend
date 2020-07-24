@@ -58,6 +58,12 @@ export class EditTicketDialogContext extends Context {
             }
 
         });
+
+        const ticket = await this.getObject<Ticket>(KIXObjectType.TICKET);
+        if (ticket) {
+            this.handleContact(new FormFieldValue(ticket.ContactID));
+            this.handleOrganisation(new FormFieldValue(ticket.OrganisationID));
+        }
     }
 
     private async setFormObject(formId: string): Promise<void> {

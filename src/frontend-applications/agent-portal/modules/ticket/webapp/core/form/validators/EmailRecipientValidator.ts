@@ -70,7 +70,7 @@ export class EmailRecipientValidator implements IFormFieldValidator {
         } else if (checkToValue) {
             return new ValidationResult(
                 ValidationSeverity.ERROR,
-                'Translatable#At least one of the fields \'To\', \'Cc\' or \'Bcc\' must contain an entry.'
+                'Translatable#At least one of the fields To, Cc or Bcc must contain an entry.'
             );
         }
 
@@ -83,7 +83,7 @@ export class EmailRecipientValidator implements IFormFieldValidator {
 
     private async checkEmail(value: string[]): Promise<ValidationResult> {
         if (value && !!value.length) {
-            const mailAddresses = value;
+            const mailAddresses = Array.isArray(value) ? value : [value];
             for (const mail of mailAddresses) {
                 if (!FormValidationService.getInstance().isValidEmail(mail)) {
                     const errorString = await TranslationService.translate(

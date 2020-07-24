@@ -382,6 +382,11 @@ export class ContactFormService extends KIXObjectFormService {
             queuesParameter[1] = Array.isArray(queuesParameter[1]) ? queuesParameter[1].join(',') : '';
         }
 
+        const roleIdsParameter = parameter.find((p) => p[0] === UserProperty.ROLE_IDS);
+        if (roleIdsParameter) {
+            roleIdsParameter[1] = Array.isArray(roleIdsParameter[1]) ? roleIdsParameter[1] : [roleIdsParameter[1]];
+        }
+
         const notificationParameter = parameter.find((p) => p[0] === PersonalSettingsProperty.NOTIFICATIONS);
         if (notificationParameter) {
             const transport = 'Email';

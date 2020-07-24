@@ -134,6 +134,10 @@ export class TicketSearchDefinition extends SearchDefinition {
             criteria.type = FilterDataType.DATETIME;
         }
 
+        if (criteria.property === TicketProperty.LOCK_ID && Array.isArray(criteria.value)) {
+            criteria.value = criteria.value[0];
+        }
+
         return criteria;
     }
 }

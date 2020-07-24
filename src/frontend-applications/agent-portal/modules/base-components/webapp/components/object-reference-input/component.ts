@@ -31,8 +31,6 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
-import { FormInstance } from '../../core/FormInstance';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -195,9 +193,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                     }
                 }
             }
+            treeHandler.selectNone(true);
             treeHandler.setSelection(selectedNodes, true, true, true);
         } else if (treeHandler) {
-            treeHandler.setSelection([], true, true, true);
+            treeHandler.selectNone();
         }
     }
 

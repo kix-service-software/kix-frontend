@@ -60,7 +60,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         token: string, objectType: KIXObjectType | string, baseUri: string, loadingOptions: KIXObjectLoadingOptions,
         objectIds: Array<number | string>, responseProperty: string,
         // tslint:disable-next-line: ban-types
-        objectConstructor: new (object?: KIXObject) => O | String | Number,
+        objectConstructor?: new (object?: KIXObject) => O,
         useCache?: boolean
         // tslint:disable-next-line: ban-types
     ): Promise<O[]> {
@@ -92,8 +92,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             ? responseObject
             : [responseObject];
 
-        const result = objects.map((o) => new objectConstructor(o as KIXObject));
-        return result as any;
+        const result = objectConstructor ? objects.map((o) => new objectConstructor(o as KIXObject)) : objects;
+        return result as O[];
     }
 
     protected async executeUpdateOrCreateRequest<R = number>(

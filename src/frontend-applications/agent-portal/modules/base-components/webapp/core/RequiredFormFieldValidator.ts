@@ -23,7 +23,7 @@ export class RequiredFormFieldValidator implements IFormFieldValidator {
         return formField.required;
     }
 
-    public async  validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
+    public async validate(formField: FormFieldConfiguration, formId: string): Promise<ValidationResult> {
         const formInstance = await FormService.getInstance().getFormInstance(formId);
         const value = formInstance.getFormFieldValue(formField.instanceId);
         let ok = false;
@@ -39,7 +39,7 @@ export class RequiredFormFieldValidator implements IFormFieldValidator {
         } else {
             const fieldLabel = await TranslationService.translate(formField.label);
             const errorString = await TranslationService.translate(
-                'Translatable#Required field \'{0}\' has no value.', [fieldLabel]
+                'Translatable#Required field {0} has no value.', [fieldLabel]
             );
             return new ValidationResult(ValidationSeverity.ERROR, errorString);
         }

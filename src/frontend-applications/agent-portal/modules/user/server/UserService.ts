@@ -165,7 +165,9 @@ export class UserService extends KIXObjectAPIService {
 
             const roleIds = this.getParameterValue(parameter, UserProperty.ROLE_IDS);
             if (roleIds) {
-                await this.updateUserRoles(token, clientRequestId, roleIds, userId);
+                await this.updateUserRoles(
+                    token, clientRequestId, Array.isArray(roleIds) ? roleIds : [roleIds], userId
+                );
             }
 
             const userLanguage = parameter.find((p) => p[0] === PersonalSettingsProperty.USER_LANGUAGE);
@@ -207,15 +209,18 @@ export class UserService extends KIXObjectAPIService {
         }
 
         const baseUri = this.buildUri(this.RESOURCE_URI, userId, 'roleids');
-        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', Number, false);
+        const existingRoleIds = await this.load<number>(token, null, baseUri, null, null, 'RoleIDs', null, false);
 
-        const rolesToDelete = existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r));
-        const rolesToCreate = roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r));
+        const rolesToDelete = existingRoleIds ? existingRoleIds.filter((r) => !roleIds.some((rid) => rid === r)) : [];
+        const rolesToCreate = existingRoleIds
+            ? roleIds.filter((r) => !existingRoleIds.some((rid) => rid === r))
+            : roleIds;
 
-        for (const roleId of rolesToDelete) {
-            const deleteUri = this.buildUri(baseUri, roleId);
-            await this.sendDeleteRequest(token, clientReqeustId, [deleteUri], KIXObjectType.USER)
-                .catch((error) => LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error));
+        if (rolesToDelete && rolesToDelete.length) {
+            const deleteUris = rolesToDelete.map((roleId) => this.buildUri(baseUri, roleId));
+            const errors: Error[] = await this.sendDeleteRequest(token, clientReqeustId, deleteUris, KIXObjectType.USER)
+                .catch((error) => [error]);
+            errors.forEach((e) => LoggingService.getInstance().error(`${e.Code}: ${e.Message}`, e));
         }
 
         for (const roleId of rolesToCreate) {

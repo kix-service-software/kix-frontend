@@ -216,7 +216,7 @@ class Component {
                         this.importConfigs.get('text_separator').map((v) => new TreeNode(v.key, v.label))
                     )
                 ],
-                new FormFieldValue('DOUBLE')
+                new FormFieldValue(['DOUBLE'])
             )
         ]);
 
@@ -389,7 +389,10 @@ class Component {
 
                 if (ok) {
                     ok = await this.prepareImportData(
-                        this.getCSVData(importString, valueSeparator.value, textSeparator.value[0])
+                        this.getCSVData(importString,
+                            Array.isArray(valueSeparator.value) ? valueSeparator.value : [valueSeparator.value],
+                            Array.isArray(textSeparator.value) ? textSeparator.value[0] : textSeparator.value
+                        )
                     );
                     if (ok) {
                         ok = await this.setTableColumns();

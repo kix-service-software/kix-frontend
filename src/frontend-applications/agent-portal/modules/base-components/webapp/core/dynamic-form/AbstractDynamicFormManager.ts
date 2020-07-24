@@ -48,6 +48,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     public resetValue: boolean = true;
 
     public useOwnSearch: boolean = false;
+    public validDFTypes = [];
 
     public async getProperties(): Promise<Array<[string, string]>> {
         let properties = [];
@@ -60,9 +61,8 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         }
 
         if (await this.checkReadPermissions('/system/dynamicfields')) {
-
-            let validDFTypes = [];
-            this.extendedFormManager.forEach((m) => validDFTypes = [...validDFTypes, ...m.getValidDFTypes()]);
+            let validTypes = this.validDFTypes;
+            this.extendedFormManager.forEach((m) => validTypes = [...validTypes, ...m.getValidDFTypes()]);
 
             const loadingOptions = new KIXObjectLoadingOptions(
                 [
@@ -81,7 +81,7 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                             DynamicFieldTypes.SELECTION,
                             DynamicFieldTypes.CI_REFERENCE,
                             DynamicFieldTypes.TICKET_REFERENCE,
-                            ...validDFTypes
+                            ...validTypes
                         ]
                     ),
                     new FilterCriteria(

@@ -148,12 +148,15 @@ export class JobAPIService extends KIXObjectAPIService {
     }
 
     public async updateObject(
-        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, string]>,
+        token: string, clientRequestId: string, objectType: KIXObjectType, parameter: Array<[string, any]>,
         objectId: number | string, updateOptions: KIXObjectSpecificCreateOptions, cacheKeyPrefix: string
     ): Promise<string | number> {
         let id;
 
         if (objectType === KIXObjectType.JOB) {
+            clientRequestId = parameter.some((p) => p[0] === JobProperty.EXEC && p[1])
+                ? 'JobAPIService'
+                : clientRequestId;
             id = await this.updateJob(token, clientRequestId, parameter, Number(objectId))
                 .catch((error: Error) => {
                     LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);

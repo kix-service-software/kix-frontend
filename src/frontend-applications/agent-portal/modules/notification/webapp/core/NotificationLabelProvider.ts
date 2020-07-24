@@ -201,7 +201,7 @@ export class NotificationLabelProvider extends LabelProvider {
                     displayString = 'Translatable#All agents with update permission for the ticket';
                     break;
                 case NotificationRecipientTypes.AGENT_MY_QUEUES:
-                    displayString = 'Translatable#All agents subscribed to the ticket\'s queue';
+                    displayString = 'Translatable#All agents subscribed to the tickets queue';
                     break;
                 case NotificationRecipientTypes.CUSTOMER:
                     displayString = 'Translatable#Contact';

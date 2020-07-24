@@ -79,7 +79,7 @@ export class FAQService extends KIXObjectAPIService {
             case KIXObjectType.FAQ_KEYWORD:
                 const uri = this.buildUri(this.RESOURCE_URI, 'keywords');
                 objects = await super.load<string>(
-                    token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword', String
+                    token, KIXObjectType.FAQ_KEYWORD, uri, null, null, 'FAQKeyword'
                 );
                 break;
             default:

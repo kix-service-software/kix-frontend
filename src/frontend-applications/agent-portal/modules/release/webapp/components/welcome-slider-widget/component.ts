@@ -43,7 +43,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Welcome to KIX 18', 'Translatable#No, thank you', 'Translatable#Yes, please',
-            'Translatable#Let\'s go', 'Translatable#previous', 'Translatable#next',
+            'Translatable#Lets go', 'Translatable#previous', 'Translatable#next',
             ...this.state.sliderList.map((s) => s.title)
         ]);
 

@@ -18,6 +18,8 @@ import { Contact } from '../../../customer/model/Contact';
 import { TicketService } from './TicketService';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { IdService } from '../../../../model/IdService';
+import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
+import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 
 export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
@@ -52,8 +54,6 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
                 }
             }
         }
-
-
     }
 
     private async getOrganisationsFromContact(contactId: number): Promise<number | string> {
@@ -71,23 +71,42 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
     }
 
     private async setPendingTimeField(formInstance: FormInstance): Promise<void> {
-        const label = await LabelService.getInstance().getPropertyText(
-            TicketProperty.PENDING_TIME, KIXObjectType.TICKET
-        );
-        const pendingField = new FormFieldConfiguration(
-            'pending-time-field',
-            label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
-            null, null, null, undefined, undefined, undefined, undefined, undefined,
-            null, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
-            false
-        );
+        const existingField = formInstance.getFormFieldByProperty(TicketProperty.PENDING_TIME);
 
-        const stateField = formInstance.getFormFieldByProperty(TicketProperty.STATE_ID);
-        if (stateField) {
-            formInstance.addFieldChildren(stateField, [pendingField]);
-        } else {
-            pendingField.instanceId = IdService.generateDateBasedId();
-            formInstance.getForm().pages[0].groups[0].formFields.push(pendingField);
+        if (!existingField) {
+            const label = await LabelService.getInstance().getPropertyText(
+                TicketProperty.PENDING_TIME, KIXObjectType.TICKET
+            );
+            const pendingField = new FormFieldConfiguration(
+                'pending-time-field',
+                label, TicketProperty.PENDING_TIME, 'ticket-input-state-pending', true,
+                null, null, null, undefined, undefined, undefined, undefined, undefined,
+                null, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                false
+            );
+
+            const stateField = formInstance.getFormFieldByProperty(TicketProperty.STATE_ID);
+            if (stateField) {
+                formInstance.addFieldChildren(stateField, [pendingField]);
+            } else {
+                pendingField.instanceId = IdService.generateDateBasedId();
+                formInstance.getForm().pages[0].groups[0].formFields.push(pendingField);
+            }
+
+            const date = new Date();
+            let offset = 86400;
+            const offsetConfig = await KIXObjectService.loadObjects<SysConfigOption>(
+                KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.TICKET_FRONTEND_PENDING_DIFF_TIME], null, null, true
+            ).catch((error): SysConfigOption[] => []);
+
+            if (Array.isArray(offsetConfig) && offsetConfig[0].Value) {
+                offset = offsetConfig[0].Value;
+            }
+
+            date.setSeconds(date.getSeconds() + Number(offset));
+            formInstance.provideFormFieldValues(
+                [[pendingField.instanceId, date]], null
+            );
         }
     }
 

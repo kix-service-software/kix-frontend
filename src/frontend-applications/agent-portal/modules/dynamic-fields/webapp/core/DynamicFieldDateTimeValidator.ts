@@ -74,7 +74,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
                         'Translatable#The value for the field is in the future! The date needs to be in the past!'
                     );
                     const errorString = await TranslationService.translate(
-                        'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                        'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
                     );
                     return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 } else if (restricition === 'DisablePastDates' && value < currentTime) {
@@ -84,7 +84,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
                         'The value for the field is in the past! The date needs to be in the future!'
                     );
                     const errorString = await TranslationService.translate(
-                        'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                        'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
                     );
                     return new ValidationResult(ValidationSeverity.ERROR, errorString);
                 }
@@ -101,7 +101,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
                             'Translatable#The year can be a maximum of {0} years in the past', [yearsInPast]
                         );
                         const errorString = await TranslationService.translate(
-                            'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                            'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
                         );
                         return new ValidationResult(ValidationSeverity.ERROR, errorString);
                     }
@@ -116,7 +116,7 @@ export class DynamicFieldDateTimeValidator implements IFormFieldValidator {
                             'Translatable#The year can be a maximum of {0} years in the future', [yearsInPast]
                         );
                         const errorString = await TranslationService.translate(
-                            'Translatable#Field \'{0}\' has an invalid value ({1}).', [fieldLabel, errorMessage]
+                            'Translatable#Field {0} has an invalid value ({1}).', [fieldLabel, errorMessage]
                         );
                         return new ValidationResult(ValidationSeverity.ERROR, errorString);
                     }

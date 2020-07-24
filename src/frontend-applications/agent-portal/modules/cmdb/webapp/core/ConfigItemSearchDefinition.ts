@@ -253,7 +253,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
             property, classParameter ? classParameter[1] : null
         );
 
-        if (input) {
+        if (input && value) {
             if (input.Type === 'GeneralCatalog') {
                 const items = await this.getGeneralCatalogItems(input);
                 const item = items.find((i) => i.ItemID === value);

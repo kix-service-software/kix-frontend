@@ -179,7 +179,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                             ),
                             new TreeNode(
                                 NotificationRecipientTypes.AGENT_MY_QUEUES,
-                                'Translatable#All agents subscribed to the ticket\'s queue'
+                                'Translatable#All agents subscribed to the tickets queue'
                             ),
                             new TreeNode(NotificationRecipientTypes.CUSTOMER, 'Translatable#Contact')
                         ]),

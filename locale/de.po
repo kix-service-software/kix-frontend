@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-05-05 09:50+0000\n"
+"PO-Revision-Date: 2020-07-23 08:51+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -51,7 +51,7 @@ msgid "Access denied"
 msgstr "Zugriff verweigert"
 
 msgid "Access Level"
-msgstr ""
+msgstr "Zugriffsebene"
 
 msgid "Accounted time"
 msgstr "Erfasste Zeit"
@@ -131,7 +131,9 @@ msgstr "Agenten"
 msgid "All"
 msgstr "Alle"
 
-msgid "All agents subscribed to the ticket's queue"
+#, fuzzy
+#| msgid "All agents subscribed to the ticket's queue"
+msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
 msgid "All agents with read permissions for the ticket"
@@ -257,7 +259,10 @@ msgstr "Zuordnung zu Team"
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
-msgid "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+#, fuzzy
+#| msgid ""
+#| "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
+msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
 "enthalten."
@@ -299,7 +304,7 @@ msgid "between"
 msgstr "zwischen"
 
 msgid "Body"
-msgstr ""
+msgstr "Nachrichteninhalt"
 
 msgid "Bookmarks"
 msgstr "Lesezeichen"
@@ -545,7 +550,9 @@ msgstr "Kopie von {0}"
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
-msgid "Could not load file '{0}'."
+#, fuzzy
+#| msgid "Could not load file '{0}'."
+msgid "Could not load file {0}."
 msgstr "Datei '{0}' konnte nicht geladen werden."
 
 msgid "Country"
@@ -558,7 +565,7 @@ msgid "Create Address"
 msgstr "Adresse wird angelegt"
 
 msgid "Create Article"
-msgstr "Artikel anlegen"
+msgstr "Artikel wird angelegt"
 
 msgid "Create Category"
 msgstr "Kategorie wird angelegt"
@@ -597,7 +604,7 @@ msgid "Create Links"
 msgstr "Verknüpfung wird angelegt"
 
 msgid "Create Notification"
-msgstr "Benachrichtigung erstellen"
+msgstr "Benachrichtigung wird angelegt"
 
 msgid "Create Organisation"
 msgstr "Kunde wird angelegt"
@@ -618,7 +625,7 @@ msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
 
 msgid "Create Ticket"
-msgstr "Ticket anlegen"
+msgstr "Ticket wird angelegt"
 
 msgid "Create Translation"
 msgstr "Übersetzung wird angelegt"
@@ -1014,7 +1021,7 @@ msgid "Fax"
 msgstr "Fax"
 
 msgid "Feedback"
-msgstr ""
+msgstr "Feedback"
 
 msgid "Fetching Mail Account"
 msgstr "E-Mail-Konto abrufen"
@@ -1025,7 +1032,9 @@ msgstr "Jetzt abrufen"
 msgid "Field"
 msgstr "Feld"
 
-msgid "Field '{0}' has an invalid value ({1})."
+#, fuzzy
+#| msgid "Field '{0}' has an invalid value ({1})."
+msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
 msgid "Field Information"
@@ -1068,8 +1077,12 @@ msgstr "Tickets werden gesperrt"
 msgid "Force"
 msgstr "Erzwingen"
 
+#, fuzzy
+#| msgid ""
+#| "For keyboard navigation, press 'Ctrl' to switch focus to dialog. See "
+#| "manual for more detailed information."
 msgid ""
-"For keyboard navigation, press 'Ctrl' to switch focus to dialog. See manual "
+"For keyboard navigation, press Ctrl to switch focus to dialog. See manual "
 "for more detailed information."
 msgstr ""
 "Durch Drücken von 'Strg' kann der Fokus der Tastatursteuerung auf den Dialog "
@@ -1295,10 +1308,10 @@ msgstr "Geben Sie das Passwort für Ihr Konto an, um sich beim Host anzumelden."
 
 msgid "Helptext_Admin_MailAccountCreate_Type."
 msgstr ""
-"IMAP/=Es werden Kopien Ihrer Nachrichten ins KIX geladen – die Nachrichten "
-"liegen weiterhin auf dem Server; POP/=Die Nachrichten werden vom Server "
-"herunter geladen; /S=Verbindung wird direkt über SSL verschlüsselt; /"
-"TLS=Verbindung wird direkt über TLS verschlüsselt"
+"Wählen Sie das Protokoll für den E-Mail-Abruf. KIX unterstützt folgende "
+"Protokolle: IMAP | IMAPS (mit SSL-Verschlüsselung) | IMAPTLS (mit TLS-"
+"Verschlüsselung); POP3 | POP3S (mit SSL-Verschlüsselung) | POP3TLS (mit TLS-"
+"Verschlüsselung)"
 
 msgid "Helptext_Admin_MailAccountCreate_UserName"
 msgstr ""
@@ -1403,11 +1416,12 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationCreate_Filter"
 msgstr ""
-"Wählen Sie ein Ticket- oder Artikelattribut aus der Liste. Anschließend "
-"können Sie in einem weiteren Feld den Wert eingeben, auf den der Filter "
-"reagiert. Nutzen Sie für jedes weitere Attribut eine neue Zeile. Ist unter "
-"\"Events\" mindestens ein artikelbezogenes Event ausgewählt, sind die "
-"Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
+"Mithilfe des Filters können Sie einschränken, für welche Tickets die "
+"Benachrichtigung versendet wird. Wählen Sie ein Ticket- oder Artikelattribut "
+"aus der Liste. Anschließend können Sie in einem weiteren Feld den Wert "
+"eingeben, auf den der Filter reagiert. Nutzen Sie für jedes weitere Attribut "
+"eine neue Zeile. Ist unter \"Events\" mindestens ein artikelbezogenes Event "
+"ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
@@ -1494,11 +1508,12 @@ msgstr ""
 
 msgid "Helptext_Admin_NotificationEdit_Filter"
 msgstr ""
-"Wählen Sie ein Ticket- oder Artikelattribut aus der Liste. Anschließend "
-"können Sie in einem weiteren Feld den Wert eingeben, auf den der Filter "
-"reagiert. Nutzen Sie für jedes weitere Attribut eine neue Zeile. Ist unter "
-"\"Events\" mindestens ein artikelbezogenes Event ausgewählt, sind die "
-"Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
+"Mithilfe des Filters können Sie einschränken, für welche Tickets die "
+"Benachrichtigung versendet wird. Wählen Sie ein Ticket- oder Artikelattribut "
+"aus der Liste. Anschließend können Sie in einem weiteren Feld den Wert "
+"eingeben, auf den der Filter reagiert. Nutzen Sie für jedes weitere Attribut "
+"eine neue Zeile. Ist unter \"Events\" mindestens ein artikelbezogenes Event "
+"ausgewählt, sind die Filterattribute \"Sendertyp\" & \"Kanal\" Pflichtfelder."
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
@@ -1932,7 +1947,9 @@ msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Comment"
-msgstr "Hier können Sie zusätzliche Informationen zu dem Kontakt hinterlegen."
+msgstr ""
+"Hier können Sie zusätzliche Informationen hinterlegen, die nur im Admin-"
+"Bereich angezeigt werden."
 
 msgid "Helptext_Customers_ContactCreate_Country"
 msgstr ""
@@ -2596,10 +2613,10 @@ msgid "Large View"
 msgstr "Großansicht"
 
 msgid "Last changed time"
-msgstr "zuletzt geändert am"
+msgstr "Zuletzt geändert am"
 
 msgid "Last executed at"
-msgstr "zuletzt ausgeführt am"
+msgstr "Zuletzt ausgeführt am"
 
 msgid "Last Login"
 msgstr "Letzte Anmeldung"
@@ -2609,6 +2626,11 @@ msgstr "Nachname"
 
 msgid "Legend"
 msgstr "Legende"
+
+#, fuzzy
+#| msgid "Let's go"
+msgid "Lets go"
+msgstr "Los geht's"
 
 msgid "Let's go"
 msgstr "Los geht's"
@@ -3250,6 +3272,11 @@ msgstr "Bewertung"
 msgid "Read"
 msgstr "Lesen"
 
+#, fuzzy
+#| msgid "Read"
+msgid "Readonly"
+msgstr "Lesen"
+
 msgid "Recently Closed"
 msgstr "Kürzlich Geschlossen"
 
@@ -3310,10 +3337,14 @@ msgstr "Antworten"
 msgid "Reply all"
 msgstr "Allen antworten"
 
-msgid "Required field '{0}' has no value."
+#, fuzzy
+#| msgid "Required field '{0}' has no value."
+msgid "Required field {0} has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
-msgid "Required field '{0}' is no JSON."
+#, fuzzy
+#| msgid "Required field '{0}' is no JSON."
+msgid "Required field {0} is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
 
 msgid "Reset"
@@ -3649,10 +3680,7 @@ msgid "Team"
 msgstr "Team"
 
 msgid "Team Backlog"
-msgstr ""
-
-msgid "Templates"
-msgstr "Vorlagen"
+msgstr "Team Backlog"
 
 msgid "Text"
 msgstr "Text"
@@ -3969,7 +3997,7 @@ msgid "URL"
 msgstr "URL"
 
 msgid "Usage Context"
-msgstr "Rollenkontext"
+msgstr "Nutzungskontext"
 
 msgid "Use KIX CSS"
 msgstr "KIX CSS verwenden"
@@ -4007,7 +4035,9 @@ msgstr "Gültigkeit"
 msgid "Value"
 msgstr "Wert"
 
-msgid "Value of field '{0}' is too long (max: {1})."
+#, fuzzy
+#| msgid "Value of field '{0}' is too long (max: {1})."
+msgid "Value of field {0} is too long (max: {1})."
 msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
 
 msgid "Value successfully created."
@@ -4105,6 +4135,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Templates"
+#~ msgstr "Vorlagen"
 
 #~ msgid "Calendar"
 #~ msgstr "Kalender"
