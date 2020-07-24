@@ -64,6 +64,8 @@ export class FilterUtil {
                             return value === cv;
                         } else if (Array.isArray(value)) {
                             return value.some((v) => v.toString() === cv.toString());
+                        } else if (typeof value === 'boolean') {
+                            return Boolean(cv) === value;
                         } else {
                             return value ? value.toString().split(',').some((v) => v === cv.toString()) : false;
                         }
