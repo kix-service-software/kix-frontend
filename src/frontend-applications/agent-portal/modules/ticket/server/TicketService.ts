@@ -33,7 +33,7 @@ import { FilterType } from '../../../model/FilterType';
 import { Ticket } from '../model/Ticket';
 import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { SenderType } from '../model/SenderType';
-import { Lock } from '../model/Lock';
+import { TicketLock } from '../model/TicketLock';
 import { Contact } from '../../customer/model/Contact';
 
 export class TicketAPIService extends KIXObjectAPIService {
@@ -60,7 +60,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE
-            || kixObjectType === KIXObjectType.LOCK
+            || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER;
     }
 
@@ -86,9 +86,9 @@ export class TicketAPIService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
             const uri = this.buildUri('system', 'communication', 'sendertypes');
             objects = await super.load(token, KIXObjectType.SENDER_TYPE, uri, null, null, 'SenderType', SenderType);
-        } else if (objectType === KIXObjectType.LOCK) {
+        } else if (objectType === KIXObjectType.TICKET_LOCK) {
             const uri = this.buildUri('system', 'ticket', 'locks');
-            objects = await super.load(token, KIXObjectType.LOCK, uri, null, null, 'Lock', Lock);
+            objects = await super.load(token, KIXObjectType.TICKET_LOCK, uri, null, null, 'Lock', TicketLock);
         } else if (objectType === KIXObjectType.ARTICLE) {
             if (objectLoadingOptions) {
                 const uri = this.buildUri(
