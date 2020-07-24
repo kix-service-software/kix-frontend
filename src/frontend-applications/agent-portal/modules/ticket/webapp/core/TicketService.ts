@@ -387,7 +387,8 @@ export class TicketService extends KIXObjectService<Ticket> {
 
             return [content, inlineContent];
         } else {
-            return [article.Body, null];
+            const body = article.Body.replace(/(\n|\r)/g, '<br>');
+            return [body, null];
         }
     }
 
