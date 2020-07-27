@@ -70,7 +70,12 @@ export class TicketFormService extends KIXObjectFormService {
                 if (!value) {
                     const context = ContextService.getInstance().getActiveContext();
                     const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
-                    value = organisation ? organisation.ID : null;
+                    if (organisation) {
+                        value = organisation;
+                    } else {
+                        const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                        value = contact ? contact.PrimaryOrganisationID : null;
+                    }
                 }
                 break;
             case TicketProperty.PENDING_TIME:
