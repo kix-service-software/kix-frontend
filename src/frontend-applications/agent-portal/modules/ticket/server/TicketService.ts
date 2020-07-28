@@ -406,14 +406,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.TICKET_ID
         ];
 
-        let filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
-
-        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
-
-        if (fulltext) {
-            const fulltextSearch = this.getFulltextSearch(fulltext);
-            filterCriteria = [...filterCriteria, ...fulltextSearch];
-        }
+        const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
 
         await this.setUserID(filterCriteria, token);
 
@@ -440,11 +433,17 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.STATE_TYPE
         ];
 
-        const searchCriteria = criteria.filter(
+        let searchCriteria = criteria.filter(
             (f) => searchProperties.some((sp) => sp === f.property) && f.operator !== SearchOperator.NOT_EQUALS
         );
 
         await this.setUserID(searchCriteria, token);
+
+        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
+        if (fulltext) {
+            const fulltextSearch = this.getFulltextSearch(fulltext);
+            searchCriteria = [...searchCriteria, ...fulltextSearch];
+        }
 
         const createdCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
         if (createdCriteria) {
@@ -486,6 +485,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             ),
             new FilterCriteria(
                 TicketProperty.TITLE, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
+            ),
+            new FilterCriteria(
+                TicketProperty.SUBJECT, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
