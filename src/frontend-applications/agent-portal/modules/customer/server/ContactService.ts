@@ -231,7 +231,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         const searchCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
                 && f.property !== KIXObjectProperty.VALID_ID
-                && f.operator !== SearchOperator.IN
+                && (f.operator !== SearchOperator.IN || f.property === ContactProperty.EMAIL)
         );
 
         const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);
