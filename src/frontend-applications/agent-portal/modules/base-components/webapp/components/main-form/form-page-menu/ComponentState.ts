@@ -15,7 +15,9 @@ export class ComponentState {
         public activePageIndex: number = 0,
         public pages: FormPageConfiguration[] = [],
         public translations: any = {},
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public activePageTitle: string = '',
+        public pageChanged: boolean = false
     ) { }
 
 }
