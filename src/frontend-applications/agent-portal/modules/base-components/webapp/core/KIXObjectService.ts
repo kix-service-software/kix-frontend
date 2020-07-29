@@ -43,7 +43,6 @@ import { ConfigItem } from '../../../cmdb/model/ConfigItem';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
-import { SortUtil } from '../../../../model/SortUtil';
 import { DataType } from '../../../../model/DataType';
 import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
@@ -637,7 +636,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 })
             ];
         }
-        return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        return nodes;
     }
 
     public static async searchObjectTree(

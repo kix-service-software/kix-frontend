@@ -9,6 +9,7 @@
 
 import { SortOrder } from './SortOrder';
 import { DataType } from './DataType';
+import { DateTimeUtil } from '../modules/base-components/webapp/core/DateTimeUtil';
 
 export class SortUtil {
 
@@ -86,9 +87,9 @@ export class SortUtil {
         } else if (b === undefined || b === '') {
             sort = 1;
         } else {
-            const DateA: Date = new Date(a);
-            const DateB: Date = new Date(b);
-            sort = (DateA.getTime() - DateB.getTime());
+            const dateA: Date = new Date(a);
+            const dateB: Date = new Date(b);
+            sort = (dateA.getTime() - dateB.getTime());
         }
         return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
     }

@@ -47,7 +47,7 @@ Feature: Als Nutzer möchte ich eine korrekte Standardkonfiguration für eine Ta
             | 'OwnerID'                     | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'OrganisationID'              | 1        | 1          | 0          | 150   | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
             | 'Changed'                     | 1        | 1          | 0          | 125   | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Ticket'   |
-            | 'Age'                         | 1        | 1          | 0          | 90    | 1        | 1        | 0        | 'DATETIME' | 1           | 0          | 'Ticket'   |
+            | 'Age'                         | 1        | 1          | 0          | 90    | 1        | 1        | 0        | 'STRING'   | 1           | 0          | 'Ticket'   |
 
     Scenario Outline: Tabelle - Schmal mit korrekter Spalte <column>
         Given Tabelle - Schmal: <objectType>
