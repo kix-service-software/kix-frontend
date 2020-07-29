@@ -44,7 +44,7 @@ export class SuggestedFAQHandler implements IObjectReferenceHandler {
                 const minLength = config.minLenght ? config.minLength : 3;
                 for (const p of config.properties) {
                     if (ticket[p] && typeof ticket[p] === 'string') {
-                        const searchWords = ticket[p].split(' ');
+                        const searchWords = ticket[p].replace(/;/g, '').split(' ');
                         filter = await this.buildFilterForSearchWords(
                             searchWords, service, minLength, stopWords
                         );
@@ -81,14 +81,14 @@ export class SuggestedFAQHandler implements IObjectReferenceHandler {
                     if (formField) {
                         const value = await formInstance.getFormFieldValueByProperty(p);
                         if (value && value.value && typeof value.value === 'string') {
-                            const searchWords = value.value.split(' ');
+                            const searchWords = value.value.replace(/;/g, '').split(' ');
                             filter = await this.buildFilterForSearchWords(
                                 searchWords, service, minLength, stopWords
                             );
                         }
                     } else {
                         if (ticket && ticket[p] && typeof ticket[p] === 'string') {
-                            const searchWords = ticket[p].split(' ');
+                            const searchWords = ticket[p].replace(/;/g, '').split(' ');
                             filter = await this.buildFilterForSearchWords(
                                 searchWords, service, minLength, stopWords
                             );
