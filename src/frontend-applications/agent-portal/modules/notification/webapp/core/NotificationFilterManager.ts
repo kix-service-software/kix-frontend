@@ -226,7 +226,7 @@ export class NotificationFilterManager extends AbstractDynamicFormManager {
     public async validate(): Promise<ValidationResult[]> {
         const validator = new NotificationFilterValidator();
         for (const v of this.values) {
-            v.valid = await validator.validateValue(v.property, v.value);
+            v.valid = validator.validateValue(v.property, v.value);
         }
         return [];
     }
