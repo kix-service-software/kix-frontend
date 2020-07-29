@@ -9,10 +9,14 @@
 
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
+import { EventService } from '../../../core/EventService';
+import { IdService } from '../../../../../../model/IdService';
+import { IEventSubscriber } from '../../../core/IEventSubscriber';
 
 class Component {
 
     private state: ComponentState;
+    private eventSubscriber: IEventSubscriber;
     private keyUpEventFunction: () => {};
 
     public onCreate(input: any): void {
@@ -31,11 +35,21 @@ class Component {
 
     public async onMount(): Promise<void> {
         this.prepareTranslations();
+        this.eventSubscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('page-subscriber-'),
+            eventPublished: () => {
+                this.state.pageChanged = true;
+            }
+        };
+        EventService.getInstance().subscribe('PAGE_CHANGED', this.eventSubscriber);
     }
 
     public onDestroy(): void {
         if (this.keyUpEventFunction) {
             document.body.removeEventListener('keyup', this.keyUpEventFunction, false);
+        }
+        if (this.eventSubscriber) {
+            EventService.getInstance().unsubscribe('PAGE_CHANGED', this.eventSubscriber);
         }
     }
 
@@ -59,11 +73,17 @@ class Component {
                 'Translatable#Next', 'Translatable#Previous',
                 ...this.state.pages.map((p) => p.name)
             ]);
+            const activePage = this.state.pages[this.state.activePageIndex];
+            if (activePage) {
+                this.state.activePageTitle = this.state.translations[activePage.name];
+                this.state.pageChanged = false;
+            }
             this.state.prepared = true;
         }
     }
 
     public showPage(index: number): void {
+        EventService.getInstance().publish('PAGE_CHANGED');
         (this as any).emit('showPage', index);
     }
 }
