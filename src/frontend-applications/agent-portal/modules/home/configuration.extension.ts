@@ -276,7 +276,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.AGE, true, false, true, true, 90,
-                    true, true, false, DataType.DATE_TIME
+                    true, true, false, DataType.STRING
                 ),
             ], null,
             true, true, new ToggleOptions('ticket-article-details', 'article', [], true)

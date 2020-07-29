@@ -24,6 +24,7 @@ import { DynamicFormFieldOption } from '../webapp/core/DynamicFormFieldOption';
 import { DynamicFieldFormUtil } from '../../base-components/webapp/core/DynamicFieldFormUtil';
 import { KIXObjectService } from '../../base-components/webapp/core/KIXObjectService';
 import { DynamicFieldTypes } from '../model/DynamicFieldTypes';
+import { DateTimeUtil } from '../../base-components/webapp/core/DateTimeUtil';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -265,7 +266,7 @@ describe('DynamicFieldFormUtil', () => {
             expect(formField.defaultValue).exist;
             expect(formField.defaultValue.value).exist;
             expect(formField.defaultValue.value).instanceOf(Date);
-            const time = formField.defaultValue.value.toLocaleTimeString();
+            const time = DateTimeUtil.getKIXTimeString(formField.defaultValue.value, false);
             expect(time).equals('00:00:00');
         });
 

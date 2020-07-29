@@ -21,15 +21,21 @@ export class TableSortUtil {
             rows.sort((a, b) => {
                 const cellA = a.getCell(columnId);
                 const cellB = b.getCell(columnId);
-                const valueA = cellA.getValue().displayValue;
-                const valueB = cellB.getValue().displayValue;
+
+                const valueA = dataType === DataType.DATE_TIME || dataType === DataType.DATE
+                    ? cellA.getValue().objectValue
+                    : cellA.getValue().displayValue;
+
+                const valueB = dataType === DataType.DATE_TIME || dataType === DataType.DATE
+                    ? cellB.getValue().objectValue
+                    : cellB.getValue().displayValue;
 
                 const numberA = Number(valueA);
                 const numberB = Number(valueB);
 
                 let compare = 0;
                 if (isNaN(numberA) || isNaN(numberB)) {
-                    compare = SortUtil.compareValues(valueA, valueB, DataType.STRING);
+                    compare = SortUtil.compareValues(valueA, valueB, dataType);
                 } else {
                     compare = numberA - numberB;
                 }

@@ -118,7 +118,7 @@ export class TicketTableFactory extends TableFactory {
                     TicketProperty.CHANGED, true, false, true, false, 125, true, true, false, DataType.DATE_TIME
                 ),
                 new DefaultColumnConfiguration(null, null, null,
-                    TicketProperty.AGE, true, false, true, false, 90, true, true, false, DataType.DATE_TIME
+                    TicketProperty.AGE, true, false, true, false, 90, true, true, false, DataType.STRING
                 )
             ];
         }
