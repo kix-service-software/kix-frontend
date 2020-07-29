@@ -65,8 +65,9 @@ export class TableExportUtil {
                             row.getRowObject().getObject(), cId
                         );
                     } else {
+                        const rowObject = row.getRowObject().getObject();
                         const value = await LabelService.getInstance().getExportPropertyValue(
-                            cId, objectType, row.getRowObject().getObject()
+                            cId, objectType, rowObject ? rowObject[cId] : ''
                         );
                         displayValue = value;
                     }
