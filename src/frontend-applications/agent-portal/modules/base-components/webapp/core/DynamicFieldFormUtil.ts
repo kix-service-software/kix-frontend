@@ -313,7 +313,11 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                     formFieldValues.set(field.instanceId, new FormFieldValue(dfValue));
                 } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
                     if (dfValue) {
-                        field.defaultValue = new FormFieldValue(JSON.parse(dfValue));
+                        let checklist = JSON.parse(dfValue);
+                        if (typeof checklist === 'string') {
+                            checklist = JSON.parse(checklist);
+                        }
+                        formFieldValues.set(field.instanceId, new FormFieldValue(checklist));
                     }
                 } else if (dfValue && Array.isArray(dfValue)) {
                     for (let i = 0; i < dfValue.length; i++) {
