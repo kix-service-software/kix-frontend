@@ -53,7 +53,6 @@ export class TicketParameterUtil {
                     parameter.push([ArticleProperty.ATTACHMENTS, attachments]);
                 }
             } else if (property === TicketProperty.OWNER_ID) {
-                parameter.push([property, value]);
                 if (forUpdate) {
                     const context = ContextService.getInstance().getActiveContext();
                     if (context) {
@@ -69,6 +68,8 @@ export class TicketParameterUtil {
                         }
                     }
                 }
+                parameter.push([property, Array.isArray(value) ? value[0] : value]);
+            } else if (property === TicketProperty.RESPONSIBLE_ID) {
                 parameter.push([property, Array.isArray(value) ? value[0] : value]);
             } else if (
                 (
