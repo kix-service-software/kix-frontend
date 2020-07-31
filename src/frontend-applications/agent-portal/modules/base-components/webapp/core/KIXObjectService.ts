@@ -655,11 +655,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objectType = this.objectType;
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
+            objectType = null;
             const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-            if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                objectType = KIXObjectType.CONFIG_ITEM;
-            } else if (dynamicField.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
-                objectType = KIXObjectType.TICKET;
+            if (dynamicField) {
+                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                    objectType = KIXObjectType.CONFIG_ITEM;
+                } else if (dynamicField.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
+                    objectType = KIXObjectType.TICKET;
+                }
             }
         } else {
             switch (property) {
