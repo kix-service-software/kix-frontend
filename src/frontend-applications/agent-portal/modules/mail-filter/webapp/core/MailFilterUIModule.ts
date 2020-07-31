@@ -25,6 +25,7 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
 import { MailFilterMatchValidator } from './MailFilterMatchValidator';
+import { MailFilterTableDeleteAction } from './actions/MailFilterTableDeleteAction';
 
 
 export class UIModule implements IUIModule {
@@ -46,6 +47,9 @@ export class UIModule implements IUIModule {
         TableFactoryService.getInstance().registerFactory(new MailFilterSetTableFactory());
 
         ActionFactory.getInstance().registerAction('mail-filter-create', MailFilterCreateAction);
+        ActionFactory.getInstance().registerAction('mail-filter-table-delete',
+            MailFilterTableDeleteAction
+        );
 
         const newMailFilterDialogContext = new ContextDescriptor(
             NewMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
