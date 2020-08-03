@@ -68,12 +68,14 @@ export class SortUtil {
         return sortOrder === SortOrder.DOWN ? sort * (-1) : sort;
     }
 
-    public static compareNumber(a: number, b: number, sortOrder: SortOrder = SortOrder.UP): number {
+    public static compareNumber(
+        a: number, b: number, sortOrder: SortOrder = SortOrder.UP, notNumberBefore: boolean = true
+    ): number {
         let sort = 0;
         if (typeof a !== 'number') {
-            sort = -1;
+            sort = notNumberBefore ? -1 : 1;
         } else if (typeof b !== 'number') {
-            sort = 1;
+            sort = notNumberBefore ? 1 : -1;
         } else {
             sort = a - b;
         }
