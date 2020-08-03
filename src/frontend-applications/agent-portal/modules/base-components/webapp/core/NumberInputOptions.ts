@@ -15,6 +15,8 @@ export enum NumberInputOptions {
 
     STEP = 'STEP',
 
-    UNIT_STRING = 'UNIT_STRING'
+    UNIT_STRING = 'UNIT_STRING',
+
+    EXCEPTS_EMPTY = 'EXCEPTS_EMPTY'
 
 }
