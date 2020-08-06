@@ -30,7 +30,7 @@ export class MailAccountDetailsContext extends Context {
 
     public async getBreadcrumbInformation(): Promise<BreadcrumbInformation> {
         const categoryLabel = await TranslationService.translate('Translatable#Communication');
-        const emailLabel = await TranslationService.translate('Translatable#Email');
+        const emailLabel = await TranslationService.translate('Translatable#Email Account');
         const mailAccount = await this.getObject<MailAccount>();
         const breadcrumbText = `${categoryLabel}: ${emailLabel}: ${mailAccount.Host}`;
         return new BreadcrumbInformation(this.getIcon(), [AdminContext.CONTEXT_ID], breadcrumbText);
