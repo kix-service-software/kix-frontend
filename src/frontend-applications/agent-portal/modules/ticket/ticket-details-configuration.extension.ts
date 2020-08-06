@@ -295,7 +295,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const articleListWidget = new WidgetConfiguration(
             'ticket-details-article-list-widget', 'Article List Widget', ConfigurationType.Widget,
-            'table-widget', 'Translatable#Article Overview', ['article-new-action'],
+            'table-widget', 'Translatable#Article Overview', [],
             new ConfigurationDefinition('ticket-details-article-list-table-config', ConfigurationType.TableWidget),
             null, false, true, null, true
         );
