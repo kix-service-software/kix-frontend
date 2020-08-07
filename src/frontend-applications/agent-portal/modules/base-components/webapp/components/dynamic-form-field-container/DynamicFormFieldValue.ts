@@ -266,6 +266,8 @@ export class DynamicFormFieldValue {
                     const node = TreeUtil.findNode(valueNodes, v);
                     if (node) {
                         currentValues.push(node);
+                    } else if (this.isFreeText) {
+                        currentValues.push(new TreeNode(v, v));
                     }
                 }
             } else if (this.isDropdown && this.isAutocomplete) {
