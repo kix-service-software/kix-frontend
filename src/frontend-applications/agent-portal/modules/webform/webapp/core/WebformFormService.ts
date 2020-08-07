@@ -34,6 +34,7 @@ import { TicketState } from '../../../ticket/model/TicketState';
 import { TicketStateProperty } from '../../../ticket/model/TicketStateProperty';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 
 export class WebformFormService extends KIXObjectFormService {
 
@@ -227,6 +228,24 @@ export class WebformFormService extends KIXObjectFormService {
         }
 
         return parameter;
+    }
+
+    public async postPrepareValues(
+        parameter: Array<[string, any]>, createOptions?: KIXObjectSpecificCreateOptions,
+        formContext?: FormContext, formInstance?: FormInstance
+    ): Promise<Array<[string, any]>> {
+        const acceptedDomainsParameter = parameter.find((p) => p[0] === WebformProperty.ACCEPTED_DOMAINS);
+        if (acceptedDomainsParameter && acceptedDomainsParameter[1] !== null) {
+            let preparedValue: string;
+            if (acceptedDomainsParameter[1].match(/^(\*|\.(\*|\+))$/)) {
+                preparedValue = '/.*/';
+            } else {
+                const domains = Webform.getDomains(acceptedDomainsParameter[1]);
+                preparedValue = domains.join(',');
+            }
+            acceptedDomainsParameter[1] = preparedValue;
+        }
+        return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
 }
