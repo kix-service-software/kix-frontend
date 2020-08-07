@@ -204,7 +204,7 @@ class Component {
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
                     new DefaultColumnConfiguration(null, null, null,
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.STRING
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.NUMBER
                     )
                 ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
@@ -291,7 +291,7 @@ class Component {
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
                     new DefaultColumnConfiguration(null, null, null,
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.STRING
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.NUMBER
                     )
                 ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
@@ -377,7 +377,8 @@ class Component {
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
                     new DefaultColumnConfiguration(null, null, null,
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.STRING
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.NUMBER
+
                     )
                 ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );
@@ -472,7 +473,8 @@ class Component {
                         TicketProperty.CHANGED, true, false, true, true, 125, true, true, false, DataType.DATE_TIME
                     ),
                     new DefaultColumnConfiguration(null, null, null,
-                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.STRING
+                        TicketProperty.AGE, true, false, true, true, 75, true, true, false, DataType.NUMBER
+
                     )
                 ], [], false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
             );

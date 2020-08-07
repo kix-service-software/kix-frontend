@@ -22,13 +22,11 @@ export class TableSortUtil {
                 const cellA = a.getCell(columnId);
                 const cellB = b.getCell(columnId);
 
-                const valueA = dataType === DataType.DATE_TIME || dataType === DataType.DATE
-                    ? cellA.getValue().objectValue
-                    : cellA.getValue().displayValue;
+                const useObjectValue =
+                    dataType === DataType.DATE_TIME || dataType === DataType.DATE || dataType === DataType.NUMBER;
 
-                const valueB = dataType === DataType.DATE_TIME || dataType === DataType.DATE
-                    ? cellB.getValue().objectValue
-                    : cellB.getValue().displayValue;
+                const valueA = useObjectValue ? cellA.getValue().objectValue : cellA.getValue().displayValue;
+                const valueB = useObjectValue ? cellB.getValue().objectValue : cellB.getValue().displayValue;
 
                 const numberA = Number(valueA);
                 const numberB = Number(valueB);
