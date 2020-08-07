@@ -20,6 +20,7 @@ import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
+import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -203,6 +204,14 @@ export class TicketSearchFormManager extends SearchFormManager {
             newValue.property = TicketProperty.CHANGED;
         }
         super.setValue(newValue, silent);
+    }
+
+    public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {
+        const options = await super.getInputTypeOptions(property, operator);
+        if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
+            options.push([ObjectReferenceOptions.FREETEXT, true]);
+        }
+        return options;
     }
 
 }
