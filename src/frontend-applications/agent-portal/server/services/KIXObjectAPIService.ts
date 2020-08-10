@@ -30,6 +30,7 @@ import { CreateLink } from '../../modules/links/server/api/CreateLink';
 import { CreateLinkRequest } from '../../modules/links/server/api/CreateLinkRequest';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
+import { CacheService } from './cache';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -319,6 +320,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     throw new Error(error.Code, error.Message);
                 });
             }
+            CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_ICON);
         }
     }
 
@@ -350,6 +352,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                         throw error;
                     });
             }
+
+            CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_ICON);
         }
     }
 

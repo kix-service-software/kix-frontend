@@ -27,7 +27,7 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { FAQDetailsContext } from './context/FAQDetailsContext';
 import { InlineContent } from '../../../../modules/base-components/webapp/core/InlineContent';
 import { FAQArticleAttachmentLoadingOptions } from '../../model/FAQArticleAttachmentLoadingOptions';
-import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { FAQVote } from '../../model/FAQVote';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { TranslationService } from '../../../../modules/translation/webapp/core/TranslationService';
@@ -271,7 +271,7 @@ export class FAQService extends KIXObjectService {
         return inlineContent;
     }
 
-    public async checkFilterValue(article: FAQArticle, criteria: TableFilterCriteria): Promise<boolean> {
+    public async checkFilterValue(article: FAQArticle, criteria: UIFilterCriterion): Promise<boolean> {
         let match = false;
         if (criteria.property === FAQArticleProperty.VOTES && article && article.Votes) {
             const rating = BrowserUtil.calculateAverage(article.Votes.map((v) => v.Rating));

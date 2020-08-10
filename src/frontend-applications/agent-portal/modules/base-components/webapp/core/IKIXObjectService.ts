@@ -16,7 +16,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 
@@ -47,7 +47,7 @@ export interface IKIXObjectService<T extends KIXObject = KIXObject> extends IKIX
         loadingOptions?: KIXObjectLoadingOptions, objectLoadingOptions?: KIXObjectSpecificLoadingOptions
     ): Promise<TreeNode[]>;
 
-    checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean>;
+    checkFilterValue(object: T, criteria: UIFilterCriterion): Promise<boolean>;
 
     determineDependendObjects(
         sourceObjects: T[], targetObjectType: KIXObjectType | string

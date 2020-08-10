@@ -12,7 +12,7 @@ import { TranslationPattern } from '../../model/TranslationPattern';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
-import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { TranslationPatternProperty } from '../../model/TranslationPatternProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { Translation } from '../../model/Translation';
@@ -121,7 +121,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return defaultLanguageConfig && defaultLanguageConfig.length ? defaultLanguageConfig[0].Value : null;
     }
 
-    public async checkFilterValue(translation: TranslationPattern, criteria: TableFilterCriteria): Promise<boolean> {
+    public async checkFilterValue(translation: TranslationPattern, criteria: UIFilterCriterion): Promise<boolean> {
         if (translation) {
             switch (criteria.property) {
                 case TranslationPatternProperty.LANGUAGES:

@@ -10,7 +10,7 @@
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { ITable } from './ITable';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 
 export interface IColumn<T = any> {
 
@@ -28,7 +28,7 @@ export interface IColumn<T = any> {
 
     filter(filterValues?: T[], textValue?: string): Promise<void>;
 
-    getFilter(): [string, TableFilterCriteria[]];
+    getFilter(): [string, UIFilterCriterion[]];
 
     setSize(size: number): void;
 
