@@ -6,17 +6,18 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <p>
     <translation-string pattern=input.text/>
 </p>
 <div.confirm-overlay-buttons>
-    <button.cancel-button type="button" on-click("closeOverlay", false) title=component.getButtonLabel()>
-        <span.kix-icon-close/>
-        <translation-string pattern=component.getButtonLabel()/>
-    </button>
-    <button.submit-button type="button" on-click("closeOverlay", true) title=component.getButtonLabel(true)>
-        <span.kix-icon-check/>
-        <translation-string pattern=component.getButtonLabel(true)/>
-    </button>
+    <if(state.hasButtons)>
+        <button.cancel-button type="button" on-click("closeOverlay", false) title=component.getButtonLabel()>
+            <span.kix-icon-close/>
+            <translation-string pattern=component.getButtonLabel()/>
+        </button>
+        <button.submit-button type="button" on-click("closeOverlay", true) title=component.getButtonLabel(true)>
+            <span.kix-icon-check/>
+            <translation-string pattern=component.getButtonLabel(true)/>
+        </button>
+    </if>
 </div>

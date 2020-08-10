@@ -36,12 +36,12 @@ export class BrowserUtil {
     public static openConfirmOverlay(
         title: string = 'Sure?', confirmText: string = 'Are you sure?',
         confirmCallback: () => void = null, cancelCallback: () => void = null,
-        labels: [string, string] = ['Yes', 'No']
+        labels: [string, string] = ['Yes', 'No'], closeButton?: boolean
     ): void {
         const content = new ComponentContent(
             'confirm-overlay', new ConfirmOverlayContent(confirmText, confirmCallback, cancelCallback, labels)
         );
-        OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, null, false);
+        OverlayService.getInstance().openOverlay(OverlayType.CONFIRM, null, content, title, null, closeButton);
     }
 
     public static openAppRefreshOverlay(
