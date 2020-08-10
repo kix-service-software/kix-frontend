@@ -170,9 +170,14 @@
                 >.widget-content {
                     border-color: @secondary-1;
 
+                    >.message-button {
+                        left: 50%;
+                        transform: translateX(-50%);
+                    }
+
                     >div {
                         >.confirm-overlay-buttons {
-                            margin: @margin-default 0;
+                            margin: @margin-default 0 0 0;
                             display: grid;
                             grid-template-columns: 1fr 1fr;
                             grid-gap: @margin-small * 2;
