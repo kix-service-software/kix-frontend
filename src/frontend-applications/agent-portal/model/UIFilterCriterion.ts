@@ -9,14 +9,15 @@
 
 import { SearchOperator } from '../modules/search/model/SearchOperator';
 
-export class TableFilterCriteria {
+export class UIFilterCriterion {
 
     public constructor(
         public property: string,
         public operator: SearchOperator,
         public value: string | number | string[] | number[],
         public useObjectService: boolean = false,
-        public useDisplayValue: boolean = false
+        public useDisplayValue: boolean = false,
+        public propertyValue?: string,
     ) { }
 
 }

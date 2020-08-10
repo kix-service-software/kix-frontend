@@ -24,7 +24,7 @@ import { TreeNode } from './tree';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { User } from '../../../user/model/User';
 import { ValidObject } from '../../../valid/model/ValidObject';
-import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { IAutofillConfiguration } from './IAutofillConfiguration';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
@@ -423,13 +423,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async checkFilterValue(
-        objectType: KIXObjectType | string, object: KIXObject, criteria: TableFilterCriteria
+        objectType: KIXObjectType | string, object: KIXObject, criteria: UIFilterCriterion
     ): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         return service ? await service.checkFilterValue(object, criteria) : true;
     }
 
-    public async checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean> {
+    public async checkFilterValue(object: T, criteria: UIFilterCriterion): Promise<boolean> {
         return true;
     }
 

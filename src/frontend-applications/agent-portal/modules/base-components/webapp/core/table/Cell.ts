@@ -11,7 +11,7 @@ import { ICell } from './ICell';
 import { IRow } from './IRow';
 import { LabelService } from '../LabelService';
 import { TableValue } from './TableValue';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { FilterUtil } from '../FilterUtil';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
@@ -79,7 +79,7 @@ export class Cell implements ICell {
         return this.loadingPromise;
     }
 
-    public async filter(filterValue: string, criteria: TableFilterCriteria[]): Promise<boolean> {
+    public async filter(filterValue: string, criteria: UIFilterCriterion[]): Promise<boolean> {
         const matchTextFilter = await this.matchDisplayValue(filterValue);
         const matchCriteria = await this.matchCriteria(criteria);
         return matchTextFilter && matchCriteria;
@@ -93,7 +93,7 @@ export class Cell implements ICell {
         return FilterUtil.stringContains(this.tableValue.displayValue, filterValue);
     }
 
-    private async matchCriteria(criteria: TableFilterCriteria[]): Promise<boolean> {
+    private async matchCriteria(criteria: UIFilterCriterion[]): Promise<boolean> {
 
         if (!criteria || criteria.length === 0) {
             return true;
@@ -109,7 +109,7 @@ export class Cell implements ICell {
 
         const matchPromises = [];
         filterCriteria.forEach(
-            (c) => matchPromises.push(FilterUtil.checkTableFilterCriteria(
+            (c) => matchPromises.push(FilterUtil.checkUIFilterCriterion(
                 c, c.useDisplayValue ? this.tableValue.displayValue : this.tableValue.objectValue
             ))
         );

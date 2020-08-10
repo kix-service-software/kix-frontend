@@ -15,22 +15,29 @@ import { TabWidgetConfiguration } from '../../model/configuration/TabWidgetConfi
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { LinkedObjectsWidgetConfiguration } from '../../model/configuration/LinkedObjectsWidgetConfiguration';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
-import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
-import { ContextMode } from '../../model/ContextMode';
-import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 import { TicketProperty } from './model/TicketProperty';
-import { ContactProperty } from '../customer/model/ContactProperty';
-import { UserProperty } from '../user/model/UserProperty';
-import { OrganisationProperty } from '../customer/model/OrganisationProperty';
 import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/core/ObjectReferenceWidgetConfiguration';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
-import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ObjectIcon } from '../icon/model/ObjectIcon';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { SearchOperator } from '../search/model/SearchOperator';
+import { FilterDataType } from '../../model/FilterDataType';
+import { FilterType } from '../../model/FilterType';
+import { UIFilterCriterion } from '../../model/UIFilterCriterion';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
+import { ContactDetailsContext } from '../customer/webapp/core';
+import { ContextMode } from '../../model/ContextMode';
+import { ContactProperty } from '../customer/model/ContactProperty';
+import { NewConfigItemDialogContext } from '../cmdb/webapp/core';
+import { DialogRoutingConfiguration } from '../../model/configuration/DialogRoutingConfiguration';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
+import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -88,6 +95,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(infoConfig);
 
+
         const linkedObjectsConfig = new LinkedObjectsWidgetConfiguration(
             'ticket-details-linked-objects-config', 'Linked Objects Config', ConfigurationType.LinkedObjects, []
         );
@@ -126,69 +134,95 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(tabWidget);
 
-        // Sidebars
-        const organisationObjectInformation = new ObjectInformationWidgetConfiguration(
-            'ticket-details-organisation-information-settings', 'Organisation Information Settings',
-            ConfigurationType.ObjectInformation,
-            KIXObjectType.ORGANISATION,
-            [
-                OrganisationProperty.NUMBER,
-                OrganisationProperty.NAME,
-                OrganisationProperty.URL,
-                OrganisationProperty.STREET,
-                OrganisationProperty.ZIP,
-                OrganisationProperty.CITY,
-                OrganisationProperty.COUNTRY
-            ], true,
-            [
-                [OrganisationProperty.NUMBER, organisationRouting],
-                [OrganisationProperty.NAME, organisationRouting]
-            ]
-        );
-        configurations.push(organisationObjectInformation);
+        const contactInfoCard = new WidgetConfiguration(
+            'ticket-details-contact-card-widget', 'Contact Info Widget', ConfigurationType.Widget,
+            'object-information-card-widget', 'Translatable#Contact Information', [], null,
+            {
+                avatar: new ObjectIcon(
+                    null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man-bubble'
+                ),
+                rows: [
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: null,
+                                text: '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>',
+                                linkSrc: null
+                            },
+                        ],
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: new ObjectIcon(
+                                    null, 'Organisation', '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
+                                ),
+                                text: '<KIX_ORG_Name>',
+                                linkSrc: null
+                            }
+                        ],
+                    },
+                    {
+                        margin: true,
+                        values: [
+                            {
+                                icon: 'kix-icon-call',
+                                text: '<KIX_CONTACT_Phone>',
+                                linkSrc: 'tel:<KIX_CONTACT_Phone>'
+                            }
+                        ]
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: 'kix-icon-mail',
+                                text: '<KIX_CONTACT_Email>',
+                                linkSrc: null
+                            }
+                        ]
+                    },
+                    {
+                        margin: true,
+                        values: [
+                            {
+                                icon: 'kix-icon-compass',
+                                text: '<KIX_CONTACT_Street>',
+                                // tslint:disable-next-line: max-line-length
+                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                            }
+                        ]
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: null,
+                                text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
+                                // tslint:disable-next-line: max-line-length
+                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                            }
+                        ]
 
-        const organisationInfoSidebar = new WidgetConfiguration(
-            'ticket-details-organisation-info-widget', 'Organisation Info Widget', ConfigurationType.Widget,
-            'object-information-widget', 'Translatable#Organisation', [],
-            new ConfigurationDefinition(
-                'ticket-details-organisation-information-settings', ConfigurationType.ObjectInformation
-            ),
-            null, false, false, 'kix-icon-man-house', false
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: null,
+                                text: '<KIX_CONTACT_Country>',
+                                // tslint:disable-next-line: max-line-length
+                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                            }
+                        ]
+                    }
+                ]
+            },
+            false, false, 'kix-icon-man-house'
         );
-        configurations.push(organisationInfoSidebar);
-
-        const contactObjectInformation = new ObjectInformationWidgetConfiguration(
-            'ticket-details-contact-information-settings', 'Contact Information Settings',
-            ConfigurationType.ObjectInformation,
-            KIXObjectType.CONTACT,
-            [
-                UserProperty.USER_LOGIN,
-                ContactProperty.TITLE,
-                ContactProperty.FIRSTNAME,
-                ContactProperty.LASTNAME,
-                ContactProperty.PRIMARY_ORGANISATION_ID,
-                ContactProperty.PHONE,
-                ContactProperty.MOBILE,
-                ContactProperty.FAX,
-                ContactProperty.EMAIL
-            ], true,
-            [
-                [ContactProperty.LASTNAME, contactRouting],
-                [ContactProperty.FIRSTNAME, contactRouting],
-                [UserProperty.USER_LOGIN, contactRouting]
-            ]
-        );
-        configurations.push(contactObjectInformation);
-
-        const contactInfoSidebar = new WidgetConfiguration(
-            'ticket-details-contact-info-widget', 'Contact Info Widget', ConfigurationType.Widget,
-            'object-information-widget', 'Translatable#Contact', [],
-            new ConfigurationDefinition(
-                'ticket-details-contact-information-settings', ConfigurationType.ObjectInformation
-            ),
-            null, false, false, 'kix-icon-man-bubble', false
-        );
-        configurations.push(contactInfoSidebar);
+        configurations.push(contactInfoCard);
 
         const ticketsForAssetsWidget = new WidgetConfiguration(
             'ticket-details-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
@@ -307,12 +341,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(),
                 [
                     new ConfiguredWidget(
-                        'ticket-details-organisation-info-widget', 'ticket-details-organisation-info-widget', null,
-                        [new UIComponentPermission('organisations', [CRUD.READ])]
-                    ),
-                    new ConfiguredWidget(
-                        'ticket-details-contact-info-widget', 'ticket-details-contact-info-widget', null,
-                        [new UIComponentPermission('contacts', [CRUD.READ])]
+                        'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget'
                     ),
                     new ConfiguredWidget(
                         'ticket-details-object-reference-widget', 'ticket-details-object-reference-widget'

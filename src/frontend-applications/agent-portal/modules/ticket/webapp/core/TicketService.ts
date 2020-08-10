@@ -30,7 +30,7 @@ import { TicketType } from '../../model/TicketType';
 import { TicketPriority } from '../../model/TicketPriority';
 import { TicketState } from '../../model/TicketState';
 import { User } from '../../../user/model/User';
-import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { AgentService } from '../../../user/webapp/core/AgentService';
 import { StateType } from '../../model/StateType';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
@@ -292,7 +292,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         return nodes;
     }
 
-    public async checkFilterValue(ticket: Ticket, criteria: TableFilterCriteria): Promise<boolean> {
+    public async checkFilterValue(ticket: Ticket, criteria: UIFilterCriterion): Promise<boolean> {
         if (criteria.property === TicketProperty.WATCHERS && ticket.Watchers) {
             let value = criteria.value;
             if (criteria.value === KIXObjectType.CURRENT_USER) {

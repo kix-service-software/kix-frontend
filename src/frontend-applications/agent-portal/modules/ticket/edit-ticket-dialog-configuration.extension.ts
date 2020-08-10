@@ -44,6 +44,7 @@ import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/core/ObjectReferenceWidgetConfiguration';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ObjectIcon } from '../icon/model/ObjectIcon';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -53,56 +54,95 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
-        const organisationInformation = new ObjectInformationWidgetConfiguration(
-            'ticket-edit-dialog-organisation-information', 'Organisation Information',
-            ConfigurationType.ObjectInformation,
-            KIXObjectType.ORGANISATION,
-            [
-                OrganisationProperty.NUMBER,
-                OrganisationProperty.NAME,
-                OrganisationProperty.URL,
-                OrganisationProperty.STREET,
-                OrganisationProperty.ZIP,
-                OrganisationProperty.CITY,
-                OrganisationProperty.COUNTRY
-            ], true
-        );
-        configurations.push(organisationInformation);
+        const contactInfoCard = new WidgetConfiguration(
+            'ticket-edit-contact-card-widget', 'Contact Info Widget', ConfigurationType.Widget,
+            'object-information-card-widget', 'Translatable#Contact Information', [], null,
+            {
+                avatar: new ObjectIcon(
+                    null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man'
+                ),
+                rows: [
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: null,
+                                text: '<KIX_CONTACT_Firstname> <KIX_CONTACT_Lastname>',
+                                linkSrc: null
+                            },
+                        ],
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: new ObjectIcon(
+                                    null, 'Organisation', '<KIX_ORG_ID>', null, null, 'kix-icon-man-house'
+                                ),
+                                text: '<KIX_ORG_Name>',
+                                linkSrc: null
+                            }
+                        ],
+                    },
+                    {
+                        margin: true,
+                        values: [
+                            {
+                                icon: 'kix-icon-call',
+                                text: '<KIX_CONTACT_Phone>',
+                                linkSrc: 'tel:<KIX_CONTACT_Phone>'
+                            }
+                        ]
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: 'kix-icon-mail',
+                                text: '<KIX_CONTACT_Email>',
+                                linkSrc: null
+                            }
+                        ]
+                    },
+                    {
+                        margin: true,
+                        values: [
+                            {
+                                icon: 'kix-icon-compass',
+                                text: '<KIX_CONTACT_Street>',
+                                // tslint:disable-next-line: max-line-length
+                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                            }
+                        ]
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: null,
+                                text: '<KIX_CONTACT_Zip> <KIX_CONTACT_City>',
+                                // tslint:disable-next-line: max-line-length
+                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                            }
+                        ]
 
-        const organisationInfoSidebar = new WidgetConfiguration(
-            'ticket-edit-dialog-organisation-widget', 'Organisation Widget', ConfigurationType.Widget,
-            'object-information-widget', 'Translatable#Organisation', [],
-            new ConfigurationDefinition(
-                'ticket-edit-dialog-organisation-information', ConfigurationType.ObjectInformation
-            ),
-            null, false, false, 'kix-icon-man-house', false
+                    },
+                    {
+                        margin: false,
+                        values: [
+                            {
+                                icon: null,
+                                text: '<KIX_CONTACT_Country>',
+                                // tslint:disable-next-line: max-line-length
+                                linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                            }
+                        ]
+                    }
+                ]
+            },
+            false, false, 'kix-icon-man-house'
         );
-        configurations.push(organisationInfoSidebar);
-
-        const contactInformation = new ObjectInformationWidgetConfiguration(
-            'ticket-edit-dialog-contact-information', 'Contact Information',
-            ConfigurationType.ObjectInformation,
-            KIXObjectType.CONTACT,
-            [
-                UserProperty.USER_LOGIN,
-                ContactProperty.TITLE,
-                ContactProperty.FIRSTNAME,
-                ContactProperty.LASTNAME,
-                ContactProperty.PRIMARY_ORGANISATION_ID,
-                ContactProperty.PHONE,
-                ContactProperty.MOBILE,
-                ContactProperty.EMAIL
-            ], true
-        );
-        configurations.push(contactInformation);
-
-        const contactInfoSidebar = new WidgetConfiguration(
-            'ticket-edit-dialog-contact-widget', 'Contact Widget', ConfigurationType.Widget,
-            'object-information-widget', 'Translatable#Contact', [],
-            new ConfigurationDefinition('ticket-edit-dialog-contact-information', ConfigurationType.ObjectInformation),
-            null, false, false, 'kix-icon-man-bubble', false
-        );
-        configurations.push(contactInfoSidebar);
+        configurations.push(contactInfoCard);
 
         const helpSettings = new HelpWidgetConfiguration(
             'ticket-edit-dialog-help-widget-config', 'Help Widget Config', ConfigurationType.HelpWidget,
@@ -171,10 +211,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 this.getModuleId(), 'Ticket New Dialog', ConfigurationType.Context,
                 this.getModuleId(),
                 [
-                    new ConfiguredWidget(
-                        'ticket-edit-dialog-organisation-widget', 'ticket-edit-dialog-organisation-widget'
-                    ),
-                    new ConfiguredWidget('ticket-edit-dialog-contact-widget', 'ticket-edit-dialog-contact-widget'),
+                    new ConfiguredWidget('ticket-edit-contact-card-widget', 'ticket-edit-contact-card-widget'),
                     new ConfiguredWidget(
                         'ticket-edit-dialog-object-reference-widget', 'ticket-edit-dialog-object-reference-widget'
                     ),

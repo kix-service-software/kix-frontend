@@ -7,14 +7,14 @@
  * --
  */
 
-import { TableFilterCriteria } from './TableFilterCriteria';
+import { UIFilterCriterion } from './UIFilterCriterion';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
 
 export class KIXObjectPropertyFilter {
 
     public constructor(
         public name: string,
-        public criteria: TableFilterCriteria[],
+        public criteria: UIFilterCriterion[],
         public icon?: string | ObjectIcon
     ) { }
 

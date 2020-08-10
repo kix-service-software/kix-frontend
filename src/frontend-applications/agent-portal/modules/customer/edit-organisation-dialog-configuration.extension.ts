@@ -142,6 +142,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new FormFieldConfiguration(
+                'organisation-edit-form-field-icon',
+                'Translatable#Avatar', 'ICON', 'icon-input', false,
+                'Translatable#Helptext_Customers_OrganisationCreate_Avatar.'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
                 'organisation-edit-form-field-comment',
                 'Translatable#Comment', OrganisationProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Customers_OrganisationCreate_Comment', null, null, null, null,
@@ -164,6 +171,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             new FormGroupConfiguration(
                 'organisation-edit-form-group-other', 'Translatable#Other',
                 [
+                    'organisation-edit-form-field-icon',
                     'organisation-edit-form-field-comment',
                     'organisation-edit-form-field-valid'
                 ]
