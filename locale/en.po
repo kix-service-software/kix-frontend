@@ -273,6 +273,9 @@ msgstr ""
 msgid "Automation: Notifications"
 msgstr ""
 
+msgid "Avatar"
+msgstr ""
+
 msgid "back to"
 msgstr ""
 
@@ -1034,6 +1037,11 @@ msgstr ""
 msgid "Filter successfully created."
 msgstr ""
 
+#, fuzzy
+#| msgid "Search successfully saved."
+msgid "Filter successfully removed."
+msgstr "Search successfully saved."
+
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
@@ -1354,8 +1362,8 @@ msgstr ""
 "By means of this filter you can restrict this notification. Choose a ticket "
 "or article attribute from the list. Then you can insert the value the filter "
 "is supposed to react to. Please use an extra line for each attribute. If at "
-"least one article related event is chosen above the filter attributes \""
-"Sendertype\" & \"Channel\" are obligatory."
+"least one article related event is chosen above the filter attributes "
+"\"Sendertype\" & \"Channel\" are obligatory."
 
 msgid "Helptext_Admin_NotificationCreate_MessageSubject"
 msgstr ""
@@ -1438,8 +1446,8 @@ msgstr ""
 "By means of this filter you can restrict this notification. Choose a ticket "
 "or article attribute from the list. Then you can insert the value the filter "
 "is supposed to react to. Please use an extra line for each attribute. If at "
-"least one article related event is chosen above the filter attributes \""
-"Sendertype\" & \"Channel\" are obligatory."
+"least one article related event is chosen above the filter attributes "
+"\"Sendertype\" & \"Channel\" are obligatory."
 
 msgid "Helptext_Admin_NotificationEdit_MessageSubject"
 msgstr ""
@@ -1828,11 +1836,19 @@ msgstr ""
 "\"County\". It is possible to use Wildcards (*). See FAQ article \"How to "
 "search in KIX 18\" for further use of special characters."
 
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Email"
+msgid "Helptext_Customers_ContactCreate_Avatar."
+msgstr ""
+"The email address has to be unique because it is used as system identifier "
+"for the contact."
+
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Comment"
-msgstr "Insert additional information (only displayed within the admin module)."
+msgstr ""
+"Insert additional information (only displayed within the admin module)."
 
 msgid "Helptext_Customers_ContactCreate_Country"
 msgstr ""
@@ -1892,6 +1908,11 @@ msgstr ""
 "Validity (valid, invalid, invalid-temporarily) If the data set does not "
 "contain a “ValidID”, this can be set automatically by selecting the "
 "attribute in the “Set Value”-area (can be changed)."
+
+#, fuzzy
+#| msgid "Helptext_Customers_OrganisationCreate_Validity"
+msgid "Helptext_Customers_OrganisationCreate_Avatar."
+msgstr "Organisations can only be used if they are set “valid”."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -2736,9 +2757,6 @@ msgstr ""
 msgid "Next Image"
 msgstr ""
 
-msgid "no"
-msgstr ""
-
 msgid "No"
 msgstr ""
 
@@ -3156,6 +3174,9 @@ msgstr ""
 msgid "Remove dependency to organisation"
 msgstr ""
 
+msgid "Remove Filter"
+msgstr ""
+
 msgid "Remove parameter"
 msgstr ""
 
@@ -3181,6 +3202,9 @@ msgid "Reply"
 msgstr ""
 
 msgid "Reply all"
+msgstr ""
+
+msgid "Required field {0} has no usable value."
 msgstr ""
 
 msgid "Required field {0} has no value."

@@ -288,6 +288,9 @@ msgstr "Automatisierung: Jobs"
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
+msgid "Avatar"
+msgstr ""
+
 msgid "back to"
 msgstr "Zurück zu"
 
@@ -1053,6 +1056,11 @@ msgid "Filter in list"
 msgstr "Filtern in Liste"
 
 msgid "Filter successfully created."
+msgstr "Filter wurde erfolgreich angelegt."
+
+#, fuzzy
+#| msgid "Filter successfully created."
+msgid "Filter successfully removed."
 msgstr "Filter wurde erfolgreich angelegt."
 
 msgid ""
@@ -1944,6 +1952,13 @@ msgstr ""
 "möglich. Die Nutzung weiterer Sonderzeichen ist im FAQ Artikel \"Wie suche "
 "ich in KIX 18\" zu finden."
 
+#, fuzzy
+#| msgid "Helptext_Customers_ContactCreate_Email"
+msgid "Helptext_Customers_ContactCreate_Avatar."
+msgstr ""
+"Die E-Mail-Adresse eines Kontaktes muss eineindeutig sein, da sie "
+"systemintern als Identifikator des Kontaktes verwendet wird."
+
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
@@ -2014,6 +2029,12 @@ msgstr ""
 "ungültig) Enthält der Datensatz keine Gültigkeit, wird dieses Attribut über "
 "die Auswahl im Bereich „Wert  ersetzen“ automatisch gesetzt (kann geändert "
 "werden)."
+
+#, fuzzy
+#| msgid "Helptext_Customers_OrganisationCreate_Validity"
+msgid "Helptext_Customers_OrganisationCreate_Avatar."
+msgstr ""
+"Der Kunde kann im System nur verwendet werden, wenn er „gültig“ gesetzt ist."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -2885,9 +2906,6 @@ msgstr "Nächste"
 msgid "Next Image"
 msgstr "Nächstes Bild"
 
-msgid "no"
-msgstr "nein"
-
 msgid "No"
 msgstr "Nein"
 
@@ -3311,6 +3329,11 @@ msgstr "Erinnerungstickets"
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zu Kunden auflösen"
 
+#, fuzzy
+#| msgid "New Filter"
+msgid "Remove Filter"
+msgstr "Neuer Filter"
+
 msgid "Remove parameter"
 msgstr "Parameter entfernen"
 
@@ -3337,6 +3360,11 @@ msgstr "Antworten"
 
 msgid "Reply all"
 msgstr "Allen antworten"
+
+#, fuzzy
+#| msgid "Required field '{0}' has no value."
+msgid "Required field {0} has no usable value."
+msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
 #, fuzzy
 #| msgid "Required field '{0}' has no value."
@@ -4136,6 +4164,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "no"
+#~ msgstr "nein"
 
 #~ msgid "Templates"
 #~ msgstr "Vorlagen"
