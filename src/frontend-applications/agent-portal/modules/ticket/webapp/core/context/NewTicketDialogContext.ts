@@ -19,6 +19,10 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
 import { FormContext } from '../../../../../model/configuration/FormContext';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
+import { ServiceRegistry } from '../../../../base-components/webapp/core/ServiceRegistry';
+import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
+import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 
 export class NewTicketDialogContext extends Context {
 
@@ -35,6 +39,7 @@ export class NewTicketDialogContext extends Context {
             eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
             eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
                 const form = data.formInstance.getForm();
+                this.setFormObject(data.formInstance.getForm().id);
                 if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {
                     const organisationValue = data.changedValues.find(
                         (cv) => cv[0] && cv[0].property === TicketProperty.ORGANISATION_ID
@@ -54,6 +59,26 @@ export class NewTicketDialogContext extends Context {
         });
     }
 
+    private async setFormObject(formId: string): Promise<void> {
+        const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+            KIXObjectType.TICKET, ServiceType.FORM
+        );
+        if (service) {
+            const newObject = {};
+            const parameter = await service.getFormParameter(formId);
+            parameter.forEach((p) => {
+                if (p[1] !== undefined) {
+                    newObject[p[0]] = p[1];
+                }
+            });
+
+            const formObject = await KIXObjectService.createObjectInstance<any>(
+                KIXObjectType.TICKET, newObject
+            );
+            this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
+        }
+    }
+
     public reset(refresh?: boolean): void {
         super.reset();
         this.contact = null;
@@ -63,16 +88,7 @@ export class NewTicketDialogContext extends Context {
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType): Promise<O> {
         let object;
         if (kixObjectType === KIXObjectType.TICKET) {
-            const ticketId = this.getObjectId();
-            if (ticketId) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, [TicketProperty.LINK, KIXObjectProperty.DYNAMIC_FIELDS]
-                );
-                const objects = await KIXObjectService.loadObjects<Ticket>(
-                    KIXObjectType.TICKET, [ticketId], loadingOptions
-                );
-                object = objects && objects.length ? objects[0] : null;
-            }
+            object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
         } else if (kixObjectType === KIXObjectType.ORGANISATION) {
             object = this.organisation;
         } else if (kixObjectType === KIXObjectType.CONTACT) {

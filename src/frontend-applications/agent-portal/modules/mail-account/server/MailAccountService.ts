@@ -86,7 +86,10 @@ export class MailAccountService extends KIXObjectAPIService {
         token: string, clientRequestId: string, objectType: KIXObjectType,
         parameter: Array<[string, any]>, objectId: number | string
     ): Promise<string | number> {
-        parameter = this.prepareParameter(parameter);
+        const fetch = this.getParameterValue(parameter, MailAccountProperty.EXEC_FETCH);
+        if (!fetch) {
+            parameter = this.prepareParameter(parameter);
+        }
         const uri = this.buildUri('system', 'communication', 'mailaccounts', objectId);
 
         const id = super.executeUpdateOrCreateRequest(

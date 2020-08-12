@@ -67,7 +67,7 @@ export class Webform extends KIXObject {
             this.modal = webform.modal;
             this.useKIXCSS = webform.useKIXCSS;
             this.allowAttachments = webform.allowAttachments;
-            this.acceptedDomains = webform.acceptedDomains;
+            this.acceptedDomains = Webform.getDomains(webform.acceptedDomains);
             this.QueueID = webform.QueueID;
             this.PrioritiyID = webform.PrioritiyID;
             this.TypeID = webform.TypeID;
@@ -84,11 +84,7 @@ export class Webform extends KIXObject {
             this.modal = modal;
             this.useKIXCSS = useKIXCSS;
             this.allowAttachments = allowAttachments;
-            this.acceptedDomains = acceptedDomains
-                ? acceptedDomains.split(/[,;]\s?/)
-                    .map((d) => d.trim())
-                    .filter((d) => !!d)
-                : [];
+            this.acceptedDomains = Webform.getDomains(acceptedDomains);
             this.QueueID = QueueID;
             this.PrioritiyID = PrioritiyID;
             this.TypeID = TypeID;
@@ -101,5 +97,37 @@ export class Webform extends KIXObject {
 
     public getIdPropertyName(): string {
         return 'ObjectId';
+    }
+
+    public static getDomains(domains: string | string[], filterInvalidRegEx: boolean = true): string[] {
+        if (domains) {
+            const domainList: string[] = Array.isArray(domains) ? domains : domains.split(/[,;]\s?/);
+            return domainList.map((d) => d.trim())
+                .filter((d) => {
+                    if (d && !d.match(/^(\/|\s)+$/) && !d.match(/^(\*|\.\*|\.\+)$/)) {
+                        if (filterInvalidRegEx && d.match(/^\/.+\/$/)) {
+                            if (Webform.checkRegEx(d)) {
+                                return false;
+                            }
+                            return true;
+                        } else {
+                            return true;
+                        }
+                    }
+                    return false;
+                });
+        } else {
+            return [];
+        }
+    }
+
+    public static checkRegEx(domain: string): Error {
+        const domainRegEx = domain.substr(1, domain.length - 2);
+        try {
+            const regex = new RegExp(domainRegEx);
+        } catch (error) {
+            return error;
+        }
+        return;
     }
 }

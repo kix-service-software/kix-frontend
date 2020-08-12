@@ -26,8 +26,11 @@ export class ObjectIcon extends KIXObject {
 
     public Content: string;
 
+    public fallbackIcon: ObjectIcon | string;
+
     public constructor(
-        objectIcon?: ObjectIcon, object?: string, id?: string | number, contentType?: string, content?: any
+        objectIcon?: ObjectIcon, object?: string, id?: string | number, contentType?: string, content?: any,
+        fallbackIcon?: ObjectIcon | string
     ) {
         super(objectIcon);
 
@@ -39,11 +42,13 @@ export class ObjectIcon extends KIXObject {
             this.Object = objectIcon.Object;
             this.ObjectID = objectIcon.ObjectID;
         } else {
-            this.ObjectID = id;
+            this.ObjectId = id;
             this.Object = object;
             this.ContentType = contentType;
             this.Content = content;
         }
+
+        this.fallbackIcon = fallbackIcon;
     }
 
     public equals(object: ObjectIcon): boolean {

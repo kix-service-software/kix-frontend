@@ -13,6 +13,8 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { DynamicField } from '../../model/DynamicField';
 import { DynamicFieldProperty } from '../../model/DynamicFieldProperty';
+import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
+import { DynamicFieldType } from '../../model/DynamicFieldType';
 
 export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
 
@@ -62,14 +64,48 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
         let displayValue = dynamicField[property];
 
         switch (property) {
-            case DynamicFieldProperty.INTERNAL_FIELD:
-                displayValue = dynamicField.InternalField ? 'Translatable#yes' : 'Translatable#no';
-                break;
             case DynamicFieldProperty.FIELD_TYPE:
                 displayValue = dynamicField.FieldTypeDisplayName;
                 break;
             default:
                 displayValue = await this.getPropertyValueDisplayText(property, displayValue, translatable);
+        }
+
+        if (displayValue) {
+            displayValue = await TranslationService.translate(
+                displayValue.toString(), undefined, undefined, !translatable
+            );
+        }
+
+        return displayValue ? displayValue.toString() : '';
+    }
+
+
+    public async getPropertyValueDisplayText(
+        property: string, value: string | number, translatable: boolean = true
+    ): Promise<string> {
+        let displayValue;
+        switch (property) {
+            case DynamicFieldProperty.INTERNAL_FIELD:
+                displayValue = value && value === 1 ? 'Translatable#Yes' : 'Translatable#No';
+                break;
+            case DynamicFieldProperty.CUSTOMER_VISIBLE:
+                displayValue = value ? 'Translatable#Yes' : 'Translatable#No';
+                break;
+            case DynamicFieldProperty.FIELD_TYPE:
+                displayValue = value;
+                const types = await KIXObjectService.loadObjects<DynamicFieldType>(
+                    KIXObjectType.DYNAMIC_FIELD_TYPE, null, null, null, true
+                ).catch(() => [] as DynamicFieldType[]);
+                if (types && types.length) {
+                    const type = types.find((t) => t.Name === value);
+                    if (type) {
+                        displayValue = type.DisplayName;
+                    }
+                }
+                break;
+            default:
+                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
 
         if (displayValue) {
@@ -106,13 +142,15 @@ export class DynamicFieldLabelProvider extends LabelProvider<DynamicField> {
         return dynamicField.Name;
     }
 
-    public async getIcons(dynamicField: DynamicField, property: string): Promise<Array<string | ObjectIcon>> {
+    public async getIcons(
+        dynamicField: DynamicField, property: string, value?: number | string
+    ): Promise<Array<string | ObjectIcon>> {
         if (property === DynamicFieldProperty.ID || property === 'ICON') {
             return [new ObjectIcon(null, 'DynamicField', dynamicField.ID)];
         } else if (property === DynamicFieldProperty.INTERNAL_FIELD) {
-            return dynamicField.InternalField === 1 ? ['kix-icon-check'] : [];
+            return dynamicField && dynamicField.InternalField === 1 ? ['kix-icon-check'] : [];
         } else if (property === DynamicFieldProperty.CUSTOMER_VISIBLE) {
-            return dynamicField.CustomerVisible ? ['kix-icon-check'] : [];
+            return dynamicField && dynamicField.CustomerVisible ? ['kix-icon-check'] : [];
         }
         return null;
     }

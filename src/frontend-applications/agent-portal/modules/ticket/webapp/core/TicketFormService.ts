@@ -27,9 +27,10 @@ import { FormFieldOption } from '../../../../model/configuration/FormFieldOption
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
+import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
+import { TicketService } from './TicketService';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -69,7 +70,12 @@ export class TicketFormService extends KIXObjectFormService {
                 if (!value) {
                     const context = ContextService.getInstance().getActiveContext();
                     const organisation = await context.getObject<Organisation>(KIXObjectType.ORGANISATION);
-                    value = organisation ? organisation.ID : null;
+                    if (organisation) {
+                        value = organisation;
+                    } else {
+                        const contact = await context.getObject<Contact>(KIXObjectType.CONTACT);
+                        value = contact ? contact.PrimaryOrganisationID : null;
+                    }
                 }
                 break;
             case TicketProperty.PENDING_TIME:
@@ -79,9 +85,11 @@ export class TicketFormService extends KIXObjectFormService {
                 }
                 break;
             case ArticleProperty.CHANNEL_ID:
-                const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
-                if (channels && channels.length) {
-                    value = channels[0].ID;
+                if (formContext === FormContext.NEW) {
+                    const channels = await KIXObjectService.loadObjects<Channel>(KIXObjectType.CHANNEL);
+                    if (channels && channels.length) {
+                        value = channels[0].ID;
+                    }
                 }
                 break;
             default:
@@ -149,6 +157,10 @@ export class TicketFormService extends KIXObjectFormService {
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         await ArticleFormService.prototype.addQueueSignature(parameter);
+        const lockParameter = parameter.find((p) => p[0] === TicketProperty.LOCK_ID);
+        if (lockParameter && Array.isArray(lockParameter[1])) {
+            lockParameter[1] = lockParameter[1][0];
+        }
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }
 
@@ -190,6 +202,17 @@ export class TicketFormService extends KIXObjectFormService {
                 case TicketProperty.PRIORITY_ID:
                     field.inputComponent = 'object-reference-input';
                     field.options = this.getObjectReferenceOptions(KIXObjectType.TICKET_PRIORITY);
+                    field.label = label;
+                    break;
+                case TicketProperty.LOCK_ID:
+                    field.inputComponent = 'default-select-input';
+                    const node = await TicketService.getInstance().getTreeNodes(TicketProperty.LOCK_ID);
+                    field.options = [
+                        new FormFieldOption(
+                            DefaultSelectInputFormOption.NODES,
+                            node
+                        )
+                    ];
                     field.label = label;
                     break;
                 case TicketProperty.STATE_ID:

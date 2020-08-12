@@ -21,5 +21,7 @@ export enum SysConfigOptionType {
 
     TIME_VACATION_DAYS = 'TimeVacationDays',
 
-    TIME_VACATION_DAYS_ONE_TIME = 'TimeVacationDaysOneTime'
+    TIME_VACATION_DAYS_ONE_TIME = 'TimeVacationDaysOneTime',
+
+    OBJECT = 'Object'
 }

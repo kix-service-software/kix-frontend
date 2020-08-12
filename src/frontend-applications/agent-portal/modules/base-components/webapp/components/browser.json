@@ -42,6 +42,7 @@
         "require ./number-input",
         "require ./object-details-page",
         "require ./object-information",
+        "require ./object-information-card-widget",
         "require ./object-information-widget",
         "require ./object-property-label",
         "require ./object-reference-input",

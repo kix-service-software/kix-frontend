@@ -18,7 +18,7 @@ import { ConfigItemProperty } from './model/ConfigItemProperty';
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
 import { KIXObjectPropertyFilter } from '../../model/KIXObjectPropertyFilter';
-import { TableFilterCriteria } from '../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -231,7 +231,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         const filter: KIXObjectPropertyFilter[] = [];
         deploymentStates.forEach(
             (ds) => filter.push(new KIXObjectPropertyFilter(ds.Name, [
-                new TableFilterCriteria(
+                new UIFilterCriterion(
                     ConfigItemProperty.CUR_DEPL_STATE_ID, SearchOperator.EQUALS, ds.ItemID
                 )
             ])));

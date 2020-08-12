@@ -12,7 +12,7 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { ITable, Table, RowObject, TableValue, TableEventData, TableEvent, ITableContentProvider, IRowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
-import { TableFilterCriteria } from '../../../src/frontend-applications/agent-portal/model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../src/frontend-applications/agent-portal/model/UIFilterCriterion';
 import { SearchOperator } from '../../../src/frontend-applications/agent-portal/modules/search/model/SearchOperator';
 import { IEventSubscriber } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/EventService';
@@ -101,7 +101,7 @@ describe('Table Filter Tests', () => {
 
     });
 
-    describe('Filter with TableFilterCriteria', () => {
+    describe('Filter with UIFilterCriterion', () => {
         let table: ITable;
 
         before(async () => {
@@ -114,7 +114,7 @@ describe('Table Filter Tests', () => {
         });
 
         it('Should return one filtered row.', async () => {
-            const criteria = new TableFilterCriteria('2', SearchOperator.EQUALS, 'value-10-2');
+            const criteria = new UIFilterCriterion('2', SearchOperator.EQUALS, 'value-10-2');
             table.setFilter(null, [criteria]);
             await table.filter();
             const rows = table.getRows();
@@ -124,7 +124,7 @@ describe('Table Filter Tests', () => {
         });
 
         it('Should return all rows.', async () => {
-            const criteria = new TableFilterCriteria('2', SearchOperator.CONTAINS, 'value');
+            const criteria = new UIFilterCriterion('2', SearchOperator.CONTAINS, 'value');
             table.setFilter(null, [criteria]);
             await table.filter();
             const rows = table.getRows();
@@ -143,8 +143,8 @@ describe('Table Filter Tests', () => {
         });
 
         it('Should return rows for criteria combination.', async () => {
-            const criteria1 = new TableFilterCriteria('1', SearchOperator.EQUALS, 'value-10-1');
-            const criteria2 = new TableFilterCriteria('2', SearchOperator.EQUALS, 'value-10-2');
+            const criteria1 = new UIFilterCriterion('1', SearchOperator.EQUALS, 'value-10-1');
+            const criteria2 = new UIFilterCriterion('2', SearchOperator.EQUALS, 'value-10-2');
             table.setFilter(null, [criteria1, criteria2]);
             await table.filter();
             const rows = table.getRows();
@@ -154,9 +154,9 @@ describe('Table Filter Tests', () => {
         });
 
         it('Should return rows for criteria combination.', async () => {
-            const criteria1 = new TableFilterCriteria('0', SearchOperator.EQUALS, 'value-12-0');
-            const criteria2 = new TableFilterCriteria('1', SearchOperator.EQUALS, 'value-12-1');
-            const criteria3 = new TableFilterCriteria('2', SearchOperator.EQUALS, 'value-12-2');
+            const criteria1 = new UIFilterCriterion('0', SearchOperator.EQUALS, 'value-12-0');
+            const criteria2 = new UIFilterCriterion('1', SearchOperator.EQUALS, 'value-12-1');
+            const criteria3 = new UIFilterCriterion('2', SearchOperator.EQUALS, 'value-12-2');
             table.setFilter(null, [criteria1, criteria2, criteria3]);
             await table.filter();
             const rows = table.getRows();
@@ -166,9 +166,9 @@ describe('Table Filter Tests', () => {
         });
 
         it('Should return no rows for criteria where no column exist.', async () => {
-            const criteria1 = new TableFilterCriteria('0', SearchOperator.EQUALS, 'value-12-0');
-            const criteria2 = new TableFilterCriteria('1', SearchOperator.EQUALS, 'value-12-1');
-            const criteria3 = new TableFilterCriteria('3', SearchOperator.EQUALS, 'value-12-3');
+            const criteria1 = new UIFilterCriterion('0', SearchOperator.EQUALS, 'value-12-0');
+            const criteria2 = new UIFilterCriterion('1', SearchOperator.EQUALS, 'value-12-1');
+            const criteria3 = new UIFilterCriterion('3', SearchOperator.EQUALS, 'value-12-3');
             table.setFilter(null, [criteria1, criteria2, criteria3]);
             await table.filter();
             const rows = table.getRows();
@@ -178,8 +178,8 @@ describe('Table Filter Tests', () => {
         });
 
         it('Should not match a row for criteria combination.', async () => {
-            const criteria1 = new TableFilterCriteria('1', SearchOperator.EQUALS, 'value-12-1');
-            const criteria2 = new TableFilterCriteria('2', SearchOperator.EQUALS, 'value-13-2');
+            const criteria1 = new UIFilterCriterion('1', SearchOperator.EQUALS, 'value-12-1');
+            const criteria2 = new UIFilterCriterion('2', SearchOperator.EQUALS, 'value-13-2');
             table.setFilter(null, [criteria1, criteria2]);
             await table.filter();
             const rows = table.getRows();

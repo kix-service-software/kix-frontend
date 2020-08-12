@@ -197,7 +197,11 @@ class SysConfigContentProvider extends TableContentProvider {
 
                 if (
                     value !== '' &&
-                    (definition.Type === SysConfigOptionType.HASH || definition.Type === SysConfigOptionType.ARRAY)
+                    (
+                        definition.Type === SysConfigOptionType.HASH
+                        || definition.Type === SysConfigOptionType.ARRAY
+                        || definition.Type === SysConfigOptionType.OBJECT
+                    )
                 ) {
                     value = JSON.stringify(value);
                 }

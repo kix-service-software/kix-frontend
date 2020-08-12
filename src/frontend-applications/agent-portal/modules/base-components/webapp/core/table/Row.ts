@@ -19,7 +19,7 @@ import { ValueState } from './ValueState';
 import { TableEventData } from './TableEventData';
 import { TableSortUtil } from './TableSortUtil';
 import { IdService } from '../../../../../model/IdService';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectService } from '../KIXObjectService';
 import { EventService } from '../EventService';
@@ -78,7 +78,7 @@ export class Row<T = any> implements IRow<T> {
         return this.cells.find((c) => c.getProperty() === property);
     }
 
-    public async filter(filterValue?: string, criteria?: TableFilterCriteria[]): Promise<boolean> {
+    public async filter(filterValue?: string, criteria?: UIFilterCriterion[]): Promise<boolean> {
         if (!this.isFilterDefined(filterValue, criteria)) {
             this.filteredChildren = null;
             this.children.forEach((cr) => cr.filter(filterValue, criteria));
@@ -114,7 +114,7 @@ export class Row<T = any> implements IRow<T> {
         return criteriaMatch;
     }
 
-    private async checkCriteria(criteria: TableFilterCriteria[]): Promise<boolean> {
+    private async checkCriteria(criteria: UIFilterCriterion[]): Promise<boolean> {
         const rowObject = this.getRowObject();
         const object = rowObject ? rowObject.getObject() : null;
 
@@ -138,7 +138,7 @@ export class Row<T = any> implements IRow<T> {
         return result;
     }
 
-    private async checkCellForCriteria(criteria: TableFilterCriteria): Promise<boolean> {
+    private async checkCellForCriteria(criteria: UIFilterCriterion): Promise<boolean> {
         const cell = this.getCell(criteria.property);
         const column = this.getTable().getColumn(criteria.property);
         if (cell && column) {
@@ -288,7 +288,7 @@ export class Row<T = any> implements IRow<T> {
         }
     }
 
-    private isFilterDefined(value: string, criteria: TableFilterCriteria[]): boolean {
+    private isFilterDefined(value: string, criteria: UIFilterCriterion[]): boolean {
         return (value && value !== '') || (criteria && criteria.length !== 0);
     }
 

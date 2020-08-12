@@ -33,7 +33,7 @@ import { FilterType } from '../../../model/FilterType';
 import { Ticket } from '../model/Ticket';
 import { RequestObject } from '../../../../../server/model/rest/RequestObject';
 import { SenderType } from '../model/SenderType';
-import { Lock } from '../model/Lock';
+import { TicketLock } from '../model/TicketLock';
 import { Contact } from '../../customer/model/Contact';
 
 export class TicketAPIService extends KIXObjectAPIService {
@@ -60,7 +60,7 @@ export class TicketAPIService extends KIXObjectAPIService {
         return kixObjectType === KIXObjectType.TICKET
             || kixObjectType === KIXObjectType.ARTICLE
             || kixObjectType === KIXObjectType.SENDER_TYPE
-            || kixObjectType === KIXObjectType.LOCK
+            || kixObjectType === KIXObjectType.TICKET_LOCK
             || kixObjectType === KIXObjectType.WATCHER;
     }
 
@@ -86,9 +86,9 @@ export class TicketAPIService extends KIXObjectAPIService {
         } else if (objectType === KIXObjectType.SENDER_TYPE) {
             const uri = this.buildUri('system', 'communication', 'sendertypes');
             objects = await super.load(token, KIXObjectType.SENDER_TYPE, uri, null, null, 'SenderType', SenderType);
-        } else if (objectType === KIXObjectType.LOCK) {
+        } else if (objectType === KIXObjectType.TICKET_LOCK) {
             const uri = this.buildUri('system', 'ticket', 'locks');
-            objects = await super.load(token, KIXObjectType.LOCK, uri, null, null, 'Lock', Lock);
+            objects = await super.load(token, KIXObjectType.TICKET_LOCK, uri, null, null, 'Lock', TicketLock);
         } else if (objectType === KIXObjectType.ARTICLE) {
             if (objectLoadingOptions) {
                 const uri = this.buildUri(
@@ -406,14 +406,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.TICKET_ID
         ];
 
-        let filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
-
-        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
-
-        if (fulltext) {
-            const fulltextSearch = this.getFulltextSearch(fulltext);
-            filterCriteria = [...filterCriteria, ...fulltextSearch];
-        }
+        const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
 
         await this.setUserID(filterCriteria, token);
 
@@ -440,11 +433,17 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.STATE_TYPE
         ];
 
-        const searchCriteria = criteria.filter(
+        let searchCriteria = criteria.filter(
             (f) => searchProperties.some((sp) => sp === f.property) && f.operator !== SearchOperator.NOT_EQUALS
         );
 
         await this.setUserID(searchCriteria, token);
+
+        const fulltext = criteria.find((f) => f.property === SearchProperty.FULLTEXT);
+        if (fulltext) {
+            const fulltextSearch = this.getFulltextSearch(fulltext);
+            searchCriteria = [...searchCriteria, ...fulltextSearch];
+        }
 
         const createdCriteria = searchCriteria.find((sc) => sc.property === TicketProperty.CREATED);
         if (createdCriteria) {
@@ -486,6 +485,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             ),
             new FilterCriteria(
                 TicketProperty.TITLE, SearchOperator.LIKE,
+                FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
+            ),
+            new FilterCriteria(
+                TicketProperty.SUBJECT, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(

@@ -27,9 +27,10 @@ import { ApplicationEvent } from '../modules/base-components/webapp/core/Applica
 import { ClientStorageService } from '../modules/base-components/webapp/core/ClientStorageService';
 import { KIXObjectLoadingOptions } from './KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from './KIXObjectSpecificLoadingOptions';
-import { ContextExtension } from './ContextExtension';
 import { ContextService } from '../modules/base-components/webapp/core/ContextService';
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
+import { SortUtil } from './SortUtil';
+import { SortOrder } from './SortOrder';
 
 export abstract class Context {
 
@@ -95,6 +96,7 @@ export abstract class Context {
                 actions = [...actions, ...addionalActions];
             }
         }
+        actions.sort((a, b) => SortUtil.compareNumber(a.data.Rank, b.data.Rank, SortOrder.UP, false));
         return actions;
     }
 

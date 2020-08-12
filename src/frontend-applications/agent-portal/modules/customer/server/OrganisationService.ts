@@ -20,6 +20,7 @@ import { UpdateOrganisationResponse } from './api/UpdateOrganisationResponse';
 import { UpdateOrganisationRequest } from './api/UpdateOrganisationRequest';
 import { Error } from '../../../../../server/model/Error';
 import { Organisation } from '../model/Organisation';
+import { ObjectIcon } from '../../icon/model/ObjectIcon';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 
@@ -77,6 +78,16 @@ export class OrganisationAPIService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
+        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
+        if (icon && icon.Content) {
+            icon.Object = objectType;
+            icon.ObjectID = response.OrganisationID;
+            await this.createIcons(token, clientRequestId, icon)
+                .catch(() => {
+                    // be silent
+                });
+        }
+
         return response.OrganisationID;
     }
 
@@ -93,6 +104,16 @@ export class OrganisationAPIService extends KIXObjectAPIService {
             LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
             throw new Error(error.Code, error.Message);
         });
+
+        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
+        if (icon && icon.Content) {
+            icon.Object = objectType;
+            icon.ObjectID = response.OrganisationID;
+            await this.updateIcon(token, clientRequestId, icon)
+                .catch(() => {
+                    // be silent
+                });
+        }
 
         return response.OrganisationID;
     }
