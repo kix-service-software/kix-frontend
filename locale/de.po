@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-08-06 07:51+0000\n"
+"PO-Revision-Date: 2020-08-12 13:51+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -568,7 +568,7 @@ msgid "Create Address"
 msgstr "Adresse wird angelegt"
 
 msgid "Create Article"
-msgstr "Artikel wird angelegt"
+msgstr "Artikel anlegen"
 
 msgid "Create Category"
 msgstr "Kategorie wird angelegt"
@@ -628,7 +628,7 @@ msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
 
 msgid "Create Ticket"
-msgstr "Ticket wird angelegt"
+msgstr "Ticket anlegen"
 
 msgid "Create Translation"
 msgstr "Übersetzung wird angelegt"
@@ -3329,25 +3329,23 @@ msgstr "Erinnerungstickets"
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zu Kunden auflösen"
 
-#, fuzzy
-#| msgid "New Filter"
 msgid "Remove Filter"
-msgstr "Neuer Filter"
+msgstr "Filter löschen"
 
 msgid "Remove parameter"
-msgstr "Parameter entfernen"
+msgstr "Parameter löschen"
 
 msgid "Remove Priorities"
-msgstr "Prioritäten entfernen"
+msgstr "Prioritäten löschen"
 
 msgid "Remove States"
-msgstr "Status entfernen"
+msgstr "Status löschen"
 
 msgid "Remove translations"
-msgstr "Übersetzungen entfernen"
+msgstr "Übersetzungen löschen"
 
 msgid "Remove Types"
-msgstr "Typen entfernen"
+msgstr "Typen löschen"
 
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
