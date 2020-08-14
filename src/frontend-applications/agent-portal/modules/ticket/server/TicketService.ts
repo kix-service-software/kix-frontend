@@ -403,7 +403,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.STATE,
             KIXObjectProperty.CREATE_BY,
             KIXObjectProperty.CHANGE_BY,
-            TicketProperty.TICKET_ID
+            TicketProperty.TICKET_ID,
+            'Queue.FollowUpID'
         ];
 
         const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
