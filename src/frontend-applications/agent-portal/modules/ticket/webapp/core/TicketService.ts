@@ -198,6 +198,25 @@ export class TicketService extends KIXObjectService<Ticket> {
                     ));
                 }
                 break;
+            case TicketProperty.STATE_TYPE:
+                let stateTypes = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
+                if (!showInvalid) {
+                    stateTypes = stateTypes.filter((s) => s.ValidID === 1);
+                }
+                for (const s of stateTypes) {
+                    const icons = await LabelService.getInstance().getIconsForType(
+                        KIXObjectType.TICKET, null, property, s.ID
+                    );
+                    const text = await LabelService.getInstance().getObjectText(s);
+                    nodes.push(new TreeNode(
+                        s.Name, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        undefined, undefined, undefined, undefined, undefined, undefined,
+                        s.ValidID === 1 || invalidClickable,
+                        undefined, undefined, undefined, undefined,
+                        s.ValidID !== 1
+                    ));
+                }
+                break;
             case TicketProperty.LOCK_ID:
                 const unlocked = await TranslationService.translate('Translatable#Unlocked');
                 const locked = await TranslationService.translate('Translatable#Locked');
