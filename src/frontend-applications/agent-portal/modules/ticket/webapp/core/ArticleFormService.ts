@@ -374,8 +374,17 @@ export class ArticleFormService extends KIXObjectFormService {
     }
 
     private async getAttachmentFieldValue(): Promise<Attachment[]> {
-        let value = await this.getReferencedValue<Attachment[]>(ArticleProperty.ATTACHMENTS);
+        let value;
         const newValue: Attachment[] = [];
+
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+            if (isForwardDialog) {
+                value = await this.getReferencedValue<Attachment[]>(ArticleProperty.ATTACHMENTS);
+            }
+        }
+
         if (Array.isArray(value)) {
             value = value.filter((a) => a.Disposition !== 'inline');
             if (!!value.length) {
