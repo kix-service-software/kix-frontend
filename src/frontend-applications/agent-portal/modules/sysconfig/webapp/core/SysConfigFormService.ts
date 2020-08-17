@@ -136,7 +136,7 @@ export class SysConfigFormService extends KIXObjectFormService {
         );
 
         if (sysconfigKeys && sysconfigKeys.length) {
-            await super.initValues(form, null);
+            await super.initValues(form, formInstance, null);
         } else {
             const sysConfigId = context ? context.getObjectId() : null;
             const sysConfigValues = sysConfigId
