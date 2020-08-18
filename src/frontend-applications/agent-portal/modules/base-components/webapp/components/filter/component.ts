@@ -62,6 +62,10 @@ class Component {
         });
         this.treeHandler.setTree(nds);
 
+        if (input.filterValue && input.filterValue !== this.state.textFilterValue) {
+            this.state.textFilterValue = input.filterValue;
+        }
+
         this.update(input);
     }
 

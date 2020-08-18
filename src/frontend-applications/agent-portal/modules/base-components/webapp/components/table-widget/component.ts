@@ -153,6 +153,8 @@ class Component {
                                 if (filterComponent) {
                                     filterComponent.reset();
                                 }
+                            } else if (this.state.table) {
+                                this.state.filterValue = this.state.table.getFilterValue();
                             }
                         }
                     },
