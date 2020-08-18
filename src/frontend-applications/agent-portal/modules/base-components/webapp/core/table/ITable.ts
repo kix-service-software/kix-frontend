@@ -57,6 +57,8 @@ export interface ITable {
 
     addColumns(columns: IColumnConfiguration[]): Promise<void>;
 
+    getFilterValue(): string;
+
     setFilter(filterValue?: string, criteria?: UIFilterCriterion[]): void;
 
     filter(): Promise<void>;
