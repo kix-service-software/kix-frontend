@@ -51,8 +51,14 @@ class Component extends FormInputComponent<string, ComponentState> {
                 (o) => o.option === NumberInputOptions.MIN
             );
             if (minOption) {
+                const exceptsEmpty = this.state.field.options.find(
+                    (o) => o.option === NumberInputOptions.EXCEPTS_EMPTY
+                );
                 this.state.min = minOption.value;
-                if (typeof this.state.currentValue === 'undefined' || this.state.currentValue === null) {
+                if (
+                    (typeof this.state.currentValue === 'undefined' || this.state.currentValue === null)
+                    && (!exceptsEmpty || !exceptsEmpty.value)
+                ) {
                     this.state.currentValue = this.state.min.toString();
                 }
             }

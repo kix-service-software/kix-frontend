@@ -17,6 +17,7 @@ import { ArticleProperty } from '../../../model/ArticleProperty';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
+import { FormService } from '../../../../base-components/webapp/core/FormService';
 
 class Component extends AbstractEditDialog {
 
@@ -48,15 +49,35 @@ class Component extends AbstractEditDialog {
 
                 if (channelValue && channelValue[1]) {
                     const channelId = channelValue[1].value;
-                    if (channelId === 2) {
-                        this.state.buttonLabel = 'Translatable#Send';
-                    } else {
-                        this.state.buttonLabel = 'Translatable#Save';
-                    }
+                    this.setSubmitButtonLabel(channelId);
                 }
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        this.setSubmitButtonLabel();
+    }
+
+    private async setSubmitButtonLabel(channelId?: number): Promise<void> {
+        if (!channelId) {
+            const formId = this.state.formId;
+            if (formId) {
+                const formInstance = await FormService.getInstance().getFormInstance(formId);
+                if (formInstance) {
+                    const value = await formInstance.getFormFieldValueByProperty<number>(
+                        ArticleProperty.CHANNEL_ID
+                    );
+                    if (value && value.value) {
+                        channelId = value.value;
+                    }
+                }
+            }
+        }
+
+        if (channelId === 2) {
+            this.state.buttonLabel = 'Translatable#Send';
+        } else {
+            this.state.buttonLabel = 'Translatable#Save';
+        }
     }
 
     public async cancel(): Promise<void> {

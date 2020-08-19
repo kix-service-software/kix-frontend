@@ -16,7 +16,7 @@ import { TableFactoryService } from './TableFactoryService';
 import { TableFactory } from './TableFactory';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { SortOrder } from '../../../../../model/SortOrder';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { EventService } from '../EventService';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
@@ -28,7 +28,7 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
     private sortOrder: SortOrder;
 
     private filterValue: string;
-    private filterCriteria: TableFilterCriteria[];
+    private filterCriteria: UIFilterCriterion[];
 
     public constructor(
         private table: ITable,
@@ -73,10 +73,10 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
     }
 
     public async filter(filterValues?: T[], textValue?: string): Promise<void> {
-        const criteria: TableFilterCriteria[] = [];
+        const criteria: UIFilterCriterion[] = [];
 
         if (filterValues && filterValues.length) {
-            criteria.push(new TableFilterCriteria(
+            criteria.push(new UIFilterCriterion(
                 this.id, SearchOperator.IN, filterValues as any[], this.columnConfiguration.useObjectServiceForFilter)
             );
         }
@@ -92,7 +92,7 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
         );
     }
 
-    public getFilter(): [string, TableFilterCriteria[]] {
+    public getFilter(): [string, UIFilterCriterion[]] {
         return [this.filterValue, this.filterCriteria];
     }
 

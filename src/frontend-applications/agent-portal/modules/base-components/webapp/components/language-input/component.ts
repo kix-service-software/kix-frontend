@@ -42,7 +42,11 @@ class Component extends FormInputComponent<string, CompontentState> {
 
     private async load(): Promise<void> {
         const languages = await TranslationService.getInstance().getLanguages();
-        const nodes = languages.map((l) => new TreeNode(l[0], l[1]));
+        const nodes = [];
+        for (const lang of languages) {
+            const language = await TranslationService.translate(lang[1]);
+            nodes.push(new TreeNode(lang[0], language));
+        }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
         if (treeHandler) {

@@ -37,21 +37,19 @@ export class TableFactoryService {
         });
     }
 
-    private mainContextId = null;
-    private dialogContextId = null;
 
     private contextChanged(
         contextId: string, context: Context, type: ContextType, history: boolean, oldContext: Context
     ): void {
+        const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (oldContext) {
             if (type === oldContext.getDescriptor().contextType) {
                 let switchContext = false;
-                if (type === ContextType.MAIN && contextId !== this.mainContextId) {
-                    this.mainContextId = contextId;
-                    switchContext = true;
-                } else if (type === ContextType.DIALOG && contextId !== this.dialogContextId) {
-                    this.dialogContextId = contextId;
-                    switchContext = true;
+                if (type === ContextType.MAIN) {
+                    switchContext = mainContext && contextId !== mainContext.getDescriptor().contextId;
+                } else if (type === ContextType.DIALOG) {
+                    switchContext = dialogContext && contextId !== dialogContext.getDescriptor().contextId;
                 }
 
                 if (switchContext) {

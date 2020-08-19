@@ -85,7 +85,7 @@ export class DynamicFormFieldValue {
         await this.setPropertyTree();
         if (this.value.property) {
             const operator = this.value.operator;
-            await this.setProperty(this.value.property);
+            await this.setProperty(this.value.property, false, true);
 
             const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
             this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
@@ -126,7 +126,7 @@ export class DynamicFormFieldValue {
         this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
     }
 
-    public async setProperty(property: string, update: boolean = false): Promise<void> {
+    public async setProperty(property: string, update: boolean = false, silent?: boolean): Promise<void> {
         this.value.property = property;
 
         if (update) {
@@ -143,7 +143,7 @@ export class DynamicFormFieldValue {
             this.valueTreeHandler.setTree([]);
         }
 
-        await this.manager.setValue(this.value);
+        await this.manager.setValue(this.value, silent);
 
         await this.setPropertyTree();
         await this.setOperationTree();
@@ -266,6 +266,8 @@ export class DynamicFormFieldValue {
                     const node = TreeUtil.findNode(valueNodes, v);
                     if (node) {
                         currentValues.push(node);
+                    } else if (this.isFreeText) {
+                        currentValues.push(new TreeNode(v, v));
                     }
                 }
             } else if (this.isDropdown && this.isAutocomplete) {

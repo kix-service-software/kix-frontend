@@ -15,6 +15,8 @@ import { OverlayService } from '../../../../../modules/base-components/webapp/co
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { EventService } from '../../core/EventService';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
 
 class Component {
 
@@ -52,6 +54,9 @@ class Component {
 
     public onDestroy(): void {
         OverlayService.getInstance().unregisterOverlayListener(this.listenerId);
+        if (this.state.show) {
+            EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
+        }
     }
 
     public showOverlay(event: any) {

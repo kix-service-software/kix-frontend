@@ -30,6 +30,7 @@ import { CreateLink } from '../../modules/links/server/api/CreateLink';
 import { CreateLinkRequest } from '../../modules/links/server/api/CreateLinkRequest';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
+import { CacheService } from './cache';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -319,6 +320,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                     throw new Error(error.Code, error.Message);
                 });
             }
+            CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_ICON);
         }
     }
 
@@ -350,6 +352,8 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
                         throw error;
                     });
             }
+
+            CacheService.getInstance().deleteKeys(KIXObjectType.OBJECT_ICON);
         }
     }
 
@@ -377,7 +381,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (filterCriteria && filterCriteria.length) {
             const apiFilter = {};
             apiFilter[objectProperty] = this.prepareObjectFilter(filterCriteria);
-            query.filter = JSON.stringify(apiFilter);
+            query.filter = encodeURIComponent(JSON.stringify(apiFilter));
         }
 
         let searchCriteria = await this.prepareAPISearch(nonDynamicFieldCriteria, token);
@@ -399,7 +403,7 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         if (searchCriteria && searchCriteria.length) {
             const apiSearch = {};
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
-            query.search = JSON.stringify(apiSearch);
+            query.search = encodeURIComponent(JSON.stringify(apiSearch));
         }
 
         return query;

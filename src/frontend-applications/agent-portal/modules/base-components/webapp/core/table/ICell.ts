@@ -9,7 +9,7 @@
 
 import { IRow } from './IRow';
 import { TableValue } from './TableValue';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
@@ -21,7 +21,7 @@ export interface ICell {
 
     setValue(value: TableValue): void;
 
-    filter(filterValue?: string, criteria?: TableFilterCriteria[]): Promise<boolean>;
+    filter(filterValue?: string, criteria?: UIFilterCriterion[]): Promise<boolean>;
 
     getRow(): IRow;
 

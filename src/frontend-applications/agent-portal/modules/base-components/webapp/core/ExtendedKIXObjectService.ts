@@ -14,7 +14,7 @@ import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpec
 import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpecificCreateOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { TreeNode } from './tree';
-import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { KIXObjectSpecificDeleteOptions } from '../../../../model/KIXObjectSpecificDeleteOptions';
 import { IAutofillConfiguration } from './IAutofillConfiguration';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
@@ -61,7 +61,7 @@ export abstract class ExtendedKIXObjectService<T extends KIXObject = KIXObject> 
         return null;
     }
 
-    public checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean> {
+    public checkFilterValue(object: T, criteria: UIFilterCriterion): Promise<boolean> {
         return null;
     }
 

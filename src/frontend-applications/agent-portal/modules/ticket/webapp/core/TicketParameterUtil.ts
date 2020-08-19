@@ -13,7 +13,7 @@ import { ArticleProperty } from '../../model/ArticleProperty';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { Ticket } from '../../model/Ticket';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
-import { Lock } from '../../model/Lock';
+import { TicketLock } from '../../model/TicketLock';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
@@ -53,14 +53,13 @@ export class TicketParameterUtil {
                     parameter.push([ArticleProperty.ATTACHMENTS, attachments]);
                 }
             } else if (property === TicketProperty.OWNER_ID) {
-                parameter.push([property, value]);
                 if (forUpdate) {
                     const context = ContextService.getInstance().getActiveContext();
                     if (context) {
                         const ticket = context.getObject<Ticket>();
 
-                        const locks = await KIXObjectService.loadObjects<Lock>(
-                            KIXObjectType.LOCK, null
+                        const locks = await KIXObjectService.loadObjects<TicketLock>(
+                            KIXObjectType.TICKET_LOCK, null
                         );
 
                         const lock = locks.find((tl) => tl.Name === 'lock');
@@ -69,6 +68,8 @@ export class TicketParameterUtil {
                         }
                     }
                 }
+                parameter.push([property, Array.isArray(value) ? value[0] : value]);
+            } else if (property === TicketProperty.RESPONSIBLE_ID) {
                 parameter.push([property, Array.isArray(value) ? value[0] : value]);
             } else if (
                 (

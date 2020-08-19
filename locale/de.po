@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-07-23 08:51+0000\n"
+"PO-Revision-Date: 2020-08-19 09:51+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -288,6 +288,9 @@ msgstr "Automatisierung: Jobs"
 msgid "Automation: Notifications"
 msgstr "Automatisierung: Benachrichtigungen"
 
+msgid "Avatar"
+msgstr ""
+
 msgid "back to"
 msgstr "Zurück zu"
 
@@ -565,7 +568,7 @@ msgid "Create Address"
 msgstr "Adresse wird angelegt"
 
 msgid "Create Article"
-msgstr "Artikel wird angelegt"
+msgstr "Artikel anlegen"
 
 msgid "Create Category"
 msgstr "Kategorie wird angelegt"
@@ -625,7 +628,7 @@ msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
 
 msgid "Create Ticket"
-msgstr "Ticket wird angelegt"
+msgstr "Ticket anlegen"
 
 msgid "Create Translation"
 msgstr "Übersetzung wird angelegt"
@@ -1055,6 +1058,11 @@ msgstr "Filtern in Liste"
 msgid "Filter successfully created."
 msgstr "Filter wurde erfolgreich angelegt."
 
+#, fuzzy
+#| msgid "Filter successfully created."
+msgid "Filter successfully removed."
+msgstr "Filter wurde erfolgreich angelegt."
+
 msgid ""
 "Find this saved search within the Dropdown Bookmarks, located in the header "
 "menu right besides the New-button"
@@ -1166,7 +1174,8 @@ msgstr ""
 msgid "Helptext_Admin_DynamicFieldCreate_Name"
 msgstr ""
 "Der Name des dynamischen Feldes dient als interner Bezeichner und wird nur "
-"im Admin Bereich angezeigt."
+"im Admin Bereich angezeigt. Es dürfen keine Leerzeichen oder Sonderzeichen "
+"verwendet werden."
 
 msgid "Helptext_Admin_DynamicFieldCreate_ObjectType"
 msgstr ""
@@ -1787,8 +1796,8 @@ msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist.
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Komma oder Semikolon sind als Texttrenner zulässig. Verwendung von RegEx ist "
-"möglich, diese müssen in Slashs (\"/\") gesetzt werden."
+"Semikolon ist als Texttrenner zulässig. Verwendung von RegEx ist möglich, "
+"diese müssen in Slashs (\"/\") gesetzt werden."
 
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
@@ -1943,6 +1952,14 @@ msgstr ""
 "möglich. Die Nutzung weiterer Sonderzeichen ist im FAQ Artikel \"Wie suche "
 "ich in KIX 18\" zu finden."
 
+msgid "Helptext_Customers_ContactCreate_Avatar."
+msgstr ""
+"Legen Sie einen Avatar (Bild oder Icon) fest, welches in der Sidebar \""
+"Kontaktinformationen\" mit dem Kontakt gemeinsam angezeigt wird. (Admin-"
+"Konfiguration an anderer Stelle möglich) Der Avatar bekommt eine fixe Höhe "
+"von 98px, die Breite wird dann entsprechend dem Bildformat angepasst. "
+"Empfehlung: Verwenden Sie ein quadratisches oder Hochkant-Format."
+
 msgid "Helptext_Customers_ContactCreate_City"
 msgstr ""
 
@@ -2013,6 +2030,12 @@ msgstr ""
 "ungültig) Enthält der Datensatz keine Gültigkeit, wird dieses Attribut über "
 "die Auswahl im Bereich „Wert  ersetzen“ automatisch gesetzt (kann geändert "
 "werden)."
+
+msgid "Helptext_Customers_OrganisationCreate_Avatar."
+msgstr ""
+"Legen Sie einen Avatar (Bild oder Icon) fest, welches je nach Konfiguration "
+"Ihres KIX Agentenportals gemeinsam mit der Organisation angezeigt werden "
+"kann, z.B. in einer Sidebar."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -2843,7 +2866,7 @@ msgid "New State"
 msgstr "Neuer Status"
 
 msgid "New Text Module"
-msgstr "Neues Textmodul"
+msgstr "Neuer Textbaustein"
 
 msgid "New Ticket"
 msgstr "Neues Ticket"
@@ -2883,9 +2906,6 @@ msgstr "Nächste"
 
 msgid "Next Image"
 msgstr "Nächstes Bild"
-
-msgid "no"
-msgstr "nein"
 
 msgid "No"
 msgstr "Nein"
@@ -3310,20 +3330,23 @@ msgstr "Erinnerungstickets"
 msgid "Remove dependency to organisation"
 msgstr "Abhängigkeit zu Kunden auflösen"
 
+msgid "Remove Filter"
+msgstr "Filter löschen"
+
 msgid "Remove parameter"
-msgstr "Parameter entfernen"
+msgstr "Parameter löschen"
 
 msgid "Remove Priorities"
-msgstr "Prioritäten entfernen"
+msgstr "Prioritäten löschen"
 
 msgid "Remove States"
-msgstr "Status entfernen"
+msgstr "Status löschen"
 
 msgid "Remove translations"
-msgstr "Übersetzungen entfernen"
+msgstr "Übersetzungen löschen"
 
 msgid "Remove Types"
-msgstr "Typen entfernen"
+msgstr "Typen löschen"
 
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
@@ -3336,6 +3359,11 @@ msgstr "Antworten"
 
 msgid "Reply all"
 msgstr "Allen antworten"
+
+#, fuzzy
+#| msgid "Required field '{0}' has no value."
+msgid "Required field {0} has no usable value."
+msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
 #, fuzzy
 #| msgid "Required field '{0}' has no value."
@@ -4135,6 +4163,9 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "no"
+#~ msgstr "nein"
 
 #~ msgid "Templates"
 #~ msgstr "Vorlagen"
