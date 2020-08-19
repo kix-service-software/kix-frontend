@@ -161,17 +161,21 @@ export class FormInstance {
             const fields = [];
             for (const child of formField.children) {
                 const existingFields = fields.filter((c) => c.property === child.property);
-                if (
-                    existingFields.length
-                    || typeof child.countDefault !== 'number'
-                    || child.countDefault > existingFields.length
-                ) {
-                    this.setFieldChildrenEmpty(child);
-                    if (typeof child.countDefault === 'number' && child.countDefault === 0) {
+                let fieldCount = existingFields.length;
+
+                if (!fieldCount) {
+                    fields.push(child);
+                    fieldCount++;
+                }
+
+                if (isNaN(child.countDefault) || child.countDefault > fieldCount) {
+                    if (!isNaN(child.countDefault) && child.countDefault === 0) {
                         child.empty = true;
                     }
                     fields.push(child);
                 }
+
+                this.setFieldChildrenEmpty(child);
             }
             formField.children = fields;
         }
