@@ -9,8 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
-import { IConfiguration, IInformationRow } from './IConfiguration';
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
+import { IConfiguration, IInformationRow, IInformation } from './IConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { PlaceholderService } from '../../core/PlaceholderService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -77,6 +76,11 @@ class Component {
         if (Array.isArray(rows)) {
             for (const row of rows) {
                 if (Array.isArray(row.values)) {
+                    const infoRow: IInformationRow = {
+                        margin: row.margin,
+                        values: []
+                    };
+
                     for (const info of row.values) {
                         if (Array.isArray(info.conditions)) {
                             const match = await FilterUtil.checkCriteriaByPropertyValue(info.conditions, object);
@@ -85,20 +89,31 @@ class Component {
                             }
                         }
 
+                        const infoValue: IInformation = {
+                            conditions: [],
+                            icon: info.icon,
+                            linkSrc: info.linkSrc,
+                            preparedLinkSrc: '',
+                            preparedText: '',
+                            routingConfiguration: info.routingConfiguration,
+                            routingObjectId: info.routingObjectId,
+                            text: info.text
+                        };
+
                         const text = await PlaceholderService.getInstance().replacePlaceholders(info.text, object);
-                        info.preparedText = text;
+                        infoValue.preparedText = text;
 
                         const link = await PlaceholderService.getInstance().replacePlaceholders(info.linkSrc, object);
-                        info.preparedLinkSrc = link;
+                        infoValue.preparedLinkSrc = link;
 
                         if (info.routingConfiguration) {
-                            info.routingObjectId = await PlaceholderService.getInstance().replacePlaceholders(
+                            infoValue.routingObjectId = await PlaceholderService.getInstance().replacePlaceholders(
                                 info.routingObjectId
                             );
                         }
-
-                        information.push(row);
+                        infoRow.values.push(infoValue);
                     }
+                    information.push(infoRow);
                 }
             }
         }
