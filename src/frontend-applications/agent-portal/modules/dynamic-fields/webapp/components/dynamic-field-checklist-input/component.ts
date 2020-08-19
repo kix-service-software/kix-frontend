@@ -16,10 +16,6 @@ import { DynamicFieldFormUtil } from '../../../../base-components/webapp/core/Dy
 
 class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 
-    public async setCurrentValue(): Promise<void> {
-        return;
-    }
-
     public onCreate(): void {
         this.state = new ComponentState();
     }
@@ -30,14 +26,24 @@ class Component extends FormInputComponent<CheckListItem[], ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const defaultValue = formInstance.getFormFieldValue<[]>(this.state.field.instanceId);
-        if (defaultValue && defaultValue.value) {
-            this.state.checklist = defaultValue.value;
-            this.setProgressValues();
-
-        }
         this.state.prepared = true;
+    }
+
+    public async setCurrentValue(): Promise<void> {
+        const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
+        const value = formInstance.getFormFieldValue<[]>(this.state.field.instanceId);
+        if (value) {
+            let checklist = value.value;
+            if (typeof checklist === 'string') {
+                checklist = JSON.parse(checklist);
+            }
+
+            if (Array.isArray(checklist)) {
+                this.state.checklist = checklist;
+            }
+
+            this.setProgressValues();
+        }
     }
 
     public itemValueChanged(item: CheckListItem): void {

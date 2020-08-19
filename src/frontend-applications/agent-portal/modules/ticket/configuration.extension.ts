@@ -13,7 +13,7 @@ import { IConfiguration } from '../../model/configuration/IConfiguration';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectPropertyFilter } from '../../model/KIXObjectPropertyFilter';
-import { TableFilterCriteria } from '../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../model/UIFilterCriterion';
 import { TicketProperty } from './model/TicketProperty';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
@@ -65,21 +65,21 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const predefinedTicketFilter = [
             new KIXObjectPropertyFilter('Translatable#Owner', [
-                new TableFilterCriteria(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
+                new UIFilterCriterion(TicketProperty.OWNER_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER)
             ]),
             new KIXObjectPropertyFilter('Translatable#Watched Tickets', [
-                new TableFilterCriteria(
+                new UIFilterCriterion(
                     TicketProperty.WATCHERS, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER, true
                 )
             ]),
             new KIXObjectPropertyFilter('Translatable#Unlocked Tickets', [
-                new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 1)
+                new UIFilterCriterion(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 1)
             ]),
             new KIXObjectPropertyFilter('Translatable#Locked Tickets', [
-                new TableFilterCriteria(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 2)
+                new UIFilterCriterion(TicketProperty.LOCK_ID, SearchOperator.EQUALS, 2)
             ]),
             new KIXObjectPropertyFilter('Translatable#Responsible Tickets', [
-                new TableFilterCriteria(
+                new UIFilterCriterion(
                     TicketProperty.RESPONSIBLE_ID, SearchOperator.EQUALS, KIXObjectType.CURRENT_USER
                 )
             ]),

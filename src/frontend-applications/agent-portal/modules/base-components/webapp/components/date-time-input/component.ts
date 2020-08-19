@@ -51,18 +51,21 @@ class Component extends FormInputComponent<string | Date, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.state.dateValue = null;
-        this.state.timeValue = null;
     }
 
     public async setCurrentValue(): Promise<void> {
+        this.state.prepared = false;
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const value = formInstance.getFormFieldValue<string>(this.state.field.instanceId);
-        if (value) {
+        if (value && value.value) {
             this.state.currentValue = new Date(value.value);
             this.state.dateValue = DateTimeUtil.getKIXDateString(this.state.currentValue);
             this.state.timeValue = DateTimeUtil.getKIXTimeString(this.state.currentValue, true);
         }
+
+        setTimeout(() => {
+            this.state.prepared = true;
+        }, 50);
     }
 
     public dateChanged(event: any): void {

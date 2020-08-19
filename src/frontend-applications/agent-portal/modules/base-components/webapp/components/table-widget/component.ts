@@ -8,7 +8,7 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { ContextType } from '../../../../../model/ContextType';
@@ -30,7 +30,7 @@ class Component {
 
     public state: ComponentState;
 
-    private additionalFilterCriteria: TableFilterCriteria[] = [];
+    private additionalFilterCriteria: UIFilterCriterion[] = [];
 
     private objectType: KIXObjectType | string;
 
@@ -153,6 +153,8 @@ class Component {
                                 if (filterComponent) {
                                     filterComponent.reset();
                                 }
+                            } else if (this.state.table) {
+                                this.state.filterValue = this.state.table.getFilterValue();
                             }
                         }
                     },

@@ -25,6 +25,7 @@ class EditorComponent {
     private editor: any;
     private autoCompletePlugins: any[] = [];
     private useReadonlyStyle: boolean = false;
+    private changeTimeout: any;
 
     public onCreate(input: any): void {
         this.state = new ComponentState(
@@ -51,9 +52,11 @@ class EditorComponent {
 
             if (input.value !== null) {
                 const contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
-                this.editor.setData(contentString, () => {
-                    this.editor.updateElement();
-                });
+                if (this.editor.getData() !== contentString) {
+                    this.editor.setData(contentString, () => {
+                        this.editor.updateElement();
+                    });
+                }
             }
 
             if (typeof input.readOnly !== 'undefined' && this.state.readOnly !== input.readOnly) {
@@ -128,13 +131,19 @@ class EditorComponent {
                 }
             });
 
-            // TODO: eventuell bessere Lösung als blur (könnte nicht fertig werden (unvollständiger Text),
-            // wenn durch den Klick außerhalb auch gleich der Editor entfernt wird
-            // - siehe bei Notes-Sidebar (toggleEditMode)) --> "change", wird aber häufig getriggert
-            this.editor.on('blur', (event) => {
-                const value = event.editor.getData();
-                (this as any).emit('valueChanged', value);
+            this.editor.on('change', (event) => {
+                if (this.changeTimeout) {
+                    window.clearTimeout(this.changeTimeout);
+                    this.changeTimeout = null;
+                }
+
+                this.changeTimeout = setTimeout(() => {
+                    const value = event.editor.getData();
+                    (this as any).emit('valueChanged', value);
+                    this.changeTimeout = null;
+                }, 300);
             });
+
 
             if (this.state.readOnly) {
                 this.editor.on('contentDom', () => {

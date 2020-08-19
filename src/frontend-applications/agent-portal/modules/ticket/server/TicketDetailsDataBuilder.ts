@@ -408,7 +408,8 @@ export class TicketDetailsDataBuilder {
             );
             return [Buffer.from(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
         } else {
-            return [article.Body, null];
+            const body = article.Body.replace(/(\n|\r)/g, '<br>');
+            return [body, null];
         }
     }
 

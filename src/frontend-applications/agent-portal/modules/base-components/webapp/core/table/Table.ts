@@ -23,7 +23,7 @@ import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
 import { TableEventData } from './TableEventData';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { EventService } from '../EventService';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
@@ -46,7 +46,7 @@ export class Table implements ITable {
     private objectType: KIXObjectType | string;
 
     private filterValue: string;
-    private filterCriteria: TableFilterCriteria[];
+    private filterCriteria: UIFilterCriterion[];
 
     private initialized: boolean = false;
 
@@ -323,7 +323,11 @@ export class Table implements ITable {
         return this.columns.some((kr) => kr.getColumnId() === id);
     }
 
-    public setFilter(filterValue?: string, criteria?: TableFilterCriteria[]): void {
+    public getFilterValue(): string {
+        return this.filterValue;
+    }
+
+    public setFilter(filterValue?: string, criteria?: UIFilterCriterion[]): void {
         this.filterValue = filterValue;
         this.filterCriteria = criteria;
     }
@@ -353,12 +357,12 @@ export class Table implements ITable {
 
     private async filterColumns(): Promise<void> {
         for (const column of this.getColumns()) {
-            const filter: [string, TableFilterCriteria[]] = column.getFilter();
+            const filter: [string, UIFilterCriterion[]] = column.getFilter();
             if (this.isFilterDefined(filter[0], filter[1])) {
                 const rows: IRow[] = [];
                 if (filter[0] && filter[0] !== '') {
                     filter[1] = [
-                        new TableFilterCriteria(column.getColumnId(), SearchOperator.CONTAINS, filter[0], false, true)
+                        new UIFilterCriterion(column.getColumnId(), SearchOperator.CONTAINS, filter[0], false, true)
                     ];
                 }
                 for (const row of this.getRows()) {
@@ -372,7 +376,7 @@ export class Table implements ITable {
         }
     }
 
-    private isFilterDefined(value: string, criteria: TableFilterCriteria[]): boolean {
+    private isFilterDefined(value: string, criteria: UIFilterCriterion[]): boolean {
         return (value && value !== '') || (criteria && criteria.length !== 0);
     }
 

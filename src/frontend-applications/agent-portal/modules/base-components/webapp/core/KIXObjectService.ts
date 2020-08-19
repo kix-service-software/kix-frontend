@@ -24,7 +24,7 @@ import { TreeNode } from './tree';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { User } from '../../../user/model/User';
 import { ValidObject } from '../../../valid/model/ValidObject';
-import { TableFilterCriteria } from '../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../model/UIFilterCriterion';
 import { IAutofillConfiguration } from './IAutofillConfiguration';
 import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
@@ -43,7 +43,6 @@ import { ConfigItem } from '../../../cmdb/model/ConfigItem';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
-import { SortUtil } from '../../../../model/SortUtil';
 import { DataType } from '../../../../model/DataType';
 import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
@@ -424,13 +423,13 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async checkFilterValue(
-        objectType: KIXObjectType | string, object: KIXObject, criteria: TableFilterCriteria
+        objectType: KIXObjectType | string, object: KIXObject, criteria: UIFilterCriterion
     ): Promise<boolean> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         return service ? await service.checkFilterValue(object, criteria) : true;
     }
 
-    public async checkFilterValue(object: T, criteria: TableFilterCriteria): Promise<boolean> {
+    public async checkFilterValue(object: T, criteria: UIFilterCriterion): Promise<boolean> {
         return true;
     }
 
@@ -637,7 +636,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 })
             ];
         }
-        return SortUtil.sortObjects(nodes, 'label', DataType.STRING);
+        return nodes;
     }
 
     public static async searchObjectTree(
@@ -656,11 +655,14 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         let objectType = this.objectType;
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
+            objectType = null;
             const dynamicField = await KIXObjectService.loadDynamicField(dfName);
-            if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
-                objectType = KIXObjectType.CONFIG_ITEM;
-            } else if (dynamicField.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
-                objectType = KIXObjectType.TICKET;
+            if (dynamicField) {
+                if (dynamicField.FieldType === DynamicFieldTypes.CI_REFERENCE) {
+                    objectType = KIXObjectType.CONFIG_ITEM;
+                } else if (dynamicField.FieldType === DynamicFieldTypes.TICKET_REFERENCE) {
+                    objectType = KIXObjectType.TICKET;
+                }
             }
         } else {
             switch (property) {

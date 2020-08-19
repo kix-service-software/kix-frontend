@@ -141,5 +141,13 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
         return organisationLabel;
     }
 
+    public getObjectIcon(object?: Organisation): string | ObjectIcon {
+        if (object) {
+            return new ObjectIcon(null, KIXObjectType.ORGANISATION, object.ID, null, null, 'kix-icon-man-house');
+        } else {
+            return 'kix-icon-man-house';
+        }
+    }
+
 }
 

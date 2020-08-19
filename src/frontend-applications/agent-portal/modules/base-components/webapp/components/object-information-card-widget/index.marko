@@ -1,0 +1,49 @@
+<!--
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<widget
+    instanceId=state.instanceId
+    title=(state.widgetConfiguration ? state.widgetConfiguration.title : "")
+    contentActions=state.actions
+    icon=(state.widgetConfiguration ? state.widgetConfiguration.icon : null)>
+    <@content>
+        <if(state.prepared)>
+            <div.info-container>
+                <if(state.avatar)>
+                    <div.info-avatar>
+                        <icon icon=state.avatar/>
+                    </div>
+                </if>
+                <div.info-rows>
+                    <for|row| of=state.information>
+                        <div.info-row class={
+                            "info-margin": row.margin
+                        }>
+                            <for|info| of=row.values>
+                                <if(info.preparedText)>
+                                    <div.info-value>
+                                        <icon icon=info.icon/>
+                                        <if(info.routingConfiguration)>
+                                            <link-target routingConfiguration=info.routingConfiguration objectId=info.routingObjectId>
+                                                <@content>${info.preparedText}</@content>
+                                            </link-target>
+                                        </if>
+                                        <else-if(info.linkSrc && info.preparedLinkSrc)>
+                                            <a href=info.preparedLinkSrc target="_blank">${info.preparedText}</a>
+                                        </else-if>
+                                        <else>${info.preparedText}</else>
+                                    </div>
+                                </if>
+                            </for>
+                        </div>
+                    </for>
+                </div>
+            </div>
+        </if>
+    </@content>
+</widget>

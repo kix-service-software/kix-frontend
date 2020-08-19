@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { FAQContext } from '../../../core/context/FAQContext';
 import { KIXObjectPropertyFilter } from '../../../../../../model/KIXObjectPropertyFilter';
-import { TableFilterCriteria } from '../../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../../model/UIFilterCriterion';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
 import { WidgetService } from '../../../../../../modules/base-components/webapp/core/WidgetService';
 import { TableFactoryService } from '../../../../../base-components/webapp/core/table';
@@ -29,7 +29,7 @@ class Component {
 
     private predefinedFilter: KIXObjectPropertyFilter;
     private textFilterValue: string;
-    private additionalFilterCriteria: TableFilterCriteria[] = [];
+    private additionalFilterCriteria: UIFilterCriterion[] = [];
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -80,7 +80,7 @@ class Component {
         const languages = await translationService.getLanguages();
         this.state.predefinedTableFilter = languages.map(
             (l) => new KIXObjectPropertyFilter(
-                l[1], [new TableFilterCriteria(FAQArticleProperty.LANGUAGE, SearchOperator.EQUALS, l[0])]
+                l[1], [new UIFilterCriterion(FAQArticleProperty.LANGUAGE, SearchOperator.EQUALS, l[0])]
             )
         );
     }
@@ -139,7 +139,7 @@ class Component {
 
         if (category) {
             this.additionalFilterCriteria = [
-                new TableFilterCriteria(FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, category.ID)
+                new UIFilterCriterion(FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, category.ID)
             ];
         }
 

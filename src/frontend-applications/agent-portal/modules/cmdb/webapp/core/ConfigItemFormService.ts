@@ -31,8 +31,6 @@ import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalo
 import { PreparedData } from '../../model/PreparedData';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
-
-
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
@@ -239,7 +237,7 @@ export class ConfigItemFormService extends KIXObjectFormService {
         ff: FormFieldConfiguration, pd: PreparedData, index: number, formFieldValues: Map<string, FormFieldValue<any>>
     ): void {
         let value = pd.Value;
-        if (value && value !== '') {
+        if (value && value !== '' && !ff.asStructure) {
             ff.empty = false;
         }
 

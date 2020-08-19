@@ -92,7 +92,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'text-modules-edit-form-field-language',
-                'Translatable#Language', TextModuleProperty.LANGUAGE, 'language-input', false,
+                'Translatable#Language', TextModuleProperty.LANGUAGE, 'language-input', true,
                 'Translatable#Helptext_Admin_TextModuleCreate_Language'
             )
         );

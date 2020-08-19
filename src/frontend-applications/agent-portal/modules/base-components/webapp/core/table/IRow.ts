@@ -12,7 +12,7 @@ import { IRowObject } from './IRowObject';
 import { ITable } from './ITable';
 import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { DataType } from '../../../../../model/DataType';
 
@@ -28,7 +28,7 @@ export interface IRow<T = any> {
 
     getCells(): ICell[];
 
-    filter(filterValue?: string, criteria?: TableFilterCriteria[]): Promise<boolean>;
+    filter(filterValue?: string, criteria?: UIFilterCriterion[]): Promise<boolean>;
 
     isSelected(): boolean;
 

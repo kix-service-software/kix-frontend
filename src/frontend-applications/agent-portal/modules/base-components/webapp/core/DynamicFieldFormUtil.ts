@@ -277,6 +277,27 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
             }
 
             if (dynamicField) {
+                if (
+                    (typeof dfValue === 'undefined' || dfValue === null) &&
+                    typeof dynamicField.Config === 'object' &&
+                    dynamicField.Config.DefaultValue
+                ) {
+                    if (dynamicField.FieldType === DynamicFieldTypes.DATE ||
+                        dynamicField.FieldType === DynamicFieldTypes.DATE_TIME
+                    ) {
+                        dfValue = new Date();
+                        const offset = dynamicField.Config.DefaultValue ? Number(dynamicField.Config.DefaultValue) : 0;
+                        if (dynamicField.FieldType === DynamicFieldTypes.DATE) {
+                            dfValue.setDate(dfValue.getDate() + offset);
+                            dfValue.setHours(0, 0, 0, 0);
+                        } else {
+                            dfValue.setSeconds(dfValue.getSeconds() + offset);
+                        }
+                    } else {
+                        dfValue = dynamicField.Config.DefaultValue;
+                    }
+                }
+
                 let extendedUtilResult: boolean = false;
                 for (const util of this.extendedUtils) {
                     extendedUtilResult = await util.setFieldValue(dynamicField, dfValue, field);
@@ -291,10 +312,12 @@ export class DynamicFieldFormUtil implements IDynamicFieldFormUtil {
                 ) {
                     formFieldValues.set(field.instanceId, new FormFieldValue(dfValue));
                 } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {
-                    if (dfValue && dfValue[0]) {
-                        field.defaultValue = new FormFieldValue(JSON.parse(dfValue[0]));
-                    } else {
-                        field.defaultValue = new FormFieldValue(JSON.parse(dynamicField.Config.DefaultValue));
+                    if (dfValue) {
+                        let checklist = JSON.parse(dfValue);
+                        if (typeof checklist === 'string') {
+                            checklist = JSON.parse(checklist);
+                        }
+                        formFieldValues.set(field.instanceId, new FormFieldValue(checklist));
                     }
                 } else if (dfValue && Array.isArray(dfValue)) {
                     for (let i = 0; i < dfValue.length; i++) {

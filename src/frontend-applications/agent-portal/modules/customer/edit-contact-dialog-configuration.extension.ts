@@ -188,6 +188,13 @@ class Extension extends KIXExtension implements IConfigurationExtension {
 
         configurations.push(
             new FormFieldConfiguration(
+                'contact-edit-form-field-icon',
+                'Translatable#Avatar', 'ICON', 'icon-input', false,
+                'Translatable#Helptext_Customers_ContactCreate_Avatar.'
+            )
+        );
+        configurations.push(
+            new FormFieldConfiguration(
                 'contact-edit-form-field-comment',
                 'Translatable#Comment', ContactProperty.COMMENT, 'text-area-input', false,
                 'Translatable#Helptext_Customers_ContactCreate_Comment', null, null, null, null,
@@ -209,6 +216,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                 'contact-edit-form-field-other-container', 'Translatable#Other',
                 'OTHER_CONTAINER', null, false, null, null, null,
                 [
+                    'contact-edit-form-field-icon',
                     'contact-edit-form-field-comment',
                     'contact-edit-form-field-valid'
                 ], null, null, null, null, null, null, null, null, true, true

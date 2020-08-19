@@ -27,6 +27,7 @@ import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { PersonalSettingsProperty } from '../../user/model/PersonalSettingsProperty';
 import { Contact } from '../model/Contact';
 import { SearchOperator } from '../../search/model/SearchOperator';
+import { ObjectIcon } from '../../icon/model/ObjectIcon';
 
 export class ContactAPIService extends KIXObjectAPIService {
 
@@ -109,6 +110,16 @@ export class ContactAPIService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
+        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
+        if (icon && icon.Content) {
+            icon.Object = objectType;
+            icon.ObjectID = response.ContactID;
+            await this.createIcons(token, clientRequestId, icon)
+                .catch(() => {
+                    // be silent
+                });
+        }
+
         return response.ContactID;
     }
 
@@ -180,6 +191,16 @@ export class ContactAPIService extends KIXObjectAPIService {
             throw new Error(error.Code, error.Message);
         });
 
+        const icon: ObjectIcon = this.getParameterValue(parameter, 'ICON');
+        if (icon && icon.Content) {
+            icon.Object = objectType;
+            icon.ObjectID = response.ContactID;
+            await this.updateIcon(token, clientRequestId, icon)
+                .catch(() => {
+                    // be silent
+                });
+        }
+
         return response.ContactID;
     }
 
@@ -231,7 +252,7 @@ export class ContactAPIService extends KIXObjectAPIService {
         const searchCriteria = criteria.filter(
             (f) => f.property !== ContactProperty.PRIMARY_ORGANISATION_ID
                 && f.property !== KIXObjectProperty.VALID_ID
-                && f.operator !== SearchOperator.IN
+                && (f.operator !== SearchOperator.IN || f.property === ContactProperty.EMAIL)
         );
 
         const loginProperty = searchCriteria.find((sc) => sc.property === UserProperty.USER_LOGIN);

@@ -16,7 +16,7 @@ import { SelectionState } from './SelectionState';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { ValueState } from './ValueState';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { TableFilterCriteria } from '../../../../../model/TableFilterCriteria';
+import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { SortOrder } from '../../../../../model/SortOrder';
 
 export interface ITable {
@@ -57,7 +57,9 @@ export interface ITable {
 
     addColumns(columns: IColumnConfiguration[]): Promise<void>;
 
-    setFilter(filterValue?: string, criteria?: TableFilterCriteria[]): void;
+    getFilterValue(): string;
+
+    setFilter(filterValue?: string, criteria?: UIFilterCriterion[]): void;
 
     filter(): Promise<void>;
 

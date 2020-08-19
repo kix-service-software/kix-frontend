@@ -12,6 +12,8 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ObjectIconLoadingOptions } from '../../../../../server/model/ObjectIconLoadingOptions';
 import { ObjectIcon } from '../../../model/ObjectIcon';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { PlaceholderService } from '../../../../base-components/webapp/core/PlaceholderService';
 
 class IconComponent {
 
@@ -24,41 +26,53 @@ class IconComponent {
     public onInput(input: any): void {
         this.state.icon = input.icon;
         this.state.showUnknown = typeof input.showUnknown !== 'undefined' ? input.showUnknown : false;
-        this.setIcon();
+        this.setIcon(this.state.icon);
     }
 
     public onMount(): void {
-        this.setIcon();
+        this.setIcon(this.state.icon);
     }
 
-    private async setIcon(): Promise<void> {
-        if (this.state.icon instanceof ObjectIcon) {
-            if (this.state.icon.Content) {
+    private async setIcon(icon: ObjectIcon | string): Promise<void> {
+        if (typeof icon === 'string') {
+            this.state.base64 = false;
+            this.state.content = icon;
+        } else if (icon) {
+            if (icon.Content) {
                 this.state.base64 = true;
-                this.state.content = this.state.icon.Content;
-                this.state.contentType = this.state.icon.ContentType;
+                this.state.content = icon.Content;
+                this.state.contentType = icon.ContentType;
             } else {
+
+                const context = ContextService.getInstance().getActiveContext();
+                const contextObject = await context.getObject();
+                const object = await PlaceholderService.getInstance().replacePlaceholders(
+                    icon.Object, contextObject
+                );
+                const objectId = await PlaceholderService.getInstance().replacePlaceholders(
+                    icon.ObjectId ? icon.ObjectId.toString() : '', contextObject
+                );
+
                 const icons = await KIXObjectService.loadObjects<ObjectIcon>(
                     KIXObjectType.OBJECT_ICON, null, null,
-                    new ObjectIconLoadingOptions(this.state.icon.Object, this.state.icon.ObjectID)
+                    new ObjectIconLoadingOptions(object, objectId)
                 );
                 if (icons && !!icons.length) {
-                    const icon = icons[0];
-                    if (icon.ContentType === 'text') {
+                    const loadedIcon = icons[0];
+                    if (loadedIcon.ContentType === 'text') {
                         this.state.base64 = false;
                     } else {
                         this.state.base64 = true;
-                        this.state.contentType = icon.ContentType;
+                        this.state.contentType = loadedIcon.ContentType;
                     }
-                    this.state.content = icon.Content;
+                    this.state.content = loadedIcon.Content;
+                } else if (icon.fallbackIcon) {
+                    this.setIcon(icon.fallbackIcon);
                 } else if (this.state.showUnknown) {
                     this.state.base64 = false;
                     this.state.content = 'kix-icon-unknown';
                 }
             }
-        } else {
-            this.state.base64 = false;
-            this.state.content = this.state.icon;
         }
     }
 

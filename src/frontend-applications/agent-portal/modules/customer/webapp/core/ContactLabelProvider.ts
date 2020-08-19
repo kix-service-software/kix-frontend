@@ -345,5 +345,13 @@ export class ContactLabelProvider extends LabelProvider<Contact> {
         }
         return user;
     }
+
+    public getObjectIcon(object?: Contact): string | ObjectIcon {
+        if (object) {
+            return new ObjectIcon(null, KIXObjectType.CONTACT, object.ID, null, null, 'kix-icon-man-bubble');
+        } else {
+            return 'kix-icon-man-bubble';
+        }
+    }
 }
 

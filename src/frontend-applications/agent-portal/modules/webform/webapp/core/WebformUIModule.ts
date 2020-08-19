@@ -22,6 +22,8 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { WebformService } from './WebformService';
+import { WebformAcceptedDomainsValidator } from './WebformAcceptedDomainsValidator';
+import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
 
 export class UIModule implements IUIModule {
 
@@ -63,6 +65,8 @@ export class UIModule implements IUIModule {
             false, 'edit-webform-dialog', ['webforms'], EditWebformDialogContext
         );
         await ContextService.getInstance().registerContext(editWebformDialogContext);
+
+        FormValidationService.getInstance().registerValidator(new WebformAcceptedDomainsValidator());
     }
 
 }

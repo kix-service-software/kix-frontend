@@ -26,6 +26,8 @@ import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { Context } from '../../../../../model/Context';
+import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 
 class Component extends AbstractNewDialog {
 
@@ -76,15 +78,35 @@ class Component extends AbstractNewDialog {
 
                 if (channelValue && channelValue[1]) {
                     const channelId = channelValue[1].value;
-                    if (channelId === 2) {
-                        this.state.buttonLabel = 'Translatable#Send';
-                    } else {
-                        this.state.buttonLabel = 'Translatable#Save';
-                    }
+                    this.setSubmitButtonLabel(channelId);
                 }
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
+        this.setSubmitButtonLabel();
+    }
+
+    private async setSubmitButtonLabel(channelId?: number): Promise<void> {
+        if (!channelId) {
+            const formId = this.state.formId;
+            if (formId) {
+                const formInstance = await FormService.getInstance().getFormInstance(formId);
+                if (formInstance) {
+                    const value = await formInstance.getFormFieldValueByProperty<number>(
+                        ArticleProperty.CHANNEL_ID
+                    );
+                    if (value && value.value) {
+                        channelId = value.value;
+                    }
+                }
+            }
+        }
+
+        if (channelId === 2) {
+            this.state.buttonLabel = 'Translatable#Send';
+        } else {
+            this.state.buttonLabel = 'Translatable#Save';
+        }
     }
 
     public async onDestroy(): Promise<void> {

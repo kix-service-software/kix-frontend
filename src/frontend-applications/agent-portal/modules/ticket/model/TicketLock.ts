@@ -10,9 +10,9 @@
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 
-export class Lock extends KIXObject {
+export class TicketLock extends KIXObject {
 
-    public KIXObjectType: KIXObjectType = KIXObjectType.LOCK;
+    public KIXObjectType: KIXObjectType = KIXObjectType.TICKET_LOCK;
 
     public ObjectId: string | number;
 
@@ -30,7 +30,7 @@ export class Lock extends KIXObject {
 
     public ChangeTime: string;
 
-    public constructor(lock?: Lock) {
+    public constructor(lock?: TicketLock) {
         super();
         if (lock) {
             this.ID = lock.ID;
@@ -44,7 +44,7 @@ export class Lock extends KIXObject {
         }
     }
 
-    public equals(lock: Lock): boolean {
+    public equals(lock: TicketLock): boolean {
         return this.ID === lock.ID;
     }
 

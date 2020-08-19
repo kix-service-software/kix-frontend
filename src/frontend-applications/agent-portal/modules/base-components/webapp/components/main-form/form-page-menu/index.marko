@@ -7,6 +7,11 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <if(state.prepared && state.pages && state.pages.length > 1)>
+    <if(input.before)>
+        <div.page-title-before class={
+            "title-change": state.pageChanged
+        }>${state.activePageTitle}</div>
+    </if>
     <div class=(input.before ? "form-page-menu-before" : "form-page-menu-after")>
         <div.kix-icon-nook-left
             class={
@@ -33,4 +38,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     )
             on-click("showPage", state.activePageIndex + 1)/>
     </div>
+    <if(!input.before)>
+        <div.page-title-after class={
+            "title-change": state.pageChanged
+        }>${state.activePageTitle}</div>
+    </if>
 </if>

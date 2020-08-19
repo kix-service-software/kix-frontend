@@ -70,7 +70,7 @@ export class ActionFactory<T extends AbstractAction> {
         return actions;
     }
 
-    public regsiterActionInstance(actionId: string, action: T): void {
+    public registerActionInstance(actionId: string, action: T): void {
         this.actionInstances.set(actionId, action);
     }
 
