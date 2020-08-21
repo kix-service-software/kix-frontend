@@ -323,6 +323,10 @@ export class Table implements ITable {
         return this.columns.some((kr) => kr.getColumnId() === id);
     }
 
+    public getFilterValue(): string {
+        return this.filterValue;
+    }
+
     public setFilter(filterValue?: string, criteria?: UIFilterCriterion[]): void {
         this.filterValue = filterValue;
         this.filterCriteria = criteria;

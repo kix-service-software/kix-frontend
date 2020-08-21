@@ -26,6 +26,8 @@ import { ObjectIcon } from '../../../icon/model/ObjectIcon';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { UserProperty } from '../../../user/model/UserProperty';
+import { StateType } from '../../model/StateType';
+import { QueueProperty } from '../../model/QueueProperty';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -55,6 +57,14 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                         KIXObjectType.TICKET_STATE, [value], null, null, true
                     ).catch((error) => []);
                     displayValue = states && !!states.length ? states[0].Name : value;
+                }
+                break;
+            case TicketProperty.STATE_TYPE:
+                if (value) {
+                    const stateTypes = await KIXObjectService.loadObjects<StateType>(
+                        KIXObjectType.TICKET_STATE_TYPE, [value], null, null, true
+                    ).catch((error) => []);
+                    displayValue = stateTypes && !!stateTypes.length ? stateTypes[0].Name : value;
                 }
                 break;
             case TicketProperty.PRIORITY_ID:
@@ -151,6 +161,13 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.ARCHIVE_FLAG:
                 displayValue = displayValue && displayValue === 'y' ? 'Translatable#Yes' : 'Translatable#No';
                 break;
+            case 'Queue.FollowUpID':
+                const queueWithFollowUp = new Queue();
+                queueWithFollowUp.FollowUpID = value;
+                displayValue = await LabelService.getInstance().getDisplayText(
+                    queueWithFollowUp, QueueProperty.FOLLOW_UP_ID
+                );
+                break;
             default:
                 displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
         }
@@ -193,6 +210,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.STATE_ID:
                 displayValue = 'Translatable#State';
                 break;
+            case TicketProperty.STATE_TYPE:
+                displayValue = 'Translatable#State Type';
+                break;
             case TicketProperty.SERVICE_ID:
                 displayValue = 'Translatable#Service';
                 break;
@@ -233,6 +253,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.ARCHIVE_FLAG:
                 displayValue = 'Translatable#Archived';
+                break;
+            case 'Queue.FollowUpID':
+                displayValue = await LabelService.getInstance().getPropertyText(
+                    QueueProperty.FOLLOW_UP_ID, KIXObjectType.QUEUE
+                );
                 break;
             case 'UserID':
                 displayValue = 'Translatable#Agent';

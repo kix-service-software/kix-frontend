@@ -31,6 +31,7 @@ import { KIXObjectSpecificCreateOptions } from '../../../../model/KIXObjectSpeci
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
 import { TicketService } from './TicketService';
+import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -237,7 +238,8 @@ export class TicketFormService extends KIXObjectFormService {
     private getObjectReferenceOptions(objectType: KIXObjectType | string, autocomplete?: boolean): FormFieldOption[] {
         return [
             new FormFieldOption(ObjectReferenceOptions.OBJECT, objectType),
-            new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete)
+            new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, autocomplete),
+            new FormFieldOption(FormFieldOptions.SHOW_INVALID, false)
         ];
     }
 

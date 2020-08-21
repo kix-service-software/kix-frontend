@@ -31,6 +31,10 @@ import { JobType } from '../model/JobType';
 import { JobRun } from '../model/JobRun';
 import { KIXObjectSpecificDeleteOptions } from '../../../model/KIXObjectSpecificDeleteOptions';
 import { CacheService } from '../../../server/services/cache';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { SearchOperator } from '../../search/model/SearchOperator';
+import { FilterDataType } from '../../../model/FilterDataType';
+import { FilterType } from '../../../model/FilterType';
 
 export class JobAPIService extends KIXObjectAPIService {
 
@@ -397,8 +401,12 @@ export class JobAPIService extends KIXObjectAPIService {
         const jobName = this.getParameterValue(parameter, JobProperty.NAME);
         const jobType = this.getParameterValue(parameter, JobProperty.TYPE);
 
-        const macroName = this.getParameterValue(parameter, MacroProperty.NAME);
-        const macroType = this.getParameterValue(parameter, MacroProperty.TYPE);
+        let macroName = this.getParameterValue(parameter, MacroProperty.NAME);
+        macroName = forJob ? `Macro for Job "${jobName}"` : macroName;
+
+        let macroType = this.getParameterValue(parameter, MacroProperty.TYPE);
+        macroType = forJob ? jobType || JobTypes.TICKET : macroType;
+
         const macroComment = this.getParameterValue(parameter, KIXObjectProperty.COMMENT);
 
         const macroActions: MacroAction[] = this.getParameterValue(parameter, JobProperty.MACRO_ACTIONS);
@@ -414,18 +422,35 @@ export class JobAPIService extends KIXObjectAPIService {
         let macroId;
 
         if (Array.isArray(createMacroActions)) {
+            let failedError;
             const macroParameter: Array<[string, any]> = [
-                [MacroProperty.NAME, forJob ? `Macro for Job "${jobName}"` : macroName],
-                [MacroProperty.TYPE, forJob ? jobType || JobTypes.TICKET : macroType],
+                [MacroProperty.NAME, macroName],
+                [MacroProperty.TYPE, macroType],
                 [KIXObjectProperty.COMMENT, forJob ? `Macro for Job "${jobName}"` : macroComment],
                 [MacroProperty.ACTIONS, createMacroActions]
             ];
             macroId = await this.createObject(
                 token, clientRequestId, KIXObjectType.MACRO, macroParameter
             ).catch((error) => {
-                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-                throw new Error(error.Code, error.Message);
+                failedError = error;
             });
+
+            if (failedError) {
+                const macros = await this.loadObjects<Macro>(
+                    token, clientRequestId, KIXObjectType.MACRO, null,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            MacroProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, macroName
+                        )
+                    ]), null
+                );
+
+                if (macros && macros.length) {
+                    await this.deleteMacro(token, macros[0].ID).catch((error) => null);
+                }
+
+                throw failedError;
+            }
         }
 
         return macroId;

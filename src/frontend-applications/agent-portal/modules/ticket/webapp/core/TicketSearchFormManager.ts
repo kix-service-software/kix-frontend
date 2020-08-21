@@ -21,6 +21,11 @@ import { KIXObjectService } from '../../../../modules/base-components/webapp/cor
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
+import { ContextService } from '../../../base-components/webapp/core/ContextService';
+import { ContextType } from '../../../../model/ContextType';
+import { ContextMode } from '../../../../model/ContextMode';
+import { QueueService } from './admin';
+import { QueueProperty } from '../../model/QueueProperty';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -52,6 +57,7 @@ export class TicketSearchFormManager extends SearchFormManager {
 
         if (await this.checkReadPermissions('system/ticket/states')) {
             properties.push([TicketProperty.STATE_ID, null]);
+            properties.push([TicketProperty.STATE_TYPE, null]);
         }
 
         if (await this.checkReadPermissions('system/ticket/queues')) {
@@ -71,6 +77,13 @@ export class TicketSearchFormManager extends SearchFormManager {
             properties.push([TicketProperty.RESPONSIBLE_ID, null]);
             properties.push([KIXObjectProperty.CREATE_BY, null]);
             properties.push([KIXObjectProperty.CHANGE_BY, null]);
+        }
+
+        const context = ContextService.getInstance().getActiveContext();
+        const isDialogContext = context.getDescriptor().contextType === ContextType.DIALOG;
+        const isSearchMode = context.getDescriptor().contextMode === ContextMode.SEARCH;
+        if (context && isDialogContext && !isSearchMode) {
+            properties.push(['Queue.FollowUpID', null]);
         }
 
         for (const p of properties) {
@@ -104,9 +117,11 @@ export class TicketSearchFormManager extends SearchFormManager {
             case TicketProperty.RESPONSIBLE_ID:
             case KIXObjectProperty.CREATE_BY:
             case KIXObjectProperty.CHANGE_BY:
+            case TicketProperty.STATE_TYPE:
                 operations = [SearchOperator.IN];
                 break;
             case TicketProperty.LOCK_ID:
+            case 'Queue.FollowUpID':
                 operations = [SearchOperator.EQUALS];
                 break;
             case TicketProperty.AGE:
@@ -151,7 +166,9 @@ export class TicketSearchFormManager extends SearchFormManager {
             || property === TicketProperty.OWNER_ID
             || property === TicketProperty.RESPONSIBLE_ID
             || property === KIXObjectProperty.CREATE_BY
-            || property === KIXObjectProperty.CHANGE_BY;
+            || property === KIXObjectProperty.CHANGE_BY
+            || property === TicketProperty.STATE_TYPE
+            || property === 'Queue.FollowUpID';
     }
 
     private isDateTime(property: string): boolean {
@@ -168,7 +185,8 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        return await super.isMultiselect(property) || property !== TicketProperty.LOCK_ID;
+        return await super.isMultiselect(property)
+            || (property !== TicketProperty.LOCK_ID && property !== 'Queue.FollowUpID');
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
@@ -191,7 +209,13 @@ export class TicketSearchFormManager extends SearchFormManager {
             default:
                 nodes = await super.getTreeNodes(property);
                 if (!nodes || !nodes.length) {
-                    nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);
+                    if (property === 'Queue.FollowUpID') {
+                        nodes = await QueueService.getInstance().getTreeNodes(
+                            QueueProperty.FOLLOW_UP_ID, true, true, objectIds
+                        );
+                    } else {
+                        nodes = await TicketService.getInstance().getTreeNodes(property, true, true, objectIds);
+                    }
                 }
         }
         return nodes;

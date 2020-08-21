@@ -142,7 +142,11 @@ export class OrganisationLabelProvider extends LabelProvider<Organisation> {
     }
 
     public getObjectIcon(object?: Organisation): string | ObjectIcon {
-        return new ObjectIcon(null, KIXObjectType.ORGANISATION, object.ID, null, null, 'kix-icon-man-house');
+        if (object) {
+            return new ObjectIcon(null, KIXObjectType.ORGANISATION, object.ID, null, null, 'kix-icon-man-house');
+        } else {
+            return 'kix-icon-man-house';
+        }
     }
 
 }

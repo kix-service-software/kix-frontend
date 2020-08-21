@@ -171,7 +171,8 @@ export class QueueService extends KIXObjectService<Queue> {
     }
 
     public async getTreeNodes(
-        property: string, showInvalid?: boolean, invalidClickable?: boolean
+        property: string, showInvalid?: boolean, invalidClickable?: boolean,
+        filterIds?: Array<string | number>, loadingOptions?: KIXObjectLoadingOptions
     ): Promise<TreeNode[]> {
         const values: TreeNode[] = [];
 

@@ -232,9 +232,14 @@ export class HttpService {
         return `${this.apiURL}/${encodedResource}`;
     }
 
-    private createError(err: any): Error {
-        LoggingService.getInstance().error(`(${err.statusCode}) ${err.error.Code}  ${err.error.Message}`);
-        return new Error(err.error.Code, err.error.Message, err.statusCode);
+    private createError(error: any): Error {
+        if (error.statusCode === 500) {
+            LoggingService.getInstance().error(`(${error.statusCode}) ${error.message}`);
+            return new Error(error.statusCode, error.message, error.statusCode);
+        } else {
+            LoggingService.getInstance().error(`(${error.statusCode}) ${error.error.Code}  ${error.error.Message}`);
+            return new Error(error.error.Code, error.error.Message, error.statusCode);
+        }
     }
 
     private async buildCacheKey(resource: string, query: any, token: string, useToken?: boolean): Promise<string> {

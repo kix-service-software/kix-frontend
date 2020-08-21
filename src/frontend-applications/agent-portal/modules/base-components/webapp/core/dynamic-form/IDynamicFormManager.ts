@@ -38,7 +38,7 @@ export interface IDynamicFormManager {
 
     getValues(): ObjectPropertyValue[];
 
-    setValue(importValue: ObjectPropertyValue): Promise<void>;
+    setValue(importValue: ObjectPropertyValue, silent?: boolean): Promise<void>;
 
     removeValue(importValue: ObjectPropertyValue): Promise<void>;
 
