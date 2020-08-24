@@ -123,7 +123,9 @@ export class DynamicFormFieldValue {
 
     public clearValue(): void {
         this.value.value = null;
-        this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
+        if (this.isDropdown) {
+            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
+        }
     }
 
     public async setProperty(property: string, update: boolean = false, silent?: boolean): Promise<void> {
@@ -139,8 +141,10 @@ export class DynamicFormFieldValue {
             }
 
             this.value.value = null;
-            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
-            this.valueTreeHandler.setTree([]);
+            if (this.isDropdown) {
+                this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
+                this.valueTreeHandler.setTree([]);
+            }
         }
 
         await this.manager.setValue(this.value, silent);
@@ -334,7 +338,9 @@ export class DynamicFormFieldValue {
             }
         }
 
-        this.valueTreeHandler.setSelection(currentValues, true, silent, true);
+        if (this.isDropdown) {
+            this.valueTreeHandler.setSelection(currentValues, true, silent, true);
+        }
     }
 
     public setValue(value: string | string[] | number[]): void {
