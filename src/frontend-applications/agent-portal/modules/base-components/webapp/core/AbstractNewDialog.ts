@@ -84,12 +84,16 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
     public async onDestroy(): Promise<void> {
         AbstractNewDialog.prototype.resetDialog();
-    }
-
-    public async cancel(): Promise<void> {
         if (this.state.formId) {
             FormService.getInstance().deleteFormInstance(this.state.formId);
         }
+
+        if (this.dialogContext) {
+            this.dialogContext.reset();
+        }
+    }
+
+    public async cancel(): Promise<void> {
         AbstractNewDialog.prototype.resetDialog();
         DialogService.getInstance().closeMainDialog();
     }
