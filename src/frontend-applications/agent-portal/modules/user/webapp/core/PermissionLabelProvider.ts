@@ -35,7 +35,7 @@ export class PermissionLabelProvider extends LabelProvider<Permission> {
         let displayValue = property;
         switch (property) {
             case PermissionProperty.TYPE_ID:
-                displayValue = 'Translatable#Type';
+                displayValue = 'Translatable#Layer';
                 break;
             case PermissionProperty.RoleID:
                 displayValue = 'Translatable#Role';

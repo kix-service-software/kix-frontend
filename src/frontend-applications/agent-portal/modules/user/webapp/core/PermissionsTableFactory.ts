@@ -53,6 +53,7 @@ export class PermissionsTableFactory extends TableFactory {
         let tableColumns = [];
         if (objectType === KIXObjectType.ROLE_PERMISSION) {
             tableColumns = [
+                this.getDefaultColumnConfiguration(PermissionProperty.TYPE_ID),
                 this.getDefaultColumnConfiguration(PermissionProperty.TARGET),
                 this.getDefaultColumnConfiguration(PermissionProperty.CREATE),
                 this.getDefaultColumnConfiguration(PermissionProperty.READ),
@@ -62,6 +63,7 @@ export class PermissionsTableFactory extends TableFactory {
             ];
         } else {
             tableColumns = [
+                this.getDefaultColumnConfiguration(PermissionProperty.TYPE_ID),
                 this.getDefaultColumnConfiguration(PermissionProperty.RoleID),
                 this.getDefaultColumnConfiguration(PermissionProperty.CREATE),
                 this.getDefaultColumnConfiguration(PermissionProperty.READ),
