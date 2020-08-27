@@ -60,6 +60,10 @@ export class ExtendedJobFormManager implements IJobFormManager {
         return null;
     }
 
+    public postPrepareOptionValue(action: MacroAction, optionName: string, value: any): any {
+        return null;
+    }
+
     public updateFields(fields: FormFieldConfiguration[]): Promise<void> {
         return null;
     }

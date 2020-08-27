@@ -31,6 +31,9 @@ import { JobRunHistoryTableFactory } from './table/JobRunHistoryTableFactory';
 import { JobRunLabelProvider } from './JobRunLabelProvider';
 import { JobRunLogLabelProvider } from './JobRunLogLabelProvider';
 import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
+import { AbstractJobFormManager } from './AbstractJobFormManager';
+import { TicketJobFormManagerFetchAssetAttributes } from './TicketJobFormManagerFetchAssetAttributes';
+import { TicketJobFormManagerTicketArticleCreate } from './TicketJobFormManagerTicketArticleCreate';
 
 export class UIModule implements IUIModule {
 
@@ -84,6 +87,16 @@ export class UIModule implements IUIModule {
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
         JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());
+
+        const manager = JobFormService.getInstance().getJobFormManager(JobTypes.TICKET);
+        if (manager) {
+            (manager as AbstractJobFormManager).addExtendedJobFormManager(
+                new TicketJobFormManagerTicketArticleCreate()
+            );
+            (manager as AbstractJobFormManager).addExtendedJobFormManager(
+                new TicketJobFormManagerFetchAssetAttributes()
+            );
+        }
     }
 
 }

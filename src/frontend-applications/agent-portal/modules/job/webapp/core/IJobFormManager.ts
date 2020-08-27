@@ -37,6 +37,8 @@ export interface IJobFormManager {
 
     prepareCreateValue(property: string, formField: FormFieldConfiguration, value: any): Promise<Array<[string, any]>>;
 
+    postPrepareOptionValue(action: MacroAction, optionName: string, value: any): any;
+
     updateFields(fields: FormFieldConfiguration[]): Promise<void>;
 
     reset(): void;

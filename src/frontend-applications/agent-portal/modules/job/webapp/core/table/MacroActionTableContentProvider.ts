@@ -78,7 +78,8 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
                     const option = actionTypes[0].Options[parameter] as MacroActionTypeOption;
                     if (option) {
                         const translated = await TranslationService.translate(option.Label);
-                        preparedParameters[translated] = o.Parameters[parameter];
+                        preparedParameters[translated] = Array.isArray(o.Parameters[parameter])
+                            ? JSON.stringify(o.Parameters[parameter]) : o.Parameters[parameter];
                     }
                 }
             }

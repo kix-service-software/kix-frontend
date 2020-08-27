@@ -287,7 +287,7 @@ export class AbstractJobFormManager implements IJobFormManager {
     ): Promise<FormFieldConfiguration[]> {
         const fields: FormFieldConfiguration[] = [];
         if (!actionFieldInstanceId) {
-            console.error('No "actionFieldInstanceID" given!');
+            console.error('No "actionFieldInstanceId" given!');
         } else {
             if (actionType) {
                 const macroActionTypes = await KIXObjectService.loadObjects<MacroActionType>(
@@ -302,12 +302,26 @@ export class AbstractJobFormManager implements IJobFormManager {
                                     action, option, actionType, actionFieldInstanceId, jobType
                                 );
 
-                                // special instance id to distinguish between the actions
-                                actionPropertyField.instanceId = IdService.generateDateBasedId(
-                                    `ACTION###${actionFieldInstanceId}###${option.Name}`
-                                );
+                                // split values if it is an array option field
+                                if (
+                                    actionPropertyField.countMax > 1
+                                    && Array.isArray(actionPropertyField.defaultValue.value)
+                                ) {
+                                    for (const value of actionPropertyField.defaultValue.value) {
+                                        const newField = this.getNewOptionField(
+                                            actionPropertyField, value, actionFieldInstanceId, option.Name
+                                        );
+                                        fields.push(newField);
+                                    }
+                                } else {
 
-                                fields.push(actionPropertyField);
+                                    // special instance id to distinguish between the actions
+                                    actionPropertyField.instanceId = IdService.generateDateBasedId(
+                                        `ACTION###${actionFieldInstanceId}###${option.Name}`
+                                    );
+
+                                    fields.push(actionPropertyField);
+                                }
                             }
                         }
                     }
@@ -321,6 +335,31 @@ export class AbstractJobFormManager implements IJobFormManager {
             }
         }
         return fields;
+    }
+
+    private getNewOptionField(
+        actionPropertyField: FormFieldConfiguration, value: any, actionFieldInstanceId: string, optionName: string
+    ) {
+        return new FormFieldConfiguration(
+            IdService.generateDateBasedId(actionPropertyField.id), actionPropertyField.label,
+            actionPropertyField.property, actionPropertyField.inputComponent,
+            actionPropertyField.required, actionPropertyField.hint,
+            actionPropertyField.options, new FormFieldValue(value),
+            [], null, null,
+            actionPropertyField.countDefault, actionPropertyField.countMax,
+            actionPropertyField.countMin, actionPropertyField.maxLength,
+            actionPropertyField.regEx, actionPropertyField.regExErrorMessage,
+            actionPropertyField.empty, actionPropertyField.asStructure,
+            actionPropertyField.readonly, actionPropertyField.placeholder,
+
+            // special instance id to distinguish between the actions
+            IdService.generateDateBasedId(
+                `ACTION###${actionFieldInstanceId}###${optionName}`
+            ),
+            actionPropertyField.showLabel, actionPropertyField.name,
+            actionPropertyField.draggableFields, actionPropertyField.defaultHint,
+            actionPropertyField.type, actionPropertyField.visible
+        );
     }
 
     public getActionOptionField(
@@ -342,12 +381,10 @@ export class AbstractJobFormManager implements IJobFormManager {
             defaultValue = action.Parameters[option.Name];
         }
 
-        const inputType = (actionType === 'ArticleCreate' || actionType === 'TicketCreate')
-            && option.Name === 'Body' ? 'rich-text-input' : null;
         return new FormFieldConfiguration(
             `job-action-${actionType}-${option.Name}`, option.Label,
             `ACTION###${actionFieldInstanceId}###${option.Name}`,
-            inputType, Boolean(option.Required), option.Description, undefined,
+            null, Boolean(option.Required), option.Description, undefined,
             typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined);
     }
 
@@ -420,4 +457,13 @@ export class AbstractJobFormManager implements IJobFormManager {
         return [[property, value]];
     }
 
+    public postPrepareOptionValue(action: MacroAction, optionName: string, value: any): any {
+        for (const extendedManager of this.extendedJobFormManager) {
+            const result = extendedManager.postPrepareOptionValue(action, optionName, value);
+            if (result) {
+                return result;
+            }
+        }
+        return;
+    }
 }
