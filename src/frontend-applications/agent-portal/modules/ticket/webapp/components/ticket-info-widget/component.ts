@@ -13,7 +13,6 @@ import { TicketLabelProvider, TicketDetailsContext, TicketService } from '../../
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Ticket } from '../../../model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { SysConfigUtil } from '../../../../../modules/base-components/webapp/core/SysConfigUtil';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
@@ -86,13 +85,9 @@ class Component {
 
         if (this.state.ticket) {
             const isPending = await TicketService.isPendingState(this.state.ticket.StateID);
-            const isAccountTimeEnabled = await SysConfigUtil.isTimeAccountingEnabled();
 
             if (!isPending) {
                 properties = properties.filter((p) => p !== TicketProperty.PENDING_TIME);
-            }
-            if (!isAccountTimeEnabled) {
-                properties = properties.filter((p) => p !== TicketProperty.TIME_UNITS);
             }
 
             if (properties.some((p) => p === TicketProperty.ORGANISATION_ID)) {

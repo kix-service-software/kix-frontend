@@ -48,8 +48,6 @@ export class Ticket extends KIXObject {
 
     public PendingTimeUnix: number;
 
-    public TimeUnits: number;
-
     public Unseen: number;
 
     // Object References

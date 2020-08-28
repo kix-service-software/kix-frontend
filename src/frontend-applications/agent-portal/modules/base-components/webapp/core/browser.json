@@ -136,7 +136,6 @@
         "require ./SocketEvent",
         "require ./SocketResponse",
         "require ./StringContent",
-        "require ./SysConfigUtil",
         "require ./TabContainerEvent",
         "require ./TabContainerEventData",
         "require ./ToastContent",

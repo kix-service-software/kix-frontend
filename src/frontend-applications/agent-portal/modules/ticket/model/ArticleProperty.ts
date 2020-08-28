@@ -57,8 +57,6 @@ export enum ArticleProperty {
 
     INCOMING_TIME = 'IncomingTime',
 
-    TIME_UNITS = 'TimeUnits',
-
     CUSTOMER_VISIBLE = 'CustomerVisible',
 
     ATTACHMENTS = 'Attachments',

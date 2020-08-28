@@ -299,9 +299,9 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
         return true;
     }
 
-    public validate(): Promise<ValidationResult[]> {
+    public async validate(): Promise<ValidationResult[]> {
         for (const extendedManager of this.extendedFormManager) {
-            const result = extendedManager.validate();
+            const result = await extendedManager.validate();
             if (result) {
                 return result;
             }

@@ -23,8 +23,6 @@ export enum SysConfigKey {
 
     CONFIG_ITEM_HOOK = 'ITSMConfigItem::Hook',
 
-    TIME_UNITS = 'Ticket::Frontend::TimeUnits',
-
     DEFAULT_USED_LANGUAGES = 'DefaultUsedLanguages',
 
     DEFAULT_LANGUAGE = 'DefaultLanguage',
