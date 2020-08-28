@@ -118,16 +118,18 @@ export class KIXIntegrationRouter extends KIXRouter {
             const formId = req.path.substring(1);
             const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
             const form = await WebformService.getInstance().getWebform(serverConfig.BACKEND_API_TOKEN, formId);
-            if (form && form.ValidID === 1) {
-                corsOptions = {
-                    origin: form.acceptedDomains.filter((d) => d).map((d) => {
-                        if (d.match(/^\/.+\/$/)) {
-                            return new RegExp(d.substr(1, d.length - 2));
-                        } else {
-                            return d;
-                        }
-                    })
-                };
+            if (form && form.ValidID === 1 && form.acceptedDomains) {
+                let regex;
+                try {
+                    regex = new RegExp(form.acceptedDomains);
+                } catch (error) {
+                    // do nothing
+                }
+                if (regex) {
+                    corsOptions = {
+                        origin: regex
+                    };
+                }
             }
         }
         callback(null, corsOptions ? corsOptions : { origin: false });
