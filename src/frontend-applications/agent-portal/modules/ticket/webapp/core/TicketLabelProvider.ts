@@ -192,9 +192,6 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.TITLE:
                 displayValue = 'Translatable#Title';
                 break;
-            case TicketProperty.TIME_UNITS:
-                displayValue = 'Translatable#Accounted time';
-                break;
             case TicketProperty.LOCK_ID:
                 displayValue = 'Translatable#Lock State';
                 break;

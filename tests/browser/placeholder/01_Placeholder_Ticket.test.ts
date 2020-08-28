@@ -331,7 +331,6 @@ class someTestFunctions {
         ticket.PendingTime = '2019-06-11 11:11:11';
 
         ticket.CreateTimeUnix = 1559198730;
-        ticket.TimeUnits = 120;
 
         ticket.DynamicFields = [
             new DynamicFieldValue(

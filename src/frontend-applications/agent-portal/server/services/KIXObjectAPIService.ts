@@ -102,6 +102,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         objectType: KIXObjectType | string, responseProperty: string, create: boolean = false,
         cacheKeyPrefix: string = objectType
     ): Promise<R> {
+        for (const service of this.extendedServices) {
+            service.postPrepareParameter(parameter);
+        }
+
         const object = {};
         object[objectType] = new RequestObject(parameter.filter((p) => p[0] !== 'ICON'));
 

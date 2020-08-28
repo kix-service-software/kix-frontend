@@ -110,6 +110,18 @@ class Component {
         await this.provideValue(value);
     }
 
+    public async setNumberValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+        const newValue = event.target.value;
+        value.setNumberValue(newValue);
+        await this.provideValue(value);
+    }
+
+    public async setNumberEndValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+        const newValue = event.target.value;
+        value.setBetweenEndNumberValue(newValue);
+        await this.provideValue(value);
+    }
+
     public async setDateValue(value: DynamicFormFieldValue, event: any): Promise<void> {
         const newValue = event.target.value;
         value.setDateValue(newValue);

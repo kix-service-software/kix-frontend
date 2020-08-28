@@ -55,8 +55,6 @@ export enum TicketProperty {
 
     PENDING_TIME_UNIX = 'PendingTimeUnix',
 
-    TIME_UNITS = 'TimeUnits',
-
     LAST_CHANGE_TIME = 'LastChangeTime',
 
     FROM = 'From',

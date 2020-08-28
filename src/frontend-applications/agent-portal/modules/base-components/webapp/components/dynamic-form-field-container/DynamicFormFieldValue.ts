@@ -30,6 +30,7 @@ export class DynamicFormFieldValue {
     public isDateTime: boolean = false;
     public isTextarea: boolean = false;
     public isSpecificInput: boolean = false;
+    public isNumber: boolean = false;
     public specificInputType: string = null;
     public inputOptions: Array<[string, string | number]> = [];
 
@@ -59,6 +60,9 @@ export class DynamicFormFieldValue {
 
     private betweenEndDate: string;
     private betweenEndTime: string;
+
+    private numberValue: string;
+    private betweenEndNumberValue: string;
 
     public constructor(
         public manager: IDynamicFormManager,
@@ -228,6 +232,7 @@ export class DynamicFormFieldValue {
 
             this.isDate = inputType === InputFieldTypes.DATE;
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
+            this.isNumber = inputType === InputFieldTypes.NUMBER;
 
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
@@ -333,6 +338,13 @@ export class DynamicFormFieldValue {
                         currentValues.push(new TreeNode(object.ObjectId, label, icon));
                     }
                 }
+            } else if (this.isNumber) {
+                if (this.isBetween && Array.isArray(this.value.value)) {
+                    this.numberValue = !isNaN(this.value.value[0]) ? this.value.value[0] : null;
+                    this.betweenEndNumberValue = !isNaN(this.value.value[1]) ? this.value.value[1] : null;
+                } else {
+                    this.numberValue = !isNaN(this.value.value) ? this.value.value : null;
+                }
             } else if (!this.isSpecificInput) {
                 this.value.value = Array.isArray(this.value.value) ? this.value.value[0] : this.value.value;
             }
@@ -378,6 +390,14 @@ export class DynamicFormFieldValue {
         this.betweenEndTime = value;
     }
 
+    public setNumberValue(value: string): void {
+        this.numberValue = value;
+    }
+
+    public setBetweenEndNumberValue(value: string): void {
+        this.betweenEndNumberValue = value;
+    }
+
     public getValue(): ObjectPropertyValue {
         const currentValue = { ...this.value };
         if (this.isDate) {
@@ -403,6 +423,14 @@ export class DynamicFormFieldValue {
                     [currentValue.value, DateTimeUtil.getKIXDateTimeString(endDate)];
             }
 
+        }
+        if (this.isNumber) {
+            currentValue.value = !isNaN(Number(this.numberValue)) && this.numberValue !== ''
+                ? Number(this.numberValue) : null;
+            if (this.isBetween && currentValue.value) {
+                currentValue.value = !isNaN(Number(this.betweenEndNumberValue)) && this.betweenEndNumberValue !== ''
+                    ? [currentValue.value, Number(this.betweenEndNumberValue)] : null;
+            }
         }
         return currentValue;
     }

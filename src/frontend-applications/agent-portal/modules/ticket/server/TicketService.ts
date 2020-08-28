@@ -277,6 +277,10 @@ export class TicketAPIService extends KIXObjectAPIService {
             articleParameter.push([ArticleProperty.CONTENT_TYPE, 'text/html; charset=utf8']);
             articleParameter.push([ArticleProperty.MIME_TYPE, 'text/html']);
             articleParameter.push([ArticleProperty.CHARSET, 'utf8']);
+
+            for (const service of this.extendedServices) {
+                service.postPrepareParameter(parameter, articleParameter);
+            }
         }
         return articleParameter;
     }

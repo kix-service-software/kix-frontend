@@ -56,6 +56,9 @@ export abstract class KIXObjectFormService {
             }
         }
         await this.prePrepareForm(form, kixObject, formInstance);
+        for (const extendedService of this.extendedFormServices) {
+            await extendedService.prePrepareForm(form, kixObject, formInstance);
+        }
 
         const formFieldValues: Map<string, FormFieldValue<any>> = formInstance.getAllFormFieldValues();
         for (const p of form.pages) {
@@ -67,6 +70,9 @@ export abstract class KIXObjectFormService {
         }
 
         await this.postPrepareForm(form, formInstance, formFieldValues, kixObject);
+        for (const extendedService of this.extendedFormServices) {
+            await extendedService.postPrepareForm(form, formInstance, formFieldValues, kixObject);
+        }
 
         (formInstance as any).formFieldValues = formFieldValues;
         for (const extendedService of this.extendedFormServices) {

@@ -86,7 +86,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 TicketProperty.PRIORITY_ID,
                 TicketProperty.RESPONSIBLE_ID,
                 TicketProperty.OWNER_ID,
-                TicketProperty.TIME_UNITS,
                 TicketProperty.STATE_ID,
                 TicketProperty.PENDING_TIME
             ], false,

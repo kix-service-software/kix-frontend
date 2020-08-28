@@ -25,7 +25,8 @@
     .value {
 
         >.dynamic-form-date-input.between,
-        >.dynamic-form-date-time-input {
+        >.dynamic-form-date-time-input,
+        >.dynamic-form-number-input.between {
             grid-gap: @margin-small/2 @margin-small;
 
             >div {
@@ -34,7 +35,8 @@
             }
         }
 
-        >.dynamic-form-date-input.between {
+        >.dynamic-form-date-input.between,
+        >.dynamic-form-number-input.between {
             display: grid;
             grid-template-columns: 1fr max-content 1fr;
 

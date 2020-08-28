@@ -47,6 +47,7 @@ import { Queue } from '../model/Queue';
 import { TicketState } from '../model/TicketState';
 import { TicketPriority } from '../model/TicketPriority';
 import { TicketType } from '../model/TicketType';
+import { ExtendedTicketDetailsDataBuilder } from './ExtendedTicketDetailsDataBuilder';
 
 export class TicketDetailsDataBuilder {
 
@@ -59,6 +60,13 @@ export class TicketDetailsDataBuilder {
             data['articles'] = await this.getArticles(token, ticket);
         }
         return data;
+    }
+
+    private static extendedDataBuilders: ExtendedTicketDetailsDataBuilder[] = [];
+    public static registerExtendedTicketDataBuilder(dataBuilder: ExtendedTicketDetailsDataBuilder) {
+        if (dataBuilder) {
+            this.extendedDataBuilders.push(dataBuilder);
+        }
     }
 
     private static async loadTicket(token: string, ticketId: number): Promise<Ticket> {
@@ -94,11 +102,6 @@ export class TicketDetailsDataBuilder {
             let ticketProperties = configuration.properties;
             if (ticket.StateType !== 'pending reminder' && ticket.StateType !== 'pending auto') {
                 ticketProperties = ticketProperties.filter((p) => p !== TicketProperty.PENDING_TIME);
-            }
-
-            const isAccountTimeEnabled = await this.isTimeAccountingEnabled(token);
-            if (!isAccountTimeEnabled) {
-                ticketProperties = ticketProperties.filter((p) => p !== TicketProperty.TIME_UNITS);
             }
 
             for (let property of ticketProperties) {
@@ -159,6 +162,13 @@ export class TicketDetailsDataBuilder {
     }
 
     private static async getDisplayValue(token: string, ticket: Ticket, property: string): Promise<string> {
+        for (const builder of this.extendedDataBuilders) {
+            const result = await builder.getDisplayValue(token, ticket, property);
+            if (typeof result !== 'undefined' && result !== null) {
+                return result;
+            }
+        }
+
         const value = ticket[property];
         let displayValue = value;
 
@@ -272,6 +282,13 @@ export class TicketDetailsDataBuilder {
     }
 
     private static async getPropertyText(token: string, property: string): Promise<string> {
+        for (const builder of this.extendedDataBuilders) {
+            const result = await builder.getPropertyText(token, property);
+            if (typeof result !== 'undefined' && result !== null) {
+                return result;
+            }
+        }
+
         let displayValue = property;
         switch (property) {
             case SearchProperty.FULLTEXT:
@@ -285,9 +302,6 @@ export class TicketDetailsDataBuilder {
                 break;
             case TicketProperty.CHANGED:
                 displayValue = 'Translatable#Changed at';
-                break;
-            case TicketProperty.TIME_UNITS:
-                displayValue = 'Translatable#Accounted time';
                 break;
             case TicketProperty.CREATED:
                 displayValue = 'Translatable#Created at';
@@ -421,17 +435,4 @@ export class TicketDetailsDataBuilder {
         ).catch(() => null);
         return attachment;
     }
-
-    private static async isTimeAccountingEnabled(token: string): Promise<boolean> {
-        let enabled = false;
-        const timeAccountingConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-            token, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.ACCOUNT_TIME], null, null
-        );
-        if (timeAccountingConfig && timeAccountingConfig[0]) {
-            enabled = (timeAccountingConfig[0].Value && timeAccountingConfig[0].Value === '1');
-        }
-
-        return enabled;
-    }
-
 }
