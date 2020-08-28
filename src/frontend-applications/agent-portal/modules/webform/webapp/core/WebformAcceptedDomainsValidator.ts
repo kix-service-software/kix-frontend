@@ -14,8 +14,6 @@ import { FormService } from '../../../base-components/webapp/core/FormService';
 import { ValidationSeverity } from '../../../base-components/webapp/core/ValidationSeverity';
 import { DynamicField } from '../../../dynamic-fields/model/DynamicField';
 import { WebformProperty } from '../../model/WebformProperty';
-import { Webform } from '../../model/Webform';
-import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class WebformAcceptedDomainsValidator implements IFormFieldValidator {
 
@@ -30,23 +28,11 @@ export class WebformAcceptedDomainsValidator implements IFormFieldValidator {
         if (formField.property === WebformProperty.ACCEPTED_DOMAINS) {
             const formInstance = await FormService.getInstance().getFormInstance(formId);
             const value = formInstance.getFormFieldValue<string>(formField.instanceId);
-            if (value && value.value && !value.value.match(/^(\*|\.\*|\.\+)$/)) {
-                const domains = Webform.getDomains(value.value, false);
-                if (domains.length) {
-                    for (const domain of domains) {
-                        if (domain && domain.match(/^\/.+\/$/)) {
-                            const error = Webform.checkRegEx(domain);
-                            if (error) {
-                                return new ValidationResult(ValidationSeverity.ERROR, error.message);
-                            }
-                        }
-                    }
-                } else {
-                    const fieldLabel = await TranslationService.translate(formField.label);
-                    const errorString = await TranslationService.translate(
-                        'Translatable#Required field {0} has no usable value.', [fieldLabel]
-                    );
-                    return new ValidationResult(ValidationSeverity.ERROR, errorString);
+            if (value && value.value && !value.value.match(/^\*$/)) {
+                try {
+                    const regex = new RegExp(value.value);
+                } catch (error) {
+                    return new ValidationResult(ValidationSeverity.ERROR, error.message);
                 }
             }
         }

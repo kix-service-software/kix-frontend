@@ -114,11 +114,6 @@ export class WebformFormService extends KIXObjectFormService {
                     value = users && !!users.length ? users[0].ObjectId : value;
                 }
                 break;
-            case WebformProperty.ACCEPTED_DOMAINS:
-                if (Array.isArray(value)) {
-                    value = value.join(',');
-                }
-                break;
             default:
         }
         return value;
@@ -235,15 +230,12 @@ export class WebformFormService extends KIXObjectFormService {
         formContext?: FormContext, formInstance?: FormInstance
     ): Promise<Array<[string, any]>> {
         const acceptedDomainsParameter = parameter.find((p) => p[0] === WebformProperty.ACCEPTED_DOMAINS);
-        if (acceptedDomainsParameter && acceptedDomainsParameter[1] !== null) {
-            let preparedValue: string;
-            if (acceptedDomainsParameter[1].match(/^(\*|\.(\*|\+))$/)) {
-                preparedValue = '/.*/';
-            } else {
-                const domains = Webform.getDomains(acceptedDomainsParameter[1]);
-                preparedValue = domains.join(',');
-            }
-            acceptedDomainsParameter[1] = preparedValue;
+        if (
+            acceptedDomainsParameter
+            && acceptedDomainsParameter[1]
+            && acceptedDomainsParameter[1].match(/^\*$/)
+        ) {
+            acceptedDomainsParameter[1] = '.*';
         }
         return super.postPrepareValues(parameter, createOptions, formContext, formInstance);
     }

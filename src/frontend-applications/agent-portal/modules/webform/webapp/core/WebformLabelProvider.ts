@@ -50,7 +50,6 @@ export class WebformLabelProvider extends LabelProvider {
                 displayValue = boolValue ? 'Translatable#Yes' : 'Translatable#No';
                 break;
             case WebformProperty.ACCEPTED_DOMAINS:
-                displayValue = Array.isArray(value) ? value.join(', ') : value.toString();
                 translatable = false;
                 break;
             case WebformProperty.QUEUE_ID:
