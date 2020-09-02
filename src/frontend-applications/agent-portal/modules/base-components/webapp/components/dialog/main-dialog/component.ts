@@ -131,7 +131,7 @@ export class MainDialogComponent implements IMainDialogListener {
 
     public setLoading(
         isLoading: boolean, loadingHint: string, showClose: boolean = false,
-        time: number = null, cancelCallback: () => void
+        time: number = null, cancelCallback: () => void, cancelButtonText?: string
     ): void {
         if (this.loadingTimeout) {
             window.clearTimeout(this.loadingTimeout);
@@ -143,6 +143,7 @@ export class MainDialogComponent implements IMainDialogListener {
                 this.state.showClose = showClose;
                 this.state.time = time;
                 this.state.cancelCallback = cancelCallback;
+                this.state.cancelButtonText = cancelButtonText;
             }, 500);
         } else {
             this.state.loadingHint = loadingHint;
@@ -150,6 +151,7 @@ export class MainDialogComponent implements IMainDialogListener {
             this.state.showClose = showClose;
             this.state.time = time;
             this.state.cancelCallback = cancelCallback;
+            this.state.cancelButtonText = cancelButtonText;
         }
     }
 

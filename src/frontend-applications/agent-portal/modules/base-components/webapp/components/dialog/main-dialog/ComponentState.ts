@@ -20,7 +20,8 @@ export class ComponentState {
         public showClose: boolean = false,
         public time: number = null,
         public cancelCallback: () => void = null,
-        public dialogWidgets: WidgetConfiguration[] = []
+        public dialogWidgets: WidgetConfiguration[] = [],
+        public cancelButtonText: string = null
     ) { }
 
 }
