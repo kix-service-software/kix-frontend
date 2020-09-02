@@ -25,7 +25,8 @@ export interface IMainDialogListener {
     setHint(hint: string): void;
 
     setLoading(
-        isLoading: boolean, loadingHint: string, showClose: boolean, time: number, cancelCallback: () => void
+        isLoading: boolean, loadingHint: string, showClose: boolean, time: number, cancelCallback: () => void,
+        cancelButtonText?: string
     ): void;
 
 }

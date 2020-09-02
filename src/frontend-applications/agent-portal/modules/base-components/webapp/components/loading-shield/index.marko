@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.loading-shield>
     <div.loading-info>
         <loading-spinner/>
@@ -22,9 +21,13 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
             </span>
         </else-if>
         <if(state.cancelCallback)>
-            <button.cancel-button type="button" on-click("cancel") title=state.translations["Translatable#Cancel"] disabled=state.cancel>
+            <button.default-button
+                type="button"
+                on-click("cancel")
+                title=(state.cancelButtonText ? state.cancelButtonText : state.translations["Translatable#Cancel"])
+                disabled=state.cancel>
                 <span.kix-icon-close/>
-                <translation-string pattern="Translatable#Cancel"/>
+                ${state.cancelButtonText ? state.cancelButtonText : state.translations["Translatable#Cancel"]}
             </button>
         </if>
     </div>
