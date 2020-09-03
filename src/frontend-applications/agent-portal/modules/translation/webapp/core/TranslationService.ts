@@ -230,7 +230,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         return language;
     }
 
-    public static async createTranslationObject(patterns: string[]): Promise<any> {
+    public static async createTranslationObject(patterns: string[]): Promise<{}> {
         const translationObject = {};
         for (const pattern of patterns) {
             const text = await TranslationService.translate(pattern);

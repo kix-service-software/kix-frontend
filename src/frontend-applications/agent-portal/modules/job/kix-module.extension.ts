@@ -41,6 +41,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
             '/kix-module-job$0/webapp/components/job-input-fetchAssetAttributesMapping', []
         ),
         new UIComponent('job-input-filter', '/kix-module-job$0/webapp/components/job-input-filter', []),
+        new UIComponent(
+            'job-input-ticketCreateDynamicField',
+            '/kix-module-job$0/webapp/components/job-input-ticketCreateDynamicField', []
+        ),
         new UIComponent('job-input-actions', '/kix-module-job$0/webapp/components/job-input-actions', []),
         new UIComponent('new-job-dialog', '/kix-module-job$0/webapp/components/new-job-dialog', []),
         new UIComponent('edit-job-dialog', '/kix-module-job$0/webapp/components/edit-job-dialog', []),

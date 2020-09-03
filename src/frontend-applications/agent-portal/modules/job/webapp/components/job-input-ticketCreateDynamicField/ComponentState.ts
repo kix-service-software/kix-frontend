@@ -8,14 +8,16 @@
  */
 
 import { FormInputComponentState } from '../../../../base-components/webapp/core/FormInputComponentState';
+import { IdService } from '../../../../../model/IdService';
 
 export class ComponentState extends FormInputComponentState<string> {
 
     public constructor(
-        public currentAssetValue: string = null,
+        public currentDFName: string = null,
         public currentDfValue: string = null,
-        public assetLabel: string = null,
-        public dfLabel: string = null
+        public dfNameLabel: string = null,
+        public dfValueLabel: string = null,
+        public treeId: string = IdService.generateDateBasedId('job-input-dynamicFields'),
     ) {
         super();
     }
