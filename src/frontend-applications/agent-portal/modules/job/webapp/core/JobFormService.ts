@@ -139,8 +139,8 @@ export class JobFormService extends KIXObjectFormService {
 
     public getNewFormField(f: FormFieldConfiguration, parent?: FormFieldConfiguration): FormFieldConfiguration {
         const field = super.getNewFormField(f, parent, false);
+        field.defaultValue = null;
         if (field.property === JobProperty.MACRO_ACTIONS) {
-            field.defaultValue = null;
             field.hint = field.defaultHint;
             field.children = [];
         }
@@ -201,7 +201,7 @@ export class JobFormService extends KIXObjectFormService {
             const action = actions.get(actionFieldInstanceId);
             if (action) {
                 if (valueName === 'SKIP') {
-                    // true means "skip" (checkbox), so valid id have to mean "invalid" (= 2)
+                    // true means "skip" (checkbox), so valid id have to be "invalid" (= 2)
                     action.ValidID = p[1] ? 2 : 1;
                 } else {
                     let value;

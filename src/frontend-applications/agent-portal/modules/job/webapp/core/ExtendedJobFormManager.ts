@@ -17,6 +17,7 @@ import { MacroAction } from '../../model/MacroAction';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
+import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
 // tslint:enable
 
 export class ExtendedJobFormManager implements IJobFormManager {
@@ -72,4 +73,25 @@ export class ExtendedJobFormManager implements IJobFormManager {
         return null;
     }
 
+    protected getOptionField(
+        option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string, fieldType?: string,
+        defaultValue?, countDefault?: number, countMax?: number, countMin?: number
+    ): FormFieldConfiguration {
+        return new FormFieldConfiguration(
+            `job-action-${actionType}-${option.Name}`, option.Label,
+            `ACTION###${actionFieldInstanceId}###${option.Name}`,
+            fieldType, Boolean(option.Required), option.Description, undefined,
+            typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined,
+            null, null, null, countDefault, countMax, countMin,
+        );
+    }
+
+    protected valueAsArray(action: MacroAction, optionName: string, value: any): any {
+        if (!action.Parameters[optionName]) {
+            return [value];
+        } else if (Array.isArray(action.Parameters[optionName])) {
+            action.Parameters[optionName].push(value);
+            return action.Parameters[optionName];
+        }
+    }
 }

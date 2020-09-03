@@ -7,14 +7,14 @@
  * --
  */
 
-import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
-import { MacroAction } from '../../model/MacroAction';
-import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
-import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
-import { ExtendedJobFormManager } from './ExtendedJobFormManager';
-import { JobTypes } from '../../model/JobTypes';
+import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
+import { MacroAction } from '../../../model/MacroAction';
+import { MacroActionTypeOption } from '../../../model/MacroActionTypeOption';
+import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
+import { ExtendedJobFormManager } from '../ExtendedJobFormManager';
+import { JobTypes } from '../../../model/JobTypes';
 
-export class TicketJobFormManagerTicketArticleCreate extends ExtendedJobFormManager {
+export class TicketArticleCreateBody extends ExtendedJobFormManager {
 
     public getActionOptionField(
         action: MacroAction, option: MacroActionTypeOption, actionType: string, actionFieldInstanceId: string,
@@ -37,5 +37,6 @@ export class TicketJobFormManagerTicketArticleCreate extends ExtendedJobFormMana
                 typeof defaultValue !== 'undefined' ? new FormFieldValue(defaultValue) : undefined
             );
         }
+        return;
     }
 }

@@ -8,6 +8,7 @@
         "require ./components/job-input-events",
         "require ./components/job-input-fetchAssetAttributesMapping",
         "require ./components/job-input-filter",
+        "require ./components/job-input-ticketCreateDynamicField",
         "require ./components/new-job-dialog",
         "require ./components/job-run-history-widget",
         "require ./components/job-run-log-download-cell",

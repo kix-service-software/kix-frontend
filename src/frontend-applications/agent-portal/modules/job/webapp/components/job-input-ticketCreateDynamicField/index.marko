@@ -1,0 +1,34 @@
+<!--
+Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+--
+This software comes with ABSOLUTELY NO WARRANTY. For details, see
+the enclosed file LICENSE for license information (GPL3). If you
+did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+--
+-->
+<if(state.field && state.prepared)>
+    <div.set-dynamic-field-entry>
+        <div>
+            <span>${state.dfNameLabel}:</span>
+            <form-list
+                placeholder=state.placeholder
+                required=state.field.required
+                on-focusLost("focusLost")
+                on-nodesChanged("nodesChanged")
+                invalid=state.invalid
+                treeId=state.treeId/>
+        </div>
+        <div>
+            <span>${state.dfValueLabel}:</span>
+            <input.input-style
+                class={
+                                invalid: state.invalid
+                            }
+                value=state.currentDfValue
+                type="text"
+                required=true
+                on-blur("focusLost")
+                on-input("valueChanged")/>
+        </div>
+    </div>
+</if>

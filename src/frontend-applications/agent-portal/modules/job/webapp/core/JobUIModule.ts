@@ -32,8 +32,9 @@ import { JobRunLabelProvider } from './JobRunLabelProvider';
 import { JobRunLogLabelProvider } from './JobRunLogLabelProvider';
 import { JobRunLogTableFactory } from './table/JobRunLogTableFactory';
 import { AbstractJobFormManager } from './AbstractJobFormManager';
-import { TicketJobFormManagerFetchAssetAttributes } from './TicketJobFormManagerFetchAssetAttributes';
-import { TicketJobFormManagerTicketArticleCreate } from './TicketJobFormManagerTicketArticleCreate';
+import { FetchAssetAttributes } from './extended-form-manager/FetchAssetAttributes';
+import { TicketArticleCreateBody } from './extended-form-manager/TicketArticleCreateBody';
+import { TicketCreateDynamicFields } from './extended-form-manager/TicketCreateDynamicFields';
 
 export class UIModule implements IUIModule {
 
@@ -91,10 +92,13 @@ export class UIModule implements IUIModule {
         const manager = JobFormService.getInstance().getJobFormManager(JobTypes.TICKET);
         if (manager) {
             (manager as AbstractJobFormManager).addExtendedJobFormManager(
-                new TicketJobFormManagerTicketArticleCreate()
+                new TicketArticleCreateBody()
             );
             (manager as AbstractJobFormManager).addExtendedJobFormManager(
-                new TicketJobFormManagerFetchAssetAttributes()
+                new FetchAssetAttributes()
+            );
+            (manager as AbstractJobFormManager).addExtendedJobFormManager(
+                new TicketCreateDynamicFields()
             );
         }
     }
