@@ -28,7 +28,7 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
     ): Promise<void> {
         const contactValue = changedFieldValues.find((cv) => cv[0] && cv[0].property === TicketProperty.CONTACT_ID);
         if (contactValue) {
-            let organisationId: number | string;
+            let organisationId: number | string = null;
             if (contactValue[1].value) {
                 organisationId = await this.getOrganisationsFromContact(contactValue[1].value);
             }

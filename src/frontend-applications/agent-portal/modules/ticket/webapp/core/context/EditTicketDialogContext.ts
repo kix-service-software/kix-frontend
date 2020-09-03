@@ -39,8 +39,6 @@ export class EditTicketDialogContext extends Context {
             eventSubscriberId: EditTicketDialogContext.CONTEXT_ID,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
                 if (eventId === FormEvent.VALUES_CHANGED) {
-                    this.setFormObject(data.formInstance.getForm().id);
-
                     const organisationValue = data.changedValues.find(
                         (cv) => cv[0] && cv[0].property === TicketProperty.ORGANISATION_ID
                     );
@@ -59,6 +57,8 @@ export class EditTicketDialogContext extends Context {
 
         });
 
+        await this.setFormObject(false);
+
         const ticket = await this.getObject<Ticket>(KIXObjectType.TICKET);
         if (ticket) {
             this.handleContact(new FormFieldValue(ticket.ContactID));
@@ -66,38 +66,57 @@ export class EditTicketDialogContext extends Context {
         }
     }
 
-    private async setFormObject(formId: string): Promise<void> {
+    private async setFormObject(overwrite: boolean = true): Promise<void> {
+        const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.TICKET, ServiceType.FORM
         );
         if (service) {
-            const newObject = {};
-            const parameter = await service.getFormParameter(formId);
-            parameter.forEach((p) => {
-                if (p[1] !== undefined) {
-                    newObject[p[0]] = p[1];
-                }
-            });
+            const ticket = await this.loadTicket();
+            let formObject = ticket;
+            if (overwrite) {
+                const parameter = await service.getFormParameter(formId);
+                parameter.forEach((p) => {
+                    if (p[1] !== undefined) {
+                        formObject[p[0]] = p[1];
+                    }
+                });
 
-            const formObject = await KIXObjectService.createObjectInstance<any>(
-                KIXObjectType.TICKET, newObject
-            );
+                formObject = await KIXObjectService.createObjectInstance<any>(
+                    KIXObjectType.TICKET, formObject
+                );
+            }
             this.setAdditionalInformation(AdditionalContextInformation.FORM_OBJECT, formObject);
         }
+    }
+
+    private async loadTicket(): Promise<Ticket> {
+        const ticketId = this.getObjectId();
+        const loadingOptions = new KIXObjectLoadingOptions(
+            null, null, null, [TicketProperty.LINK, KIXObjectProperty.DYNAMIC_FIELDS], [TicketProperty.LINK]
+        );
+
+        let tickets: Ticket[];
+        if (ticketId) {
+            tickets = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, [ticketId], loadingOptions
+            );
+        }
+
+        let ticket = new Ticket();
+        if (tickets && tickets.length) {
+            ticket = KIXObjectService.createObjectInstance(KIXObjectType.TICKET, tickets[0]);
+        }
+
+        return ticket;
     }
 
     public async getObject<O extends KIXObject>(kixObjectType: KIXObjectType = KIXObjectType.TICKET): Promise<O> {
         let object;
         if (kixObjectType === KIXObjectType.TICKET) {
-            const ticketId = this.getObjectId();
-            if (ticketId) {
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    null, null, null, [TicketProperty.LINK, KIXObjectProperty.DYNAMIC_FIELDS], [TicketProperty.LINK]
-                );
-                const objects = await KIXObjectService.loadObjects<Ticket>(
-                    KIXObjectType.TICKET, [ticketId], loadingOptions
-                );
-                object = objects && objects.length ? objects[0] : null;
+            object = this.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
+            if (!object) {
+                object = await this.loadTicket();
             }
         } else if (kixObjectType === KIXObjectType.ORGANISATION) {
             object = this.organisation;
@@ -132,6 +151,8 @@ export class EditTicketDialogContext extends Context {
             this.organisation = null;
         }
 
+        await this.setFormObject();
+
         this.listeners.forEach(
             (l) => l.objectChanged(organisationId, this.organisation, KIXObjectType.ORGANISATION)
         );
@@ -155,6 +176,8 @@ export class EditTicketDialogContext extends Context {
         } else {
             this.contact = null;
         }
+
+        await this.setFormObject();
 
         this.listeners.forEach(
             (l) => l.objectChanged(contactId, this.contact, KIXObjectType.CONTACT)
