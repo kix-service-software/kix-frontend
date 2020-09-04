@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../base-components/webapp/core/AbstractAction';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ComponentContent } from '../../../../base-components/webapp/core/ComponentContent';
 import { ConfirmOverlayContent } from '../../../../base-components/webapp/core/ConfirmOverlayContent';
@@ -20,7 +20,7 @@ import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObj
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ToastContent } from '../../../../base-components/webapp/core/ToastContent';
 
-export class MailFilterTableDeleteAction extends AbstractAction<ITable> {
+export class MailFilterTableDeleteAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 

@@ -11,10 +11,10 @@ import { AbstractAction } from '../../../base-components/webapp/core/AbstractAct
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../model/ContextMode';
-import { ITable } from '../../../base-components/webapp/core/table';
+import { Table } from '../../../base-components/webapp/core/table';
 import { EditSysConfigDialogContext } from './context';
 
-export class SysconfigEditAction extends AbstractAction<ITable> {
+export class SysconfigEditAction extends AbstractAction<Table> {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Edit';

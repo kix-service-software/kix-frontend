@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { ITable, Table, IRow, IColumn } from '../../../../base-components/webapp/core/table';
+import { Table, Row, Column } from '../../../../base-components/webapp/core/table';
 import { FAQArticleTableContentProvider } from '.';
 import { FAQArticleProperty } from '../../../model/FAQArticleProperty';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
@@ -31,7 +31,7 @@ export class FAQArticleTableFactory extends TableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean, objectType?: KIXObjectType | string,
         objects?: KIXObject[]
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short
@@ -136,7 +136,7 @@ export class FAQArticleTableFactory extends TableFactory {
     }
 
     public getColumnFilterValues<T extends KIXObject>(
-        rows: IRow[], column: IColumn, values: Array<[T, number]> = []
+        rows: Row[], column: Column, values: Array<[T, number]> = []
     ): Array<[T, number]> {
         if (column.getColumnId() === FAQArticleProperty.VOTES) {
             rows.forEach((r) => {

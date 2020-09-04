@@ -9,20 +9,20 @@
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { Organisation } from '../../../model/Organisation';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public organisation: Organisation = null,
-        public reminderTicketsTable: ITable = null,
+        public reminderTicketsTable: Table = null,
         public reminderFilterValue: string = null,
-        public newTicketsTable: ITable = null,
+        public newTicketsTable: Table = null,
         public newFilterValue: string = null,
-        public openTicketsTable: ITable = null,
+        public openTicketsTable: Table = null,
         public openFilterValue: string = null,
-        public pendingTicketsTable: ITable = null,
+        public pendingTicketsTable: Table = null,
         public pendingFilterValue: string = null,
         public actions: AbstractAction[] = [],
         public reminderTicketsCount: number = 0,

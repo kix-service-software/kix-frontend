@@ -28,6 +28,7 @@ import { LabelService } from './LabelService';
 import { SearchProperty } from '../../../search/model/SearchProperty';
 import { ExtendedLabelProvider } from './ExtendedLabelProvider';
 import { Label } from './Label';
+import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export class LabelProvider<T = any> implements ILabelProvider<T> {
 
@@ -150,21 +151,29 @@ export class LabelProvider<T = any> implements ILabelProvider<T> {
     }
 
     public async getDisplayText(
-        object: T, property: string, defaultValue?: string, translatable?: boolean, short?: boolean
+        object: any, property: string, defaultValue?: string, translatable?: boolean, short?: boolean
     ): Promise<string> {
-        let displayValue;
+        let displayValue: string;
 
-        if (property && property.match(this.dFRegEx)) {
-            const dfName = property.replace(this.dFRegEx, '$1');
-            let fieldValue: DynamicFieldValue;
-            if (object[KIXObjectProperty.DYNAMIC_FIELDS]) {
-                fieldValue = object[KIXObjectProperty.DYNAMIC_FIELDS].find((dfv) => dfv.Name === dfName);
-                if (fieldValue) {
-                    const preparedValue = await this.getDFDisplayValues(fieldValue);
-                    if (preparedValue && preparedValue[1]) {
-                        displayValue = preparedValue[1];
-                    } else {
-                        displayValue = fieldValue.DisplayValue.toString();
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName && object.KIXObjectType && object.ObjectId) {
+            const objects = await KIXObjectService.loadObjects(
+                object.KIXObjectType, [object.ObjectId],
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+            );
+
+            if (objects && objects.length) {
+                const kixObject = objects[0];
+                let fieldValue: DynamicFieldValue;
+                if (Array.isArray(kixObject.DynamicFields) && kixObject.DynamicFields.length) {
+                    fieldValue = kixObject.DynamicFields.find((dfv) => dfv.Name === dfName);
+                    if (fieldValue) {
+                        const preparedValue = await this.getDFDisplayValues(fieldValue);
+                        if (preparedValue && preparedValue[1]) {
+                            displayValue = preparedValue[1];
+                        } else {
+                            displayValue = fieldValue.DisplayValue.toString();
+                        }
                     }
                 }
             }

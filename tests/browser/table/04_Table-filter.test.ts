@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, RowObject, TableValue, TableEventData, TableEvent, ITableContentProvider, IRowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table, RowObject, TableValue, TableEventData, TableEvent, TableContentProvider, RowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { UIFilterCriterion } from '../../../src/frontend-applications/agent-portal/model/UIFilterCriterion';
 import { SearchOperator } from '../../../src/frontend-applications/agent-portal/modules/search/model/SearchOperator';
 import { IEventSubscriber } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IEventSubscriber';
@@ -25,7 +25,7 @@ const expect = chai.expect;
 describe('Table Filter Tests', () => {
 
     describe('Filter table rows by search value', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');
@@ -102,7 +102,7 @@ describe('Table Filter Tests', () => {
     });
 
     describe('Filter with UIFilterCriterion', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');
@@ -191,7 +191,7 @@ describe('Table Filter Tests', () => {
     });
 
     describe('Column filter getValues().', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');
@@ -249,7 +249,7 @@ describe('Table Filter Tests', () => {
     });
 
     describe('Set Column filter', () => {
-        let table: ITable;
+        let table: Table;
 
         beforeEach(async () => {
             table = new Table('test');
@@ -329,7 +329,7 @@ describe('Table Filter Tests', () => {
     });
 
     describe('Event Test', () => {
-        let table: ITable;
+        let table: Table;
         let subscriber: IEventSubscriber;
 
         before(async () => {
@@ -362,7 +362,7 @@ describe('Table Filter Tests', () => {
 
 });
 
-class TestTableContentProvider implements ITableContentProvider {
+class TestTableContentProvider implements TableContentProvider {
 
     public constructor(
         private rowCount = 1,
@@ -376,7 +376,7 @@ class TestTableContentProvider implements ITableContentProvider {
         return KIXObjectType.ANY;
     }
 
-    public async loadData(): Promise<IRowObject[]> {
+    public async loadData(): Promise<RowObject[]> {
         const objects = [];
         for (let r = 0; r < this.rowCount; r++) {
             const values: TableValue[] = [];

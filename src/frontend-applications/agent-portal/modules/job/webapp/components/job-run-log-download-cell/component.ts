@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { ICell, TableFactoryService, TableExportUtil } from '../../../../base-components/webapp/core/table';
+import { Cell, TableFactoryService, TableExportUtil } from '../../../../base-components/webapp/core/table';
 import { JobRun } from '../../../model/JobRun';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -29,7 +29,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         if (input.cell) {
-            const cell: ICell = input.cell;
+            const cell: Cell = input.cell;
             const jobRun: JobRun = cell.getRow().getRowObject().getObject();
             this.update(jobRun);
         }

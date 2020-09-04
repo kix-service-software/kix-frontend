@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable } from '../../../base-components/webapp/core/table';
+import { Table } from '../../../base-components/webapp/core/table';
 import { IEventSubscriber } from '../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../model/IdService';
@@ -21,7 +21,7 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { DialogEventData } from '../../../../modules/base-components/webapp/core/DialogEventData';
 
 
-export class BulkAction extends AbstractAction<ITable> implements IEventSubscriber {
+export class BulkAction extends AbstractAction<Table> implements IEventSubscriber {
 
     public hasLink: boolean = false;
 

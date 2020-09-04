@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { OrganisationTableContentProvider } from './OrganisationTableContentProvider';
 import { OrganisationProperty } from '../../../model/OrganisationProperty';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
@@ -29,7 +29,7 @@ export class OrganisationTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting);
         const table = new Table(tableKey, tableConfiguration, contextId);

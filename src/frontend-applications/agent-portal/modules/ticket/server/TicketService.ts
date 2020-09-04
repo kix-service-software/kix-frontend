@@ -392,18 +392,6 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterProperties = [
-            TicketProperty.TICKET_NUMBER,
-            TicketProperty.TITLE,
-            TicketProperty.PENDING_TIME,
-            TicketProperty.ORGANISATION_ID,
-            TicketProperty.CONTACT_ID,
-            TicketProperty.TYPE_ID,
-            TicketProperty.STATE_ID,
-            TicketProperty.QUEUE_ID,
-            TicketProperty.PRIORITY_ID,
-            TicketProperty.LOCK_ID,
-            TicketProperty.OWNER_ID,
-            TicketProperty.RESPONSIBLE_ID,
             TicketProperty.STATE,
             KIXObjectProperty.CREATE_BY,
             KIXObjectProperty.CHANGE_BY,
@@ -435,7 +423,8 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.PRIORITY_ID,
             TicketProperty.OWNER_ID,
             TicketProperty.RESPONSIBLE_ID,
-            TicketProperty.STATE_TYPE
+            TicketProperty.STATE_TYPE,
+            TicketProperty.LOCK_ID
         ];
 
         let searchCriteria = criteria.filter(

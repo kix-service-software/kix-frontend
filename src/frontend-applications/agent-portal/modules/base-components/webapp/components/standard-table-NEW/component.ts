@@ -11,7 +11,7 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { ComponentState } from './ComponentState';
 import { IEventSubscriber } from '../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
-import { Table, ITable, TableEvent, TableEventData, IRow, IColumn } from '../../core/table';
+import { Table, TableEvent, TableEventData, Row, Column } from '../../core/table';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 
@@ -39,7 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         return table && this.state.table.getTableId() !== table.getTableId();
     }
 
-    private async init(table: ITable): Promise<void> {
+    private async init(table: Table): Promise<void> {
         this.state.prepared = false;
         this.eventSubscriberId = table.getTableId();
 
@@ -114,7 +114,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
         if (eventId === TableEvent.SCROLL_TO_AND_TOGGLE_ROW) {
             if (data && data.tableId && data.tableId === this.state.table.getTableId() && data.rowId) {
-                const row: IRow = this.state.table.getRow(data.rowId);
+                const row: Row = this.state.table.getRow(data.rowId);
                 if (row) {
                     row.expand(true);
                     EventService.getInstance().publish(TableEvent.REFRESH, this.state.table.getTableId());
@@ -172,7 +172,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }
     }
 
-    private countRows(rows: IRow[]): number {
+    private countRows(rows: Row[]): number {
         let count = rows.length;
         rows.forEach((r) => count += this.countRows(r.getChildren()));
         return count;
@@ -197,7 +197,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         return withScroll;
     }
 
-    private getColumnSize(column: IColumn): number {
+    private getColumnSize(column: Column): number {
         let minWidth: number = (2.5 * this.browserFontSize);
         const config = column.getColumnConfiguration();
         if (config.showColumnIcon || config.showColumnTitle) {

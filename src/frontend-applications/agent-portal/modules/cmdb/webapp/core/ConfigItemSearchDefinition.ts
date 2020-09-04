@@ -42,7 +42,7 @@ export class ConfigItemSearchDefinition extends SearchDefinition {
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            criteria, null, null,
+            criteria, null, this.limit,
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links', ConfigItemProperty.CURRENT_VERSION],
             [VersionProperty.DATA, VersionProperty.PREPARED_DATA, 'Links']
         );

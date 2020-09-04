@@ -14,7 +14,7 @@ import { IEventSubscriber } from '../../../../../modules/base-components/webapp/
 import { IdService } from '../../../../../model/IdService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
-import { TableEventData, TableEvent, TableFactoryService, ITable } from '../../core/table';
+import { TableEventData, TableEvent, TableFactoryService, Table } from '../../core/table';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { SearchFormInstance } from '../../../../../modules/base-components/webapp/core/SearchFormInstance';
 import { SearchService, SearchContext } from '../../../../search/webapp/core';
@@ -32,6 +32,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { Error } from '../../../../../../../server/model/Error';
 import { ContextService } from '../../core/ContextService';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { TicketHistory } from '../../../../ticket/model/TicketHistory';
 
 class Component implements ISearchFormListener {
 
@@ -253,7 +254,7 @@ class Component implements ISearchFormListener {
         await this.setCanSearch();
     }
 
-    private async createTable(): Promise<ITable> {
+    private async createTable(): Promise<Table> {
         const tableConfiguration = new TableConfiguration(null, null, null,
             this.objectType, null, null, null, [], false, false, null, null,
             TableHeaderHeight.SMALL, TableRowHeight.SMALL
@@ -264,6 +265,14 @@ class Component implements ISearchFormListener {
         );
 
         return table;
+    }
+
+    public limitChanged(event: any): void {
+        const searchDefinition = SearchService.getInstance().getSearchDefinition(
+            SearchFormInstance.getInstance().getObjectType()
+        );
+        this.state.limit = event.target.value;
+        searchDefinition.setLimit(this.state.limit);
     }
 }
 

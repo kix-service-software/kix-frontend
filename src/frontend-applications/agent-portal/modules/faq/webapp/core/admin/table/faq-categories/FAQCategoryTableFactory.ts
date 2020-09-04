@@ -11,7 +11,7 @@ import { FAQCategoryDetailsContext } from '../../context';
 import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { ITable, Table } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { FAQCategoryTableContentProvider } from '.';
 import { FAQCategoryProperty } from '../../../../../model/FAQCategoryProperty';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
@@ -32,7 +32,7 @@ export class FAQCategoryTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);

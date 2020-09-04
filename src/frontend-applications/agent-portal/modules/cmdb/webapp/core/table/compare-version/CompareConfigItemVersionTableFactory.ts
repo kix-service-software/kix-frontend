@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../model/configuration/TableConfiguration';
-import { ITable, Table } from '../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../base-components/webapp/core/table';
 import { CompareConfigItemVersionTableContentProvider } from './CompareConfigItemVersionTableContentProvider';
 import { DefaultColumnConfiguration } from '../../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../../model/DataType';
@@ -24,7 +24,7 @@ export class CompareConfigItemVersionTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 

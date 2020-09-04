@@ -10,7 +10,7 @@
 import { SearchCache } from '../../model/SearchCache';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ITable } from '../../../base-components/webapp/core/table';
+import { Table } from '../../../base-components/webapp/core/table';
 import { SearchDefinition } from './SearchDefinition';
 import { SearchResultCategory } from './SearchResultCategory';
 import { IKIXObjectSearchListener } from './IKIXObjectSearchListener';
@@ -47,7 +47,7 @@ export class SearchService {
 
     private searchCache: SearchCache<KIXObject>;
     private formSearches: Map<KIXObjectType | string, (formId: string) => Promise<any[]>> = new Map();
-    private formTableConfigs: Map<KIXObjectType | string, ITable> = new Map();
+    private formTableConfigs: Map<KIXObjectType | string, Table> = new Map();
     private searchDefinitions: SearchDefinition[] = [];
     private activeSearchResultExplorerCategory: SearchResultCategory = null;
 
@@ -65,15 +65,15 @@ export class SearchService {
     public registerFormSearch<T extends KIXObject>(
         objectType: KIXObjectType | string,
         search: (formId: string) => Promise<T[]>,
-        tableConfig?: ITable): void {
+        tableConfig?: Table): void {
         this.formSearches.set(objectType, search);
         if (tableConfig) {
             this.formTableConfigs.set(objectType, tableConfig);
         }
     }
 
-    public getFormResultTable(objectType: KIXObjectType | string): ITable {
-        let tableConfig: ITable;
+    public getFormResultTable(objectType: KIXObjectType | string): Table {
+        let tableConfig: Table;
         if (this.formTableConfigs.has(objectType)) {
             tableConfig = this.formTableConfigs.get(objectType);
         }

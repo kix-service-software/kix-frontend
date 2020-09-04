@@ -7,14 +7,14 @@
  * --
  */
 
-import { ITable } from './table';
+import { Table } from './table';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 
 export interface IActionListener {
 
     listenerInstanceId: string;
 
-    actionDataChanged(data?: KIXObject[] | ITable): void;
+    actionDataChanged(data?: KIXObject[] | Table): void;
 
     actionsChanged(): void;
 

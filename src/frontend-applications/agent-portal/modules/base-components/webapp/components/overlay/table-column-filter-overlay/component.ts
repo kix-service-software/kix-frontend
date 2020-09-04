@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IColumn } from '../../../core/table';
+import { Column } from '../../../core/table';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 import { TreeHandler, TreeService, TreeNode } from '../../../core/tree';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
@@ -22,7 +22,7 @@ import { SortUtil } from '../../../../../../model/SortUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private column: IColumn;
+    private column: Column;
 
     public onCreate(): void {
         this.state = new ComponentState();

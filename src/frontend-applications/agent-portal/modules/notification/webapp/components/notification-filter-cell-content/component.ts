@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ICell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../base-components/webapp/core/table';
 import { NotificationFilterTableProperty, NotificationFilterManager } from '../../core';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
 
@@ -21,7 +21,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onInput(input: any): Promise<void> {
         if (input.cell) {
-            const propertyCell = (input.cell as ICell).getRow().getCell(NotificationFilterTableProperty.FIELD);
+            const propertyCell = (input.cell as Cell).getRow().getCell(NotificationFilterTableProperty.FIELD);
             const inputType = propertyCell ? await NotificationFilterManager.getInstance().getInputType(
                 propertyCell.getValue().objectValue
             ) : null;

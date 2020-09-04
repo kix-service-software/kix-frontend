@@ -9,14 +9,14 @@
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public actions: AbstractAction[] = [],
-        public table: ITable = null,
+        public table: Table = null,
         public title: string = 'Translatable#Assigned Roles'
     ) {
         super();

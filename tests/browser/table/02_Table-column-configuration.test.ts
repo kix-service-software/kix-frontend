@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table, TableContentProvider, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { DefaultColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
 import { IColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/IColumnConfiguration';
@@ -22,7 +22,7 @@ const expect = chai.expect;
 describe('Table Column Configuration Tests', () => {
 
     describe('Create a table instance with column configuration.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test')
@@ -60,7 +60,7 @@ describe('Table Column Configuration Tests', () => {
         });
     });
 });
-class TestTableContentProvider implements ITableContentProvider {
+class TestTableContentProvider implements TableContentProvider {
 
     public constructor(
         private rowCount = 1,
@@ -74,7 +74,7 @@ class TestTableContentProvider implements ITableContentProvider {
         return KIXObjectType.ANY;
     }
 
-    public async loadData(): Promise<IRowObject[]> {
+    public async loadData(): Promise<RowObject[]> {
         const rowObjects: RowObject[] = [];
         for (let r = 0; r < this.rowCount; r++) {
             const values: TableValue[] = [];

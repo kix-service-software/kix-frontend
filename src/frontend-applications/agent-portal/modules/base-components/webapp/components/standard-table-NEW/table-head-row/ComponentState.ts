@@ -7,12 +7,12 @@
  * --
  */
 
-import { IColumn } from '../../../core/table';
+import { Column } from '../../../core/table';
 
 export class ComponentState {
 
     public constructor(
-        public columns: IColumn[] = [],
+        public columns: Column[] = [],
         public toggleAll: boolean = false,
         public closeAll: boolean = true
     ) { }

@@ -8,13 +8,13 @@
  */
 
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-sysconfig-overview',
-        public table: ITable = null,
+        public table: Table = null,
         public filterValue: string = '',
         public prepared: boolean = false,
         public title: string = 'Internationalisation: Translations (0)',

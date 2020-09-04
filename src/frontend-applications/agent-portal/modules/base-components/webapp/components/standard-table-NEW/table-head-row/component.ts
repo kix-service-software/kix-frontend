@@ -10,14 +10,14 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../../../modules/base-components/webapp/core/IEventSubscriber';
-import { ITable, TableEvent, TableEventData, SelectionState } from '../../../core/table';
+import { Table, TableEvent, TableEventData, SelectionState } from '../../../core/table';
 import { EventService } from '../../../../../../modules/base-components/webapp/core/EventService';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
     public eventSubscriberId: string;
 
-    private table: ITable;
+    private table: Table;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();

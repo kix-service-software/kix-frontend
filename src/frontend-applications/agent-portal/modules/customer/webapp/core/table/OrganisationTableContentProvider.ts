@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { Organisation } from '../../../model/Organisation';
-import { ITable, IRowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { OrganisationProperty } from '../../../model/OrganisationProperty';
@@ -18,7 +18,7 @@ import { TicketStats } from '../../../model/TicketStats';
 export class OrganisationTableContentProvider extends TableContentProvider<Organisation> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: string[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -26,7 +26,7 @@ export class OrganisationTableContentProvider extends TableContentProvider<Organ
         super(KIXObjectType.ORGANISATION, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<Organisation>>> {
+    public async loadData(): Promise<Array<RowObject<Organisation>>> {
         const rowObjects = await super.loadData();
 
         rowObjects.forEach((ro) => {

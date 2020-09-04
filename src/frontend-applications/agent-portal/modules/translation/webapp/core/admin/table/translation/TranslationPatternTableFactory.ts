@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { ITable, Table } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TranslationPatternTableContentProvider } from '.';
 import { TranslationPatternProperty } from '../../../../../model/TranslationPatternProperty';
 import { TableHeaderHeight } from '../../../../../../../model/configuration/TableHeaderHeight';
@@ -30,7 +30,7 @@ export class TranslationPatternTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 
         const table = new Table(tableKey, tableConfiguration);

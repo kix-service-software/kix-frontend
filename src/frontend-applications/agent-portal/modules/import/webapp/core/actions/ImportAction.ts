@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { ImportService } from '../';
@@ -18,7 +18,7 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { DialogEvents } from '../../../../../modules/base-components/webapp/core/DialogEvents';
 import { DialogEventData } from '../../../../../modules/base-components/webapp/core/DialogEventData';
 
-export class ImportAction extends AbstractAction<ITable> {
+export class ImportAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 

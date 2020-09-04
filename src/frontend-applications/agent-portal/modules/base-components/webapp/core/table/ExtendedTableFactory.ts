@@ -11,10 +11,10 @@ import { ITableFactory } from './ITableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { ITable } from './ITable';
+import { Table } from './Table';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
-import { IRow } from './IRow';
-import { IColumn } from './IColumn';
+import { Row } from './Row';
+import { Column } from './Column';
 
 export abstract class ExtendedTableFactory implements ITableFactory {
 
@@ -34,7 +34,7 @@ export abstract class ExtendedTableFactory implements ITableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: string, objects?: KIXObject[]
-    ): ITable {
+    ): Table {
         return null;
     }
 
@@ -43,7 +43,7 @@ export abstract class ExtendedTableFactory implements ITableFactory {
     }
 
     public getColumnFilterValues<T extends KIXObject = any>(
-        rows: Array<IRow<any>>, column: IColumn<any>
+        rows: Array<Row<any>>, column: Column<any>
     ): Array<[T, number]> {
         return null;
     }

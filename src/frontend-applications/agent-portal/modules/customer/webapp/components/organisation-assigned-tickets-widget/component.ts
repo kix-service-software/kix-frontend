@@ -17,7 +17,7 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { Organisation } from '../../../model/Organisation';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableFactoryService, TableEventData, ITable } from '../../../../base-components/webapp/core/table';
+import { TableEvent, TableFactoryService, TableEventData, Table } from '../../../../base-components/webapp/core/table';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
@@ -173,7 +173,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
+                new KIXObjectLoadingOptions(filter), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -264,7 +264,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
+                new KIXObjectLoadingOptions(filter), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -349,7 +349,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
+                new KIXObjectLoadingOptions(filter), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -441,7 +441,7 @@ class Component {
 
             const tableConfiguration = new TableConfiguration(null, null, null,
                 KIXObjectType.TICKET,
-                new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]), null,
+                new KIXObjectLoadingOptions(filter), null,
                 [
                     new DefaultColumnConfiguration(null, null, null,
                         TicketProperty.PRIORITY_ID, false, true, true, true, 65, true, true, true
@@ -525,7 +525,7 @@ class Component {
         return ids.length;
     }
 
-    private getTicketIds(table: ITable): number[] {
+    private getTicketIds(table: Table): number[] {
         if (table) {
             return table.getRows(true)
                 .filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')
@@ -591,7 +591,7 @@ class Component {
         this.filter(this.state.pendingTicketsTable, filterValue);
     }
 
-    private filter(table: ITable, filterValue: string) {
+    private filter(table: Table, filterValue: string) {
         table.setFilter(filterValue);
         table.filter();
     }

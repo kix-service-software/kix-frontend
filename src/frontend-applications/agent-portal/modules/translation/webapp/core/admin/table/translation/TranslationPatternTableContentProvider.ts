@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { TranslationPattern } from '../../../../../model/TranslationPattern';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { KIXObjectService } from '../../../../../../../modules/base-components/webapp/core/KIXObjectService';
@@ -18,7 +18,7 @@ import { TranslationPatternProperty } from '../../../../../model/TranslationPatt
 export class TranslationPatternTableContentProvider extends TableContentProvider<TranslationPattern> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -26,7 +26,7 @@ export class TranslationPatternTableContentProvider extends TableContentProvider
         super(KIXObjectType.TRANSLATION_PATTERN, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<TranslationPattern>>> {
+    public async loadData(): Promise<Array<RowObject<TranslationPattern>>> {
         let objects = [];
         if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             objects = await KIXObjectService.loadObjects<TranslationPattern>(
@@ -41,7 +41,7 @@ export class TranslationPatternTableContentProvider extends TableContentProvider
             const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
             for (const column of columns) {
                 if (column.property === TranslationPatternProperty.VALUE) {
-                    const tableValue = await this.getTableValue(t, column.property, column);
+                    const tableValue = new TableValue(column.property, t[column.property]);
                     values.push(tableValue);
                 } else {
                     values.push(new TableValue(column.property, t[column.property], t[column.property]));

@@ -7,13 +7,13 @@
  * --
  */
 
-import { IColumn } from '../../../../core/table';
+import { Column } from '../../../../core/table';
 import { ObjectIcon } from '../../../../../../icon/model/ObjectIcon';
 
 export class ComponentState {
 
     public loading: boolean = true;
-    public column: IColumn = null;
+    public column: Column = null;
     public icon: string | ObjectIcon = null;
     public title: string = '';
     public size: number = 100;

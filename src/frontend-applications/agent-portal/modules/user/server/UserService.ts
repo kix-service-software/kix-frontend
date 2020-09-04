@@ -22,6 +22,8 @@ import { SetPreferenceOptions } from '../model/SetPreferenceOptions';
 import { UserPreference } from '../model/UserPreference';
 import { Error } from '../../../../../server/model/Error';
 import { UserProperty } from '../model/UserProperty';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { SearchOperator } from '../../search/model/SearchOperator';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -283,5 +285,27 @@ export class UserService extends KIXObjectAPIService {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
     }
+
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const filterProperties = [
+            UserProperty.USER_LOGIN,
+            'UserEmail',
+            'UserFirstname',
+            'UserLastname',
+        ];
+        const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
+        return filterCriteria;
+    }
+
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        const searchProperties = [];
+
+        const searchCriteria = criteria.filter(
+            (f) => searchProperties.some((sp) => sp === f.property) && f.operator !== SearchOperator.NOT_EQUALS
+        );
+
+        return searchCriteria;
+    }
+
 
 }

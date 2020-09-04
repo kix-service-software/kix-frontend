@@ -7,11 +7,10 @@
  * --
  */
 
-import { IRowObject } from './IRowObject';
 import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
 
-export class RowObject<T = any> implements IRowObject<T> {
+export class RowObject<T = any> {
 
     private children: RowObject[] = [];
     private rowValueState: ValueState;

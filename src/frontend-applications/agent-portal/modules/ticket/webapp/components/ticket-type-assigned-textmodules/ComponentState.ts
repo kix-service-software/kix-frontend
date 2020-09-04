@@ -8,7 +8,7 @@
  */
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
 export class ComponentState extends WidgetComponentState {
@@ -16,7 +16,7 @@ export class ComponentState extends WidgetComponentState {
     public constructor(
         public title: string = '',
         public filterCount: number = 0,
-        public table: ITable = null,
+        public table: Table = null,
         public actions: AbstractAction[] = []
     ) {
         super();

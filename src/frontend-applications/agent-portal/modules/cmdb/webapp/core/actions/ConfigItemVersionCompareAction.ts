@@ -9,13 +9,13 @@
 
 import { CompareConfigItemVersionDialogContext } from '../context';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { Version } from '../../../model/Version';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../model/ContextMode';
 
-export class ConfigItemVersionCompareAction extends AbstractAction<ITable> {
+export class ConfigItemVersionCompareAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 

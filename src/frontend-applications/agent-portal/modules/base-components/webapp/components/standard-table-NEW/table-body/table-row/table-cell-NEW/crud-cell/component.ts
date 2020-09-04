@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent
 } from '../../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ICell } from '../../../../../../core/table';
+import { Cell } from '../../../../../../core/table';
 import { CRUD } from '../../../../../../../../../../../server/model/rest/CRUD';
 import { LabelService } from '../../../../../../../../../modules/base-components/webapp/core/LabelService';
 import { KIXObjectType } from '../../../../../../../../../model/kix/KIXObjectType';
@@ -25,7 +25,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        const cell: ICell = input.cell;
+        const cell: Cell = input.cell;
         if (cell) {
             const property = cell.getProperty();
 

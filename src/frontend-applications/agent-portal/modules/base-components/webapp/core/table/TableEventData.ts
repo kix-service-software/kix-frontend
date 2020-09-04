@@ -7,7 +7,7 @@
  * --
  */
 
-import { ITable } from './ITable';
+import { Table } from './Table';
 
 export class TableEventData {
 
@@ -15,7 +15,7 @@ export class TableEventData {
         public tableId: string,
         public rowId?: string,
         public columnId?: string,
-        public table?: ITable,
+        public table?: Table,
         public openRows?: boolean
     ) { }
 }

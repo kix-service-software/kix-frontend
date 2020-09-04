@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { ITable, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
+import { Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { TicketTableContentProvider } from '.';
 import { TicketProperty } from '../../../model/TicketProperty';
 import { DataType } from '../../../../../model/DataType';
@@ -28,7 +28,7 @@ export class TicketTableFactory extends TableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[],
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short

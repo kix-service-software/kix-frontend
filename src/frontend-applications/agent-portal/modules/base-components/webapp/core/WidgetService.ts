@@ -7,7 +7,7 @@
  * --
  */
 
-import { ITable } from './table';
+import { Table } from './table';
 import { IAction } from './IAction';
 import { IActionListener } from './IActionListener';
 import { WidgetType } from '../../../../model/configuration/WidgetType';
@@ -96,7 +96,7 @@ export class WidgetService {
         }
     }
 
-    public setActionData(instanceId: string, data: KIXObject[] | ITable) {
+    public setActionData(instanceId: string, data: KIXObject[] | Table) {
         if (this.widgetActions.has(instanceId)) {
             this.widgetActions.get(instanceId)[0].forEach((a) => a.setData(data));
             const listener = this.actionListenerListeners.find((l) => l.listenerInstanceId === instanceId);

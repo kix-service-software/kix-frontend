@@ -38,9 +38,7 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
                         TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
                         FilterDataType.NUMERIC, FilterType.AND, ticket.TicketID
                     ));
-                    const loadingOptions = new KIXObjectLoadingOptions(
-                        filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]
-                    );
+                    const loadingOptions = new KIXObjectLoadingOptions(filter);
                     tickets = await KIXObjectService.loadObjects<Ticket>(KIXObjectType.TICKET, null, loadingOptions)
                         .catch(() => []);
                 }
@@ -106,9 +104,7 @@ export class TicketsForAssetsHandler implements IObjectReferenceHandler {
                         FilterDataType.NUMERIC, FilterType.AND, ticket.TicketID
                     ));
                 }
-                const loadingOptions = new KIXObjectLoadingOptions(
-                    filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]
-                );
+                const loadingOptions = new KIXObjectLoadingOptions(filter);
                 tickets = await KIXObjectService.loadObjects<Ticket>(KIXObjectType.TICKET, null, loadingOptions)
                     .catch(() => []);
             }

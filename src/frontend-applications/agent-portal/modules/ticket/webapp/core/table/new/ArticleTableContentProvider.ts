@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Article } from '../../../../model/Article';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
@@ -18,7 +18,7 @@ import { ArticleProperty } from '../../../../model/ArticleProperty';
 export class ArticleTableContentProvider extends TableContentProvider<Article> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -26,7 +26,7 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
         super(KIXObjectType.ARTICLE, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<Article>>> {
+    public async loadData(): Promise<Array<RowObject<Article>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -46,7 +46,7 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
                         } else if (column.property === ArticleProperty.ARTICLE_INFORMATION) {
                             values.push(new TableValue(ArticleProperty.ARTICLE_INFORMATION, null));
                         } else {
-                            const tableValue = await this.getTableValue(a, column.property, column);
+                            const tableValue = new TableValue(column.property, a[column.property]);
                             values.push(tableValue);
                         }
                     }

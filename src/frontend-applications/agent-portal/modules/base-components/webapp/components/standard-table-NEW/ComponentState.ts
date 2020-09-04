@@ -7,12 +7,12 @@
  * --
  */
 
-import { ITable } from '../../core/table';
+import { Table } from '../../core/table';
 
 export class ComponentState {
 
     public constructor(
-        public table: ITable = null,
+        public table: Table = null,
         public tableHeight: string = 'unset',
         public prepared: boolean = false
     ) { }
