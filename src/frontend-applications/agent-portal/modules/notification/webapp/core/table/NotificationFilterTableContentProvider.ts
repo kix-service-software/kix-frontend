@@ -10,7 +10,7 @@
 
 import { NotificationFilterTableProperty } from './NotificationFilterTableProperty';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -27,7 +27,7 @@ import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicField
 export class NotificationFilterTableContentProvider extends TableContentProvider<any> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -35,11 +35,11 @@ export class NotificationFilterTableContentProvider extends TableContentProvider
         super(KIXObjectType.NOTIFICATION, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<IRowObject[]> {
+    public async loadData(): Promise<RowObject[]> {
         const context = await ContextService.getInstance().getContext(NotificationDetailsContext.CONTEXT_ID);
         const notification = context ? await context.getObject<Notification>() : null;
 
-        const rowObjects: IRowObject[] = [];
+        const rowObjects: RowObject[] = [];
         if (notification && notification.Filter) {
             const filterIterator = notification.Filter.entries();
             let filter = filterIterator.next();

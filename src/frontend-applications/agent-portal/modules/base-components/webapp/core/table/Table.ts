@@ -7,13 +7,10 @@
  * --
  */
 
-import { ITable } from './ITable';
 import { Row } from './Row';
 import { Column } from './Column';
-import { IColumn } from './IColumn';
 import { ITableContentProvider } from './ITableContentProvider';
-import { IRowObject } from './IRowObject';
-import { IRow } from './IRow';
+import { RowObject } from './RowObject';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { TableSortUtil } from './TableSortUtil';
 import { SelectionState } from './SelectionState';
@@ -36,11 +33,11 @@ import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 
 
-export class Table implements ITable {
+export class Table implements Table {
 
-    private rows: IRow[] = [];
-    private filteredRows: IRow[] = null;
-    private columns: IColumn[] = [];
+    private rows: Row[] = [];
+    private filteredRows: Row[] = null;
+    private columns: Column[] = [];
     private contentProvider: ITableContentProvider;
     private columnConfiguration: IColumnConfiguration[];
     private objectType: KIXObjectType | string;
@@ -106,6 +103,8 @@ export class Table implements ITable {
                 this.columns.forEach((c) => {
                     r.addCell(new TableValue(c.getColumnId(), null));
                 });
+
+                r.initializeDisplayValues();
             });
 
             if (this.sortColumnId && this.sortOrder) {
@@ -134,13 +133,13 @@ export class Table implements ITable {
         }
     }
 
-    public createRow(tableObject?: IRowObject): IRow {
+    public createRow(tableObject?: RowObject): Row {
         const row = new Row(this, tableObject);
         this.rows.push(row);
         return row;
     }
 
-    private async createColumn(columnConfiguration: IColumnConfiguration): Promise<IColumn> {
+    private async createColumn(columnConfiguration: IColumnConfiguration): Promise<Column> {
         let column;
 
         let canCreate: boolean = false;
@@ -178,20 +177,20 @@ export class Table implements ITable {
         return can;
     }
 
-    public getRows(all: boolean = false): IRow[] {
+    public getRows(all: boolean = false): Row[] {
         if (all) {
             return this.rows;
         }
         return this.filteredRows ? [...this.filteredRows] : [...this.rows];
     }
 
-    public getSelectedRows(all?: boolean): IRow[] {
+    public getSelectedRows(all?: boolean): Row[] {
         const rows = this.getRows(all);
         const selectedRows = this.determineSelectedRows(rows);
         return selectedRows;
     }
 
-    private determineSelectedRows(rows: IRow[]): IRow[] {
+    private determineSelectedRows(rows: Row[]): Row[] {
         let selectedRows = [];
 
         rows.forEach((r) => {
@@ -209,7 +208,7 @@ export class Table implements ITable {
         return selectedRows;
     }
 
-    public getRow(rowId: string): IRow {
+    public getRow(rowId: string): Row {
         // TODO: neue Zeile liefern, nicht die Referenz
         return this.rows.find((r) => r.getRowId() === rowId);
     }
@@ -264,15 +263,15 @@ export class Table implements ITable {
         return replacedRows;
     }
 
-    public getColumns(): IColumn[] {
+    public getColumns(): Column[] {
         return [...this.columns];
     }
 
-    public getColumn(columnId: string): IColumn {
+    public getColumn(columnId: string): Column {
         return this.columns.find((r) => r.getColumnId() === columnId);
     }
 
-    public removeColumns(columnIds: string[]): IColumn[] | IColumnConfiguration[] {
+    public removeColumns(columnIds: string[]): Column[] | IColumnConfiguration[] {
         const removedColumns = [];
         if (!this.initialized) {
             this.columnConfiguration = this.columnConfiguration.filter((cc) => {
@@ -359,7 +358,7 @@ export class Table implements ITable {
         for (const column of this.getColumns()) {
             const filter: [string, UIFilterCriterion[]] = column.getFilter();
             if (this.isFilterDefined(filter[0], filter[1])) {
-                const rows: IRow[] = [];
+                const rows: Row[] = [];
                 if (filter[0] && filter[0] !== '') {
                     filter[1] = [
                         new UIFilterCriterion(column.getColumnId(), SearchOperator.CONTAINS, filter[0], false, true)
@@ -463,7 +462,7 @@ export class Table implements ITable {
         });
     }
 
-    private getRowByObject(object: any): IRow {
+    private getRowByObject(object: any): Row {
         return this.rows.filter((r) => r.getRowObject() !== null && typeof r.getRowObject() !== 'undefined')
             .find((r) => r.getRowObject().getObject() && r.getRowObject().getObject().equals(object));
     }
@@ -483,7 +482,7 @@ export class Table implements ITable {
 
     public async reload(keepSelection: boolean = false, sort: boolean = true): Promise<void> {
         EventService.getInstance().publish(TableEvent.RELOAD, new TableEventData(this.getTableId()));
-        let selectedRows: IRow[] = [];
+        let selectedRows: Row[] = [];
         if (keepSelection) {
             selectedRows = this.getSelectedRows(true);
         }
@@ -507,6 +506,10 @@ export class Table implements ITable {
         if (sort && this.sortColumnId && this.sortOrder) {
             await this.sort(this.sortColumnId, this.sortOrder);
         }
+
+        this.rows.forEach((r) => {
+            r.initializeDisplayValues();
+        });
 
         EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
         EventService.getInstance().publish(TableEvent.RELOADED, new TableEventData(this.getTableId()));
@@ -563,7 +566,7 @@ export class Table implements ITable {
         }
     }
 
-    public getRowByObjectId(objectId: string | number): IRow {
+    public getRowByObjectId(objectId: string | number): Row {
         const row = this.rows.find((r) => {
             const object = r.getRowObject().getObject();
             return object && object.ObjectId === objectId;

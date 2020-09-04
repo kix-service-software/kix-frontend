@@ -18,7 +18,7 @@ import { WidgetService } from '../../../../../modules/base-components/webapp/cor
 import { WidgetType } from '../../../../../model/configuration/WidgetType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import {
-    TableEvent, TableFactoryService, TableEventData, ITable, ValueState
+    TableEvent, TableFactoryService, TableEventData, Table, ValueState
 } from '../../../../base-components/webapp/core/table';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
 import { TreeNode, TreeService } from '../../../../base-components/webapp/core/tree';
@@ -227,7 +227,7 @@ class LinkDialogComponent {
         }
     }
 
-    private setLinkedAsValues(table: ITable, links: CreateLinkDescription[] = []) {
+    private setLinkedAsValues(table: Table, links: CreateLinkDescription[] = []) {
         const values = links.map((ld) => {
             const name = ld.linkTypeDescription.asSource
                 ? ld.linkTypeDescription.linkType.SourceName

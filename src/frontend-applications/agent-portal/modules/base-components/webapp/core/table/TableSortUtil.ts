@@ -7,7 +7,7 @@
  * --
  */
 
-import { IRow } from './IRow';
+import { Row } from './Row';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { DataType } from '../../../../../model/DataType';
 import { SortUtil } from '../../../../../model/SortUtil';
@@ -15,8 +15,8 @@ import { SortUtil } from '../../../../../model/SortUtil';
 export class TableSortUtil {
 
     public static sort(
-        rows: IRow[], columnId: string, sortOrder: SortOrder, dataType: DataType
-    ): IRow[] {
+        rows: Row[], columnId: string, sortOrder: SortOrder, dataType: DataType
+    ): Row[] {
         if (columnId && sortOrder && dataType) {
             rows.sort((a, b) => {
                 const cellA = a.getCell(columnId);

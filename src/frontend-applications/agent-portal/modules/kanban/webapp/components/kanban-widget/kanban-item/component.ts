@@ -79,9 +79,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async ticketChanged(data: any, eventId: string): Promise<void> {
         if (data.ticketId && Number(data.ticketId) === this.state.ticket.TicketID) {
-            const loadingOptions = new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]);
             const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [data.ticketId], loadingOptions
+                KIXObjectType.TICKET, [data.ticketId]
             );
 
             if (tickets && tickets.length) {

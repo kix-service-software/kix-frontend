@@ -7,13 +7,13 @@
  * --
  */
 
-import { IRow } from '../../../../../core/table';
+import { Row } from '../../../../../core/table';
 import { IAction } from '../../../../../../../../modules/base-components/webapp/core/IAction';
 
 export class ComponentState {
 
     public constructor(
-        public row: IRow = null,
+        public row: Row = null,
         public width: string = '100%',
         public actions: IAction[] = null,
         public loading = true

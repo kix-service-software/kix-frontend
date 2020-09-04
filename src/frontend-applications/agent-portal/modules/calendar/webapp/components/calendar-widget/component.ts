@@ -72,7 +72,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, null, new KIXObjectLoadingOptions(
-                ticketFilter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.STATE_TYPE]
+                ticketFilter, null, null, [TicketProperty.STATE_TYPE]
             )
         );
 
@@ -268,8 +268,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             const template = KIXModulesService.getComponentTemplate('calendar-schedule-details');
 
             const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [schedule.raw.TicketID],
-                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+                KIXObjectType.TICKET, [schedule.raw.TicketID]
             );
 
             if (tickets && tickets.length) {

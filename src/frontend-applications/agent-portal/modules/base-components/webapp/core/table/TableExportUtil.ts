@@ -7,14 +7,14 @@
  * --
  */
 
-import { ITable } from './ITable';
+import { Table } from './Table';
 import { LabelService } from '../LabelService';
 import { BrowserUtil } from '../BrowserUtil';
 
 export class TableExportUtil {
 
     public static async export(
-        table: ITable, additionalColumns?: string[], useDisplayString?: boolean,
+        table: Table, additionalColumns?: string[], useDisplayString?: boolean,
         sortColumns?: boolean, allRows?: boolean, filename?: string, withDate?: boolean
     ): Promise<void> {
         const csvString = await this.prepareCSVString(table, additionalColumns, useDisplayString, sortColumns, allRows);
@@ -23,7 +23,7 @@ export class TableExportUtil {
     }
 
     private static async prepareCSVString(
-        table: ITable, additionalColumns: string[] = [], useDisplayString: boolean = true,
+        table: Table, additionalColumns: string[] = [], useDisplayString: boolean = true,
         sortColumns: boolean = true, allRows: boolean = false
     ): Promise<string> {
         const objectType = table.getObjectType();

@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { MailFilterMatch } from '../../../model/MailFilterMatch';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -20,7 +20,7 @@ import { DataType } from '../../../../../model/DataType';
 export class MailFilterMatchTableContentProvider extends TableContentProvider<MailFilterMatch> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -28,7 +28,7 @@ export class MailFilterMatchTableContentProvider extends TableContentProvider<Ma
         super(KIXObjectType.MAIL_FILTER_MATCH, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<MailFilterMatch>>> {
+    public async loadData(): Promise<Array<RowObject<MailFilterMatch>>> {
         let rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);

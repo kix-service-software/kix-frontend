@@ -7,7 +7,7 @@
  * --
  */
 
-import { IRowObject } from './IRowObject';
+import { RowObject } from './RowObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export interface ITableContentProvider<T = any> {
@@ -16,7 +16,7 @@ export interface ITableContentProvider<T = any> {
 
     getObjectType(): KIXObjectType | string;
 
-    loadData(): Promise<Array<IRowObject<T>>>;
+    loadData(): Promise<Array<RowObject<T>>>;
 
     destroy(): void;
 

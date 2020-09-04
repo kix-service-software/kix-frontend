@@ -7,7 +7,7 @@
  * --
  */
 
-import { ICell } from '../../../../../../core/table';
+import { Cell } from '../../../../../../core/table';
 import { ObjectIcon } from '../../../../../../../../icon/model/ObjectIcon';
 
 export class ComponentState {
@@ -15,7 +15,7 @@ export class ComponentState {
     public constructor(
         public icons: Array<string | ObjectIcon> = null,
         public displayText: string = null,
-        public cell: ICell = null
+        public cell: Cell = null
     ) { }
 
 }

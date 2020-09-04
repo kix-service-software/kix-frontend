@@ -10,7 +10,7 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Article } from '../../../model/Article';
-import { ICell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../base-components/webapp/core/table';
 import { OverlayService } from '../../../../../modules/base-components/webapp/core/OverlayService';
 import { OverlayType } from '../../../../../modules/base-components/webapp/core/OverlayType';
 import { ComponentContent } from '../../../../../modules/base-components/webapp/core/ComponentContent';
@@ -24,7 +24,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public onInput(input: any): void {
-        const cell: ICell = input.cell;
+        const cell: Cell = input.cell;
         if (cell) {
             this.article = cell.getRow().getRowObject().getObject();
             if (this.article && this.article.Attachments) {

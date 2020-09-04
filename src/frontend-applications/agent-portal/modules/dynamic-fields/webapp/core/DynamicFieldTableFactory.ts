@@ -8,7 +8,7 @@
  */
 
 import {
-    ITable, Table, TableHeaderHeight, TableRowHeight
+    Table, TableHeaderHeight, TableRowHeight
 } from '../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableFactory } from '../../../base-components/webapp/core/table/TableFactory';
@@ -28,7 +28,7 @@ export class DynamicFieldTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 

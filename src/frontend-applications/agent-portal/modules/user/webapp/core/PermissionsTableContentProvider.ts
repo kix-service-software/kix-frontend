@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../base-components/webapp/core/table/TableContentProvider';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
@@ -20,14 +20,14 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
 
     public constructor(
         public objectType: KIXObjectType | string,
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string,
     ) {
         super(KIXObjectType.PERMISSION, table, objectIds, loadingOptions, contextId);
     }
-    public async loadData(): Promise<Array<IRowObject<Permission>>> {
+    public async loadData(): Promise<Array<RowObject<Permission>>> {
         let object: KIXObject;
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -51,7 +51,7 @@ export class PermissionsTableContentProvider extends TableContentProvider<Permis
 
                 const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                 for (const column of columns) {
-                    const tableValue = await this.getTableValue(p, column.property, column);
+                    const tableValue = new TableValue(column.property, object[column.property]);
                     values.push(tableValue);
                 }
 

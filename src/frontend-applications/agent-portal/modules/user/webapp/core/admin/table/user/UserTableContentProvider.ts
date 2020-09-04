@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { User } from '../../../../../model/User';
-import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 
@@ -17,7 +17,7 @@ import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 export class UserTableContentProvider extends TableContentProvider<User> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string

@@ -10,7 +10,7 @@
 import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Version } from '../../../../model/Version';
 import {
-    ITable, IRowObject, RowObject, TableValue, ValueState
+    Table, RowObject, TableValue, ValueState
 } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
@@ -24,7 +24,7 @@ import { DateTimeUtil } from '../../../../../../modules/base-components/webapp/c
 export class CompareConfigItemVersionTableContentProvider extends TableContentProvider<Version> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -32,7 +32,7 @@ export class CompareConfigItemVersionTableContentProvider extends TableContentPr
         super(KIXObjectType.CONFIG_ITEM_VERSION_COMPARE, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<Version>>> {
+    public async loadData(): Promise<Array<RowObject<Version>>> {
         let rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);

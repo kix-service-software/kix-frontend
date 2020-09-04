@@ -9,14 +9,14 @@
 
 import { DynamicField } from '../../../model/DynamicField';
 import { CheckListItem } from '../../core/CheckListItem';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 
 export class ComponentState {
 
     public constructor(
         public field: DynamicField = null,
         public checklist: CheckListItem[] = [],
-        public table: ITable = null
+        public table: Table = null
     ) { }
 
 }

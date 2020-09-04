@@ -34,6 +34,12 @@ export abstract class SearchDefinition {
 
     protected extendedDefinitions: SearchDefinition[] = [];
 
+    protected limit: number;
+
+    public setLimit(limit: number): void {
+        this.limit = limit && limit > 0 ? limit : null;
+    }
+
     public addExtendedDefinitions(definition: SearchDefinition): void {
         this.extendedDefinitions.push(definition);
     }
@@ -77,7 +83,7 @@ export abstract class SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria);
+        return new KIXObjectLoadingOptions(criteria, null, this.limit);
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {

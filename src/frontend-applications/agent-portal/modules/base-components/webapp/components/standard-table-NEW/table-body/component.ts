@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ITable, TableEvent, TableEventData } from '../../../core/table';
+import { Table, TableEvent, TableEventData } from '../../../core/table';
 import { EventService } from '../../../core/EventService';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
 
@@ -21,7 +21,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     public selectionEnabled: boolean;
     public toggleEnabled: boolean;
 
-    private table: ITable;
+    private table: Table;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
@@ -29,7 +29,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public onInput(input: any): void {
         if (input.table) {
-            const t: ITable = input.table;
+            const t: Table = input.table;
             this.eventSubscriberId = 'table-body-' + t.getTableId();
             this.columnLength = t.getColumns().length;
             this.selectionEnabled = t.getTableConfiguration().enableSelection;

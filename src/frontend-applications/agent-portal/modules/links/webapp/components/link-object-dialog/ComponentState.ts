@@ -8,7 +8,7 @@
  */
 
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { LinkTypeDescription } from '../../../model/LinkTypeDescription';
 import { CreateLinkDescription } from '../../../server/api/CreateLinkDescription';
 import { IdService } from '../../../../../model/IdService';
@@ -17,7 +17,7 @@ export class ComponentState {
 
     public constructor(
         public loadNodes: () => Promise<TreeNode[]> = null,
-        public table: ITable = null,
+        public table: Table = null,
         public resultCount: number = 0,
         public currentLinkTypeDescription: LinkTypeDescription = null,
         public linkDescriptions: CreateLinkDescription[] = null,

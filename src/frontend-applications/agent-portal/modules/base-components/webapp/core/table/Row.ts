@@ -7,11 +7,8 @@
  * --
  */
 
-import { IRow } from './IRow';
-import { IRowObject } from './IRowObject';
-import { ICell } from './ICell';
 import { Cell } from './Cell';
-import { ITable } from './ITable';
+import { Table } from './Table';
 import { TableEvent } from './TableEvent';
 import { RowObject } from './RowObject';
 import { TableValue } from './TableValue';
@@ -26,22 +23,21 @@ import { EventService } from '../EventService';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { DataType } from '../../../../../model/DataType';
 
-export class Row<T = any> implements IRow<T> {
+export class Row<T = any> {
 
     private id: string;
-    private cells: ICell[] = [];
+    private cells: Cell[] = [];
     private selected: boolean = false;
     private canBeSelected: boolean = true;
     private expanded: boolean = false;
-    private children: IRow[] = [];
-    private filteredChildren: IRow[] = null;
+    private children: Row[] = [];
+    private filteredChildren: Row[] = null;
 
     public filterMatch: boolean = true;
 
-    public constructor(
-        private table: ITable, private rowObject?: IRowObject
-    ) {
+    public constructor(private table: Table, private rowObject?: RowObject) {
         this.id = IdService.generateDateBasedId(table.getTableId() + '-row-');
+
         if (rowObject) {
             rowObject.getValues().forEach((v) => this.cells.push(new Cell(this, v)));
             this.createChildren(rowObject.getChildren());
@@ -51,10 +47,22 @@ export class Row<T = any> implements IRow<T> {
     private createChildren(children: RowObject[]): void {
         children.forEach((c) => {
             this.children.push(new Row(this.table, c));
+        }
+
+        );
+    }
+
+    public initializeDisplayValues(): void {
+        this.cells.forEach((c) => {
+            c.initDisplayValue();
+
+            if (Array.isArray(this.children) && this.children.length) {
+                this.children.forEach((cr) => cr.initializeDisplayValues());
+            }
         });
     }
 
-    public getTable(): ITable {
+    public getTable(): Table {
         return this.table;
     }
 
@@ -62,19 +70,19 @@ export class Row<T = any> implements IRow<T> {
         return this.id;
     }
 
-    public getRowObject(): IRowObject<T> {
+    public getRowObject(): RowObject<T> {
         return this.rowObject;
     }
 
-    public getChildren(): IRow[] {
+    public getChildren(): Row[] {
         return this.filteredChildren ? this.filteredChildren : this.children;
     }
 
-    public getCells(): ICell[] {
+    public getCells(): Cell[] {
         return this.cells;
     }
 
-    public getCell(property: string): ICell {
+    public getCell(property: string): Cell {
         return this.cells.find((c) => c.getProperty() === property);
     }
 
@@ -87,6 +95,7 @@ export class Row<T = any> implements IRow<T> {
         }
 
         let criteriaMatch = true;
+
         if (criteria && criteria.length) {
             criteriaMatch = await this.checkCriteria(criteria);
         }
@@ -98,8 +107,10 @@ export class Row<T = any> implements IRow<T> {
         if (this.children && this.children.length) {
             this.filteredChildren = [];
             const children = [...this.children];
+
             for (const child of children) {
                 const childMatch = await child.filter(filterValue, criteria);
+
                 if (childMatch) {
                     this.filteredChildren.push(child);
                 }
@@ -128,6 +139,7 @@ export class Row<T = any> implements IRow<T> {
                 break;
             } else {
                 const match = await this.checkCellForCriteria(c);
+
                 if (!match) {
                     result = false;
                     break;
@@ -141,8 +153,10 @@ export class Row<T = any> implements IRow<T> {
     private async checkCellForCriteria(criteria: UIFilterCriterion): Promise<boolean> {
         const cell = this.getCell(criteria.property);
         const column = this.getTable().getColumn(criteria.property);
+
         if (cell && column) {
             const match = await cell.filter(null, [criteria]);
+
             if (!match) {
                 return false;
             }
@@ -155,13 +169,16 @@ export class Row<T = any> implements IRow<T> {
 
     private async checkFilterValue(filterValue: string): Promise<boolean> {
         const columns = this.getTable().getColumns();
+
         for (const column of columns) {
             const cell = this.getCell(column.getColumnId());
             const match = cell ? await cell.filter(filterValue, null) : null;
+
             if (match) {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -189,17 +206,17 @@ export class Row<T = any> implements IRow<T> {
 
         if (selectChildren && this.children) {
             let children = this.children;
+
             if (!withoutFilter) {
                 children = this.children.filter((c: Row) => c.filterMatch);
             }
+
             children.forEach((c) => c.select(selected, selectChildren, withoutFilter, silent));
         }
 
         if (notify && !silent) {
-            EventService.getInstance().publish(
-                TableEvent.ROW_SELECTION_CHANGED,
-                new TableEventData(this.getTable().getTableId(), this.getRowId())
-            );
+            EventService.getInstance().publish(TableEvent.ROW_SELECTION_CHANGED,
+                new TableEventData(this.getTable().getTableId(), this.getRowId()));
         }
     }
 
@@ -218,18 +235,18 @@ export class Row<T = any> implements IRow<T> {
         } else {
             if (this.isSelectable()) {
                 this.canBeSelected = false;
+
                 if (this.isSelected()) {
                     this.select(false);
                 }
+
                 notify = true;
             }
         }
 
         if (notify) {
-            EventService.getInstance().publish(
-                TableEvent.ROW_SELECTABLE_CHANGED,
-                new TableEventData(this.getTable().getTableId(), this.getRowId())
-            );
+            EventService.getInstance().publish(TableEvent.ROW_SELECTABLE_CHANGED,
+                new TableEventData(this.getTable().getTableId(), this.getRowId()));
         }
     }
 
@@ -253,36 +270,38 @@ export class Row<T = any> implements IRow<T> {
         }
 
         if (notify) {
-            EventService.getInstance().publish(
-                TableEvent.ROW_TOGGLED,
-                new TableEventData(this.getTable().getTableId(), this.getRowId(), null, this.getTable())
-            );
+            EventService.getInstance().publish(TableEvent.ROW_TOGGLED,
+                new TableEventData(this.getTable().getTableId(), this.getRowId(), null, this.getTable()));
         }
     }
 
     public updateValues(): void {
         this.getTable().getColumns().forEach((c) => {
             const cell = this.getCell(c.getColumnId());
+
             if (!cell) {
                 this.cells.push(new Cell(this, new TableValue(c.getColumnId(), null)));
             }
-        });
+        }
+
+        );
     }
 
     public setValueState(state: ValueState): void {
         this.getRowObject().setValueState(state);
-        EventService.getInstance().publish(
-            TableEvent.ROW_VALUE_STATE_CHANGED,
-            new TableEventData(this.getTable().getTableId(), this.getRowId())
-        );
+        EventService.getInstance().publish(TableEvent.ROW_VALUE_STATE_CHANGED,
+            new TableEventData(this.getTable().getTableId(), this.getRowId()));
     }
 
     public addCell(value: TableValue): void {
         const cell = this.getCell(value.property);
+
         if (!cell) {
             this.cells.push(new Cell(this, value));
         }
+
         const children = this.getChildren();
+
         if (Array.isArray(children)) {
             children.forEach((r) => r.addCell(value));
         }
@@ -307,6 +326,7 @@ export class Row<T = any> implements IRow<T> {
     public sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): void {
         if (this.children && this.children.length) {
             this.children = TableSortUtil.sort(this.children, columnId, sortOrder, dataType);
+
             for (const row of this.children) {
                 row.sortChildren(columnId, sortOrder, dataType);
             }

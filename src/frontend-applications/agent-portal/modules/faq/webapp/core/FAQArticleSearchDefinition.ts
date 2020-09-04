@@ -30,7 +30,7 @@ export class FAQArticleSearchDefinition extends SearchDefinition {
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            criteria, null, null, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
+            criteria, null, this.limit, [KIXObjectProperty.LINKS, FAQArticleProperty.VOTES], [KIXObjectProperty.LINKS]
         );
     }
 

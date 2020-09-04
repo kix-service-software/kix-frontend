@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Ticket } from '../../../../model/Ticket';
-import { ITable } from '../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../../model/kix/KIXObject';
@@ -17,7 +17,7 @@ import { KIXObject } from '../../../../../../model/kix/KIXObject';
 export class TicketTableContentProvider extends TableContentProvider<Ticket> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string,

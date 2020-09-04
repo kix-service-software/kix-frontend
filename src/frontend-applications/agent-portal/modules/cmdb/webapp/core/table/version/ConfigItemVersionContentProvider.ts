@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Version } from '../../../../model/Version';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../modules/base-components/webapp/core/ContextService';
@@ -20,7 +20,7 @@ import { VersionProperty } from '../../../../model/VersionProperty';
 export class ConfigItemVersionContentProvider extends TableContentProvider<Version> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -28,7 +28,7 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
         super(KIXObjectType.CONFIG_ITEM, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<Version>>> {
+    public async loadData(): Promise<Array<RowObject<Version>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -63,7 +63,7 @@ export class ConfigItemVersionContentProvider extends TableContentProvider<Versi
                                 VersionProperty.BASED_ON_CLASS_VERSION, v.Definition.Version, basedOnDefinitionString
                             ));
                         } else {
-                            const tableValue = await this.getTableValue(v, column.property, column);
+                            const tableValue = new TableValue(column.property, v[column.property]);
                             values.push(tableValue);
                         }
                     }

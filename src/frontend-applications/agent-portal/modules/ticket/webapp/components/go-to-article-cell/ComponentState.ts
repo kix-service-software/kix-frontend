@@ -7,13 +7,13 @@
  * --
  */
 
-import { ICell } from '../../../../base-components/webapp/core/table/ICell';
+import { Cell } from '../../../../base-components/webapp/core/table/Cell';
 
 
 export class ComponentState {
 
     public constructor(
-        public cell: ICell = null,
+        public cell: Cell = null,
         public isActive: boolean = false
     ) { }
 

@@ -8,37 +8,20 @@
  */
 
 import { IdService } from '../../../../../model/IdService';
-import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { TableWidgetConfiguration } from '../../../../../model/configuration/TableWidgetConfiguration';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { SortOrder } from '../../../../../model/SortOrder';
-import { ContactProperty } from '../../../../customer/model/ContactProperty';
-import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
-import { UserProperty } from '../../../model/UserProperty';
-import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
-import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
+import { Table } from '../../../../base-components/webapp/core/table';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('user-admin-users'),
-        public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
-            'table-widget', 'Translatable#User Management: Users',
-            ['user-admin-user-create-action', 'csv-export-action'], null,
-            new TableWidgetConfiguration(
-                null, null, null, KIXObjectType.USER, [ContactProperty.LASTNAME, SortOrder.UP],
-                null,
-                new TableConfiguration(
-                    null, null, undefined, KIXObjectType.USER,
-                    new KIXObjectLoadingOptions(
-                        null, null, null, [UserProperty.PREFERENCES, UserProperty.CONTACT]
-                    ), null, undefined, [], true, false, null, null,
-                    TableHeaderHeight.LARGE, TableRowHeight.LARGE
-                )
-            ), false, false,
-            'kix-icon-gears'
-        )
-    ) { }
+        public table: Table = null,
+        public prepared: boolean = false,
+        public title: string = 'User Management: Users (0)',
+        public placeholder: string = 'Please enter a search term.',
+        public filterValue: string = ''
+    ) {
+        super();
+    }
 
 }

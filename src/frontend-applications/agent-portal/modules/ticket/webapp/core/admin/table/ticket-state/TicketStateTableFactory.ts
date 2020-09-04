@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../../../model/configuration/TableConfiguration';
-import { ITable, Table } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TicketStateTableContentProvider } from './TicketStateTableContentProvider';
 import { TicketStateProperty } from '../../../../../model/TicketStateProperty';
 import { KIXObjectProperty } from '../../../../../../../model/kix/KIXObjectProperty';
@@ -32,7 +32,7 @@ export class TicketStateTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 

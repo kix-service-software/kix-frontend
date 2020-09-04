@@ -9,14 +9,14 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { MailFilter } from '../../../model/MailFilter';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 export class MailFilterTableContentProvider extends TableContentProvider<MailFilter> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string

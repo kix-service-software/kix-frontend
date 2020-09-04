@@ -7,24 +7,27 @@
  * --
  */
 
-import { ICell } from './ICell';
-import { IRow } from './IRow';
+import { Row } from './Row';
 import { LabelService } from '../LabelService';
 import { TableValue } from './TableValue';
 import { UIFilterCriterion } from '../../../../../model/UIFilterCriterion';
 import { FilterUtil } from '../FilterUtil';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
-export class Cell implements ICell {
+export class Cell {
 
     private loadingPromise: Promise<string>;
 
     public constructor(
-        private row: IRow,
+        private row: Row,
         private tableValue: TableValue
     ) { }
 
-    public getRow(): IRow {
+    public initDisplayValue(): void {
+        this.tableValue.initDisplayValue(this);
+    }
+
+    public getRow(): Row {
         return this.row;
     }
 

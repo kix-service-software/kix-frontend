@@ -18,7 +18,6 @@ import { EventService } from '../../../../../modules/base-components/webapp/core
 import { ApplicationEvent } from '../../../../../modules/base-components/webapp/core/ApplicationEvent';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
 
@@ -58,7 +57,7 @@ export class TicketContext extends Context {
         EventService.getInstance().publish(ContextUIEvent.RELOAD_OBJECTS, KIXObjectType.TICKET);
 
         const loadingOptions = new KIXObjectLoadingOptions(
-            [], null, null, [TicketProperty.STATE, TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
+            [], null, null, [TicketProperty.STATE, TicketProperty.WATCHERS]
         );
 
         if (this.queueId) {
@@ -84,7 +83,7 @@ export class TicketContext extends Context {
                 TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
             ));
             loadingOptions.filter.push(new FilterCriteria(
-                TicketProperty.STATE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'new'
+                TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'new'
             ));
         } else {
             loadingOptions.filter.push(new FilterCriteria(

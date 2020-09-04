@@ -8,14 +8,14 @@
  */
 
 import { TableContentProvider } from '../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable } from '../../../base-components/webapp/core/table';
+import { Table } from '../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class WebformTableContentProvider extends TableContentProvider {
 
     public constructor(
-        table: ITable, objectIds: number[], loadingOptions: KIXObjectLoadingOptions, contextId?: string
+        table: Table, objectIds: number[], loadingOptions: KIXObjectLoadingOptions, contextId?: string
     ) {
         super(KIXObjectType.WEBFORM, table, objectIds, loadingOptions, contextId);
     }

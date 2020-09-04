@@ -8,7 +8,7 @@
  */
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { ITable } from '../../core/table';
+import { Table } from '../../core/table';
 import { IDynamicFormManager } from '../../core/dynamic-form/IDynamicFormManager';
 
 export class ComponentState extends AbstractComponentState {
@@ -16,9 +16,10 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public resultCount: number = 0,
         public canSearch: boolean = false,
-        public table: ITable = null,
+        public table: Table = null,
         public manager: IDynamicFormManager = null,
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public limit: number = 500
     ) {
         super();
     }

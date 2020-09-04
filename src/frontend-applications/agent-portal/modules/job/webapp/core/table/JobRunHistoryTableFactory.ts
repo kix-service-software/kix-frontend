@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { ITable, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
+import { Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
 import { DataType } from '../../../../../model/DataType';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
@@ -25,7 +25,7 @@ export class JobRunHistoryTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);

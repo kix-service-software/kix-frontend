@@ -8,7 +8,7 @@
  */
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable, IRowObject } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ImportExportTemplateRun } from '../../../model/ImportExportTemplateRun';
@@ -17,7 +17,7 @@ import { ContextService } from '../../../../base-components/webapp/core/ContextS
 export class ImportExportTemplateRunTableContentProvider extends TableContentProvider<ImportExportTemplateRun> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -25,13 +25,13 @@ export class ImportExportTemplateRunTableContentProvider extends TableContentPro
         super(KIXObjectType.IMPORT_EXPORT_TEMPLATE_RUN, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<ImportExportTemplateRun>>> {
+    public async loadData(): Promise<Array<RowObject<ImportExportTemplateRun>>> {
         let objects = [];
         // first object id is template id
         if (this.contextId && this.objectIds && this.objectIds[0]) {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList('RUNS_OF_TEMPLATE_' + this.objectIds[0]) : [];
         }
-        return await this.getRowObjects(objects, new Map());
+        return await this.getRowObjects(objects);
     }
 }

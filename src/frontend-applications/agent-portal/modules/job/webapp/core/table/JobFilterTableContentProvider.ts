@@ -10,7 +10,7 @@
 import { JobDetailsContext } from '../context';
 import { JobFilterTableProperty } from './JobFilterTableProperty';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -25,7 +25,7 @@ import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicField
 export class JobFilterTableContentProvider extends TableContentProvider<any> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -33,11 +33,11 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
         super(KIXObjectType.JOB, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<IRowObject[]> {
+    public async loadData(): Promise<RowObject[]> {
         const context = await ContextService.getInstance().getContext(JobDetailsContext.CONTEXT_ID);
         const job = context ? await context.getObject<Job>() : null;
 
-        const rowObjects: IRowObject[] = [];
+        const rowObjects: RowObject[] = [];
         if (job && job.Filter && typeof job.Filter === 'object') {
             for (const filter in job.Filter) {
                 if (filter) {

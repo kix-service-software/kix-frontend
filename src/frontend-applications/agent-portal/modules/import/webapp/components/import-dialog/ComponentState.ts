@@ -9,7 +9,7 @@
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
 import { ImportManager } from '../../core';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 
 export class ComponentState extends AbstractComponentState {
 
@@ -17,7 +17,7 @@ export class ComponentState extends AbstractComponentState {
         public instanceId: string = null,
         public importConfigFormId: string = null,
         public importManager: ImportManager = null,
-        public table: ITable = null,
+        public table: Table = null,
         public tableTitle: string = null,
         public canRun: boolean = false,
         public run: boolean = false

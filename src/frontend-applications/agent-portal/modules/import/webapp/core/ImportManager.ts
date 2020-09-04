@@ -24,7 +24,7 @@ import { ImportPropertyOperator } from './ImportPropertyOperator';
 import { ImportPropertyOperatorUtil } from './ImportPropertyOperatorUtil';
 import { InputFieldTypes } from '../../../../modules/base-components/webapp/core/InputFieldTypes';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
-import { IColumn } from '../../../base-components/webapp/core/table';
+import { Column } from '../../../base-components/webapp/core/table';
 import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
 import { Error } from '../../../../../../server/model/Error';
 
@@ -148,7 +148,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
         )];
     }
 
-    public async execute(object: KIXObject, columns: IColumn[]): Promise<void> {
+    public async execute(object: KIXObject, columns: Column[]): Promise<void> {
         this.importRun = true;
 
         await this.checkObject(object).then(async () => {
@@ -183,7 +183,7 @@ export abstract class ImportManager extends AbstractDynamicFormManager {
         return null;
     }
 
-    protected async prepareParameter(object: KIXObject, columns: IColumn[]): Promise<Array<[string, any]>> {
+    protected async prepareParameter(object: KIXObject, columns: Column[]): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
         const objectProperties = await this.getColumnProperties();
         for (const prop in object) {

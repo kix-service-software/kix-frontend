@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
-import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { SysConfigOption } from '../../../model/SysConfigOption';
@@ -25,7 +25,7 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 export class SysConfigTableContentProvider extends TableContentProvider<SysConfigOptionDefinition> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -33,7 +33,7 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
         super(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<SysConfigOptionDefinition>>> {
+    public async loadData(): Promise<Array<RowObject<SysConfigOptionDefinition>>> {
 
         const configLevel = await KIXObjectService.loadObjects<SysConfigOption>(
             KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.CONFIG_LEVEL]
@@ -76,7 +76,7 @@ export class SysConfigTableContentProvider extends TableContentProvider<SysConfi
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
-            const tableValue = await this.getTableValue(definition, column.property, column);
+            const tableValue = new TableValue(column.property, definition[column.property]);
             values.push(tableValue);
         }
 

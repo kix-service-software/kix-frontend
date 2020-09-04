@@ -8,14 +8,14 @@
  */
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { BulkManager } from '../../core/BulkManager';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public objectCount: number = 0,
-        public table: ITable = null,
+        public table: Table = null,
         public bulkManager: BulkManager = null,
         public tableTitle: string = '',
         public canRun: boolean = false,

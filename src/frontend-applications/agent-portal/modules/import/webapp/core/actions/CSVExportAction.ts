@@ -8,10 +8,10 @@
  */
 
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable, TableExportUtil } from '../../../../base-components/webapp/core/table';
+import { Table, TableExportUtil } from '../../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
-export class CSVExportAction extends AbstractAction<ITable> {
+export class CSVExportAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 

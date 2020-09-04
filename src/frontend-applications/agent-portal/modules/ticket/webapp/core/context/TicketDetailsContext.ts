@@ -86,7 +86,7 @@ export class TicketDetailsContext extends Context {
             [
                 KIXObjectProperty.DYNAMIC_FIELDS, KIXObjectProperty.LINKS,
                 TicketProperty.HISTORY, TicketProperty.WATCHERS, TicketProperty.ARTICLES,
-                'Flags', 'Attachments'],
+                'Flags', 'Attachments', 'ObjectActions'],
             [KIXObjectProperty.LINKS]
         );
 

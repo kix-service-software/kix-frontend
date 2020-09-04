@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, TableEventData, TableEvent, ITableContentProvider, IRowObject, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table, TableEventData, TableEvent, TableContentProvider, RowObject, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { DataType } from '../../../src/frontend-applications/agent-portal/model/DataType';
 import { SortOrder } from '../../../src/frontend-applications/agent-portal/model/SortOrder';
 import { IEventSubscriber } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/IEventSubscriber';
@@ -25,7 +25,7 @@ const expect = chai.expect;
 describe('Table Sort Tests', () => {
 
     describe('Sort table rows by column', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');
@@ -102,7 +102,7 @@ describe('Table Sort Tests', () => {
 
     });
     describe('Sort table on initialisation', () => {
-        let table: ITable;
+        let table: Table;
         let subscriber: IEventSubscriber;
 
         before(async () => {
@@ -165,7 +165,7 @@ describe('Table Sort Tests', () => {
     });
 
     describe('Sort table performance', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');
@@ -188,7 +188,7 @@ describe('Table Sort Tests', () => {
     });
 });
 
-class TestTableContentProvider implements ITableContentProvider {
+class TestTableContentProvider implements TableContentProvider {
 
     public constructor(
         private rowCount = 1,
@@ -213,7 +213,7 @@ class TestTableContentProvider implements ITableContentProvider {
         return KIXObjectType.ANY;
     }
 
-    public async loadData(): Promise<IRowObject[]> {
+    public async loadData(): Promise<RowObject[]> {
         const rowObjects: RowObject[] = [];
         for (let r = 0; r < this.rowCount; r++) {
             const values: TableValue[] = [];

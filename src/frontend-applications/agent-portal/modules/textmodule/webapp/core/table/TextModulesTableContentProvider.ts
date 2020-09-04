@@ -8,7 +8,7 @@
  */
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TextModule } from '../../../model/TextModule';
@@ -16,7 +16,7 @@ import { TextModule } from '../../../model/TextModule';
 export class TextModulesTableContentProvider extends TableContentProvider<TextModule> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string

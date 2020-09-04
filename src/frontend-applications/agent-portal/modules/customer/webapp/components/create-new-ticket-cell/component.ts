@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ICell } from '../../../../base-components/webapp/core/table';
+import { Cell } from '../../../../base-components/webapp/core/table';
 import { Contact } from '../../../model/Contact';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -24,7 +24,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         if (input.cell) {
-            const cell: ICell = input.cell;
+            const cell: Cell = input.cell;
             const contact: Contact = cell.getRow().getRowObject().getObject();
             this.update(contact);
 

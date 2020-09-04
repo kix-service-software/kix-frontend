@@ -7,8 +7,8 @@
  * --
  */
 
-import { ITableFactory } from './ITableFactory';
-import { ITable } from '.';
+import { TableFactory } from './TableFactory';
+import { Table } from '.';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { ContextService } from '../ContextService';
@@ -75,11 +75,11 @@ export class TableFactoryService {
         }
     }
 
-    private factories: ITableFactory[] = [];
+    private factories: TableFactory[] = [];
 
-    private contextTableInstances: Map<string, Map<string, ITable>> = new Map();
+    private contextTableInstances: Map<string, Map<string, Table>> = new Map();
 
-    public registerFactory(factory: ITableFactory): void {
+    public registerFactory(factory: TableFactory): void {
         if (this.factories.some((f) => f.isFactoryFor(factory.objectType))) {
             console.warn(`Redudant TableFactory for type ${factory.objectType}`);
         }
@@ -87,7 +87,7 @@ export class TableFactoryService {
         this.factories.push(factory);
     }
 
-    public getTableFactory<T extends ITableFactory>(objectType: KIXObjectType | string): T {
+    public getTableFactory<T extends TableFactory>(objectType: KIXObjectType | string): T {
         const factory = this.factories.find((f) => f.isFactoryFor(objectType));
         return factory as T;
     }
@@ -97,8 +97,8 @@ export class TableFactoryService {
         objectIds?: Array<number | string>, contextId?: string, defaultRouting?: boolean,
         defaultToggle?: boolean, short: boolean = false, reload: boolean = true, recreate: boolean = true,
         objects: KIXObject[] = null
-    ): Promise<ITable> {
-        let table: ITable;
+    ): Promise<Table> {
+        let table: Table;
 
         const context = ContextService.getInstance().getActiveContext();
         let tableContextId: string;

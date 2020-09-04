@@ -7,11 +7,11 @@
  * --
  */
 
-import { ITable } from '.';
+import { Table } from '.';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { IColumn } from './IColumn';
-import { IRow } from './IRow';
+import { Column } from './Column';
+import { Row } from './Row';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 
@@ -25,9 +25,9 @@ export interface ITableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
-    ): ITable;
+    ): Table;
 
     getDefaultColumnConfiguration(property: string): IColumnConfiguration;
 
-    getColumnFilterValues<T extends KIXObject = any>(rows: IRow[], column: IColumn): Array<[T, number]>;
+    getColumnFilterValues<T extends KIXObject = any>(rows: Row[], column: Column): Array<[T, number]>;
 }

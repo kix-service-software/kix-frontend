@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, RowObject, IRow, Row, Column, IColumn } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table, RowObject, Row, Row, Column, Column } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { DefaultColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
 
 chai.use(chaiAsPromised);
@@ -22,21 +22,21 @@ describe('Table Tests', () => {
     describe('Create a new table instance.', () => {
 
         it('Should create a new table instance with given table id.', () => {
-            const table: ITable = new Table('test');
+            const table: Table = new Table('test');
             expect(table).exist;
             expect(table.getTableId()).exist;
         });
 
     });
 
-    describe('Create a new row with ITableObject.', () => {
-        let table: ITable;
+    describe('Create a new row with TableObject.', () => {
+        let table: Table;
 
         before(() => {
             table = new Table('test');
         });
 
-        it('Should create a row which contains the ITableObject.', () => {
+        it('Should create a row which contains the TableObject.', () => {
             const tableObject = new RowObject([]);
             const row = table.createRow(tableObject);
             expect(row).exist;
@@ -46,12 +46,12 @@ describe('Table Tests', () => {
     });
 
     describe('Create new row in table.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => table = new Table('test'));
 
         it('Should create a new row in the table.', () => {
-            const row: IRow = table.createRow();
+            const row: Row = table.createRow();
             expect(row).exist;
             expect(row.getRowId()).exist;
         });
@@ -59,8 +59,8 @@ describe('Table Tests', () => {
     });
 
     describe('Get all table rows.', () => {
-        let table: ITable;
-        let row1: IRow, row2: IRow, row3: IRow;
+        let table: Table;
+        let row1: Row, row2: Row, row3: Row;
 
         before(() => {
             table = new Table('test');
@@ -84,8 +84,8 @@ describe('Table Tests', () => {
     });
 
     describe('Get specific row.', () => {
-        let table: ITable;
-        let row: IRow;
+        let table: Table;
+        let row: Row;
 
         before(() => {
             table = new Table('test');
@@ -102,8 +102,8 @@ describe('Table Tests', () => {
     });
 
     describe('Remove a row from table.', () => {
-        let table: ITable;
-        let row: IRow;
+        let table: Table;
+        let row: Row;
 
         before(() => {
             table = new Table('test');
@@ -131,7 +131,7 @@ describe('Table Tests', () => {
     });
 
     describe('Add two rows at the end.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -160,7 +160,7 @@ describe('Table Tests', () => {
     });
 
     describe('Add a row on position two.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -185,7 +185,7 @@ describe('Table Tests', () => {
     });
 
     describe('Add one row twice.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -207,9 +207,9 @@ describe('Table Tests', () => {
     });
 
     describe('Replace two rows.', () => {
-        let table: ITable;
-        let oldRow1: IRow;
-        let oldRow2: IRow;
+        let table: Table;
+        let oldRow1: Row;
+        let oldRow2: Row;
 
         before(() => {
             table = new Table('test');
@@ -247,9 +247,9 @@ describe('Table Tests', () => {
     });
 
     describe('Replace two rows but one with already exiting row.', () => {
-        let table: ITable;
-        let oldRow1: IRow;
-        let oldRow2: IRow;
+        let table: Table;
+        let oldRow1: Row;
+        let oldRow2: Row;
         let existingRow;
 
         before(() => {
@@ -286,7 +286,7 @@ describe('Table Tests', () => {
     });
 
     describe('Replace not exiting row.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -314,7 +314,7 @@ describe('Table Tests', () => {
     });
 
     describe('Set column configuration.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -334,7 +334,7 @@ describe('Table Tests', () => {
     });
 
     describe('Get columns.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -364,7 +364,7 @@ describe('Table Tests', () => {
     });
 
     describe('Get specific column.', () => {
-        let table: ITable;
+        let table: Table;
         const columnId = '1';
 
         before(() => {
@@ -386,7 +386,7 @@ describe('Table Tests', () => {
     });
 
     describe('Remove two columns.', () => {
-        let table: ITable;
+        let table: Table;
         let columnId1 = '1';
         let columnId2 = '3';
 
@@ -403,7 +403,7 @@ describe('Table Tests', () => {
         });
 
         it('Should remove two columns.', () => {
-            const removedColumns = table.removeColumns([columnId1, columnId2]) as IColumn[];
+            const removedColumns = table.removeColumns([columnId1, columnId2]) as Column[];
             expect(removedColumns).exist;
             expect(removedColumns).is.an('array');
             expect(removedColumns.length).equals(2);
@@ -422,7 +422,7 @@ describe('Table Tests', () => {
     });
 
     describe('Add two columns.', () => {
-        let table: ITable;
+        let table: Table;
 
         beforeEach(() => {
             table = new Table('test');
@@ -479,7 +479,7 @@ describe('Table Tests', () => {
     });
 
     describe('Add one column twice.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');

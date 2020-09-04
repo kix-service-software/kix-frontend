@@ -7,12 +7,12 @@
  * --
  */
 
-import { ICell } from '../../../../../../core/table';
+import { Cell } from '../../../../../../core/table';
 
 export class ComponentState {
 
     public constructor(
-        public cell: ICell = null,
+        public cell: Cell = null,
         public text: string = null
     ) { }
 
