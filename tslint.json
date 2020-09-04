@@ -3,6 +3,7 @@
         "tslint:recommended"
     ],
     "rules": {
+        "array-type": false,
         "no-unused-variable": true,
         "member-ordering": false,
         "arrow-parens": true,
