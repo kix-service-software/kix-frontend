@@ -280,7 +280,6 @@ export class UserService extends KIXObjectAPIService {
                 });
             }
         }
-        // TODO: für Komponente ggf. Fehlerliste übermitteln
         if (!!errors.length) {
             throw new Error(errors[0].Code, errors.map((e) => e.Message).join('\n'), errors[0].StatusCode);
         }
@@ -306,6 +305,5 @@ export class UserService extends KIXObjectAPIService {
 
         return searchCriteria;
     }
-
 
 }

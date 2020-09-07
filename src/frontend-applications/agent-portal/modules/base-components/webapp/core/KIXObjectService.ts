@@ -666,6 +666,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
             }
         } else {
             switch (property) {
+                case TicketProperty.OWNER_ID:
+                case TicketProperty.RESPONSIBLE_ID:
+                    objectType = KIXObjectType.USER;
+                    break;
                 case TicketProperty.CONTACT_ID:
                 case ArticleProperty.TO:
                 case ArticleProperty.CC:
