@@ -144,11 +144,19 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public async getInputType(property: string): Promise<InputFieldTypes> {
         let inputType;
+
+        const objectReferenceProperties = [
+            TicketProperty.ORGANISATION_ID,
+            TicketProperty.CONTACT_ID,
+            TicketProperty.OWNER_ID,
+            TicketProperty.RESPONSIBLE_ID
+        ];
+
         if (this.isDropDown(property)) {
             inputType = InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
             inputType = InputFieldTypes.DATE_TIME;
-        } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
+        } else if (objectReferenceProperties.some((p) => p === property)) {
             inputType = InputFieldTypes.OBJECT_REFERENCE;
         } else {
             inputType = super.getInputType(property);
@@ -163,8 +171,6 @@ export class TicketSearchFormManager extends SearchFormManager {
             || property === TicketProperty.PRIORITY_ID
             || property === TicketProperty.TYPE_ID
             || property === TicketProperty.LOCK_ID
-            || property === TicketProperty.OWNER_ID
-            || property === TicketProperty.RESPONSIBLE_ID
             || property === KIXObjectProperty.CREATE_BY
             || property === KIXObjectProperty.CHANGE_BY
             || property === TicketProperty.STATE_TYPE
@@ -234,6 +240,7 @@ export class TicketSearchFormManager extends SearchFormManager {
         const options = await super.getInputTypeOptions(property, operator);
         if (property === TicketProperty.OWNER_ID || property === TicketProperty.RESPONSIBLE_ID) {
             options.push([ObjectReferenceOptions.FREETEXT, true]);
+            options.push([ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*']);
         }
         return options;
     }

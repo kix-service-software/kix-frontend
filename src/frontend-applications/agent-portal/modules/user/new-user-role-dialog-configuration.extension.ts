@@ -142,7 +142,9 @@ class Extension extends KIXExtension implements IConfigurationExtension {
             [
                 new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
                 new FormFieldOption(ObjectReferenceOptions.MULTISELECT, true),
-                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true)
+                new FormFieldOption(FormFieldOptions.INVALID_CLICKABLE, true),
+                new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*')
             ]
         );
         configurations.push(agentsField);

@@ -203,9 +203,15 @@ export class UserLabelProvider extends LabelProvider<User> {
     }
 
     public async getObjectText(user: User, id?: boolean, title?: boolean, translatable?: boolean): Promise<string> {
-        const email = user.Contact ? ` (${user.Contact.Email})` : '';
-        const base = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
-        return `${base}${email}`;
+        if (user.Contact) {
+            const email = user.Contact ? ` (${user.Contact.Email})` : '';
+            const base = user.Contact ? `${user.Contact.Firstname} ${user.Contact.Lastname}` : user.UserLogin;
+            return `${base}${email}`;
+        } else if (user['UserFirstname'] && user['UserLastname'] && user['UserEmail']) {
+            return `${user['UserLastname']}, ${user['UserFirstname']} (${user.UserLogin})`;
+        }
+
+        return user.UserLogin;
     }
 
     public getObjectTypeIcon(): string | ObjectIcon {

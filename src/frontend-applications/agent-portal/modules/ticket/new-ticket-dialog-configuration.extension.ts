@@ -305,7 +305,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketCreate_Owner',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*'),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

@@ -258,9 +258,17 @@ export class DynamicFormFieldValue {
                 }
             }
 
-            if (this.value.property && this.isDropdown) {
+            if (this.value.property && this.isDropdown && !this.isAutocomplete) {
                 const valueNodes = await this.manager.getTreeNodes(this.value.property);
                 this.valueTreeHandler.setTree(valueNodes);
+            }
+
+            const preloadOption = this.inputOptions.find(
+                (o) => o[0] === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
+            );
+            if (this.isAutocomplete && preloadOption && preloadOption[1]) {
+                const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
+                this.valueTreeHandler.setTree(tree);
             }
         }
     }
