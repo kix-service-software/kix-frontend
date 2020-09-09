@@ -52,11 +52,6 @@ export class RedisCache implements ICache {
         this.redisClient.on('ready', (client) => {
             LoggingService.getInstance().info('REDIS ready');
         });
-
-        this.getAsync = promisify(this.redisClient.get).bind(this.redisClient);
-        this.setAsync = promisify(this.redisClient.set).bind(this.redisClient);
-        this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
-        this.keysAsync = promisify(this.redisClient.keys).bind(this.redisClient);
     }
 
     public async clear(ignoreKeyPrefixes: string[] = []): Promise<void> {
@@ -103,10 +98,10 @@ export class RedisCache implements ICache {
                 this.checkConnection();
                 return null;
             });
-        LoggingService.getInstance().debug(
-            `Redis Cache: delete cacheKeyPrefix ${cacheKeyPrefix} - key count: ${keys.length}`
-        );
         if (keys) {
+            LoggingService.getInstance().debug(
+                `Redis Cache: delete cacheKeyPrefix ${cacheKeyPrefix} - key count: ${keys.length}`
+            );
             keys.forEach((k) => this.delAsync(k).catch(() => this.checkConnection()));
         }
     }
@@ -120,6 +115,7 @@ export class RedisCache implements ICache {
     }
 
     private connect(): void {
+        this.redisClient = null;
 
         const config = ConfigurationService.getInstance().getServerConfiguration();
 
@@ -152,6 +148,11 @@ export class RedisCache implements ICache {
                 return Math.min(options.attempt * 100, 3000);
             }
         });
+
+        this.getAsync = promisify(this.redisClient.get).bind(this.redisClient);
+        this.setAsync = promisify(this.redisClient.set).bind(this.redisClient);
+        this.delAsync = promisify(this.redisClient.del).bind(this.redisClient);
+        this.keysAsync = promisify(this.redisClient.keys).bind(this.redisClient);
     }
 
 }
