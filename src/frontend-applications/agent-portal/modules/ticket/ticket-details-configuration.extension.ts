@@ -38,6 +38,8 @@ import { NewConfigItemDialogContext } from '../cmdb/webapp/core';
 import { DialogRoutingConfiguration } from '../../model/configuration/DialogRoutingConfiguration';
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
+import { OrganisationProperty } from '../customer/model/OrganisationProperty';
+import { UserProperty } from '../user/model/UserProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -84,7 +86,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 TicketProperty.PRIORITY_ID,
                 TicketProperty.RESPONSIBLE_ID,
                 TicketProperty.OWNER_ID,
-                TicketProperty.TIME_UNITS,
                 TicketProperty.STATE_ID,
                 TicketProperty.PENDING_TIME
             ], false,
@@ -274,6 +275,26 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(suggestedFAQWidget);
 
         // Overlays
+        const organisationObjectInformation = new ObjectInformationWidgetConfiguration(
+            'ticket-details-organisation-information-settings', 'Organisation Information Settings',
+            ConfigurationType.ObjectInformation,
+            KIXObjectType.ORGANISATION,
+            [
+                OrganisationProperty.NUMBER,
+                OrganisationProperty.NAME,
+                OrganisationProperty.URL,
+                OrganisationProperty.STREET,
+                OrganisationProperty.ZIP,
+                OrganisationProperty.CITY,
+                OrganisationProperty.COUNTRY
+            ], true,
+            [
+                [OrganisationProperty.NUMBER, organisationRouting],
+                [OrganisationProperty.NAME, organisationRouting]
+            ]
+        );
+        configurations.push(organisationObjectInformation);
+
         const organisationInfoOverlay = new WidgetConfiguration(
             'ticket-details-organisation-overlay', 'Organisation Info Overlay', ConfigurationType.Widget,
             'object-information', 'Translatable#Organisation', [],
@@ -282,6 +303,29 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
             )
         );
         configurations.push(organisationInfoOverlay);
+
+        const contactObjectInformation = new ObjectInformationWidgetConfiguration(
+            'ticket-details-contact-information-settings', 'Contact Information Settings',
+            ConfigurationType.ObjectInformation,
+            KIXObjectType.CONTACT,
+            [
+                UserProperty.USER_LOGIN,
+                ContactProperty.TITLE,
+                ContactProperty.FIRSTNAME,
+                ContactProperty.LASTNAME,
+                ContactProperty.PRIMARY_ORGANISATION_ID,
+                ContactProperty.PHONE,
+                ContactProperty.MOBILE,
+                ContactProperty.FAX,
+                ContactProperty.EMAIL
+            ], true,
+            [
+                [ContactProperty.LASTNAME, contactRouting],
+                [ContactProperty.FIRSTNAME, contactRouting],
+                [UserProperty.USER_LOGIN, contactRouting]
+            ]
+        );
+        configurations.push(contactObjectInformation);
 
         const contactInfoOverlay = new WidgetConfiguration(
             'ticket-details-contact-overlay', 'Contact Info Overlay', ConfigurationType.Widget,

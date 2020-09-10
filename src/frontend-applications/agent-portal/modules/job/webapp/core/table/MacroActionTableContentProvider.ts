@@ -8,7 +8,7 @@
  */
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -23,7 +23,7 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 export class MacroActionTableContentProvider extends TableContentProvider<any> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -31,7 +31,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
         super(KIXObjectType.JOB, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<IRowObject[]> {
+    public async loadData(): Promise<RowObject[]> {
         const context = await ContextService.getInstance().getContext(JobDetailsContext.CONTEXT_ID);
         const job = context ? await context.getObject<Job>(KIXObjectType.MACRO_ACTION) : null;
 
@@ -48,7 +48,7 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
                             const column = this.table.getColumns().map((c) => c.getColumnConfiguration()).find(
                                 (c) => c.property === property
                             );
-                            const value = await this.getTableValue(o, property, column);
+                            const value = new TableValue(column.property, o[column.property]);
                             values.push(value);
                         }
                     }
@@ -78,7 +78,8 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
                     const option = actionTypes[0].Options[parameter] as MacroActionTypeOption;
                     if (option) {
                         const translated = await TranslationService.translate(option.Label);
-                        preparedParameters[translated] = o.Parameters[parameter];
+                        preparedParameters[translated] = Array.isArray(o.Parameters[parameter])
+                            ? JSON.stringify(o.Parameters[parameter]) : o.Parameters[parameter];
                     }
                 }
             }

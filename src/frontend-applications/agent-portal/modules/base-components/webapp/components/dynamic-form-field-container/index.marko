@@ -131,6 +131,26 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             on-change("setSpecificValue", dynamicValue)
                             on-valueChanged("setSpecificValue", dynamicValue)/>
                     </else-if>
+                    <else-if(dynamicValue.isNumber)>
+                        <span.dynamic-form-number-input class={
+                            between: dynamicValue.isBetween
+                        }>
+                            <input.input-style
+                                class={
+                                                                invalid: !dynamicValue.value.valid
+                                                            }
+                                value=dynamicValue.numberValue
+                                type="number"
+                                disabled=(dynamicValue.readonly && !dynamicValue.changeable)
+                                on-input("setNumberValue", dynamicValue)/>
+                            <if(dynamicValue.isBetween)>
+                                <div.between-space>
+                                    <translation-string pattern="Translatable#and"/>
+                                </div>
+                                <input.input-style type="number" on-change("setNumberEndValue", dynamicValue) value=dynamicValue.betweenEndNumberValue/>
+                            </if>
+                        </span>
+                    </else-if>
                     <else>
                         <input.input-style
                             class={

@@ -8,7 +8,7 @@
  */
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { LogFile } from '../../../model/LogFile';
@@ -16,7 +16,7 @@ import { LogFile } from '../../../model/LogFile';
 export class LogFileTableContentProvider extends TableContentProvider<LogFile> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string

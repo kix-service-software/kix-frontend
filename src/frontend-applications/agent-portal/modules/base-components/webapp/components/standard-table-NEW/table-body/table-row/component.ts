@@ -13,7 +13,7 @@ import {
 } from '../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { IEventSubscriber } from '../../../../../../../modules/base-components/webapp/core/IEventSubscriber';
 import { EventService } from '../../../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, TableEventData, IColumn, ICell, TableCSSHandlerRegistry } from '../../../../core/table';
+import { TableEvent, TableEventData, Column, Cell, TableCSSHandlerRegistry } from '../../../../core/table';
 
 class Component extends AbstractMarkoComponent<ComponentState> implements IEventSubscriber {
 
@@ -139,11 +139,11 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
         }
     }
 
-    public getColumns(): IColumn[] {
+    public getColumns(): Column[] {
         return this.state.row ? this.state.row.getTable().getColumns() : [];
     }
 
-    public getCell(columnId: string): ICell {
+    public getCell(columnId: string): Cell {
         return this.state.row.getCell(columnId);
     }
 

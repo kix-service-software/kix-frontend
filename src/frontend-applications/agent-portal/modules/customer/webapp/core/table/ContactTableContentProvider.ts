@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { Contact } from '../../../model/Contact';
-import { ITable, IRowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContactProperty } from '../../../model/ContactProperty';
@@ -21,7 +21,7 @@ import { User } from '../../../../user/model/User';
 export class ContactTableContentProvider extends TableContentProvider<Contact> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: string[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -29,7 +29,7 @@ export class ContactTableContentProvider extends TableContentProvider<Contact> {
         super(KIXObjectType.CONTACT, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<Contact>>> {
+    public async loadData(): Promise<Array<RowObject<Contact>>> {
         const rowObjects = await super.loadData();
 
         rowObjects.forEach((ro) => {

@@ -8,13 +8,13 @@
  */
 
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { ImportExportTemplate } from '../../../model/ImportExportTemplate';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public table: ITable = null,
+        public table: Table = null,
         public template: ImportExportTemplate = null
     ) {
         super();

@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { ConfigItemHistory } from '../../../model/ConfigItemHistory';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
@@ -18,7 +18,7 @@ import { ConfigItem } from '../../../model/ConfigItem';
 export class ConfigItemHistoryContentProvider extends TableContentProvider<ConfigItemHistory> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -26,7 +26,7 @@ export class ConfigItemHistoryContentProvider extends TableContentProvider<Confi
         super(KIXObjectType.CONFIG_ITEM_HISTORY, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<ConfigItemHistory>>> {
+    public async loadData(): Promise<Array<RowObject<ConfigItemHistory>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -37,7 +37,7 @@ export class ConfigItemHistoryContentProvider extends TableContentProvider<Confi
 
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
-                        const tableValue = await this.getTableValue(ch, column.property, column);
+                        const tableValue = new TableValue(column.property, ch[column.property]);
                         values.push(tableValue);
                     }
 

@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { ITable, Table } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { ContactTableContentProvider } from './ContactTableContentProvider';
 import { ContactProperty } from '../../../model/ContactProperty';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
@@ -32,7 +32,7 @@ export class ContactTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: string[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, short);
 

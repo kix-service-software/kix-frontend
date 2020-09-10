@@ -9,14 +9,14 @@
 
 import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { ConfigItemClass } from '../../../../../model/ConfigItemClass';
-import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 
 export class ConfigItemClassTableContentProvider extends TableContentProvider<ConfigItemClass> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string

@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { GeneralCatalogItem } from '../../../model/GeneralCatalogItem';
-import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
@@ -22,7 +22,7 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 export class GeneralCatalogTableContentProvider extends TableContentProvider<GeneralCatalogItem> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -30,7 +30,7 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
         super(KIXObjectType.GENERAL_CATALOG_ITEM, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<GeneralCatalogItem>>> {
+    public async loadData(): Promise<Array<RowObject<GeneralCatalogItem>>> {
 
         let loadingOptions;
         const definitionFilter = [
@@ -62,7 +62,7 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
                 const column = this.table.getColumns().map((c) => c.getColumnConfiguration()).find(
                     (c) => c.property === property
                 );
-                const tableValue = await this.getTableValue(definition, property, column);
+                const tableValue = new TableValue(column.property, definition[property]);
                 values.push(tableValue);
             }
         }

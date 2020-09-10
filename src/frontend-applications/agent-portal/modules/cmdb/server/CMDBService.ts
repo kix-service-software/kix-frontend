@@ -309,14 +309,22 @@ export class CMDBAPIService extends KIXObjectAPIService {
             c.property !== ConfigItemProperty.NAME &&
             c.property !== 'InciStateIDs' &&
             c.property !== 'DeplStateIDs' &&
-            c.property !== 'ClassIDs'
+            c.property !== 'ClassIDs' &&
+            !c.property.startsWith('Data') &&
+            !c.property.startsWith('CurrentVersion')
         );
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const newCriteria = criteria.filter((c) =>
-            !c.property.startsWith('Data') &&
-            !c.property.startsWith('CurrentVersion')
+            c.property === ConfigItemProperty.CONFIG_ITEM_ID ||
+            c.property === ConfigItemProperty.NUMBER ||
+            c.property === ConfigItemProperty.NAME ||
+            c.property === 'InciStateIDs' ||
+            c.property === 'DeplStateIDs' ||
+            c.property === 'ClassIDs' ||
+            c.property.startsWith('Data') ||
+            c.property.startsWith('CurrentVersion')
         );
 
         for (const searchCriteria of newCriteria) {

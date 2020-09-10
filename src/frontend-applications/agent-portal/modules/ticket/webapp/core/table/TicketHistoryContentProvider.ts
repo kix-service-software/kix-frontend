@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { TicketHistory } from '../../../model/TicketHistory';
-import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
@@ -18,7 +18,7 @@ import { Ticket } from '../../../model/Ticket';
 export class TicketHistoryContentProvider extends TableContentProvider<TicketHistory> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -26,7 +26,7 @@ export class TicketHistoryContentProvider extends TableContentProvider<TicketHis
         super(KIXObjectType.TICKET_HISTORY, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<TicketHistory>>> {
+    public async loadData(): Promise<Array<RowObject<TicketHistory>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -37,7 +37,7 @@ export class TicketHistoryContentProvider extends TableContentProvider<TicketHis
 
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
-                        const tableValue = await this.getTableValue(th, column.property, column);
+                        const tableValue = new TableValue(column.property, th[column.property]);
                         values.push(tableValue);
                     }
 

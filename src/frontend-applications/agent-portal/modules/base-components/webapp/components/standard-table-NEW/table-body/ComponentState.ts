@@ -7,12 +7,12 @@
  * --
  */
 
-import { IRow } from '../../../core/table';
+import { Row } from '../../../core/table';
 
 export class ComponentState {
 
     public constructor(
-        public rows: IRow[] = [],
+        public rows: Row[] = [],
         public ready: boolean = false,
         public loading: boolean = false
     ) { }

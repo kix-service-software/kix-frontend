@@ -23,7 +23,7 @@ export class ContactSearchDefinition extends SearchDefinition {
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(criteria, null, null, ['Tickets'], null);
+        return new KIXObjectLoadingOptions(criteria, null, this.limit, ['Tickets'], null);
     }
 
     public async getSearchResultCategories(): Promise<SearchResultCategory> {

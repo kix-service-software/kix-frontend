@@ -27,6 +27,7 @@ import { ComponentContent } from './ComponentContent';
 import { OverlayService } from './OverlayService';
 import { OverlayType } from './OverlayType';
 import { Error } from '../../../../../../server/model/Error';
+import { Context } from '../../../../model/Context';
 
 export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
 
@@ -107,9 +108,19 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                     ContextService.getInstance().updateObjectLists(this.objectType);
 
                 } else {
-                    DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
+
+                    let canceled = false;
+                    DialogService.getInstance().setMainDialogLoading(
+                        true, this.loadingHint, false, null, () => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            DialogService.getInstance().closeMainDialog();
+                            canceled = true;
+                            resolve();
+                        }, 'Translatable#send to background'
+                    );
+
                     if (!objectId) {
-                        let context;
+                        let context: Context;
                         if (this.contextId) {
                             context = await ContextService.getInstance().getContext(this.contextId);
                         } else {
@@ -119,12 +130,17 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                             objectId = context.getObjectId();
                         }
                     }
+
                     KIXObjectService.updateObjectByForm(this.objectType, this.state.formId, objectId)
                         .then(async (succesObjectId) => {
-                            if (this.handleDialogSuccess) {
-                                await this.handleDialogSuccess(succesObjectId);
+                            if (canceled) {
+                                BrowserUtil.openSuccessOverlay(this.successHint);
                             } else {
-                                await AbstractEditDialog.prototype.handleDialogSuccess.call(this, succesObjectId);
+                                if (this.handleDialogSuccess) {
+                                    await this.handleDialogSuccess(succesObjectId);
+                                } else {
+                                    await AbstractEditDialog.prototype.handleDialogSuccess.call(this, succesObjectId);
+                                }
                             }
                             resolve();
                         }).catch((error: Error) => {

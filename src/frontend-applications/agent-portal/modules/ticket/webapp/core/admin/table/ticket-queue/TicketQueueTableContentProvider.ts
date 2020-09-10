@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { Queue } from '../../../../../model/Queue';
-import { ITable, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 
@@ -17,7 +17,7 @@ import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 export class TicketQueueTableContentProvider extends TableContentProvider<Queue> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -30,9 +30,9 @@ export class TicketQueueTableContentProvider extends TableContentProvider<Queue>
     }
 
     protected async addChildRows(
-        rowObject: RowObject<Queue>, propertyMap: Map<string, Map<any, TableValue>>
+        rowObject: RowObject<Queue>
     ): Promise<void> {
-        const rows = await this.getRowObjects(rowObject.getObject().SubQueues, propertyMap);
+        const rows = await this.getRowObjects(rowObject.getObject().SubQueues);
         rows.forEach((r) => rowObject.addChild(r));
     }
 }

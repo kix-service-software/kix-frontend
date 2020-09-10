@@ -8,7 +8,7 @@
  */
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { JobRunLog } from '../../../model/JobRunLog';
 import { JobRunLogProperty } from '../../../model/JobRunLogProperty';
@@ -17,12 +17,12 @@ export class JobRunLogContentProvider extends TableContentProvider<JobRunLog> {
 
     public constructor(
         private logs: JobRunLog[],
-        table: ITable
+        table: Table
     ) {
         super(KIXObjectType.JOB_RUN_LOG, table, null, null);
     }
 
-    public async loadData(): Promise<Array<IRowObject<JobRunLog>>> {
+    public async loadData(): Promise<Array<RowObject<JobRunLog>>> {
         const rowObjects = [];
         if (this.logs && this.logs.length) {
             let number = 1;
@@ -34,7 +34,7 @@ export class JobRunLogContentProvider extends TableContentProvider<JobRunLog> {
                     if (column.property === JobRunLogProperty.NUMBER) {
                         values.push(new TableValue(column.property, number, number.toString()));
                     } else {
-                        const tableValue = await this.getTableValue(log, column.property, column);
+                        const tableValue = new TableValue(column.property, log[column.property]);
                         values.push(tableValue);
                     }
                 }

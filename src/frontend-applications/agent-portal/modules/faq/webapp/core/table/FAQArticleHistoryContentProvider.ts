@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { FAQHistory } from '../../../model/FAQHistory';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
@@ -18,7 +18,7 @@ import { FAQArticle } from '../../../model/FAQArticle';
 export class FAQArticleHistoryContentProvider extends TableContentProvider<FAQHistory> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -26,7 +26,7 @@ export class FAQArticleHistoryContentProvider extends TableContentProvider<FAQHi
         super(KIXObjectType.CONFIG_ITEM_HISTORY, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<FAQHistory>>> {
+    public async loadData(): Promise<Array<RowObject<FAQHistory>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -36,7 +36,7 @@ export class FAQArticleHistoryContentProvider extends TableContentProvider<FAQHi
                     const values: TableValue[] = [];
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
-                        const tableValue = await this.getTableValue(fh, column.property, column);
+                        const tableValue = new TableValue(column.property, fh[column.property]);
                         values.push(tableValue);
                     }
                     rowObjects.push(new RowObject<FAQHistory>(values, fh));

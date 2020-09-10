@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../../../../../modules/translation/webapp/core/TranslationService';
 import { ComponentContent } from '../../../../../../../modules/base-components/webapp/core/ComponentContent';
 import { ConfirmOverlayContent } from '../../../../../../../modules/base-components/webapp/core/ConfirmOverlayContent';
@@ -20,7 +20,7 @@ import { KIXObjectService } from '../../../../../../../modules/base-components/w
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ToastContent } from '../../../../../../../modules/base-components/webapp/core/ToastContent';
 
-export class TicketTypeTableDeleteAction extends AbstractAction<ITable> {
+export class TicketTypeTableDeleteAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 

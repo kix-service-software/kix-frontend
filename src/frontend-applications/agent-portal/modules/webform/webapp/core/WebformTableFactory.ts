@@ -11,7 +11,7 @@ import { WebformDetailsContext } from './context/WebformDetailsContext';
 import { TableFactory } from '../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
-import { ITable, Table, ToggleOptions } from '../../../base-components/webapp/core/table';
+import { Table, ToggleOptions } from '../../../base-components/webapp/core/table';
 import { WebformTableContentProvider } from './WebformTableContentProvider';
 import { WebformProperty } from '../../model/WebformProperty';
 import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
@@ -30,7 +30,7 @@ export class WebformTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
 

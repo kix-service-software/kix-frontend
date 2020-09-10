@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { TranslationLanguage } from '../../../../../model/TranslationLanguage';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../../../modules/base-components/webapp/core/ContextService';
@@ -22,7 +22,7 @@ import { SortOrder } from '../../../../../../../model/SortOrder';
 export class TranslationLanguageTableContentProvider extends TableContentProvider<TranslationLanguage> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -30,7 +30,7 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
         super(KIXObjectType.TRANSLATION_LANGUAGE, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<TranslationLanguage>>> {
+    public async loadData(): Promise<Array<RowObject<TranslationLanguage>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -46,7 +46,7 @@ export class TranslationLanguageTableContentProvider extends TableContentProvide
 
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
-                        const tableValue = await this.getTableValue(l, column.property, column);
+                        const tableValue = new TableValue(column.property, l[column.property]);
                         values.push(tableValue);
                     }
 

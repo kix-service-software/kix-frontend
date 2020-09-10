@@ -9,7 +9,7 @@
 
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { Table, IRowObject, ITable, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { IdService } from '../../../../../model/IdService';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -70,11 +70,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 // tslint:disable-next-line:max-classes-per-file
 class DynamicFieldChecklistTableContentProvider extends TableContentProvider {
 
-    public constructor(private checklist: CheckListItem[], table: ITable) {
+    public constructor(private checklist: CheckListItem[], table: Table) {
         super(null, table, null, null);
     }
 
-    public async loadData(): Promise<Array<IRowObject<CheckListItem>>> {
+    public async loadData(): Promise<Array<RowObject<CheckListItem>>> {
         return this.createRowsForChecklist();
     }
 

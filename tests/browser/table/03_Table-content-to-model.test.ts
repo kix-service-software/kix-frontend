@@ -11,7 +11,7 @@
 
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
-import { ITable, Table, ITableContentProvider, IRowObject, ICell, TableValue, RowObject } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
+import { Table, TableContentProvider, RowObject, Cell, TableValue } from '../../../src/frontend-applications/agent-portal/modules/base-components/webapp/core/table';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { DefaultColumnConfiguration } from '../../../src/frontend-applications/agent-portal/model/configuration/DefaultColumnConfiguration';
 
@@ -21,14 +21,14 @@ const expect = chai.expect;
 describe('Table Content Tests', () => {
 
     describe('Create a table instance with content provider.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
         });
 
         it('Should create a instance with a table provider.', () => {
-            const tableContentProvider: ITableContentProvider = new TestTableContentProvider();
+            const tableContentProvider: TableContentProvider = new TestTableContentProvider();
             table.setContentProvider(tableContentProvider);
             expect(table['contentProvider']).exist;
         });
@@ -36,14 +36,14 @@ describe('Table Content Tests', () => {
     });
 
     describe('Content provider should deliver rows.', () => {
-        let contentProvider: ITableContentProvider;
+        let contentProvider: TableContentProvider;
 
         before(() => {
             contentProvider = new TestTableContentProvider(3);
         });
 
         it('Should deliver content objects for the table.', async () => {
-            const rowObjects: IRowObject[] = await contentProvider.loadData();
+            const rowObjects: RowObject[] = await contentProvider.loadData();
             expect(rowObjects).exist;
             expect(rowObjects).an('array');
             expect(rowObjects.length).equals(3);
@@ -51,7 +51,7 @@ describe('Table Content Tests', () => {
     });
 
     describe('Initialize table without content provider.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -68,7 +68,7 @@ describe('Table Content Tests', () => {
     });
 
     describe('Initialize table with rows based on data given from content provider.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(() => {
             table = new Table('test');
@@ -93,7 +93,7 @@ describe('Table Content Tests', () => {
     });
 
     describe('Initialize table with cells based on data given from content provider.', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');
@@ -118,7 +118,7 @@ describe('Table Content Tests', () => {
     });
 
     describe('Get a cell from a row', () => {
-        let table: ITable;
+        let table: Table;
 
         before(async () => {
             table = new Table('test');
@@ -136,7 +136,7 @@ describe('Table Content Tests', () => {
             expect(rows).an('array');
             expect(rows.length).equals(1);
 
-            const cell: ICell = rows[0].getCell('property-1');
+            const cell: Cell = rows[0].getCell('property-1');
             expect(cell).exist;
             expect(cell.getProperty()).equals('property-1');
         });
@@ -145,7 +145,7 @@ describe('Table Content Tests', () => {
 
 });
 
-class TestTableContentProvider implements ITableContentProvider {
+class TestTableContentProvider implements TableContentProvider {
 
     public constructor(
         private rowCount = 1,
@@ -159,7 +159,7 @@ class TestTableContentProvider implements ITableContentProvider {
         return KIXObjectType.ANY;
     }
 
-    public async loadData(): Promise<IRowObject[]> {
+    public async loadData(): Promise<RowObject[]> {
         const objects = [];
         for (let r = 0; r < this.rowCount; r++) {
             const values: TableValue[] = [];

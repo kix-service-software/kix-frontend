@@ -8,7 +8,7 @@
  */
 
 import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
@@ -20,7 +20,7 @@ export class ComponentState {
         public widgetConfiguration: WidgetConfiguration = null,
         public resultTitle: string = 'Translatable#Hit List',
         public resultIcon: string | ObjectIcon = null,
-        public table: ITable = null,
+        public table: Table = null,
         public noSearch: boolean = true,
         public actions: IAction[] = [],
         public loading: boolean = false,

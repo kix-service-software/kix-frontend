@@ -18,7 +18,7 @@ import { TableConfiguration } from '../../../../../model/configuration/TableConf
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../../model/configuration/TableRowHeight';
 import {
-    TableFactoryService, ITable, IRowObject, TableValue, RowObject, TableEvent
+    TableFactoryService, Table, RowObject, TableValue, TableEvent
 } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { TranslationPatternProperty } from '../../../model/TranslationPatternProperty';
@@ -120,11 +120,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 // tslint:disable-next-line:max-classes-per-file
 class TranslationPatternContentProvider extends TableContentProvider {
 
-    public constructor(private state: ComponentState, table: ITable) {
+    public constructor(private state: ComponentState, table: Table) {
         super(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, table, [], null);
     }
 
-    public async loadData(): Promise<Array<IRowObject<TranslationPattern>>> {
+    public async loadData(): Promise<Array<RowObject<TranslationPattern>>> {
         const rowObjects = [];
         if (this.state.filterValue && this.state.filterValue !== '') {
             const filter = [
@@ -161,7 +161,7 @@ class TranslationPatternContentProvider extends TableContentProvider {
 
         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
         for (const column of columns) {
-            const tableValue = await this.getTableValue(definition, column.property, column);
+            const tableValue = new TableValue(column.property, definition[column.property]);
             values.push(tableValue);
         }
 

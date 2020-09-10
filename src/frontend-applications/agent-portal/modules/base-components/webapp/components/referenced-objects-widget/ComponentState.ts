@@ -8,12 +8,12 @@
  */
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
-import { ITable } from '../../core/table';
+import { Table } from '../../core/table';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public table: ITable = null
+        public table: Table = null
     ) {
         super();
     }

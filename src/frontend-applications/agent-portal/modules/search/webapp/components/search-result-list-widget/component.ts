@@ -15,7 +15,7 @@ import { SearchService } from '../../core/SearchService';
 import { WidgetService } from '../../../../../modules/base-components/webapp/core/WidgetService';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import {
-    TableEvent, TableFactoryService, TableHeaderHeight, TableRowHeight, TableEventData, ITable
+    TableEvent, TableFactoryService, TableHeaderHeight, TableRowHeight, TableEventData, Table
 } from '../../../../base-components/webapp/core/table';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -168,7 +168,7 @@ class Component implements IKIXObjectSearchListener {
         WidgetService.getInstance().updateActions(this.state.instanceId);
     }
 
-    private async prepareActions(table: ITable): Promise<void> {
+    private async prepareActions(table: Table): Promise<void> {
         WidgetService.getInstance().setActionData(this.state.instanceId, table);
         if (this.state.widgetConfiguration) {
             this.state.actions = await ActionFactory.getInstance()

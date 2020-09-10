@@ -8,7 +8,7 @@
  */
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 
 
 
@@ -17,7 +17,7 @@ export class ComponentState extends AbstractComponentState {
     public constructor(
         public loading: boolean = false,
         public linkObjectCount: number = 0,
-        public table: ITable = null,
+        public table: Table = null,
         public canDelete: boolean = false,
         public canSubmit: boolean = false,
         public filterCount: number = null,

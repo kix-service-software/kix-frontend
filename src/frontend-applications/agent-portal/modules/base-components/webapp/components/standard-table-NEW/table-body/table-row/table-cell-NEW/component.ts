@@ -11,23 +11,47 @@ import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent
 } from '../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { IColumn, ICell, ValueState, TableCSSHandlerRegistry } from '../../../../../core/table';
+import { Column, Cell, ValueState, TableCSSHandlerRegistry, TableEvent } from '../../../../../core/table';
 import { KIXModulesService } from '../../../../../../../../modules/base-components/webapp/core/KIXModulesService';
 import { ServiceRegistry } from '../../../../../core/ServiceRegistry';
 import { IKIXObjectService } from '../../../../../core/IKIXObjectService';
 import { RoutingService } from '../../../../../core/RoutingService';
 import { ContextType } from '../../../../../../../../model/ContextType';
 import { DialogRoutingConfiguration } from '../../../../../../../../model/configuration/DialogRoutingConfiguration';
-import { KIXObjectService } from '../../../../../core/KIXObjectService';
-import { LabelService } from '../../../../../core/LabelService';
 import { ContextService } from '../../../../../core/ContextService';
+import { EventService } from '../../../../../core/EventService';
+import { IEventSubscriber } from '../../../../../core/IEventSubscriber';
+import { IdService } from '../../../../../../../../model/IdService';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
-    private column: IColumn;
+    private column: Column;
+    private subscriber: IEventSubscriber;
+    private cell: Cell;
 
     public onCreate(input: any): void {
         this.state = new ComponentState();
+    }
+
+    public async onMount(): Promise<void> {
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId(),
+            eventPublished: (data: string, eventId: string) => {
+                if (this.cell && data === this.cell.getValue().instanceId) {
+                    (this as any).setStateDirty();
+                }
+            }
+        };
+
+        if (this.cell && !this.cell.getValue().displayValue) {
+            this.cell.getValue().initDisplayValue(this.cell);
+        }
+
+        EventService.getInstance().subscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
+    }
+
+    public onDestroy(): void {
+        EventService.getInstance().unsubscribe(TableEvent.DISPLAY_VALUE_CHANGED, this.subscriber);
     }
 
     public onInput(input: any): void {
@@ -39,6 +63,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
 
         if (input.cell) {
+            this.cell = input.cell;
             const table = input.cell.getRow().getTable();
             const tableConfiguration = table.getTableConfiguration();
             const object = input.cell.getRow().getRowObject().getObject();
@@ -73,7 +98,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return undefined;
     }
 
-    private async setValueStateClass(cell: ICell): Promise<void> {
+    private async setValueStateClass(cell: Cell): Promise<void> {
         let classes = [];
         const state = cell.getValue().state && cell.getValue().state !== ValueState.NONE
             ? cell.getValue().state : cell.getRow().getRowObject().getValueState();

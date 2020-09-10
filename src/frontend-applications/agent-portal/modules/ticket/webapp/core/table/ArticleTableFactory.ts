@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
-import { TableEvent, ITable, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
+import { TableEvent, Table, ToggleOptions } from '../../../../base-components/webapp/core/table';
 import { ArticleTableToggleSubscriber } from './ArticleTableToggleSubscriber';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { ArticleTableContentProvider } from '.';
@@ -32,7 +32,7 @@ export class ArticleTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, short

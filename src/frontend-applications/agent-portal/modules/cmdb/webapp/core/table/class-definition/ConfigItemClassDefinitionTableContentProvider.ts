@@ -9,7 +9,7 @@
 
 import { TableContentProvider } from '../../../../../base-components/webapp/core/table/TableContentProvider';
 import { ConfigItemClassDefinition } from '../../../../model/ConfigItemClassDefinition';
-import { ITable, IRowObject, TableValue, RowObject } from '../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
@@ -21,7 +21,7 @@ import { ConfigItemClassDefinitionProperty } from '../../../../model/ConfigItemC
 export class ConfigItemClassDefinitionTableContentProvider extends TableContentProvider<ConfigItemClassDefinition> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -30,7 +30,7 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
         super(KIXObjectType.CONFIG_ITEM_CLASS, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<ConfigItemClassDefinition>>> {
+    public async loadData(): Promise<Array<RowObject<ConfigItemClassDefinition>>> {
         const rowObjects = [];
 
         const isCurrentText = await TranslationService.translate('Translatable#(Current definition)');
@@ -52,7 +52,7 @@ export class ConfigItemClassDefinitionTableContentProvider extends TableContentP
                             )
                         );
                     } else {
-                        const tableValue = await this.getTableValue(d, column.property, column);
+                        const tableValue = new TableValue(column.property, d[column.property]);
                         values.push(tableValue);
                     }
                 }

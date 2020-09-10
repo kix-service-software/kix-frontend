@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../model/configuration/TableConfiguration';
-import { ITable, Table } from '../../../base-components/webapp/core/table';
+import { Table } from '../../../base-components/webapp/core/table';
 import { PermissionsTableContentProvider } from './PermissionsTableContentProvider';
 import { TableHeaderHeight } from '../../../../model/configuration/TableHeaderHeight';
 import { TableRowHeight } from '../../../../model/configuration/TableRowHeight';
@@ -33,7 +33,7 @@ export class PermissionsTableFactory extends TableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<number | string>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(
             tableConfiguration, defaultRouting, defaultToggle, objectType
@@ -53,6 +53,7 @@ export class PermissionsTableFactory extends TableFactory {
         let tableColumns = [];
         if (objectType === KIXObjectType.ROLE_PERMISSION) {
             tableColumns = [
+                this.getDefaultColumnConfiguration(PermissionProperty.TYPE_ID),
                 this.getDefaultColumnConfiguration(PermissionProperty.TARGET),
                 this.getDefaultColumnConfiguration(PermissionProperty.CREATE),
                 this.getDefaultColumnConfiguration(PermissionProperty.READ),
@@ -62,6 +63,7 @@ export class PermissionsTableFactory extends TableFactory {
             ];
         } else {
             tableColumns = [
+                this.getDefaultColumnConfiguration(PermissionProperty.TYPE_ID),
                 this.getDefaultColumnConfiguration(PermissionProperty.RoleID),
                 this.getDefaultColumnConfiguration(PermissionProperty.CREATE),
                 this.getDefaultColumnConfiguration(PermissionProperty.READ),

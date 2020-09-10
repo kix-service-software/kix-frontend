@@ -7,14 +7,14 @@
  * --
  */
 
-import { IRow } from '../../../../core/table';
+import { Row } from '../../../../core/table';
 
 
 export class ComponentState {
 
     public constructor(
-        public row: IRow = null,
-        public children: IRow[] = [],
+        public row: Row = null,
+        public children: Row[] = [],
         public open: boolean = false,
         public selected: boolean = false,
         public selectable: boolean = true,

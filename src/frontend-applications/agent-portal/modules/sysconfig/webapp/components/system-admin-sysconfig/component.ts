@@ -13,7 +13,7 @@ import { SysConfigOptionDefinitionProperty } from '../../../model/SysConfigOptio
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import {
-    ITable, IRowObject, RowObject, TableValue, TableFactoryService, TableEvent, TableEventData
+    Table, RowObject, TableValue, TableFactoryService, TableEvent, TableEventData
 } from '../../../../base-components/webapp/core/table';
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
 import { SysConfigOptionDefinition } from '../../../model/SysConfigOptionDefinition';
@@ -39,6 +39,7 @@ import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private subscriber: IEventSubscriber;
+    public filterValue: string;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -53,9 +54,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
-
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#SysConfig']);
-
         this.state.prepared = true;
     }
 
@@ -78,7 +77,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             undefined, true, 'sysconfig-edit-form'
         );
 
-        this.state.table.setContentProvider(new SysConfigContentProvider(this.state, this.state.table));
+        this.state.table.setContentProvider(new SysConfigContentProvider(this));
 
         this.subscriber = {
             eventSubscriberId: 'admin-sysconfig',
@@ -100,53 +99,54 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public keyUp(event: any): void {
-        this.state.filterValue = event.target.value;
+        this.filterValue = event.target.value;
         if (event.key === 'Enter') {
             this.search();
         }
     }
 
     public search(): void {
+        this.state.filterValue = this.filterValue;
         this.state.table.reload(true);
-    }
 
+    }
 }
 
 // tslint:disable-next-line:max-classes-per-file
 class SysConfigContentProvider extends TableContentProvider {
 
-    public constructor(private state: ComponentState, table: ITable) {
-        super(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, table, [], null);
+    public constructor(private component: Component) {
+        super(KIXObjectType.SYS_CONFIG_OPTION_DEFINITION, component.state.table, [], null);
     }
 
-    public async loadData(): Promise<Array<IRowObject<SysConfigOptionDefinition>>> {
+    public async loadData(): Promise<Array<RowObject<SysConfigOptionDefinition>>> {
         const rowObjects = [];
-        if (this.state.filterValue && this.state.filterValue !== '') {
+        if (this.component.filterValue && this.component.filterValue !== '') {
             let filter = [
                 new FilterCriteria(
                     SysConfigOptionDefinitionProperty.NAME,
                     SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, this.state.filterValue
+                    FilterDataType.STRING, FilterType.OR, this.component.filterValue
                 ),
                 new FilterCriteria(
                     SysConfigOptionDefinitionProperty.CONTEXT,
                     SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, this.state.filterValue
+                    FilterDataType.STRING, FilterType.OR, this.component.filterValue
                 ),
                 new FilterCriteria(
                     SysConfigOptionDefinitionProperty.CONTEXT_METADATA,
                     SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, this.state.filterValue
+                    FilterDataType.STRING, FilterType.OR, this.component.filterValue
                 ),
                 new FilterCriteria(
                     SysConfigOptionDefinitionProperty.GROUP,
                     SearchOperator.LIKE,
-                    FilterDataType.STRING, FilterType.OR, this.state.filterValue
+                    FilterDataType.STRING, FilterType.OR, this.component.filterValue
                 )
             ];
 
-            if (this.state.filterValue === 'modified' || this.state.filterValue === '!modified') {
-                const modified = this.state.filterValue === 'modified' ? 1 : 0;
+            if (this.component.filterValue === 'modified' || this.component.filterValue === '!modified') {
+                const modified = this.component.filterValue === 'modified' ? 1 : 0;
                 filter = [
                     new FilterCriteria(
                         SysConfigOptionDefinitionProperty.IS_MODIFIED,
@@ -173,7 +173,7 @@ class SysConfigContentProvider extends TableContentProvider {
             }
         }
 
-        this.state.title = await TranslationService.translate(
+        this.component.state.title = await TranslationService.translate(
             'Translatable#System: Sysconfig ({0})', [rowObjects.length]
         );
 
@@ -208,10 +208,10 @@ class SysConfigContentProvider extends TableContentProvider {
                 tableValue = new TableValue(column.property, value, value);
             } else if (column.property === SysConfigOptionDefinitionProperty.NAME) {
                 const icons = option && option.ReadOnly ? ['kix-icon-lock-close'] : [];
-                tableValue = await this.getTableValue(definition, column.property, column);
+                tableValue = new TableValue(column.property, definition[column.property]);
                 tableValue.displayIcons = icons;
             } else {
-                tableValue = await this.getTableValue(definition, column.property, column);
+                tableValue = new TableValue(column.property, definition[column.property]);
             }
             values.push(tableValue);
         }
@@ -222,6 +222,5 @@ class SysConfigContentProvider extends TableContentProvider {
     }
 
 }
-
 
 module.exports = Component;

@@ -11,7 +11,7 @@
 import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 import { ConfigItemVersionCompareAction } from '../webapp/core';
-import { Table, IRow, Row, RowObject } from '../../base-components/webapp/core/table';
+import { Table, Row, RowObject } from '../../base-components/webapp/core/table';
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -71,7 +71,7 @@ describe('CMDBReadUIModule', () => {
 
 class Testtable extends Table {
 
-    private testRows: IRow[];
+    private testRows: Row[];
 
     public constructor(private rowsSelected: boolean) {
         super(null, null, null);
@@ -82,7 +82,7 @@ class Testtable extends Table {
         ]
     }
 
-    public getSelectedRows(): IRow[] {
+    public getSelectedRows(): Row[] {
         return this.rowsSelected ? this.testRows : [];
     }
 

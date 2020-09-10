@@ -10,7 +10,7 @@
 import { TableFactory } from '../../../../base-components/webapp/core/table/TableFactory';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { ITable, Table, TableEvent, TableEventData } from '../../../../base-components/webapp/core/table';
+import { Table, TableEvent, TableEventData } from '../../../../base-components/webapp/core/table';
 import { LogFileTableContentProvider } from './LogFileTableContentProvider';
 import { EventService } from '../../../../../modules/base-components/webapp/core/EventService';
 import { TableHeaderHeight } from '../../../../../model/configuration/TableHeaderHeight';
@@ -31,7 +31,7 @@ export class LogFileTableFactory extends TableFactory {
     public createTable(
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: number[], contextId?: string,
         defaultRouting?: boolean, defaultToggle?: boolean
-    ): ITable {
+    ): Table {
 
         tableConfiguration = this.setDefaultTableConfiguration(tableConfiguration, defaultRouting, defaultToggle);
         const table = new Table(tableKey, tableConfiguration);

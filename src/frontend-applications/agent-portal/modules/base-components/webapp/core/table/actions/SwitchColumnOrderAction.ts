@@ -7,11 +7,10 @@
  * --
  */
 
-import { ITable } from '../ITable';
 import { Table } from '../Table';
 import { AbstractAction } from '../../AbstractAction';
 
-export class SwitchColumnOrderAction extends AbstractAction<ITable> {
+export class SwitchColumnOrderAction extends AbstractAction<Table> {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Switch';

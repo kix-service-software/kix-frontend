@@ -8,7 +8,7 @@
  */
 
 import { TableContentProvider } from '../../../../base-components/webapp/core/table/TableContentProvider';
-import { ITable, IRowObject, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
@@ -19,7 +19,7 @@ import { JobRunProperty } from '../../../model/JobRunProperty';
 export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: number[],
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -27,7 +27,7 @@ export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
         super(KIXObjectType.JOB_RUN, table, objectIds, loadingOptions, contextId);
     }
 
-    public async loadData(): Promise<Array<IRowObject<JobRun>>> {
+    public async loadData(): Promise<Array<RowObject<JobRun>>> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
@@ -47,7 +47,7 @@ export class JobRunHistoryContentProvider extends TableContentProvider<JobRun> {
 
                         const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                         for (const column of columns) {
-                            const tableValue = await this.getTableValue(run, column.property, column);
+                            const tableValue = new TableValue(column.property, run[column.property]);
                             values.push(tableValue);
                         }
 

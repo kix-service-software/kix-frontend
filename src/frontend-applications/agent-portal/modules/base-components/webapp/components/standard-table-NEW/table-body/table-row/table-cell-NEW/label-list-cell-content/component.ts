@@ -11,7 +11,7 @@ import { ComponentState } from './ComponentState';
 import {
     AbstractMarkoComponent
 } from '../../../../../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
-import { ICell } from '../../../../../../core/table';
+import { Cell } from '../../../../../../core/table';
 import { SortUtil } from '../../../../../../../../../model/SortUtil';
 import { Label } from '../../../../../../../../../modules/base-components/webapp/core/Label';
 import { DataType } from '../../../../../../../../../model/DataType';
@@ -30,20 +30,24 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private setLabels(cell: ICell): void {
+    private setLabels(cell: Cell): void {
         let values = [];
         let icons: Array<string | ObjectIcon> = [];
         const value = cell.getValue();
-        if (Array.isArray(value.objectValue)) {
-            if (typeof value.objectValue[0] === 'object') {
-                const stringValue = cell.getValue().displayValue;
-                values = stringValue.split(',').map((v) => v.trim());
-            } else {
-                values = value.objectValue;
-                icons = value.displayIcons ? value.displayIcons : [];
+        if (value) {
+            if (typeof value.displayValue === 'string') {
+                values = value.displayValue ? value.displayValue.split(',').map((v) => v.trim()) : [];
+            } else if (Array.isArray(value.objectValue)) {
+                if (typeof value.objectValue[0] === 'object') {
+                    const stringValue = cell.getValue().displayValue;
+                    values = stringValue.split(',').map((v) => v.trim());
+                } else {
+                    values = value.objectValue;
+                    icons = value.displayIcons ? value.displayIcons : [];
+                }
+            } else if (typeof value.objectValue !== 'undefined' && value.objectValue !== null) {
+                values = [value.objectValue];
             }
-        } else if (typeof value.objectValue !== 'undefined' && value.objectValue !== null) {
-            values = [value.objectValue];
         }
 
         this.state.cellLabels = SortUtil.sortObjects(

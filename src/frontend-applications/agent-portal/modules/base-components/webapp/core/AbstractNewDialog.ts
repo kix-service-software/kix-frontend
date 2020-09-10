@@ -84,12 +84,16 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
 
     public async onDestroy(): Promise<void> {
         AbstractNewDialog.prototype.resetDialog();
-    }
-
-    public async cancel(): Promise<void> {
         if (this.state.formId) {
             FormService.getInstance().deleteFormInstance(this.state.formId);
         }
+
+        if (this.dialogContext) {
+            this.dialogContext.reset();
+        }
+    }
+
+    public async cancel(): Promise<void> {
         AbstractNewDialog.prototype.resetDialog();
         DialogService.getInstance().closeMainDialog();
     }
@@ -116,17 +120,31 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                         AbstractNewDialog.prototype.showValidationError.call(this, result);
                     }
                 } else {
-                    DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
+
+                    let canceled = false;
+                    DialogService.getInstance().setMainDialogLoading(
+                        true, this.loadingHint, false, null,
+                        () => {
+                            DialogService.getInstance().setMainDialogLoading(false);
+                            DialogService.getInstance().closeMainDialog();
+                            canceled = true;
+                            resolve();
+                        }, 'Translatable#send to background'
+                    );
+
                     KIXObjectService.createObjectByForm(this.objectType, this.state.formId, this.options)
                         .then(async (objectId) => {
-                            if (this.handleDialogSuccess) {
-                                await this.handleDialogSuccess(objectId);
+                            if (canceled) {
+                                BrowserUtil.openSuccessOverlay(this.successHint);
                             } else {
-                                await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
+                                if (this.handleDialogSuccess) {
+                                    await this.handleDialogSuccess(objectId);
+                                } else {
+                                    await AbstractNewDialog.prototype.handleDialogSuccess.call(this, objectId);
+                                }
+
+                                ContextService.getInstance().updateObjectLists(this.objectType);
                             }
-
-                            ContextService.getInstance().updateObjectLists(this.objectType);
-
                             resolve();
                         }).catch((error: Error) => {
                             DialogService.getInstance().setMainDialogLoading(false);

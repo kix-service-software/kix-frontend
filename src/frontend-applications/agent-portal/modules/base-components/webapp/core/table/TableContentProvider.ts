@@ -8,8 +8,7 @@
  */
 
 import { ITableContentProvider } from './ITableContentProvider';
-import { ITable } from './ITable';
-import { IRowObject } from './IRowObject';
+import { Table } from './Table';
 import { RowObject } from './RowObject';
 import { TableValue } from './TableValue';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
@@ -20,7 +19,6 @@ import { KIXObjectService } from '../KIXObjectService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { LabelService } from '../LabelService';
-import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -30,7 +28,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     public constructor(
         protected objectType: KIXObjectType | string,
-        protected table: ITable,
+        protected table: Table,
         protected objectIds: Array<number | string>,
         protected loadingOptions: KIXObjectLoadingOptions,
         protected contextId?: string,
@@ -87,7 +85,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return this.objectType;
     }
 
-    public async loadData(): Promise<Array<IRowObject<T>>> {
+    public async loadData(): Promise<Array<RowObject<T>>> {
         let objects = [];
 
         if (this.objects) {
@@ -105,24 +103,10 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             objects = [];
         }
 
-        const props = this.table.getColumns().map((c) => c.getColumnConfiguration().property);
-        const propertyMap: Map<string, Map<any, TableValue>> = new Map();
-        for (const p of props) {
-            const column = this.table.getColumns().find((c) => c.getColumnConfiguration().property === p);
-            const valueMap: Map<any, TableValue> = new Map();
-            propertyMap.set(p, valueMap);
-            for (const o of objects) {
-                if (!valueMap.has(o[p])) {
-                    const vm = await this.getTableValue(o, p, column.getColumnConfiguration());
-                    valueMap.set(o[p], vm);
-                }
-            }
-        }
-
-        return await this.getRowObjects(objects, propertyMap);
+        return await this.getRowObjects(objects);
     }
 
-    protected async getRowObjects(objects: T[], propertyMap: Map<string, Map<any, TableValue>>): Promise<RowObject[]> {
+    protected async getRowObjects(objects: T[]): Promise<RowObject[]> {
         const rowObjectPromises: Array<Promise<RowObject<T>>> = [];
         if (objects) {
             for (const o of objects) {
@@ -131,24 +115,14 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
                     const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
                     for (const column of columns) {
-                        const property = column.property;
-
-                        if (o.hasOwnProperty(property)
-                            && propertyMap.has(property)
-                            && propertyMap.get(property).has(o[property])
-                        ) {
-                            const value = propertyMap.get(property).get(o[property]);
-                            values.push(value);
-                        } else if (!KIXObjectService.getDynamicFieldName(property)) {
-                            const tableValue = await this.getTableValue(o, property, column);
-                            values.push(tableValue);
-                        }
+                        const tableValue = new TableValue(column.property, o[column.property], null, null, null);
+                        values.push(tableValue);
                     }
                     await this.prepareSpecificValues(values, o);
                     const rowObject = new RowObject<T>(values, o);
 
                     if (this.hasChildRows(rowObject)) {
-                        await this.addChildRows(rowObject, propertyMap);
+                        await this.addChildRows(rowObject);
                     }
 
                     resolve(rowObject);
@@ -158,22 +132,6 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
         const rowObjects = await Promise.all(rowObjectPromises);
         return rowObjects;
-    }
-
-    protected async getTableValue(object: any, property: string, column: IColumnConfiguration): Promise<TableValue> {
-        const showIcons = column ? column.showIcon : true;
-        const translatable = column ? column.translatable : true;
-
-        const displayValue = await LabelService.getInstance().getDisplayText(
-            object, property, object[property], translatable
-        );
-
-        let icons = [];
-        if (showIcons) {
-            icons = await LabelService.getInstance().getIcons(object, property, null, true);
-        }
-
-        return new TableValue(property, object[property], displayValue, undefined, icons);
     }
 
     protected async prepareSpecificValues(values: TableValue[], object: any): Promise<void> {
@@ -196,7 +154,7 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
         return false;
     }
 
-    protected async addChildRows(rowObject: RowObject, propertyMap: Map<string, Map<any, TableValue>>): Promise<void> {
+    protected async addChildRows(rowObject: RowObject): Promise<void> {
         return;
     }
 }

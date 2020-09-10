@@ -126,7 +126,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const response = await this.sendRequest<CreateObjectResponse>(
             request,
-            KIXObjectEvent.CREATE_OBJECT, KIXObjectEvent.CREATE_OBJECT_FINISHED, KIXObjectEvent.CREATE_OBJECT_ERROR
+            KIXObjectEvent.CREATE_OBJECT, KIXObjectEvent.CREATE_OBJECT_FINISHED, KIXObjectEvent.CREATE_OBJECT_ERROR, -1
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
@@ -148,7 +148,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
         const response = await this.sendRequest<UpdateObjectResponse>(
             request,
-            KIXObjectEvent.UPDATE_OBJECT, KIXObjectEvent.UPDATE_OBJECT_FINISHED, KIXObjectEvent.UPDATE_OBJECT_ERROR
+            KIXObjectEvent.UPDATE_OBJECT, KIXObjectEvent.UPDATE_OBJECT_FINISHED, KIXObjectEvent.UPDATE_OBJECT_ERROR, -1
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
@@ -169,7 +169,7 @@ export class KIXObjectSocketClient extends SocketClient {
 
         await this.sendRequest<DeleteObjectResponse>(
             request,
-            KIXObjectEvent.DELETE_OBJECT, KIXObjectEvent.DELETE_OBJECT_FINISHED, KIXObjectEvent.DELETE_OBJECT_ERROR
+            KIXObjectEvent.DELETE_OBJECT, KIXObjectEvent.DELETE_OBJECT_FINISHED, KIXObjectEvent.DELETE_OBJECT_ERROR, -1
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
@@ -184,13 +184,17 @@ export class KIXObjectSocketClient extends SocketClient {
         const socketTimeout = defaultTimeout ? defaultTimeout : ClientStorageService.getSocketTimeout();
 
         return new Promise<T>((resolve, reject) => {
-            const timeout = window.setTimeout(() => {
-                const timeoutInSeconds = socketTimeout / 1000;
-                // tslint:disable-next-line:max-line-length
-                const error = `Zeitüberschreitung der Anfrage (Event: ${event} - ${requestObject.objectType}) (Timeout: ${timeoutInSeconds} Sekunden)`;
-                console.error(error);
-                reject(new Error('TIMEOUT', error));
-            }, socketTimeout);
+            let timeout: any;
+
+            if (defaultTimeout > 0) {
+                timeout = window.setTimeout(() => {
+                    const timeoutInSeconds = socketTimeout / 1000;
+                    // tslint:disable-next-line:max-line-length
+                    const error = `Zeitüberschreitung der Anfrage (Event: ${event} - ${requestObject.objectType}) (Timeout: ${timeoutInSeconds} Sekunden)`;
+                    console.error(error);
+                    reject(new Error('TIMEOUT', error));
+                }, socketTimeout);
+            }
 
             this.socket.on(finishEvent, (result: T) => {
                 if (result.requestId === requestObject.requestId) {

@@ -7,23 +7,18 @@
  * --
  */
 
-export { ITable } from './ITable';
 export { Table } from './Table';
-export { IRow } from './IRow';
 export { Row } from './Row';
-export { IColumn } from './IColumn';
 export { Column } from './Column';
-export { ICell } from './ICell';
 export { Cell } from './Cell';
-export { ITableContentProvider } from './ITableContentProvider';
-export { IRowObject } from './IRowObject';
+export { TableContentProvider } from './TableContentProvider';
 export { RowObject } from './RowObject';
 export { SelectionState } from './SelectionState';
 export { TableRowHeight } from './TableRowHeight';
 export { ToggleOptions } from './ToggleOptions';
 export { TableHeaderHeight } from './TableHeaderHeight';
 export { TableFactoryService } from './TableFactoryService';
-export { ITableFactory } from './ITableFactory';
+export { TableFactory } from './TableFactory';
 export { TableEvent } from './TableEvent';
 export { TableEventData } from './TableEventData';
 export { ValueState } from './ValueState';

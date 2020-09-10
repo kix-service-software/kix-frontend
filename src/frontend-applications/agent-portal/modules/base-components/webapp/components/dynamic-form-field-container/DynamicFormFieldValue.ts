@@ -30,6 +30,7 @@ export class DynamicFormFieldValue {
     public isDateTime: boolean = false;
     public isTextarea: boolean = false;
     public isSpecificInput: boolean = false;
+    public isNumber: boolean = false;
     public specificInputType: string = null;
     public inputOptions: Array<[string, string | number]> = [];
 
@@ -59,6 +60,9 @@ export class DynamicFormFieldValue {
 
     private betweenEndDate: string;
     private betweenEndTime: string;
+
+    private numberValue: string;
+    private betweenEndNumberValue: string;
 
     public constructor(
         public manager: IDynamicFormManager,
@@ -123,7 +127,9 @@ export class DynamicFormFieldValue {
 
     public clearValue(): void {
         this.value.value = null;
-        this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
+        if (this.isDropdown) {
+            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, false, true);
+        }
     }
 
     public async setProperty(property: string, update: boolean = false, silent?: boolean): Promise<void> {
@@ -139,8 +145,10 @@ export class DynamicFormFieldValue {
             }
 
             this.value.value = null;
-            this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
-            this.valueTreeHandler.setTree([]);
+            if (this.isDropdown) {
+                this.valueTreeHandler.setSelection(this.valueTreeHandler.getSelectedNodes(), false, true, true);
+                this.valueTreeHandler.setTree([]);
+            }
         }
 
         await this.manager.setValue(this.value, silent);
@@ -224,6 +232,7 @@ export class DynamicFormFieldValue {
 
             this.isDate = inputType === InputFieldTypes.DATE;
             this.isDateTime = inputType === InputFieldTypes.DATE_TIME;
+            this.isNumber = inputType === InputFieldTypes.NUMBER;
 
             this.isDropdown = inputType === InputFieldTypes.DROPDOWN || inputType === InputFieldTypes.OBJECT_REFERENCE;
             this.isAutocomplete = inputType === InputFieldTypes.OBJECT_REFERENCE;
@@ -249,9 +258,17 @@ export class DynamicFormFieldValue {
                 }
             }
 
-            if (this.value.property && this.isDropdown) {
+            if (this.value.property && this.isDropdown && !this.isAutocomplete) {
                 const valueNodes = await this.manager.getTreeNodes(this.value.property);
                 this.valueTreeHandler.setTree(valueNodes);
+            }
+
+            const preloadOption = this.inputOptions.find(
+                (o) => o[0] === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
+            );
+            if (this.isAutocomplete && preloadOption && preloadOption[1]) {
+                const tree = await this.doAutocompleteSearch(10, preloadOption[1].toString());
+                this.valueTreeHandler.setTree(tree);
             }
         }
     }
@@ -329,12 +346,21 @@ export class DynamicFormFieldValue {
                         currentValues.push(new TreeNode(object.ObjectId, label, icon));
                     }
                 }
+            } else if (this.isNumber) {
+                if (this.isBetween && Array.isArray(this.value.value)) {
+                    this.numberValue = !isNaN(this.value.value[0]) ? this.value.value[0] : null;
+                    this.betweenEndNumberValue = !isNaN(this.value.value[1]) ? this.value.value[1] : null;
+                } else {
+                    this.numberValue = !isNaN(this.value.value) ? this.value.value : null;
+                }
             } else if (!this.isSpecificInput) {
                 this.value.value = Array.isArray(this.value.value) ? this.value.value[0] : this.value.value;
             }
         }
 
-        this.valueTreeHandler.setSelection(currentValues, true, silent, true);
+        if (this.isDropdown) {
+            this.valueTreeHandler.setSelection(currentValues, true, silent, true);
+        }
     }
 
     public setValue(value: string | string[] | number[]): void {
@@ -372,6 +398,14 @@ export class DynamicFormFieldValue {
         this.betweenEndTime = value;
     }
 
+    public setNumberValue(value: string): void {
+        this.numberValue = value;
+    }
+
+    public setBetweenEndNumberValue(value: string): void {
+        this.betweenEndNumberValue = value;
+    }
+
     public getValue(): ObjectPropertyValue {
         const currentValue = { ...this.value };
         if (this.isDate) {
@@ -397,6 +431,14 @@ export class DynamicFormFieldValue {
                     [currentValue.value, DateTimeUtil.getKIXDateTimeString(endDate)];
             }
 
+        }
+        if (this.isNumber) {
+            currentValue.value = !isNaN(Number(this.numberValue)) && this.numberValue !== ''
+                ? Number(this.numberValue) : null;
+            if (this.isBetween && currentValue.value) {
+                currentValue.value = !isNaN(Number(this.betweenEndNumberValue)) && this.betweenEndNumberValue !== ''
+                    ? [currentValue.value, Number(this.betweenEndNumberValue)] : null;
+            }
         }
         return currentValue;
     }

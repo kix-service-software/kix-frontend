@@ -9,14 +9,14 @@
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
 import { Contact } from '../../../model/Contact';
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { AbstractAction } from '../../../../../modules/base-components/webapp/core/AbstractAction';
 
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
         public contact: Contact = null,
-        public table: ITable = null,
+        public table: Table = null,
         public filterValue: string = '',
         public title: string = '',
         public actions: AbstractAction[] = [],

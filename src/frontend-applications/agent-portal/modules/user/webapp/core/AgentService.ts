@@ -21,6 +21,11 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectFormService } from '../../../base-components/webapp/core/KIXObjectFormService';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { UserProperty } from '../../model/UserProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
 export class AgentService extends KIXObjectService<User> {
 
@@ -107,5 +112,25 @@ export class AgentService extends KIXObjectService<User> {
     public async checkPassword(password: string): Promise<boolean> {
         const user = await this.getCurrentUser();
         return await AuthenticationSocketClient.getInstance().login(user.UserLogin, password, null, true);
+    }
+
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
+        return [
+            new FilterCriteria(
+                UserProperty.USER_LOGIN, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
+            ),
+            new FilterCriteria(
+                'UserFullname', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
+            ),
+            new FilterCriteria(
+                'UserFirstname', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
+            ),
+            new FilterCriteria(
+                'UserLastname', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
+            ),
+            new FilterCriteria(
+                'UserEmail', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
+            )
+        ];
     }
 }

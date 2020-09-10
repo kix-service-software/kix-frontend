@@ -109,15 +109,15 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
     }
 
     public async execute(object: KIXObject): Promise<void> {
-        const editableValues = await this.getEditableValues();
-        if (editableValues.some((v) => !v.valid)) {
+        const edTableValues = await this.getEditableValues();
+        if (edTableValues.some((v) => !v.valid)) {
             return;
         }
 
         this.bulkRun = true;
         const parameter: Array<[string, any]> = [];
 
-        const values = editableValues.filter(
+        const values = edTableValues.filter(
             (v) => !v.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
 

@@ -190,7 +190,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             );
         }
 
-        const loadingOptions = new KIXObjectLoadingOptions(filter, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]);
+        const loadingOptions = new KIXObjectLoadingOptions(filter);
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, null, loadingOptions
         );

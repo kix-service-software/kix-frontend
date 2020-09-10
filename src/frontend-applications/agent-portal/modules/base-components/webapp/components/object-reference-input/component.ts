@@ -67,7 +67,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             eventSubscriberId: this.state.field.instanceId,
             eventPublished: (data: any, eventId: string) => {
                 if (data.formField && data.formField.instanceId === this.state.field.instanceId) {
-                    this.load();
+                    this.load(false);
                 }
             }
         };
@@ -80,14 +80,14 @@ class Component extends FormInputComponent<string | number | string[] | number[]
         TreeService.getInstance().removeTreeHandler(this.state.treeId);
     }
 
-    private async load(loadingOptions?: KIXObjectLoadingOptions): Promise<void> {
+    private async load(preload: boolean = true): Promise<void> {
         let nodes = [];
         const objectOption = this.state.field.options.find((o) => o.option === ObjectReferenceOptions.OBJECT);
         const configLoadingOptions = this.state.field.options.find(
             (o) => o.option === ObjectReferenceOptions.LOADINGOPTIONS
         );
 
-        loadingOptions = loadingOptions || configLoadingOptions ? configLoadingOptions.value : null;
+        const loadingOptions = configLoadingOptions ? configLoadingOptions.value : null;
 
         if (objectOption) {
             if (!this.autocomplete) {
@@ -130,6 +130,16 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 node.tooltip = tooltip;
             }
             nodes = [...additionalNodes.value, ...nodes];
+        }
+
+        if (preload) {
+            const preloadPatternOption = this.state.field.options.find(
+                (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
+            );
+            if (preloadPatternOption && preloadPatternOption.value) {
+                const preloadedNodes = await this.search(10, preloadPatternOption.value);
+                nodes = [...preloadedNodes, ...nodes];
+            }
         }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
@@ -194,7 +204,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 }
             }
             treeHandler.selectNone(true);
-            treeHandler.setSelection(selectedNodes, true, true, true);
+            setTimeout(() => treeHandler.setSelection(selectedNodes, true, true, true), 200);
         } else if (treeHandler) {
             treeHandler.selectNone();
         }

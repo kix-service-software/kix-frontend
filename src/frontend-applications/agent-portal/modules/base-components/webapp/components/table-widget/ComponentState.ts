@@ -8,7 +8,7 @@
  */
 
 import { WidgetComponentState } from '../../../../../modules/base-components/webapp/core/WidgetComponentState';
-import { ITable } from '../../core/table';
+import { Table } from '../../core/table';
 import { KIXObjectPropertyFilter } from '../../../../../model/KIXObjectPropertyFilter';
 import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
@@ -16,7 +16,7 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public table: ITable = null,
+        public table: Table = null,
         public predefinedTableFilter: KIXObjectPropertyFilter[] = [],
         public actions: IAction[] = [],
         public title: string = null,

@@ -57,7 +57,7 @@ class FormComponent {
 
                 setTimeout(() => {
                     const elements = this.keyListenerElement.getElementsByClassName('field-input');
-                    if (elements && elements.length) {
+                    if (elements && elements.length && elements.item(0).firstElementChild) {
                         elements.item(0).firstElementChild.focus();
                     }
                 }, 500);

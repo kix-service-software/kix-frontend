@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.search-form key="search-form">
     <widget instanceId="search-form-group" title=state.translations["Translatable#Attributes"] key="attributes">
         <@content>
@@ -14,6 +13,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <if(state.manager && state.prepared)>
                     <dynamic-form-field-container manager=state.manager key="search-dynamic-form"/>
                 </if>
+            </div>
+            <div.search-limit>
+                <span>
+                    <translation-string pattern="Translatable#Limit:"/>
+                </span>
+                <input.input-style type="number" value=state.limit on-input("limitChanged")/>
             </div>
         </@content>
     </widget>

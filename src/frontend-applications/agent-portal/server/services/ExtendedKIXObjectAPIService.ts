@@ -63,4 +63,13 @@ export abstract class ExtendedKIXObjectAPIService implements IKIXObjectService {
         return null;
     }
 
+    public postPrepareParameter(parameter: Array<[string, string]>, additionalData?: any): void {
+        return;
+    }
+
+    protected getParameterValue(parameter: Array<[string, any]>, property: string): any {
+        const value = parameter.find((p) => p[0] === property);
+        return value ? value[1] : undefined;
+    }
+
 }

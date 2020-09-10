@@ -10,11 +10,9 @@
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { EditTicketDialogContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
-import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { WidgetConfiguration } from '../../model/configuration/WidgetConfiguration';
-import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { HelpWidgetConfiguration } from '../../model/configuration/HelpWidgetConfiguration';
 import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
 import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
@@ -37,9 +35,6 @@ import { FormPageConfiguration } from '../../model/configuration/FormPageConfigu
 import { FormConfiguration } from '../../model/configuration/FormConfiguration';
 import { FormContext } from '../../model/configuration/FormContext';
 import { ModuleConfigurationService } from '../../server/services/configuration';
-import { UserProperty } from '../user/model/UserProperty';
-import { ContactProperty } from '../customer/model/ContactProperty';
-import { OrganisationProperty } from '../customer/model/OrganisationProperty';
 import { DynamicFormFieldOption } from '../dynamic-fields/webapp/core';
 import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/core/ObjectReferenceWidgetConfiguration';
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
@@ -322,7 +317,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketEdit_Owner',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*'),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [
@@ -346,7 +342,8 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 'Translatable#Helptext_Tickets_TicketEdit_Responsible',
                 [
                     new FormFieldOption(ObjectReferenceOptions.OBJECT, KIXObjectType.USER),
-
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE, true),
+                    new FormFieldOption(ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN, '*'),
                     new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
                         new KIXObjectLoadingOptions(
                             [

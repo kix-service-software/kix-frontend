@@ -19,7 +19,6 @@ import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export class TicketSearchDefinition extends SearchDefinition {
@@ -36,17 +35,9 @@ export class TicketSearchDefinition extends SearchDefinition {
         return newManager;
     }
 
-    public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
-        return new KIXObjectLoadingOptions(
-            criteria, null, null,
-            [TicketProperty.WATCHERS, KIXObjectProperty.LINKS, KIXObjectProperty.DYNAMIC_FIELDS],
-            [KIXObjectProperty.LINKS]
-        );
-    }
-
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
         return new KIXObjectLoadingOptions(
-            null, null, null, [TicketProperty.WATCHERS, KIXObjectProperty.DYNAMIC_FIELDS]
+            null, null, null, [TicketProperty.WATCHERS]
         );
     }
 
@@ -61,11 +52,6 @@ export class TicketSearchDefinition extends SearchDefinition {
         if (await this.checkReadPermissions('organisations')) {
             categories.push(
                 new SearchResultCategory('Translatable#Organisations', KIXObjectType.ORGANISATION)
-            );
-        }
-        if (await this.checkReadPermissions('cmdb/configitems')) {
-            categories.push(
-                new SearchResultCategory('Translatable#Config Items', KIXObjectType.CONFIG_ITEM)
             );
         }
 

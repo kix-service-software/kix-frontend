@@ -7,18 +7,18 @@
  * --
  */
 
-import { ITable } from '../../../../base-components/webapp/core/table';
+import { Table } from '../../../../base-components/webapp/core/table';
 import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public instanceId: string = 'admin-sysconfig-overview',
-        public table: ITable = null,
-        public filterValue: string = '',
+        public table: Table = null,
         public prepared: boolean = false,
         public title: string = 'System: Sysconfig (0)',
-        public placeholder: string = 'Please enter a search term.'
+        public placeholder: string = 'Please enter a search term.',
+        public filterValue: string = ''
     ) {
         super();
     }

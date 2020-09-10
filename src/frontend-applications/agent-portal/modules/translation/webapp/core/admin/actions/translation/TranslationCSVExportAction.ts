@@ -8,11 +8,11 @@
  */
 
 import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { TranslationService } from '../../../TranslationService';
 import { TranslationPattern } from '../../../../../model/TranslationPattern';
 
-export class TranslationCSVExportAction extends AbstractAction<ITable> {
+export class TranslationCSVExportAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 

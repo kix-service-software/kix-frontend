@@ -8,7 +8,7 @@
  */
 
 import { AbstractAction } from '../../../../../../../modules/base-components/webapp/core/AbstractAction';
-import { ITable } from '../../../../../../base-components/webapp/core/table';
+import { Table } from '../../../../../../base-components/webapp/core/table';
 import { UIComponentPermission } from '../../../../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../../../../server/model/rest/CRUD';
 import { TranslationService } from '../../../TranslationService';
@@ -24,7 +24,7 @@ import { ToastContent } from '../../../../../../../modules/base-components/webap
 import { ContextService } from '../../../../../../base-components/webapp/core/ContextService';
 import { AuthenticationSocketClient } from '../../../../../../base-components/webapp/core/AuthenticationSocketClient';
 
-export class TranslationTableDeleteAction extends AbstractAction<ITable> {
+export class TranslationTableDeleteAction extends AbstractAction<Table> {
 
     public hasLink: boolean = false;
 

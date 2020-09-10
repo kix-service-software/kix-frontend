@@ -9,14 +9,14 @@
 
 import { TableContentProvider } from '../../../../../../base-components/webapp/core/table/TableContentProvider';
 import { FAQCategory } from '../../../../../model/FAQCategory';
-import { ITable, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
+import { Table, RowObject, TableValue } from '../../../../../../base-components/webapp/core/table';
 import { KIXObjectLoadingOptions } from '../../../../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectType } from '../../../../../../../model/kix/KIXObjectType';
 
 export class FAQCategoryTableContentProvider extends TableContentProvider<FAQCategory> {
 
     public constructor(
-        table: ITable,
+        table: Table,
         objectIds: Array<string | number>,
         loadingOptions: KIXObjectLoadingOptions,
         contextId?: string
@@ -29,9 +29,9 @@ export class FAQCategoryTableContentProvider extends TableContentProvider<FAQCat
     }
 
     protected async addChildRows(
-        rowObject: RowObject<FAQCategory>, propertyMap: Map<string, Map<any, TableValue>>
+        rowObject: RowObject<FAQCategory>
     ): Promise<void> {
-        const rows = await this.getRowObjects(rowObject.getObject().SubCategories, propertyMap);
+        const rows = await this.getRowObjects(rowObject.getObject().SubCategories);
         rows.forEach((r) => rowObject.addChild(r));
     }
 

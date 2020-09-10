@@ -10,10 +10,10 @@
 import { ITableFactory } from './ITableFactory';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 import { TableConfiguration } from '../../../../../model/configuration/TableConfiguration';
-import { ITable } from './ITable';
+import { Table } from './Table';
 import { DefaultColumnConfiguration } from '../../../../../model/configuration/DefaultColumnConfiguration';
-import { IColumn } from './IColumn';
-import { IRow } from './IRow';
+import { Column } from './Column';
+import { Row } from './Row';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DataType } from '../../../../../model/DataType';
@@ -38,7 +38,7 @@ export abstract class TableFactory implements ITableFactory {
         tableKey: string, tableConfiguration?: TableConfiguration, objectIds?: Array<string | number>,
         contextId?: string, defaultRouting?: boolean, defaultToggle?: boolean, short?: boolean,
         objectType?: KIXObjectType | string, objects?: KIXObject[]
-    ): ITable;
+    ): Table;
 
     public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
         let config;
@@ -81,7 +81,7 @@ export abstract class TableFactory implements ITableFactory {
         return config;
     }
 
-    public getColumnFilterValues<T extends KIXObject = any>(rows: IRow[], column: IColumn): Array<[T, number]> {
+    public getColumnFilterValues<T extends KIXObject = any>(rows: Row[], column: Column): Array<[T, number]> {
         for (const extendedFactory of this.extendedTableFactories) {
             const extendedValues = extendedFactory.getColumnFilterValues(rows, column);
             if (extendedValues) {
@@ -92,7 +92,7 @@ export abstract class TableFactory implements ITableFactory {
     }
 
     public static getColumnFilterValues<T extends KIXObject = any>(
-        rows: IRow[], column: IColumn, values: Array<[T, number]> = []
+        rows: Row[], column: Column, values: Array<[T, number]> = []
     ): Array<[T, number]> {
         rows.forEach((r) => {
             const cell = r.getCell(column.getColumnId());

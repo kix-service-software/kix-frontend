@@ -7,8 +7,7 @@
  * --
  */
 
-import { IColumn } from './IColumn';
-import { ITable } from './ITable';
+import { Table } from './Table';
 import { TableEvent } from './TableEvent';
 import { TableEventData } from './TableEventData';
 import { ClientStorageService } from '../ClientStorageService';
@@ -21,7 +20,7 @@ import { EventService } from '../EventService';
 import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { IColumnConfiguration } from '../../../../../model/configuration/IColumnConfiguration';
 
-export class Column<T extends KIXObject = any> implements IColumn<T> {
+export class Column<T extends KIXObject = any> {
 
     private id: string;
 
@@ -31,7 +30,7 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
     private filterCriteria: UIFilterCriterion[];
 
     public constructor(
-        private table: ITable,
+        private table: Table,
         private columnConfiguration: IColumnConfiguration
     ) {
         this.id = columnConfiguration.property;
@@ -45,7 +44,7 @@ export class Column<T extends KIXObject = any> implements IColumn<T> {
         return this.id;
     }
 
-    public getTable(): ITable {
+    public getTable(): Table {
         return this.table;
     }
 
