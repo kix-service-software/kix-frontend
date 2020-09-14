@@ -53,9 +53,6 @@ msgstr ""
 msgid "Access Level"
 msgstr ""
 
-msgid "Accounted time"
-msgstr ""
-
 msgid "Account Information"
 msgstr ""
 
@@ -253,6 +250,9 @@ msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 
 msgid "Attachments"
+msgstr ""
+
+msgid "Attribut"
 msgstr ""
 
 msgid "Attribute"
@@ -729,6 +729,9 @@ msgid "Download log"
 msgstr ""
 
 msgid "Duplicate"
+msgstr ""
+
+msgid "DynamicField"
 msgstr ""
 
 msgid "Dynamic Field"
@@ -1699,6 +1702,13 @@ msgstr "Only valid agents are available."
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "The role can only be used within the system if set “valid”."
 
+#, fuzzy
+#| msgid "Helptext_Admin_TranslationSearch"
+msgid "Helptext_Admin_UsersSearch"
+msgstr ""
+"Searchable are properties of the colum \"Pattern\". If only a part of a name "
+"is inserted it must be put in * (Wildcard-Search)."
+
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
 "Semicolon can be used as text separator. You can also use RegEx, as long as "
@@ -1913,8 +1923,8 @@ msgstr ""
 msgid "Helptext_Customers_OrganisationCreate_Avatar."
 msgstr ""
 "Upload an avatar (picture or icon). Depending on the configuration of your "
-"KIX Agent Portal the avatar can be shown together with the organisation, "
-"e.g. in a sidebar."
+"KIX Agent Portal the avatar can be shown together with the organisation, e."
+"g. in a sidebar."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -2501,6 +2511,9 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
+msgid "Layer"
+msgstr ""
+
 msgid "Legend"
 msgstr ""
 
@@ -2508,6 +2521,9 @@ msgid "Lets go"
 msgstr ""
 
 msgid "Let's go"
+msgstr ""
+
+msgid "Limit:"
 msgstr ""
 
 msgid "link {0}"
@@ -3206,9 +3222,6 @@ msgstr ""
 msgid "Reply all"
 msgstr ""
 
-msgid "Required field {0} has no usable value."
-msgstr ""
-
 msgid "Required field {0} has no value."
 msgstr ""
 
@@ -3351,6 +3364,9 @@ msgid "Send to"
 msgstr ""
 
 msgid "Send to all role members"
+msgstr ""
+
+msgid "send to background"
 msgstr ""
 
 msgid "Send to these agents"
@@ -3873,7 +3889,7 @@ msgstr ""
 msgid "User Management: Roles"
 msgstr ""
 
-msgid "User Management: Users"
+msgid "User Management: Users ({0})"
 msgstr ""
 
 msgid "User manual"

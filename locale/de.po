@@ -53,9 +53,6 @@ msgstr "Zugriff verweigert"
 msgid "Access Level"
 msgstr "Zugriffsebene"
 
-msgid "Accounted time"
-msgstr "Erfasste Zeit"
-
 msgid "Account Information"
 msgstr "Kontoinformationen"
 
@@ -269,6 +266,11 @@ msgstr ""
 
 msgid "Attachments"
 msgstr "Anlagen"
+
+#, fuzzy
+#| msgid "Attribute"
+msgid "Attribut"
+msgstr "Attribut"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -749,6 +751,11 @@ msgstr "Log Download"
 
 msgid "Duplicate"
 msgstr "Duplizieren"
+
+#, fuzzy
+#| msgid "Dynamic Field"
+msgid "DynamicField"
+msgstr "Dynamisches Feld"
 
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
@@ -1794,6 +1801,14 @@ msgstr "Es werden nur gültige Agenten angezeigt."
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
+#, fuzzy
+#| msgid "Helptext_Admin_TranslationSearch"
+msgid "Helptext_Admin_UsersSearch"
+msgstr ""
+"Durchsuchbar sind die Eigenschaften in der Spalte \"Pattern\". Wird nur ein "
+"Teil einer Bezeichnung gesucht, muss dieser in * gesetzt werden (Wildcard-"
+"Suche)."
+
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
 "Semikolon ist als Texttrenner zulässig. Verwendung von RegEx ist möglich, "
@@ -1954,8 +1969,8 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Avatar."
 msgstr ""
-"Legen Sie einen Avatar (Bild oder Icon) fest, welches in der Sidebar \""
-"Kontaktinformationen\" mit dem Kontakt gemeinsam angezeigt wird. (Admin-"
+"Legen Sie einen Avatar (Bild oder Icon) fest, welches in der Sidebar "
+"\"Kontaktinformationen\" mit dem Kontakt gemeinsam angezeigt wird. (Admin-"
 "Konfiguration an anderer Stelle möglich) Der Avatar bekommt eine fixe Höhe "
 "von 98px, die Breite wird dann entsprechend dem Bildformat angepasst. "
 "Empfehlung: Verwenden Sie ein quadratisches oder Hochkant-Format."
@@ -2647,6 +2662,9 @@ msgstr "Letzte Anmeldung"
 msgid "Last Name"
 msgstr "Nachname"
 
+msgid "Layer"
+msgstr ""
+
 msgid "Legend"
 msgstr "Legende"
 
@@ -2657,6 +2675,9 @@ msgstr "Los geht's"
 
 msgid "Let's go"
 msgstr "Los geht's"
+
+msgid "Limit:"
+msgstr ""
 
 msgid "link {0}"
 msgstr "{0} verknüpfen"
@@ -3362,11 +3383,6 @@ msgstr "Allen antworten"
 
 #, fuzzy
 #| msgid "Required field '{0}' has no value."
-msgid "Required field {0} has no usable value."
-msgstr "Benötigtes Feld '{0}' hat keinen Wert."
-
-#, fuzzy
-#| msgid "Required field '{0}' has no value."
 msgid "Required field {0} has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
@@ -3514,6 +3530,9 @@ msgstr "Senden an"
 
 msgid "Send to all role members"
 msgstr "Senden an Agenten-Rollen"
+
+msgid "send to background"
+msgstr ""
 
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
@@ -4042,7 +4061,9 @@ msgstr "Nutzerverwaltung"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
-msgid "User Management: Users"
+#, fuzzy
+#| msgid "User Management: Users"
+msgid "User Management: Users ({0})"
 msgstr "Nutzerverwaltung: Nutzer"
 
 msgid "User manual"
@@ -4163,6 +4184,14 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Accounted time"
+#~ msgstr "Erfasste Zeit"
+
+#, fuzzy
+#~| msgid "Required field '{0}' has no value."
+#~ msgid "Required field {0} has no usable value."
+#~ msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
 #~ msgid "no"
 #~ msgstr "nein"
