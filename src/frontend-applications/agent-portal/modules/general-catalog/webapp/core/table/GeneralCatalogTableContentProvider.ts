@@ -57,14 +57,10 @@ export class GeneralCatalogTableContentProvider extends TableContentProvider<Gen
     private async createRowObject(definition: GeneralCatalogItem): Promise<RowObject> {
         const values: TableValue[] = [];
 
-        for (const property in definition) {
-            if (definition.hasOwnProperty(property)) {
-                const column = this.table.getColumns().map((c) => c.getColumnConfiguration()).find(
-                    (c) => c.property === property
-                );
-                const tableValue = new TableValue(column.property, definition[property]);
-                values.push(tableValue);
-            }
+        const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+        for (const column of columns) {
+            const tableValue = new TableValue(column.property, definition[column.property]);
+            values.push(tableValue);
         }
 
         const rowObject = new RowObject<GeneralCatalogItem>(values, definition);
