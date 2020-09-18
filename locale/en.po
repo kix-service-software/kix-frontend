@@ -186,6 +186,11 @@ msgstr ""
 msgid "Article"
 msgstr ""
 
+#, fuzzy
+#| msgid "Helptext_FAQ_ArticleCreate_Title"
+msgid "Article Create Time"
+msgstr "Briefly summarize the FAQ article topic."
+
 msgid "Article Data"
 msgstr ""
 
@@ -247,6 +252,9 @@ msgid "At least {0} values must be selected"
 msgstr ""
 
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
+msgstr ""
+
+msgid "Attachment Name"
 msgstr ""
 
 msgid "Attachments"
@@ -570,6 +578,29 @@ msgid "Created at"
 msgstr ""
 
 msgid "Created by"
+msgstr ""
+
+#, fuzzy
+#| msgid "Load Ticket Priority"
+msgid "Created with Priority"
+msgstr "Loading Ticket Priority"
+
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Created with Queue"
+msgstr "Create Team"
+
+#, fuzzy
+#| msgid "Load Ticket State"
+msgid "Created with State"
+msgstr "Loading Ticket State"
+
+#, fuzzy
+#| msgid "Load Ticket Type"
+msgid "Created with Type"
+msgstr "Loading Ticket Type"
+
+msgid "Created with User"
 msgstr ""
 
 msgid "Create Dynamic Field"
@@ -3943,6 +3974,11 @@ msgstr ""
 msgid "Watch Ticket"
 msgstr ""
 
+#, fuzzy
+#| msgid "Load User"
+msgid "Watch User"
+msgstr "Loading User"
+
 msgid "We are working on this functionality."
 msgstr ""
 
@@ -4012,9 +4048,6 @@ msgstr ""
 msgid "ZIP"
 msgstr ""
 
-#~ msgid "Load Ticket State"
-#~ msgstr "Loading Ticket State"
-
 #~ msgid "Load Config Item"
 #~ msgstr "Loading Assets"
 
@@ -4060,17 +4093,8 @@ msgstr ""
 #~ msgid "Load Ticket"
 #~ msgstr "Loading Ticket"
 
-#~ msgid "Load Ticket Priority"
-#~ msgstr "Loading Ticket Priority"
-
 #~ msgid "Load Tickets"
 #~ msgstr "Loading Tickets"
-
-#~ msgid "Load Ticket Type"
-#~ msgstr "Loading Ticket Type"
-
-#~ msgid "Load User"
-#~ msgstr "Loading User"
 
 #~ msgid "Helptext_Tickets_TicketCreate_Links"
 #~ msgstr "Link this ticket with an asset, a FAQ article or another ticket."

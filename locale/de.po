@@ -196,6 +196,11 @@ msgstr "Archiviert"
 msgid "Article"
 msgstr "Artikel"
 
+#, fuzzy
+#| msgid "Article Data"
+msgid "Article Create Time"
+msgstr "Artikeldaten"
+
 msgid "Article Data"
 msgstr "Artikeldaten"
 
@@ -263,6 +268,11 @@ msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
 "enthalten."
+
+#, fuzzy
+#| msgid "Attachment"
+msgid "Attachment Name"
+msgstr "Anhang"
 
 msgid "Attachments"
 msgstr "Anlagen"
@@ -592,6 +602,31 @@ msgstr "Erstellt am"
 
 msgid "Created by"
 msgstr "Erstellt von"
+
+#, fuzzy
+#| msgid "Create Priority"
+msgid "Created with Priority"
+msgstr "Priorität wird angelegt"
+
+#, fuzzy
+#| msgid "Create Queue"
+msgid "Created with Queue"
+msgstr "Team wird angelegt"
+
+#, fuzzy
+#| msgid "Create State"
+msgid "Created with State"
+msgstr "Status wird angelegt"
+
+#, fuzzy
+#| msgid "Create Type"
+msgid "Created with Type"
+msgstr "Typ wird angelegt"
+
+#, fuzzy
+#| msgid "Create Filter"
+msgid "Created with User"
+msgstr "Filter wird angelegt"
 
 msgid "Create Dynamic Field"
 msgstr "Dynamisches Feld wird angelegt"
@@ -4119,6 +4154,11 @@ msgstr "Beobachtete Tickets"
 msgid "Watch Ticket"
 msgstr "Ticket beobachten"
 
+#, fuzzy
+#| msgid "Watched"
+msgid "Watch User"
+msgstr "Beobachtet"
+
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
 
@@ -5602,9 +5642,6 @@ msgstr "PLZ"
 
 #~ msgid "Room"
 #~ msgstr "Raum"
-
-#~ msgid "Attachment"
-#~ msgstr "Anhang"
 
 #~ msgid "Assigned Owner"
 #~ msgstr "Zugeordneter Besitzer"
