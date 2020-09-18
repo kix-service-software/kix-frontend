@@ -13,7 +13,7 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 
 export class SearchOperatorUtil {
 
-    public static async getText(operator: SearchOperator): Promise<string> {
+    public static async getText(operator: SearchOperator | string): Promise<string> {
         switch (operator) {
             case SearchOperator.BETWEEN:
                 return await TranslationService.translate('Translatable#between');

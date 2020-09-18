@@ -11,5 +11,7 @@ export enum NotificationFilterTableProperty {
 
     FIELD = 'FIELD',
 
-    VALUE = 'VALUE'
+    VALUE = 'VALUE',
+
+    OPERATOR = 'OPERATOR'
 }

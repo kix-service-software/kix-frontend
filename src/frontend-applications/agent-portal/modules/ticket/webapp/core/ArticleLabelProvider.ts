@@ -146,12 +146,15 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 displayValue = '';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
-                if (value === 1) {
-                    displayValue = 'Translatable#agent';
-                } else if (value === 2) {
-                    displayValue = 'Translatable#system';
-                } else if (value === 3) {
-                    displayValue = 'Translatable#external';
+                const checkNumber = Number(value);
+                if (!isNaN(checkNumber)) {
+                    if (checkNumber === 1) {
+                        displayValue = 'Translatable#agent';
+                    } else if (checkNumber === 2) {
+                        displayValue = 'Translatable#system';
+                    } else if (checkNumber === 3) {
+                        displayValue = 'Translatable#external';
+                    }
                 }
                 break;
             case ArticleProperty.INCOMING_TIME:

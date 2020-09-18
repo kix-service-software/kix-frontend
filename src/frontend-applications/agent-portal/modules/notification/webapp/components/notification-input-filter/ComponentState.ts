@@ -8,15 +8,20 @@
  */
 
 import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
-import { NotificationFilterManager } from '../../core';
+import { SearchService } from '../../../../search/webapp/core';
+import { AbstractDynamicFormManager } from '../../../../base-components/webapp/core/dynamic-form';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { SearchProperty } from '../../../../search/model/SearchProperty';
 
 export class ComponentState extends FormInputComponentState<Array<[string, string[] | number[]]>> {
 
     public constructor(
-        public manager: NotificationFilterManager = NotificationFilterManager.getInstance(),
+        public manager: AbstractDynamicFormManager = null,
         public prepared: boolean = false
     ) {
         super();
+        const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
+        this.manager = searchDefinition.createFormManager([SearchProperty.FULLTEXT]);
     }
 
 }

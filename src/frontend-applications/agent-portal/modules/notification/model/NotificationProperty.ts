@@ -41,7 +41,7 @@ export enum NotificationProperty {
 
     DATA_SEND_ONCE_A_DAY = 'OncePerDay',
 
-    DATA_FILTER = 'Filter',
+    FILTER = 'Filter',
 
     DATA_CREATE_ARTICLE = 'CreateArticle'
 

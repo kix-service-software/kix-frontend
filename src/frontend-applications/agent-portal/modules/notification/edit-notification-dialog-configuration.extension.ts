@@ -141,7 +141,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(
             new FormFieldConfiguration(
                 'notification-edit-form-field-filter',
-                '', NotificationProperty.DATA_FILTER, 'notification-input-filter', false,
+                '', NotificationProperty.FILTER, 'notification-input-filter', false,
                 'Translatable#Helptext_Admin_NotificationEdit_Filter', [], null,
                 null, null, null, null, null, null, null, null, null, null, null, null, null, null, false
             )

@@ -400,35 +400,14 @@ export class TicketAPIService extends KIXObjectAPIService {
         ];
 
         const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
-
         await this.setUserID(filterCriteria, token);
-
         return filterCriteria;
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const searchProperties = [
-            TicketProperty.TICKET_NUMBER,
-            TicketProperty.TITLE,
-            TicketProperty.CREATED,
-            TicketProperty.CLOSE_TIME,
-            TicketProperty.CHANGED,
-            TicketProperty.PENDING_TIME,
-            TicketProperty.LAST_CHANGE_TIME,
-            TicketProperty.ORGANISATION_ID,
-            TicketProperty.CONTACT_ID,
-            TicketProperty.TYPE_ID,
-            TicketProperty.STATE_ID,
-            TicketProperty.QUEUE_ID,
-            TicketProperty.PRIORITY_ID,
-            TicketProperty.OWNER_ID,
-            TicketProperty.RESPONSIBLE_ID,
-            TicketProperty.STATE_TYPE,
-            TicketProperty.LOCK_ID
-        ];
-
         let searchCriteria = criteria.filter(
-            (f) => searchProperties.some((sp) => sp === f.property) && f.operator !== SearchOperator.NOT_EQUALS
+            (f) => Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property)
+                && f.operator !== SearchOperator.NOT_EQUALS
         );
 
         await this.setUserID(searchCriteria, token);

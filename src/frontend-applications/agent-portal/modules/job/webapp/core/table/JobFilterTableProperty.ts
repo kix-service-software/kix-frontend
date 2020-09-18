@@ -11,5 +11,7 @@ export enum JobFilterTableProperty {
 
     FIELD = 'FIELD',
 
-    VALUE = 'VALUE'
+    VALUE = 'VALUE',
+
+    OPERATOR = 'OPERATOR'
 }

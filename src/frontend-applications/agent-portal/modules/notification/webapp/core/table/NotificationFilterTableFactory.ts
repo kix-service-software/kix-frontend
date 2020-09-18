@@ -48,7 +48,11 @@ export class NotificationFilterTableFactory extends TableFactory {
                 false, DataType.STRING, true, null, 'Translatable#Field', false
             ),
             new DefaultColumnConfiguration(null, null, null,
-                NotificationFilterTableProperty.VALUE, true, false, true, false, 500, true, true,
+                NotificationFilterTableProperty.OPERATOR, true, false, true, false, 200, true, true,
+                false, DataType.STRING, true, null, 'Translatable#Operator', false
+            ),
+            new DefaultColumnConfiguration(null, null, null,
+                NotificationFilterTableProperty.VALUE, true, false, true, false, 600, true, true,
                 false, DataType.STRING, true, 'notification-filter-cell-content', 'Translatable#Value', false
             )
         ];
