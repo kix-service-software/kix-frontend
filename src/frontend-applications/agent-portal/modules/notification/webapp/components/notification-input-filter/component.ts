@@ -10,8 +10,6 @@
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
 import { ComponentState } from './ComponentState';
 import { FormService } from '../../../../../modules/base-components/webapp/core/FormService';
-import { FormFieldConfiguration } from '../../../../../model/configuration/FormFieldConfiguration';
-import { FormFieldValue } from '../../../../../model/configuration/FormFieldValue';
 import { NotificationProperty } from '../../../model/NotificationProperty';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../../model/ContextType';
@@ -24,8 +22,11 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { FormEvent } from '../../../../base-components/webapp/core/FormEvent';
 import { IEventSubscriber } from '../../../../base-components/webapp/core/IEventSubscriber';
 import { FormValuesChangedEventData } from '../../../../base-components/webapp/core/FormValuesChangedEventData';
+import { SearchService } from '../../../../search/webapp/core';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
+import { SearchOperator } from '../../../../search/model/SearchOperator';
 
-class Component extends FormInputComponent<Array<[string, string[] | number[]]>, ComponentState> {
+class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
 
     private listenerId: string;
     private formTimeout: any;
@@ -78,14 +79,11 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
                 clearTimeout(this.formTimeout);
             }
             this.formTimeout = setTimeout(async () => {
-                const filterValues: Array<[string, string[] | number[]]> = [];
+                let filterValues: FilterCriteria[] = [];
                 if (await this.state.manager.hasDefinedValues()) {
                     const values = await this.state.manager.getEditableValues();
-                    values.forEach((v) => {
-                        if (v.value !== null) {
-                            filterValues.push([v.property, v.value]);
-                        }
-                    });
+                    const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
+                    filterValues = values.map((v) => searchDefinition.getFilterCriteria(v));
                 }
                 super.provideValue(filterValues);
             }, 200);
@@ -96,25 +94,46 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
 
     public async setCurrentValue(): Promise<void> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
-        const value = formInstance.getFormFieldValue(this.state.field.instanceId);
-        if (value && Array.isArray(value.value)) {
-            for (const v of value.value) {
-                let objectType;
-                const inputType = await this.state.manager.getInputType(v[0]);
-                if (inputType && inputType === InputFieldTypes.OBJECT_REFERENCE) {
-                    objectType = await this.state.manager.getObjectReferenceObjectType(v[0]);
-                }
+        const value = formInstance.getFormFieldValue<any>(this.state.field.instanceId);
+        if (value && value.value) {
 
-                const isRequired = this.isRequiredProperty(v[0]);
-                objectType = isRequired ? KIXObjectType.ARTICLE : objectType;
-                this.state.manager.setValue(
-                    new ObjectPropertyValue(
-                        v[0], null, v[1], isRequired, true, objectType, null, null, v[0]
-                    ),
-                    true
+            // value is frontend filter criteria (set in dialog)
+            if (Array.isArray(value.value)) {
+                for (const criteria of value.value) {
+                    await this.setCriteria(criteria);
+                }
+            } else if (typeof value.value === 'object') {
+                // value is a backend filter criteria (with AND and OR - inital value)
+                for (const filter in value.value) {
+                    if (value.value[filter] && value.value[filter]) {
+                        for (const criteria of value.value[filter]) {
+                            await this.setCriteria(criteria, true);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private async setCriteria(criteria: any, fromBackend?: boolean) {
+        let objectType: KIXObjectType | string;
+        const inputType = await this.state.manager.getInputType(fromBackend ? criteria.Field : criteria.property);
+        if (inputType) {
+            if (inputType === InputFieldTypes.OBJECT_REFERENCE) {
+                objectType = await this.state.manager.getObjectReferenceObjectType(
+                    fromBackend ? criteria.Field : criteria.property
                 );
             }
         }
+
+        const filterValue = new ObjectPropertyValue(
+            fromBackend ? criteria.Field : criteria.property,
+            fromBackend ? criteria.Operator : criteria.operator,
+            fromBackend ? criteria.Value : criteria.value,
+            false, true, objectType, null, null,
+            fromBackend ? criteria.Field : criteria.property
+        );
+        this.state.manager.setValue(filterValue);
     }
 
     private async addRequiredArticleProperties(): Promise<void> {
@@ -125,7 +144,9 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
             channelValue.required = true;
         } else {
             this.state.manager.setValue(
-                new ObjectPropertyValue(ArticleProperty.CHANNEL_ID, null, null, true, true, KIXObjectType.ARTICLE)
+                new ObjectPropertyValue(
+                    ArticleProperty.CHANNEL_ID, SearchOperator.IN, null, true, true, KIXObjectType.ARTICLE
+                )
             );
         }
 
@@ -134,7 +155,9 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
             senderTypeValue.required = true;
         } else {
             this.state.manager.setValue(
-                new ObjectPropertyValue(ArticleProperty.SENDER_TYPE_ID, null, null, true, true, KIXObjectType.ARTICLE)
+                new ObjectPropertyValue(
+                    ArticleProperty.SENDER_TYPE_ID, SearchOperator.IN, null, true, true, KIXObjectType.ARTICLE
+                )
             );
         }
     }
@@ -163,10 +186,6 @@ class Component extends FormInputComponent<Array<[string, string[] | number[]]>,
             this.state.manager.reset(false);
         }
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
-    }
-
-    private isRequiredProperty(property: string): boolean {
-        return property === ArticleProperty.CHANNEL_ID || property === ArticleProperty.SENDER_TYPE_ID;
     }
 
 }

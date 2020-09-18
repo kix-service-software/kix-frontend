@@ -16,10 +16,10 @@ export class FilterCriteria {
 
     public constructor(
         public property: string,
-        public operator: SearchOperator,
+        public operator: SearchOperator | string,
         public type: FilterDataType,
         public filterType: FilterType,
-        public value: string | number | string[] | number[] | KIXObject
+        public value: string | number | string[] | number[]
     ) { }
 
 }

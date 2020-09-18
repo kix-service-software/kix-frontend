@@ -18,9 +18,6 @@ import { Notification } from '../../model/Notification';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
-import { NotificationFilterManager } from './NotificationFilterManager';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
-import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
 
 export class NotificationService extends KIXObjectService<SystemAddress> {
 
@@ -65,8 +62,6 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
 
     private async prepareNotificationData(notification: Notification): Promise<void> {
         if (notification.Data) {
-            const filterProperties = await NotificationFilterManager.getInstance().getProperties();
-            notification.Filter = new Map();
             for (const key in notification.Data) {
                 if (key && Array.isArray(notification.Data[key])) {
                     const value = notification.Data[key];
@@ -105,35 +100,11 @@ export class NotificationService extends KIXObjectService<SystemAddress> {
                             notification.CreateArticle = Boolean(Number(value[0]));
                             break;
                         default:
-                            let property = key.replace('Ticket::', '');
-                            property = property.replace('Article::', '');
-                            property = property.replace(
-                                /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
-                            );
-                            if (filterProperties.some((p) => p[0] === property)) {
-                                let newValue;
-                                if (this.isStringProperty(property)) {
-                                    newValue = value[0];
-                                } else {
-                                    newValue = value.map((v) => !isNaN(Number(v)) ? Number(v) : v);
-                                }
-                                notification.Filter.set(property, newValue);
-                            }
                     }
                 }
             }
         }
     }
-
-    private isStringProperty(property: string): boolean {
-        return property === ArticleProperty.FROM
-            || property === ArticleProperty.TO
-            || property === ArticleProperty.CC
-            || property === ArticleProperty.BCC
-            || property === ArticleProperty.SUBJECT
-            || property === ArticleProperty.BODY;
-    }
-
 
     public async hasArticleEvent(events: string[]): Promise<boolean> {
         let hasArticleEvent = false;

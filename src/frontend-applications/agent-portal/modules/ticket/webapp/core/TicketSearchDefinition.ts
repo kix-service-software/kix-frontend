@@ -20,6 +20,7 @@ import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
+import { Ticket } from '../../model/Ticket';
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -28,8 +29,8 @@ export class TicketSearchDefinition extends SearchDefinition {
         this.formManager = new TicketSearchFormManager();
     }
 
-    public createFormManager(): SearchFormManager {
-        const newManager = new TicketSearchFormManager();
+    public createFormManager(ignoreProperties: string[] = []): SearchFormManager {
+        const newManager = new TicketSearchFormManager(ignoreProperties);
 
         this.formManager.getExtendedFormManager().forEach((m) => newManager.addExtendedFormManager(m));
         return newManager;
@@ -111,17 +112,15 @@ export class TicketSearchDefinition extends SearchDefinition {
     public getFilterCriteria(searchValue: ObjectPropertyValue): FilterCriteria {
         const criteria = super.getFilterCriteria(searchValue);
 
-        if (criteria.property === TicketProperty.CREATED
-            || criteria.property === TicketProperty.CHANGED
-            || criteria.property === TicketProperty.CLOSE_TIME
-            || criteria.property === TicketProperty.PENDING_TIME
-            || criteria.property === TicketProperty.LAST_CHANGE_TIME
-        ) {
-            criteria.type = FilterDataType.DATETIME;
-        }
-
-        if (criteria.property === TicketProperty.LOCK_ID && Array.isArray(criteria.value)) {
-            criteria.value = criteria.value[0];
+        const searchProperty = Ticket.SEARCH_PROPERTIES.find((p) => p.Property === searchValue.property);
+        if (searchProperty) {
+            criteria.type = searchProperty.DataType;
+        } else {
+            if (criteria.property === TicketProperty.CREATED
+                || criteria.property === TicketProperty.CHANGED
+            ) {
+                criteria.type = FilterDataType.DATETIME;
+            }
         }
 
         return criteria;

@@ -87,6 +87,22 @@ export enum TicketProperty {
 
     HISTORY = 'History',
 
+    STATE_TYPE_ID = 'StateTypeID',
+
+    CREATE_TIME = 'CreateTime',
+
+    CHANGE_TIME = 'ChangeTime',
+
+    CREATED_PRIORITY_ID = 'CreatedPriorityID',
+
+    CREATED_QUEUE_ID = 'CreatedQueueID',
+
+    CREATED_STATE_ID = 'CreatedStateID',
+
+    CREATED_TYPE_ID = 'CreatedTypeID',
+
+    CREATED_USER_ID = 'CreatedUserID',
+
     // UI properties
     STATE = 'State',
     STATE_TYPE = 'StateType',

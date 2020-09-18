@@ -19,64 +19,31 @@ import { InputFieldTypes } from '../../../../modules/base-components/webapp/core
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
-import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { ObjectReferenceOptions } from '../../../base-components/webapp/core/ObjectReferenceOptions';
 import { ContextService } from '../../../base-components/webapp/core/ContextService';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { QueueService } from './admin';
 import { QueueProperty } from '../../model/QueueProperty';
+import { Ticket } from '../../model/Ticket';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
+    public constructor(public ignoreProperties: string[] = []) {
+        super();
+    }
+
     public async getProperties(): Promise<Array<[string, string]>> {
         let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
-            [TicketProperty.TICKET_NUMBER, null],
-            [TicketProperty.TITLE, null],
-            [TicketProperty.CREATED, null],
-            [TicketProperty.CLOSE_TIME, null],
-            [TicketProperty.CHANGED, null],
-            [TicketProperty.PENDING_TIME, null],
-            [TicketProperty.LAST_CHANGE_TIME, null]
+            [KIXObjectProperty.CREATE_BY, null],
+            [KIXObjectProperty.CHANGE_BY, null]
         ];
 
-        if (await this.checkReadPermissions('organisations')) {
-            properties.push([TicketProperty.ORGANISATION_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('contacts')) {
-            properties.push([TicketProperty.CONTACT_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/types')) {
-            properties.push([TicketProperty.TYPE_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/states')) {
-            properties.push([TicketProperty.STATE_ID, null]);
-            properties.push([TicketProperty.STATE_TYPE, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/queues')) {
-            properties.push([TicketProperty.QUEUE_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/priorities')) {
-            properties.push([TicketProperty.PRIORITY_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/ticket/locks')) {
-            properties.push([TicketProperty.LOCK_ID, null]);
-        }
-
-        if (await this.checkReadPermissions('system/users')) {
-            properties.push([TicketProperty.OWNER_ID, null]);
-            properties.push([TicketProperty.RESPONSIBLE_ID, null]);
-            properties.push([KIXObjectProperty.CREATE_BY, null]);
-            properties.push([KIXObjectProperty.CHANGE_BY, null]);
+        for (const prop of Ticket.SEARCH_PROPERTIES) {
+            properties.push([prop.Property, null]);
         }
 
         const context = ContextService.getInstance().getActiveContext();
@@ -96,67 +63,51 @@ export class TicketSearchFormManager extends SearchFormManager {
         const superProperties = await super.getProperties();
         properties = [...properties, ...superProperties];
 
-        return properties;
+        properties = properties.filter((p) => !this.ignoreProperties.some((ip) => ip === p[0]));
+
+        return properties.sort((a, b) => a[1].localeCompare(b[1]));
     }
 
     public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
         let operations: Array<string | SearchOperator> = [];
 
-        switch (property) {
-            case TicketProperty.TICKET_NUMBER:
-            case TicketProperty.TITLE:
-                operations = SearchDefinition.getStringOperators();
-                break;
-            case TicketProperty.TYPE_ID:
-            case TicketProperty.STATE_ID:
-            case TicketProperty.QUEUE_ID:
-            case TicketProperty.PRIORITY_ID:
-            case TicketProperty.ORGANISATION_ID:
-            case TicketProperty.CONTACT_ID:
-            case TicketProperty.OWNER_ID:
-            case TicketProperty.RESPONSIBLE_ID:
-            case KIXObjectProperty.CREATE_BY:
-            case KIXObjectProperty.CHANGE_BY:
-            case TicketProperty.STATE_TYPE:
-                operations = [SearchOperator.IN];
-                break;
-            case TicketProperty.LOCK_ID:
-            case 'Queue.FollowUpID':
-                operations = [SearchOperator.EQUALS];
-                break;
-            case TicketProperty.AGE:
-            case TicketProperty.CREATED:
-            case TicketProperty.CLOSE_TIME:
-            case TicketProperty.CHANGED:
-            case TicketProperty.PENDING_TIME:
-            case TicketProperty.LAST_CHANGE_TIME:
-                operations = SearchDefinition.getDateTimeOperators();
-                break;
-            case SearchProperty.FULLTEXT:
-                operations = [SearchOperator.CONTAINS];
-                break;
-            default:
-                operations = await super.getOperations(property);
+        const searchProperty = Ticket.SEARCH_PROPERTIES.find((p) => p.Property === property);
+        if (searchProperty) {
+            operations = searchProperty.Operations;
+        } else {
+            switch (property) {
+                case KIXObjectProperty.CREATE_BY:
+                case KIXObjectProperty.CHANGE_BY:
+                    operations = [SearchOperator.IN];
+                    break;
+                case 'Queue.FollowUpID':
+                    operations = [SearchOperator.EQUALS];
+                    break;
+                case TicketProperty.CREATED:
+                case TicketProperty.CHANGED:
+                    operations = SearchDefinition.getDateTimeOperators();
+                    break;
+                case SearchProperty.FULLTEXT:
+                    operations = [SearchOperator.CONTAINS];
+                    break;
+                default:
+                    operations = await super.getOperations(property);
+            }
         }
 
         return operations;
     }
 
-    public async getInputType(property: string): Promise<InputFieldTypes> {
+    public async getInputType(property: string): Promise<InputFieldTypes | string> {
         let inputType;
-
-        const objectReferenceProperties = [
-            TicketProperty.ORGANISATION_ID,
-            TicketProperty.CONTACT_ID,
-            TicketProperty.OWNER_ID,
-            TicketProperty.RESPONSIBLE_ID
-        ];
-
-        if (this.isDropDown(property)) {
+        const searchProperty = Ticket.SEARCH_PROPERTIES.find((p) => p.Property === property);
+        if (searchProperty) {
+            inputType = searchProperty.InputType;
+        } else if (this.isDropDown(property)) {
             inputType = InputFieldTypes.DROPDOWN;
         } else if (this.isDateTime(property)) {
             inputType = InputFieldTypes.DATE_TIME;
-        } else if (objectReferenceProperties.some((p) => p === property)) {
+        } else if (property === TicketProperty.ORGANISATION_ID || property === TicketProperty.CONTACT_ID) {
             inputType = InputFieldTypes.OBJECT_REFERENCE;
         } else {
             inputType = super.getInputType(property);
@@ -166,11 +117,7 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     private isDropDown(property: string): boolean {
-        return property === TicketProperty.QUEUE_ID
-            || property === TicketProperty.STATE_ID
-            || property === TicketProperty.PRIORITY_ID
-            || property === TicketProperty.TYPE_ID
-            || property === TicketProperty.LOCK_ID
+        return Ticket.SEARCH_PROPERTIES.some((p) => p.Property === property && p.InputType === InputFieldTypes.DROPDOWN)
             || property === KIXObjectProperty.CREATE_BY
             || property === KIXObjectProperty.CHANGE_BY
             || property === TicketProperty.STATE_TYPE
@@ -178,12 +125,7 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     private isDateTime(property: string): boolean {
-        return property === TicketProperty.AGE
-            || property === TicketProperty.CREATED
-            || property === TicketProperty.CLOSE_TIME
-            || property === TicketProperty.CHANGED
-            || property === TicketProperty.PENDING_TIME
-            || property === TicketProperty.LAST_CHANGE_TIME;
+        return property === TicketProperty.CREATED;
     }
 
     public getOperatorDisplayText(operator: string): Promise<string> {
@@ -225,15 +167,6 @@ export class TicketSearchFormManager extends SearchFormManager {
                 }
         }
         return nodes;
-    }
-
-    public async setValue(newValue: ObjectPropertyValue, silent?: boolean): Promise<void> {
-        if (newValue.property === KIXObjectProperty.CREATE_TIME) {
-            newValue.property = TicketProperty.CREATED;
-        } else if (newValue.property === KIXObjectProperty.CHANGE_TIME) {
-            newValue.property = TicketProperty.CHANGED;
-        }
-        super.setValue(newValue, silent);
     }
 
     public async getInputTypeOptions(property: string, operator: string): Promise<Array<[string, any]>> {

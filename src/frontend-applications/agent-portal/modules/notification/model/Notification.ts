@@ -10,7 +10,6 @@
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { NotificationProperty } from './NotificationProperty';
-import { ArticleProperty } from '../../ticket/model/ArticleProperty';
 
 export class Notification extends KIXObject {
 
@@ -26,8 +25,9 @@ export class Notification extends KIXObject {
 
     public Name: string;
 
+    public Filter: any;
+
     // data properties
-    public Filter: Map<string, string[] | number[]>;
     public Events: string[];
     public VisibleForAgent: boolean;
     public VisibleForAgentTooltip: string;
@@ -48,9 +48,9 @@ export class Notification extends KIXObject {
             this.Name = notification.Name;
             this.Data = notification.Data;
             this.Message = notification.Message;
+            this.Filter = notification.Filter;
 
             if (notification.Data) {
-                this.Filter = new Map();
                 for (const key in notification.Data) {
                     if (key && Array.isArray(notification.Data[key])) {
                         const value = notification.Data[key];
@@ -89,17 +89,6 @@ export class Notification extends KIXObject {
                                 this.CreateArticle = Boolean(Number(value[0]));
                                 break;
                             default:
-                                if (key.match(/(Ticket|Article)::/)) {
-                                    let property = key.replace('Ticket::', '');
-                                    property = property.replace('Article::', '');
-                                    let newValue;
-                                    if (this.isStringProperty(property)) {
-                                        newValue = value[0];
-                                    } else {
-                                        newValue = value.map((v) => !isNaN(Number(v)) ? Number(v) : v);
-                                    }
-                                    this.Filter.set(property, newValue);
-                                }
                         }
                     }
                 }
@@ -107,14 +96,4 @@ export class Notification extends KIXObject {
 
         }
     }
-
-    private isStringProperty(property: string): boolean {
-        return property === ArticleProperty.FROM
-            || property === ArticleProperty.TO
-            || property === ArticleProperty.CC
-            || property === ArticleProperty.BCC
-            || property === ArticleProperty.SUBJECT
-            || property === ArticleProperty.BODY;
-    }
-
 }

@@ -14,7 +14,6 @@ import { WidgetService } from '../../../../../modules/base-components/webapp/cor
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { Label } from '../../../../../modules/base-components/webapp/core/Label';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { SearchOperatorUtil } from '../../core/SearchOperatorUtil';
 import { SortUtil } from '../../../../../model/SortUtil';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
@@ -95,11 +94,6 @@ class Component implements IKIXObjectSearchListener {
                         );
                         labels.push(new Label(null, value, icons ? icons[0] : null, value, null, value, false));
                     }
-                } else if (criteria.value instanceof KIXObject) {
-                    labels.push(new Label(
-                        null, criteria.property, null, criteria.value.toString(),
-                        null, criteria.value.toString(), false
-                    ));
                 } else {
                     const value = await searchDefinition.getDisplaySearchValue(
                         criteria.property, parameter, criteria.value, criteria.type
