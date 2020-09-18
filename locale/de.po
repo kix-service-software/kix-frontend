@@ -1811,8 +1811,8 @@ msgstr ""
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|\" ("
-"ohne Leerzeichen)."
+"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|"
+"\" (ohne Leerzeichen)."
 
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
@@ -3065,6 +3065,9 @@ msgstr "Geöffnete Sidebars"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
+
+msgid "Operator"
+msgstr ""
 
 msgid "Organisation"
 msgstr "Kunde"
