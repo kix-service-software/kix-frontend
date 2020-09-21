@@ -9,7 +9,6 @@
 
 import { RoutingConfiguration } from '../../../../../../../../model/configuration/RoutingConfiguration';
 import { DialogRoutingConfiguration } from '../../../../../../../../model/configuration/DialogRoutingConfiguration';
-import { Cell } from '../../../../../core/table';
 
 export class ComponentState {
 
@@ -18,8 +17,7 @@ export class ComponentState {
         public object: any = null,
         public objectId: string | number = null,
         public showDefaultCell: boolean = true,
-        public stateClasses: string[] = null,
-        public prepared: boolean = true
+        public stateClasses: string[] = null
     ) { }
 
 }
