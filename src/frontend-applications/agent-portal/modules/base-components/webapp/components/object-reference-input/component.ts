@@ -281,8 +281,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                                 return f;
                             }
                         }),
-                        ...filter
                     ];
+                    if (filter) {
+                        loadingOptions.filter.push(...filter);
+                    }
                 } else {
                     loadingOptions.filter = filter;
                 }
