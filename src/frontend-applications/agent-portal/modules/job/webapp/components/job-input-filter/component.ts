@@ -201,6 +201,15 @@ class Component extends FormInputComponent<{}, ComponentState> {
             false, true, objectType, null, null,
             fromBackend ? criteria.Field : criteria.property
         );
+        if (
+            fromBackend
+            && (
+                filterValue.property === ArticleProperty.CHANNEL_ID
+                || filterValue.property === ArticleProperty.SENDER_TYPE_ID
+            )
+        ) {
+            filterValue.required = true;
+        }
         this.state.manager.setValue(filterValue);
     }
 }
