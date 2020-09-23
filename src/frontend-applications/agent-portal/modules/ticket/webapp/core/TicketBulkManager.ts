@@ -216,7 +216,7 @@ export class TicketBulkManager extends BulkManager {
                     orgId = contacts[0].PrimaryOrganisationID;
                 }
                 const value = new ObjectPropertyValue(
-                    TicketProperty.ORGANISATION_ID, PropertyOperator.CHANGE, orgId, false, true,
+                    TicketProperty.ORGANISATION_ID, PropertyOperator.CHANGE, orgId, [], false, true,
                     KIXObjectType.ORGANISATION, true, false
                 );
                 const organisationValueIndex = this.values.findIndex(
@@ -247,7 +247,7 @@ export class TicketBulkManager extends BulkManager {
             if (pendingState) {
                 const pendingValueIndex = this.values.findIndex((bv) => bv.property === TicketProperty.PENDING_TIME);
                 const value = new ObjectPropertyValue(
-                    TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, false, true, null, true, true
+                    TicketProperty.PENDING_TIME, PropertyOperator.CHANGE, null, [], false, true, null, true, true
                 );
                 if (pendingValueIndex === -1) {
                     const index = this.values.findIndex((bv) => bv.property === TicketProperty.STATE_ID);

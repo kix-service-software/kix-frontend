@@ -11,20 +11,21 @@ import { SearchOperator } from '../modules/search/model/SearchOperator';
 import { KIXObject } from './kix/KIXObject';
 import { KIXObjectType } from './kix/KIXObjectType';
 import { IdService } from './IdService';
+import { ObjectPropertyValueOption } from './ObjectPropertyValueOption';
 
 export class ObjectPropertyValue {
 
     public constructor(
         public property: string,
-        // public operator: SearchOperator | PropertyOperator | ImportPropertyOperator | string,
         public operator: SearchOperator | string,
         public value: string | number | string[] | number[] | KIXObject | any,
+        public options: ObjectPropertyValueOption[] = [],
         public required: boolean = false,
         public valid: boolean = true,
         public objectType: KIXObjectType | string = null,
         public readonly: boolean = false,
         public changeable: boolean = true,
-        public id: string = IdService.generateDateBasedId('value-')
+        public id: string = IdService.generateDateBasedId('value-'),
     ) { }
 
 }

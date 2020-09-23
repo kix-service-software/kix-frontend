@@ -121,7 +121,7 @@ class Component extends FormInputComponent<{}, ComponentState> {
             channelValue.required = true;
         } else {
             this.state.manager.setValue(
-                new ObjectPropertyValue(ArticleProperty.CHANNEL_ID, null, null, true, true, KIXObjectType.ARTICLE)
+                new ObjectPropertyValue(ArticleProperty.CHANNEL_ID, null, null, [], true, true, KIXObjectType.ARTICLE)
             );
         }
 
@@ -130,7 +130,9 @@ class Component extends FormInputComponent<{}, ComponentState> {
             senderTypeValue.required = true;
         } else {
             this.state.manager.setValue(
-                new ObjectPropertyValue(ArticleProperty.SENDER_TYPE_ID, null, null, true, true, KIXObjectType.ARTICLE)
+                new ObjectPropertyValue(
+                    ArticleProperty.SENDER_TYPE_ID, null, null, [], true, true, KIXObjectType.ARTICLE
+                )
             );
         }
     }
@@ -198,7 +200,7 @@ class Component extends FormInputComponent<{}, ComponentState> {
             fromBackend ? criteria.Field : criteria.property,
             fromBackend ? criteria.Operator : criteria.operator,
             fromBackend ? criteria.Value : criteria.value,
-            false, true, objectType, null, null,
+            [], false, true, objectType, null, null,
             fromBackend ? criteria.Field : criteria.property
         );
         if (

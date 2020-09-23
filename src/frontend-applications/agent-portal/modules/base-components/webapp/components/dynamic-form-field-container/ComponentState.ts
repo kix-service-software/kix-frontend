@@ -9,11 +9,13 @@
 
 import { DynamicFormFieldValue } from './DynamicFormFieldValue';
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public dynamicValues: DynamicFormFieldValue[] = [],
+        public options: ObjectPropertyValueOption[] = [],
         public prepared: boolean = false,
     ) {
         super();

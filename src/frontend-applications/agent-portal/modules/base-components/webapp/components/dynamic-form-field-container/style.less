@@ -8,8 +8,13 @@
  */
 
 @dynamic-value-gap: @margin-small;
-@dynamic-value-columns: 15rem 15rem minmax(10rem, auto) 1rem;
-@dynamic-value-columns-no-operation: 15rem minmax(15rem, auto) 1rem;
+@dynamic-value-columns: minmax(1rem, max-content) 15rem 15rem minmax(10rem, auto) 1rem;
+@dynamic-value-columns-no-operation: minmax(1rem, max-content) 15rem minmax(15rem, auto) 1rem;
+
+.dynamic-form-field-header {
+    display: grid;
+    grid-template-columns: @dynamic-value-columns;
+}
 
 .dynamic-form-field-value {
     display: grid;

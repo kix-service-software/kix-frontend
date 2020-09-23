@@ -130,7 +130,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
             fromBackend ? criteria.Field : criteria.property,
             fromBackend ? criteria.Operator : criteria.operator,
             fromBackend ? criteria.Value : criteria.value,
-            false, true, objectType, null, null,
+            [], false, true, objectType, null, null,
             fromBackend ? criteria.Field : criteria.property
         );
         if (
@@ -154,7 +154,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
         } else {
             this.state.manager.setValue(
                 new ObjectPropertyValue(
-                    ArticleProperty.CHANNEL_ID, SearchOperator.IN, null, true, true, KIXObjectType.ARTICLE
+                    ArticleProperty.CHANNEL_ID, SearchOperator.IN, null, [], true, true, KIXObjectType.ARTICLE
                 )
             );
         }
@@ -165,7 +165,7 @@ class Component extends FormInputComponent<FilterCriteria[], ComponentState> {
         } else {
             this.state.manager.setValue(
                 new ObjectPropertyValue(
-                    ArticleProperty.SENDER_TYPE_ID, SearchOperator.IN, null, true, true, KIXObjectType.ARTICLE
+                    ArticleProperty.SENDER_TYPE_ID, SearchOperator.IN, null, [], true, true, KIXObjectType.ARTICLE
                 )
             );
         }

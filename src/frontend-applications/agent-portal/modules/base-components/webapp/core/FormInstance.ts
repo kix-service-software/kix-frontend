@@ -573,6 +573,7 @@ export class FormInstance {
                 if (field) {
                     field.visible = value[0].visible;
                     field.readonly = value[0].readonly;
+                    field.required = value[0].required;
                 }
                 values.push([key, value[1]]);
             });
