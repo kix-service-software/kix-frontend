@@ -47,20 +47,20 @@ export abstract class FormInputComponent<T, C extends FormInputComponentState<T>
         this.subscriber = {
             eventSubscriberId: this.state.field.instanceId,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {
-                if (
-                    eventId === FormEvent.VALUES_CHANGED &&
-                    this.state.field &&
-                    data &&
-                    data.originInstanceId !== this.state.field.instanceId
-                ) {
-                    const ownValue = data.changedValues.find(
-                        (cv) => cv[0] && cv[0].instanceId === this.state.field.instanceId
-                    );
-                    if (ownValue) {
-                        this.state.prepared = false;
-                        this.setCurrentValue();
-                        this.state.field = await data.formInstance.getFormField(this.state.field.instanceId);
-                        setTimeout(() => this.state.prepared = true, 10);
+                if (eventId === FormEvent.VALUES_CHANGED && this.state.field && data) {
+                    if (data.originInstanceId !== this.state.field.instanceId) {
+                        const ownValue = data.changedValues.find(
+                            (cv) => cv[0] && cv[0].instanceId === this.state.field.instanceId
+                        );
+                        if (ownValue) {
+                            this.state.prepared = false;
+                            this.setCurrentValue();
+                            this.state.field = data.formInstance.getFormField(this.state.field.instanceId);
+                            FormInputComponent.prototype.setInvalidState.call(this);
+                            setTimeout(() => this.state.prepared = true, 10);
+                        }
+                    } else {
+                        FormInputComponent.prototype.setInvalidState.call(this);
                     }
                 }
             }

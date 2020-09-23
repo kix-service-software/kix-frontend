@@ -13,6 +13,7 @@ import { DynamicFormFieldValue } from './DynamicFormFieldValue';
 import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { TreeNode } from '../../core/tree';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 
 class Component {
 
@@ -66,13 +67,18 @@ class Component {
         if (this.manager) {
             this.manager.init();
             for (const v of this.manager.getValues()) {
-                const formFieldValue = new DynamicFormFieldValue(this.manager, new ObjectPropertyValue(
-                    v.property, v.operator, v.value, v.required, v.valid,
-                    v.objectType, v.readonly, v.changeable, v.id
-                ));
+                const formFieldValue = new DynamicFormFieldValue(
+                    this.manager,
+                    new ObjectPropertyValue(
+                        v.property, v.operator, v.value, v.options, v.required, v.valid,
+                        v.objectType, v.readonly, v.changeable, v.id
+                    )
+                );
                 await formFieldValue.init();
                 this.state.dynamicValues.push(formFieldValue);
             }
+
+            this.state.options = await this.manager.getFieldOptions();
 
             this.addEmptyValue();
             this.state.prepared = true;
@@ -85,70 +91,75 @@ class Component {
             value.clearValue();
         }
 
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
     public async operationChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): Promise<void> {
         await value.setOperator(nodes && nodes.length ? nodes[0].id : null);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async operationStringChanged(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public operationStringChanged(value: DynamicFormFieldValue, event: any): void {
         const operationString = event.target.value;
         value.setOperator(operationString);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async treeValueChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): Promise<void> {
+    public treeValueChanged(value: DynamicFormFieldValue, nodes: TreeNode[]): void {
         value.setValue(nodes.map((n) => n.id));
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public setValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setValue(newValue);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setNumberValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public setNumberValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setNumberValue(newValue);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setNumberEndValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public setNumberEndValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setBetweenEndNumberValue(newValue);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setDateValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public setDateValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setDateValue(newValue);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setTimeValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public setTimeValue(value: DynamicFormFieldValue, event: any): void {
         const newValue = event.target.value;
         value.setTimeValue(newValue);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setBetweenEndDateValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public setBetweenEndDateValue(value: DynamicFormFieldValue, event: any): void {
         const date = event.target.value;
         value.setBetweenEndDateValue(date);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setBetweenEndTimeValue(value: DynamicFormFieldValue, event: any): Promise<void> {
+    public setBetweenEndTimeValue(value: DynamicFormFieldValue, event: any): void {
         const time = event.target.value;
         value.setBetweenEndTimeValue(time);
-        await this.provideValue(value);
+        this.provideValue(value);
     }
 
-    public async setSpecificValue(value: DynamicFormFieldValue, emittedValue: any): Promise<void> {
+    public setSpecificValue(value: DynamicFormFieldValue, emittedValue: any): void {
         value.setValue(emittedValue);
-        await this.provideValue(value);
+        this.provideValue(value);
+    }
+
+    public optionClicked(option: ObjectPropertyValueOption, value: DynamicFormFieldValue): void {
+        value.toggleOption(option);
+        this.provideValue(value);
     }
 
     public async provideValue(value: DynamicFormFieldValue): Promise<void> {
@@ -200,6 +211,13 @@ class Component {
             default:
         }
         return returnValue;
+    }
+
+    public hasOption(option: ObjectPropertyValueOption, value: DynamicFormFieldValue): boolean {
+        const hasOption = this.manager.hasOption(
+            option, value ? value.value.property : null, value ? value.value.operator : null
+        );
+        return hasOption;
     }
 
 }

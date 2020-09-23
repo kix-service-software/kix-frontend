@@ -7,12 +7,30 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <if(state.prepared)>
+    <div.dynamic-form-field-header>
+        <for|option| of=state.options>
+            <span title=option.tooltip>${option.label}</span>
+        </for>
+    </div>
     <for|dynamicValue, index| of=state.dynamicValues>
         <div.dynamic-form-field-value
             class={
                         "no-operation": dynamicValue.operationIsNone
                     }
             key="dynamic-form-field-value-[]">
+            <div>
+                <if(state.options)>
+                    <for|option| of=state.options>
+                        <if(component.hasOption(option, dynamicValue))>
+                            <input
+                                type="checkbox"
+                                on-click("optionClicked", option, dynamicValue)
+                                title=option.tooltip
+                                checked=dynamicValue.isOptionSet(option)/>
+                        </if>
+                    </for>
+                </if>
+            </div>
             <if(dynamicValue.required)>
                 <span>${dynamicValue.label}*</span>
             </if>
