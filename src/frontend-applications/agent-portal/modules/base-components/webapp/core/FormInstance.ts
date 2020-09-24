@@ -33,21 +33,21 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 export class FormInstance {
 
     private formFieldValues: Map<string, FormFieldValue<any>> = new Map();
-    private fixedValues: Map<string, FormFieldValue<any>> = new Map();
+    private fixedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = new Map();
 
     private templateValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = new Map();
     private savedValues: Map<string, [FormFieldConfiguration, FormFieldValue<any>]> = null;
 
     private form: FormConfiguration;
 
-    public provideFixedValue(property: string, value: FormFieldValue): void {
-        this.fixedValues.set(property, value);
+    public provideFixedValue(property: string, value: FormFieldValue, templateField?: FormFieldConfiguration): void {
+        this.fixedValues.set(property, [templateField, value]);
         EventService.getInstance().publish(
             FormEvent.FIXED_VALUE_CHANGED, { formInstance: this, property, value }
         );
     }
 
-    public getFixedValues(): Map<string, FormFieldValue> {
+    public getFixedValues(): Map<string, [FormFieldConfiguration, FormFieldValue<any>]> {
         return this.fixedValues;
     }
 
@@ -55,8 +55,10 @@ export class FormInstance {
         return this.templateValues;
     }
 
-    public provideTemplateValue(property: string, value: [FormFieldConfiguration, FormFieldValue]): void {
-        this.templateValues.set(property, value);
+    public provideTemplateValue(
+        property: string, value: FormFieldValue, templateField: FormFieldConfiguration
+    ): void {
+        this.templateValues.set(property, [templateField, value]);
     }
 
     public async initFormInstance(formId: string, kixObject: KIXObject): Promise<void> {
@@ -94,6 +96,13 @@ export class FormInstance {
                     this.formFieldValues.set(f.instanceId, value[1]);
                     f.visible = value[0].visible;
                     f.readonly = value[0].readonly;
+                }
+            } else if (this.fixedValues.has(f.property)) {
+                const value = this.fixedValues.get(f.property);
+                if (Array.isArray(value)) {
+                    this.formFieldValues.set(f.instanceId, value[1]);
+                    f.visible = value[0] ? value[0].visible : f.visible;
+                    f.readonly = true;
                 }
             } else {
                 this.formFieldValues.set(f.instanceId, f.defaultValue
@@ -345,7 +354,7 @@ export class FormInstance {
             return this.getFormFieldValue(field.instanceId);
         }
 
-        return this.fixedValues.get(property);
+        return this.fixedValues.has(property) ? this.fixedValues.get(property)[1] : undefined;
     }
 
     public getFormFieldByProperty(property: string): FormFieldConfiguration {
