@@ -94,8 +94,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             const context = await ContextService.getInstance().getContext(this.contextId);
             objects = context ? await context.getObjectList(this.objectType) : [];
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
+            const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
             objects = await KIXObjectService.loadObjects<KIXObject>(
-                this.objectType, this.objectIds, this.loadingOptions, null, false, this.useCache
+                this.objectType, this.objectIds, this.loadingOptions, null, forceIds, this.useCache
             );
         }
 
