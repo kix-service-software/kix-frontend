@@ -56,7 +56,9 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         let superLoad = false;
         if (objectType === KIXObjectType.ORGANISATION) {
             objects = await super.loadObjects<O>(
-                KIXObjectType.ORGANISATION, forceIds ? objectIds : null, loadingOptions
+                KIXObjectType.ORGANISATION,
+                forceIds || (Array.isArray(objectIds) && objectIds.length) ? objectIds : null,
+                loadingOptions
             );
         } else {
             superLoad = true;
