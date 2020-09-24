@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-09-23 07:53+0000\n"
+"PO-Revision-Date: 2020-09-24 08:53+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -128,8 +128,6 @@ msgstr "Agenten"
 msgid "All"
 msgstr "Alle"
 
-#, fuzzy
-#| msgid "All agents subscribed to the ticket's queue"
 msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
@@ -196,10 +194,8 @@ msgstr "Archiviert"
 msgid "Article"
 msgstr "Artikel"
 
-#, fuzzy
-#| msgid "Article Data"
 msgid "Article Create Time"
-msgstr "Artikeldaten"
+msgstr "Erstellzeitpunkt des Artikels"
 
 msgid "Article Data"
 msgstr "Artikeldaten"
@@ -261,18 +257,13 @@ msgstr "Zuordnung zu Team"
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
-#, fuzzy
-#| msgid ""
-#| "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
 "enthalten."
 
-#, fuzzy
-#| msgid "Attachment"
 msgid "Attachment Name"
-msgstr "Anhang"
+msgstr "Name des Anhangs"
 
 msgid "Attachments"
 msgstr "Anlagen"
@@ -603,30 +594,20 @@ msgstr "Erstellt am"
 msgid "Created by"
 msgstr "Erstellt von"
 
-#, fuzzy
-#| msgid "Create Priority"
 msgid "Created with Priority"
-msgstr "Priorität wird angelegt"
+msgstr "Erstellt mit der Priorität"
 
-#, fuzzy
-#| msgid "Create Queue"
 msgid "Created with Queue"
-msgstr "Team wird angelegt"
+msgstr "Erstellt mit dem Team"
 
-#, fuzzy
-#| msgid "Create State"
 msgid "Created with State"
-msgstr "Status wird angelegt"
+msgstr "Erstellt mit dem Status"
 
-#, fuzzy
-#| msgid "Create Type"
 msgid "Created with Type"
-msgstr "Typ wird angelegt"
+msgstr "Erstellt mit dem Typ"
 
-#, fuzzy
-#| msgid "Create Filter"
 msgid "Created with User"
-msgstr "Filter wird angelegt"
+msgstr "Erstellt mit dem Nutzer"
 
 msgid "Create Dynamic Field"
 msgstr "Dynamisches Feld wird angelegt"
@@ -4151,10 +4132,8 @@ msgstr "Beobachtete Tickets"
 msgid "Watch Ticket"
 msgstr "Ticket beobachten"
 
-#, fuzzy
-#| msgid "Watched"
 msgid "Watch User"
-msgstr "Beobachtet"
+msgstr "Beobachtender Nutzer"
 
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
