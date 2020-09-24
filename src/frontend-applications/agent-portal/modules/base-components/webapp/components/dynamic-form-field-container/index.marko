@@ -7,19 +7,22 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
 <if(state.prepared)>
-    <div.dynamic-form-field-header>
-        <for|option| of=state.options>
-            <span title=option.tooltip>${option.label}</span>
-        </for>
-    </div>
+    <if(Array.isArray(state.options) && state.options.length)>
+        <div.dynamic-form-field-header>
+            <for|option| of=state.options>
+                <span title=option.tooltip>${option.label}</span>
+            </for>
+        </div>
+    </if>
     <for|dynamicValue, index| of=state.dynamicValues>
         <div.dynamic-form-field-value
             class={
-                        "no-operation": dynamicValue.operationIsNone
+                        "no-operation": dynamicValue.operationIsNone,
+                        "with-options": Array.isArray(state.options) && state.options.length
                     }
             key="dynamic-form-field-value-[]">
-            <div>
-                <if(state.options)>
+            <if(Array.isArray(state.options) && state.options.length)>
+                <div>
                     <for|option| of=state.options>
                         <if(component.hasOption(option, dynamicValue))>
                             <input
@@ -29,8 +32,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                                 checked=dynamicValue.isOptionSet(option)/>
                         </if>
                     </for>
-                </if>
-            </div>
+                </div>
+            </if>
             <if(dynamicValue.required)>
                 <span>${dynamicValue.label}*</span>
             </if>
