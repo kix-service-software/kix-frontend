@@ -398,9 +398,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         const dynamicFieldCriteria = criteria.filter(
             (c) => c.property.match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))
         );
-        dynamicFieldCriteria.forEach(
-            (c) => c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_')
-        );
 
         searchCriteria = [...searchCriteria, ...dynamicFieldCriteria];
 
@@ -423,6 +420,10 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
 
     public prepareObjectFilter(filterCriteria: FilterCriteria[]): any {
         let objectFilter = {};
+
+        filterCriteria.forEach(
+            (c) => c.property = c.property.replace(KIXObjectProperty.DYNAMIC_FIELDS + '.', 'DynamicField_')
+        );
 
         const andFilter = filterCriteria.filter((f) => f.filterType === FilterType.AND).map((f) => {
             return { Field: f.property, Operator: f.operator, Type: f.type, Value: f.value };

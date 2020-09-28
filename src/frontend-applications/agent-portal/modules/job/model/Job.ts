@@ -10,7 +10,6 @@
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { Macro } from './Macro';
-import { ArticleProperty } from '../../ticket/model/ArticleProperty';
 import { ExecPlan } from './ExecPlan';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { JobTypes } from './JobTypes';
@@ -61,37 +60,20 @@ export class Job extends KIXObject {
                 ? job.ExecPlans.map((ep) => new ExecPlan(ep))
                 : null;
 
-            if (job.Filter) {
-                const newFilter = {};
-                for (const key in job.Filter) {
-                    if (job.Filter[key]) {
-                        let property = key.replace('Ticket::', '');
-                        property = property.replace('Article::', '');
-                        property = property.replace(
-                            /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
-                        );
-                        if (this.isStringProperty(property)) {
-                            newFilter[property] = Array.isArray(job.Filter[key]) ?
-                                job.Filter[key][0] : job.Filter[key];
-                        } else {
-                            newFilter[property] = Array.isArray(job.Filter[key]) ?
-                                job.Filter[key].map((v) => !isNaN(Number(v)) ? Number(v) : v) : job.Filter[key];
+            if (this.Filter) {
+                for (const key in this.Filter) {
+                    if (Array.isArray(this.Filter[key])) {
+                        for (const filter of this.Filter[key]) {
+                            if (filter.Field.match(/^DynamicField_/)) {
+                                filter.Field = filter.Field.replace(
+                                    /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                                );
+                            }
                         }
-
                     }
                 }
-                this.Filter = newFilter;
             }
         }
-    }
-
-    private isStringProperty(property: string): boolean {
-        return property === ArticleProperty.FROM
-            || property === ArticleProperty.TO
-            || property === ArticleProperty.CC
-            || property === ArticleProperty.BCC
-            || property === ArticleProperty.SUBJECT
-            || property === ArticleProperty.BODY;
     }
 
 }

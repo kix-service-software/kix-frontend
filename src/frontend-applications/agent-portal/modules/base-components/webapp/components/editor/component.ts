@@ -131,19 +131,10 @@ class EditorComponent {
                 }
             });
 
-            this.editor.on('change', (event) => {
-                if (this.changeTimeout) {
-                    window.clearTimeout(this.changeTimeout);
-                    this.changeTimeout = null;
-                }
-
-                this.changeTimeout = setTimeout(() => {
-                    const value = event.editor.getData();
-                    (this as any).emit('valueChanged', value);
-                    this.changeTimeout = null;
-                }, 300);
+            this.editor.on('blur', (event) => {
+                const value = event.editor.getData();
+                (this as any).emit('valueChanged', value);
             });
-
 
             if (this.state.readOnly) {
                 this.editor.on('contentDom', () => {
