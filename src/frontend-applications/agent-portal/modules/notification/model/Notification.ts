@@ -8,6 +8,7 @@
  */
 
 import { KIXObject } from '../../../model/kix/KIXObject';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { NotificationProperty } from './NotificationProperty';
 
@@ -50,6 +51,20 @@ export class Notification extends KIXObject {
             this.Message = notification.Message;
             this.Filter = notification.Filter;
 
+            if (this.Filter) {
+                for (const key in this.Filter) {
+                    if (Array.isArray(this.Filter[key])) {
+                        for (const filter of this.Filter[key]) {
+                            if (filter.Field.match(/^DynamicField_/)) {
+                                filter.Field = filter.Field.replace(
+                                    /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                                );
+                            }
+                        }
+
+                    }
+                }
+            }
             if (notification.Data) {
                 for (const key in notification.Data) {
                     if (key && Array.isArray(notification.Data[key])) {
