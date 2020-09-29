@@ -269,7 +269,6 @@ msgid "Attachments"
 msgstr "Anlagen"
 
 #, fuzzy
-#| msgid "Attribute"
 msgid "Attribut"
 msgstr "Attribut"
 
@@ -557,7 +556,6 @@ msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
 #, fuzzy
-#| msgid "Could not load file '{0}'."
 msgid "Could not load file {0}."
 msgstr "Datei '{0}' konnte nicht geladen werden."
 
@@ -769,7 +767,6 @@ msgid "Duplicate"
 msgstr "Duplizieren"
 
 #, fuzzy
-#| msgid "Dynamic Field"
 msgid "DynamicField"
 msgstr "Dynamisches Feld"
 
@@ -1059,7 +1056,6 @@ msgid "Field"
 msgstr "Feld"
 
 #, fuzzy
-#| msgid "Field '{0}' has an invalid value ({1})."
 msgid "Field {0} has an invalid value ({1})."
 msgstr "Feld '{0}' enthält einen ungültigen Wert ({1})."
 
@@ -1082,7 +1078,6 @@ msgid "Filter successfully created."
 msgstr "Filter wurde erfolgreich angelegt."
 
 #, fuzzy
-#| msgid "Filter successfully created."
 msgid "Filter successfully removed."
 msgstr "Filter wurde erfolgreich angelegt."
 
@@ -1109,9 +1104,6 @@ msgid "Force"
 msgstr "Erzwingen"
 
 #, fuzzy
-#| msgid ""
-#| "For keyboard navigation, press 'Ctrl' to switch focus to dialog. See "
-#| "manual for more detailed information."
 msgid ""
 "For keyboard navigation, press Ctrl to switch focus to dialog. See manual "
 "for more detailed information."
@@ -1819,13 +1811,13 @@ msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist.
 
 msgid "Helptext_Admin_UsersSearch"
 msgstr ""
-"Durchsuchbar sind die Eigenschaften in den Spalten \"Login\", \"Vorname\", \""
-"Nachname\" und \"E-Mail\". Wildcard-Suche (Eingabe \"*\") ist möglich."
+"Durchsuchbar sind die Eigenschaften in den Spalten \"Login\", \"Vorname\", "
+"\"Nachname\" und \"E-Mail\". Wildcard-Suche (Eingabe \"*\") ist möglich."
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|\" ("
-"ohne Leerzeichen) und setzen Sie die gesamte Liste in Klammern."
+"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|"
+"\" (ohne Leerzeichen) und setzen Sie die gesamte Liste in Klammern."
 
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
@@ -2682,7 +2674,6 @@ msgid "Legend"
 msgstr "Legende"
 
 #, fuzzy
-#| msgid "Let's go"
 msgid "Lets go"
 msgstr "Los geht's"
 
@@ -3330,7 +3321,6 @@ msgid "Read"
 msgstr "Lesen"
 
 #, fuzzy
-#| msgid "Read"
 msgid "Readonly"
 msgstr "Lesen"
 
@@ -3398,12 +3388,10 @@ msgid "Reply all"
 msgstr "Allen antworten"
 
 #, fuzzy
-#| msgid "Required field '{0}' has no value."
 msgid "Required field {0} has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
 #, fuzzy
-#| msgid "Required field '{0}' is no JSON."
 msgid "Required field {0} is no JSON."
 msgstr "Benötigtes Feld '{0}' ist kein gültiges JSON-Format"
 
@@ -4078,7 +4066,6 @@ msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
 #, fuzzy
-#| msgid "User Management: Users"
 msgid "User Management: Users ({0})"
 msgstr "Nutzerverwaltung: Nutzer"
 
@@ -4101,7 +4088,6 @@ msgid "Value"
 msgstr "Wert"
 
 #, fuzzy
-#| msgid "Value of field '{0}' is too long (max: {1})."
 msgid "Value of field {0} is too long (max: {1})."
 msgstr "Wert des Feldes '{0}' ist zu  lang (max: {1})."
 

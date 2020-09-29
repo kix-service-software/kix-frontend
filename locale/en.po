@@ -1062,7 +1062,6 @@ msgid "Filter successfully created."
 msgstr ""
 
 #, fuzzy
-#| msgid "Search successfully saved."
 msgid "Filter successfully removed."
 msgstr "Search successfully saved."
 
@@ -1725,8 +1724,8 @@ msgstr "The role can only be used within the system if set “valid”."
 
 msgid "Helptext_Admin_UsersSearch"
 msgstr ""
-"Searchable are properties of the colums \"Login\", \"Firstname\", \""
-"Lastname\" and \"Email\". Wildcard-Search (using \"*\") is possible."
+"Searchable are properties of the colums \"Login\", \"Firstname\", \"Lastname"
+"\" and \"Email\". Wildcard-Search (using \"*\") is possible."
 
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
