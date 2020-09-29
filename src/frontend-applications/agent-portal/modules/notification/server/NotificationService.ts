@@ -114,15 +114,10 @@ export class NotificationAPIService extends KIXObjectAPIService {
                     messageProperties[language] = new NotificationMessage();
                 }
                 messageProperties[language][property] = p[1];
-            } else if (p[0] === NotificationProperty.DATA_FILTER) {
+            } else if (p[0] === NotificationProperty.FILTER) {
                 if (Array.isArray(p[1])) {
-                    p[1].forEach((df) => {
-                        if (Array.isArray(df[1])) {
-                            dataProperties[df[0]] = df[1];
-                        } else if (typeof df[1] !== 'undefined' && df[1] !== null) {
-                            dataProperties[df[0]] = [df[1]];
-                        }
-                    });
+                    const filter = this.prepareObjectFilter(p[1]);
+                    newParameter.push([NotificationProperty.FILTER, filter]);
                 }
             } else {
                 // handle Data properties

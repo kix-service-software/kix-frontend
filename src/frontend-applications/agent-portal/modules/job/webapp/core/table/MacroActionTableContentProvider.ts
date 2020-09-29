@@ -43,14 +43,10 @@ export class MacroActionTableContentProvider extends TableContentProvider<any> {
                 rowObjectPromises.push(new Promise<RowObject<MacroAction>>(async (resolve, reject) => {
                     const values: TableValue[] = [];
 
-                    for (const property in o) {
-                        if (o.hasOwnProperty(property)) {
-                            const column = this.table.getColumns().map((c) => c.getColumnConfiguration()).find(
-                                (c) => c.property === property
-                            );
-                            const value = new TableValue(column.property, o[column.property]);
-                            values.push(value);
-                        }
+                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+                    for (const column of columns) {
+                        const value = new TableValue(column.property, o[column.property]);
+                        values.push(value);
                     }
 
                     o['preparedParameters'] = await this.getPreparedParameters(o, job.Macros[0].Type);

@@ -134,6 +134,7 @@ export class TicketService extends KIXObjectService<Ticket> {
         let nodes: TreeNode[] = [];
 
         switch (property) {
+            case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
                 const queuesHierarchy = await QueueService.getInstance().getQueuesHierarchy(false);
                 nodes = await QueueService.getInstance().prepareObjectTree(
@@ -141,6 +142,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                     filterIds ? filterIds.map((fid) => Number(fid)) : null
                 );
                 break;
+            case TicketProperty.CREATED_TYPE_ID:
             case TicketProperty.TYPE_ID:
                 let types = await KIXObjectService.loadObjects<TicketType>(KIXObjectType.TICKET_TYPE);
                 if (!showInvalid) {
@@ -160,6 +162,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                     ));
                 }
                 break;
+            case TicketProperty.CREATED_PRIORITY_ID:
             case TicketProperty.PRIORITY_ID:
                 let priorities = await KIXObjectService.loadObjects<TicketPriority>(KIXObjectType.TICKET_PRIORITY);
                 if (!showInvalid) {
@@ -179,6 +182,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                     ));
                 }
                 break;
+            case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
                 let states = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
                 if (!showInvalid) {
@@ -223,6 +227,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                 nodes.push(new TreeNode(1, unlocked, 'kix-icon-lock-open'));
                 nodes.push(new TreeNode(2, locked, 'kix-icon-lock-close'));
                 break;
+            case TicketProperty.WATCH_USER_ID:
+            case TicketProperty.CREATED_USER_ID:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.OWNER_ID:
                 if (loadingOptions) {

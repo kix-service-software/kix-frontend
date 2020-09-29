@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-08-19 09:51+0000\n"
+"PO-Revision-Date: 2020-09-28 08:53+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/de/>\n"
@@ -53,9 +53,6 @@ msgstr "Zugriff verweigert"
 msgid "Access Level"
 msgstr "Zugriffsebene"
 
-msgid "Accounted time"
-msgstr "Erfasste Zeit"
-
 msgid "Account Information"
 msgstr "Kontoinformationen"
 
@@ -102,7 +99,7 @@ msgid "Advanced Search"
 msgstr "Komplexsuche"
 
 msgid "after"
-msgstr "nach"
+msgstr "nach/größer als"
 
 msgid "Age"
 msgstr "Alter"
@@ -131,8 +128,6 @@ msgstr "Agenten"
 msgid "All"
 msgstr "Alle"
 
-#, fuzzy
-#| msgid "All agents subscribed to the ticket's queue"
 msgid "All agents subscribed to the tickets queue"
 msgstr "Alle Agenten, die das Team des Tickets abonniert haben"
 
@@ -199,6 +194,9 @@ msgstr "Archiviert"
 msgid "Article"
 msgstr "Artikel"
 
+msgid "Article Create Time"
+msgstr "Erstellzeitpunkt des Artikels"
+
 msgid "Article Data"
 msgstr "Artikeldaten"
 
@@ -259,16 +257,21 @@ msgstr "Zuordnung zu Team"
 msgid "At least {0} values must be selected"
 msgstr "Es müssen mindestens {0} Werte ausgewählt werden."
 
-#, fuzzy
-#| msgid ""
-#| "At least one of the fields 'To', 'Cc' or 'Bcc' must contain an entry."
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 "Mindestens eins der Felder  'An', 'Cc' oder 'Bcc' muss einen Eintrag "
 "enthalten."
 
+msgid "Attachment Name"
+msgstr "Name des Anhangs"
+
 msgid "Attachments"
 msgstr "Anlagen"
+
+#, fuzzy
+#| msgid "Attribute"
+msgid "Attribut"
+msgstr "Attribut"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -301,7 +304,7 @@ msgid "Bcc"
 msgstr "Bcc"
 
 msgid "before"
-msgstr "vor"
+msgstr "vor/kleiner als"
 
 msgid "between"
 msgstr "zwischen"
@@ -591,6 +594,21 @@ msgstr "Erstellt am"
 msgid "Created by"
 msgstr "Erstellt von"
 
+msgid "Created with Priority"
+msgstr "Erstellt mit der Priorität"
+
+msgid "Created with Queue"
+msgstr "Erstellt mit dem Team"
+
+msgid "Created with State"
+msgstr "Erstellt mit dem Status"
+
+msgid "Created with Type"
+msgstr "Erstellt mit dem Typ"
+
+msgid "Created with User"
+msgstr "Erstellt mit dem Nutzer"
+
 msgid "Create Dynamic Field"
 msgstr "Dynamisches Feld wird angelegt"
 
@@ -750,6 +768,11 @@ msgstr "Log Download"
 msgid "Duplicate"
 msgstr "Duplizieren"
 
+#, fuzzy
+#| msgid "Dynamic Field"
+msgid "DynamicField"
+msgstr "Dynamisches Feld"
+
 msgid "Dynamic Field"
 msgstr "Dynamisches Feld"
 
@@ -865,7 +888,7 @@ msgid "Edit Value"
 msgstr "Wert bearbeiten"
 
 msgid "Edit Webform"
-msgstr "bearbeiten"
+msgstr "Webformular bearbeiten"
 
 msgid "Email"
 msgstr "E-Mail"
@@ -1794,10 +1817,15 @@ msgstr "Es werden nur gültige Agenten angezeigt."
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "Die Rolle kann nur verwendet werden, wenn sie „gültig“ gesetzt ist."
 
+msgid "Helptext_Admin_UsersSearch"
+msgstr ""
+"Durchsuchbar sind die Eigenschaften in den Spalten \"Login\", \"Vorname\", \""
+"Nachname\" und \"E-Mail\". Wildcard-Suche (Eingabe \"*\") ist möglich."
+
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Semikolon ist als Texttrenner zulässig. Verwendung von RegEx ist möglich, "
-"diese müssen in Slashs (\"/\") gesetzt werden."
+"Die Verwendung von RegEx ist möglich. Für Aufzählungen nutzen Sie \"|\" ("
+"ohne Leerzeichen) und setzen Sie die gesamte Liste in Klammern."
 
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
@@ -1954,8 +1982,8 @@ msgstr ""
 
 msgid "Helptext_Customers_ContactCreate_Avatar."
 msgstr ""
-"Legen Sie einen Avatar (Bild oder Icon) fest, welches in der Sidebar \""
-"Kontaktinformationen\" mit dem Kontakt gemeinsam angezeigt wird. (Admin-"
+"Legen Sie einen Avatar (Bild oder Icon) fest, welches in der Sidebar "
+"\"Kontaktinformationen\" mit dem Kontakt gemeinsam angezeigt wird. (Admin-"
 "Konfiguration an anderer Stelle möglich) Der Avatar bekommt eine fixe Höhe "
 "von 98px, die Breite wird dann entsprechend dem Bildformat angepasst. "
 "Empfehlung: Verwenden Sie ein quadratisches oder Hochkant-Format."
@@ -2647,6 +2675,9 @@ msgstr "Letzte Anmeldung"
 msgid "Last Name"
 msgstr "Nachname"
 
+msgid "Layer"
+msgstr ""
+
 msgid "Legend"
 msgstr "Legende"
 
@@ -2657,6 +2688,9 @@ msgstr "Los geht's"
 
 msgid "Let's go"
 msgstr "Los geht's"
+
+msgid "Limit:"
+msgstr "Limit (Suchergebnisse):"
 
 msgid "link {0}"
 msgstr "{0} verknüpfen"
@@ -3045,6 +3079,9 @@ msgstr "Geöffnete Sidebars"
 msgid "Open Tickets"
 msgstr "Offene Tickets"
 
+msgid "Operator"
+msgstr ""
+
 msgid "Organisation"
 msgstr "Kunde"
 
@@ -3362,11 +3399,6 @@ msgstr "Allen antworten"
 
 #, fuzzy
 #| msgid "Required field '{0}' has no value."
-msgid "Required field {0} has no usable value."
-msgstr "Benötigtes Feld '{0}' hat keinen Wert."
-
-#, fuzzy
-#| msgid "Required field '{0}' has no value."
 msgid "Required field {0} has no value."
 msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
@@ -3515,6 +3547,9 @@ msgstr "Senden an"
 msgid "Send to all role members"
 msgstr "Senden an Agenten-Rollen"
 
+msgid "send to background"
+msgstr "Im Hintergrund fortsetzen"
+
 msgid "Send to these agents"
 msgstr "Senden an Agenten"
 
@@ -3552,7 +3587,7 @@ msgid "Signature"
 msgstr "Signatur"
 
 msgid "since"
-msgstr "seit"
+msgstr "seit/gleich oder größer"
 
 msgid "SINGLE_QUOTES"
 msgstr "' (Einfaches Hochkomma)"
@@ -3941,7 +3976,7 @@ msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
 
 msgid "until"
-msgstr "bis"
+msgstr "bis/gleich oder weniger"
 
 msgid "Unwatch"
 msgstr "Nicht beobachten"
@@ -4042,7 +4077,9 @@ msgstr "Nutzerverwaltung"
 msgid "User Management: Roles"
 msgstr "Nutzerverwaltung: Rollen"
 
-msgid "User Management: Users"
+#, fuzzy
+#| msgid "User Management: Users"
+msgid "User Management: Users ({0})"
 msgstr "Nutzerverwaltung: Nutzer"
 
 msgid "User manual"
@@ -4094,6 +4131,9 @@ msgstr "Beobachtete Tickets"
 
 msgid "Watch Ticket"
 msgstr "Ticket beobachten"
+
+msgid "Watch User"
+msgstr "Beobachtender Nutzer"
 
 msgid "We are working on this functionality."
 msgstr "Funktionalität ist in Arbeit."
@@ -4163,6 +4203,14 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Accounted time"
+#~ msgstr "Erfasste Zeit"
+
+#, fuzzy
+#~| msgid "Required field '{0}' has no value."
+#~ msgid "Required field {0} has no usable value."
+#~ msgstr "Benötigtes Feld '{0}' hat keinen Wert."
 
 #~ msgid "no"
 #~ msgstr "nein"
@@ -5570,9 +5618,6 @@ msgstr "PLZ"
 
 #~ msgid "Room"
 #~ msgstr "Raum"
-
-#~ msgid "Attachment"
-#~ msgstr "Anhang"
 
 #~ msgid "Assigned Owner"
 #~ msgstr "Zugeordneter Besitzer"

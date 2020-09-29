@@ -31,6 +31,7 @@ import { DynamicField } from '../../../../dynamic-fields/model/DynamicField';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
+import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -49,6 +50,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
     public useOwnSearch: boolean = false;
     public validDFTypes = [];
+
+    public async getFieldOptions(): Promise<ObjectPropertyValueOption[]> {
+        return [];
+    }
 
     public async getProperties(): Promise<Array<[string, string]>> {
         let properties = [];
@@ -412,6 +417,10 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             objectType = await service.getObjectTypeForProperty(property);
         }
         return objectType;
+    }
+
+    public hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean {
+        return false;
     }
 
 }

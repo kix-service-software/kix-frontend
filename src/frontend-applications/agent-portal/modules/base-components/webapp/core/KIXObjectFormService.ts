@@ -305,14 +305,14 @@ export abstract class KIXObjectFormService {
         let fixedKey = fixedIterator.next();
         while (fixedKey.value) {
             const property = fixedKey.value;
-            const value = fixedValues.get(property);
+            const value = fixedValues.get(property) || [];
             const dfName = KIXObjectService.getDynamicFieldName(property);
             if (dfName) {
                 await DynamicFieldFormUtil.getInstance().handleDynamicFieldByProperty(
-                    property, value, parameter
+                    property, value[1], parameter
                 );
             } else {
-                await this.prepareValue(forUpdate, property, null, value, formInstance, parameter);
+                await this.prepareValue(forUpdate, property, null, value[1], formInstance, parameter);
             }
 
             fixedKey = fixedIterator.next();
@@ -325,14 +325,14 @@ export abstract class KIXObjectFormService {
             const property = templateKey.value;
             const field = formInstance.getFormFieldByProperty(property);
             if (!field) {
-                const value = templateValues.get(property);
+                const value = templateValues.get(property) || [];
                 const dfName = KIXObjectService.getDynamicFieldName(property);
                 if (dfName) {
                     await DynamicFieldFormUtil.getInstance().handleDynamicFieldByProperty(
                         property, value[1], parameter
                     );
                 } else {
-                    await this.prepareValue(forUpdate, property, null, value, formInstance, parameter);
+                    await this.prepareValue(forUpdate, property, null, value[1], formInstance, parameter);
                 }
             }
 

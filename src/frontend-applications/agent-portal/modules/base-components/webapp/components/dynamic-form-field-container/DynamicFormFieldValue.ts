@@ -456,4 +456,17 @@ export class DynamicFormFieldValue {
         return tree;
     }
 
+    public toggleOption(option: any): void {
+        const index = this.value.options.findIndex((o) => o.option === option.option);
+        if (index !== -1) {
+            this.value.options.splice(index, 1);
+        } else {
+            this.value.options.push(option);
+        }
+    }
+
+    public isOptionSet(option: any): boolean {
+        return this.value.options.some((o) => o.option === option.option);
+    }
+
 }

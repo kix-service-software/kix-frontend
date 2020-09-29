@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-05-07 09:05+0000\n"
-"PO-Revision-Date: 2020-08-19 09:51+0000\n"
+"PO-Revision-Date: 2020-09-28 08:53+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: English <http://translate.kix18.docker.vm.devel.cape-it.de/"
 "projects/kix18/frontend-app/en/>\n"
@@ -53,9 +53,6 @@ msgstr ""
 msgid "Access Level"
 msgstr ""
 
-msgid "Accounted time"
-msgstr ""
-
 msgid "Account Information"
 msgstr ""
 
@@ -102,7 +99,7 @@ msgid "Advanced Search"
 msgstr ""
 
 msgid "after"
-msgstr ""
+msgstr "after/greater than"
 
 msgid "Age"
 msgstr ""
@@ -189,6 +186,9 @@ msgstr ""
 msgid "Article"
 msgstr ""
 
+msgid "Article Create Time"
+msgstr ""
+
 msgid "Article Data"
 msgstr ""
 
@@ -252,7 +252,13 @@ msgstr ""
 msgid "At least one of the fields To, Cc or Bcc must contain an entry."
 msgstr ""
 
+msgid "Attachment Name"
+msgstr ""
+
 msgid "Attachments"
+msgstr ""
+
+msgid "Attribut"
 msgstr ""
 
 msgid "Attribute"
@@ -286,7 +292,7 @@ msgid "Bcc"
 msgstr ""
 
 msgid "before"
-msgstr ""
+msgstr "before/less than"
 
 msgid "between"
 msgstr ""
@@ -572,6 +578,21 @@ msgstr ""
 msgid "Created by"
 msgstr ""
 
+msgid "Created with Priority"
+msgstr ""
+
+msgid "Created with Queue"
+msgstr "Created with Team"
+
+msgid "Created with State"
+msgstr ""
+
+msgid "Created with Type"
+msgstr ""
+
+msgid "Created with User"
+msgstr ""
+
 msgid "Create Dynamic Field"
 msgstr ""
 
@@ -729,6 +750,9 @@ msgid "Download log"
 msgstr ""
 
 msgid "Duplicate"
+msgstr ""
+
+msgid "DynamicField"
 msgstr ""
 
 msgid "Dynamic Field"
@@ -1699,10 +1723,15 @@ msgstr "Only valid agents are available."
 msgid "Helptext_Admin_Users_RoleCreate_Valid"
 msgstr "The role can only be used within the system if set “valid”."
 
+msgid "Helptext_Admin_UsersSearch"
+msgstr ""
+"Searchable are properties of the colums \"Login\", \"Firstname\", \""
+"Lastname\" and \"Email\". Wildcard-Search (using \"*\") is possible."
+
 msgid "Helptext_Admin_WebformCreateEdit_AcceptedDomains"
 msgstr ""
-"Semicolon can be used as text separator. You can also use RegEx, as long as "
-"they are surounded by slashes (\"/\")."
+"RegEx useage is possible. For lists use \"|\" (without spaces) as text "
+"separatorand put the whole list in brackets."
 
 msgid "Helptext_Admin_WebformCreateEdit_AllowAttachments"
 msgstr ""
@@ -1913,8 +1942,8 @@ msgstr ""
 msgid "Helptext_Customers_OrganisationCreate_Avatar."
 msgstr ""
 "Upload an avatar (picture or icon). Depending on the configuration of your "
-"KIX Agent Portal the avatar can be shown together with the organisation, "
-"e.g. in a sidebar."
+"KIX Agent Portal the avatar can be shown together with the organisation, e."
+"g. in a sidebar."
 
 msgid "Helptext_Customers_OrganisationCreate_City"
 msgstr ""
@@ -2132,7 +2161,7 @@ msgid "Helptext_Tickets_ArticleCreateEdit_CustomerVisible"
 msgstr ""
 "Choose if the following article should be visible in the Self Service "
 "Portal. If \"Email\" is choosen as chanal above, and one of the following "
-"form fields (To, Cc, Bcc) contains an adresss conected to the tickets "
+"form fields (To, Cc, Bcc) contains an adresss conected to the ticket's "
 "customer, the checkbox will be set automatically and cannot be removed."
 
 msgid "Helptext_Tickets_ArticleCreateEdit_Subject"
@@ -2218,7 +2247,7 @@ msgid "Helptext_Tickets_TicketCreate_CustomerVisible"
 msgstr ""
 "Choose if the following article should be visible in the Self Service "
 "Portal. If \"Email\" is choosen as chanal above, and one of the following "
-"form fields (To, Cc, Bcc) contains an adresss conected to the tickets "
+"form fields (To, Cc, Bcc) contains an adresss conected to the ticket's "
 "customer, the checkbox will be set automatically and cannot be removed."
 
 msgid "Helptext_Tickets_TicketCreate_Organisation"
@@ -2501,6 +2530,9 @@ msgstr ""
 msgid "Last Name"
 msgstr ""
 
+msgid "Layer"
+msgstr ""
+
 msgid "Legend"
 msgstr ""
 
@@ -2509,6 +2541,9 @@ msgstr ""
 
 msgid "Let's go"
 msgstr ""
+
+msgid "Limit:"
+msgstr "Limit (Search Results):"
 
 msgid "link {0}"
 msgstr "Link {0}"
@@ -2897,6 +2932,9 @@ msgstr ""
 msgid "Open Tickets"
 msgstr ""
 
+msgid "Operator"
+msgstr ""
+
 msgid "Organisation"
 msgstr ""
 
@@ -3206,9 +3244,6 @@ msgstr ""
 msgid "Reply all"
 msgstr ""
 
-msgid "Required field {0} has no usable value."
-msgstr ""
-
 msgid "Required field {0} has no value."
 msgstr ""
 
@@ -3353,6 +3388,9 @@ msgstr ""
 msgid "Send to all role members"
 msgstr ""
 
+msgid "send to background"
+msgstr "Continue in background"
+
 msgid "Send to these agents"
 msgstr ""
 
@@ -3390,7 +3428,7 @@ msgid "Signature"
 msgstr ""
 
 msgid "since"
-msgstr ""
+msgstr "since/equal or greater"
 
 msgid "SINGLE_QUOTES"
 msgstr "' (Single Quotes)"
@@ -3772,7 +3810,7 @@ msgid "Unread Articles"
 msgstr ""
 
 msgid "until"
-msgstr ""
+msgstr "until/equal or less"
 
 msgid "Unwatch"
 msgstr ""
@@ -3873,7 +3911,7 @@ msgstr ""
 msgid "User Management: Roles"
 msgstr ""
 
-msgid "User Management: Users"
+msgid "User Management: Users ({0})"
 msgstr ""
 
 msgid "User manual"
@@ -3922,6 +3960,9 @@ msgid "Watched Tickets"
 msgstr ""
 
 msgid "Watch Ticket"
+msgstr ""
+
+msgid "Watch User"
 msgstr ""
 
 msgid "We are working on this functionality."
@@ -3993,9 +4034,6 @@ msgstr ""
 msgid "ZIP"
 msgstr ""
 
-#~ msgid "Load Ticket State"
-#~ msgstr "Loading Ticket State"
-
 #~ msgid "Load Config Item"
 #~ msgstr "Loading Assets"
 
@@ -4041,17 +4079,8 @@ msgstr ""
 #~ msgid "Load Ticket"
 #~ msgstr "Loading Ticket"
 
-#~ msgid "Load Ticket Priority"
-#~ msgstr "Loading Ticket Priority"
-
 #~ msgid "Load Tickets"
 #~ msgstr "Loading Tickets"
-
-#~ msgid "Load Ticket Type"
-#~ msgstr "Loading Ticket Type"
-
-#~ msgid "Load User"
-#~ msgstr "Loading User"
 
 #~ msgid "Helptext_Tickets_TicketCreate_Links"
 #~ msgstr "Link this ticket with an asset, a FAQ article or another ticket."

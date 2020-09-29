@@ -89,7 +89,8 @@ export class ComponentState {
             removeButtons: '',
             removePlugins: 'elementspath'
                 + (this.readOnly || this.noImages ? ',image2' : '')
-                + (this.readOnly ? '' : ',autogrow'),
+                + (this.readOnly ? '' : ',autogrow')
+                + (this.readOnly ? ',stylesheetparser' : ''),
             codeSnippet_theme: 'github'
         };
         if (resize || resize === undefined) {

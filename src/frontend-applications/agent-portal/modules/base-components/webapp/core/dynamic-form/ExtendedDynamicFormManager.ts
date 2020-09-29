@@ -13,6 +13,7 @@ import { TreeNode } from '../tree';
 import { DynamicFormOperationsType } from './DynamicFormOperationsType';
 import { ValidationResult } from '../ValidationResult';
 import { DynamicFieldTypes } from '../../../../dynamic-fields/model/DynamicFieldTypes';
+import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 
 export abstract class ExtendedDynamicFormManager implements IDynamicFormManager {
 
@@ -20,6 +21,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
     public uniqueProperties: boolean;
     public resetOperator?: boolean;
     public useOwnSearch?: boolean;
+
+    public async getFieldOptions(): Promise<any[]> {
+        return [];
+    }
 
     public getValidDFTypes(): Array<DynamicFieldTypes | string> {
         return [];
@@ -127,6 +132,10 @@ export abstract class ExtendedDynamicFormManager implements IDynamicFormManager 
 
     public searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]> {
         return null;
+    }
+
+    public hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean {
+        return false;
     }
 
 }

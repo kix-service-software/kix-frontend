@@ -34,6 +34,8 @@ import { IKIXObjectService } from '../../../../../modules/base-components/webapp
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { Contact } from '../../../../customer/model/Contact';
 import { AutoCompleteConfiguration } from '../../../../../model/configuration/AutoCompleteConfiguration';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { FormFieldOptions } from '../../../../../model/configuration/FormFieldOptions';
 
 class Component extends FormInputComponent<number | string, ComponentState> {
 
@@ -119,10 +121,22 @@ class Component extends FormInputComponent<number | string, ComponentState> {
             : Array.isArray(contactValue.value) ? contactValue.value[0] : contactValue.value;
         if (contactId) {
             if (!isNaN(Number(contactId))) {
-                const currentNode = await this.getContactNode(Number(contactId));
-                if (currentNode) {
-                    nodes.push(currentNode);
-                    currentNode.selected = true;
+                // check if this contact is valid, if required
+                const onlyValidOption = this.state.field.options.find((o) =>
+                    o.option === FormFieldOptions.SHOW_INVALID);
+                let canSelect = true;
+                if (onlyValidOption && !onlyValidOption.value) {
+                    const contacts = await KIXObjectService.loadObjects(KIXObjectType.CONTACT, [contactId]);
+                    if (!contacts || !contacts.length || contacts[0].ValidID !== 1) {
+                        canSelect = false;
+                    }
+                }
+                if (canSelect) {
+                    const currentNode = await this.getContactNode(Number(contactId));
+                    if (currentNode) {
+                        nodes.push(currentNode);
+                        currentNode.selected = true;
+                    }
                 }
             } else {
                 const currentNode = new TreeNode(contactId, contactId.toString(), 'kix-icon-man-bubble');
@@ -163,7 +177,16 @@ class Component extends FormInputComponent<number | string, ComponentState> {
         const nodes = [];
         const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(KIXObjectType.CONTACT);
         if (service) {
+            const onlyValidOption = this.state.field.options.find((o) => o.option === FormFieldOptions.SHOW_INVALID);
             const filter = await service.prepareFullTextFilter(searchValue);
+            if (onlyValidOption && !onlyValidOption.value) {
+                filter.push(
+                    new FilterCriteria(
+                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                        FilterType.AND, 1
+                    )
+                );
+            }
             const loadingOptions = new KIXObjectLoadingOptions(filter, null, limit);
             this.contacts = await KIXObjectService.loadObjects(
                 KIXObjectType.CONTACT, null, loadingOptions, null, true

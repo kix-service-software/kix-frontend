@@ -38,6 +38,7 @@ export class SearchFormManager extends AbstractDynamicFormManager {
                         break;
                     case DynamicFieldTypes.SELECTION:
                     case DynamicFieldTypes.CI_REFERENCE:
+                    case DynamicFieldTypes.TICKET_REFERENCE:
                         operations = [SearchOperator.IN];
                         break;
                     case DynamicFieldTypes.DATE:

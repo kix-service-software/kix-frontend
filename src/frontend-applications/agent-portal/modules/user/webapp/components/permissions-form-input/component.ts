@@ -92,8 +92,8 @@ class Component extends FormInputComponent<any[], ComponentState> {
             value.value.forEach((permission: Permission) => {
                 permissionManager.setValue(
                     new ObjectPropertyValue(
-                        permission.TypeID.toString(), permission.Target, this.getPermissionFormData(permission), false,
-                        true, null, null, null, permission.ID.toString()
+                        permission.TypeID.toString(), permission.Target, this.getPermissionFormData(permission), [],
+                        false, true, null, null, null, permission.ID.toString()
                     )
                 );
                 permissionDescriptions.push(

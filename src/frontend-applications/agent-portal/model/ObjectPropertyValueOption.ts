@@ -7,11 +7,12 @@
  * --
  */
 
-export enum JobFilterTableProperty {
+export class ObjectPropertyValueOption {
 
-    FIELD = 'FIELD',
+    public constructor(
+        public option: string,
+        public label: string,
+        public tooltip: string
+    ) { }
 
-    VALUE = 'VALUE',
-
-    OPERATOR = 'OPERATOR'
 }

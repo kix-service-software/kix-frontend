@@ -15,5 +15,4 @@ export * from './table';
 export { NotificationLabelProvider } from './NotificationLabelProvider';
 export { NotificationService } from './NotificationService';
 export { NotificationFormService } from './NotificationFormService';
-export { NotificationFilterManager } from './NotificationFilterManager';
 export { UIModule as NotificationUIModule } from './NotificationUIModule';

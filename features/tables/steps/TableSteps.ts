@@ -21,6 +21,7 @@ import { MacroActionTableFactory } from '../../../src/frontend-applications/agen
 import { TableHeaderHeight } from '../../../src/frontend-applications/agent-portal/model/configuration/TableHeaderHeight';
 import { KIXObjectType } from '../../../src/frontend-applications/agent-portal/model/kix/KIXObjectType';
 import { ImportExportTemplateTableFactory, ImportExportTemplateRunTableFactory } from '../../../src/frontend-applications/agent-portal/modules/import-export/webapp/core';
+import { resolve } from 'path';
 
 let table: Table;
 TableFactoryService.getInstance().registerFactory(new FAQArticleTableFactory());
@@ -61,7 +62,12 @@ Given('Tabelle: {string}', async (objectType: KIXObjectType | string) => {
     expect(table).exist;
 
     // to enable column checks for dynamic field properties
-    table['checkDF'] = () => { return true; };
+    table['checkDF'] = () => {
+        return new Promise((resolve, reject) => {
+            resolve(true);
+            reject();
+        });
+    };
 
     await table.initialize();
 });
@@ -71,7 +77,12 @@ Given('Tabelle - Schmal: {string}', async (objectType: KIXObjectType | string) =
     expect(table).exist;
 
     // to enable column checks for dynamic field properties
-    table['checkDF'] = () => { return true; };
+    table['checkDF'] = () => {
+        return new Promise((resolve, reject) => {
+            resolve(true);
+            reject();
+        });
+    };
 
     await table.initialize();
 });

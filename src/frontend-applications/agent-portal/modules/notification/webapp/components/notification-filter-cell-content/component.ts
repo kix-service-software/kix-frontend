@@ -10,8 +10,10 @@
 import { ComponentState } from './ComponentState';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
 import { Cell } from '../../../../base-components/webapp/core/table';
-import { NotificationFilterTableProperty, NotificationFilterManager } from '../../core';
+import { NotificationFilterTableProperty } from '../../core';
 import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { SearchService } from '../../../../search/webapp/core';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -21,10 +23,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onInput(input: any): Promise<void> {
         if (input.cell) {
+            const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
+            const manager = searchDefinition.createFormManager();
             const propertyCell = (input.cell as Cell).getRow().getCell(NotificationFilterTableProperty.FIELD);
-            const inputType = propertyCell ? await NotificationFilterManager.getInstance().getInputType(
-                propertyCell.getValue().objectValue
-            ) : null;
+            const inputType = propertyCell && manager
+                ? await manager.getInputType(propertyCell.getValue().objectValue)
+                : null;
             this.state.isLabelCell = inputType === InputFieldTypes.DROPDOWN
                 || inputType === InputFieldTypes.OBJECT_REFERENCE;
         }

@@ -146,12 +146,15 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 displayValue = '';
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
-                if (value === 1) {
-                    displayValue = 'Translatable#agent';
-                } else if (value === 2) {
-                    displayValue = 'Translatable#system';
-                } else if (value === 3) {
-                    displayValue = 'Translatable#external';
+                const checkNumber = Number(value);
+                if (!isNaN(checkNumber)) {
+                    if (checkNumber === 1) {
+                        displayValue = 'Translatable#agent';
+                    } else if (checkNumber === 2) {
+                        displayValue = 'Translatable#system';
+                    } else if (checkNumber === 3) {
+                        displayValue = 'Translatable#external';
+                    }
                 }
                 break;
             case ArticleProperty.INCOMING_TIME:
@@ -267,25 +270,29 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
                 break;
             case ArticleProperty.CHANNEL_ID:
                 if (channelID) {
-                    const channels = await KIXObjectService.loadObjects<Channel>(
-                        KIXObjectType.CHANNEL, [channelID]
-                    );
-                    if (channels && channels.length && channels[0].Name === 'email') {
-                        const mailIcon = article && article.isUnsent()
-                            ? 'kix-icon-mail-warning'
-                            : new ObjectIcon(null, 'Channel', channelID);
-                        let directionIcon = 'kix-icon-arrow-receive';
+                    if (article) {
+                        const channels = await KIXObjectService.loadObjects<Channel>(
+                            KIXObjectType.CHANNEL, [channelID]
+                        );
+                        if (channels && channels.length && channels[0].Name === 'email') {
+                            const mailIcon = article && article.isUnsent()
+                                ? 'kix-icon-mail-warning'
+                                : new ObjectIcon(null, 'Channel', channelID);
+                            let directionIcon = 'kix-icon-arrow-receive';
 
-                        const senderTypes = await KIXObjectService.loadObjects<SenderType>(
-                            KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
-                        ).catch((error) => []);
+                            const senderTypes = await KIXObjectService.loadObjects<SenderType>(
+                                KIXObjectType.SENDER_TYPE, [article.SenderTypeID]
+                            ).catch((error) => []);
 
-                        const senderType = senderTypes && senderTypes.length ? senderTypes[0] : '';
-                        if (article && senderType.Name === 'agent') {
-                            directionIcon = 'kix-icon-arrow-outward';
+                            const senderType = senderTypes && senderTypes.length ? senderTypes[0] : '';
+                            if (article && senderType.Name === 'agent') {
+                                directionIcon = 'kix-icon-arrow-outward';
+                            }
+                            icons.push(mailIcon);
+                            icons.push(directionIcon);
+                        } else {
+                            icons.push(new ObjectIcon(null, 'Channel', channelID));
                         }
-                        icons.push(mailIcon);
-                        icons.push(directionIcon);
                     } else {
                         icons.push(new ObjectIcon(null, 'Channel', channelID));
                     }

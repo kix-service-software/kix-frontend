@@ -19,13 +19,9 @@ import { TranslationService } from '../../../../modules/translation/webapp/core/
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormContext } from '../../../../model/configuration/FormContext';
 import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
-import { ArticleProperty } from '../../../ticket/model/ArticleProperty';
-import { NotificationService } from '.';
 import { FormFieldOption } from '../../../../model/configuration/FormFieldOption';
 import { NotificationMessage } from '../../model/NotificationMessage';
 import { Notification } from '../../model/Notification';
-import { TicketProperty } from '../../../ticket/model/TicketProperty';
-import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 import { IdService } from '../../../../model/IdService';
 import { FormInstance } from '../../../base-components/webapp/core/FormInstance';
 
@@ -91,38 +87,6 @@ export class NotificationFormService extends KIXObjectFormService {
                 );
             }
         }
-    }
-
-    protected async getValue(
-        property: string, value: any, notification: Notification, formField: FormFieldConfiguration
-    ): Promise<any> {
-        switch (property) {
-            case NotificationProperty.DATA_FILTER:
-                if (notification && notification.Filter) {
-                    const articleProperty = [
-                        ArticleProperty.SENDER_TYPE_ID, ArticleProperty.CHANNEL_ID, ArticleProperty.TO,
-                        ArticleProperty.CC, ArticleProperty.FROM, ArticleProperty.SUBJECT, ArticleProperty.BODY
-                    ];
-                    let hasArticleEvent = false;
-                    value = [];
-                    const context = ContextService.getInstance().getActiveContext();
-                    if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
-                        const selectedEvents = context.getAdditionalInformation(NotificationProperty.DATA_EVENTS);
-                        hasArticleEvent = selectedEvents
-                            ? await NotificationService.getInstance().hasArticleEvent(selectedEvents)
-                            : false;
-                    }
-
-                    notification.Filter.forEach((v, k) => {
-                        if (hasArticleEvent || !articleProperty.some((p) => k === p)) {
-                            value.push([k, v]);
-                        }
-                    });
-                }
-                break;
-            default:
-        }
-        return value;
     }
 
     public async hasPermissions(field: FormFieldConfiguration): Promise<boolean> {
@@ -202,41 +166,6 @@ export class NotificationFormService extends KIXObjectFormService {
                 break;
             case NotificationProperty.DATA_RECIPIENT_EMAIL:
                 value = Array.isArray(value) ? value.join(',') : value;
-                break;
-            case NotificationProperty.DATA_FILTER:
-                if (Array.isArray(value)) {
-                    for (const v of value) {
-                        switch (v[0]) {
-                            case TicketProperty.TYPE_ID:
-                            case TicketProperty.STATE_ID:
-                            case TicketProperty.PRIORITY_ID:
-                            case TicketProperty.QUEUE_ID:
-                            case TicketProperty.LOCK_ID:
-                            case TicketProperty.ORGANISATION_ID:
-                            case TicketProperty.CONTACT_ID:
-                            case TicketProperty.OWNER_ID:
-                            case TicketProperty.RESPONSIBLE_ID:
-                                v[0] = 'Ticket::' + v[0];
-                                break;
-                            case ArticleProperty.SENDER_TYPE_ID:
-                            case ArticleProperty.CHANNEL_ID:
-                            case ArticleProperty.TO:
-                            case ArticleProperty.CC:
-                            case ArticleProperty.FROM:
-                            case ArticleProperty.SUBJECT:
-                            case ArticleProperty.BODY:
-                                v[0] = 'Article::' + v[0];
-                                break;
-                            default:
-                                if (v[0].match(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`))) {
-                                    v[0] = v[0].replace(
-                                        new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`),
-                                        'Ticket::DynamicField_$1'
-                                    );
-                                }
-                        }
-                    }
-                }
                 break;
             default:
 

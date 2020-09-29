@@ -13,6 +13,7 @@ import { ObjectPropertyValue } from '../../../../../model/ObjectPropertyValue';
 import { InputFieldTypes } from '../InputFieldTypes';
 import { TreeNode } from '../tree';
 import { ValidationResult } from '../ValidationResult';
+import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
 
 export interface IDynamicFormManager {
 
@@ -25,6 +26,8 @@ export interface IDynamicFormManager {
     resetValue?: boolean;
 
     useOwnSearch?: boolean;
+
+    getFieldOptions(): Promise<any[]>;
 
     searchObjectTree(property: string, searchValue: string, limit?: number): Promise<TreeNode[]>;
 
@@ -77,5 +80,7 @@ export interface IDynamicFormManager {
     validate(): Promise<ValidationResult[]>;
 
     shouldAddEmptyField(): Promise<boolean>;
+
+    hasOption(option: ObjectPropertyValueOption, property: string, operator: string): boolean;
 
 }

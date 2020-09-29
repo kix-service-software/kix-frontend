@@ -74,7 +74,7 @@ class Component extends FormInputComponent<any[], ComponentState> {
             value.value.forEach((match: MailFilterMatch) => {
                 this.state.matchManager.setValue(
                     new ObjectPropertyValue(
-                        match.Key, null, match, false, true, null, null, null, match.Key
+                        match.Key, null, match, [], false, true, null, null, null, match.Key
                     )
                 );
             });
