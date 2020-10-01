@@ -101,6 +101,15 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
             if (fields) {
                 for (const field of fields) {
+                    if (
+                        field.FieldType === DynamicFieldTypes.CI_REFERENCE
+                        && !await this.checkReadPermissions('/cmdb/configitems')
+                    ) { continue; }
+                    if (
+                        field.FieldType === DynamicFieldTypes.TICKET_REFERENCE
+                        && !await this.checkReadPermissions('/tickets')
+                    ) { continue; }
+
                     const translated = await TranslationService.translate(field.Label);
                     properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
                 }

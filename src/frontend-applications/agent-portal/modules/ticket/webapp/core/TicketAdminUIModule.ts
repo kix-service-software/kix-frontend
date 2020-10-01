@@ -7,22 +7,17 @@
  * --
  */
 
-import { IUIModule } from '../../../../model/IUIModule';
 import { ServiceRegistry } from '../../../../modules/base-components/webapp/core/ServiceRegistry';
 import {
     TicketTypeFormService, TicketPriorityFormService, TicketStateFormService, QueueFormService,
-    TicketTypeService, TicketStateService, TicketPriorityService, QueueService, TicketTypeLabelProvider,
-    TicketPriorityLabelProvider, TicketStateLabelProvider, TicketStateTypeLabelProvider, QueueLabelProvider,
     TicketPriorityTableFactory, TicketQueueTableFactory, TicketTypeTableFactory, TicketStateTableFactory,
     TicketTypeCreateAction, NewTicketTypeDialogContext, TicketTypeEditAction,
     EditTicketTypeDialogContext, TicketTypeTableDeleteAction, TicketTypeDetailsContext, TicketStateCreateAction,
     NewTicketStateDialogContext, TicketStateEditAction, EditTicketStateDialogContext, TicketStateTableDeleteAction,
     TicketStateDetailsContext, TicketPriorityCreateAction, NewTicketPriorityDialogContext, TicketPriorityEditAction,
     EditTicketPriorityDialogContext, TicketPriorityTableDeleteAction, TicketPriorityDetailsContext,
-    TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext, QueueDetailsContext
+    TicketQueueCreateAction, NewQueueDialogContext, TicketQueueEditAction, EditQueueDialogContext, QueueDetailsContext,
 } from '.';
-import { LabelService } from '../../../../modules/base-components/webapp/core/LabelService';
-import { ChannelLabelProvider } from './ChannelLabelProvider';
 import { TableFactoryService } from '../../../base-components/webapp/core/table';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
@@ -31,8 +26,9 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { QueueDuplicateAction } from './admin';
+import { UIModule as TicketReadUIModule } from './TicketReadUIModule';
 
-export class UIModule implements IUIModule {
+export class UIModule extends TicketReadUIModule {
 
     public priority: number = 104;
 
@@ -43,22 +39,11 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
+        super.register();
         ServiceRegistry.registerServiceInstance(TicketTypeFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketPriorityFormService.getInstance());
         ServiceRegistry.registerServiceInstance(TicketStateFormService.getInstance());
         ServiceRegistry.registerServiceInstance(QueueFormService.getInstance());
-
-        ServiceRegistry.registerServiceInstance(TicketTypeService.getInstance());
-        ServiceRegistry.registerServiceInstance(TicketStateService.getInstance());
-        ServiceRegistry.registerServiceInstance(TicketPriorityService.getInstance());
-        ServiceRegistry.registerServiceInstance(QueueService.getInstance());
-
-        LabelService.getInstance().registerLabelProvider(new TicketTypeLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new TicketPriorityLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new TicketStateLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new TicketStateTypeLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new ChannelLabelProvider());
-        LabelService.getInstance().registerLabelProvider(new QueueLabelProvider());
 
         TableFactoryService.getInstance().registerFactory(new TicketPriorityTableFactory());
         TableFactoryService.getInstance().registerFactory(new TicketQueueTableFactory());
