@@ -10,18 +10,34 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { EventService } from '../../core/EventService';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { IdService } from '../../../../../model/IdService';
+import { LoadingShieldEventData } from '../../core/LoadingShieldEventData';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
+
+    private subscriber: IEventSubscriber;
 
     public onCreate(): void {
         this.state = new ComponentState();
     }
 
-    public onInput(input: any): void {
-        this.state.cancelCallback = input.cancelCallback;
-        this.state.time = input.time;
-        this.state.cancelButtonText = input.cancelButtonText;
-        this.update();
+    public async onMount(): Promise<void> {
+        this.subscriber = {
+            eventSubscriberId: IdService.generateDateBasedId('LoadingShield'),
+            eventPublished: (data: LoadingShieldEventData, eventId: string) => {
+                this.state.show = data.isLoading;
+                this.state.hint = data.loadingHint;
+                this.state.cancelButtonText = data.cancelButtonText;
+                this.state.cancelCallback = data.cancelCallback;
+                this.state.time = data.time;
+                this.update();
+            }
+        };
+
+        EventService.getInstance().subscribe(ApplicationEvent.TOGGLE_LOADING_SHIELD, this.subscriber);
     }
 
     public async update(): Promise<void> {

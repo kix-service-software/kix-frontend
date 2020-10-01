@@ -110,9 +110,9 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                 } else {
 
                     let canceled = false;
-                    DialogService.getInstance().setMainDialogLoading(
-                        true, this.loadingHint, false, null, () => {
-                            DialogService.getInstance().setMainDialogLoading(false);
+                    BrowserUtil.toggleLoadingShield(
+                        true, this.loadingHint, null, () => {
+                            BrowserUtil.toggleLoadingShield(false);
                             DialogService.getInstance().closeMainDialog();
                             canceled = true;
                             resolve();
@@ -144,7 +144,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
                             }
                             resolve();
                         }).catch((error: Error) => {
-                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.toggleLoadingShield(false);
                             BrowserUtil.openErrorOverlay(
                                 error.Message ? `${error.Code}: ${error.Message}` : error.toString()
                             );
@@ -156,7 +156,7 @@ export abstract class AbstractEditDialog extends AbstractMarkoComponent<any> {
     }
 
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(false);
+        BrowserUtil.toggleLoadingShield(false);
         DialogService.getInstance().submitMainDialog();
 
         FormService.getInstance().deleteFormInstance(this.state.formId);

@@ -45,10 +45,6 @@ export class OverlayDialogComponent implements IOverlayDialogListener {
         this.state.show = false;
     }
 
-    public setLoading(loading: boolean): void {
-        this.state.loading = loading;
-    }
-
 }
 
 module.exports = OverlayDialogComponent;

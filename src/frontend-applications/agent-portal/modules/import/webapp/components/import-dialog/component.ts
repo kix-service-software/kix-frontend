@@ -651,7 +651,7 @@ class Component {
                 }).catch(async (error) => {
                     this.errorObjects.push(object);
                     this.state.table.setRowObjectValueState([object], ValueState.HIGHLIGHT_ERROR);
-                    DialogService.getInstance().setMainDialogLoading(true, 'Translatable#An error occurred.');
+                    BrowserUtil.toggleLoadingShield(true, 'Translatable#An error occurred.');
                     end = Date.now();
                     await this.handleObjectEditError(object, error);
                 });
@@ -669,7 +669,7 @@ class Component {
             BrowserUtil.openSuccessOverlay(succesText);
         }
 
-        DialogService.getInstance().setMainDialogLoading(false);
+        BrowserUtil.toggleLoadingShield(false);
     }
 
     private async setDialogLoadingInfo(times: number[] = [], objectsCount: number = 0): Promise<void> {
@@ -683,8 +683,8 @@ class Component {
         const loadingHint = await TranslationService.translate(
             'Translatable#{0}/{1} {2} imported', [finishCount, totalCount, objectName]
         );
-        DialogService.getInstance().setMainDialogLoading(
-            true, loadingHint, false, time, this.cancelImport.bind(this)
+        BrowserUtil.toggleLoadingShield(
+            true, loadingHint, time, this.cancelImport.bind(this)
         );
     }
 

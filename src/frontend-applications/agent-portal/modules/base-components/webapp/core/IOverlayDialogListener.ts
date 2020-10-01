@@ -18,6 +18,4 @@ export interface IOverlayDialogListener {
 
     close(): void;
 
-    setLoading(loading: boolean): void;
-
 }

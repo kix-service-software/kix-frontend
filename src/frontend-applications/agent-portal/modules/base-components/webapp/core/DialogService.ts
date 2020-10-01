@@ -176,12 +176,6 @@ export class DialogService {
         }
     }
 
-    public setOverlayDialogLoading(loading: boolean): void {
-        if (this.overlayDialogListener) {
-            this.overlayDialogListener.setLoading(loading);
-        }
-    }
-
     public async getRegisteredDialogs(
         contextMode: ContextMode, objectType?: KIXObjectType | string
     ): Promise<ConfiguredDialogWidget[]> {
@@ -219,17 +213,6 @@ export class DialogService {
     public setMainDialogHint(hint: string): void {
         if (this.mainDialogListener) {
             this.mainDialogListener.setHint(hint);
-        }
-    }
-
-    public setMainDialogLoading(
-        isLoading: boolean = false, loadingHint: string = '', showClose: boolean = false,
-        time: number = null, cancelCallback: () => void = null, cancelButtonText?: string
-    ): void {
-        if (this.mainDialogListener) {
-            this.mainDialogListener.setLoading(
-                isLoading, loadingHint, showClose, time, cancelCallback, cancelButtonText
-            );
         }
     }
 

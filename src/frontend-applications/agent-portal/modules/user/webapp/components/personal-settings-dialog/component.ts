@@ -102,19 +102,19 @@ class Component {
                     this.showValidationError(result);
                 } else {
                     const loadingHint = await TranslationService.translate('Translatable#Save Settings');
-                    DialogService.getInstance().setMainDialogLoading(true, loadingHint);
+                    BrowserUtil.toggleLoadingShield(true, loadingHint);
                     await AgentService.getInstance().setPreferencesByForm(this.state.formId)
                         .then(async () => {
                             TranslationService.getInstance().resetTranslations();
                             setTimeout(async () => {
-                                DialogService.getInstance().setMainDialogLoading(false);
+                                BrowserUtil.toggleLoadingShield(false);
                                 DialogService.getInstance().submitMainDialog();
                                 EventService.getInstance().publish(ApplicationEvent.REFRESH);
                                 const toast = await TranslationService.translate('Translatable#Changes saved.');
                                 BrowserUtil.openSuccessOverlay(toast);
                             }, 100);
                         }).catch((error: Error) => {
-                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.toggleLoadingShield(false);
                             BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                         });
                 }
