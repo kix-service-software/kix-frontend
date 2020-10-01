@@ -119,14 +119,14 @@ class Component {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Create Config Item');
+                BrowserUtil.toggleLoadingShield(true, 'Translatable#Create Config Item');
                 const cmdbService
                     = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
 
                 const ciClass = await this.getCIClass(this.classId);
                 await cmdbService.createConfigItem(this.state.formId, ciClass.ID)
                     .then((configItemId) => {
-                        DialogService.getInstance().setMainDialogLoading(false);
+                        BrowserUtil.toggleLoadingShield(false);
                         BrowserUtil.openSuccessOverlay('Translatable#Config Item successfully created.');
                         DialogService.getInstance().submitMainDialog();
                         const routingConfiguration = new RoutingConfiguration(
@@ -136,7 +136,7 @@ class Component {
                         RoutingService.getInstance().routeToContext(routingConfiguration, configItemId);
                         ContextService.getInstance().updateObjectLists(KIXObjectType.CONFIG_ITEM);
                     }).catch((error: Error) => {
-                        DialogService.getInstance().setMainDialogLoading(false);
+                        BrowserUtil.toggleLoadingShield(false);
                         BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                     });
             }

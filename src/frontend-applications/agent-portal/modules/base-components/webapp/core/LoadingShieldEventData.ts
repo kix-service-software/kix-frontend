@@ -7,15 +7,14 @@
  * --
  */
 
-import { WidgetConfiguration } from '../../../../../../model/configuration/WidgetConfiguration';
-
-export class ComponentState {
+export class LoadingShieldEventData {
 
     public constructor(
-        public show: boolean = false,
-        public dialogHint: string = '',
-        public contextId: string = null,
-        public dialogWidgets: WidgetConfiguration[] = [],
+        public isLoading: boolean,
+        public loadingHint?: string,
+        public time?: number,
+        public cancelCallback?: () => void,
+        public cancelButtonText?: string
     ) { }
 
 }

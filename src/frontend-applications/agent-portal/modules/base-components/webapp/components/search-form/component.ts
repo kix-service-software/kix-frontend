@@ -33,6 +33,9 @@ import { Error } from '../../../../../../../server/model/Error';
 import { ContextService } from '../../core/ContextService';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
 import { TicketHistory } from '../../../../ticket/model/TicketHistory';
+import { ApplicationEvent } from '../../core/ApplicationEvent';
+import { ContextType } from '../../../../../model/ContextType';
+import { LoadingShieldEventData } from '../../core/LoadingShieldEventData';
 
 class Component implements ISearchFormListener {
 
@@ -200,7 +203,10 @@ class Component implements ISearchFormListener {
 
     public async search(): Promise<void> {
         const hint = await TranslationService.translate('Translatable#Search');
-        DialogService.getInstance().setMainDialogLoading(true, hint, true);
+
+        EventService.getInstance().publish(
+            ApplicationEvent.TOGGLE_LOADING_SHIELD, new LoadingShieldEventData(true, hint)
+        );
 
         const result = await SearchService.getInstance().executeSearch<KIXObject>(null, this.objectType)
             .catch((error: Error) => {
@@ -209,7 +215,10 @@ class Component implements ISearchFormListener {
 
         await this.setAdditionalColumns();
 
-        DialogService.getInstance().setMainDialogLoading(false);
+        EventService.getInstance().publish(
+            ApplicationEvent.TOGGLE_LOADING_SHIELD,
+            new LoadingShieldEventData(false)
+        );
 
         setTimeout(() => {
             this.state.resultCount = Array.isArray(result) ? result.length : 0;

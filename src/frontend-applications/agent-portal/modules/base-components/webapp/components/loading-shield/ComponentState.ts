@@ -12,10 +12,12 @@ import { AbstractComponentState } from '../../../../../modules/base-components/w
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
+        public hint: string = null,
         public cancelCallback: () => void = null,
         public cancel: boolean = false,
         public time: number = null,
-        public cancelButtonText: string = null
+        public cancelButtonText: string = null,
+        public show: boolean = false
     ) {
         super();
     }

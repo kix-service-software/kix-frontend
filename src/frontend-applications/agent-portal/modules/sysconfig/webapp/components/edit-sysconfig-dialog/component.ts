@@ -74,7 +74,7 @@ class Component extends AbstractEditDialog {
                     ContextService.getInstance().updateObjectLists(this.objectType);
 
                 } else {
-                    DialogService.getInstance().setMainDialogLoading(true, this.loadingHint);
+                    BrowserUtil.toggleLoadingShield(true, this.loadingHint);
                     const updateObjects: Map<string, any> = new Map();
                     for (const p of formInstance.getForm().pages) {
                         for (const f of p.groups[0].formFields) {
@@ -136,7 +136,7 @@ class Component extends AbstractEditDialog {
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
         EventService.getInstance().publish(SysconfigEvent.SYSCONFIG_OPTIONS_UPDATED);
 
-        DialogService.getInstance().setMainDialogLoading(false);
+        BrowserUtil.toggleLoadingShield(false);
         DialogService.getInstance().submitMainDialog();
         FormService.getInstance().deleteFormInstance(this.state.formId);
         BrowserUtil.openSuccessOverlay(this.successHint);
