@@ -213,6 +213,14 @@ class Component implements ISearchFormListener {
                 BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
             });
 
+        const currentColumns = this.state.table.getColumns();
+        const removeColumnIds = currentColumns.filter(
+            (c) => !this.state.table['columnConfiguration'].some((cc) => cc.property === c.getColumnId())
+        ).map((c) => c.getColumnId());
+        if (removeColumnIds.length) {
+            this.state.table.removeColumns(removeColumnIds);
+        }
+
         await this.setAdditionalColumns();
 
         EventService.getInstance().publish(
