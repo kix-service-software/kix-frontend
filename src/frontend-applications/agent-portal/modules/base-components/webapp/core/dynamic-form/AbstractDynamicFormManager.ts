@@ -32,6 +32,7 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
+import { ValidationSeverity } from '../ValidationSeverity';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -318,6 +319,22 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             const result = await extendedManager.validate();
             if (result) {
                 return result;
+            }
+        }
+        for (const value of this.values) {
+            if (value.operator === SearchOperator.BETWEEN && Array.isArray(value.value)) {
+                const start: Date = new Date(value.value[0]);
+                const end: Date = new Date(value.value[1]);
+                if (
+                    typeof start.getTime === 'function'
+                    && typeof end.getTime === 'function'
+                    && start.getTime() > end.getTime()
+                ) {
+                    value.valid = false;
+                    return [new ValidationResult(ValidationSeverity.ERROR, 'Translatable#Start time has to be before end time')];
+                } else {
+                    value.valid = true;
+                }
             }
         }
         return null;

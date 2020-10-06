@@ -32,10 +32,13 @@ import { TranslationService } from '../../../../../modules/translation/webapp/co
 import { Error } from '../../../../../../../server/model/Error';
 import { ContextService } from '../../core/ContextService';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
-import { TicketHistory } from '../../../../ticket/model/TicketHistory';
 import { ApplicationEvent } from '../../core/ApplicationEvent';
-import { ContextType } from '../../../../../model/ContextType';
 import { LoadingShieldEventData } from '../../core/LoadingShieldEventData';
+import { ValidationResult } from '../../core/ValidationResult';
+import { ComponentContent } from '../../core/ComponentContent';
+import { OverlayService } from '../../core/OverlayService';
+import { OverlayType } from '../../core/OverlayType';
+import { ValidationSeverity } from '../../core/ValidationSeverity';
 
 class Component implements ISearchFormListener {
 
@@ -202,35 +205,54 @@ class Component implements ISearchFormListener {
     }
 
     public async search(): Promise<void> {
-        const hint = await TranslationService.translate('Translatable#Search');
+        const validationResult = await this.state.manager.validate();
+        if (validationResult && validationResult.some((r) => r.severity === ValidationSeverity.ERROR)) {
+            this.showValidationError(validationResult.filter((r) => r.severity === ValidationSeverity.ERROR));
+        } else {
+            const hint = await TranslationService.translate('Translatable#Search');
 
-        EventService.getInstance().publish(
-            ApplicationEvent.TOGGLE_LOADING_SHIELD, new LoadingShieldEventData(true, hint)
-        );
+            EventService.getInstance().publish(
+                ApplicationEvent.TOGGLE_LOADING_SHIELD, new LoadingShieldEventData(true, hint)
+            );
 
-        const result = await SearchService.getInstance().executeSearch<KIXObject>(null, this.objectType)
-            .catch((error: Error) => {
-                BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
-            });
+            const result = await SearchService.getInstance().executeSearch<KIXObject>(null, this.objectType)
+                .catch((error: Error) => {
+                    BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
+                });
 
-        const currentColumns = this.state.table.getColumns();
-        const removeColumnIds = currentColumns.filter(
-            (c) => !this.state.table['columnConfiguration'].some((cc) => cc.property === c.getColumnId())
-        ).map((c) => c.getColumnId());
-        if (removeColumnIds.length) {
-            this.state.table.removeColumns(removeColumnIds);
+            const currentColumns = this.state.table.getColumns();
+            const removeColumnIds = currentColumns.filter(
+                (c) => !this.state.table['columnConfiguration'].some((cc) => cc.property === c.getColumnId())
+            ).map((c) => c.getColumnId());
+            if (removeColumnIds.length) {
+                this.state.table.removeColumns(removeColumnIds);
+            }
+
+            await this.setAdditionalColumns();
+
+            EventService.getInstance().publish(
+                ApplicationEvent.TOGGLE_LOADING_SHIELD,
+                new LoadingShieldEventData(false)
+            );
+
+            setTimeout(() => {
+                this.state.resultCount = Array.isArray(result) ? result.length : 0;
+            }, 100);
         }
+    }
 
-        await this.setAdditionalColumns();
-
-        EventService.getInstance().publish(
-            ApplicationEvent.TOGGLE_LOADING_SHIELD,
-            new LoadingShieldEventData(false)
+    protected showValidationError(result: ValidationResult[]): void {
+        const errorMessages = result.map((r) => r.message);
+        const content = new ComponentContent('list-with-title',
+            {
+                title: 'Translatable#Error on form validation:',
+                list: errorMessages
+            }
         );
 
-        setTimeout(() => {
-            this.state.resultCount = Array.isArray(result) ? result.length : 0;
-        }, 100);
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
+        );
     }
 
     private async setAdditionalColumns(): Promise<void> {
