@@ -28,9 +28,3 @@ export { TicketBulkManager } from './TicketBulkManager';
 export { QueueLabelProvider } from './QueueLabelProvider';
 export { ArticleFormService } from './ArticleFormService';
 export { TicketDialogUtil } from './TicketDialogUtil';
-
-export { UIModule as TicketAdminUIModule } from './TicketAdminUIModule';
-export { UIModule as TicketCreateUIModule } from './TicketCreateUIModule';
-export { UIModule as TicketReadUIModule } from './TicketReadUIModule';
-export { UIModule as TicketUpdateUIModule } from './TicketUpdateUIModule';
-export { UIModule as ArticleCreateUIModule } from './ArticleCreateUIModule';

@@ -12,7 +12,8 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
-import { TicketCreateUIModule, NewTicketDialogContext } from '../webapp/core';
+import { NewTicketDialogContext } from '../webapp/core';
+import { UIModule as TicketCreateUIModule } from '../webapp/core/TicketCreateUIModule';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 
 chai.use(chaiAsPromised);
