@@ -28,6 +28,8 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { TabContainerEvent } from '../../../../base-components/webapp/core/TabContainerEvent';
 import { TabContainerEventData } from '../../../../base-components/webapp/core/TabContainerEventData';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -61,11 +63,16 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async prepareTable(context: Context): Promise<void> {
         this.state.prepared = false;
 
-        const object = await context.getObject();
+        const contextObject = await context.getObject();
+
+        const loadedObjects = await KIXObjectService.loadObjects(
+            contextObject.KIXObjectType, [contextObject.ObjectId],
+            new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.LINKS], [KIXObjectProperty.LINKS])
+        );
 
         let linkObjects = [];
-        if (object && object.Links) {
-            linkObjects = await this.prepareLinkObjects(object);
+        if (Array.isArray(loadedObjects) && loadedObjects.length && Array.isArray(loadedObjects[0].Links)) {
+            linkObjects = await this.prepareLinkObjects(loadedObjects[0]);
         }
 
         const title = await TranslationService.translate('Translatable#Linked Objects ({0})', [linkObjects.length]);

@@ -17,6 +17,7 @@ export class ComponentState {
         public listExpansion: IAction[] = [],
         public showListExpansion: boolean = false,
         public keepShow: boolean = false,
-        public displayText: boolean = true
+        public displayText: boolean = true,
+        public prepared: boolean = false
     ) { }
 }

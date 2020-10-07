@@ -87,13 +87,7 @@ export abstract class Context {
         for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
             const extendedActions = await extension.getAdditionalActions(this);
             if (Array.isArray(extendedActions)) {
-                const addionalActions = [];
-                for (const a of extendedActions) {
-                    if (await a.canShow()) {
-                        addionalActions.push(a);
-                    }
-                }
-                actions = [...actions, ...addionalActions];
+                actions = [...actions, ...extendedActions];
             }
         }
         actions.sort((a, b) => SortUtil.compareNumber(a.data.Rank, b.data.Rank, SortOrder.UP, false));
@@ -169,7 +163,7 @@ export abstract class Context {
         return this.dialogSubscriberId;
     }
 
-    public async getObjectList(objectType: KIXObjectType | string): Promise<KIXObject[]> {
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
         if (!objectType) {
             const values = this.objectLists.values();
             const list = values.next();
@@ -177,7 +171,7 @@ export abstract class Context {
         } else if (!this.objectLists.has(objectType)) {
             await this.reloadObjectList(objectType);
         }
-        return this.objectLists.get(objectType);
+        return this.objectLists.get(objectType) as any[];
     }
 
     public setObjectList(objectType: KIXObjectType | string, objectList: KIXObject[], silent?: boolean) {
