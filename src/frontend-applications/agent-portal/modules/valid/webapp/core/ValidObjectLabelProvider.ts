@@ -14,7 +14,7 @@ import { TranslationService } from '../../../translation/webapp/core/Translation
 
 export class ValidObjectLabelProvider extends LabelProvider<ValidObject> {
 
-    public kixObjectType: KIXObjectType | string = KIXObjectType.TICKET_STATE;
+    public kixObjectType: KIXObjectType | string = KIXObjectType.VALID_OBJECT;
 
     public isLabelProviderFor(validObject: ValidObject): boolean {
         return validObject instanceof ValidObject;
