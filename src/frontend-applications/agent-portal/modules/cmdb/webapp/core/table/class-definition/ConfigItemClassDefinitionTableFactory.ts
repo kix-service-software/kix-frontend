@@ -40,7 +40,8 @@ export class ConfigItemClassDefinitionTableFactory extends TableFactory {
     ): TableConfiguration {
         const tableColumns = [
             new DefaultColumnConfiguration(null, null, null,
-                ConfigItemClassDefinitionProperty.VERSION, true, false, true, true, 100, true, true
+                ConfigItemClassDefinitionProperty.VERSION, true, false, true, true, 100, true, true,
+                null, DataType.NUMBER
             ),
             new DefaultColumnConfiguration(null, null, null,
                 ConfigItemClassDefinitionProperty.CREATE_BY, true, false, true, true, 150, true, true
