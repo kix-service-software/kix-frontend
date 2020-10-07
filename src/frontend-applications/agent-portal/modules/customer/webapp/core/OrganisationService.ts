@@ -150,6 +150,9 @@ export class OrganisationService extends KIXObjectService<Organisation> {
                 OrganisationProperty.STREET, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
+                OrganisationProperty.CITY, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+            ),
+            new FilterCriteria(
                 OrganisationProperty.COUNTRY, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             ),
             new FilterCriteria(
