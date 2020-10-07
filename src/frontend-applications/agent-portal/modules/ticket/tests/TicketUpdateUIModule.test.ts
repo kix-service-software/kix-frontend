@@ -12,7 +12,8 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
-import { TicketUpdateUIModule, TicketFormService, TicketBulkManager, EditTicketDialogContext } from '../webapp/core';
+import { UIModule as TicketUpdateUIModule } from '../webapp/core/TicketUpdateUIModule';
+import { TicketFormService, TicketBulkManager, EditTicketDialogContext } from '../webapp/core';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
 import { ServiceRegistry } from '../../base-components/webapp/core/ServiceRegistry';

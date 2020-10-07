@@ -16,6 +16,9 @@ import { ConfirmOverlayContent } from './ConfirmOverlayContent';
 import { RefreshToastSettings } from './RefreshToastSettings';
 import { DateTimeUtil } from './DateTimeUtil';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
+import { LoadingShieldEventData } from './LoadingShieldEventData';
 
 
 export class BrowserUtil {
@@ -209,6 +212,15 @@ export class BrowserUtil {
             element.click();
             document.body.removeChild(element);
         }
+    }
+
+    public static toggleLoadingShield(
+        loading: boolean, hint?: string, time?: number, cancelCallback?: () => void, cancelButtonText?: string
+    ): void {
+        EventService.getInstance().publish(
+            ApplicationEvent.TOGGLE_LOADING_SHIELD,
+            new LoadingShieldEventData(loading, hint, time, cancelCallback, cancelButtonText)
+        );
     }
 
 }

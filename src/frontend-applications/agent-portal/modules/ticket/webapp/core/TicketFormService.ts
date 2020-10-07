@@ -32,6 +32,12 @@ import { FormInstance } from '../../../base-components/webapp/core/FormInstance'
 import { DefaultSelectInputFormOption } from '../../../../model/configuration/DefaultSelectInputFormOption';
 import { TicketService } from './TicketService';
 import { FormFieldOptions } from '../../../../model/configuration/FormFieldOptions';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { FilterCriteria } from '../../../../model/FilterCriteria';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
+import { SearchOperator } from '../../../search/model/SearchOperator';
+import { FilterDataType } from '../../../../model/FilterDataType';
+import { FilterType } from '../../../../model/FilterType';
 
 export class TicketFormService extends KIXObjectFormService {
 
@@ -199,6 +205,21 @@ export class TicketFormService extends KIXObjectFormService {
                 case TicketProperty.RESPONSIBLE_ID:
                     field.inputComponent = 'object-reference-input';
                     field.options = this.getObjectReferenceOptions(KIXObjectType.USER);
+                    field.options.push(
+                        new FormFieldOption(ObjectReferenceOptions.LOADINGOPTIONS,
+                            new KIXObjectLoadingOptions(
+                                [
+                                    new FilterCriteria(
+                                        KIXObjectProperty.VALID_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                                        FilterType.AND, 1
+                                    )
+                                ], undefined, undefined, undefined, undefined,
+                                [
+                                    ['requiredPermission', 'TicketRead,TicketUpdate']
+                                ]
+                            )
+                        )
+                    );
                     field.label = label;
                     break;
                 case TicketProperty.PRIORITY_ID:

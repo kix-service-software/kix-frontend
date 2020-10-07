@@ -124,7 +124,7 @@ class LinkDialogComponent {
     }
 
     public async linkableObjectChanged(nodes: TreeNode[]): Promise<void> {
-        DialogService.getInstance().setOverlayDialogLoading(true);
+        BrowserUtil.toggleLoadingShield(true);
 
         this.selectedObjects = [];
         this.state.resultCount = 0;
@@ -157,12 +157,12 @@ class LinkDialogComponent {
             this.setSubmitState();
             this.state.formId = formId;
             await this.prepareResultTable();
-            DialogService.getInstance().setOverlayDialogLoading(false);
+            BrowserUtil.toggleLoadingShield(false);
         }, 50);
     }
 
     private async executeSearch(): Promise<void> {
-        DialogService.getInstance().setOverlayDialogLoading(true);
+        BrowserUtil.toggleLoadingShield(true);
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         if (this.state.formId && formInstance.hasValues()) {
             const excludeObjects = this.rootObject && formInstance.getObjectType() === this.rootObject.KIXObjectType
@@ -183,7 +183,7 @@ class LinkDialogComponent {
             this.setSubmitState();
         }
 
-        DialogService.getInstance().setOverlayDialogLoading(false);
+        BrowserUtil.toggleLoadingShield(false);
     }
 
     private async prepareResultTable(): Promise<void> {

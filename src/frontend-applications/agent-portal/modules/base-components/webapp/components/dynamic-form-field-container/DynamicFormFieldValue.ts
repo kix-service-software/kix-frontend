@@ -367,35 +367,67 @@ export class DynamicFormFieldValue {
         this.value.value = value;
     }
 
+    private endDateManuell: boolean = false;
+    private startDateManuell: boolean = false;
     public setDateValue(value: string): void {
         this.date = value;
+        this.startDateManuell = true;
+
+        if (this.date && this.isBetween && (!this.betweenEndDate || !this.endDateManuell)) {
+            const asDate = new Date(this.date);
+            if (typeof asDate.getTime === 'function') {
+                this.betweenEndDate = DateTimeUtil.getKIXDateString(new Date(asDate.getTime() + 1000 * 60 * 60 * 24));
+            } else {
+                this.betweenEndDate = this.date;
+            }
+            this.endDateManuell = false;
+        }
+
         if (this.isDateTime) {
             if (!this.time) {
                 this.time = '00:00:00';
             }
-            if (this.isBetween) {
-                if (!this.betweenEndDate) {
-                    this.betweenEndDate = this.date;
-                }
-                if (!this.betweenEndTime) {
-                    this.betweenEndTime = this.time;
-                }
+            if (this.isBetween && !this.betweenEndTime) {
+                this.betweenEndTime = this.time;
             }
-        } else if (this.isBetween && !this.betweenEndDate) {
-            this.betweenEndDate = this.date;
         }
     }
 
+    private endTimeManuell: boolean = false;
+    private startTimeManuell: boolean = false;
     public setTimeValue(value: string): void {
         this.time = value;
+        this.startTimeManuell = true;
+
+        if (this.time && ((this.isBetween && !this.betweenEndTime) || !this.endTimeManuell)) {
+            this.betweenEndTime = this.time;
+            this.endTimeManuell = false;
+        }
     }
 
     public setBetweenEndDateValue(value: string): void {
         this.betweenEndDate = value;
+        this.endDateManuell = true;
+
+        if (this.betweenEndDate && (!this.date || !this.startDateManuell)) {
+            const endAsDate = new Date(this.betweenEndDate);
+            if (typeof endAsDate.getTime === 'function') {
+                this.date = DateTimeUtil.getKIXDateString(new Date(endAsDate.getTime() - 1000 * 60 * 60 * 24));
+            } else {
+                this.date = this.betweenEndDate;
+            }
+            this.startDateManuell = false;
+        }
     }
 
     public setBetweenEndTimeValue(value: string): void {
         this.betweenEndTime = value;
+        this.endTimeManuell = true;
+
+        if (this.betweenEndTime && (!this.time || !this.startTimeManuell)) {
+            this.time = this.betweenEndTime;
+            this.startTimeManuell = false;
+        }
     }
 
     public setNumberValue(value: string): void {

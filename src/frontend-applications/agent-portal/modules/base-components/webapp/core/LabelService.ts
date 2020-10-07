@@ -31,7 +31,9 @@ export class LabelService {
     private labelProviders: Array<LabelProvider<any>> = [];
 
     public registerLabelProvider<T>(labelProvider: LabelProvider<T>): void {
-        this.labelProviders.push(labelProvider);
+        if (!this.labelProviders.some((lp) => lp.isLabelProviderForType(labelProvider.kixObjectType))) {
+            this.labelProviders.push(labelProvider);
+        }
     }
 
     public getLabelProvider<T extends KIXObject>(object: T): LabelProvider<T> {

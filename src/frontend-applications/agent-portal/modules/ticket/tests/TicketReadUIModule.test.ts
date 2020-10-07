@@ -12,7 +12,8 @@ import chai = require('chai');
 import chaiAsPromised = require('chai-as-promised');
 
 import { ContextFactory } from '../../base-components/webapp/core/ContextFactory';
-import { TicketReadUIModule, TicketContext, TicketDetailsContext, TicketSearchContext, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService } from '../webapp/core';
+import { TicketContext, TicketDetailsContext, TicketSearchContext, TicketSearchDefinition, TicketHistoryTableFactory, TicketTableCSSHandler, ArticleTableCSSHandler, TicketListContext, TicketLabelProvider, QueueLabelProvider, TicketStateTypeLabelProvider, TicketStateLabelProvider, TicketPriorityLabelProvider, TicketTypeLabelProvider, TicketHistoryLabelProvider, ArticleLabelProvider, TicketService, QueueService, TicketPriorityService, TicketStateService, TicketTypeService, TicketFormService, ArticleFormService } from '../webapp/core';
+import { UIModule as TicketReadUIModule } from '../webapp/core/TicketReadUIModule';
 import { TicketTableFactory } from '../webapp/core/table/TicketTableFactory'
 import { TicketPlaceholderHandler } from '../webapp/core/TicketPlaceholderHandler';
 import { ActionFactory } from '../../base-components/webapp/core/ActionFactory';

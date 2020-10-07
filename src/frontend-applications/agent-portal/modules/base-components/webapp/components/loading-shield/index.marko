@@ -6,29 +6,31 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-<div.loading-shield>
-    <div.loading-info>
-        <loading-spinner/>
-        <span>
-            <translation-string pattern=input.loadingHint/>
-        </span>
-        <if(state.time && !state.cancel)>
-            <timer time=state.time/>
-        </if>
-        <else-if(state.cancel)>
+<if(state.show)>
+    <div.loading-shield>
+        <div.loading-info>
+            <loading-spinner/>
             <span>
-                <translation-string pattern="Translatable#Cancel Process"/>
+                <translation-string pattern=state.hint/>
             </span>
-        </else-if>
-        <if(state.cancelCallback)>
-            <button.default-button
-                type="button"
-                on-click("cancel")
-                title=(state.cancelButtonText ? state.cancelButtonText : state.translations["Translatable#Cancel"])
-                disabled=state.cancel>
-                <span.kix-icon-close/>
-                ${state.cancelButtonText ? state.cancelButtonText : state.translations["Translatable#Cancel"]}
-            </button>
-        </if>
+            <if(state.time && !state.cancel)>
+                <timer time=state.time/>
+            </if>
+            <else-if(state.cancel)>
+                <span>
+                    <translation-string pattern="Translatable#Cancel Process"/>
+                </span>
+            </else-if>
+            <if(state.cancelCallback)>
+                <button.default-button
+                    type="button"
+                    on-click("cancel")
+                    title=(state.cancelButtonText ? state.cancelButtonText : state.translations["Translatable#Cancel"])
+                    disabled=state.cancel>
+                    <span.kix-icon-close/>
+                    ${state.cancelButtonText ? state.cancelButtonText : state.translations["Translatable#Cancel"]}
+                </button>
+            </if>
+        </div>
     </div>
-</div>
+</if>
