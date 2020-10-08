@@ -34,7 +34,19 @@ export class ContextFactory {
     private contextCreatePromises: Map<string, Promise<any>> = new Map();
 
     public registerContext(contextDescriptor: ContextDescriptor): void {
-        this.registeredDescriptors.push(contextDescriptor);
+        if (!this.registeredDescriptors.some(
+            (cd) => ContextFactory.checkIfContextsAreSame(cd, contextDescriptor)
+        )) {
+            this.registeredDescriptors.push(contextDescriptor);
+        }
+    }
+
+    private static checkIfContextsAreSame(cd: ContextDescriptor, cd2: ContextDescriptor): unknown {
+        return cd.contextMode === cd2.contextMode
+            && cd.contextType === cd2.contextType
+            && cd.contextId === cd2.contextId
+            && cd.kixObjectTypes.length === cd2.kixObjectTypes.length
+            && cd.kixObjectTypes.every((t) => cd2.kixObjectTypes.some((t2) => t === t2));
     }
 
     public async getContext(

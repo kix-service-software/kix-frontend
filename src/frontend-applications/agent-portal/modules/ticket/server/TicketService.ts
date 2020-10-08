@@ -189,13 +189,15 @@ export class TicketAPIService extends KIXObjectAPIService {
             (p) => !articleParameter.some((ap) => ap[0] === p[0])
         ) : parameter;
 
-        const uri = this.buildUri(this.RESOURCE_URI, objectId);
-        const ticketId = await super.executeUpdateOrCreateRequest<number>(
-            token, clientRequestId, ticketParameter, uri, this.objectType, 'TicketID'
-        ).catch((error: Error) => {
-            LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
-            throw new Error(error.Code, error.Message);
-        });
+        if (ticketParameter.length) {
+            const uri = this.buildUri(this.RESOURCE_URI, objectId);
+            await super.executeUpdateOrCreateRequest<number>(
+                token, clientRequestId, ticketParameter, uri, this.objectType, 'TicketID'
+            ).catch((error: Error) => {
+                LoggingService.getInstance().error(`${error.Code}: ${error.Message}`, error);
+                throw new Error(error.Code, error.Message);
+            });
+        }
 
         if (articleParameter) {
             const articleUri = this.buildUri(this.RESOURCE_URI, objectId, 'articles');
@@ -207,7 +209,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             });
         }
 
-        return ticketId;
+        return objectId;
     }
 
     private async prepareArticleData(
