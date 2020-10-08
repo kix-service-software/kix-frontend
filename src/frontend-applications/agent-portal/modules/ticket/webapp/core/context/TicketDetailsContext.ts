@@ -91,7 +91,7 @@ export class TicketDetailsContext extends Context {
         if (objectType === KIXObjectType.ARTICLE) {
             const tickets = await KIXObjectService.loadObjects<Ticket>(
                 KIXObjectType.TICKET, [this.objectId],
-                new KIXObjectLoadingOptions(null, null, null, [TicketProperty.ARTICLES])
+                new KIXObjectLoadingOptions(null, null, null, [TicketProperty.ARTICLES, 'Flags', 'Attachments'])
             );
             if (Array.isArray(tickets) && tickets.length) {
                 objects = Array.isArray(tickets[0].Articles) ? tickets[0].Articles : [];
