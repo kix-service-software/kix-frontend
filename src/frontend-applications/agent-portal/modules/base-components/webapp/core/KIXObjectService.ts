@@ -560,7 +560,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
                 ), null, true
             ).catch(() => [] as DynamicField[]);
 
-            if (Array.isArray(dynamicFields && dynamicFields.length)) {
+            if (Array.isArray(dynamicFields) && dynamicFields.length) {
                 dynamicField = dynamicFields.find((df) => df.Name === name);
             }
         }

@@ -23,6 +23,8 @@ import { RoutingService } from '../../../../base-components/webapp/core/RoutingS
 
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -52,8 +54,20 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async createDynamicFieldInfos(): Promise<void> {
         if (this.state.field && this.object) {
-            const dfValue = this.object.DynamicFields
-                ? this.object.DynamicFields.find((dfv) => dfv.Name === this.state.field.Name)
+            let dynamicFields = this.object.DynamicFields;
+            if (!Array.isArray(this.object.DynamicFields) || !this.object.DynamicFields.length) {
+                const objectsWithDF = await KIXObjectService.loadObjects(
+                    this.object.KIXObjectType, [this.object.ObjectId],
+                    new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+                );
+
+                if (Array.isArray(objectsWithDF) && objectsWithDF.length) {
+                    dynamicFields = objectsWithDF[0].DynamicFields;
+                }
+            }
+
+            const dfValue = dynamicFields
+                ? dynamicFields.find((dfv) => dfv.Name === this.state.field.Name)
                 : null;
             if (dfValue) {
                 if (this.state.field.FieldType === DynamicFieldTypes.CHECK_LIST) {

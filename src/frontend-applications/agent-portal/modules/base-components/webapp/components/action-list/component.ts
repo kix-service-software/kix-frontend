@@ -36,16 +36,20 @@ export class Component implements IActionListener {
         this.state = new ComponentState();
         this.listenerInstanceId = input.instanceId;
         this.contextListernerId = IdService.generateDateBasedId('action-list-');
-    }
-
-    public onInput(input: any): void {
         this.initActionList(input);
     }
 
     private async initActionList(input: any): Promise<void> {
+        await this.setActionList(input.list);
+        this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
+        this.state.prepared = true;
+        setTimeout(() => this.prepareActionLists(), 100);
+    }
+
+    private async setActionList(actionList: IAction[]): Promise<void> {
         const actions = [];
-        if (Array.isArray(input.list)) {
-            for (const action of input.list as IAction[]) {
+        if (Array.isArray(actionList)) {
+            for (const action of actionList) {
                 const canShow = await action.canShow();
                 if (canShow) {
                     actions.push(action);
@@ -54,11 +58,6 @@ export class Component implements IActionListener {
         }
 
         this.state.actionList = actions;
-        this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
-
-        this.state.prepared = true;
-
-        setTimeout(() => this.prepareActionLists(), 100);
     }
 
     public onMount(): void {
@@ -123,10 +122,10 @@ export class Component implements IActionListener {
         this.state.keepShow = !this.state.keepShow;
     }
 
-    public actionsChanged(): void {
+    public async actionsChanged(): Promise<void> {
         const actions = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
         if (actions) {
-            this.state.actionList = actions[0];
+            await this.setActionList(actions[0]);
             this.state.displayText = actions[1];
             this.prepareActionLists();
         }
