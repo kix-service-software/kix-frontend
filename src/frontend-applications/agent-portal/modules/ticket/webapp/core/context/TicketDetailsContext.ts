@@ -17,6 +17,9 @@ import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformatio
 import { TicketContext } from './TicketContext';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { TicketProperty } from '../../../model/TicketProperty';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { Article } from '../../../model/Article';
+import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 
 export class TicketDetailsContext extends Context {
 
@@ -89,13 +92,12 @@ export class TicketDetailsContext extends Context {
     public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
         let objects = [];
         if (objectType === KIXObjectType.ARTICLE) {
-            const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, [this.objectId],
-                new KIXObjectLoadingOptions(null, null, null, [TicketProperty.ARTICLES, 'Flags', 'Attachments'])
-            );
-            if (Array.isArray(tickets) && tickets.length) {
-                objects = Array.isArray(tickets[0].Articles) ? tickets[0].Articles : [];
-            }
+            objects = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, null,
+                new KIXObjectLoadingOptions(
+                    null, null, null, [ArticleProperty.FLAGS, ArticleProperty.ATTACHMENTS]
+                ), new ArticleLoadingOptions(this.objectId)
+            ).catch(() => [] as Article[]) || [];
         } else if (objectType === KIXObjectType.TICKET_HISTORY) {
             const tickets = await KIXObjectService.loadObjects<Ticket>(
                 KIXObjectType.TICKET, [this.objectId],

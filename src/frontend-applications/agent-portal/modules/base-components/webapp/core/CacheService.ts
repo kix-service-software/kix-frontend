@@ -141,6 +141,7 @@ export class BrowserCacheService {
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.QUEUE);
                 cacheKeyPrefixes.push(KIXObjectType.CURRENT_USER);
+                cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
                 break;
             case KIXObjectType.FAQ_VOTE:
                 cacheKeyPrefixes.push(KIXObjectType.FAQ_ARTICLE);

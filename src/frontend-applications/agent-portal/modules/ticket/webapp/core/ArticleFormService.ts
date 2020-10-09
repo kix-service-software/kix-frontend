@@ -39,6 +39,7 @@ import { FormInstance } from '../../../base-components/webapp/core/FormInstance'
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
+import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -73,20 +74,14 @@ export class ArticleFormService extends KIXObjectFormService {
                 if (dialogContext) {
                     const isReplyDialog = dialogContext.getAdditionalInformation('ARTICLE_REPLY');
                     if (isReplyDialog) {
-                        const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-                        if (!ticket) {
-                            const mainContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                            if (mainContext) {
-                                ticket = await mainContext.getObject<Ticket>(KIXObjectType.TICKET);
-                            }
+                        const referencedArticle = await this.getReferencedArticle(dialogContext, ticket);
+                        if (referencedArticle) {
+                            value = referencedArticle.ChannelID;
                         }
-                        if (referencedArticleId && ticket) {
-                            const referencedArticle = ticket.Articles.find(
-                                (a) => a.ArticleID === referencedArticleId
-                            );
-                            if (referencedArticle) {
-                                value = referencedArticle.ChannelID;
-                            }
+                    } else {
+                        const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+                        if (isForwardDialog) {
+                            value = 2;
                         }
                     }
                 }
@@ -96,28 +91,30 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    protected async prepareFormFieldOptions(
-        formFields: FormFieldConfiguration[], ticket: Ticket, formContext: FormContext
+    protected async prePrepareForm(
+        form: FormConfiguration, ticket: Ticket, formInstance: FormInstance
     ) {
-        for (const f of formFields) {
-            if (f.property === ArticleProperty.CHANNEL_ID) {
-                const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-                if (dialogContext) {
-                    const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
-                    if (isForwardDialog) {
-                        const channels = [2];
-                        const option = f.options.find((o) => o.option === 'CHANNELS');
-                        if (option) {
-                            option.value = channels;
-                        } else {
-                            f.options.push(new FormFieldOption('CHANNELS', channels));
+        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+        if (dialogContext) {
+            const isForwardDialog = dialogContext.getAdditionalInformation('ARTICLE_FORWARD');
+            if (isForwardDialog) {
+                PAGES:
+                for (const p of form.pages) {
+                    for (const g of p.groups) {
+                        for (const f of g.formFields) {
+                            if (f.property === ArticleProperty.CHANNEL_ID) {
+                                const channels = [2];
+                                const option = f.options.find((o) => o.option === 'CHANNELS');
+                                if (option) {
+                                    option.value = channels;
+                                } else {
+                                    f.options.push(new FormFieldOption('CHANNELS', channels));
+                                }
+                            }
                         }
+                        break PAGES;
                     }
                 }
-            }
-
-            if (f.children) {
-                this.prepareFormFieldOptions(f.children, ticket, formContext);
             }
         }
     }
@@ -429,17 +426,22 @@ export class ArticleFormService extends KIXObjectFormService {
         return value;
     }
 
-    private async getReferencedArticle(dialogContext?: Context): Promise<Article> {
+    private async getReferencedArticle(dialogContext?: Context, ticket?: Ticket): Promise<Article> {
         let article: Article = null;
         if (!dialogContext) {
             dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         }
-        const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        if (dialogContext && context) {
+        if (dialogContext) {
             const referencedArticleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-            const ticket = await context.getObject<Ticket>();
-            if (referencedArticleId && ticket) {
-                article = ticket.Articles.find((a) => a.ArticleID === referencedArticleId);
+            if (referencedArticleId) {
+                let articles: Article[] = ticket ? ticket.Articles : [];
+                if (!Array.isArray(articles) || !articles.length) {
+                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                    if (context) {
+                        articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+                    }
+                }
+                article = articles.find((a) => a.ArticleID === referencedArticleId);
             }
         }
         return article;
