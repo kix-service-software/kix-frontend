@@ -39,6 +39,8 @@ import {
     DynamicFieldValuePlaceholderHandler
 } from '../../../dynamic-fields/webapp/core/DynamicFieldValuePlaceholderHandler';
 import { AbstractPlaceholderHandler } from '../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler';
+import { Article } from '../../model/Article';
+import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
 
 export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -88,9 +90,10 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case 'FIRST':
                     case 'LAST':
-                        if (ticket.Articles && !!ticket.Articles.length) {
+                        const flArticles = await this.getArticles(ticket);
+                        if (flArticles && !!flArticles.length) {
                             const article = SortUtil.sortObjects(
-                                ticket.Articles, ArticleProperty.ARTICLE_ID, DataType.NUMBER,
+                                flArticles, ArticleProperty.ARTICLE_ID, DataType.NUMBER,
                                 objectString === 'FIRST' ? SortOrder.UP : SortOrder.DOWN
                             )[0];
                             if (article) {
@@ -102,8 +105,9 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         break;
                     case 'CUSTOMER':
                     case 'AGENT':
-                        if (ticket.Articles && !!ticket.Articles.length) {
-                            const relevantArticles = ticket.Articles.filter(
+                        const caArticles = await this.getArticles(ticket);
+                        if (caArticles && !!caArticles.length) {
+                            const relevantArticles = caArticles.filter(
                                 (a) => a.SenderType === (objectString === 'AGENT' ? 'agent' : 'external')
                             );
                             const lastArticle = SortUtil.sortObjects(
@@ -117,19 +121,25 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         }
                         break;
                     case 'ARTICLE':
-                        if (ticket.Articles && !!ticket.Articles.length) {
-                            const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
-                            if (dialogContext) {
-                                const articleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-                                if (articleId) {
-                                    const referencedArticle = ticket.Articles.find(
+                        const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+                        if (dialogContext) {
+                            const articleId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+                            if (articleId) {
+                                let referencedArticle;
+                                if (ticket.Articles && !!ticket.Articles.length) {
+                                    referencedArticle = ticket.Articles.find(
                                         (a) => a.ArticleID.toString() === articleId.toString()
                                     );
-                                    if (referencedArticle) {
-                                        result = await ArticlePlaceholderHandler.prototype.replace(
-                                            placeholder, referencedArticle, language
-                                        );
+                                } else {
+                                    const articles = await this.getArticles(ticket, articleId);
+                                    if (articles && articles.length) {
+                                        referencedArticle = articles[0];
                                     }
+                                }
+                                if (referencedArticle) {
+                                    result = await ArticlePlaceholderHandler.prototype.replace(
+                                        placeholder, referencedArticle, language
+                                    );
                                 }
                             }
                         }
@@ -200,6 +210,19 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
             }
         }
         return result;
+    }
+
+    private async getArticles(ticket: Ticket, articleId?: number) {
+        let articles = ticket.Articles;
+        if (!Array.isArray(articles) || !articles.length) {
+            articles = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, articleId ? [articleId] : null,
+                new KIXObjectLoadingOptions(
+                    null, null, null, [ArticleProperty.ATTACHMENTS]
+                ), new ArticleLoadingOptions(ticket.TicketID), true
+            ).catch(() => [] as Article[]);
+        }
+        return articles;
     }
 
     private async getTicketValue(attribute: string, ticket?: Ticket, language?: string, placeholder?: string) {

@@ -208,9 +208,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (this.state.field.property === ArticleProperty.TO && context && dialogContext) {
             const replyId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-            const ticket = await context.getObject<Ticket>();
-            if (replyId && ticket) {
-                const replyArticle = ticket.Articles.find((a) => a.ArticleID === replyId);
+            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+            if (replyId && articles && articles.length) {
+                const replyArticle = articles.find((a) => a.ArticleID === replyId);
                 if (replyArticle) {
                     const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                         KIXObjectType.SYSTEM_ADDRESS
