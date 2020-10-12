@@ -16,6 +16,7 @@ import { SocketEvent } from '../../../../modules/base-components/webapp/core/Soc
 import { SocketErrorResponse } from '../../../../modules/base-components/webapp/core/SocketErrorResponse';
 import { ISocketRequest } from '../../../../modules/base-components/webapp/core/ISocketRequest';
 import { ClientStorageService } from '../../../../modules/base-components/webapp/core/ClientStorageService';
+import { AdminModule } from '../../model/AdminModule';
 
 export class AdministrationSocketClient extends SocketClient {
 
@@ -36,7 +37,7 @@ export class AdministrationSocketClient extends SocketClient {
 
     private categories: AdminModuleCategory[];
 
-    public async loadAdminCategories(): Promise<AdminModuleCategory[]> {
+    public async loadAdminCategories(): Promise<Array<AdminModuleCategory | AdminModule>> {
         if (this.categories) {
             return this.categories;
         }
@@ -55,7 +56,14 @@ export class AdministrationSocketClient extends SocketClient {
                 (result: AdminCategoriesResponse) => {
                     if (result.requestId === requestId) {
                         window.clearTimeout(timeout);
-                        const categories = result.categories.map((c) => new AdminModuleCategory(c));
+                        const categories = result.modules.map((m) => {
+                            if (m['modules']) {
+                                return new AdminModuleCategory(m);
+                            }
+                            else {
+                                return new AdminModule(m as AdminModule);
+                            }
+                        });
                         this.categories = categories;
                         resolve(categories);
                     }

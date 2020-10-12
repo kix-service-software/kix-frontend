@@ -20,7 +20,7 @@ class Component extends AbstractNewDialog {
     public onCreate(): void {
         this.state = new ComponentState();
         super.init(
-            'Translatable#Create Account',
+            'Translatable#Create Email Account',
             'Translatable#Account successfully created.',
             KIXObjectType.MAIL_ACCOUNT,
             new RoutingConfiguration(

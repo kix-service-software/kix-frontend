@@ -9,12 +9,13 @@
 
 import { ISocketResponse } from '../../../modules/base-components/webapp/core/ISocketResponse';
 import { AdminModuleCategory } from './AdminModuleCategory';
+import { AdminModule } from './AdminModule';
 
 export class AdminCategoriesResponse implements ISocketResponse {
 
     public constructor(
         public requestId: string,
-        public categories: AdminModuleCategory[]
+        public modules: Array<AdminModuleCategory | AdminModule>
     ) { }
 
 }

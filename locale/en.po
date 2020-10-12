@@ -3406,6 +3406,15 @@ msgstr ""
 msgid "Set Value"
 msgstr ""
 
+msgid "setup_assistant_add_mail_account_text"
+msgstr "Add an email account for fetching incoming emails. If you need more than one account, you can add more in the admin module \"Communication/Email/Email Account\"."
+
+msgid "setup_assistant_create_superuser_text"
+msgstr "The user admin is a system user and not recommended for active use. Please create a new user here. This one will also have complete permissions. After successfully creating that account, please login again with the new user."
+
+msgid "setup_assistant_welcome_text"
+msgstr "Please compete the following steps to set the basic configurations for KIX. The admin manual, section First Steps also provides more information."
+
 msgid "Show all"
 msgstr ""
 

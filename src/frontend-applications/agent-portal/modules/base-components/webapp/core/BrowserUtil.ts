@@ -16,9 +16,12 @@ import { ConfirmOverlayContent } from './ConfirmOverlayContent';
 import { RefreshToastSettings } from './RefreshToastSettings';
 import { DateTimeUtil } from './DateTimeUtil';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ValidationResult } from './ValidationResult';
+import { ValidationSeverity } from './ValidationSeverity';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
 import { LoadingShieldEventData } from './LoadingShieldEventData';
+import { ContextHistory } from './ContextHistory';
 
 
 export class BrowserUtil {
@@ -214,6 +217,20 @@ export class BrowserUtil {
         }
     }
 
+    public static showValidationError(result: ValidationResult[]): void {
+        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+        const content = new ComponentContent('list-with-title',
+            {
+                title: 'Translatable#Error on form validation:',
+                list: errorMessages
+            }
+        );
+
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
+        );
+    }
+
     public static toggleLoadingShield(
         loading: boolean, hint?: string, time?: number, cancelCallback?: () => void, cancelButtonText?: string
     ): void {
@@ -221,6 +238,11 @@ export class BrowserUtil {
             ApplicationEvent.TOGGLE_LOADING_SHIELD,
             new LoadingShieldEventData(loading, hint, time, cancelCallback, cancelButtonText)
         );
+    }
+
+    public static logout(): void {
+        ContextHistory.getInstance().removeBrowserListener();
+        window.location.replace('/auth/logout');
     }
 
 }

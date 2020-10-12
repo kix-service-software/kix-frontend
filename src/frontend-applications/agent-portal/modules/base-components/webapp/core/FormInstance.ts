@@ -29,6 +29,7 @@ import { FormValuesChangedEventData } from './FormValuesChangedEventData';
 import { FormFactory } from './FormFactory';
 import { KIXObjectFormService } from './KIXObjectFormService';
 import { KIXObject } from '../../../../model/kix/KIXObject';
+import { FormGroupConfiguration } from '../../../../model/configuration/FormGroupConfiguration';
 
 export class FormInstance {
 
@@ -61,10 +62,34 @@ export class FormInstance {
         this.templateValues.set(property, [templateField, value]);
     }
 
-    public async initFormInstance(formId: string, kixObject: KIXObject): Promise<void> {
+    public async initFormInstance(formId: string, kixObject: KIXObject, readonly?: boolean): Promise<void> {
         this.form = await FormService.getInstance().getForm(formId);
         FormFactory.initForm(this.form);
         await this.initFormFields(kixObject);
+        if (typeof readonly !== 'undefined' && readonly !== null) {
+            this.setFormReadonly(readonly);
+        }
+    }
+
+    public setFormReadonly(readonly: boolean = true): void {
+        for (const p of this.form.pages) {
+            for (const g of p.groups) {
+                this.setGroupReadonly(g, readonly);
+            }
+        }
+    }
+
+    public setGroupReadonly(group: FormGroupConfiguration, readonly: boolean = true): void {
+        this.setFieldsReadonly(group.formFields, readonly);
+    }
+
+    private setFieldsReadonly(formFields: FormFieldConfiguration[], readonly: boolean = true): void {
+        formFields.forEach((f) => {
+            f.readonly = readonly;
+            if (Array.isArray(f.children) && f.children.length) {
+                this.setFieldsReadonly(f.children, readonly);
+            }
+        });
     }
 
     private async initFormFields(kixObject: KIXObject): Promise<void> {
@@ -306,6 +331,17 @@ export class FormInstance {
         if (formField.children) {
             formField.children.forEach((c) => this.deleteFieldValues(c));
         }
+    }
+
+    public async provideFormFieldValuesForProperties(
+        values: Array<[string, any]>, originInstanceId: string, silent?: boolean
+    ): Promise<void> {
+        const instanceValues: Array<[string, any]> = values.map((v) => {
+            const formField = this.getFormFieldByProperty(v[0]);
+            return [formField ? formField.instanceId : null, v[1]];
+        });
+
+        this.provideFormFieldValues(instanceValues, originInstanceId, silent);
     }
 
     public async provideFormFieldValues<T>(

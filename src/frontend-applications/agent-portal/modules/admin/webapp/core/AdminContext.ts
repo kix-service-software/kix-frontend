@@ -8,14 +8,12 @@
  */
 
 import { Context } from '../../../../model/Context';
-import { AdminModule } from '../../model/AdminModule';
-import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
 export class AdminContext extends Context {
 
     public static CONTEXT_ID: string = 'admin';
 
-    public adminModule: AdminModule;
+    public adminModuleId: string;
     public categoryName: string;
 
     public getIcon(): string {
@@ -26,18 +24,18 @@ export class AdminContext extends Context {
         return 'Admin Dashboard';
     }
 
-    public setAdminModule(adminModule: AdminModule, categoryName: string): void {
-        if (!this.adminModule || this.adminModule.id !== adminModule.id) {
-            this.adminModule = adminModule;
+    public setAdminModule(adminModuleId: string, categoryName: string): void {
+        if (!this.adminModuleId || this.adminModuleId !== adminModuleId) {
+            this.adminModuleId = adminModuleId;
             this.categoryName = categoryName;
-            this.listeners.forEach((l) => l.objectChanged(adminModule.id, adminModule, KIXObjectType.ANY));
+            this.listeners.forEach((l) => l.objectChanged(null, null, null));
         }
     }
 
     public reset(refresh?: boolean): void {
         super.reset();
         if (!refresh) {
-            this.adminModule = null;
+            this.adminModuleId = null;
             this.categoryName = null;
         }
     }
