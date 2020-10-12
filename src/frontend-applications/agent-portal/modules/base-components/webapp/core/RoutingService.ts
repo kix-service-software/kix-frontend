@@ -21,10 +21,13 @@ import { BrowserUtil } from './BrowserUtil';
 import { ActionFactory } from './ActionFactory';
 import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
+import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
 
 export class RoutingService {
 
     private static INSTANCE: RoutingService = null;
+
+    private VISITED_KEY = 'KIXWebFrontendVisitedVersion';
 
     public static getInstance(): RoutingService {
         if (!RoutingService.INSTANCE) {
@@ -48,54 +51,79 @@ export class RoutingService {
         this.routingConfigurations.push(configuration);
     }
 
-    public async routeToInitialContext(history: boolean = false): Promise<void> {
-        const VISITED_KEY = 'KIXWebFrontendVisitedVersion';
+    public async routeToInitialContext(history: boolean = false, useURL: boolean = true): Promise<void> {
+        const isSetupAssistantNeeded = await SetupService.getInstance().isSetupAssitantNeeded();
+        if (isSetupAssistantNeeded) {
+            const context = await ContextService.getInstance().getContext<any>('admin');
+            if (context) {
+                context.setAdminModule('setup-assistant', '');
+                await ContextService.getInstance().setContext(
+                    'admin', KIXObjectType.ANY, ContextMode.DASHBOARD, null, false
+                );
+            }
+        } else {
+            const needReleaseInfo = await this.isReleaseInfoNeeded();
+            if (needReleaseInfo) {
+                ContextService.getInstance().setContext(
+                    'release', KIXObjectType.ANY, ContextMode.DASHBOARD
+                );
 
-        let visited: string;
+                const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
+                const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
+                AgentService.getInstance().setPreferences([
+                    [this.VISITED_KEY, buildNumber.toString()]
+                ]);
+            } else if (useURL) {
+                this.routeToURL(history);
+            } else {
+                ContextService.getInstance().setContext(
+                    'home', KIXObjectType.ANY, ContextMode.DASHBOARD, null, false
+                );
+            }
+        }
+    }
+
+    private async isReleaseInfoNeeded(): Promise<boolean> {
+        let releaseInfoVisited: string;
         const currentUser = await AgentService.getInstance().getCurrentUser();
         if (currentUser && currentUser.Preferences) {
-            const vistedVersion = currentUser.Preferences.find((p) => p.ID === VISITED_KEY);
-            visited = vistedVersion ? vistedVersion.Value : null;
+            const vistedVersion = currentUser.Preferences.find((p) => p.ID === this.VISITED_KEY);
+            releaseInfoVisited = vistedVersion ? vistedVersion.Value : null;
         }
 
         const releaseInfo = await KIXModulesSocketClient.getInstance().loadReleaseConfig();
         const buildNumber = releaseInfo ? releaseInfo.buildNumber : null;
-        if (!visited || (buildNumber && visited !== buildNumber.toString())) {
-            await ContextService.getInstance().setContext(
-                'release', KIXObjectType.ANY, ContextMode.DASHBOARD
-            );
-            AgentService.getInstance().setPreferences([
-                [VISITED_KEY, buildNumber.toString()]
-            ]);
-        } else {
-            const parsedUrl = new URL(window.location.href);
-            const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
-            if (path.length > 1) {
-                const contextUrl = path[1];
-                const objectId = path[2];
+        return !releaseInfoVisited || (buildNumber && releaseInfoVisited !== buildNumber.toString());
+    }
 
-                let context: Context;
-                if (contextUrl && contextUrl !== '') {
-                    context = await ContextFactory.getContextForUrl(contextUrl, objectId);
-                }
+    private async routeToURL(history: boolean = false): Promise<void> {
+        const parsedUrl = new URL(window.location.href);
+        const path = parsedUrl.pathname === '/' ? [] : parsedUrl.pathname.split('/');
+        if (path.length > 1) {
+            const contextUrl = path[1];
+            const objectId = path[2];
 
-                if (context) {
-                    await ContextService.getInstance().setContext(
-                        context.getDescriptor().contextId, null,
-                        context.getDescriptor().contextMode, objectId, undefined, history, false, true
-                    );
-                } else {
-                    if (contextUrl !== 'login') {
-                        BrowserUtil.openAccessDeniedOverlay();
-                    }
-                    await this.setHomeContext();
-                }
-            } else {
-                await this.setHomeContext();
+            let context: Context;
+            if (contextUrl && contextUrl !== '') {
+                context = await ContextFactory.getContextForUrl(contextUrl, objectId);
             }
 
-            this.handleRequest(parsedUrl.searchParams);
+            if (context) {
+                await ContextService.getInstance().setContext(
+                    context.getDescriptor().contextId, null,
+                    context.getDescriptor().contextMode, objectId, undefined, history, false, true
+                );
+            } else {
+                if (contextUrl !== 'login') {
+                    BrowserUtil.openAccessDeniedOverlay();
+                }
+                await this.setHomeContext();
+            }
+        } else {
+            await this.setHomeContext();
         }
+
+        this.handleRequest(parsedUrl.searchParams);
     }
 
     private async setHomeContext(): Promise<void> {

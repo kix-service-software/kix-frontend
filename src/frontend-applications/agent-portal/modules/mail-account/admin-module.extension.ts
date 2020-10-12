@@ -28,11 +28,21 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                         [
                             new AdminModule(
                                 null, 'mail-account', 'Translatable#Email Accounts', null,
-                                KIXObjectType.MAIL_ACCOUNT, 'admin-mail-accounts', [
-                                new UIComponentPermission(
-                                    'system/communication/mailaccounts', [CRUD.CREATE], true
-                                )
-                            ]
+                                KIXObjectType.MAIL_ACCOUNT, 'admin-mail-accounts',
+                                [
+                                    new UIComponentPermission(
+                                        'system/communication/mailaccounts', [CRUD.CREATE], true
+                                    )
+                                ]
+                            ),
+                            new AdminModule(
+                                null, 'sending-email', 'Translatable#Sending Email', null,
+                                KIXObjectType.ANY, 'setup-sending-email',
+                                [
+                                    new UIComponentPermission(
+                                        'system/config', [CRUD.READ], true
+                                    )
+                                ]
                             )
                         ]
                     )

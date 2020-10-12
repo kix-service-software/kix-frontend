@@ -46,22 +46,22 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.state.nodes = await this.prepareCategoryTreeNodes(categories);
             }
 
-            this.setActiveNode(context.adminModule);
+            setTimeout(() => {
+                this.setActiveNode(context.adminModuleId);
+            }, 500);
         }
     }
 
-    private setActiveNode(adminModule: AdminModule): void {
-        if (adminModule) {
-            this.activeNodeChanged(this.getActiveNode(adminModule));
-        }
+    private setActiveNode(adminModuleId: string): void {
+        this.activeNodeChanged(this.getActiveNode(adminModuleId));
     }
 
-    private getActiveNode(adminModule: AdminModule, nodes: TreeNode[] = this.state.nodes): TreeNode {
-        let activeNode = nodes.find((n) => n.id.id === adminModule.id);
+    private getActiveNode(adminModuleId: string, nodes: TreeNode[] = this.state.nodes): TreeNode {
+        let activeNode = nodes.find((n) => n.id === adminModuleId);
         if (!activeNode) {
             for (const node of nodes) {
                 if (node.children && node.children.length) {
-                    activeNode = this.getActiveNode(adminModule, node.children);
+                    activeNode = this.getActiveNode(adminModuleId, node.children);
                 }
                 if (activeNode) {
                     node.expanded = true;
@@ -72,31 +72,38 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return activeNode;
     }
 
-    private async prepareCategoryTreeNodes(categories: AdminModuleCategory[]): Promise<TreeNode[]> {
-        let nodes = [];
-        if (categories) {
-            for (const c of categories) {
-                const categoryTreeNodes = await this.prepareCategoryTreeNodes(c.children);
-                const moduleTreeNodes = await this.prepareModuleTreeNodes(c.modules);
-                const name = await TranslationService.translate(c.name);
-                nodes.push(new TreeNode(
-                    c, name, c.icon, null, [
-                    ...categoryTreeNodes,
-                    ...moduleTreeNodes
-                ], null, null, null, null, false, true, true)
-                );
+    private async prepareCategoryTreeNodes(modules: Array<AdminModuleCategory | AdminModule>): Promise<TreeNode[]> {
+        const adminModules: TreeNode[] = [];
+        let categories: TreeNode[] = [];
+        if (modules) {
+
+            for (const m of modules) {
+                if (m instanceof AdminModuleCategory) {
+                    const categoryTreeNodes = await this.prepareCategoryTreeNodes(m.children);
+                    const moduleTreeNodes = await this.prepareModuleTreeNodes(m.modules);
+                    const name = await TranslationService.translate(m.name);
+                    categories.push(new TreeNode(
+                        m.id, name, m.icon, null, [
+                        ...categoryTreeNodes,
+                        ...moduleTreeNodes
+                    ], null, null, null, null, false, true, true)
+                    );
+                } else {
+                    const name = await TranslationService.translate(m.name);
+                    adminModules.push(new TreeNode(m.id, name, m.icon));
+                }
             }
         }
 
-        nodes = this.sortNodes(nodes);
-        return nodes;
+        categories = this.sortNodes(categories);
+        return [...adminModules, ...categories];
     }
 
     private async prepareModuleTreeNodes(modules: AdminModule[]): Promise<TreeNode[]> {
         const nodes = [];
         for (const m of modules) {
             const name = await TranslationService.translate(m.name);
-            nodes.push(new TreeNode(m, name, m.icon));
+            nodes.push(new TreeNode(m.id, name, m.icon));
         }
 
         return nodes;
@@ -104,11 +111,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
-        if (node.id instanceof AdminModule) {
-            const adminModule = node.id as AdminModule;
+        if (node) {
             const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
             if (context) {
-                context.setAdminModule(adminModule, node.parent ? node.parent.label : '');
+                context.setAdminModule(node.id, node.parent ? node.parent.label : '');
             }
         }
     }

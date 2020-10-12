@@ -1,0 +1,100 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+.setup-header {
+    padding: 0.5rem;
+}
+
+@seperator-width: 4rem;
+@icon-width: 4.5rem;
+@step-width: @seperator-width + @seperator-width + @icon-width;
+
+.setup-steps {
+    margin: @margin-small;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: @step-width;
+    justify-content: center;
+
+    .step {
+        display: grid;
+        justify-content: center;
+        justify-items: center;
+        padding: 0.5rem;
+
+        .step-icon-seperator {
+            width: @seperator-width;
+            border-top: 2px solid @secondary-0;
+            justify-self: center;
+            align-self: center;
+
+            &.empty {
+                border: none;
+            }
+        }
+
+        >.icon {
+            font-size: @icon-width;
+            justify-self: center;
+            border: 2px solid @secondary-0;
+            border-radius: 35px;
+        }
+
+        &:hover {
+            >.icon {
+                background-color: @secondary-4;
+                cursor: pointer;
+            }
+        }
+
+        &.completed {
+            >.icon {
+                background-color: @primary-6;
+                color: @secondary-6;
+            }
+        }
+
+        &.skipped {
+            >.icon {
+                background-color: @tertiary-6;
+                color: @secondary-6;
+            }
+        }
+
+        &.active {
+            >.icon {
+                background-color: @primary-1;
+                color: @secondary-6;
+            }
+        }
+
+        .step-name {
+            margin-top: @margin-small;
+            grid-row: 2;
+            grid-column: 1 /span 3;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.step-content {
+    margin: 1rem;
+
+    .step-header {
+        margin: 0 1rem 2rem 1rem;
+        border-bottom: 1px solid @secondary-3;
+        border-top: 1px solid @secondary-3;
+        padding: 1rem;
+
+        h2 {
+            margin-bottom: 1rem;
+        }
+    }
+}

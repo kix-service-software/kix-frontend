@@ -23,6 +23,10 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { MailAccountService } from './MailAccountService';
+import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
+import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export class UIModule implements IUIModule {
 
@@ -65,5 +69,26 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext
         );
         await ContextService.getInstance().registerContext(mailAccountDetailsContext);
+
+        await SetupService.getInstance().registerSetupStep(
+            new SetupStep('setup-sending-email', 'Translatable#Sending Email', 'setup-sending-email',
+                [
+                    new UIComponentPermission('system/config', [CRUD.READ])
+                ],
+                'Translatable#Setup email server', 'Translatable#setup_assistant_sending_email_text',
+                'kix-icon-mail-forward-outline', 40
+            )
+        );
+
+        await SetupService.getInstance().registerSetupStep(
+            new SetupStep(
+                'MailAccount', 'Translatable#Email Account', 'setup-mail-account',
+                [
+                    new UIComponentPermission('/system/communication/mailaccounts', [CRUD.CREATE])
+                ],
+                'Translatable#Add email account for incoming mails', 'Translatable#setup_assistant_add_mail_account_text',
+                'kix-icon-mail-answer-outline', 30
+            )
+        );
     }
 }

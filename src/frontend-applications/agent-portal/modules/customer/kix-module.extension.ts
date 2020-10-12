@@ -92,7 +92,8 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'search-organisation-dialog', '/kix-module-customer$0/webapp/components/search-organisation-dialog', []
         ),
-        new UIComponent('contact-input-access', '/kix-module-customer$0/webapp/components/contact-input-access', [])
+        new UIComponent('contact-input-access', '/kix-module-customer$0/webapp/components/contact-input-access', []),
+        new UIComponent('setup-my-organisation', '/kix-module-customer$0/webapp/components/setup-my-organisation', [])
     ];
 
     public webDependencies: string[] = [

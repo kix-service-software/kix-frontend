@@ -61,6 +61,8 @@ export enum SysConfigKey {
 
     TICKET_SUBJECT_RE = 'Ticket::SubjectRe',
 
-    TICKET_SUBJECT_FW = 'Ticket::SubjectFwd'
+    TICKET_SUBJECT_FW = 'Ticket::SubjectFwd',
+
+    SETUP_ASSISTANT_STATE = 'SetupAssistantState'
 
 }

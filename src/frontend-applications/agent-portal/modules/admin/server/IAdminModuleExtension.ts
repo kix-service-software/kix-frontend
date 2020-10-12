@@ -8,9 +8,10 @@
  */
 
 import { AdminModuleCategory } from '../model/AdminModuleCategory';
+import { AdminModule } from '../model/AdminModule';
 
 export interface IAdminModuleExtension {
 
-    getAdminModules(): AdminModuleCategory[];
+    getAdminModules(): Array<AdminModuleCategory | AdminModule>;
 
 }

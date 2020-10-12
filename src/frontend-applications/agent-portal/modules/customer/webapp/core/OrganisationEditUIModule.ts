@@ -20,6 +20,10 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ImportService } from '../../../import/webapp/core';
 import { OrganisationDuplicateAction } from './actions/OrganisationDuplicateAction';
+import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
+import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -36,6 +40,18 @@ export class UIModule implements IUIModule {
 
         await this.registerContexts();
         this.registerActions();
+
+        await SetupService.getInstance().registerSetupStep(
+            new SetupStep(
+                'SetupMyOrganisation', 'Translatable#My Organisation', 'setup-my-organisation',
+                [
+                    new UIComponentPermission('organisations', [CRUD.READ]),
+                    new UIComponentPermission('system/config/Organization', [CRUD.UPDATE])
+                ],
+                'Translatable#Rename Your Organisation', 'Translatable#setupt_assistant_my-organisation_text',
+                'kix-icon-man-house', 50
+            )
+        );
     }
 
     private async registerContexts(): Promise<void> {

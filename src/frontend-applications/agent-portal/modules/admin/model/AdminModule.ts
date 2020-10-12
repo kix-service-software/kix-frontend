@@ -20,7 +20,8 @@ export class AdminModule {
         public icon?: string | ObjectIcon,
         public objectType?: KIXObjectType | string,
         public componentId?: string,
-        public permissions: UIComponentPermission[] = []
+        public permissions: UIComponentPermission[] = [],
+        public priority: number = 0
     ) {
         if (adminModule) {
             this.id = adminModule.id;
