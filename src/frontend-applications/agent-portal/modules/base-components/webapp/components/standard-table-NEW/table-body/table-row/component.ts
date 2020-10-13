@@ -94,21 +94,22 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
 
     public eventPublished(data: TableEventData, eventId: string, subscriberId?: string): void {
         if (data && data.tableId === this.state.row.getTable().getTableId()) {
-            if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
-                this.state.selected = this.state.row.isSelected();
-            }
-            if (eventId === TableEvent.ROW_SELECTABLE_CHANGED) {
-                this.state.selectable = this.state.row.isSelectable();
-            }
-            if (eventId === TableEvent.ROW_TOGGLED && data.rowId === this.state.row.getRowId()) {
-                this.state.open = this.state.row.isExpanded();
-            }
-            if (
-                (eventId === TableEvent.ROW_VALUE_STATE_CHANGED || eventId === TableEvent.ROW_VALUE_CHANGED)
-                && data.rowId === this.state.row.getRowId()
-            ) {
-                (this as any).setStateDirty('row');
-                this.setRowClasses();
+            if (data.rowId === this.state.row.getRowId()) {
+                if (eventId === TableEvent.ROW_SELECTION_CHANGED) {
+                    this.state.selected = this.state.row.isSelected();
+                }
+                if (eventId === TableEvent.ROW_SELECTABLE_CHANGED) {
+                    this.state.selectable = this.state.row.isSelectable();
+                }
+                if (eventId === TableEvent.ROW_TOGGLED) {
+                    this.state.open = this.state.row.isExpanded();
+                }
+                if (
+                    (eventId === TableEvent.ROW_VALUE_STATE_CHANGED || eventId === TableEvent.ROW_VALUE_CHANGED)
+                    && data.rowId === this.state.row.getRowId()
+                ) {
+                    this.setRowClasses();
+                }
             }
 
             if (eventId === TableEvent.TOGGLE_ROWS) {
@@ -116,7 +117,6 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 this.state.row.expand(data.openRows);
                 this.setRowClasses();
             }
-            this.setRowClasses();
         }
     }
 

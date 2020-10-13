@@ -138,7 +138,7 @@ export class KIXObjectSocketClient extends SocketClient {
     public async updateObject(
         objectType: KIXObjectType | string, parameter: Array<[string, any]>,
         objectId: number | string, updateOptions?: KIXObjectSpecificCreateOptions,
-        cacheKeyPrefix: string = objectType
+        cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
         const requestId = IdService.generateDateBasedId();
 
@@ -152,7 +152,11 @@ export class KIXObjectSocketClient extends SocketClient {
         );
 
         BrowserCacheService.getInstance().deleteKeys(cacheKeyPrefix);
-        EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType, objectId });
+
+        if (!silent) {
+            EventService.getInstance().publish(ApplicationEvent.OBJECT_UPDATED, { objectType, objectId });
+        }
+
         return response.objectId;
     }
 

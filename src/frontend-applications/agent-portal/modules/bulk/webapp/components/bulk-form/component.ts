@@ -210,7 +210,7 @@ class Component {
         for (const object of objects) {
 
             const start = Date.now();
-            let end;
+            let end: number;
             await this.state.bulkManager.execute(object)
                 .then(() => {
                     this.finishedObjects.push(object);

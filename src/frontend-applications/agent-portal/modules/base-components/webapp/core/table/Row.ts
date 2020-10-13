@@ -215,8 +215,9 @@ export class Row<T = any> {
         }
 
         if (notify && !silent) {
-            EventService.getInstance().publish(TableEvent.ROW_SELECTION_CHANGED,
-                new TableEventData(this.getTable().getTableId(), this.getRowId()));
+            EventService.getInstance().publish(
+                TableEvent.ROW_SELECTION_CHANGED, new TableEventData(this.getTable().getTableId(), this.getRowId())
+            );
         }
     }
 
@@ -245,8 +246,9 @@ export class Row<T = any> {
         }
 
         if (notify) {
-            EventService.getInstance().publish(TableEvent.ROW_SELECTABLE_CHANGED,
-                new TableEventData(this.getTable().getTableId(), this.getRowId()));
+            EventService.getInstance().publish(
+                TableEvent.ROW_SELECTABLE_CHANGED, new TableEventData(this.getTable().getTableId(), this.getRowId())
+            );
         }
     }
 
@@ -289,8 +291,9 @@ export class Row<T = any> {
 
     public setValueState(state: ValueState): void {
         this.getRowObject().setValueState(state);
-        EventService.getInstance().publish(TableEvent.ROW_VALUE_STATE_CHANGED,
-            new TableEventData(this.getTable().getTableId(), this.getRowId()));
+        EventService.getInstance().publish(
+            TableEvent.ROW_VALUE_STATE_CHANGED, new TableEventData(this.getTable().getTableId(), this.getRowId())
+        );
     }
 
     public addCell(value: TableValue): void {
