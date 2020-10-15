@@ -13,7 +13,7 @@ import { SetupStep } from '../../core/SetupStep';
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public instanceId: string = 'admin-sysconfig-overview',
+        public instanceId: string = 'admin-setup-assistant-overview',
         public prepared: boolean = false,
         public title: string = 'Setup Assistant',
         public setupSteps: SetupStep[] = [],
