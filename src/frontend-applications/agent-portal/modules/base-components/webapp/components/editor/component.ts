@@ -50,7 +50,14 @@ class EditorComponent {
                 this.editor.insertHtml(input.addValue);
             }
 
-            if (input.value !== null) {
+            // if editor has no value or is not focused, set "new" value
+            if (
+                input.value !== null
+                && (
+                    (this.editor.focusManager && !this.editor.focusManager.hasFocus)
+                    || !this.editor.getData()
+                )
+            ) {
                 const contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
                 if (this.editor.getData() !== contentString) {
                     this.editor.setData(contentString, () => {
@@ -131,9 +138,29 @@ class EditorComponent {
                 }
             });
 
-            this.editor.on('blur', (event) => {
-                const value = event.editor.getData();
-                (this as any).emit('valueChanged', value);
+            const changeListener = () => {
+                if (this.changeTimeout) {
+                    window.clearTimeout(this.changeTimeout);
+                    this.changeTimeout = null;
+                }
+
+                this.changeTimeout = setTimeout(() => {
+                    const value = this.editor.getData();
+                    (this as any).emit('valueChanged', value);
+                    this.changeTimeout = null;
+                }, 200);
+            };
+
+            this.editor.on('change', changeListener);
+            this.editor.on('mode', () => {
+                const editable = this.editor.editable();
+                if (editable) {
+                    if (this.editor.mode === 'source') {
+                        editable.attachListener(editable, 'input', changeListener);
+                    } else {
+                        editable.removeListener('input', changeListener);
+                    }
+                }
             });
 
             if (this.state.readOnly) {
