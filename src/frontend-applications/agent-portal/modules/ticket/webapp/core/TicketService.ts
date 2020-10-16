@@ -282,13 +282,18 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 break;
             case ArticleProperty.SENDER_TYPE_ID:
-                nodes.push(new TreeNode(1, 'agent'));
-                nodes.push(new TreeNode(2, 'system'));
-                nodes.push(new TreeNode(3, 'external'));
+                const agent = await TranslationService.translate('Translatable#agent');
+                const system = await TranslationService.translate('Translatable#system');
+                const external = await TranslationService.translate('Translatable#external');
+                nodes.push(new TreeNode(1, agent));
+                nodes.push(new TreeNode(2, system));
+                nodes.push(new TreeNode(3, external));
                 break;
             case ArticleProperty.CUSTOMER_VISIBLE:
-                nodes.push(new TreeNode(0, 'No'));
-                nodes.push(new TreeNode(1, 'Yes'));
+                const yes = await TranslationService.translate('Translatable#Yes');
+                const no = await TranslationService.translate('Translatable#No');
+                nodes.push(new TreeNode(0, no));
+                nodes.push(new TreeNode(1, yes));
                 break;
             case ArticleProperty.TO:
             case ArticleProperty.CC:
