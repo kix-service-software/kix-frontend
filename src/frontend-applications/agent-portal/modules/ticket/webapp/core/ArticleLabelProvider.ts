@@ -76,7 +76,7 @@ export class ArticleLabelProvider extends LabelProvider<Article> {
 
         if (displayValue) {
             displayValue = await TranslationService.translate(
-                displayValue.toString(), undefined, undefined, !translatable
+                displayValue.toString(), undefined, undefined, translatable
             );
         }
 
