@@ -74,6 +74,9 @@ msgstr ""
 msgid "Add CI Class"
 msgstr "Add Asset Class"
 
+msgid "Add email account for incoming mails"
+msgstr ""
+
 msgid "Additional recipients"
 msgstr ""
 
@@ -93,6 +96,9 @@ msgid "Administration"
 msgstr ""
 
 msgid "Administrator's Guide"
+msgstr ""
+
+msgid "Admin Password"
 msgstr ""
 
 msgid "Advanced Search"
@@ -339,6 +345,9 @@ msgstr ""
 msgid "Cc"
 msgstr ""
 
+msgid "Change Admin Password"
+msgstr ""
+
 msgid "Changed"
 msgstr ""
 
@@ -455,13 +464,13 @@ msgstr ""
 msgid "Communication: Email"
 msgstr ""
 
-msgid "Communication: Email: Email Accounts"
-msgstr ""
-
 msgid "Communication: Email: Email Addresses"
 msgstr ""
 
 msgid "Communication: Email: Email Filters"
+msgstr ""
+
+msgid "Communication: Email: Inbox"
 msgstr ""
 
 msgid "Communication: Webform"
@@ -548,9 +557,6 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-msgid "Create Account"
-msgstr ""
-
 msgid "Create Address"
 msgstr ""
 
@@ -596,6 +602,9 @@ msgstr ""
 msgid "Create Dynamic Field"
 msgstr ""
 
+msgid "Create Email Account"
+msgstr ""
+
 msgid "Create FAQ Article"
 msgstr ""
 
@@ -624,6 +633,9 @@ msgid "Create Role"
 msgstr ""
 
 msgid "Create State"
+msgstr ""
+
+msgid "Create Superuser Account"
 msgstr ""
 
 msgid "Create Text Module"
@@ -699,6 +711,9 @@ msgid "Default Value"
 msgstr ""
 
 msgid "Default Values"
+msgstr ""
+
+msgid "Define notification template"
 msgstr ""
 
 msgid "Delete"
@@ -912,6 +927,9 @@ msgid "End time"
 msgstr "End Time"
 
 msgid "Enter search value"
+msgstr ""
+
+msgid "Envelope From"
 msgstr ""
 
 msgid "equals"
@@ -2436,6 +2454,9 @@ msgstr ""
 msgid "Imprint"
 msgstr ""
 
+msgid "Inbox"
+msgstr ""
+
 msgid "Incident"
 msgstr ""
 
@@ -2652,6 +2673,9 @@ msgstr ""
 msgid "My Open Tickets"
 msgstr ""
 
+msgid "My Organisation"
+msgstr ""
+
 msgid "My Queues"
 msgstr "My Teams"
 
@@ -2847,6 +2871,12 @@ msgstr ""
 msgid "Notification"
 msgstr "Notification"
 
+msgid "Notification Envelope From"
+msgstr ""
+
+msgid "Notification Envelope From Fallback"
+msgstr ""
+
 msgid "Notification Information"
 msgstr "Notification Information"
 
@@ -2864,6 +2894,9 @@ msgstr ""
 
 msgid "Notification successfully created."
 msgstr "Notification successfully created."
+
+msgid "Notification Template"
+msgstr ""
 
 msgid "Notification Text"
 msgstr ""
@@ -2953,6 +2986,9 @@ msgid "Organisation successfully created."
 msgstr ""
 
 msgid "Other"
+msgstr ""
+
+msgid "Outbox"
 msgstr ""
 
 msgid "Overall"
@@ -3060,7 +3096,13 @@ msgstr ""
 msgid "Please enter a search term for a organisation."
 msgstr ""
 
+msgid "Please logout and login again with the new user."
+msgstr ""
+
 msgid "Please select a contact"
+msgstr ""
+
+msgid "Port"
 msgstr ""
 
 msgid "Postal Address"
@@ -3070,6 +3112,9 @@ msgid "Preferences"
 msgstr ""
 
 msgid "Prepare Ticket for print"
+msgstr ""
+
+msgid "Preview"
 msgstr ""
 
 msgid "Preview ({0})"
@@ -3231,6 +3276,9 @@ msgstr ""
 msgid "Remove Types"
 msgstr ""
 
+msgid "Rename Your Organisation"
+msgstr ""
+
 msgid "Replace empty value"
 msgstr ""
 
@@ -3312,7 +3360,25 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Save & Continue"
+msgstr ""
+
+msgid "Save & Fetch"
+msgstr ""
+
+msgid "Save & Logout"
+msgstr ""
+
 msgid "Save new search"
+msgstr ""
+
+msgid "Save notification template"
+msgstr ""
+
+msgid "Save Organisation"
+msgstr ""
+
+msgid "Save Outbox Settings"
 msgstr ""
 
 msgid "Save Search"
@@ -3402,17 +3468,46 @@ msgstr ""
 msgid "Set Email Headers"
 msgstr ""
 
-msgid "Set Value"
+msgid "Set Password for admin"
+msgstr ""
+
+msgid "Setup Assistant"
 msgstr ""
 
 msgid "setup_assistant_add_mail_account_text"
-msgstr "Add an email account for fetching incoming emails. If you need more than one account, you can add more in the admin module \"Communication/Email/Email Account\"."
+msgstr ""
+"Add an email account for fetching incoming emails. If you need more than one "
+"account, you can add more in the admin module \"Communication/Email/Email "
+"Account\"."
+
+msgid "setup_assistant_change_admin_password_text"
+msgstr ""
 
 msgid "setup_assistant_create_superuser_text"
-msgstr "The user admin is a system user and not recommended for active use. Please create a new user here. This one will also have complete permissions. After successfully creating that account, please login again with the new user."
+msgstr ""
+"The user admin is a system user and not recommended for active use. Please "
+"create a new user here. This one will also have complete permissions. After "
+"successfully creating that account, please login again with the new user."
+
+msgid "setup_assistant_notification_template_text"
+msgstr ""
+
+msgid "setup_assistant_sending_email_text"
+msgstr ""
 
 msgid "setup_assistant_welcome_text"
-msgstr "Please compete the following steps to set the basic configurations for KIX. The admin manual, section First Steps also provides more information."
+msgstr ""
+"Please compete the following steps to set the basic configurations for KIX. "
+"The admin manual, section First Steps also provides more information."
+
+msgid "Setup email server"
+msgstr ""
+
+msgid "setupt_assistant_my-organisation_text"
+msgstr ""
+
+msgid "Set Value"
+msgstr ""
 
 msgid "Show all"
 msgstr ""
@@ -3447,6 +3542,9 @@ msgstr ""
 msgid "Skip"
 msgstr ""
 
+msgid "Skip & Continue"
+msgstr ""
+
 msgid "Solution"
 msgstr ""
 
@@ -3475,6 +3573,9 @@ msgid "starts with"
 msgstr ""
 
 msgid "Start time"
+msgstr ""
+
+msgid "Start time has to be before end time"
 msgstr ""
 
 msgid "State"
@@ -3531,6 +3632,9 @@ msgstr ""
 msgid "Sunday"
 msgstr ""
 
+msgid "Superuser Account"
+msgstr ""
+
 msgid "Switch"
 msgstr ""
 
@@ -3541,6 +3645,9 @@ msgid "Symptom"
 msgstr ""
 
 msgid "SysConfig"
+msgstr ""
+
+msgid "SysConfig Keys"
 msgstr ""
 
 msgid "system"
@@ -3594,6 +3701,9 @@ msgstr ""
 msgid "Team Backlog"
 msgstr ""
 
+msgid "Template"
+msgstr ""
+
 msgid "Text"
 msgstr ""
 
@@ -3624,6 +3734,9 @@ msgid ""
 msgstr ""
 
 msgid "The Job {0} will be ran now. Are you sure?"
+msgstr ""
+
+msgid "The password is changed for Admin."
 msgstr ""
 
 msgid "The search only includes current versions."
@@ -3992,6 +4105,9 @@ msgid "Week"
 msgstr ""
 
 msgid "Weekday(s)"
+msgstr ""
+
+msgid "Welcome"
 msgstr ""
 
 msgid "Welcome to KIX 18"

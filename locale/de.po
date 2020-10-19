@@ -74,6 +74,9 @@ msgstr "Hinzufügen"
 msgid "Add CI Class"
 msgstr "Asset-Klasse hinzufügen"
 
+msgid "Add email account for incoming mails"
+msgstr ""
+
 msgid "Additional recipients"
 msgstr "Zusätzliche Empfänger"
 
@@ -94,6 +97,9 @@ msgstr "Administration"
 
 msgid "Administrator's Guide"
 msgstr "Handbuch für Administratoren"
+
+msgid "Admin Password"
+msgstr ""
 
 msgid "Advanced Search"
 msgstr "Komplexsuche"
@@ -350,6 +356,9 @@ msgstr "Ursache"
 msgid "Cc"
 msgstr "Cc"
 
+msgid "Change Admin Password"
+msgstr ""
+
 msgid "Changed"
 msgstr "Geändert"
 
@@ -468,14 +477,14 @@ msgstr "Kommunikation"
 msgid "Communication: Email"
 msgstr "Kommunikation: E-Mail"
 
-msgid "Communication: Email: Email Accounts"
-msgstr "Kommunikation: E-Mail: E-Mail Konten"
-
 msgid "Communication: Email: Email Addresses"
 msgstr "Kommunikation: E-Mail: E-Mail Adressen"
 
 msgid "Communication: Email: Email Filters"
 msgstr "Kommunikation: E-Mail: E-Mail Filter"
+
+msgid "Communication: Email: Inbox"
+msgstr ""
 
 msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
@@ -562,9 +571,6 @@ msgstr "Datei '{0}' konnte nicht geladen werden."
 msgid "Country"
 msgstr "Land"
 
-msgid "Create Account"
-msgstr "Konto wird angelegt"
-
 msgid "Create Address"
 msgstr "Adresse wird angelegt"
 
@@ -610,6 +616,9 @@ msgstr "Erstellt mit dem Nutzer"
 msgid "Create Dynamic Field"
 msgstr "Dynamisches Feld wird angelegt"
 
+msgid "Create Email Account"
+msgstr ""
+
 msgid "Create FAQ Article"
 msgstr "FAQ Artikel wird angelegt"
 
@@ -639,6 +648,9 @@ msgstr "Rolle wird angelegt"
 
 msgid "Create State"
 msgstr "Status wird angelegt"
+
+msgid "Create Superuser Account"
+msgstr ""
 
 msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
@@ -714,6 +726,9 @@ msgstr "Standardwert"
 
 msgid "Default Values"
 msgstr "Vordefinierte Werte"
+
+msgid "Define notification template"
+msgstr ""
 
 msgid "Delete"
 msgstr "Löschen"
@@ -928,6 +943,9 @@ msgstr "Endzeitpunkt"
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
+
+msgid "Envelope From"
+msgstr ""
 
 msgid "equals"
 msgstr "ist gleich"
@@ -2574,6 +2592,9 @@ msgstr "Der Import wird gestartet"
 msgid "Imprint"
 msgstr "Impressum"
 
+msgid "Inbox"
+msgstr ""
+
 msgid "Incident"
 msgstr "Vorfall"
 
@@ -2791,6 +2812,9 @@ msgstr "Meine gesperrten Tickets mit neuen Artikeln"
 msgid "My Open Tickets"
 msgstr "Meine offenen Tickets"
 
+msgid "My Organisation"
+msgstr ""
+
 msgid "My Queues"
 msgstr "Meine Teams"
 
@@ -2986,6 +3010,12 @@ msgstr "Nein, danke"
 msgid "Notification"
 msgstr "Benachrichtigung"
 
+msgid "Notification Envelope From"
+msgstr ""
+
+msgid "Notification Envelope From Fallback"
+msgstr ""
+
 msgid "Notification Information"
 msgstr "Benachrichtigungsinformation"
 
@@ -3003,6 +3033,9 @@ msgstr "Benachrichtigungen für Tickets"
 
 msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt."
+
+msgid "Notification Template"
+msgstr ""
 
 msgid "Notification Text"
 msgstr "Benachrichtigungstext"
@@ -3093,6 +3126,9 @@ msgstr "Kunde wurde erfolgreich angelegt."
 
 msgid "Other"
 msgstr "Sonstiges"
+
+msgid "Outbox"
+msgstr ""
 
 msgid "Overall"
 msgstr "Gesamt"
@@ -3200,8 +3236,14 @@ msgstr "Bitte geben Sie einen Suchbegriff ein."
 msgid "Please enter a search term for a organisation."
 msgstr "Bitte geben Sie einen Suchbegriff für einen Kunden ein."
 
+msgid "Please logout and login again with the new user."
+msgstr ""
+
 msgid "Please select a contact"
 msgstr "Wählen Sie bitte einen Kontakt."
+
+msgid "Port"
+msgstr ""
 
 msgid "Postal Address"
 msgstr "Adresse"
@@ -3211,6 +3253,9 @@ msgstr "Persönliche Einstellungen"
 
 msgid "Prepare Ticket for print"
 msgstr "Ticket für den Druck vorbereiten"
+
+msgid "Preview"
+msgstr ""
 
 msgid "Preview ({0})"
 msgstr "Treffervorschau ({0})"
@@ -3375,6 +3420,9 @@ msgstr "Übersetzungen löschen"
 msgid "Remove Types"
 msgstr "Typen löschen"
 
+msgid "Rename Your Organisation"
+msgstr ""
+
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
 
@@ -3460,8 +3508,26 @@ msgstr "Samstag"
 msgid "Save"
 msgstr "Speichern"
 
+msgid "Save & Continue"
+msgstr ""
+
+msgid "Save & Fetch"
+msgstr ""
+
+msgid "Save & Logout"
+msgstr ""
+
 msgid "Save new search"
 msgstr "Neue Suche speichern"
+
+msgid "Save notification template"
+msgstr ""
+
+msgid "Save Organisation"
+msgstr ""
+
+msgid "Save Outbox Settings"
+msgstr ""
 
 msgid "Save Search"
 msgstr "Suche speichern"
@@ -3550,11 +3616,41 @@ msgstr "E-Mail Header setzen"
 msgid "Set Email Headers"
 msgstr "E-Mail Header setzen"
 
-msgid "Set Value"
-msgstr "Wert setzen"
+msgid "Set Password for admin"
+msgstr ""
+
+msgid "Setup Assistant"
+msgstr ""
 
 msgid "setup_assistant_add_mail_account_text"
-msgstr "Richten Sie ein E-Mail Konto ein, von dem Sie E-Mails abrufen möchten. Wenn Sie mehr als ein Konto einrichten wollen, haben Sie im Admin-Bereich \"Kommunikation/E-Mail/E-Mail Konten\" die Möglichkeit dazu."
+msgstr ""
+"Richten Sie ein E-Mail Konto ein, von dem Sie E-Mails abrufen möchten. Wenn "
+"Sie mehr als ein Konto einrichten wollen, haben Sie im Admin-Bereich "
+"\"Kommunikation/E-Mail/E-Mail Konten\" die Möglichkeit dazu."
+
+msgid "setup_assistant_change_admin_password_text"
+msgstr ""
+
+msgid "setup_assistant_create_superuser_text"
+msgstr ""
+
+msgid "setup_assistant_notification_template_text"
+msgstr ""
+
+msgid "setup_assistant_sending_email_text"
+msgstr ""
+
+msgid "setup_assistant_welcome_text"
+msgstr ""
+
+msgid "Setup email server"
+msgstr ""
+
+msgid "setupt_assistant_my-organisation_text"
+msgstr ""
+
+msgid "Set Value"
+msgstr "Wert setzen"
 
 msgid "Show all"
 msgstr "Alle anzeigen"
@@ -3589,6 +3685,9 @@ msgstr "Größe"
 msgid "Skip"
 msgstr "Überspringen"
 
+msgid "Skip & Continue"
+msgstr ""
+
 msgid "Solution"
 msgstr "Lösung"
 
@@ -3618,6 +3717,9 @@ msgstr "beginnt mit"
 
 msgid "Start time"
 msgstr "Startzeitpunkt"
+
+msgid "Start time has to be before end time"
+msgstr ""
 
 msgid "State"
 msgstr "Status"
@@ -3673,6 +3775,9 @@ msgstr "Empfohlene FAQ"
 msgid "Sunday"
 msgstr "Sonntag"
 
+msgid "Superuser Account"
+msgstr ""
+
 msgid "Switch"
 msgstr "Tauschen"
 
@@ -3684,6 +3789,9 @@ msgstr "Symptom"
 
 msgid "SysConfig"
 msgstr "SysConfig"
+
+msgid "SysConfig Keys"
+msgstr ""
 
 msgid "system"
 msgstr "System"
@@ -3736,6 +3844,9 @@ msgstr "Team"
 msgid "Team Backlog"
 msgstr "Team Backlog"
 
+msgid "Template"
+msgstr "Vorlage"
+
 msgid "Text"
 msgstr "Text"
 
@@ -3769,6 +3880,9 @@ msgstr ""
 
 msgid "The Job {0} will be ran now. Are you sure?"
 msgstr "Der Job {0} wird jetzt ausgeführt. Sind Sie sicher?"
+
+msgid "The password is changed for Admin."
+msgstr ""
 
 msgid "The search only includes current versions."
 msgstr "Es werden nur aktuelle Versionen durchsucht."
@@ -4145,6 +4259,9 @@ msgstr "Woche"
 msgid "Weekday(s)"
 msgstr "Wochentag(e)"
 
+msgid "Welcome"
+msgstr ""
+
 msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
 
@@ -4192,6 +4309,12 @@ msgstr "PLZ"
 
 msgid "ZIP"
 msgstr "PLZ"
+
+#~ msgid "Communication: Email: Email Accounts"
+#~ msgstr "Kommunikation: E-Mail: E-Mail Konten"
+
+#~ msgid "Create Account"
+#~ msgstr "Konto wird angelegt"
 
 #~ msgid "Accounted time"
 #~ msgstr "Erfasste Zeit"
@@ -4417,9 +4540,6 @@ msgstr "PLZ"
 
 #~ msgid "New Template"
 #~ msgstr "Neue Vorlage"
-
-#~ msgid "Template"
-#~ msgstr "Vorlage"
 
 #~ msgid "Templates successfully removed."
 #~ msgstr "Vorlagen wurden erfolgreich entfernt."
