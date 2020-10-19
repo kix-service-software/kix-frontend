@@ -10,6 +10,7 @@
         "require ./components/notification-input-filter",
         "require ./components/notification-label-widget",
         "require ./components/notification-text-widget",
+        "require ./components/setup-notification-template",
         "require ./core"
     ]
 }

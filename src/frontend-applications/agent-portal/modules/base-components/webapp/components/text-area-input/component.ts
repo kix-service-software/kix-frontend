@@ -10,16 +10,12 @@
 import { ComponentState } from './ComponentState';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FormInputComponent } from '../../../../../modules/base-components/webapp/core/FormInputComponent';
-import { IdService } from '../../../../../model/IdService';
 import { FormService } from '../../core/FormService';
 
 class Component extends FormInputComponent<string, ComponentState> {
 
-    private formListenerId: string;
-
     public onCreate(): void {
         this.state = new ComponentState();
-        this.formListenerId = IdService.generateDateBasedId('text-area-input');
     }
 
     public onInput(input: any): void {
@@ -33,6 +29,16 @@ class Component extends FormInputComponent<string, ComponentState> {
             : this.state.field.required ? this.state.field.label : '';
 
         this.state.placeholder = await TranslationService.translate(placeholderText);
+        if (this.state.field && this.state.field.options) {
+            const rowOption = this.state.field.options.find(
+                (o) => o.option === 'ROWS'
+            );
+            if (rowOption && !isNaN(Number(rowOption.value)) && rowOption.value > 0) {
+                this.state.rows = Number(rowOption.value);
+            } else {
+                this.state.rows = 5;
+            }
+        }
     }
 
     public async onMount(): Promise<void> {
