@@ -113,7 +113,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const form = formInstance.getForm();
         if (form && Array.isArray(form.pages) && form.pages.length) {
             if (!this.organisation || !this.canOrganisationUpdate) {
-                form.pages[0].groups.splice(0, 1);
+                form.pages[0].groups = [];
             }
             form.pages[0].groups.push(sysConfigGroup);
         }
