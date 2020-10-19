@@ -7,14 +7,14 @@
  * --
  */
 
-import { FormInputComponentState } from '../../../../../modules/base-components/webapp/core/FormInputComponentState';
+import { AbstractComponentState } from '../../../../base-components/webapp/core/AbstractComponentState';
 
-export class ComponentState extends FormInputComponentState<string> {
+export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public currentValue: string = null,
-        public placeholder: string = null,
-        public rows: number = 5
+        public prepared: boolean = false,
+        public isSetup: boolean = false,
+        public completed: boolean = false
     ) {
         super();
     }

@@ -208,7 +208,7 @@ export class SysConfigFormService extends KIXObjectFormService {
     private async handleSysconfigListValue(
         property: string, value: any, formField: FormFieldConfiguration
     ): Promise<any> {
-        const option = formField.options.find((o) => o.option === 'SYSCONFIG_NAME');
+        const option = formField.options ? formField.options.find((o) => o.option === 'SYSCONFIG_NAME') : null;
 
         if (option) {
             const context = await ContextService.getInstance().getContext<EditSysConfigDialogContext>(
