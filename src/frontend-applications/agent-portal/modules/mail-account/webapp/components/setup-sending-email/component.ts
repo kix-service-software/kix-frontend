@@ -269,10 +269,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (validationError) {
             BrowserUtil.showValidationError(result);
         } else {
-            BrowserUtil.toggleLoadingShield(true, 'Translatable#Save Sending Mail Settings');
+            BrowserUtil.toggleLoadingShield(true, 'Translatable#Save Outbox Settings');
 
             await this.saveSysconfigValues(formInstance).catch(() => null);
-            await SetupService.getInstance().stepCompleted(this.step.id, null);
+
+            if (this.state.isSetup) {
+                await SetupService.getInstance().stepCompleted(this.step.id, null);
+            }
+
             BrowserUtil.toggleLoadingShield(false);
         }
     }
