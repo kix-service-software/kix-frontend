@@ -21,6 +21,8 @@ import { UpdateOrganisationRequest } from './api/UpdateOrganisationRequest';
 import { Error } from '../../../../../server/model/Error';
 import { Organisation } from '../model/Organisation';
 import { ObjectIcon } from '../../icon/model/ObjectIcon';
+import { FilterCriteria } from '../../../model/FilterCriteria';
+import { OrganisationProperty } from '../model/OrganisationProperty';
 
 export class OrganisationAPIService extends KIXObjectAPIService {
 
@@ -116,6 +118,18 @@ export class OrganisationAPIService extends KIXObjectAPIService {
         }
 
         return response.OrganisationID;
+    }
+
+    public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return criteria.filter((c) => c.property !== OrganisationProperty.FULLTEXT);
+    }
+
+    public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
+        return criteria.filter(
+            (c) => c.property === OrganisationProperty.NAME
+                || c.property === OrganisationProperty.NUMBER
+                || c.property === OrganisationProperty.FULLTEXT
+        );
     }
 
 }

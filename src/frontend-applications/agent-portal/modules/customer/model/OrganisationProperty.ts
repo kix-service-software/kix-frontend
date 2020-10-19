@@ -41,6 +41,8 @@ export enum OrganisationProperty {
 
     TICKETS = 'Tickets',
 
+    FULLTEXT = 'Fulltext',
+
     // UI properties
     VALID = 'Valid'
 
