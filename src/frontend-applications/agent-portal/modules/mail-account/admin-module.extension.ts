@@ -27,7 +27,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                         null, 'communication_email', 'Translatable#Email', null, [],
                         [
                             new AdminModule(
-                                null, 'mail-account', 'Translatable#Email Accounts', null,
+                                null, 'mail-account', 'Translatable#Inbox', null,
                                 KIXObjectType.MAIL_ACCOUNT, 'admin-mail-accounts',
                                 [
                                     new UIComponentPermission(
@@ -36,7 +36,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 ]
                             ),
                             new AdminModule(
-                                null, 'sending-email', 'Translatable#Sending Email', null,
+                                null, 'sending-email', 'Translatable#Outbox', null,
                                 KIXObjectType.ANY, 'setup-sending-email',
                                 [
                                     new UIComponentPermission(
