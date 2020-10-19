@@ -24,6 +24,10 @@ import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
+import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -65,6 +69,16 @@ export class UIModule implements IUIModule {
             false, 'object-details-page', ['notifications'], NotificationDetailsContext
         );
         await ContextService.getInstance().registerContext(notificationDetailsContext);
+
+        await SetupService.getInstance().registerSetupStep(
+            new SetupStep('setup-notification-template', 'Translatable#Notification Template', 'setup-notification-template',
+                [
+                    new UIComponentPermission('system/config', [CRUD.READ])
+                ],
+                'Translatable#Define notification template', 'Translatable#setup_assistant_notification_template_text',
+                'kix-icon-letter-blue', 60
+            )
+        );
     }
 
     public unRegister(): Promise<void> {

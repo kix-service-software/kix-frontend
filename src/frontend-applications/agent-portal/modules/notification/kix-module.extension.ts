@@ -58,6 +58,10 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'edit-notification-dialog', '/kix-module-notification$0/webapp/components/edit-notification-dialog', []
         ),
+        new UIComponent(
+            'setup-notification-template',
+            '/kix-module-notification$0/webapp/components/setup-notification-template', []
+        )
     ];
 
     public webDependencies: string[] = [
