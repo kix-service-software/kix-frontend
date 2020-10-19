@@ -31,6 +31,7 @@ import { CreateLinkRequest } from '../../modules/links/server/api/CreateLinkRequ
 import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ExtendedKIXObjectAPIService } from './ExtendedKIXObjectAPIService';
 import { CacheService } from './cache';
+import { SearchProperty } from '../../modules/search/model/SearchProperty';
 
 export abstract class KIXObjectAPIService implements IKIXObjectService {
 
@@ -382,6 +383,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             }
         }
 
+        // ignore fulltext property
+        filterCriteria = filterCriteria ? filterCriteria.filter((c) => c.property !== SearchProperty.FULLTEXT) : [];
+
         if (filterCriteria && filterCriteria.length) {
             const apiFilter = {};
             apiFilter[objectProperty] = this.prepareObjectFilter(filterCriteria);
@@ -402,6 +406,13 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         searchCriteria = [...searchCriteria, ...dynamicFieldCriteria];
 
         if (searchCriteria && searchCriteria.length) {
+
+            // use correct property name
+            const fulltextCriterion = searchCriteria.find((c) => c.property === SearchProperty.FULLTEXT);
+            if (fulltextCriterion) {
+                fulltextCriterion.property = 'Fulltext';
+            }
+
             const apiSearch = {};
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
             query.search = encodeURIComponent(JSON.stringify(apiSearch));

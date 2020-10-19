@@ -7,13 +7,11 @@
  * --
  */
 
-import { OrganisationService } from './OrganisationService';
 import { OrganisationSearchFormManager } from './OrganisationSearchFormManager';
 import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class OrganisationSearchDefinition extends SearchDefinition {
 
@@ -43,15 +41,4 @@ export class OrganisationSearchDefinition extends SearchDefinition {
         return new KIXObjectLoadingOptions(criteria, null, this.limit, ['Tickets', 'Contacts']);
     }
 
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria);
-        const fulltextCriteriaIndex = criteria.findIndex((c) => c.property === SearchProperty.FULLTEXT);
-        if (fulltextCriteriaIndex !== -1) {
-            const value = criteria[fulltextCriteriaIndex].value;
-            criteria.splice(fulltextCriteriaIndex, 1);
-            const filter = await OrganisationService.getInstance().prepareFullTextFilter(value.toString());
-            criteria = [...criteria, ...filter];
-        }
-        return criteria;
-    }
 }

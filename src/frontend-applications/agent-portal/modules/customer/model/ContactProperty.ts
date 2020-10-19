@@ -61,9 +61,6 @@ export enum ContactProperty {
     VALID = 'Valid',
     PRIMARY_ORGANISATION = 'PrimaryOrganisation',
     PRIMARY_ORGANISATION_NUMBER = 'PrimaryOrganisationNumber',
-    ORGANISATIONS = 'Organisations',
-
-    // search property
-    FULLTEXT = 'Fulltext'
+    ORGANISATIONS = 'Organisations'
 
 }
