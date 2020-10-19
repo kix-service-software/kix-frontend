@@ -58,7 +58,18 @@ class EditorComponent {
                     || !this.editor.getData()
                 )
             ) {
-                const contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
+                let contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
+                const matches = contentString.match(
+                    /<(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))>/ig);
+                if (matches) {
+                    for (const m in matches) {
+                        if (matches.hasOwnProperty(m)) {
+                            let replacedString = matches[m].replace(/>/g, '&gt;');
+                            replacedString = replacedString.replace(/</g, '&lt;');
+                            contentString = contentString.replace(matches[m], replacedString);
+                        }
+                    }
+                }
                 if (this.editor.getData() !== contentString) {
                     this.editor.setData(contentString, () => {
                         this.editor.updateElement();
