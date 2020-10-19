@@ -57,13 +57,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             'Translatable#Save & Continue', 'Translatable#Save & Logout', 'Translatable#Skip & Continue'
         ]);
 
-        this.prepareForm();
+        await this.prepareForm();
         this.state.prepared = true;
     }
 
     public onInput(input: any) {
         this.step = input.step;
         this.update = this.step && this.step.result && this.step.result.contactId && this.step.result.userId;
+        this.state.completed = this.step ? this.step.completed : false;
     }
 
     public onDestroy(): void {
@@ -74,14 +75,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const formFields = [
             new FormFieldConfiguration(
-                'create-superuser-lastname',
-                'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
-                'Translatable#Helptext_Customers_ContactCreate_Lastname'
-            ),
-            new FormFieldConfiguration(
                 'create-superuser-firstname',
                 'Translatable#First Name', ContactProperty.FIRSTNAME, null, true,
                 'Translatable#Helptext_Customers_ContactCreate_Firstname'
+            ),
+            new FormFieldConfiguration(
+                'create-superuser-lastname',
+                'Translatable#Last Name', ContactProperty.LASTNAME, null, true,
+                'Translatable#Helptext_Customers_ContactCreate_Lastname'
             ),
             new FormFieldConfiguration(
                 'create-superuser-email',

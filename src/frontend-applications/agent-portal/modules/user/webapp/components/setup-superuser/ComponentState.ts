@@ -12,7 +12,8 @@ import { AbstractComponentState } from '../../../../base-components/webapp/core/
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public completed: boolean = false
     ) {
         super();
     }

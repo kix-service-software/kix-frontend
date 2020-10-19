@@ -77,6 +77,7 @@ export class SetupService {
         const step = this.setupSteps.find((s) => s.id === stepId);
         if (step) {
             step.completed = true;
+            step.skipped = false;
             step.result = result;
         }
 

@@ -7,11 +7,12 @@
  * --
  */
 .setup-header {
-    padding: 0.5rem;
+    padding: 0.5rem 1rem 0 1rem;
+    margin: 0 0.5rem;
 }
 
 @seperator-width: 4rem;
-@icon-width: 4.5rem;
+@icon-width: 4rem;
 @step-width: @seperator-width + @seperator-width + @icon-width;
 
 .setup-steps {
@@ -42,7 +43,8 @@
             font-size: @icon-width;
             justify-self: center;
             border: 2px solid @secondary-0;
-            border-radius: 35px;
+            border-radius: 50px;
+            padding: 0.5rem;
         }
 
         &:hover {
@@ -88,10 +90,10 @@
     margin: 1rem;
 
     .step-header {
-        margin: 0 1rem 2rem 1rem;
+        margin: 0 0.5rem 2rem 0.5rem;
         border-bottom: 1px solid @secondary-3;
         border-top: 1px solid @secondary-3;
-        padding: 1rem;
+        padding: 1rem 0;
 
         h2 {
             margin-bottom: 1rem;

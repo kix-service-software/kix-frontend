@@ -82,6 +82,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any): void {
         this.step = input.step;
+        this.state.completed = this.step ? this.step.completed : false;
     }
 
     private async prepareForm(): Promise<void> {
