@@ -10,10 +10,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     <div.superuser-form>
         <main-form formId=state.formId/>
         <div.button-container>
-            <button.form-button type="button" on-click("skip") title=state.translations["Translatable#Skip & Continue"]>
-                <span.kix-icon-arrow-outward/>
-                <translation-string pattern="Translatable#Skip & Continue"/>
-            </button>
+            <if(!state.completed)>
+                <button.form-button type="button" on-click("skip") title=state.translations["Translatable#Skip & Continue"]>
+                    <span.kix-icon-arrow-outward/>
+                    <translation-string pattern="Translatable#Skip & Continue"/>
+                </button>
+            </if>
             <button.submit-button type="button" on-click("submit", true) title=state.translations["Translatable#Save & Logout"]>
                 <span.kix-icon-arrow-outward/>
                 <translation-string pattern="Translatable#Save & Logout"/>

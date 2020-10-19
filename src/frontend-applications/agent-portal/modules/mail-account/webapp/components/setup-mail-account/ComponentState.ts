@@ -13,7 +13,8 @@ export class ComponentState extends AbstractComponentState {
 
     public constructor(
         public prepared: boolean = false,
-        public canUpdate: boolean = true
+        public canUpdate: boolean = true,
+        public completed: boolean = false
     ) {
         super();
     }

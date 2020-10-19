@@ -71,7 +71,7 @@ export class UIModule implements IUIModule {
         await ContextService.getInstance().registerContext(mailAccountDetailsContext);
 
         await SetupService.getInstance().registerSetupStep(
-            new SetupStep('setup-sending-email', 'Translatable#Sending Email', 'setup-sending-email',
+            new SetupStep('setup-sending-email', 'Translatable#Outbox', 'setup-sending-email',
                 [
                     new UIComponentPermission('system/config', [CRUD.READ])
                 ],
@@ -82,7 +82,7 @@ export class UIModule implements IUIModule {
 
         await SetupService.getInstance().registerSetupStep(
             new SetupStep(
-                'MailAccount', 'Translatable#Email Account', 'setup-mail-account',
+                'MailAccount', 'Translatable#Inbox', 'setup-mail-account',
                 [
                     new UIComponentPermission('/system/communication/mailaccounts', [CRUD.CREATE])
                 ],

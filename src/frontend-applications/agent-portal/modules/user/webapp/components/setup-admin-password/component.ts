@@ -52,6 +52,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public onInput(input: any) {
         this.step = input.step;
+        this.state.completed = this.step ? this.step.completed : false;
     }
 
     public onDestroy(): void {
