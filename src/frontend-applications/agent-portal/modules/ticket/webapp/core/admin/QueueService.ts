@@ -183,7 +183,7 @@ export class QueueService extends KIXObjectService<Queue> {
                     followUpTypes = followUpTypes.filter((q) => q.ValidID === 1);
                 }
                 for (const type of followUpTypes) {
-                    values.push(new TreeNode(type.ID, type.Name));
+                    values.push(new TreeNode(type.ID, await TranslationService.translate(type.Name)));
                 }
                 break;
             default:

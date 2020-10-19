@@ -78,21 +78,16 @@ class Component {
         EventService.getInstance().subscribe(ApplicationEvent.REFRESH, {
             eventSubscriberId: 'BASE-TEMPLATE-REFRESH',
             eventPublished: (data: any, eventId: string) => {
-                if (eventId === ApplicationEvent.REFRESH) {
-                    this.state.reload = true;
-
-                    const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-                    if (context) {
-                        context.reset(true);
-                    }
-
-                    setTimeout(() => {
-                        this.state.reload = false;
-                        setTimeout(() => {
-                            RoutingService.getInstance().routeToInitialContext(true);
-                        }, 500);
-                    }, 20);
+                this.state.reload = true;
+                const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                if (context) {
+                    context.reset(true);
                 }
+
+                setTimeout(() => {
+                    this.state.reload = false;
+                    RoutingService.getInstance().routeToInitialContext(false);
+                }, 500);
             }
         });
 

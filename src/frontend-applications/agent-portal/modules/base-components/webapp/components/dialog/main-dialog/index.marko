@@ -21,16 +21,8 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                     <kix-footer leftText=state.dialogHint/>
                 </@content>
             </widget>
-            <if(state.isLoading)>
-                <loading-shield
-                    loadingHint=state.loadingHint
-                    cancelCallback=state.cancelCallback
-                    time=state.time
-                    cancelButtonText=state.cancelButtonText/>
-            </if>
-            <if(!state.isLoading || state.showClose)>
-                <span.kix-icon-close.close-button on-click("close", { byX: true })/>
-            </if>
+            <loading-shield/>
+            <span.kix-icon-close.close-button on-click("close", { byX: true })/>
         </div>
     </div>
 </if>

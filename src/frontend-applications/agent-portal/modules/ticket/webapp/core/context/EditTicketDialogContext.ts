@@ -93,7 +93,7 @@ export class EditTicketDialogContext extends Context {
     private async loadTicket(): Promise<Ticket> {
         const ticketId = this.getObjectId();
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [TicketProperty.LINK, KIXObjectProperty.DYNAMIC_FIELDS], [TicketProperty.LINK]
+            null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]
         );
 
         let tickets: Ticket[];

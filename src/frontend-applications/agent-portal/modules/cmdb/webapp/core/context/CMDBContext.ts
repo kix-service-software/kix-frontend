@@ -116,7 +116,7 @@ export class CMDBContext extends Context {
         return catalogItems.map((c) => c.ItemID);
     }
 
-    public async getObjectList(objectType: KIXObjectType): Promise<KIXObject[]> {
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType): Promise<T[]> {
         return await super.getObjectList(objectType);
     }
 

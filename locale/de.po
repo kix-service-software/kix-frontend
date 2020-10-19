@@ -3553,6 +3553,9 @@ msgstr "E-Mail Header setzen"
 msgid "Set Value"
 msgstr "Wert setzen"
 
+msgid "setup_assistant_add_mail_account_text"
+msgstr "Richten Sie ein E-Mail Konto ein, von dem Sie E-Mails abrufen möchten. Wenn Sie mehr als ein Konto einrichten wollen, haben Sie im Admin-Bereich \"Kommunikation/E-Mail/E-Mail Konten\" die Möglichkeit dazu."
+
 msgid "Show all"
 msgstr "Alle anzeigen"
 

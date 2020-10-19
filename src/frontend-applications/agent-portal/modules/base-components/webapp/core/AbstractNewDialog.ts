@@ -122,10 +122,10 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                 } else {
 
                     let canceled = false;
-                    DialogService.getInstance().setMainDialogLoading(
-                        true, this.loadingHint, false, null,
+                    BrowserUtil.toggleLoadingShield(
+                        true, this.loadingHint, null,
                         () => {
-                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.toggleLoadingShield(false);
                             DialogService.getInstance().closeMainDialog();
                             canceled = true;
                             resolve();
@@ -147,7 +147,7 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
                             }
                             resolve();
                         }).catch((error: Error) => {
-                            DialogService.getInstance().setMainDialogLoading(false);
+                            BrowserUtil.toggleLoadingShield(false);
                             BrowserUtil.openErrorOverlay(
                                 error.Message ? `${error.Code}: ${error.Message}` : error.toString()
                             );
@@ -176,9 +176,9 @@ export abstract class AbstractNewDialog extends AbstractMarkoComponent<any> {
             EventService.getInstance().publish(
                 TabContainerEvent.CHANGE_TAB, new TabContainerEventData(previousTabData.tabId)
             );
-            DialogService.getInstance().setMainDialogLoading(false);
+            BrowserUtil.toggleLoadingShield(false);
         } else {
-            DialogService.getInstance().setMainDialogLoading(false);
+            BrowserUtil.toggleLoadingShield(false);
             DialogService.getInstance().submitMainDialog();
             if (this.routingConfiguration) {
                 RoutingService.getInstance().routeToContext(this.routingConfiguration, objectId);

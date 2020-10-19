@@ -136,10 +136,10 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const preloadPatternOption = this.state.field.options.find(
                 (o) => o.option === ObjectReferenceOptions.AUTOCOMPLETE_PRELOAD_PATTERN
             );
-            if (preloadPatternOption && preloadPatternOption.value) {
-                const preloadedNodes = await this.search(10, preloadPatternOption.value);
-                nodes = [...preloadedNodes, ...nodes];
-            }
+
+            const searchValue = preloadPatternOption ? preloadPatternOption.value : null;
+            const preloadedNodes = await this.search(10, searchValue);
+            nodes = [...preloadedNodes, ...nodes];
         }
 
         const treeHandler = TreeService.getInstance().getTreeHandler(this.state.treeId);
@@ -258,7 +258,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
                 const service = ServiceRegistry.getServiceInstance<IKIXObjectService>(objectType);
                 let filter: FilterCriteria[];
-                if (service) {
+                if (service && searchValue) {
                     filter = await service.prepareFullTextFilter(searchValue);
                 }
                 const fieldLoadingOptions = this.state.field.options.find(

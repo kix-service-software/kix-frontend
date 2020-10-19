@@ -21,6 +21,7 @@ import { AdminModuleService } from './AdminModuleService';
 import { AdminModuleCategory } from '../model/AdminModuleCategory';
 
 import cookie = require('cookie');
+import { AdminModule } from '../model/AdminModule';
 
 export class AdministrationNamespace extends SocketNameSpace {
 
@@ -55,7 +56,7 @@ export class AdministrationNamespace extends SocketNameSpace {
         const token = parsedCookie ? parsedCookie.token : '';
 
         const response = await AdminModuleService.getInstance().getAdminModules(token)
-            .then((categories: AdminModuleCategory[]) =>
+            .then((categories: Array<AdminModuleCategory | AdminModule>) =>
                 new SocketResponse(
                     AdministrationEvent.ADMIN_CATEGORIES_LOADED,
                     new AdminCategoriesResponse(data.requestId, categories)

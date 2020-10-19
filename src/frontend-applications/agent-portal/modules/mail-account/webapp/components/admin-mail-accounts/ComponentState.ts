@@ -18,7 +18,7 @@ export class ComponentState {
     public constructor(
         public instanceId: string = IdService.generateDateBasedId('communication-mail-accounts-list'),
         public widgetConfiguration: WidgetConfiguration = new WidgetConfiguration(null, null, null,
-            'table-widget', 'Translatable#Communication: Email: Email Accounts',
+            'table-widget', 'Translatable#Communication: Email: Inbox',
             ['mail-account-create', 'csv-export-action'], null,
             new TableWidgetConfiguration(null, null, null, KIXObjectType.MAIL_ACCOUNT,
                 [MailAccountProperty.HOST, SortOrder.UP]), false, false, 'kix-icon-gears')

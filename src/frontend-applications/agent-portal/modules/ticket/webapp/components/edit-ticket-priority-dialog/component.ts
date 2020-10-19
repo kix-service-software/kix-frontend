@@ -56,7 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Priority');
+                BrowserUtil.toggleLoadingShield(true, 'Translatable#Update Priority');
 
                 const context = await ContextService.getInstance().getContext<TicketPriorityDetailsContext>(
                     TicketPriorityDetailsContext.CONTEXT_ID
@@ -66,13 +66,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     KIXObjectType.TICKET_PRIORITY, this.state.formId, context.getObjectId()
                 ).then(async (priorityId) => {
                     context.getObject(KIXObjectType.TICKET_PRIORITY, true);
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    BrowserUtil.toggleLoadingShield(false);
 
                     const toast = await TranslationService.translate('Translatable#Changes saved.');
                     BrowserUtil.openSuccessOverlay(toast);
                     DialogService.getInstance().submitMainDialog();
                 }).catch((error: Error) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    BrowserUtil.toggleLoadingShield(false);
                     BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
             }

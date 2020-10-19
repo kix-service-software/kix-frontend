@@ -15,12 +15,12 @@ import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { OrganisationDetailsContext } from '.';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
-import { OrganisationProperty } from '../../model/OrganisationProperty';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class OrganisationService extends KIXObjectService<Organisation> {
 
@@ -133,27 +133,10 @@ export class OrganisationService extends KIXObjectService<Organisation> {
         return context.getDescriptor().urlPaths[0] + '/' + id;
     }
 
-    public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
-        searchValue = `*${searchValue}*`;
-
+    public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                OrganisationProperty.NUMBER, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                OrganisationProperty.NAME, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                OrganisationProperty.URL, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                OrganisationProperty.STREET, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                OrganisationProperty.COUNTRY, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
-            ),
-            new FilterCriteria(
-                OrganisationProperty.ZIP, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
     }

@@ -18,10 +18,10 @@ import { DialogEvents } from '../../../../../../modules/base-components/webapp/c
 import { DialogEventData } from '../../../../../../modules/base-components/webapp/core/DialogEventData';
 import { WidgetConfiguration } from '../../../../../../model/configuration/WidgetConfiguration';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
+import { BrowserUtil } from '../../../core/BrowserUtil';
 
 export class MainDialogComponent implements IMainDialogListener {
 
-    private loadingTimeout: any;
     private state: ComponentState;
 
     private dialogId: string;
@@ -108,14 +108,14 @@ export class MainDialogComponent implements IMainDialogListener {
         if (tab) {
             const dialog = this.dialogWidgets.find((d) => d.instanceId === tab.instanceId);
 
-            DialogService.getInstance().setMainDialogLoading(true);
+            BrowserUtil.toggleLoadingShield(true);
 
             await ContextService.getInstance().setDialogContext(
                 null, dialog.kixObjectType, dialog.contextMode, undefined, false, undefined,
                 false, undefined, undefined, false
             );
 
-            DialogService.getInstance().setMainDialogLoading(false);
+            BrowserUtil.toggleLoadingShield(false);
 
             this.dialogId = tab.instanceId;
         }
@@ -127,32 +127,6 @@ export class MainDialogComponent implements IMainDialogListener {
 
     public setHint(hint: string): void {
         this.state.dialogHint = hint;
-    }
-
-    public setLoading(
-        isLoading: boolean, loadingHint: string, showClose: boolean = false,
-        time: number = null, cancelCallback: () => void, cancelButtonText?: string
-    ): void {
-        if (this.loadingTimeout) {
-            window.clearTimeout(this.loadingTimeout);
-        }
-        if (isLoading) {
-            this.loadingTimeout = setTimeout(() => {
-                this.state.loadingHint = loadingHint;
-                this.state.isLoading = isLoading;
-                this.state.showClose = showClose;
-                this.state.time = time;
-                this.state.cancelCallback = cancelCallback;
-                this.state.cancelButtonText = cancelButtonText;
-            }, 500);
-        } else {
-            this.state.loadingHint = loadingHint;
-            this.state.isLoading = isLoading;
-            this.state.showClose = showClose;
-            this.state.time = time;
-            this.state.cancelCallback = cancelCallback;
-            this.state.cancelButtonText = cancelButtonText;
-        }
     }
 
 }

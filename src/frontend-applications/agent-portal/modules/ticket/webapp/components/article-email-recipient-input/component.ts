@@ -97,27 +97,36 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const formInstance = await FormService.getInstance().getFormInstance(this.state.formId);
         const value = formInstance.getFormFieldValue<number>(this.state.field.instanceId);
         if (value && value.value) {
-            let contactValues: any[] = Array.isArray(value.value) ? value.value : [value.value];
+            let contactValues: any[] = Array.isArray(value.value) ? [...value.value] : [value.value];
             contactValues = contactValues.map((v) => v.replace(/.+ <(.+)>/, '$1'));
 
             const emailAddresses = contactValues.filter((v) => isNaN(v));
-            const contactIds = contactValues.filter((v) => !isNaN(v)).map((v) => Number(v));
+            const contactIds = contactValues.filter((v) => !isNaN(v) && v !== '' && v !== null).map((v) => Number(v));
 
-            const contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
-            let nodes = await this.createTreeNodes(contacts);
+            let nodes: TreeNode[] = [];
+            let contacts: Contact[] = [];
+            if (contactIds.length) {
+                contacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, contactIds);
+                nodes = await this.createTreeNodes(contacts);
+            }
 
-            const mailContacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
-                new KIXObjectLoadingOptions(
-                    [
-                        new FilterCriteria(
-                            'Email', SearchOperator.IN, FilterDataType.STRING,
-                            FilterType.OR, emailAddresses
-                        )
-                    ]
+            let mailNodes: TreeNode[] = [];
+            let mailContacts: Contact[] = [];
+            if (emailAddresses.length) {
+                mailContacts = await KIXObjectService.loadObjects<Contact>(KIXObjectType.CONTACT, null,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                'Email', SearchOperator.IN, FilterDataType.STRING,
+                                FilterType.OR, emailAddresses
+                            )
+                        ]
 
-                ), null, true
-            );
-            const mailNodes = await this.createTreeNodes(mailContacts);
+                    ), null, true
+                );
+                mailNodes = await this.createTreeNodes(mailContacts);
+            }
+
             nodes = [...nodes, ...mailNodes];
 
             const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
@@ -125,6 +134,7 @@ class Component extends FormInputComponent<string[], ComponentState> {
             );
 
             const unknownNodes = contactValues.filter((v) =>
+                typeof v !== 'undefined' && v !== '' && v !== null &&
                 !contacts.some((c) => c.ID === Number(v) || c.Email === v) &&
                 !mailContacts.some((c) => c.ID === v || c.Email === v) &&
                 !systemAddresses.some((sa) => sa.Name === v)
@@ -208,9 +218,9 @@ class Component extends FormInputComponent<string[], ComponentState> {
         const dialogContext = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (this.state.field.property === ArticleProperty.TO && context && dialogContext) {
             const replyId = dialogContext.getAdditionalInformation('REFERENCED_ARTICLE_ID');
-            const ticket = await context.getObject<Ticket>();
-            if (replyId && ticket) {
-                const replyArticle = ticket.Articles.find((a) => a.ArticleID === replyId);
+            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+            if (replyId && articles && articles.length) {
+                const replyArticle = articles.find((a) => a.ArticleID === replyId);
                 if (replyArticle) {
                     const systemAddresses = await KIXObjectService.loadObjects<SystemAddress>(
                         KIXObjectType.SYSTEM_ADDRESS

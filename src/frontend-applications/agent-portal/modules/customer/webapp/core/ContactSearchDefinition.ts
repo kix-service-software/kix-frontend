@@ -7,13 +7,11 @@
  * --
  */
 
-import { ContactService } from './ContactService';
 import { ContactSearchFormManager } from './ContactSearchFormManager';
 import { SearchDefinition, SearchResultCategory } from '../../../search/webapp/core';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
-import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class ContactSearchDefinition extends SearchDefinition {
 
@@ -40,18 +38,6 @@ export class ContactSearchDefinition extends SearchDefinition {
             );
         }
         return new SearchResultCategory('Translatable#Contacts', KIXObjectType.CONTACT, categories);
-    }
-
-    public async prepareFormFilterCriteria(criteria: FilterCriteria[]): Promise<FilterCriteria[]> {
-        criteria = await super.prepareFormFilterCriteria(criteria);
-        const fulltextCriteriaIndex = criteria.findIndex((c) => c.property === SearchProperty.FULLTEXT);
-        if (fulltextCriteriaIndex !== -1) {
-            const value = criteria[fulltextCriteriaIndex].value;
-            criteria.splice(fulltextCriteriaIndex, 1);
-            const filter = await ContactService.getInstance().prepareFullTextFilter(value.toString());
-            criteria = [...criteria, ...filter];
-        }
-        return criteria;
     }
 
 }

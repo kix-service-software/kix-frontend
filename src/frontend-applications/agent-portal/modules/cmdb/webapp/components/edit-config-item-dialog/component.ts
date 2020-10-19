@@ -62,7 +62,7 @@ class Component extends AbstractEditDialog {
                 if (validationError) {
                     this.showValidationError(result);
                 } else {
-                    DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update Config Item');
+                    BrowserUtil.toggleLoadingShield(true, 'Translatable#Update Config Item');
                     const cmdbService = ServiceRegistry.getServiceInstance<CMDBService>(KIXObjectType.CONFIG_ITEM);
                     const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
                     if (cmdbService && context) {
@@ -70,7 +70,7 @@ class Component extends AbstractEditDialog {
                         const versionId = await cmdbService.createConfigItemVersion(
                             this.state.formId, Number(context.getObjectId())
                         );
-                        DialogService.getInstance().setMainDialogLoading(false);
+                        BrowserUtil.toggleLoadingShield(false);
                         if (versionId) {
                             const updatedConfigItem = await context.getObject<ConfigItem>(
                                 KIXObjectType.CONFIG_ITEM, true,

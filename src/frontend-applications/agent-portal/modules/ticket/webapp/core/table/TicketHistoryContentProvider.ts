@@ -30,19 +30,17 @@ export class TicketHistoryContentProvider extends TableContentProvider<TicketHis
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
-            const ticket = await context.getObject<Ticket>();
-            if (ticket) {
-                for (const th of ticket.History) {
-                    const values: TableValue[] = [];
+            const history = await context.getObjectList<TicketHistory>(KIXObjectType.TICKET_HISTORY);
+            for (const th of history) {
+                const values: TableValue[] = [];
 
-                    const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
-                    for (const column of columns) {
-                        const tableValue = new TableValue(column.property, th[column.property]);
-                        values.push(tableValue);
-                    }
-
-                    rowObjects.push(new RowObject<TicketHistory>(values, th));
+                const columns = this.table.getColumns().map((c) => c.getColumnConfiguration());
+                for (const column of columns) {
+                    const tableValue = new TableValue(column.property, th[column.property]);
+                    values.push(tableValue);
                 }
+
+                rowObjects.push(new RowObject<TicketHistory>(values, th));
             }
         }
 

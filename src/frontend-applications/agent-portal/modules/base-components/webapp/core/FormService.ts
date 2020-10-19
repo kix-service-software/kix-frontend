@@ -63,11 +63,11 @@ export class FormService {
     }
 
     public async getFormInstance(
-        formId: string, cache: boolean = true, form?: FormConfiguration, kixObject?: KIXObject
+        formId: string, cache: boolean = true, kixObject?: KIXObject, readonly?: boolean
     ): Promise<FormInstance> {
         if (formId) {
             if (!this.formInstances.has(formId) || !cache) {
-                const formInstance = this.getNewFormInstance(formId, form, kixObject);
+                const formInstance = this.getNewFormInstance(formId, kixObject, readonly);
                 this.formInstances.set(formId, formInstance);
             }
             return await this.formInstances.get(formId);
@@ -75,11 +75,11 @@ export class FormService {
         return;
     }
 
-    private getNewFormInstance(formId: string, form: FormConfiguration, kixObject: KIXObject): Promise<FormInstance> {
+    private getNewFormInstance(formId: string, kixObject: KIXObject, readonly?: boolean): Promise<FormInstance> {
         return new Promise<FormInstance>(async (resolve, reject) => {
             this.deleteFormInstance(formId);
             const formInstance = new FormInstance();
-            await formInstance.initFormInstance(formId, kixObject);
+            await formInstance.initFormInstance(formId, kixObject, readonly);
             EventService.getInstance().publish(FormEvent.FORM_INITIALIZED, formInstance);
             resolve(formInstance);
         });

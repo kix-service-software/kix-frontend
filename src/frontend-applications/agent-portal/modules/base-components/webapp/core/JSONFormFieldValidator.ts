@@ -48,7 +48,7 @@ export class JSONFormFieldValidator implements IFormFieldValidator {
         try {
             JSON.parse(json);
         } catch (e) {
-            if (json.indexOf('{') !== -1 || json.indexOf('[') !== -1) {
+            if (json.match(/^\s*?(\{|\[)/) || json.match(/(\}|\])\s*$/)) {
                 return false;
             }
         }

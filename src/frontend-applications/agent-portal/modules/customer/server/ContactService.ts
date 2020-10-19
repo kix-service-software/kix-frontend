@@ -242,7 +242,7 @@ export class ContactAPIService extends KIXObjectAPIService {
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterCriteria = criteria.filter(
-            (f) => f.property !== ContactProperty.FULLTEXT && !this.isUserProperty(f.property)
+            (f) => !this.isUserProperty(f.property)
         );
 
         return filterCriteria;

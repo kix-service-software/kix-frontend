@@ -56,7 +56,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             if (validationError) {
                 this.showValidationError(result);
             } else {
-                DialogService.getInstance().setMainDialogLoading(true, 'Translatable#Update State');
+                BrowserUtil.toggleLoadingShield(true, 'Translatable#Update State');
 
                 const context = await ContextService.getInstance().getContext<TicketStateDetailsContext>(
                     TicketStateDetailsContext.CONTEXT_ID
@@ -66,13 +66,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     KIXObjectType.TICKET_STATE, this.state.formId, context.getObjectId()
                 ).then(async (typeId) => {
                     context.getObject(KIXObjectType.TICKET_STATE, true);
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    BrowserUtil.toggleLoadingShield(false);
 
                     const toast = await TranslationService.translate('Translatable#Changes saved.');
                     BrowserUtil.openSuccessOverlay(toast);
                     DialogService.getInstance().submitMainDialog();
                 }).catch((error: Error) => {
-                    DialogService.getInstance().setMainDialogLoading(false);
+                    BrowserUtil.toggleLoadingShield(false);
                     BrowserUtil.openErrorOverlay(`${error.Code}: ${error.Message}`);
                 });
             }

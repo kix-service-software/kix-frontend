@@ -1,0 +1,15 @@
+{
+    "name": "kix-module-setup-assistant",
+    "extensions": {
+        "kix:admin-module": {
+            "setup-assistant-admin-module": {
+                "module": "admin-module.extension"
+            }
+        },
+        "kix:modules": {
+            "setup-assistant-module": {
+                "module": "kix-module.extension"
+            }
+        }
+    }
+}

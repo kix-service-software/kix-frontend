@@ -13,9 +13,9 @@ import { ContextService } from '../../../../../modules/base-components/webapp/co
 import { AdminContext } from '../../core/AdminContext';
 import { ContextType } from '../../../../../model/ContextType';
 import { KIXModulesService } from '../../../../../modules/base-components/webapp/core/KIXModulesService';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { AdminModule } from '../../../model/AdminModule';
+import { AdministrationSocketClient } from '../../core';
+import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -27,11 +27,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ContextService.getInstance().registerListener({
             constexServiceListenerId: 'admin-module-context-service-listener',
             contextChanged: (contextId: string, c: AdminContext, type: ContextType, history: boolean) => {
-                if (contextId === AdminContext.CONTEXT_ID && c.adminModule) {
-                    this.state.template = KIXModulesService.getComponentTemplate(
-                        c.adminModule.componentId
-                    );
-                    (this as any).setStateDirty('template');
+                if (contextId === AdminContext.CONTEXT_ID && c.adminModuleId) {
+                    this.moduleChanged();
                 }
             },
             contextRegistered: () => { return; }
@@ -52,14 +49,37 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         ContextService.getInstance().unregisterListener('admin-module-context-service-listener');
     }
 
-    public moduleChanged(
-        objectId: string | number, object: KIXObject | any, type: KIXObjectType | string, changedProperties?: string[]
-    ): void {
-        if (object instanceof AdminModule) {
-            this.state.template = KIXModulesService.getComponentTemplate(object.componentId);
+    public async moduleChanged(): Promise<void> {
+        const context = await ContextService.getInstance().getContext<AdminContext>(AdminContext.CONTEXT_ID);
+        const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
+        const module = this.findAdminModule(categories, context.adminModuleId);
+        if (module) {
+            this.state.template = KIXModulesService.getComponentTemplate(module.componentId);
         }
     }
 
+    private findAdminModule(modules: Array<AdminModuleCategory | AdminModule>, moduleId: string): AdminModule {
+        for (const module of modules) {
+            if (module instanceof AdminModuleCategory) {
+                if (Array.isArray(module.modules)) {
+                    let found = this.findAdminModule(module.modules, moduleId);
+                    if (found) {
+                        return found;
+                    } else if (Array.isArray(module.children)) {
+                        found = this.findAdminModule(module.children, moduleId);
+                        if (found) {
+                            return found;
+                        }
+                    }
+                }
+            } else {
+                if (module.id === moduleId) {
+                    return module;
+                }
+            }
+        }
+        return null;
+    }
 }
 
 module.exports = Component;

@@ -66,6 +66,7 @@ class Component extends FormInputComponent<number, ComponentState> {
 
         const channelsOption = this.state.field.options.find((o) => o.option === 'CHANNELS');
         if (channelsOption && channelsOption.value && isArray(channelsOption.value) && channelsOption.value.length) {
+            this.state.channels = [];
             channelsOption.value.forEach((cid) => {
                 const channel = channels.find((c) => c.ID === cid);
                 if (channel) {
@@ -76,7 +77,7 @@ class Component extends FormInputComponent<number, ComponentState> {
             this.state.channels = channels;
         }
 
-        if (this.state.channels) {
+        if (this.state.channels && this.state.channels.length) {
             for (const channel of this.state.channels) {
                 const name = await LabelService.getInstance().getDisplayText(channel, ChannelProperty.NAME);
                 this.state.channelNames.push([channel.ID, name]);
