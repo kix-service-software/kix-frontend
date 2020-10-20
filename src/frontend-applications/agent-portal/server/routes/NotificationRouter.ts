@@ -14,6 +14,7 @@ import { CacheService } from '../services/cache';
 import { NotificationEvent } from '../../model/NotificationEvent';
 import { ObjectUpdatedEventData } from '../../model/ObjectUpdatedEventData';
 import { SocketService } from '../services/SocketService';
+import { LoggingService } from '../../../../server/services/LoggingService';
 
 export class NotificationRouter extends KIXRouter {
 
@@ -44,8 +45,12 @@ export class NotificationRouter extends KIXRouter {
     private async handleRequest(req: Request, res: Response): Promise<void> {
         if (Array.isArray(req.body)) {
             const objectEvents: ObjectUpdatedEventData[] = req.body;
-            await CacheService.getInstance().updateCaches(objectEvents);
-            SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, objectEvents);
+            CacheService.getInstance().updateCaches(objectEvents)
+                .then(() => {
+                    SocketService.getInstance().broadcast(NotificationEvent.UPDATE_EVENTS, objectEvents);
+                }).catch((error) => {
+                    LoggingService.getInstance().error(error);
+                });
         }
 
         res.status(201).send();
