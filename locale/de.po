@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-09-28 08:53+0000\n"
+"PO-Revision-Date: 2020-10-21 09:36+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
-"Language-Team: German <http://translate.kix18.docker.vm.devel.cape-it.de/"
-"projects/kix18/frontend-app/de/>\n"
+"Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
+"frontend-app/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 3.9.1\n"
+"X-Generator: Weblate 4.2.2\n"
 
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
@@ -75,7 +75,7 @@ msgid "Add CI Class"
 msgstr "Asset-Klasse hinzufügen"
 
 msgid "Add email account for incoming mails"
-msgstr ""
+msgstr "E-Mail Konto für eingehende E-Mails einrichten"
 
 msgid "Additional recipients"
 msgstr "Zusätzliche Empfänger"
@@ -99,7 +99,7 @@ msgid "Administrator's Guide"
 msgstr "Handbuch für Administratoren"
 
 msgid "Admin Password"
-msgstr ""
+msgstr "Admin Passwort"
 
 msgid "Advanced Search"
 msgstr "Komplexsuche"
@@ -357,7 +357,7 @@ msgid "Cc"
 msgstr "Cc"
 
 msgid "Change Admin Password"
-msgstr ""
+msgstr "Admin Passwort ändern"
 
 msgid "Changed"
 msgstr "Geändert"
@@ -484,7 +484,7 @@ msgid "Communication: Email: Email Filters"
 msgstr "Kommunikation: E-Mail: E-Mail Filter"
 
 msgid "Communication: Email: Inbox"
-msgstr ""
+msgstr "Kommunikation: E-Mail: Posteingang"
 
 msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
@@ -650,7 +650,7 @@ msgid "Create State"
 msgstr "Status wird angelegt"
 
 msgid "Create Superuser Account"
-msgstr ""
+msgstr "Superuser anlegen"
 
 msgid "Create Text Module"
 msgstr "Textbaustein wird angelegt"
@@ -728,7 +728,7 @@ msgid "Default Values"
 msgstr "Vordefinierte Werte"
 
 msgid "Define notification template"
-msgstr ""
+msgstr "Benachrichtigungs-Vorlage definieren"
 
 msgid "Delete"
 msgstr "Löschen"
@@ -2593,7 +2593,7 @@ msgid "Imprint"
 msgstr "Impressum"
 
 msgid "Inbox"
-msgstr ""
+msgstr "Posteingang"
 
 msgid "Incident"
 msgstr "Vorfall"
@@ -2813,7 +2813,7 @@ msgid "My Open Tickets"
 msgstr "Meine offenen Tickets"
 
 msgid "My Organisation"
-msgstr ""
+msgstr "Eigene Firma"
 
 msgid "My Queues"
 msgstr "Meine Teams"
@@ -3035,7 +3035,7 @@ msgid "Notification successfully created."
 msgstr "Benachrichtigung wurde erfolgreich angelegt."
 
 msgid "Notification Template"
-msgstr ""
+msgstr "Benachrichtigungs-Vorlage"
 
 msgid "Notification Text"
 msgstr "Benachrichtigungstext"
@@ -3128,7 +3128,7 @@ msgid "Other"
 msgstr "Sonstiges"
 
 msgid "Outbox"
-msgstr ""
+msgstr "Postausgang"
 
 msgid "Overall"
 msgstr "Gesamt"
@@ -3421,7 +3421,7 @@ msgid "Remove Types"
 msgstr "Typen löschen"
 
 msgid "Rename Your Organisation"
-msgstr ""
+msgstr "Eigene Firma eintragen"
 
 msgid "Replace empty value"
 msgstr "Leerwert ersetzen"
@@ -3509,25 +3509,25 @@ msgid "Save"
 msgstr "Speichern"
 
 msgid "Save & Continue"
-msgstr ""
+msgstr "Speichern & Weiter"
 
 msgid "Save & Fetch"
-msgstr ""
+msgstr "Speichern & Abrufen"
 
 msgid "Save & Logout"
-msgstr ""
+msgstr "Speichern & Ausloggen"
 
 msgid "Save new search"
 msgstr "Neue Suche speichern"
 
 msgid "Save notification template"
-msgstr ""
+msgstr "Benachrichtigungs-Vorlage speichern"
 
 msgid "Save Organisation"
 msgstr ""
 
 msgid "Save Outbox Settings"
-msgstr ""
+msgstr "Postausgangseinstellungen speichern"
 
 msgid "Save Search"
 msgstr "Suche speichern"
@@ -3617,7 +3617,7 @@ msgid "Set Email Headers"
 msgstr "E-Mail Header setzen"
 
 msgid "Set Password for admin"
-msgstr ""
+msgstr "Passwort für admin setzen"
 
 msgid "Setup Assistant"
 msgstr ""
@@ -3642,9 +3642,12 @@ msgstr ""
 
 msgid "setup_assistant_welcome_text"
 msgstr ""
+"Bitte führen Sie die folgenden Schritte aus, um die Grundeinstellungen für "
+"KIX zu setzen. Nähere Informationen dazu finden Sie auch im Admin-Handbuch "
+"im Abschnitt „Erste Schritte“."
 
 msgid "Setup email server"
-msgstr ""
+msgstr "E-Mail Server einrichten"
 
 msgid "setupt_assistant_my-organisation_text"
 msgstr ""
@@ -3686,7 +3689,7 @@ msgid "Skip"
 msgstr "Überspringen"
 
 msgid "Skip & Continue"
-msgstr ""
+msgstr "Überspringen & Weiter"
 
 msgid "Solution"
 msgstr "Lösung"
@@ -3776,7 +3779,7 @@ msgid "Sunday"
 msgstr "Sonntag"
 
 msgid "Superuser Account"
-msgstr ""
+msgstr "Nutzer Superuser"
 
 msgid "Switch"
 msgstr "Tauschen"
@@ -4260,7 +4263,7 @@ msgid "Weekday(s)"
 msgstr "Wochentag(e)"
 
 msgid "Welcome"
-msgstr ""
+msgstr "Wilkommen"
 
 msgid "Welcome to KIX 18"
 msgstr "Willkommen bei KIX 18"
