@@ -98,10 +98,11 @@ export class ArticleTableFactory extends TableFactory {
             tableConfiguration.toggleOptions = new ToggleOptions('ticket-article-details', 'article', [
                 'article-reply-action',
                 'article-forward-action',
-                'article-edit-action',
-                'article-communication-action',
-                'article-tag-action',
-                'article-maximize-action'
+                'article-get-plain-action',
+                // 'article-edit-action',
+                // 'article-communication-action',
+                // 'article-tag-action',
+                // 'article-maximize-action'
             ], true, null, null, true);
         }
 
