@@ -37,11 +37,14 @@ export class FormService {
 
     private constructor() { }
 
-    public addFormFieldValueHandler(objectType: KIXObjectType | string, handler: FormFieldValueHandler): void {
-        if (!this.formFieldValueHandler.has(objectType)) {
-            this.formFieldValueHandler.set(objectType, []);
+    public addFormFieldValueHandler(handler: FormFieldValueHandler): void {
+        if (!this.formFieldValueHandler.has(handler.objectType)) {
+            this.formFieldValueHandler.set(handler.objectType, []);
         }
-        this.formFieldValueHandler.get(objectType).push(handler);
+
+        if (!this.formFieldValueHandler.get(handler.objectType).some((h) => h.id === handler.id)) {
+            this.formFieldValueHandler.get(handler.objectType).push(handler);
+        }
     }
 
     public getFormFieldValueHandler(objectType: KIXObjectType | string): FormFieldValueHandler[] {
