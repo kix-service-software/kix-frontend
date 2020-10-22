@@ -179,7 +179,9 @@ class Component {
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
 
         const context = ContextService.getInstance().getActiveContext(this.contextType);
-        context.unregisterListener('table-widget-' + this.state.instanceId);
+        if (context) {
+            context.unregisterListener('table-widget-' + this.state.instanceId);
+        }
 
         TableFactoryService.getInstance().destroyTable(`table-widget-${this.state.instanceId}`);
     }
