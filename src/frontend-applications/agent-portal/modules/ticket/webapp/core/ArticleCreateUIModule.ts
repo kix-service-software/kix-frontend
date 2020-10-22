@@ -11,7 +11,7 @@ import { IUIModule } from '../../../../model/IUIModule';
 import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import {
     EmailRecipientValidator, TicketFormService, NewTicketArticleContext, ArticleNewAction,
-    ArticleReplyAction, ArticleForwardAction
+    ArticleReplyAction, ArticleForwardAction, ArticleGetPlainAction
 } from '.';
 import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
@@ -51,5 +51,6 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('article-new-action', ArticleNewAction);
         ActionFactory.getInstance().registerAction('article-reply-action', ArticleReplyAction);
         ActionFactory.getInstance().registerAction('article-forward-action', ArticleForwardAction);
+        ActionFactory.getInstance().registerAction('article-get-plain-action', ArticleGetPlainAction);
     }
 }
