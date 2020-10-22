@@ -40,7 +40,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                                 KIXObjectType.ANY, 'setup-sending-email',
                                 [
                                     new UIComponentPermission(
-                                        'system/config', [CRUD.READ], true
+                                        'system/config/SendmailModule', [CRUD.UPDATE], true
                                     )
                                 ]
                             )
