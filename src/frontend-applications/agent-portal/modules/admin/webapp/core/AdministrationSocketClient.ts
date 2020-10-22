@@ -42,20 +42,13 @@ export class AdministrationSocketClient extends SocketClient {
             return this.categories;
         }
 
-        const socketTimeout = ClientStorageService.getSocketTimeout();
-
         return new Promise<AdminModuleCategory[]>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
-
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + AdministrationEvent.LOAD_ADMIN_CATEGORIES);
-            }, socketTimeout);
 
             this.socket.on(
                 AdministrationEvent.ADMIN_CATEGORIES_LOADED,
                 (result: AdminCategoriesResponse) => {
                     if (result.requestId === requestId) {
-                        window.clearTimeout(timeout);
                         const categories = result.modules.map((m) => {
                             if (m['modules']) {
                                 return new AdminModuleCategory(m);
@@ -72,7 +65,6 @@ export class AdministrationSocketClient extends SocketClient {
 
             this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
-                    window.clearTimeout(timeout);
                     console.error(error.error);
                     reject(error.error);
                 }
