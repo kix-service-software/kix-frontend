@@ -65,6 +65,8 @@ export enum ArticleProperty {
 
     CHANGED_BY = 'ChangedBy',
 
+    PLAIN = 'Plain',
+
     ARTICLE_INFORMATION = 'ArticleInformation',
     NUMBER = 'Number',
     ARTICLE_TAG = 'ArticleTag',

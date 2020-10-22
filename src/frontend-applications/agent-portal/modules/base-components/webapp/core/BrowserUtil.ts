@@ -70,15 +70,17 @@ export class BrowserUtil {
         OverlayService.getInstance().openOverlay(OverlayType.ERROR_TOAST, null, content, 'Translatable#Access denied');
     }
 
-    public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
+    public static startBrowserDownload(
+        fileName: string, content: string, contentType: string, base64: boolean = true
+    ): void {
         content = content.replace(/\r?\n|\r/, '\n');
 
         const FileSaver = require('file-saver');
+        const blob = base64 ? this.b64toBlob(content, contentType)
+            : new Blob([content], { type: contentType });
         if (window.navigator.msSaveOrOpenBlob) {
-            const blob = this.b64toBlob(content, contentType);
             FileSaver.saveAs(blob, fileName);
         } else {
-            const blob = this.b64toBlob(content, contentType);
             const file = new File([blob], fileName, { type: contentType });
             FileSaver.saveAs(file);
         }

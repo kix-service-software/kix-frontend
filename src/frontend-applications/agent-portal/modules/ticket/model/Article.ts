@@ -78,6 +78,8 @@ export class Article extends KIXObject {
     public CreatedBy: number;
     public ChangedBy: number;
 
+    public Plain: string;
+
     // UI Properties
 
     public senderType: SenderType;
@@ -122,6 +124,7 @@ export class Article extends KIXObject {
             this.CreateTime = article.CreateTime;
             this.ChangedBy = article.ChangedBy;
             this.CreatedBy = article.CreatedBy;
+            this.Plain = article.Plain;
 
             this.bodyAttachment = article.bodyAttachment;
 
