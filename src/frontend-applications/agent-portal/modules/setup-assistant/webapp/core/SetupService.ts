@@ -107,7 +107,7 @@ export class SetupService {
 
     private async saveSetupSteps(): Promise<void> {
         const results = this.setupSteps.map((ss) => new SetupStepResult(ss.id, ss.completed, ss.skipped, ss.result));
-        KIXObjectService.updateObject(
+        await KIXObjectService.updateObject(
             KIXObjectType.SYS_CONFIG_OPTION,
             [[SysConfigOptionProperty.VALUE, JSON.stringify(results)]],
             SysConfigKey.SETUP_ASSISTANT_STATE
