@@ -26,7 +26,7 @@ export class ArticleGetPlainAction extends AbstractAction {
     public hasLink: boolean = true;
 
     public async initAction(): Promise<void> {
-        this.text = 'Translatable#Source';
+        this.text = 'Translatable#Source Message';
         this.icon = 'kix-icon-listview';
     }
 
