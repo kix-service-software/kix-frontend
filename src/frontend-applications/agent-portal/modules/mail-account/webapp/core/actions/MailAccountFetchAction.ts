@@ -35,7 +35,7 @@ export class MailAccountFetchAction extends AbstractAction {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`system/communication/mailaccounts/${objectId}`, [CRUD.UPDATE])
+            new UIComponentPermission(`system/communication/mailaccounts/${objectId}`, [CRUD.UPDATE], false, 'Object')
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

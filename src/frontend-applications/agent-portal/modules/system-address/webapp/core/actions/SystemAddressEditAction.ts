@@ -29,7 +29,9 @@ export class SystemAddressEditAction extends AbstractAction {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`system/communication/systemaddresses/${objectId}`, [CRUD.UPDATE])
+            new UIComponentPermission(
+                `system/communication/systemaddresses/${objectId}`, [CRUD.UPDATE], false, 'Object'
+            )
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

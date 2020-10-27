@@ -101,7 +101,7 @@ export class PermissionService {
         return true;
     }
 
-    private async  methodAllowed(token: string, permission: UIComponentPermission): Promise<boolean> {
+    private async methodAllowed(token: string, permission: UIComponentPermission): Promise<boolean> {
         if (permission.permissions && permission.permissions.length) {
             if (permission.target.startsWith('/')) {
                 permission.target = permission.target.substr(1, permission.target.length);
@@ -109,11 +109,12 @@ export class PermissionService {
 
             permission.target = permission.target.replace('\*', 'permissioncheck');
 
-            const response = await HttpService.getInstance().options(token, permission.target)
-                .catch((error) => {
-                    console.error(error);
-                    return null;
-                });
+            const response = await HttpService.getInstance().options(
+                token, permission.target, permission.permissionCheckMaxLayer
+            ).catch((error) => {
+                console.error(error);
+                return null;
+            });
 
             if (response !== null && permission.value) {
                 const permissionValue = Number(permission.value);

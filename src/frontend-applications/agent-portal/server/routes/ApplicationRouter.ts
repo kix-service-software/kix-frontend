@@ -88,11 +88,8 @@ export class ApplicationRouter extends KIXRouter {
             this.clearRequireCache('../applications/_app');
             const token: string = req.cookies.token;
             const options = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
-                token, '', KIXObjectType.SYS_CONFIG_OPTION,
-                [
-                    SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG
-                ], null, null
-            );
+                token, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG], null, null
+            ).catch((): SysConfigOption[] => []);
 
             const templatePath = path.join('..', '..', 'modules', 'agent-portal', 'webapp', 'application');
             const template = require(templatePath);
