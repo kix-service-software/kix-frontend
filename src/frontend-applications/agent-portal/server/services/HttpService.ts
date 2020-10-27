@@ -21,6 +21,7 @@ import { Error } from '../../../../server/model/Error';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { User } from '../../modules/user/model/User';
 import { PermissionError } from '../../modules/user/model/PermissionError';
+import { PermissionType } from '../../modules/user/model/PermissionType';
 
 
 export class HttpService {
@@ -135,9 +136,14 @@ export class HttpService {
         return errors;
     }
 
-    public async options(token: string, resource: string): Promise<OptionsResponse> {
+    public async options(
+        token: string, resource: string, permissionCheckMaxLayer: string = 'Resource'
+    ): Promise<OptionsResponse> {
         const options = {
-            method: RequestMethod.OPTIONS
+            method: RequestMethod.OPTIONS,
+            headers: {
+                'X-KIX-PermissionCheckMaxLayer': permissionCheckMaxLayer
+            }
         };
 
         const cacheKey = token + resource;

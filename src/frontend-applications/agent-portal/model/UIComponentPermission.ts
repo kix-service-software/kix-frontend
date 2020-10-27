@@ -16,7 +16,8 @@ export class UIComponentPermission {
     public constructor(
         public target: string,
         public permissions: CRUD[] = [],
-        public OR: boolean = false
+        public OR: boolean = false,
+        public permissionCheckMaxLayer: string = 'Resource'
     ) {
         permissions.forEach((p) => this.value = this.value | p);
     }
