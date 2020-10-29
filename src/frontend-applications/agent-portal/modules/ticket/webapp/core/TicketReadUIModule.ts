@@ -94,7 +94,7 @@ export class UIModule implements IUIModule {
         ServiceRegistry.registerObjectReferenceHandler('TicketsForAssetsHandler', new TicketsForAssetsHandler());
         ServiceRegistry.registerObjectReferenceHandler('SuggestedFAQHandler', new SuggestedFAQHandler());
 
-        FormService.getInstance().addFormFieldValueHandler(KIXObjectType.TICKET, new TicketFormFieldValueHandler());
+        FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());
 
         await this.registerContexts();
         this.registerTicketActions();

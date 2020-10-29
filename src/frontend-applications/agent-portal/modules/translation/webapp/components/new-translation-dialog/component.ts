@@ -43,7 +43,7 @@ class Component extends AbstractNewDialog {
     }
 
     protected async handleDialogSuccess(objectId: string | number): Promise<void> {
-        DialogService.getInstance().setMainDialogLoading(false);
+        BrowserUtil.toggleLoadingShield(false);
         DialogService.getInstance().submitMainDialog();
         FormService.getInstance().deleteFormInstance(this.state.formId);
         BrowserUtil.openSuccessOverlay(this.successHint);

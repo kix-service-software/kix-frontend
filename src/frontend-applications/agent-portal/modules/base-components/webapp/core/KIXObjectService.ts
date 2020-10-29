@@ -104,7 +104,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false,
-        cache: boolean = true, forceIds: boolean = false
+        cache: boolean = true, forceIds?: boolean
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
@@ -239,11 +239,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async updateObject(
         objectType: KIXObjectType | string, parameter: Array<[string, any]>, objectId: number | string,
-        catchError: boolean = true, cacheKeyPrefix: string = objectType
+        catchError: boolean = true, cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
 
-        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, cacheKeyPrefix)
+        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent)
             .catch((error: Error) => {
                 if (catchError) {
                     // TODO: Publish event to show an error dialog
@@ -266,10 +266,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async updateObject(
         objectType: KIXObjectType | string, parameter: Array<[string, any]>, objectId: number | string,
-        cacheKeyPrefix: string = objectType
+        cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
         const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
-            objectType, parameter, objectId, null, cacheKeyPrefix
+            objectType, parameter, objectId, null, cacheKeyPrefix, silent
         );
 
         return updatedObjectId;
@@ -551,22 +551,20 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
     }
 
     public static async loadDynamicField(name: string, id?: number): Promise<DynamicField> {
-        let dynamicFields: DynamicField[];
+        let dynamicField: DynamicField;
         if (name || id) {
-            const filter = id ? null : [
-                new FilterCriteria(
-                    DynamicFieldProperty.NAME, SearchOperator.EQUALS, FilterDataType.STRING,
-                    FilterType.AND, name
-                )
-            ];
-            dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, id ? [id] : null,
                 new KIXObjectLoadingOptions(
-                    filter, null, null, [DynamicFieldProperty.CONFIG]
+                    null, null, null, [DynamicFieldProperty.CONFIG]
                 ), null, true
             ).catch(() => [] as DynamicField[]);
+
+            if (Array.isArray(dynamicFields) && dynamicFields.length) {
+                dynamicField = dynamicFields.find((df) => df.Name === name);
+            }
         }
-        return dynamicFields && dynamicFields.length ? dynamicFields[0] : null;
+        return dynamicField;
     }
 
     public static getDynamicFieldName(property: string): string {

@@ -17,7 +17,9 @@ import { BreadcrumbInformation } from '../../../../../model/BreadcrumbInformatio
 import { TicketContext } from './TicketContext';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { TicketProperty } from '../../../model/TicketProperty';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { ArticleProperty } from '../../../model/ArticleProperty';
+import { Article } from '../../../model/Article';
+import { ArticleLoadingOptions } from '../../../model/ArticleLoadingOptions';
 
 export class TicketDetailsContext extends Context {
 
@@ -61,10 +63,8 @@ export class TicketDetailsContext extends Context {
         }
 
         if (reload && objectType === KIXObjectType.TICKET) {
+            this.listeners.forEach((l) => l.objectListChanged(KIXObjectType.ARTICLE, []));
             setTimeout(() => {
-                if (ticket) {
-                    this.setObjectList(KIXObjectType.ARTICLE, ticket.Articles);
-                }
                 this.listeners.forEach(
                     (l) => l.objectChanged(Number(this.objectId), ticket, KIXObjectType.TICKET, changedProperties)
                 );
@@ -82,16 +82,34 @@ export class TicketDetailsContext extends Context {
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null,
-            [
-                KIXObjectProperty.DYNAMIC_FIELDS, KIXObjectProperty.LINKS,
-                TicketProperty.HISTORY, TicketProperty.WATCHERS, TicketProperty.ARTICLES,
-                'Flags', 'Attachments', 'ObjectActions'],
-            [KIXObjectProperty.LINKS]
+            null, null, null, ['ObjectActions']
         );
 
         const ticket: Ticket = await this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
         return ticket;
     }
 
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
+        let objects = [];
+        if (objectType === KIXObjectType.ARTICLE) {
+            objects = await KIXObjectService.loadObjects<Article>(
+                KIXObjectType.ARTICLE, null,
+                new KIXObjectLoadingOptions(
+                    null, null, null, [ArticleProperty.FLAGS, ArticleProperty.ATTACHMENTS]
+                ), new ArticleLoadingOptions(this.objectId)
+            ).catch(() => [] as Article[]) || [];
+        } else if (objectType === KIXObjectType.TICKET_HISTORY) {
+            const tickets = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, [this.objectId],
+                new KIXObjectLoadingOptions(null, null, null, [TicketProperty.HISTORY])
+            );
+            if (Array.isArray(tickets) && tickets.length) {
+                objects = Array.isArray(tickets[0].History) ? tickets[0].History : [];
+            }
+        } else {
+            objects = await super.getObjectList(objectType);
+        }
+
+        return objects;
+    }
 }

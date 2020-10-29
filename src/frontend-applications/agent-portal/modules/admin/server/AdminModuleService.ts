@@ -27,7 +27,7 @@ export class AdminModuleService {
 
     private constructor() { }
 
-    public async getAdminModules(token: string): Promise<AdminModuleCategory[]> {
+    public async getAdminModules(token: string): Promise<Array<AdminModuleCategory | AdminModule>> {
         const moduleExtensions = await PluginService.getInstance().getExtensions<IAdminModuleExtension>(
             AgentPortalExtensions.ADMIN_MODULE
         );
@@ -44,52 +44,68 @@ export class AdminModuleService {
         return categories;
     }
 
-    private mergeCategory(categories: AdminModuleCategory[], category: AdminModuleCategory): void {
-        const existingCategory = categories.find((c) => c.id === category.id);
-        if (existingCategory) {
-            if (category.children) {
-                if (!existingCategory.children) {
-                    existingCategory.children = [];
+    private mergeCategory(categories: AdminModuleCategory[], module: AdminModuleCategory | AdminModule): void {
+        if (module instanceof AdminModuleCategory) {
+            const existingCategory = categories.find((c) => c.id === module.id);
+            if (existingCategory) {
+                if (module.children) {
+                    if (!existingCategory.children) {
+                        existingCategory.children = [];
+                    }
+                    module.children.forEach((c) => this.mergeCategory(existingCategory.children, c));
                 }
-                category.children.forEach((c) => this.mergeCategory(existingCategory.children, c));
-            }
 
-            if (category.modules) {
-                if (!existingCategory.modules) {
-                    existingCategory.modules = [];
+                if (module.modules) {
+                    if (!existingCategory.modules) {
+                        existingCategory.modules = [];
+                    }
+                    module.modules.forEach((m) => existingCategory.modules.push(m));
                 }
-                category.modules.forEach((m) => existingCategory.modules.push(m));
+            } else {
+                categories.push(module);
             }
         } else {
-            categories.push(category);
+            categories.push(module);
         }
     }
 
-    private async checkPermissions(token: string, categories: AdminModuleCategory[]): Promise<AdminModuleCategory[]> {
+    private async checkPermissions(
+        token: string, modules: Array<AdminModuleCategory | AdminModule>
+    ): Promise<AdminModuleCategory[]> {
         const result: AdminModuleCategory[] = [];
-        for (const category of categories) {
-            const modules: AdminModule[] = [];
+        for (const module of modules) {
+            if (module instanceof AdminModuleCategory) {
+                const childModules: AdminModule[] = [];
 
-            if (category.modules) {
-                for (const adminModule of category.modules) {
-                    const allowed = await PermissionService.getInstance().checkPermissions(
-                        token, adminModule.permissions
-                    );
+                if (module.modules) {
+                    for (const adminModule of module.modules) {
+                        const allowed = await PermissionService.getInstance().checkPermissions(
+                            token, adminModule.permissions
+                        );
 
-                    if (allowed) {
-                        modules.push(adminModule);
+                        if (allowed) {
+                            childModules.push(adminModule);
+                        }
                     }
                 }
-            }
 
-            category.modules = modules;
+                module.modules = childModules;
 
-            if (category.children && category.children.length) {
-                category.children = await this.checkPermissions(token, category.children);
-            }
+                if (module.children && module.children.length) {
+                    module.children = await this.checkPermissions(token, module.children);
+                }
 
-            if (!!category.modules.length || (category.children && !!category.children.length)) {
-                result.push(category);
+                if (!!module.modules.length || (module.children && !!module.children.length)) {
+                    result.push(module);
+                }
+            } else {
+                const allowed = await PermissionService.getInstance().checkPermissions(
+                    token, module.permissions
+                );
+
+                if (allowed) {
+                    result.push(module);
+                }
             }
         }
 

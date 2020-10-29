@@ -32,6 +32,7 @@ import { TranslationService } from '../../../../translation/webapp/core/Translat
 import { ServiceRegistry } from '../ServiceRegistry';
 import { IKIXObjectService } from '../IKIXObjectService';
 import { ObjectPropertyValueOption } from '../../../../../model/ObjectPropertyValueOption';
+import { ValidationSeverity } from '../ValidationSeverity';
 
 export abstract class AbstractDynamicFormManager implements IDynamicFormManager {
 
@@ -101,6 +102,15 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
 
             if (fields) {
                 for (const field of fields) {
+                    if (
+                        field.FieldType === DynamicFieldTypes.CI_REFERENCE
+                        && !await this.checkReadPermissions('/cmdb/configitems')
+                    ) { continue; }
+                    if (
+                        field.FieldType === DynamicFieldTypes.TICKET_REFERENCE
+                        && !await this.checkReadPermissions('/tickets')
+                    ) { continue; }
+
                     const translated = await TranslationService.translate(field.Label);
                     properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
                 }
@@ -248,7 +258,32 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                 return result;
             }
         }
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            return await this.getNodesForDF(dfName);
+        }
         return [];
+    }
+
+    private async getNodesForDF(name: string): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        const field = await KIXObjectService.loadDynamicField(name);
+        if (field) {
+            if (
+                field.FieldType === DynamicFieldTypes.SELECTION
+                && field.Config && field.Config.PossibleValues && field.Config.TranslatableValues
+            ) {
+                for (const pv in field.Config.PossibleValues) {
+                    if (field.Config.PossibleValues[pv]) {
+                        const value = field.Config.PossibleValues[pv]
+                            ? await TranslationService.translate(field.Config.PossibleValues[pv]) : pv;
+                        const node = new TreeNode(pv, value);
+                        nodes.push(node);
+                    }
+                }
+            }
+        }
+        return nodes;
     }
 
     public hasValueForProperty(property: string): boolean {
@@ -309,6 +344,22 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             const result = await extendedManager.validate();
             if (result) {
                 return result;
+            }
+        }
+        for (const value of this.values) {
+            if (value.operator === SearchOperator.BETWEEN && Array.isArray(value.value)) {
+                const start: Date = new Date(value.value[0]);
+                const end: Date = new Date(value.value[1]);
+                if (
+                    typeof start.getTime === 'function'
+                    && typeof end.getTime === 'function'
+                    && start.getTime() > end.getTime()
+                ) {
+                    value.valid = false;
+                    return [new ValidationResult(ValidationSeverity.ERROR, 'Translatable#Start time has to be before end time')];
+                } else {
+                    value.valid = true;
+                }
             }
         }
         return null;

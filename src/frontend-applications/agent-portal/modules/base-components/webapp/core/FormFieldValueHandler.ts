@@ -10,8 +10,13 @@
 import { FormInstance } from './FormInstance';
 import { FormFieldConfiguration } from '../../../../model/configuration/FormFieldConfiguration';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 
-export class FormFieldValueHandler {
+export abstract class FormFieldValueHandler {
+
+    public abstract id: string;
+
+    public abstract objectType: KIXObjectType | string;
 
     public async handleFormFieldValues(
         formInstance: FormInstance, changedFieldValues: Array<[FormFieldConfiguration, FormFieldValue]>

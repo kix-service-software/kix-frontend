@@ -221,13 +221,14 @@ describe('BrowserCacheService', () => {
                 const prefixes: string[] = (BrowserCacheService.getInstance() as any).getCacheKeyPrefix(KIXObjectType.TICKET);
                 expect(prefixes).exist;
                 expect(prefixes).an('array');
-                expect(prefixes.length).equals(5);
+                expect(prefixes.length).equals(6);
 
                 expect(prefixes.find((p) => p === KIXObjectType.TICKET)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.ORGANISATION)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CONTACT)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.QUEUE)).exist;
                 expect(prefixes.find((p) => p === KIXObjectType.CURRENT_USER)).exist;
+                expect(prefixes.find((p) => p === KIXObjectType.ARTICLE)).exist;
             });
 
             it('should resolve the namespace for Article', () => {

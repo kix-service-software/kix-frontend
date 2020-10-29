@@ -21,6 +21,8 @@ import { FilterType } from '../../../../model/FilterType';
 import { ObjectPropertyValue } from '../../../../model/ObjectPropertyValue';
 import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 import { Ticket } from '../../model/Ticket';
+import { IColumnConfiguration } from '../../../../model/configuration/IColumnConfiguration';
+import { ArticleProperty } from '../../model/ArticleProperty';
 
 export class TicketSearchDefinition extends SearchDefinition {
 
@@ -124,5 +126,42 @@ export class TicketSearchDefinition extends SearchDefinition {
         }
 
         return criteria;
+    }
+
+    public async getTableColumnConfiguration(searchParameter: Array<[string, any]>): Promise<IColumnConfiguration[]> {
+        const columns: IColumnConfiguration[] = await super.getTableColumnConfiguration(searchParameter);
+        if (columns) {
+            for (const column of columns) {
+                switch (column.property) {
+                    case TicketProperty.CREATE_TIME:
+                        column.property = TicketProperty.CREATED;
+                        break;
+                    case TicketProperty.CHANGE_TIME:
+                        column.property = TicketProperty.CHANGED;
+                        break;
+                    default:
+                }
+            }
+        }
+        return columns.filter(
+            (c) => c.property !== TicketProperty.CLOSE_TIME
+                && c.property !== TicketProperty.CREATED_PRIORITY_ID
+                && c.property !== TicketProperty.CREATED_QUEUE_ID
+                && c.property !== TicketProperty.CREATED_TYPE_ID
+                && c.property !== TicketProperty.CREATED_USER_ID
+                && c.property !== TicketProperty.CREATED_STATE_ID
+                && c.property !== TicketProperty.ARTICLE_CREATE_TIME
+                && c.property !== TicketProperty.ATTACHMENT_NAME
+                && c.property !== TicketProperty.BODY
+                && c.property !== TicketProperty.SUBJECT
+                && c.property !== TicketProperty.CC
+                && c.property !== TicketProperty.FROM
+                && c.property !== TicketProperty.TO
+                && c.property !== ArticleProperty.CHANNEL_ID
+                && c.property !== ArticleProperty.SENDER_TYPE_ID
+                && c.property !== TicketProperty.WATCH_USER_ID
+                && c.property !== TicketProperty.STATE_TYPE
+                && c.property !== TicketProperty.LAST_CHANGE_TIME
+        );
     }
 }

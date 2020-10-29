@@ -30,9 +30,9 @@ export class ArticleTableContentProvider extends TableContentProvider<Article> {
         const rowObjects = [];
         if (this.contextId) {
             const context = await ContextService.getInstance().getContext(this.contextId);
-            const articles = await context.getObjectList(KIXObjectType.ARTICLE);
+            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
             if (articles) {
-                (articles as Article[]).sort((a, b) => b.ArticleID - a.ArticleID);
+                articles.sort((a, b) => b.ArticleID - a.ArticleID);
 
                 for (let i = 0; i < articles.length; i++) {
                     const a = articles[i];

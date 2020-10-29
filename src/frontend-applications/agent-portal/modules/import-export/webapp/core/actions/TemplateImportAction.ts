@@ -13,8 +13,6 @@ import { ApplicationEvent } from '../../../../base-components/webapp/core/Applic
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Row } from '../../../../base-components/webapp/core/table';
 import { ImportExportTemplate } from '../../../model/ImportExportTemplate';
-import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
-import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 import { AttachmentUtil } from '../../../../base-components/webapp/core/AttachmentUtil';
 import { AttachmentError } from '../../../../../model/AttachmentError';
 import { OverlayService } from '../../../../base-components/webapp/core/OverlayService';
@@ -27,27 +25,12 @@ import { ToastContent } from '../../../../base-components/webapp/core/ToastConte
 import { ImportExportTemplateRunProperty } from '../../../model/ImportExportTemplateRunProperty';
 import { ImportExportTemplateRunTypes } from '../../../model/ImportExportTemplateRunTypes';
 import { CreateImportExportTemplateRunOptions } from '../../../model/CreateImportExportTemplateRunOptions';
-import { ContextService } from '../../../../base-components/webapp/core/ContextService';
-import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 export class TemplateImportAction extends AbstractAction {
 
     public async initAction(): Promise<void> {
         this.text = 'Translatable#Import';
         this.icon = 'kix-icon-import';
-    }
-
-    public async canShow(): Promise<boolean> {
-        let show = false;
-        const context = ContextService.getInstance().getActiveContext();
-        const objectId = context.getObjectId();
-
-        const permissions = [
-            new UIComponentPermission(`/system/importexport/templates/${objectId}/runs`, [CRUD.CREATE])
-        ];
-
-        show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);
-        return show;
     }
 
     public canRun(): boolean {

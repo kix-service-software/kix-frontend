@@ -34,6 +34,10 @@ import { UserPasswordValidator } from './UserPasswordValidator';
 import { FormValidationService } from '../../../../modules/base-components/webapp/core/FormValidationService';
 import { AgentService } from './AgentService';
 import { PersonalSettingsFormService } from './PersonalSettingsFormService';
+import { SetupService } from '../../../setup-assistant/webapp/core/SetupService';
+import { SetupStep } from '../../../setup-assistant/webapp/core/SetupStep';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 
 export class UIModule implements IUIModule {
@@ -77,12 +81,33 @@ export class UIModule implements IUIModule {
         await this.registerRole();
 
         FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
+
+        await SetupService.getInstance().registerSetupStep(
+            new SetupStep(
+                'SuperUserAccount', 'Translatable#Superuser Account', 'setup-superuser',
+                [
+                    new UIComponentPermission('contacts', [CRUD.CREATE]),
+                    new UIComponentPermission('system/users', [CRUD.CREATE])
+                ],
+                'Translatable#Create Superuser Account', 'Translatable#setup_assistant_create_superuser_text',
+                'kix-icon-man', 10
+            )
+        );
+
+        await SetupService.getInstance().registerSetupStep(
+            new SetupStep(
+                'Mail', 'Translatable#Admin Password', 'setup-admin-password',
+                [
+                    new UIComponentPermission('system/users/1', [CRUD.UPDATE])
+                ],
+                'Translatable#Set Password for admin', 'Translatable#setup_assistant_change_admin_password_text',
+                'kix-icon-admin', 20
+            )
+        );
     }
 
     private async registerUser(): Promise<void> {
-
         ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
-
         ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
 
         const userDetailsContextDescriptor = new ContextDescriptor(

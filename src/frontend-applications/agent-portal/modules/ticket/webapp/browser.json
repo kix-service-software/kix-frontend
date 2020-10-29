@@ -47,6 +47,11 @@
         "require ./components/ticket-state-info-widget",
         "require ./components/ticket-type-assigned-textmodules",
         "require ./components/ticket-type-info-widget",
-        "require ./core"
+        "require ./core",
+        "require ./core/TicketAdminUIModule",
+        "require ./core/TicketCreateUIModule",
+        "require ./core/TicketReadUIModule",
+        "require ./core/TicketUpdateUIModule",
+        "require ./core/ArticleCreateUIModule"
     ]
 }

@@ -17,6 +17,8 @@ import { LabelService } from '../../../base-components/webapp/core/LabelService'
 import { ExtendedDynamicFieldPlaceholderHandler } from './ExtendedDynamicFieldPlaceholderHandler';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { AbstractPlaceholderHandler } from '../../../base-components/webapp/core/AbstractPlaceholderHandler';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -54,15 +56,27 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
     }
 
     public async replaceDFValue(object: KIXObject, optionString: string): Promise<string> {
+        let objectWithDF = object;
+        if (object && (!object.DynamicFields) || !object.DynamicFields.length) {
+            const objects = await KIXObjectService.loadObjects(
+                object.KIXObjectType, [object.ObjectId],
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+            );
+
+            if (Array.isArray(objects) && objects.length) {
+                objectWithDF = objects[0];
+            }
+        }
+
         for (const extendedHandler of this.extendedPlaceholderHandler) {
-            const value = await extendedHandler.replaceDFValue(object, optionString);
+            const value = await extendedHandler.replaceDFValue(objectWithDF, optionString);
             if (value) {
                 return value;
             }
         }
 
         let result = '';
-        if (object && Array.isArray(object.DynamicFields)) {
+        if (objectWithDF && Array.isArray(objectWithDF.DynamicFields)) {
             if (optionString) {
                 let dfName = optionString;
                 let dfValueOptions = '';
@@ -71,9 +85,9 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                     dfName = dfName.replace(/(.+?)_.+/, '$1');
                 }
 
-                const dfValue = dfName ? object.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
+                const dfValue = dfName ? objectWithDF.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
                 if (dfValue) {
-                    result = await this.getDFDisplayValue(object, dfValue, dfValueOptions);
+                    result = await this.getDFDisplayValue(objectWithDF, dfValue, dfValueOptions);
                 }
             }
         }

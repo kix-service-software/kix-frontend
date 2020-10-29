@@ -19,6 +19,8 @@ import { IContextListener } from '../../../../../modules/base-components/webapp/
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Context } from '../../../../../model/Context';
+import { AbstractAction } from '../../core/AbstractAction';
+import { IAction } from '../../core/IAction';
 
 export class Component implements IActionListener {
 
@@ -34,12 +36,28 @@ export class Component implements IActionListener {
         this.state = new ComponentState();
         this.listenerInstanceId = input.instanceId;
         this.contextListernerId = IdService.generateDateBasedId('action-list-');
+        this.initActionList(input);
     }
 
-    public onInput(input: any): void {
-        this.state.actionList = input.list;
+    private async initActionList(input: any): Promise<void> {
+        await this.setActionList(input.list);
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
-        this.prepareActionLists();
+        this.state.prepared = true;
+        setTimeout(() => this.prepareActionLists(), 100);
+    }
+
+    private async setActionList(actionList: IAction[]): Promise<void> {
+        const actions = [];
+        if (Array.isArray(actionList)) {
+            for (const action of actionList) {
+                const canShow = await action.canShow();
+                if (canShow) {
+                    actions.push(action);
+                }
+            }
+        }
+
+        this.state.actionList = actions;
     }
 
     public onMount(): void {
@@ -104,10 +122,10 @@ export class Component implements IActionListener {
         this.state.keepShow = !this.state.keepShow;
     }
 
-    public actionsChanged(): void {
+    public async actionsChanged(): Promise<void> {
         const actions = WidgetService.getInstance().getRegisteredActions(this.listenerInstanceId);
         if (actions) {
-            this.state.actionList = actions[0];
+            await this.setActionList(actions[0]);
             this.state.displayText = actions[1];
             this.prepareActionLists();
         }

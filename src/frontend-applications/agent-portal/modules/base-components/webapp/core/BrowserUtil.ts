@@ -16,6 +16,12 @@ import { ConfirmOverlayContent } from './ConfirmOverlayContent';
 import { RefreshToastSettings } from './RefreshToastSettings';
 import { DateTimeUtil } from './DateTimeUtil';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
+import { ValidationResult } from './ValidationResult';
+import { ValidationSeverity } from './ValidationSeverity';
+import { EventService } from './EventService';
+import { ApplicationEvent } from './ApplicationEvent';
+import { LoadingShieldEventData } from './LoadingShieldEventData';
+import { ContextHistory } from './ContextHistory';
 
 
 export class BrowserUtil {
@@ -64,15 +70,17 @@ export class BrowserUtil {
         OverlayService.getInstance().openOverlay(OverlayType.ERROR_TOAST, null, content, 'Translatable#Access denied');
     }
 
-    public static startBrowserDownload(fileName: string, content: string, contentType: string): void {
+    public static startBrowserDownload(
+        fileName: string, content: string, contentType: string, base64: boolean = true
+    ): void {
         content = content.replace(/\r?\n|\r/, '\n');
 
         const FileSaver = require('file-saver');
+        const blob = base64 ? this.b64toBlob(content, contentType)
+            : new Blob([content], { type: contentType });
         if (window.navigator.msSaveOrOpenBlob) {
-            const blob = this.b64toBlob(content, contentType);
             FileSaver.saveAs(blob, fileName);
         } else {
-            const blob = this.b64toBlob(content, contentType);
             const file = new File([blob], fileName, { type: contentType });
             FileSaver.saveAs(file);
         }
@@ -209,6 +217,34 @@ export class BrowserUtil {
             element.click();
             document.body.removeChild(element);
         }
+    }
+
+    public static showValidationError(result: ValidationResult[]): void {
+        const errorMessages = result.filter((r) => r.severity === ValidationSeverity.ERROR).map((r) => r.message);
+        const content = new ComponentContent('list-with-title',
+            {
+                title: 'Translatable#Error on form validation:',
+                list: errorMessages
+            }
+        );
+
+        OverlayService.getInstance().openOverlay(
+            OverlayType.WARNING, null, content, 'Translatable#Validation error', null, true
+        );
+    }
+
+    public static toggleLoadingShield(
+        loading: boolean, hint?: string, time?: number, cancelCallback?: () => void, cancelButtonText?: string
+    ): void {
+        EventService.getInstance().publish(
+            ApplicationEvent.TOGGLE_LOADING_SHIELD,
+            new LoadingShieldEventData(loading, hint, time, cancelCallback, cancelButtonText)
+        );
+    }
+
+    public static logout(): void {
+        ContextHistory.getInstance().removeBrowserListener();
+        window.location.replace('/auth/logout');
     }
 
 }
