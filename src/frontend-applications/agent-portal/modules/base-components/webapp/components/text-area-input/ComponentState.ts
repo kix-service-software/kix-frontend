@@ -13,7 +13,8 @@ export class ComponentState extends FormInputComponentState<string> {
 
     public constructor(
         public currentValue: string = null,
-        public placeholder: string = null
+        public placeholder: string = null,
+        public rows: number = 5
     ) {
         super();
     }

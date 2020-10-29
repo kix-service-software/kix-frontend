@@ -29,7 +29,7 @@ export class MailFilterEditAction extends AbstractAction {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`system/communication/mailfilters/${objectId}`, [CRUD.UPDATE])
+            new UIComponentPermission(`system/communication/mailfilters/${objectId}`, [CRUD.UPDATE], false, 'Object')
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

@@ -99,11 +99,18 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async setToggleActions(): Promise<void> {
-        this.state.actions = this.toggleOptions && this.state.row
+        const actions = this.toggleOptions && this.state.row
             ? await ActionFactory.getInstance().generateActions(
                 this.toggleOptions.actions, [this.state.row.getRowObject().getObject()]
             )
             : [];
+        const filteredActions = [];
+        for (const a of actions) {
+            if (await a.canShow()) {
+                filteredActions.push(a);
+            }
+        }
+        this.state.actions = filteredActions;
     }
 
     public calculateToggleContentMinHeight(index: number): string {

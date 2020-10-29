@@ -10,7 +10,6 @@
 import { KIXObjectService } from '../../../../modules/base-components/webapp/core/KIXObjectService';
 import { Contact } from '../../model/Contact';
 import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
-import { ContactProperty } from '../../model/ContactProperty';
 import { TreeNode } from '../../../base-components/webapp/core/tree';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
@@ -19,6 +18,7 @@ import { FilterCriteria } from '../../../../model/FilterCriteria';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../model/FilterDataType';
 import { FilterType } from '../../../../model/FilterType';
+import { SearchProperty } from '../../../search/model/SearchProperty';
 
 export class ContactService extends KIXObjectService<Contact> {
 
@@ -93,7 +93,7 @@ export class ContactService extends KIXObjectService<Contact> {
     public async prepareFullTextFilter(searchValue): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                ContactProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
+                SearchProperty.FULLTEXT, SearchOperator.LIKE, FilterDataType.STRING, FilterType.AND, searchValue
             )
         ];
     }

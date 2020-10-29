@@ -30,7 +30,7 @@ export class NotificationEditAction extends AbstractAction {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`system/communication/notifications/${objectId}`, [CRUD.UPDATE])
+            new UIComponentPermission(`system/communication/notifications/${objectId}`, [CRUD.UPDATE], false, 'Object')
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

@@ -170,11 +170,19 @@ class Component {
 
     public onDestroy(): void {
         WidgetService.getInstance().unregisterActions(this.state.instanceId);
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_CREATED, this.subscriber);
+        EventService.getInstance().unsubscribe(ApplicationEvent.OBJECT_UPDATED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.TABLE_READY, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.ROW_SELECTION_CHANGED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.RELOADED, this.subscriber);
         EventService.getInstance().unsubscribe(TableEvent.RELOAD, this.subscriber);
         EventService.getInstance().unsubscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
+
+        const context = ContextService.getInstance().getActiveContext(this.contextType);
+        if (context) {
+            context.unregisterListener('table-widget-' + this.state.instanceId);
+        }
+
         TableFactoryService.getInstance().destroyTable(`table-widget-${this.state.instanceId}`);
     }
 

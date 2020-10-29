@@ -28,6 +28,7 @@ import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptio
 import { UserProperty } from '../../../user/model/UserProperty';
 import { StateType } from '../../model/StateType';
 import { QueueProperty } from '../../model/QueueProperty';
+import { ArticleProperty } from '../../model/ArticleProperty';
 
 export class TicketLabelProvider extends LabelProvider<Ticket> {
 
@@ -287,6 +288,12 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.WATCH_USER_ID:
                 displayValue = 'Translatable#Watch User';
+                break;
+            case ArticleProperty.CHANNEL_ID:
+                displayValue = 'Translatable#Channel';
+                break;
+            case ArticleProperty.SENDER_TYPE_ID:
+                displayValue = 'Translatable#Sender Type';
                 break;
             default:
                 displayValue = await super.getPropertyText(property, short, translatable);

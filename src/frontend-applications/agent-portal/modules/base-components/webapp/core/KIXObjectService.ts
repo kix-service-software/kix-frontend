@@ -104,7 +104,7 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
         objectType: KIXObjectType | string, objectIds?: Array<number | string>,
         loadingOptions?: KIXObjectLoadingOptions,
         objectLoadingOptions?: KIXObjectSpecificLoadingOptions, silent: boolean = false,
-        cache: boolean = true, forceIds: boolean = false
+        cache: boolean = true, forceIds?: boolean
     ): Promise<T[]> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
         let objects = [];
@@ -239,11 +239,11 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public static async updateObject(
         objectType: KIXObjectType | string, parameter: Array<[string, any]>, objectId: number | string,
-        catchError: boolean = true, cacheKeyPrefix: string = objectType
+        catchError: boolean = true, cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectService>(objectType);
 
-        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, cacheKeyPrefix)
+        const updatedObjectId = await service.updateObject(objectType, parameter, objectId, cacheKeyPrefix, silent)
             .catch((error: Error) => {
                 if (catchError) {
                     // TODO: Publish event to show an error dialog
@@ -266,10 +266,10 @@ export abstract class KIXObjectService<T extends KIXObject = KIXObject> implemen
 
     public async updateObject(
         objectType: KIXObjectType | string, parameter: Array<[string, any]>, objectId: number | string,
-        cacheKeyPrefix: string = objectType
+        cacheKeyPrefix: string = objectType, silent?: boolean
     ): Promise<string | number> {
         const updatedObjectId = await KIXObjectSocketClient.getInstance().updateObject(
-            objectType, parameter, objectId, null, cacheKeyPrefix
+            objectType, parameter, objectId, null, cacheKeyPrefix, silent
         );
 
         return updatedObjectId;

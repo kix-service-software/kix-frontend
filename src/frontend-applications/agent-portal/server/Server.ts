@@ -261,12 +261,24 @@ export class Server implements IServer {
                 Name: SysConfigKey.BROWSER_SOCKET_TIMEOUT_CONFIG,
                 Description: 'Timeout (in ms) configuration for socket requests.',
                 Default: '30000',
-                Context: serverConfig.NOTIFICATION_CLIENT_ID,
+                Context: 'kix18-web-frontend',
                 ContextMetadata: 'agent-portal-configuration',
                 Type: 'String',
                 IsRequired: 0
             };
             sysconfigOptionDefinitions.push(browserTimeoutConfig);
+
+            const setupAssistantConfig: any = {
+                AccessLevel: SysConfigAccessLevel.INTERNAL,
+                Name: SysConfigKey.SETUP_ASSISTANT_STATE,
+                Description: 'The state of the setup steps for the agent portal setup assistant.',
+                Default: JSON.stringify([]),
+                Context: 'kix18-web-frontend',
+                ContextMetadata: 'agent-portal-configuration',
+                Type: 'String',
+                IsRequired: 0
+            };
+            sysconfigOptionDefinitions.push(setupAssistantConfig);
 
             return sysconfigOptionDefinitions;
         }

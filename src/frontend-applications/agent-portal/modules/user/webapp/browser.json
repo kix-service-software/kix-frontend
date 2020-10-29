@@ -11,6 +11,8 @@
         "require ./components/personal-settings-dialog",
         "require ./components/permissions-form-input",
         "require ./components/permission-input",
+        "require ./components/setup-superuser",
+        "require ./components/setup-admin-password",
         "require ./core"
     ]
 }

@@ -59,7 +59,6 @@ export class ArticlePlaceholderHandler extends AbstractPlaceholderHandler {
                         result = await LabelService.getInstance().getDisplayText(
                             article, attribute, undefined, false, false
                         );
-                        result = result.toString().replace('<', '&lt;').replace('>', '&gt;');
                         break;
                     case KIXObjectProperty.CREATE_TIME:
                     case KIXObjectProperty.CHANGE_TIME:

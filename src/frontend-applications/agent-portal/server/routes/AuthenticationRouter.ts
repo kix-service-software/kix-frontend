@@ -120,7 +120,7 @@ export class AuthenticationRouter extends KIXRouter {
         const imprintConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
             config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.IMPRINT_LINK],
             undefined, undefined
-        );
+        ).catch(() => []);
 
         if (imprintConfig && imprintConfig.length) {
             const data = imprintConfig[0].Value;
@@ -128,7 +128,7 @@ export class AuthenticationRouter extends KIXRouter {
             const defaultLangConfig = await SysConfigService.getInstance().loadObjects<SysConfigOption>(
                 config.BACKEND_API_TOKEN, '', KIXObjectType.SYS_CONFIG_OPTION, [SysConfigKey.DEFAULT_LANGUAGE],
                 undefined, undefined
-            );
+            ).catch(() => []);
 
             if (defaultLangConfig && defaultLangConfig.length) {
                 imprintLink = data[defaultLangConfig[0].Value];

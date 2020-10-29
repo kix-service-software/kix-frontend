@@ -50,8 +50,26 @@ class EditorComponent {
                 this.editor.insertHtml(input.addValue);
             }
 
-            if (input.value !== null) {
-                const contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
+            // if editor has no value or is not focused, set "new" value
+            if (
+                input.value !== null
+                && (
+                    (this.editor.focusManager && !this.editor.focusManager.hasFocus)
+                    || !this.editor.getData()
+                )
+            ) {
+                let contentString = this.replaceInlineContent(input.value ? input.value : '', input.inlineContent);
+                const matches = contentString.match(
+                    /<(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))>/ig);
+                if (matches) {
+                    for (const m in matches) {
+                        if (matches.hasOwnProperty(m)) {
+                            let replacedString = matches[m].replace(/>/g, '&gt;');
+                            replacedString = replacedString.replace(/</g, '&lt;');
+                            contentString = contentString.replace(matches[m], replacedString);
+                        }
+                    }
+                }
                 if (this.editor.getData() !== contentString) {
                     this.editor.setData(contentString, () => {
                         this.editor.updateElement();
@@ -131,9 +149,29 @@ class EditorComponent {
                 }
             });
 
-            this.editor.on('blur', (event) => {
-                const value = event.editor.getData();
-                (this as any).emit('valueChanged', value);
+            const changeListener = () => {
+                if (this.changeTimeout) {
+                    window.clearTimeout(this.changeTimeout);
+                    this.changeTimeout = null;
+                }
+
+                this.changeTimeout = setTimeout(() => {
+                    const value = this.editor.getData();
+                    (this as any).emit('valueChanged', value);
+                    this.changeTimeout = null;
+                }, 200);
+            };
+
+            this.editor.on('change', changeListener);
+            this.editor.on('mode', () => {
+                const editable = this.editor.editable();
+                if (editable) {
+                    if (this.editor.mode === 'source') {
+                        editable.attachListener(editable, 'input', changeListener);
+                    } else {
+                        editable.removeListener('input', changeListener);
+                    }
+                }
             });
 
             if (this.state.readOnly) {

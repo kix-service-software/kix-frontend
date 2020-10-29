@@ -23,6 +23,10 @@ import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 
 export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
+    public objectType: string = KIXObjectType.TICKET;
+
+    public id: string = 'TicketFormFieldValueHandler';
+
     public async handleFormFieldValues(
         formInstance: FormInstance, changedFieldValues: Array<[FormFieldConfiguration, FormFieldValue]>
     ): Promise<void> {
@@ -105,7 +109,7 @@ export class TicketFormFieldValueHandler extends FormFieldValueHandler {
 
             date.setSeconds(date.getSeconds() + Number(offset));
             formInstance.provideFormFieldValues(
-                [[pendingField.instanceId, date]], null
+                [[pendingField.instanceId, date]], null, true
             );
         }
     }

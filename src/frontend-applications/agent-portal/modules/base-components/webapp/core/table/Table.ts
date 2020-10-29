@@ -431,19 +431,11 @@ export class Table implements Table {
     }
 
     public selectAll(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select(undefined, true, withoutFilter, true));
-        EventService.getInstance().publish(
-            TableEvent.ROW_SELECTION_CHANGED,
-            new TableEventData(this.getTableId(), null)
-        );
+        this.getRows(withoutFilter).forEach((r) => r.select(undefined, true, withoutFilter, false));
     }
 
     public selectNone(withoutFilter: boolean = false): void {
-        this.getRows(withoutFilter).forEach((r) => r.select(false, true, withoutFilter, true));
-        EventService.getInstance().publish(
-            TableEvent.ROW_SELECTION_CHANGED,
-            new TableEventData(this.getTableId(), null)
-        );
+        this.getRows(withoutFilter).forEach((r) => r.select(false, true, withoutFilter, false));
     }
 
     public selectRowByObject(object: any, select?: boolean): void {

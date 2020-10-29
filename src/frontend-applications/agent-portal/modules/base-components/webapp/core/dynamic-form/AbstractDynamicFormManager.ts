@@ -258,7 +258,32 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                 return result;
             }
         }
+        const dfName = KIXObjectService.getDynamicFieldName(property);
+        if (dfName) {
+            return await this.getNodesForDF(dfName);
+        }
         return [];
+    }
+
+    private async getNodesForDF(name: string): Promise<TreeNode[]> {
+        const nodes: TreeNode[] = [];
+        const field = await KIXObjectService.loadDynamicField(name);
+        if (field) {
+            if (
+                field.FieldType === DynamicFieldTypes.SELECTION
+                && field.Config && field.Config.PossibleValues && field.Config.TranslatableValues
+            ) {
+                for (const pv in field.Config.PossibleValues) {
+                    if (field.Config.PossibleValues[pv]) {
+                        const value = field.Config.PossibleValues[pv]
+                            ? await TranslationService.translate(field.Config.PossibleValues[pv]) : pv;
+                        const node = new TreeNode(pv, value);
+                        nodes.push(node);
+                    }
+                }
+            }
+        }
+        return nodes;
     }
 
     public hasValueForProperty(property: string): boolean {

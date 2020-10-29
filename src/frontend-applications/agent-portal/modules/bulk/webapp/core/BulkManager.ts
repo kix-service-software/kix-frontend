@@ -158,7 +158,7 @@ export abstract class BulkManager extends AbstractDynamicFormManager {
             parameter.push([KIXObjectProperty.DYNAMIC_FIELDS, dfObjectValues]);
         }
 
-        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId, false);
+        await KIXObjectService.updateObject(this.objectType, parameter, object.ObjectId, false, undefined, true);
     }
 
     public async getEditableValues(): Promise<ObjectPropertyValue[]> {
