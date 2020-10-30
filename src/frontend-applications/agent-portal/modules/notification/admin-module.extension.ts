@@ -35,7 +35,7 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                         KIXObjectType.ANY, 'setup-notification-template',
                         [
                             new UIComponentPermission(
-                                'system/config', [CRUD.READ], true
+                                'system/config/Notification::Template', [CRUD.UPDATE], true
                             )
                         ]
                     )

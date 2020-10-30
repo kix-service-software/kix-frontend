@@ -30,7 +30,7 @@ export class TicketPriorityEditAction extends AbstractAction {
         const objectId = context.getObjectId();
 
         const permissions = [
-            new UIComponentPermission(`system/ticket/priorities/${objectId}`, [CRUD.UPDATE])
+            new UIComponentPermission(`system/ticket/priorities/${objectId}`, [CRUD.UPDATE], false, 'Object')
         ];
 
         show = await AuthenticationSocketClient.getInstance().checkPermissions(permissions);

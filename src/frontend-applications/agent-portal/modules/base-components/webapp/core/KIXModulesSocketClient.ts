@@ -46,26 +46,19 @@ export class KIXModulesSocketClient extends SocketClient {
     }
 
     public async loadModules(): Promise<IKIXModuleExtension[]> {
-        const socketTimeout = ClientStorageService.getSocketTimeout();
 
         return new Promise<IKIXModuleExtension[]>((resolve, reject) => {
             const requestId = IdService.generateDateBasedId();
             const request = new LoadKIXModulesRequest(requestId, ClientStorageService.getClientRequestId());
 
-            const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + KIXModulesEvent.LOAD_MODULES);
-            }, socketTimeout);
-
             this.socket.on(KIXModulesEvent.LOAD_MODULES_FINISHED, (result: LoadKIXModulesResponse) => {
                 if (requestId === result.requestId) {
-                    window.clearTimeout(timeout);
                     resolve(result.modules);
                 }
             });
 
             this.socket.on(SocketEvent.ERROR, (error: SocketErrorResponse) => {
                 if (error.requestId === requestId) {
-                    window.clearTimeout(timeout);
                     console.error(error.error);
                     reject(error.error);
                 }
@@ -149,7 +142,7 @@ export class KIXModulesSocketClient extends SocketClient {
             const requestId = IdService.generateDateBasedId();
 
             const timeout = window.setTimeout(() => {
-                reject('Timeout: ' + KIXModulesEvent.LOAD_MODULES);
+                reject('Timeout: ' + KIXModulesEvent.LOAD_RELEASE_INFO);
             }, socketTimeout);
 
             this.socket.on(KIXModulesEvent.LOAD_RELEASE_INFO_FINISHED, (result: LoadReleaseInfoResponse) => {

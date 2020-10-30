@@ -42,6 +42,8 @@ import { ServiceRegistry } from '../../../../../modules/base-components/webapp/c
 import { CreateLinkObjectOptions } from '../../../server/api/CreateLinkObjectOptions';
 import { Error } from '../../../../../../../server/model/Error';
 import { IKIXObjectService } from '../../../../../modules/base-components/webapp/core/IKIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 
 class Component {
 
@@ -83,30 +85,40 @@ class Component {
 
             this.state.allowDelete = this.state.allowCreate;
 
-            this.mainObject = await context.getObject();
+            const contextObject = await context.getObject();
 
-            this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);
-            this.availableLinkObjects.sort((a, b) => {
-                return SortUtil.compareValues(a.linkedObjectType, b.linkedObjectType, DataType.STRING);
-            });
-            this.state.linkObjectCount = this.availableLinkObjects.length;
-
-            await this.reviseLinkObjects();
-            await this.setInitialLinkDescriptions();
-
-            const editLinksContext = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
-                EditLinkedObjectsDialogContext.CONTEXT_ID
+            const objects = await KIXObjectService.loadObjects(
+                contextObject.KIXObjectType, [contextObject.ObjectId],
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.LINKS], [KIXObjectProperty.LINKS])
             );
-            editLinksContext.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
 
-            await this.prepareTable();
+            if (objects && objects.length) {
+                this.mainObject = objects[0];
 
-            this.linkDialogListenerId = 'result-listener-link-' + this.mainObject.KIXObjectType + '-edit-links';
-            DialogService.getInstance()
-                .registerDialogResultListener<CreateLinkDescription[][]>(
-                    this.linkDialogListenerId, 'object-link', this.linksChanged.bind(this)
+                this.availableLinkObjects = await LinkUtil.getLinkObjects(this.mainObject);
+                this.availableLinkObjects.sort((a, b) => {
+                    return SortUtil.compareValues(a.linkedObjectType, b.linkedObjectType, DataType.STRING);
+                });
+                this.state.linkObjectCount = this.availableLinkObjects.length;
+
+                await this.reviseLinkObjects();
+                await this.setInitialLinkDescriptions();
+
+                const editLinksContext = await ContextService.getInstance().getContext<EditLinkedObjectsDialogContext>(
+                    EditLinkedObjectsDialogContext.CONTEXT_ID
                 );
+                editLinksContext.setObjectList(KIXObjectType.LINK_OBJECT, this.availableLinkObjects);
+
+                await this.prepareTable();
+
+                this.linkDialogListenerId = 'result-listener-link-' + this.mainObject.KIXObjectType + '-edit-links';
+                DialogService.getInstance()
+                    .registerDialogResultListener<CreateLinkDescription[][]>(
+                        this.linkDialogListenerId, 'object-link', this.linksChanged.bind(this)
+                    );
+            }
         }
+
         this.state.loading = false;
     }
 
