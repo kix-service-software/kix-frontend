@@ -35,6 +35,8 @@ import { SysconfigEvent } from '../../core/SysconfigEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../model/SysConfigOption';
 import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
+import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -78,6 +80,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         this.state.table.setContentProvider(new SysConfigContentProvider(this));
+        this.state.table.sort(SysConfigOptionProperty.NAME, SortOrder.UP);
 
         this.subscriber = {
             eventSubscriberId: 'admin-sysconfig',
