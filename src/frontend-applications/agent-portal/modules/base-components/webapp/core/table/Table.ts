@@ -389,19 +389,23 @@ export class Table implements Table {
             column.setSortOrder(sortOrder);
 
             if (this.filteredRows) {
-                this.filteredRows = TableSortUtil.sort(
+                this.filteredRows = await TableSortUtil.sort(
                     this.filteredRows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                const sortPromises = [];
                 for (const row of this.filteredRows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
                 }
+                await Promise.all(sortPromises);
             } else {
-                this.rows = TableSortUtil.sort(
+                this.rows = await TableSortUtil.sort(
                     this.rows, columnId, sortOrder, column.getColumnConfiguration().dataType
                 );
+                const sortPromises = [];
                 for (const row of this.rows) {
-                    row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType);
+                    sortPromises.push(row.sortChildren(columnId, sortOrder, column.getColumnConfiguration().dataType));
                 }
+                await Promise.all(sortPromises);
             }
             EventService.getInstance().publish(TableEvent.REFRESH, new TableEventData(this.getTableId()));
             EventService.getInstance().publish(

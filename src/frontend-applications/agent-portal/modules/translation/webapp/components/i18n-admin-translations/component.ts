@@ -34,6 +34,7 @@ import { EventService } from '../../../../base-components/webapp/core/EventServi
 import { ContextMode } from '../../../../../model/ContextMode';
 import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { EditTranslationDialogContext } from '../../core/admin/context';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -81,6 +82,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         this.state.table.setContentProvider(new TranslationPatternContentProvider(this.state, this.state.table));
+        this.state.table.sort(TranslationPatternProperty.VALUE, SortOrder.UP);
 
         this.subscriber = {
             eventSubscriberId: 'admin-translations',

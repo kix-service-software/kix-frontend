@@ -24,6 +24,7 @@ import { UserProperty } from '../../../model/UserProperty';
 import { AgentService } from '../../core';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { User } from '../../../model/User';
+import { SortOrder } from '../../../../../model/SortOrder';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -63,6 +64,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         this.state.table.setContentProvider(new UserContentProvider(this));
+        this.state.table.sort(UserProperty.USER_LOGIN, SortOrder.UP);
 
         this.subscriber = {
             eventSubscriberId: 'admin-users',
