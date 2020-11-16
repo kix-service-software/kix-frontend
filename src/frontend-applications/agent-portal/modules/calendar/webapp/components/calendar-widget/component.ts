@@ -72,7 +72,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, null, new KIXObjectLoadingOptions(
-                ticketFilter, null, null, [TicketProperty.STATE_TYPE]
+                ticketFilter, null, null, [TicketProperty.STATE_TYPE, KIXObjectProperty.DYNAMIC_FIELDS]
             )
         );
 

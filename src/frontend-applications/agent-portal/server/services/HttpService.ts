@@ -99,7 +99,7 @@ export class HttpService {
             body: content
         };
 
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options, undefined, logError);
+        const response = await this.executeRequest<T>(resource, token, clientRequestId, options, undefined, logError);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix).catch(() => null);
         return response;
     }
@@ -112,7 +112,7 @@ export class HttpService {
             body: content
         };
 
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        const response = await this.executeRequest<T>(resource, token, clientRequestId, options);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
         return response;
     }
