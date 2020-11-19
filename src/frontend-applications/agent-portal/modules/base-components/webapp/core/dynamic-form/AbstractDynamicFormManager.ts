@@ -340,27 +340,73 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
     }
 
     public async validate(): Promise<ValidationResult[]> {
+        const fullResult = [];
         for (const extendedManager of this.extendedFormManager) {
             const result = await extendedManager.validate();
             if (result) {
-                return result;
+                fullResult.push(...result);
             }
         }
         for (const value of this.values) {
             if (value.operator === SearchOperator.BETWEEN && Array.isArray(value.value)) {
-                const start: Date = new Date(value.value[0]);
-                const end: Date = new Date(value.value[1]);
-                if (
-                    typeof start.getTime === 'function'
-                    && typeof end.getTime === 'function'
-                    && start.getTime() > end.getTime()
-                ) {
-                    value.valid = false;
-                    return [new ValidationResult(ValidationSeverity.ERROR, 'Translatable#Start time has to be before end time')];
-                } else {
-                    value.valid = true;
+                const fieldType = await this.getInputType(value.property);
+                if (fieldType && fieldType === InputFieldTypes.DATE || fieldType === InputFieldTypes.DATE_TIME) {
+                    const result = this.checkDate(value);
+                    if (result) {
+                        fullResult.push(...result);
+                    }
+                } else if (fieldType && fieldType === InputFieldTypes.NUMBER) {
+                    const result = this.checkNumber(value);
+                    if (result) {
+                        fullResult.push(...result);
+                    }
                 }
             }
+        }
+        return fullResult;
+    }
+
+    private checkDate(value: ObjectPropertyValue) {
+        const start: Date = new Date(value.value[0]);
+        const end: Date = new Date(value.value[1]);
+        if (typeof start.getTime !== 'function') {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start date/time is not given'
+            )];
+        } else if (typeof end.getTime !== 'function') {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#End date/time is not given'
+            )];
+        } else if (start.getTime() > end.getTime()) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start time has to be before end time'
+            )];
+        } else {
+            value.valid = true;
+        }
+        return null;
+    }
+    private checkNumber(value: ObjectPropertyValue) {
+        if (isNaN(Number(value.value[0])) || value.value[0] === null) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start value is not given'
+            )];
+        } else if (isNaN(Number(value.value[1])) || value.value[1] === null) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#End value is not given'
+            )];
+        } else if (Number(value.value[1]) > Number(value.value[0])) {
+            value.valid = false;
+            return [new ValidationResult(
+                ValidationSeverity.ERROR, 'Translatable#Start value is greate than end value'
+            )];
+        } else {
+            value.valid = true;
         }
         return null;
     }

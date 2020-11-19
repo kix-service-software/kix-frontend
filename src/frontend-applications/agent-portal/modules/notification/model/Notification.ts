@@ -10,6 +10,7 @@
 import { KIXObject } from '../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 import { KIXObjectType } from '../../../model/kix/KIXObjectType';
+import { SearchOperator } from '../../search/model/SearchOperator';
 import { NotificationProperty } from './NotificationProperty';
 
 export class Notification extends KIXObject {
@@ -51,20 +52,8 @@ export class Notification extends KIXObject {
             this.Message = notification.Message;
             this.Filter = notification.Filter;
 
-            if (this.Filter) {
-                for (const key in this.Filter) {
-                    if (Array.isArray(this.Filter[key])) {
-                        for (const filter of this.Filter[key]) {
-                            if (filter.Field.match(/^DynamicField_/)) {
-                                filter.Field = filter.Field.replace(
-                                    /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
-                                );
-                            }
-                        }
+            this.prepareFilter();
 
-                    }
-                }
-            }
             if (notification.Data) {
                 for (const key in notification.Data) {
                     if (key && Array.isArray(notification.Data[key])) {
@@ -108,7 +97,32 @@ export class Notification extends KIXObject {
                     }
                 }
             }
+        }
+    }
 
+    private prepareFilter() {
+        if (this.Filter) {
+            // key = AND or OR
+            for (const key in this.Filter) {
+                if (Array.isArray(this.Filter[key])) {
+                    const preparedFilter = [];
+                    for (const filter of this.Filter[key]) {
+                        if (filter.Field.match(/^DynamicField_/)) {
+                            filter.Field = filter.Field.replace(
+                                /^DynamicField_(.+)$/, `${KIXObjectProperty.DYNAMIC_FIELDS}.$1`
+                            );
+                        }
+                        if (filter.Operator === SearchOperator.GREATER_THAN_OR_EQUAL) {
+                            this.handleBetweenValueOnGTE(preparedFilter, filter);
+                        } else if (filter.Operator === SearchOperator.LESS_THAN_OR_EQUAL) {
+                            this.handleBetweenValueOnLTE(preparedFilter, filter);
+                        } else {
+                            preparedFilter.push(filter);
+                        }
+                    }
+                    this.Filter[key] = preparedFilter;
+                }
+            }
         }
     }
 }

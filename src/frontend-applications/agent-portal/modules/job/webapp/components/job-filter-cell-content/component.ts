@@ -8,10 +8,10 @@
  */
 
 import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../../modules/base-components/webapp/core/AbstractMarkoComponent';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { Cell } from '../../../../base-components/webapp/core/table';
-import { NotificationFilterTableProperty } from '../../core';
-import { InputFieldTypes } from '../../../../../modules/base-components/webapp/core/InputFieldTypes';
+import { JobFilterTableProperty } from '../../../../job/webapp/core/table/JobFilterTableProperty';
+import { InputFieldTypes } from '../../../../base-components/webapp/core/InputFieldTypes';
 import { SearchService } from '../../../../search/webapp/core';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
@@ -25,7 +25,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         if (input.cell) {
             const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
             const manager = searchDefinition.createFormManager();
-            const propertyCell = (input.cell as Cell).getRow().getCell(NotificationFilterTableProperty.FIELD);
+            const propertyCell = (input.cell as Cell).getRow().getCell(JobFilterTableProperty.FIELD);
             const inputType = propertyCell && manager
                 ? await manager.getInputType(propertyCell.getValue().objectValue)
                 : null;
