@@ -19,7 +19,6 @@ import { IContextListener } from '../../../../../modules/base-components/webapp/
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Context } from '../../../../../model/Context';
-import { AbstractAction } from '../../core/AbstractAction';
 import { IAction } from '../../core/IAction';
 
 export class Component implements IActionListener {
@@ -36,6 +35,10 @@ export class Component implements IActionListener {
         this.state = new ComponentState();
         this.listenerInstanceId = input.instanceId;
         this.contextListernerId = IdService.generateDateBasedId('action-list-');
+        this.initActionList(input);
+    }
+
+    public onInput(input: any): void {
         this.initActionList(input);
     }
 
