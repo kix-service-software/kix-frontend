@@ -31,7 +31,9 @@ export class Component {
 
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<TicketContext>(TicketContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
         await this.loadQueues(context);
     }
 

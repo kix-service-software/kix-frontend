@@ -38,6 +38,7 @@ export class HttpService {
     private request: any;
     private apiURL: string;
     private backendCertificate: any;
+    private requestCounter = 0;
 
     private requestPromises: Map<string, Promise<any>> = new Map();
 
@@ -48,6 +49,13 @@ export class HttpService {
 
         const certPath = ConfigurationService.getInstance().certDirectory + '/backend.pem';
         this.backendCertificate = fs.readFileSync(certPath);
+
+        if (serverConfig.LOG_REQUEST_QUEUES_INTERVAL) {
+            setInterval(
+                () => LoggingService.getInstance().info(`HTTP Request Queue Length: ${this.requestCounter}`),
+                serverConfig.LOG_REQUEST_QUEUES_INTERVAL
+            );
+        }
     }
 
     public async get<T>(
@@ -196,12 +204,14 @@ export class HttpService {
                 a: options,
                 b: parameter
             });
+        this.requestCounter++;
 
         return new Promise((resolve, reject) => {
             this.request(options)
                 .then((response) => {
                     resolve(response);
                     ProfilingService.getInstance().stop(profileTaskId, response);
+                    this.requestCounter--;
                 }).catch((error) => {
                     if (logError) {
                         LoggingService.getInstance().error(
@@ -209,6 +219,7 @@ export class HttpService {
                         );
                     }
                     ProfilingService.getInstance().stop(profileTaskId, 'Error');
+                    this.requestCounter--;
                     if (error.statusCode === 403) {
                         reject(new PermissionError(this.createError(error), resource, options.method));
                     } else {

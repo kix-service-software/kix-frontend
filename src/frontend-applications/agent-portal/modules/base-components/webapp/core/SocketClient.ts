@@ -18,7 +18,9 @@ export abstract class SocketClient {
     protected createSocket(namespace: string, authenticated: boolean = true): SocketIO.Server {
         const socketUrl = ClientStorageService.getFrontendSocketUrl();
 
-        const options = {};
+        const options = {
+            // transports: ['websocket']
+        };
 
         let socket;
         if (typeof io !== 'undefined') {

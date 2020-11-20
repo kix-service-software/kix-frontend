@@ -15,6 +15,8 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -34,9 +36,12 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newTicketContext = new ContextDescriptor(
             NewTicketDialogContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-ticket-dialog', ['tickets'], NewTicketDialogContext
+            false, 'new-ticket-dialog', ['tickets'], NewTicketDialogContext,
+            [
+                new UIComponentPermission('tickets', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newTicketContext);
+        ContextService.getInstance().registerContext(newTicketContext);
     }
 
     private registerTicketActions(): void {

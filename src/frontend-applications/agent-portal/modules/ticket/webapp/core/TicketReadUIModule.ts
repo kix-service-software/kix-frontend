@@ -42,6 +42,8 @@ import { SuggestedFAQHandler } from './SuggestedFAQHandler';
 import { TicketHistoryTableFactory } from './table';
 import { FormService } from '../../../base-components/webapp/core/FormService';
 import { TicketFormFieldValueHandler } from './TicketFormFieldValueHandler';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -114,28 +116,40 @@ export class UIModule implements IUIModule {
         const ticketContext = new ContextDescriptor(
             TicketContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'ticket-module', ['tickets'], TicketContext
+            false, 'ticket-module', ['tickets'], TicketContext,
+            [
+                new UIComponentPermission('tickets', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(ticketContext);
+        ContextService.getInstance().registerContext(ticketContext);
 
         const ticketDetailsContextDescriptor = new ContextDescriptor(
             TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['tickets'], TicketDetailsContext
+            true, 'object-details-page', ['tickets'], TicketDetailsContext,
+            [
+                new UIComponentPermission('tickets', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 
         const searchContext = new ContextDescriptor(
             TicketSearchContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-ticket-dialog', ['tickets'], TicketSearchContext
+            false, 'search-ticket-dialog', ['tickets'], TicketSearchContext,
+            [
+                new UIComponentPermission('tickets', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(searchContext);
+        ContextService.getInstance().registerContext(searchContext);
 
         const ticketListContext = new ContextDescriptor(
             TicketListContext.CONTEXT_ID, [KIXObjectType.TICKET], ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'ticket-list-module', ['ticket-list'], TicketListContext
+            false, 'ticket-list-module', ['ticket-list'], TicketListContext,
+            [
+                new UIComponentPermission('tickets', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(ticketListContext);
+        ContextService.getInstance().registerContext(ticketListContext);
     }
 
 }

@@ -12,6 +12,7 @@ import { ContextType } from './ContextType';
 import { Context } from './Context';
 import { KIXObjectType } from './kix/KIXObjectType';
 import { ContextConfiguration } from './configuration/ContextConfiguration';
+import { UIComponentPermission } from './UIComponentPermission';
 
 export class ContextDescriptor {
 
@@ -25,7 +26,8 @@ export class ContextDescriptor {
         public urlPaths: string[],
         public contextClass: new (
             descriptor: ContextDescriptor, objectId: string | number, configuration: ContextConfiguration
-        ) => Context
+        ) => Context,
+        public permissions: UIComponentPermission[] = []
     ) { }
 
     public isContextFor(kixObjectType: KIXObjectType | string): boolean {

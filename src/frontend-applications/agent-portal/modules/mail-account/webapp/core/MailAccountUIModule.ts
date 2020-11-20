@@ -49,9 +49,12 @@ export class UIModule implements IUIModule {
         const newMailAccountDialogContext = new ContextDescriptor(
             NewMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext
+            false, 'new-mail-account-dialog', ['mail-accounts'], NewMailAccountDialogContext,
+            [
+                new UIComponentPermission('system/communication/mailaccounts', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newMailAccountDialogContext);
+        ContextService.getInstance().registerContext(newMailAccountDialogContext);
 
         ActionFactory.getInstance().registerAction('mail-account-edit', MailAccountEditAction);
         ActionFactory.getInstance().registerAction('mail-account-fetch', MailAccountFetchAction);
@@ -59,18 +62,24 @@ export class UIModule implements IUIModule {
         const editMailAccountDialogContext = new ContextDescriptor(
             EditMailAccountDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-mail-account-dialog', ['mail-accounts'], EditMailAccountDialogContext
+            false, 'edit-mail-account-dialog', ['mail-accounts'], EditMailAccountDialogContext,
+            [
+                new UIComponentPermission('system/communication/mailaccounts', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editMailAccountDialogContext);
+        ContextService.getInstance().registerContext(editMailAccountDialogContext);
 
         const mailAccountDetailsContext = new ContextDescriptor(
             MailAccountDetailsContext.CONTEXT_ID, [KIXObjectType.MAIL_ACCOUNT],
             ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext
+            false, 'object-details-page', ['mail-accounts'], MailAccountDetailsContext,
+            [
+                new UIComponentPermission('system/communication/mailaccounts', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(mailAccountDetailsContext);
+        ContextService.getInstance().registerContext(mailAccountDetailsContext);
 
-        await SetupService.getInstance().registerSetupStep(
+        SetupService.getInstance().registerSetupStep(
             new SetupStep('setup-sending-email', 'Translatable#Outbox', 'setup-sending-email',
                 [
                     new UIComponentPermission('system/config', [CRUD.READ])
@@ -80,7 +89,7 @@ export class UIModule implements IUIModule {
             )
         );
 
-        await SetupService.getInstance().registerSetupStep(
+        SetupService.getInstance().registerSetupStep(
             new SetupStep(
                 'MailAccount', 'Translatable#Inbox', 'setup-mail-account',
                 [

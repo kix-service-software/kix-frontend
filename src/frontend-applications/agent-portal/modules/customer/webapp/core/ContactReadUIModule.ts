@@ -25,6 +25,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { ContactPlaceholderHandler } from './ContactPlaceholderHandler';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -53,15 +55,21 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const organisationDetailsContext = new ContextDescriptor(
             ContactDetailsContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['contacts'], ContactDetailsContext
+            true, 'object-details-page', ['contacts'], ContactDetailsContext,
+            [
+                new UIComponentPermission('contacts', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(organisationDetailsContext);
+        ContextService.getInstance().registerContext(organisationDetailsContext);
 
         const searchContactContext = new ContextDescriptor(
             ContactSearchContext.CONTEXT_ID, [KIXObjectType.CONTACT], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-contact-dialog', ['contacts'], ContactSearchContext
+            false, 'search-contact-dialog', ['contacts'], ContactSearchContext,
+            [
+                new UIComponentPermission('contacts', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(searchContactContext);
+        ContextService.getInstance().registerContext(searchContactContext);
     }
 
     private registerActions(): void {

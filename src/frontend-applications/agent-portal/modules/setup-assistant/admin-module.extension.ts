@@ -24,7 +24,6 @@ class Extension extends KIXExtension implements IAdminModuleExtension {
                 null, 'setup-assistant-overview',
                 [
                     new UIComponentPermission('system/config', [CRUD.READ]),
-                    new UIComponentPermission('system/config/home', [CRUD.UPDATE]),
                     new UIComponentPermission('system/config/FQDN', [CRUD.UPDATE])
                 ]
             )

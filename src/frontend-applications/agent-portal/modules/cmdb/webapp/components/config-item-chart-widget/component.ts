@@ -32,10 +32,10 @@ class Component {
         this.state.instanceId = input.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
-            ? currentContext.getWidgetConfiguration(this.state.instanceId)
+            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'CMDB';

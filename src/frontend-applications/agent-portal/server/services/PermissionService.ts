@@ -7,9 +7,6 @@
  * --
  */
 
-import { UIComponent } from '../../model/UIComponent';
-import { ContextConfiguration } from '../../model/configuration/ContextConfiguration';
-import { ConfiguredWidget } from '../../model/configuration/ConfiguredWidget';
 import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { HttpService } from './HttpService';
 
@@ -25,57 +22,6 @@ export class PermissionService {
     }
 
     private constructor() { }
-
-    public async filterUIComponents(token: string, uiComponents: UIComponent[]): Promise<UIComponent[]> {
-        const components: UIComponent[] = [];
-        for (const component of uiComponents) {
-            if (await this.checkPermissions(token, component.permissions)) {
-                components.push(component);
-            }
-        }
-
-        return components;
-    }
-
-    public async filterContextConfiguration(
-        token: string, configuration: ContextConfiguration
-    ): Promise<ContextConfiguration> {
-
-        const sidebars = await this.checkConfiguration(token, configuration.sidebars);
-        const explorer = await this.checkConfiguration(token, configuration.explorer);
-        const lanes = await this.checkConfiguration(token, configuration.lanes);
-        const content = await this.checkConfiguration(token, configuration.content);
-        const overlays = await this.checkConfiguration(token, configuration.overlays);
-        const others = await this.checkConfiguration(token, configuration.others);
-        const dialogs = await this.checkConfiguration(token, configuration.dialogs);
-
-        return new ContextConfiguration(
-            configuration.id, configuration.name, configuration.type,
-            configuration.contextId,
-            sidebars.map((w) => w),
-            explorer.map((w) => w),
-            lanes.map((w) => w),
-            content.map((w) => w),
-            configuration.generalActions,
-            configuration.actions,
-            overlays,
-            others,
-            dialogs
-        );
-    }
-
-    private async checkConfiguration<T extends ConfiguredWidget>(
-        token: string, widgets: T[]
-    ): Promise<T[]> {
-        const allowedWidgets: T[] = [];
-        for (const widget of widgets) {
-            const allowed = await this.checkPermissions(token, widget.permissions);
-            if (allowed) {
-                allowedWidgets.push(widget);
-            }
-        }
-        return allowedWidgets;
-    }
 
     public async checkPermissions(token: string, permissions: UIComponentPermission[] = []): Promise<boolean> {
         if (permissions && permissions.length) {

@@ -39,7 +39,9 @@ class Component {
         const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
             TicketDetailsContext.CONTEXT_ID
         );
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         WidgetService.getInstance().setWidgetType('ticket-description-widget', WidgetType.GROUP);
         WidgetService.getInstance().setWidgetType('ticket-description-notes', WidgetType.GROUP);

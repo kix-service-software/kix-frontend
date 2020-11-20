@@ -31,7 +31,9 @@ class Component {
         const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
             TicketDetailsContext.CONTEXT_ID
         );
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         context.registerListener('ticket-history-widget', {
             explorerBarToggled: () => { return; },

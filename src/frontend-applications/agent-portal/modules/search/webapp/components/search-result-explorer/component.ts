@@ -40,7 +40,9 @@ export class Component implements IKIXObjectSearchListener {
         SearchService.getInstance().registerListener(this);
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
         this.state.contextId = context.getDescriptor().contextId;
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
         this.prepareTree();
         const activeCategory = SearchService.getInstance().getActiveSearchResultExplorerCategory();
         if (activeCategory) {

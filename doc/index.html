@@ -93,7 +93,7 @@
     function isCollapsable(arg) {
       return arg instanceof Object && Object.keys(arg).length > 0;
     }
-  
+
     /**
      * Check if a string represents a valid url
      * @return boolean
@@ -102,7 +102,7 @@
        var regexp = /^(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
        return regexp.test(string);
     }
-  
+
     /**
      * Transform a json object into html representation
      * @return string
@@ -179,7 +179,7 @@
       }
       return html;
     }
-  
+
     $.fn.jsonHighlight = function(json) {
 
         // jQuery chaining
@@ -189,7 +189,7 @@
             var html = json2html(json, { withQuotes: true, noToggle: true })
 
             // Insert HTML in target DOM element
-            $(this).html(html);    
+            $(this).html(html);
         });
     }
 
@@ -200,18 +200,18 @@
      */
     $.fn.jsonBrowse = function(json, options) {
       options = options || {};
-  
+
       // jQuery chaining
       return this.each(function() {
-  
+
         // Transform to HTML
         var html = json2html(json, options)
         if (isCollapsable(json))
           html = '<a href></a>' + html;
-  
+
         // Insert HTML in target DOM element
         $(this).html(html);
-  
+
         // Bind click on toggle buttons
         $(this).off('click');
         $(this).on('click', 'a.json-toggle', function() {
@@ -227,13 +227,13 @@
           }
           return false;
         });
-  
+
         // Simulate click on toggle button when placeholder is clicked
         $(this).on('click', 'a.json-placeholder', function() {
           $(this).siblings('a.json-toggle').click();
           return false;
         });
-  
+
         if (options.collapsed == true) {
           // Trigger click to collapse all nodes
           $(this).find('a.json-toggle').click();
@@ -241,7 +241,7 @@
       });
     };
   })(jQuery);
-  
+
     </script><style>
       h1 {
   font-weight: bold;
@@ -531,7 +531,7 @@ pre code {
 .json-body {
     margin: 10px 20px;
   }
-  
+
   ul.json-dict, ol.json-array {
     list-style-type: none;
     margin: 0 0 0 1px;
@@ -586,7 +586,7 @@ pre code {
     -webkit-transform: rotate(0deg);
     font-size: 10px;
   }
-  
+
   /* Collapsable placeholder links */
   a.json-placeholder {
     color: #aaa;
@@ -596,7 +596,7 @@ pre code {
   a.json-placeholder:hover {
     text-decoration: underline;
   }
-  
+
     </style><link rel="stylesheet" href="static/prism.css"><link rel="stylesheet" href="static/style.css"><script type="text/javascript" src="static/prism.js"></script></head><body data-spy="scroll" data-target="#sidebar"><div class="container"><div class="row"><div class="col-md-9" role="main"><div class="page-header"><h1>KIX - Frontend Server</h1><h2></h2><div class="chapter"><h2 id="agent_portal"><a href="#agent_portal">Agent Portal</a></h2><p>The KIX Agent Portal contains a application framework, web server (REST-API) and web application in once. The server (based on <a href="https://nodejs.org">NodeJS</a>) provides a web server instance (<a href="https://expressjs.com/de/">express</a>) for http communication. Over the http default route (<code>http://&lt;fqdn&gt;:&lt;port&gt;/</code>) the web server delivers the basic web application. The web application itself is a single page application (<a href="https://en.wikipedia.org/wiki/Single-page_application">SPA</a>) and uses sockets (<a href="https://socket.io/">Socket.io</a>) to communicate with the frontend server.</p></div><div class="chapter"><h2 id="modularization___plugins"><a href="#modularization___plugins">Modularization - Plugins</a></h2><h3 id="indruction">Indruction</h3><p>The framework provides the possibility to provide functionality via plugins with the help of extension points. One Plugin can contain several extension point implementations.</p><p>A extension point describes a specific interface which one is needed to be implemented by the extension.</p><h3 id="structure-of-a-plugin">Structure of a Plugin</h3><ul><li><b>src</b></li><ul><li>package.json</li><li>RELEASE</li><li>locale</li><li><i>[module]</i></li><br></ul><li>README.md</li><li><i>(other files to organise the plugin, e.g. ci/cd definitions, ide configurations)</i></li></ul><p>The <strong>src</strong> folder contains the main implementation of the plugin.</p><h4 id="release-file">RELEASE File</h4><p>The RELEASE file defines the current state and the requirements of the plugin. This file is evaluated at frontend server startup and checks the dependencies from the REQUIRES field. If dependencies could not be resolved the plugin will not be available in the software.</p><table class="table"><thead><tr><th>Property</th><th>Value</th><th>Example</th></tr></thead><tbody><tr><td>PRODUCT</td><td>Name of th plugin</td><td>MyPlugin</td></tr><tr><td>VERSION</td><td>String which describes the version</td><td>1 or V1</td></tr><tr><td>BUILDDATE</td><td>String with the date of build</td><td>Fri, 17 Apr 2020 07:30:54 +0200</td></tr><tr><td>BUILDNUMBER</td><td>The build number of the version</td><td>1, 3354</td></tr><tr><td>REQUIRES</td><td>Dependencies for the plugin</td><td>framework(&gt;3), backend::Maintenance</td></tr></tbody></table><p><strong>REQUIRES</strong> Following syntax is supported for the REQUIRES dependencies:</p><ul><li><strong>framework</strong> <em>(the frontend it self)</em></li><li><strong>framework(&gt;1)</strong> <em>(the frontend must be available in the specified version)</em></li><li><strong>pluginname</strong> <em>(only the name of the depending plugin; plugin must be available)</em></li><li><strong>pluginname(&gt;1)</strong> <em>(the name of the depending plugin with a version requirement; plugin must be available in the specified version; supported operators: &gt;, &lt;, =, !)</em></li><li><strong>backend</strong> <em>(the KIX backend)</em></li><li><strong>backend::pluginname</strong> <em>(this plugin must be available in KIX backend)</em></li><li><strong>backend::pluginname(&gt;1)</strong> <em>(this plugin must be available in the specified version in KIX backend)</em></li></ul><p>Example:</p><pre><code>PRODUCT = MyPlugin
 VERSION = 1
 BUILDDATE = Fri, 17 Apr 2020 07:30:54 +0200
@@ -713,7 +713,7 @@ TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
 ContextType.MAIN, ContextMode.DETAILS,
 true, &#39;object-details-page&#39;, [&#39;tickets&#39;], TicketDetailsContext
 );
-await ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 </code></pre><h3 id="functionality">Functionality</h3><p>If a page should be shown in the agent portal the context is always the required base for it. The application loads the context and its configuration from the configuration cache The component which is defined in the <code>ContextDescriptor</code> is loaded and included in the web application content area. After the configuration is loaded the context get initialized and the context is now responsible to load objects or execute other needed functionality.</p><p>Components can register a listener on the context to get notified about changes to update theirself.</p><p>The main application reacts on the context changing and updates the main template. The explorer and the sidebar also reacts on this change and load the components from the context configuration.</p><p><img src="static/ticket-details.png" alt="Context"></p></div><div class="chapter"><h2 id="configuration"><a href="#configuration">Configuration</a></h2><p>The configuration is the base for main composition of components in the agent portal. Configurations are stored in the Sysconfig. There are different types of configurations possible:</p><pre><code class="lang-typescript">export enum ConfigurationType {
 Context = &#39;Context&#39;,
 Widget = &#39;Widget&#39;,
@@ -771,9 +771,9 @@ public dialogs: ConfiguredDialogWidget[] = []
 </code></pre><h3 id="implementation-configuredwidget">Implementation - ConfiguredWidget</h3><p>This list are arrays of type <code>ConfiguredWidget</code> or for dialogs type of <code>ConfiguredDialogWidget</code>.</p><table class="table"><thead><tr><th>parameter</th><th>description</th><th>exmaple</th></tr></thead><tbody><tr><td>instanceId</td><td>The id of the concrete instance for usage of this widget</td><td><code>home-dashboard-notes-widget</code></td></tr><tr><td>configurationId</td><td>The id of the referenced configuration</td><td><code>home-dashboard-notes-widget</code></td></tr><tr><td>configuration?</td><td>The configuration if not referenced by id</td><td>Object: <code>{ ... }</code></td></tr><tr><td>permissions</td><td>Permissions for the widget. If the user has insufficient rights the widget ist filtered out on context loading.</td></tr></tbody></table><pre><code class="lang-typescript">export class ConfiguredWidget {
 public constructor(
 public instanceId: string,
-public configurationId: string, 
-public configuration?: WidgetConfiguration, 
-public permissions: UIComponentPermission[] = [] 
+public configurationId: string,
+public configuration?: WidgetConfiguration,
+public permissions: UIComponentPermission[] = []
 ) { }
 }
 </code></pre></div><div class="chapter"><h2 id="form_configuration"><a href="#form_configuration">Form Configuration</a></h2></div><div class="chapter"><h2 id="extendedkixobjectservice"><a href="#extendedkixobjectservice">ExtendedKIXObjectService</a></h2><p><strong><em>Layer: Webapplication (Browser)</em></strong></p><h3 id="implementation">Implementation</h3><p>The <code>ExtendedKIXObjectService</code> implements the interface <code>IKIXObjectService</code> and has an default implementation for each method of the interface. The methods itself do not execute anything and always return <strong>null</strong>. You can overwrite a needed method and return a value which is required for you extension.</p><pre><code class="lang-typescript">export class MyObjectService extends ExtendedKIXObjectService {

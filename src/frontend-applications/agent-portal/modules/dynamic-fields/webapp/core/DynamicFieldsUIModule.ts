@@ -34,6 +34,8 @@ import { CMDBService } from '../../../cmdb/webapp/core';
 import { KIXObjectService } from '../../../base-components/webapp/core/KIXObjectService';
 import { ConfigItemClass } from '../../../cmdb/model/ConfigItemClass';
 import { DynamicFieldTypeLabelProvider } from './DynamicFieldTypeLabelProvider';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -61,16 +63,22 @@ export class UIModule implements IUIModule {
         const newDynamicFieldContext = new ContextDescriptor(
             NewDynamicFieldDialogContext.CONTEXT_ID, [KIXObjectType.DYNAMIC_FIELD],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-dynamic-field-dialog', ['dynamicfields'], NewDynamicFieldDialogContext
+            false, 'new-dynamic-field-dialog', ['dynamicfields'], NewDynamicFieldDialogContext,
+            [
+                new UIComponentPermission('system/dynamicfields', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newDynamicFieldContext);
+        ContextService.getInstance().registerContext(newDynamicFieldContext);
 
         const editDynamicFieldContext = new ContextDescriptor(
             EditDynamicFieldDialogContext.CONTEXT_ID, [KIXObjectType.DYNAMIC_FIELD],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-dynamic-field-dialog', ['dynamicfields'], EditDynamicFieldDialogContext
+            false, 'edit-dynamic-field-dialog', ['dynamicfields'], EditDynamicFieldDialogContext,
+            [
+                new UIComponentPermission('system/dynamicfields', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editDynamicFieldContext);
+        ContextService.getInstance().registerContext(editDynamicFieldContext);
 
         FormValidationService.getInstance().registerValidator(new DynamicFieldTextValidator());
         FormValidationService.getInstance().registerValidator(new DynamicFieldDateTimeValidator());

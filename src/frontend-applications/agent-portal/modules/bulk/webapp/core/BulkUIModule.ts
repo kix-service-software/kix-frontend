@@ -16,6 +16,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { BulkAction } from './BulkAction';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -31,9 +33,12 @@ export class UIModule implements IUIModule {
         const bulkDialogContext = new ContextDescriptor(
             BulkDialogContext.CONTEXT_ID, [KIXObjectType.ANY],
             ContextType.DIALOG, ContextMode.EDIT_BULK,
-            false, 'bulk-dialog', ['bulk'], BulkDialogContext
+            false, 'bulk-dialog', ['bulk'], BulkDialogContext,
+            [
+                new UIComponentPermission('tickets', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(bulkDialogContext);
+        ContextService.getInstance().registerContext(bulkDialogContext);
 
         ActionFactory.getInstance().registerAction('bulk-action', BulkAction);
     }

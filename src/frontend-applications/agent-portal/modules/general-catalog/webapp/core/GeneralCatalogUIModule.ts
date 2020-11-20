@@ -22,6 +22,8 @@ import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export class UIModule implements IUIModule {
 
@@ -44,15 +46,21 @@ export class UIModule implements IUIModule {
         const newGeneralCatalogDialogContext = new ContextDescriptor(
             NewGeneralCatalogDialogContext.CONTEXT_ID, [KIXObjectType.GENERAL_CATALOG_ITEM],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            true, 'new-general-catalog-dialog', ['generalcatalog'], NewGeneralCatalogDialogContext
+            true, 'new-general-catalog-dialog', ['generalcatalog'], NewGeneralCatalogDialogContext,
+            [
+                new UIComponentPermission('system/generalcatalog', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newGeneralCatalogDialogContext);
+        ContextService.getInstance().registerContext(newGeneralCatalogDialogContext);
         const editGeneralCatalogDialogContext = new ContextDescriptor(
             EditGeneralCatalogDialogContext.CONTEXT_ID, [KIXObjectType.GENERAL_CATALOG_ITEM],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            true, 'edit-general-catalog-dialog', ['generalcatalog'], EditGeneralCatalogDialogContext
+            true, 'edit-general-catalog-dialog', ['generalcatalog'], EditGeneralCatalogDialogContext,
+            [
+                new UIComponentPermission('system/generalcatalog', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editGeneralCatalogDialogContext);
+        ContextService.getInstance().registerContext(editGeneralCatalogDialogContext);
 
     }
 }

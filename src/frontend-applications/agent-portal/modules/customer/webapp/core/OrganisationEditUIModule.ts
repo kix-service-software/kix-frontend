@@ -38,10 +38,10 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         ImportService.getInstance().registerImportManager(new OrganisationImportManager());
 
-        await this.registerContexts();
+        this.registerContexts();
         this.registerActions();
 
-        await SetupService.getInstance().registerSetupStep(
+        SetupService.getInstance().registerSetupStep(
             new SetupStep(
                 'SetupMyOrganisation', 'Translatable#My Organisation', 'setup-my-organisation',
                 [
@@ -54,27 +54,36 @@ export class UIModule implements IUIModule {
         );
     }
 
-    private async registerContexts(): Promise<void> {
+    private registerContexts(): void {
         const newOrganisationContext = new ContextDescriptor(
             NewOrganisationDialogContext.CONTEXT_ID, [KIXObjectType.ORGANISATION],
             ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-organisation-dialog', ['organisations'], NewOrganisationDialogContext
+            false, 'new-organisation-dialog', ['organisations'], NewOrganisationDialogContext,
+            [
+                new UIComponentPermission('organisations', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newOrganisationContext);
+        ContextService.getInstance().registerContext(newOrganisationContext);
 
         const editOrganisationContext = new ContextDescriptor(
             EditOrganisationDialogContext.CONTEXT_ID, [KIXObjectType.ORGANISATION],
             ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-organisation-dialog', ['organisations'], EditOrganisationDialogContext
+            false, 'edit-organisation-dialog', ['organisations'], EditOrganisationDialogContext,
+            [
+                new UIComponentPermission('organisations', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editOrganisationContext);
+        ContextService.getInstance().registerContext(editOrganisationContext);
 
         const organisationImportDialogContext = new ContextDescriptor(
             OrganisationImportDialogContext.CONTEXT_ID, [KIXObjectType.ORGANISATION],
             ContextType.DIALOG, ContextMode.IMPORT,
-            false, 'import-dialog', ['organisations'], OrganisationImportDialogContext
+            false, 'import-dialog', ['organisations'], OrganisationImportDialogContext,
+            [
+                new UIComponentPermission('organisations', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(organisationImportDialogContext);
+        ContextService.getInstance().registerContext(organisationImportDialogContext);
     }
 
     private registerActions(): void {

@@ -30,13 +30,13 @@ export class UIModule implements IUIModule {
     }
 
     public async register(): Promise<void> {
-        const dialogs = ContextFactory.getInstance().getContextDescriptors(ContextMode.SEARCH);
+        const dialogs = await ContextFactory.getInstance().getContextDescriptors(ContextMode.SEARCH);
         if (dialogs && dialogs.length) {
             const searchContext = new ContextDescriptor(
                 SearchContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
                 false, 'search', ['search'], SearchContext
             );
-            await ContextService.getInstance().registerContext(searchContext);
+            ContextService.getInstance().registerContext(searchContext);
 
             ActionFactory.getInstance().registerAction('new-search-action', NewSearchAction);
             ActionFactory.getInstance().registerAction('edit-search-action', EditSearchAction);

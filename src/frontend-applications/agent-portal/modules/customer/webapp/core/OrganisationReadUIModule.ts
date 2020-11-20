@@ -26,6 +26,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
 import { OrganisationPlaceholderHandler } from './OrganisationPlaceholderHandler';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -54,15 +56,21 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const organisationDetailsContext = new ContextDescriptor(
             OrganisationDetailsContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['organisations'], OrganisationDetailsContext
+            true, 'object-details-page', ['organisations'], OrganisationDetailsContext,
+            [
+                new UIComponentPermission('organisations', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(organisationDetailsContext);
+        ContextService.getInstance().registerContext(organisationDetailsContext);
 
         const searchContactContext = new ContextDescriptor(
             OrganisationSearchContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-organisation-dialog', ['organisations'], OrganisationSearchContext
+            false, 'search-organisation-dialog', ['organisations'], OrganisationSearchContext,
+            [
+                new UIComponentPermission('organisations', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(searchContactContext);
+        ContextService.getInstance().registerContext(searchContactContext);
     }
 
     private registerActions(): void {

@@ -53,4 +53,6 @@ export interface IServerConfiguration {
 
     INSTALLED_BUILD: number;
 
+    LOG_REQUEST_QUEUES_INTERVAL: number;
+
 }

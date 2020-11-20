@@ -52,17 +52,15 @@ class WidgetComponent implements IEventSubscriber {
 
         this.state.widgetType = WidgetService.getInstance().getWidgetType(this.state.instanceId, context);
 
-        const config = context.getWidgetConfiguration(this.state.instanceId);
+        const config = await context.getWidgetConfiguration(this.state.instanceId);
         this.state.widgetConfiguration = config;
 
-        if (config) {
-            if (this.state.widgetType === WidgetType.SIDEBAR) {
-                this.state.minimizable = false;
-                this.state.minimized = false;
-            } else {
-                this.state.minimizable = config.minimizable;
-                this.state.minimized = config.minimized;
-            }
+        if (this.state.widgetType === WidgetType.SIDEBAR) {
+            this.state.minimizable = false;
+            this.state.minimized = false;
+        } else {
+            this.state.minimizable = config ? config.minimizable : false;
+            this.state.minimized = config ? config.minimized : false;
         }
 
         // TODO: Enum für events nutzen (ohne Prefix), falls es mehrer geben sollte
