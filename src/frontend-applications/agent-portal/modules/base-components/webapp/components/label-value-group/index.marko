@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.label-value-groups-container>
     <if(state.groups && Array.isArray(state.groups) && !!state.groups.length)>
         <for|group, index| of=state.groups>
@@ -20,12 +19,17 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 <div.label title=group.label>
                     <span>${group.label}</span>
                 </div>
-                <if(group.value)>
-                    <if(group.attachment)>
-                        <file-entry attachment=group.attachment on-fileClicked("fileClicked", index)/>
+                <if(group.value.value)>
+                    <if(group.value.attachment)>
+                        <file-entry attachment=group.value.attachment on-fileClicked("fileClicked", index)/>
                     </if>
                     <else>
-                        <div.value title=group.value>${group.value}</div>
+                        <div.value title=group.value.value>
+                            <if(group.value.multiline)>
+                                <textarea>${group.value.value}</textarea>
+                            </if>
+                            <else>${group.value.value}</else>
+                        </div>
                     </else>
                 </if>
                 <if(group.sub && Array.isArray(group.sub) && !!group.sub.length)>

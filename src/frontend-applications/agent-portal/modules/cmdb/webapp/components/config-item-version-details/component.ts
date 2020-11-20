@@ -22,6 +22,7 @@ import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { AttachmentLoadingOptions } from '../../../model/AttachmentLoadingOptions';
+import { LabelValueGroupValue } from '../../../../../model/LabelValueGroupValue';
 
 class Component {
 
@@ -111,21 +112,31 @@ class Component {
 
     private async prepareLabelValueGroups(data: PreparedData[]): Promise<LabelValueGroup[]> {
         const groups = [];
+
+        let attachment: ConfigItemAttachment;
+        let multiline: boolean;
+
         for (const attr of data) {
             let value = await TranslationService.translate(attr.DisplayValue);
             if (attr.Type === 'Date') {
                 value = await DateTimeUtil.getLocalDateString(value);
             } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
+                attachment = attr.Type === 'Attachment'
+                    ? new ConfigItemAttachment(attr.Value)
+                    : null;
+            } else if (attr.Type === 'TextArea') {
+                multiline = true;
             }
 
             const subAttributes = (attr.Sub && attr.Sub.length ? await this.prepareLabelValueGroups(attr.Sub) : null);
 
             const label = await TranslationService.translate(attr.Label);
-            groups.push(new LabelValueGroup(
-                label, value, null, null, subAttributes,
-                (attr.Type === 'Attachment' ? new ConfigItemAttachment(attr.Value) : null)
-            ));
+            groups.push(
+                new LabelValueGroup(
+                    label, new LabelValueGroupValue(value, multiline, attachment), null, null, subAttributes
+                )
+            );
         }
         return groups;
     }
