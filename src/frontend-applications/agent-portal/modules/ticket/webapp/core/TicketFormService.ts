@@ -215,7 +215,7 @@ export class TicketFormService extends KIXObjectFormService {
                                     )
                                 ], undefined, undefined, undefined, undefined,
                                 [
-                                    ['requiredPermission', 'TicketRead,TicketUpdate']
+                                    ['requiredPermission', 'TicketRead,TicketCreate']
                                 ]
                             )
                         )

@@ -24,6 +24,7 @@ import { Error } from '../../../../../server/model/Error';
 import { UserProperty } from '../model/UserProperty';
 import { FilterCriteria } from '../../../model/FilterCriteria';
 import { SearchOperator } from '../../search/model/SearchOperator';
+import { KIXObjectProperty } from '../../../model/kix/KIXObjectProperty';
 
 export class UserService extends KIXObjectAPIService {
 
@@ -287,17 +288,16 @@ export class UserService extends KIXObjectAPIService {
 
     public async prepareAPIFilter(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
         const filterProperties = [
-            UserProperty.USER_LOGIN,
-            'UserEmail',
-            'UserFirstname',
-            'UserLastname',
+            KIXObjectProperty.VALID_ID
         ];
         const filterCriteria = criteria.filter((f) => filterProperties.some((fp) => f.property === fp));
         return filterCriteria;
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        const searchProperties = [];
+        const searchProperties = [
+            UserProperty.USER_LOGIN
+        ];
 
         const searchCriteria = criteria.filter(
             (f) => searchProperties.some((sp) => sp === f.property) && f.operator !== SearchOperator.NOT_EQUALS
