@@ -48,7 +48,7 @@ export class Component {
                     filter.textFilterValueChanged(null, this.state.filterValue);
                 }
             }
-            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
 
             this.setActiveNode(context.currentCIClass);
         } else {

@@ -27,6 +27,8 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../modules/base-components/webapp/core/ActionFactory';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -69,26 +71,37 @@ export class UIModule implements IUIModule {
             CMDBContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'cmdb-module', ['configitems'], CMDBContext
         );
-        await ContextService.getInstance().registerContext(cmdbContext);
+        ContextService.getInstance().registerContext(cmdbContext);
 
         const configItemDetailsContext = new ContextDescriptor(
             ConfigItemDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['configitems'], ConfigItemDetailsContext
+            true, 'object-details-page', ['configitems'], ConfigItemDetailsContext,
+            [
+                new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(configItemDetailsContext);
+        ContextService.getInstance().registerContext(configItemDetailsContext);
 
         const searchConfigItemContext = new ContextDescriptor(
             ConfigItemSearchContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext
+            false, 'search-config-item-dialog', ['configitems'], ConfigItemSearchContext,
+
+            [
+                new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(searchConfigItemContext);
+        ContextService.getInstance().registerContext(searchConfigItemContext);
 
         const compareConfigItemContext = new ContextDescriptor(
             CompareConfigItemVersionDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_VERSION_COMPARE],
             ContextType.DIALOG, ContextMode.EDIT,
-            false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext
+            false, 'compare-config-item-version-dialog', ['configitems'], CompareConfigItemVersionDialogContext,
+
+            [
+                new UIComponentPermission('cmdb/configitems', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(compareConfigItemContext);
+        ContextService.getInstance().registerContext(compareConfigItemContext);
     }
 
     private registerActions(): void {

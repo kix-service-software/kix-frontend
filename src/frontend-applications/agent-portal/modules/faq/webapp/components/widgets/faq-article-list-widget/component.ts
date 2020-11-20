@@ -42,7 +42,9 @@ class Component {
     public async onMount(): Promise<void> {
         this.additionalFilterCriteria = [];
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         if (this.state.widgetConfiguration.contextDependent) {
             context.registerListener('faq-article-list-context-listener', {

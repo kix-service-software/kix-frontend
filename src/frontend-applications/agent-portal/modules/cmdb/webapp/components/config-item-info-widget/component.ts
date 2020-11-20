@@ -40,7 +40,9 @@ class Component {
         this.properties = ConfigItemProperty;
 
         const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         context.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, configItem: ConfigItem, type: KIXObjectType) => {

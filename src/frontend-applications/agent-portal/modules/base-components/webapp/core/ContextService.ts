@@ -69,7 +69,7 @@ export class ContextService {
         this.serviceListener.delete(listenerId);
     }
 
-    public async registerContext(contextDescriptor: ContextDescriptor): Promise<void> {
+    public registerContext(contextDescriptor: ContextDescriptor): void {
         ContextFactory.getInstance().registerContext(contextDescriptor);
         this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
     }

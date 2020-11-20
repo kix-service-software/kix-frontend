@@ -27,19 +27,17 @@ export class AdminModuleService {
 
     private constructor() { }
 
-    public async getAdminModules(token: string): Promise<Array<AdminModuleCategory | AdminModule>> {
+    public async getAdminModules(): Promise<Array<AdminModuleCategory | AdminModule>> {
         const moduleExtensions = await PluginService.getInstance().getExtensions<IAdminModuleExtension>(
             AgentPortalExtensions.ADMIN_MODULE
         );
 
-        let categories: AdminModuleCategory[] = [];
+        const categories: AdminModuleCategory[] = [];
 
         moduleExtensions.forEach((m) => {
             const moduleCategories = m.getAdminModules();
             moduleCategories.forEach((c) => this.mergeCategory(categories, c));
         });
-
-        categories = await this.checkPermissions(token, categories);
 
         return categories;
     }

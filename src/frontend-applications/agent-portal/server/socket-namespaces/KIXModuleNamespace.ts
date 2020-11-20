@@ -28,7 +28,6 @@ import { LoadReleaseInfoResponse } from '../../modules/base-components/webapp/co
 import { Socket } from 'socket.io';
 import { AgentPortalExtensions } from '../extensions/AgentPortalExtensions';
 import { ReleaseInfoUtil } from '../../../../server/ReleaseInfoUtil';
-import { KIXModuleFactory } from '../extensions/KIXModuleFactory';
 import { LoadFormConfigurationRequest } from '../../modules/base-components/webapp/core/LoadFormConfigurationRequest';
 import { LoadFormConfigurationResponse } from '../../modules/base-components/webapp/core/LoadFormConfigurationResponse';
 import { ConfigurationService } from '../../../../server/services/ConfigurationService';
@@ -61,6 +60,8 @@ export class KIXModuleNamespace extends SocketNameSpace {
     private constructor() {
         super();
     }
+
+    private configCache: Map<string, any>;
 
     private rebuildPromise: Promise<void>;
 
@@ -103,7 +104,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
     public async rebuildConfigCache(): Promise<void> {
         if (!this.rebuildPromise) {
             this.rebuildPromise = new Promise<void>(async (resolve, reject) => {
-
+                this.configCache = new Map();
                 await CacheService.getInstance().deleteKeys('FormConfiguration', true);
 
                 const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
@@ -138,6 +139,7 @@ export class KIXModuleNamespace extends SocketNameSpace {
                         });
 
                         await CacheService.getInstance().set(formOption.Name, newConfig, 'FormConfiguration');
+                        this.configCache.set(formOption.Name, newConfig);
                     }
                 }
 
@@ -149,26 +151,32 @@ export class KIXModuleNamespace extends SocketNameSpace {
     }
 
     private async loadModules(data: LoadKIXModulesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
-        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
+        let kixModulesResponse = await CacheService.getInstance().get('KIX_MODULES');
+        if (!kixModulesResponse) {
+            kixModulesResponse = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
+                AgentPortalExtensions.MODULES
+            ).then(async (modules) => {
+                const uiModules = modules.map((m) => {
+                    return {
+                        id: m.id,
+                        external: m.external,
+                        initComponents: m.initComponents,
+                        uiComponents: m.uiComponents,
+                        webDependencies: m.webDependencies,
+                        applications: m.applications
+                    };
+                });
 
-        const response = await PluginService.getInstance().getExtensions<IKIXModuleExtension>(
-            AgentPortalExtensions.MODULES
-        ).then(async (modules) => {
-            const createPromises: Array<Promise<IKIXModuleExtension>> = [];
-            for (const uiModule of modules) {
-                createPromises.push(KIXModuleFactory.getInstance().create(token, uiModule));
-            }
+                const socketResponse = new SocketResponse(
+                    KIXModulesEvent.LOAD_MODULES_FINISHED,
+                    new LoadKIXModulesResponse(data.requestId, uiModules)
+                );
+                CacheService.getInstance().set('KIX_MODULES_RESPONSE', socketResponse);
+                return socketResponse;
+            }).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
 
-            const uiModules = await Promise.all(createPromises);
-
-            return new SocketResponse(
-                KIXModulesEvent.LOAD_MODULES_FINISHED,
-                new LoadKIXModulesResponse(data.requestId, uiModules)
-            );
-        }).catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
-
-        return response;
+        }
+        return kixModulesResponse;
     }
 
     private async loadFormConfigurations(
@@ -188,8 +196,11 @@ export class KIXModuleNamespace extends SocketNameSpace {
         let form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
 
         if (!form) {
-            await this.rebuildConfigCache();
-            form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
+            if (!this.configCache) {
+                await this.rebuildConfigCache();
+            }
+            // form = await CacheService.getInstance().get(data.formId, 'FormConfiguration');
+            form = this.configCache.get(data.formId);
         }
 
         return new SocketResponse(

@@ -22,6 +22,7 @@ import { AdminModuleCategory } from '../model/AdminModuleCategory';
 
 import cookie = require('cookie');
 import { AdminModule } from '../model/AdminModule';
+import { CacheService } from '../../../server/services/cache';
 
 export class AdministrationNamespace extends SocketNameSpace {
 
@@ -52,18 +53,20 @@ export class AdministrationNamespace extends SocketNameSpace {
     }
 
     private async loadAdminCategories(data: MainMenuEntriesRequest, client: SocketIO.Socket): Promise<SocketResponse> {
-        const parsedCookie = client ? cookie.parse(client.handshake.headers.cookie) : null;
-        const token = parsedCookie ? parsedCookie.token : '';
-
-        const response = await AdminModuleService.getInstance().getAdminModules(token)
-            .then((categories: Array<AdminModuleCategory | AdminModule>) =>
-                new SocketResponse(
-                    AdministrationEvent.ADMIN_CATEGORIES_LOADED,
-                    new AdminCategoriesResponse(data.requestId, categories)
+        let adminCategoryResponse = await CacheService.getInstance().get('KIX_ADMIN_MODULES');
+        if (!adminCategoryResponse) {
+            adminCategoryResponse = await AdminModuleService.getInstance().getAdminModules()
+                .then((categories: Array<AdminModuleCategory | AdminModule>) =>
+                    new SocketResponse(
+                        AdministrationEvent.ADMIN_CATEGORIES_LOADED,
+                        new AdminCategoriesResponse(data.requestId, categories)
+                    )
                 )
-            )
-            .catch((error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error)));
-        return response;
+                .catch(
+                    (error) => new SocketResponse(SocketEvent.ERROR, new SocketErrorResponse(data.requestId, error))
+                );
+        }
+        return adminCategoryResponse;
     }
 
     private async updateFrontend(data: ISocketRequest): Promise<SocketResponse> {

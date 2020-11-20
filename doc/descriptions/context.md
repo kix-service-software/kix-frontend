@@ -2,7 +2,7 @@ A context is container which load and hold objects which can be used by componen
 * MainContext (general pages in agent portal, e.g. Ticket Dashboard, Ticket Details, CMDB Dashboard)
 * DialogContext (dialogs in agent portal, e.g. New Ticket Dialog, Edit Ticket Dialog)
 
-On the otherside the context needs a configuration which pretend which components are available at this context. This configuration contains different lists: 
+On the otherside the context needs a configuration which pretend which components are available at this context. This configuration contains different lists:
 * explorer
 * sidebars
 * content
@@ -57,12 +57,12 @@ const ticketDetailsContextDescriptor = new ContextDescriptor(
         ContextType.MAIN, ContextMode.DETAILS,
         true, 'object-details-page', ['tickets'], TicketDetailsContext
     );
-    await ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+    ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 ```
 
 ### Functionality
 
-If a page should be shown in the agent portal the context is always the required base for it. The application loads the context and its configuration from the configuration cache The component which is defined in the `ContextDescriptor` is loaded and included in the web application content area. After the configuration is loaded the context get initialized and the context is now responsible to load objects or execute other needed functionality. 
+If a page should be shown in the agent portal the context is always the required base for it. The application loads the context and its configuration from the configuration cache The component which is defined in the `ContextDescriptor` is loaded and included in the web application content area. After the configuration is loaded the context get initialized and the context is now responsible to load objects or execute other needed functionality.
 
 Components can register a listener on the context to get notified about changes to update theirself.
 

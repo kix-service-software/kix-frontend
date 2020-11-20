@@ -37,7 +37,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const context = await ContextService.getInstance().getContext<TicketTypeDetailsContext>(
             TicketTypeDetailsContext.CONTEXT_ID
         );
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         this.prepareActions();
         await this.prepareTable();

@@ -147,6 +147,10 @@ export class AuthenticationSocketClient extends SocketClient {
     private createPermissionRequest(permissions: UIComponentPermission[]): Promise<boolean> {
         return new Promise((resolve, reject) => {
 
+            if (!permissions || !permissions.length) {
+                resolve(true);
+            }
+
             const requestId = IdService.generateDateBasedId();
 
             const timeout = window.setTimeout(() => {

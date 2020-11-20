@@ -57,7 +57,9 @@ class Component {
         WidgetService.getInstance().setWidgetType('faq-article-group', WidgetType.GROUP);
 
         const context = await ContextService.getInstance().getContext<FAQDetailsContext>(FAQDetailsContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         context.registerListener(this.contextListenerId, {
             objectChanged: (id: string | number, faqArticle: FAQArticle, type: KIXObjectType | string) => {

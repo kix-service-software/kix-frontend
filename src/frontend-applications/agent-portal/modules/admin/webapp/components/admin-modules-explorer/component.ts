@@ -16,6 +16,7 @@ import { AdminModule } from '../../../model/AdminModule';
 import { TreeNode } from '../../../../base-components/webapp/core/tree';
 import { AdminModuleCategory } from '../../../model/AdminModuleCategory';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
+import { AuthenticationSocketClient } from '../../../../base-components/webapp/core/AuthenticationSocketClient';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -38,12 +39,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                     filter.textFilterValueChanged(null, this.state.filterValue);
                 }
             }
-            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
 
             const categories = await AdministrationSocketClient.getInstance().loadAdminCategories();
 
             if (categories) {
-                this.state.nodes = await this.prepareCategoryTreeNodes(categories);
+                await this.prepareCategoryTreeNodes(categories);
             }
 
             setTimeout(() => {
@@ -72,41 +73,66 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return activeNode;
     }
 
-    private async prepareCategoryTreeNodes(modules: Array<AdminModuleCategory | AdminModule>): Promise<TreeNode[]> {
+    private async prepareCategoryTreeNodes(
+        modules: Array<AdminModuleCategory | AdminModule>, parent?: TreeNode
+    ): Promise<void> {
         const adminModules: TreeNode[] = [];
-        let categories: TreeNode[] = [];
         if (modules) {
 
             for (const m of modules) {
                 if (m instanceof AdminModuleCategory) {
-                    const categoryTreeNodes = await this.prepareCategoryTreeNodes(m.children);
-                    const moduleTreeNodes = await this.prepareModuleTreeNodes(m.modules);
                     const name = await TranslationService.translate(m.name);
-                    categories.push(new TreeNode(
-                        m.id, name, m.icon, null, [
-                        ...categoryTreeNodes,
-                        ...moduleTreeNodes
-                    ], null, null, null, null, false, true, true)
+                    const categoryNode = new TreeNode(
+                        m.id, name, m.icon, null,
+                        [], null, null, null, null, false, true, true
                     );
+                    this.prepareCategoryTreeNodes(m.children, categoryNode);
+                    this.prepareModuleTreeNodes(m.modules, categoryNode);
+                    if (parent) {
+                        parent.children.push(categoryNode);
+                    } else {
+                        this.state.nodes.push(categoryNode);
+                        this.sortNodes();
+                        (this as any).setStateDirty('nodes');
+                    }
                 } else {
-                    const name = await TranslationService.translate(m.name);
-                    adminModules.push(new TreeNode(m.id, name, m.icon));
+                    const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
+                    if (allowed) {
+                        const name = await TranslationService.translate(m.name);
+                        this.state.nodes.push(new TreeNode(
+                            m.id, name, m.icon,
+                            undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                            undefined, undefined, undefined,
+                            ['MODULE']
+                        ));
+                        this.sortNodes();
+                        (this as any).setStateDirty('nodes');
+                    }
                 }
             }
         }
-
-        categories = this.sortNodes(categories);
-        return [...adminModules, ...categories];
     }
 
-    private async prepareModuleTreeNodes(modules: AdminModule[]): Promise<TreeNode[]> {
-        const nodes = [];
+    private async prepareModuleTreeNodes(modules: AdminModule[], parent?: TreeNode): Promise<void> {
         for (const m of modules) {
-            const name = await TranslationService.translate(m.name);
-            nodes.push(new TreeNode(m.id, name, m.icon));
+            const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(m.permissions);
+            if (allowed) {
+                const name = await TranslationService.translate(m.name);
+                const node = new TreeNode(
+                    m.id, name, m.icon,
+                    undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined,
+                    undefined, undefined, undefined,
+                    ['MODULE']
+                );
+                if (parent) {
+                    parent.children.push(node);
+                } else {
+                    this.state.nodes.push(node);
+                    this.sortNodes();
+                    (this as any).setStateDirty('nodes');
+                }
+            }
         }
-
-        return nodes;
     }
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
@@ -127,12 +153,19 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private sortNodes(nodes: TreeNode[]): TreeNode[] {
+    private sortNodes(nodes: TreeNode[] = this.state.nodes): TreeNode[] {
         return nodes.sort((a, b) => {
             if (a.children) {
                 a.children = this.sortNodes(a.children);
             }
-            return a.label.localeCompare(b.label);
+
+            if (a.flags.some((f) => f === 'MODULE') && !b.flags.some((f) => f === 'MODULE')) {
+                return -1;
+            } else if (!a.flags.some((f) => f === 'MODULE') && b.flags.some((f) => f === 'MODULE')) {
+                return 1;
+            } else {
+                return a.label.localeCompare(b.label);
+            }
         });
     }
 

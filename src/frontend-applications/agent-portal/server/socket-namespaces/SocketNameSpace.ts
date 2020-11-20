@@ -13,6 +13,8 @@ import { SocketEvent } from '../../modules/base-components/webapp/core/SocketEve
 import { ISocketRequest } from '../../modules/base-components/webapp/core/ISocketRequest';
 import { ProfilingService } from '../../../../server/services/ProfilingService';
 import { SocketResponse } from '../../modules/base-components/webapp/core/SocketResponse';
+import { ConfigurationService } from '../../../../server/services/ConfigurationService';
+import { LoggingService } from '../../../../server/services/LoggingService';
 
 export abstract class SocketNameSpace implements ISocketNamespace {
 
@@ -21,6 +23,8 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     protected abstract registerEvents(client: SocketIO.Socket): void;
 
     protected namespace: SocketIO.Namespace;
+
+    private requestCounter: number = 0;
 
     public registerNamespace(server: SocketIO.Server): void {
         this.initialize();
@@ -33,7 +37,15 @@ export abstract class SocketNameSpace implements ISocketNamespace {
     }
 
     protected async initialize(): Promise<void> {
-        return;
+        const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
+        if (serverConfig && serverConfig.LOG_REQUEST_QUEUES_INTERVAL) {
+            setInterval(
+                () => LoggingService.getInstance().info(
+                    `Socket Request Queue Length (${this.getNamespace()}): ${this.requestCounter}`
+                ),
+                serverConfig.LOG_REQUEST_QUEUES_INTERVAL
+            );
+        }
     }
 
     protected registerEventHandler<RQ extends ISocketRequest, RS>(
@@ -62,12 +74,15 @@ export abstract class SocketNameSpace implements ISocketNamespace {
 
             const message = `${this.getNamespace()} / ${event} ${JSON.stringify(logData)}`;
             const profileTaskId = ProfilingService.getInstance().start('SocketIO', message, data);
+            this.requestCounter++;
 
             handler(data, client).then((response) => {
                 client.emit(response.event, response.data);
 
                 // stop profiling
                 ProfilingService.getInstance().stop(profileTaskId, response.data);
+
+                this.requestCounter--;
             });
 
         });

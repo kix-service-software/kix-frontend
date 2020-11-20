@@ -26,7 +26,7 @@ export class UIModule implements IUIModule {
             ReleaseContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'release-module', ['release'], ReleaseContext
         );
-        await ContextService.getInstance().registerContext(releaseContext);
+        ContextService.getInstance().registerContext(releaseContext);
     }
 
     public unRegister(): Promise<void> {

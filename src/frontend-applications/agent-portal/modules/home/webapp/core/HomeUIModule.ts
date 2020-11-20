@@ -30,7 +30,7 @@ export class UIModule implements IUIModule {
             HomeContext.CONTEXT_ID, [KIXObjectType.ANY], ContextType.MAIN, ContextMode.DASHBOARD,
             false, 'home', ['home'], HomeContext
         );
-        await ContextService.getInstance().registerContext(homeContext);
+        ContextService.getInstance().registerContext(homeContext);
     }
 
 }

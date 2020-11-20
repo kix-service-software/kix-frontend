@@ -31,6 +31,7 @@ import { ContextService } from '../modules/base-components/webapp/core/ContextSe
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { SortUtil } from './SortUtil';
 import { SortOrder } from './SortOrder';
+import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
 
 export abstract class Context {
 
@@ -324,40 +325,41 @@ export abstract class Context {
         return sidebars ? sidebars.length > 0 : false;
     }
 
-    public getWidgetConfiguration(instanceId: string): WidgetConfiguration {
-        let configuration: WidgetConfiguration;
+    public async getWidgetConfiguration(instanceId: string): Promise<WidgetConfiguration> {
+        let configuration: ConfiguredWidget;
 
         if (this.configuration) {
-            const explorer = this.configuration.explorer.find((e) => e.instanceId === instanceId);
-            configuration = explorer ? explorer.configuration : undefined;
+            configuration = this.configuration.explorer.find((e) => e.instanceId === instanceId);
 
             if (!configuration) {
-                const sidebar = this.configuration.sidebars.find((e) => e.instanceId === instanceId);
-                configuration = sidebar ? sidebar.configuration : undefined;
+                configuration = this.configuration.sidebars.find((e) => e.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const overlay = this.configuration.overlays.find((o) => o.instanceId === instanceId);
-                configuration = overlay ? overlay.configuration : undefined;
+                configuration = this.configuration.overlays.find((o) => o.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const laneWidget = this.configuration.lanes.find((lw) => lw.instanceId === instanceId);
-                configuration = laneWidget ? laneWidget.configuration : undefined;
+                configuration = this.configuration.lanes.find((lw) => lw.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const contentWidget = this.configuration.content.find((cw) => cw.instanceId === instanceId);
-                configuration = contentWidget ? contentWidget.configuration : undefined;
+                configuration = this.configuration.content.find((cw) => cw.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const otherWidget = this.configuration.others.find((cw) => cw.instanceId === instanceId);
-                configuration = otherWidget ? otherWidget.configuration : undefined;
+                configuration = this.configuration.others.find((cw) => cw.instanceId === instanceId);
             }
         }
 
-        return configuration;
+        if (configuration && Array.isArray(configuration.permissions)) {
+            const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(configuration.permissions);
+            if (!allowed) {
+                return null;
+            }
+        }
+
+        return configuration ? configuration.configuration : null;
     }
 
     public getContextSpecificWidgetType(instanceId: string): WidgetType {

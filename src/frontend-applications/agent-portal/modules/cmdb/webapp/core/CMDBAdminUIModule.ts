@@ -23,6 +23,8 @@ import { ContextDescriptor } from '../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 
 
@@ -51,25 +53,34 @@ export class UIModule implements IUIModule {
         const newConfigItemClassDetailsContext = new ContextDescriptor(
             NewConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext
+            true, 'new-config-item-class-dialog', ['configitemclasses'], NewConfigItemClassDialogContext,
+            [
+                new UIComponentPermission('system/cmdb/classes', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
+        ContextService.getInstance().registerContext(newConfigItemClassDetailsContext);
 
         ActionFactory.getInstance().registerAction('cmdb-admin-ci-class-edit', ConfigItemClassEditAction);
 
         const editConfigItemClassContext = new ContextDescriptor(
             EditConfigItemClassDialogContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext
+            true, 'edit-config-item-class-dialog', ['configitemclasses'], EditConfigItemClassDialogContext,
+            [
+                new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editConfigItemClassContext);
+        ContextService.getInstance().registerContext(editConfigItemClassContext);
 
         const configItemClassDetailsContext = new ContextDescriptor(
             ConfigItemClassDetailsContext.CONTEXT_ID, [KIXObjectType.CONFIG_ITEM_CLASS],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['configitemclasses'], ConfigItemClassDetailsContext
+            true, 'object-details-page', ['configitemclasses'], ConfigItemClassDetailsContext,
+            [
+                new UIComponentPermission('system/cmdb/classes', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(configItemClassDetailsContext);
+        ContextService.getInstance().registerContext(configItemClassDetailsContext);
     }
 
 }

@@ -53,7 +53,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (context) {
-            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
             this.initWidget();
         }
         this.state.prepared = true;

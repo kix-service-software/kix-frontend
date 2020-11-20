@@ -36,7 +36,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const context = await ContextService.getInstance().getContext<JobDetailsContext>(JobDetailsContext.CONTEXT_ID);
         if (context) {
-            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
             this.initWidget(context);
 
             context.registerListener('jop-exec-plan-widget', {

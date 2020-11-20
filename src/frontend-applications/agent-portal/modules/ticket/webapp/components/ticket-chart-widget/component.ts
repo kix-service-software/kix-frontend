@@ -36,46 +36,49 @@ class Component {
     public async onMount(): Promise<void> {
         const currentContext = ContextService.getInstance().getActiveContext();
         this.state.widgetConfiguration = currentContext
-            ? currentContext.getWidgetConfiguration(this.state.instanceId)
+            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
-        this.state.title = this.state.widgetConfiguration ? this.state.widgetConfiguration.title : 'Tickets';
-        this.ticketChartConfiguration = this.state.widgetConfiguration.configuration;
+        if (this.state.widgetConfiguration) {
+            this.state.show = true;
+            this.state.title = this.state.widgetConfiguration.title;
+            this.ticketChartConfiguration = this.state.widgetConfiguration.configuration;
 
-        this.initChartConfig();
+            this.initChartConfig();
 
-        if (this.state.widgetConfiguration.contextDependent) {
-            this.ticketChartConfiguration.configuration.chartConfiguration.data.labels = [];
-            this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
+            if (this.state.widgetConfiguration.contextDependent) {
+                this.ticketChartConfiguration.configuration.chartConfiguration.data.labels = [];
+                this.ticketChartConfiguration.configuration.chartConfiguration.data.datasets[0].data = [];
 
-            currentContext.registerListener('TicketChartComponent' + IdService.generateDateBasedId(), {
-                explorerBarToggled: () => { return; },
-                sidebarToggled: () => { return; },
-                objectChanged: () => { return; },
-                objectListChanged: () => { return; },
-                scrollInformationChanged: () => { return; },
-                filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this),
-                additionalInformationChanged: () => { return; }
-            });
+                currentContext.registerListener('TicketChartComponent' + IdService.generateDateBasedId(), {
+                    explorerBarToggled: () => { return; },
+                    sidebarToggled: () => { return; },
+                    objectChanged: () => { return; },
+                    objectListChanged: () => { return; },
+                    scrollInformationChanged: () => { return; },
+                    filteredObjectListChanged: this.contextFilteredObjectListChanged.bind(this),
+                    additionalInformationChanged: () => { return; }
+                });
 
-            this.contextFilteredObjectListChanged(
-                KIXObjectType.TICKET, currentContext.getFilteredObjectList(KIXObjectType.TICKET)
-            );
+                this.contextFilteredObjectListChanged(
+                    KIXObjectType.TICKET, currentContext.getFilteredObjectList(KIXObjectType.TICKET)
+                );
 
-            this.subscriber = {
-                eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
-                eventPublished: (data: any, eventId: string) => {
-                    if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.TICKET) {
-                        this.state.loading = true;
+                this.subscriber = {
+                    eventSubscriberId: IdService.generateDateBasedId(this.state.instanceId),
+                    eventPublished: (data: any, eventId: string) => {
+                        if (eventId === ContextUIEvent.RELOAD_OBJECTS && data === KIXObjectType.TICKET) {
+                            this.state.loading = true;
+                        }
                     }
-                }
-            };
-            EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
-        } else {
-            const tickets = await KIXObjectService.loadObjects<Ticket>(
-                KIXObjectType.TICKET, null, this.ticketChartConfiguration.loadingOptions
-            );
-            this.contextFilteredObjectListChanged(KIXObjectType.TICKET, tickets);
+                };
+                EventService.getInstance().subscribe(ContextUIEvent.RELOAD_OBJECTS, this.subscriber);
+            } else {
+                const tickets = await KIXObjectService.loadObjects<Ticket>(
+                    KIXObjectType.TICKET, null, this.ticketChartConfiguration.loadingOptions
+                );
+                this.contextFilteredObjectListChanged(KIXObjectType.TICKET, tickets);
+            }
         }
     }
 
