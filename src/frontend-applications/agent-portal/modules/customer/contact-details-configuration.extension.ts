@@ -10,7 +10,6 @@
 import { IConfigurationExtension } from '../../server/extensions/IConfigurationExtension';
 import { ContactDetailsContext } from './webapp/core';
 import { IConfiguration } from '../../model/configuration/IConfiguration';
-import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { ConfigurationType } from '../../model/configuration/ConfigurationType';
 import { KIXObjectType } from '../../model/kix/KIXObjectType';
 import { ContactProperty } from './model/ContactProperty';
@@ -33,6 +32,7 @@ import { UserProperty } from '../user/model/UserProperty';
 import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../model/ContextMode';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ObjectIcon } from '../icon/model/ObjectIcon';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -43,50 +43,225 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
 
-        const userRouting = new RoutingConfiguration(
-            'user-details', KIXObjectType.USER,
-            ContextMode.DETAILS, ContactProperty.ASSIGNED_USER_ID, false
-        );
-
-        const infoConfig = new ObjectInformationWidgetConfiguration(
-            'contact-details-object-information-config', 'Contact Info', ConfigurationType.ObjectInformation,
-            KIXObjectType.CONTACT,
-            [
-                ContactProperty.TITLE,
-                ContactProperty.FIRSTNAME,
-                ContactProperty.LASTNAME,
-                UserProperty.USER_LOGIN,
-                UserProperty.USER_ACCESS,
-                UserProperty.USER_LANGUAGE,
-                ContactProperty.PRIMARY_ORGANISATION_ID,
-                ContactProperty.PHONE,
-                ContactProperty.MOBILE,
-                ContactProperty.FAX,
-                ContactProperty.EMAIL,
-                ContactProperty.STREET,
-                ContactProperty.ZIP,
-                ContactProperty.CITY,
-                ContactProperty.COUNTRY,
-                ContactProperty.COMMENT,
-                KIXObjectProperty.VALID_ID,
-                KIXObjectProperty.CREATE_BY,
-                KIXObjectProperty.CREATE_TIME,
-                KIXObjectProperty.CHANGE_BY,
-                KIXObjectProperty.CHANGE_TIME
-            ], false,
-            [
-                [UserProperty.USER_LOGIN, userRouting],
-            ]
-        );
-        configurations.push(infoConfig);
-
         const contactInfoWidget = new WidgetConfiguration(
             'contact-details-info-widget', 'Contact Info Widget', ConfigurationType.Widget,
-            'object-information-widget', 'Translatable#Contact Information', [],
-            new ConfigurationDefinition(
-                'contact-details-object-information-config', ConfigurationType.ObjectInformation
-            ),
-            null, false, true, null, false
+            'object-information-card-widget', 'Translatable#Contact Information', [], null,
+            {
+                avatar: [],
+                rows: [
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'icon',
+                                    componentData: {
+                                        icon: new ObjectIcon(
+                                            null, KIXObjectType.CONTACT, '<KIX_CONTACT_ID>', null, null, 'kix-icon-man-bubble'
+                                        ),
+                                        style: 'width: 5rem;height:5rem;font-size:5rem;'
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.TITLE
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.FIRSTNAME
+                                    }
+                                },
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.LASTNAME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.PRIMARY_ORGANISATION_ID
+                                    }
+                                },
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.VALID_ID
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: UserProperty.USER_LOGIN
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: UserProperty.USER_ACCESS
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: UserProperty.USER_LANGUAGE
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.PHONE
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.MOBILE
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.FAX
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.EMAIL
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.STREET
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.ZIP
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.CITY
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: ContactProperty.COUNTRY
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CREATE_TIME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CREATE_BY
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CHANGE_TIME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CHANGE_BY
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: false,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.COMMENT
+                                    }
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            }, false, true, null, false
         );
         configurations.push(contactInfoWidget);
 

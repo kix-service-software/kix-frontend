@@ -513,18 +513,35 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.CONTACT_ID:
             case TicketProperty.CONTACT:
-                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT));
+                icons.push(new ObjectIcon(
+                    null, KIXObjectType.CONTACT, ticket.ContactID, null, null,
+                    LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT)
+                ));
                 break;
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.ORGANISATION:
-                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ORGANISATION));
+                icons.push(new ObjectIcon(
+                    null, KIXObjectType.ORGANISATION, ticket.OrganisationID, null, null,
+                    LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ORGANISATION)
+                ));
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.OWNER:
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.RESPONSIBLE:
             case TicketProperty.CREATED_USER_ID:
-                icons.push(LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER));
+                const users = await KIXObjectService.loadObjects<User>(
+                    KIXObjectType.USER, [ticket[property]],
+                    new KIXObjectLoadingOptions(
+                        null, null, 1, [UserProperty.CONTACT]
+                    ), null, true, true, true
+                ).catch((error) => [] as User[]);
+                if (Array.isArray(users) && users.length) {
+                    icons.push(new ObjectIcon(
+                        null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
+                        LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
+                    );
+                }
                 break;
             case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
