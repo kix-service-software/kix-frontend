@@ -23,6 +23,8 @@ import { ActionFactory } from '../../../base-components/webapp/core/ActionFactor
 import { SysconfigTableResetAction } from './SysconfigTableResetAction';
 import { ReloadConfigurationCacheAction } from './ReloadConfigurationCacheAction';
 import { SysconfigEditAction } from './SysconfigEditAction';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { SysConfigPlaceholderHandler } from './SysConfigPlaceholderHandler';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
@@ -59,6 +61,8 @@ export class UIModule implements IUIModule {
         ActionFactory.getInstance().registerAction('sysconfig-edit-action', SysconfigEditAction);
         ActionFactory.getInstance().registerAction('sysconfig-reset-action', SysconfigTableResetAction);
         ActionFactory.getInstance().registerAction('activate-configuration', ReloadConfigurationCacheAction);
+
+        PlaceholderService.getInstance().registerPlaceholderHandler(new SysConfigPlaceholderHandler());
     }
 
 }

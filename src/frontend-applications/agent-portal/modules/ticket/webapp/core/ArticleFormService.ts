@@ -40,6 +40,9 @@ import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
 import { LabelService } from '../../../base-components/webapp/core/LabelService';
 import { FormConfiguration } from '../../../../model/configuration/FormConfiguration';
+import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
+import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
+import { TicketFormService } from './TicketFormService';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -134,6 +137,12 @@ export class ArticleFormService extends KIXObjectFormService {
                 this.getBodyField(formInstance, clear),
                 this.getAttachmentField(formInstance, clear)
             ];
+
+            formInstance.provideFormFieldValuesForProperties([
+                [ArticleProperty.TO, null],
+                [ArticleProperty.CC, null],
+                [ArticleProperty.BCC, null],
+            ], null);
         } else if (channel.Name === 'email') {
             fieldPromises = [
                 this.getVisibleField(formInstance, clear),
@@ -494,7 +503,7 @@ export class ArticleFormService extends KIXObjectFormService {
     }
 
     public async createFormFieldConfigurations(
-        formFields: FormFieldConfiguration[]
+        formFields: FormFieldConfiguration[], useTicketFormService: boolean = true
     ): Promise<FormFieldConfiguration[]> {
         const filterProperties = [
             ArticleProperty.TO,
@@ -546,6 +555,13 @@ export class ArticleFormService extends KIXObjectFormService {
                     break;
                 default:
             }
+        }
+
+        const ticketFormService = ServiceRegistry.getServiceInstance<TicketFormService>(
+            KIXObjectType.TICKET, ServiceType.FORM
+        );
+        if (ticketFormService && useTicketFormService) {
+            formFields = await ticketFormService.createFormFieldConfigurations(formFields, false);
         }
 
         return formFields;

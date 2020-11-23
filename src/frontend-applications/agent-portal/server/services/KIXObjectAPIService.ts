@@ -244,9 +244,9 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
     }
 
     protected sendDeleteRequest<R>(
-        token: string, clientRequestId: string, uri: string[], cacheKeyPrefix: string
+        token: string, clientRequestId: string, uri: string[], cacheKeyPrefix: string, logError: boolean = true
     ): Promise<Error[]> {
-        return this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix);
+        return this.httpService.delete<R>(uri, token, clientRequestId, cacheKeyPrefix, logError);
     }
 
     protected buildUri(...args): string {

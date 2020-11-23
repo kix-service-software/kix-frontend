@@ -142,6 +142,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                             disabled=(dynamicValue.readonly && !dynamicValue.changeable)
                             on-input("setValue", dynamicValue)/>
                     </else-if>
+                    <else-if(dynamicValue.isCheckbox)>
+                        <input type="checkbox" checked=dynamicValue.value.value on-click("setCheckboxValue", dynamicValue)/>
+                    </else-if>
                     <else-if(dynamicValue.isSpecificInput)>
                         <${dynamicValue.specificInputType}
                             propertyId=dynamicValue.value.property

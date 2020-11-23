@@ -126,7 +126,8 @@ export class HttpService {
     }
 
     public async delete<T>(
-        resources: string[], token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+        resources: string[], token: any, clientRequestId: string, cacheKeyPrefix: string = '',
+        logError: boolean = true
     ): Promise<Error[]> {
         const options = {
             method: RequestMethod.DELETE,
@@ -135,7 +136,7 @@ export class HttpService {
         const errors = [];
         const executePromises = [];
         resources.forEach((resource) => executePromises.push(
-            this.executeRequest<T>(resource, token, clientRequestId, options)
+            this.executeRequest<T>(resource, token, clientRequestId, options, null, logError)
                 .catch((error: Error) => errors.push(error))
         ));
 

@@ -29,6 +29,7 @@ export class DynamicFormFieldValue {
     public isDate: boolean = false;
     public isDateTime: boolean = false;
     public isTextarea: boolean = false;
+    public isCheckbox: boolean = false;
     public isSpecificInput: boolean = false;
     public isNumber: boolean = false;
     public specificInputType: string = null;
@@ -249,6 +250,7 @@ export class DynamicFormFieldValue {
             }
 
             this.isTextarea = inputType === InputFieldTypes.TEXT_AREA;
+            this.isCheckbox = inputType === InputFieldTypes.CHECKBOX;
 
             this.isSpecificInput = inputType === 'SPECIFIC';
             if (this.isSpecificInput) {

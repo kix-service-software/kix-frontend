@@ -95,7 +95,7 @@ export class TicketDetailsContext extends Context {
             objects = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
                 new KIXObjectLoadingOptions(
-                    null, null, null, [ArticleProperty.FLAGS, ArticleProperty.ATTACHMENTS]
+                    null, null, null, [ArticleProperty.ATTACHMENTS, ArticleProperty.FLAGS, 'ObjectActions']
                 ), new ArticleLoadingOptions(this.objectId)
             ).catch(() => [] as Article[]) || [];
         } else if (objectType === KIXObjectType.TICKET_HISTORY) {

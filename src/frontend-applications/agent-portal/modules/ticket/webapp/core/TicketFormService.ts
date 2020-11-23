@@ -173,7 +173,7 @@ export class TicketFormService extends KIXObjectFormService {
     }
 
     public async createFormFieldConfigurations(
-        formFields: FormFieldConfiguration[]
+        formFields: FormFieldConfiguration[], useArticleFormService: boolean = true
     ): Promise<FormFieldConfiguration[]> {
         await super.createFormFieldConfigurations(formFields);
 
@@ -247,11 +247,11 @@ export class TicketFormService extends KIXObjectFormService {
             }
         }
 
-        const articleFormService = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
+        const articleFormService = ServiceRegistry.getServiceInstance<ArticleFormService>(
             KIXObjectType.ARTICLE, ServiceType.FORM
         );
-        if (articleFormService) {
-            formFields = await articleFormService.createFormFieldConfigurations(formFields);
+        if (articleFormService && useArticleFormService) {
+            formFields = await articleFormService.createFormFieldConfigurations(formFields, false);
         }
 
         return formFields;

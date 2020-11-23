@@ -171,7 +171,7 @@ class Component extends FormInputComponent<string | number | string[] | number[]
             const objectIds: any[] = Array.isArray(formValue.value)
                 ? formValue.value : [formValue.value];
 
-            const selectedNodes = [];
+            let selectedNodes = [];
 
             if (!this.autocomplete) {
                 const nodes = treeHandler.getTree();
@@ -201,6 +201,17 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                             }
                         }
                     }
+                    const freeTextOption = this.state.field.options.find(
+                        (o) => o.option === ObjectReferenceOptions.FREETEXT
+                    );
+
+                    if (freeTextOption && freeTextOption.value) {
+                        const freeTextNodes = objectIds
+                            .filter((oid) => !selectedNodes.some((sn) => sn.id.toString() === oid.toString()))
+                            .map((v) => new TreeNode(v, v));
+                        selectedNodes = [...selectedNodes, ...freeTextNodes];
+                    }
+
                 }
             }
             treeHandler.selectNone(true);
