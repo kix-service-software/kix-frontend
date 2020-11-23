@@ -25,6 +25,7 @@ import { ServiceRegistry } from '../../../../base-components/webapp/core/Service
 import { ServiceType } from '../../../../base-components/webapp/core/ServiceType';
 import { AdditionalContextInformation } from '../../../../base-components/webapp/core/AdditionalContextInformation';
 import { KIXObjectFormService } from '../../../../base-components/webapp/core/KIXObjectFormService';
+import { ArticleProperty } from '../../../model/ArticleProperty';
 
 export class EditTicketDialogContext extends Context {
 
@@ -93,7 +94,7 @@ export class EditTicketDialogContext extends Context {
     private async loadTicket(): Promise<Ticket> {
         const ticketId = this.getObjectId();
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS]
+            null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS, TicketProperty.ARTICLES, ArticleProperty.ATTACHMENTS]
         );
 
         let tickets: Ticket[];
@@ -124,6 +125,16 @@ export class EditTicketDialogContext extends Context {
             object = this.contact;
         }
         return object;
+    }
+
+    public async getObjectList<T = KIXObject>(objectType: KIXObjectType | string): Promise<T[]> {
+        if (objectType === KIXObjectType.ARTICLE) {
+            const ticket = await this.getObject<Ticket>(KIXObjectType.TICKET);
+            if (ticket && Array.isArray(ticket.Articles)) {
+                return ticket.Articles as any[];
+            }
+        }
+        return this.objectLists.get(objectType) as any[];
     }
 
     public reset(): void {

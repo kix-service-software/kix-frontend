@@ -43,15 +43,22 @@ export class TicketDialogUtil {
         );
     }
 
-    public static async editTicket(ticketId?: number, formId?: string, deleteForm: boolean = true): Promise<void> {
-        if (!ticketId) {
-            const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
-                TicketDetailsContext.CONTEXT_ID
-            );
+    public static async editTicket(
+        ticketId?: number, articleId?: number, formId?: string, deleteForm: boolean = true
+    ): Promise<void> {
+        const context = await ContextService.getInstance().getContext<TicketDetailsContext>(
+            TicketDetailsContext.CONTEXT_ID
+        );
 
-            if (context) {
-                ticketId = Number(context.getObjectId());
-            }
+        if (!ticketId && context) {
+            ticketId = Number(context.getObjectId());
+        }
+
+        if (articleId && context) {
+            const editContext = await ContextService.getInstance().getContext<TicketDetailsContext>(
+                EditTicketDialogContext.CONTEXT_ID
+            );
+            editContext.setAdditionalInformation('REFERENCED_ARTICLE_ID', articleId);
         }
 
         if (ticketId) {

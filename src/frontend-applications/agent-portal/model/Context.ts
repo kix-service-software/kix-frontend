@@ -83,10 +83,10 @@ export abstract class Context {
         return;
     }
 
-    public async getAdditionalActions(): Promise<AbstractAction[]> {
+    public async getAdditionalActions(object?: KIXObject): Promise<AbstractAction[]> {
         let actions: AbstractAction[] = [];
         for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
-            const extendedActions = await extension.getAdditionalActions(this);
+            const extendedActions = await extension.getAdditionalActions(this, object);
             if (Array.isArray(extendedActions)) {
                 actions = [...actions, ...extendedActions];
             }

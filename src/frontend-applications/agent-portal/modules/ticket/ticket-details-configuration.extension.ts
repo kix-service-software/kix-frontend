@@ -40,6 +40,8 @@ import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 import { ObjectInformationWidgetConfiguration } from '../../model/configuration/ObjectInformationWidgetConfiguration';
 import { OrganisationProperty } from '../customer/model/OrganisationProperty';
 import { UserProperty } from '../user/model/UserProperty';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { ToggleOptions } from '../base-components/webapp/core/table';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -367,7 +369,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const tableSettings = new TableWidgetConfiguration(
             'ticket-details-article-list-table-config', 'Article Table', ConfigurationType.TableWidget,
-            KIXObjectType.ARTICLE, undefined, undefined, null, ['article-attachment-count']
+            KIXObjectType.ARTICLE, undefined, undefined, new TableConfiguration(
+                'ticket-details-article-list-table', 'Article Table', ConfigurationType.Table, KIXObjectType.ARTICLE,
+                null, null, null, null, null, true, new ToggleOptions(
+                    'ticket-article-details', 'article',
+                    [
+                        'article-reply-action',
+                        'article-forward-action',
+                        'article-get-plain-action'
+                    ], true, null, null, true
+                )
+            ), ['article-attachment-count']
         );
         configurations.push(tableSettings);
 

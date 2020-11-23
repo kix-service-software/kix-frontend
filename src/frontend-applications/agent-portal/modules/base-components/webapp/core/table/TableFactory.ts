@@ -40,7 +40,7 @@ export abstract class TableFactory implements ITableFactory {
         objectType?: KIXObjectType | string, objects?: KIXObject[]
     ): Table;
 
-    public getDefaultColumnConfiguration(property: string): IColumnConfiguration {
+    public getDefaultColumnConfiguration(property: string, translatable: boolean = true): IColumnConfiguration {
         let config;
         switch (property) {
             case KIXObjectProperty.COMMENT:
@@ -76,7 +76,9 @@ export abstract class TableFactory implements ITableFactory {
                 break;
             default:
                 config = new DefaultColumnConfiguration(
-                    null, null, null, property, true, false, true, false, 150, true, true);
+                    undefined, undefined, undefined, property, true, false, true, false, 150, true, true,
+                    undefined, undefined, undefined, undefined, undefined, translatable
+                );
         }
         return config;
     }
@@ -101,6 +103,8 @@ export abstract class TableFactory implements ITableFactory {
                 const cellValue = cell.getValue();
                 if (Array.isArray(cellValue.objectValue)) {
                     cellValues = cellValue.objectValue;
+                } else if (cellValue.displayValue) {
+                    cellValues.push(cellValue.displayValue);
                 } else {
                     cellValues.push(cellValue.objectValue);
                 }

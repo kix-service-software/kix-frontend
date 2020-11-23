@@ -31,6 +31,8 @@ export enum InputFieldTypes {
 
     TEXT_AREA = 'TEXT_AREA',
 
-    NUMBER = 'NUMBER'
+    NUMBER = 'NUMBER',
+
+    CHECKBOX = 'CHECKBOX'
 
 }

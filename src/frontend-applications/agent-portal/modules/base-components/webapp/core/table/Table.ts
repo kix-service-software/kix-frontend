@@ -125,6 +125,7 @@ export class Table implements Table {
 
             if (this.tableConfiguration &&
                 this.tableConfiguration.toggle &&
+                this.tableConfiguration.toggleOptions &&
                 this.tableConfiguration.toggleOptions.toggleFirst &&
                 this.rows.length
             ) {
