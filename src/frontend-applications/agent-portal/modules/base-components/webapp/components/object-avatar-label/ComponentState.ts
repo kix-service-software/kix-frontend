@@ -9,15 +9,12 @@
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 
-
 export class ComponentState {
 
     public constructor(
-        public propertyDisplayText: string = null,
-        public propertyName: string = '',
-        public propertyIcon: string | ObjectIcon = null,
-        public hasText: boolean = true,
-        public showLabel: boolean = true
+        public displayText: string = '',
+        public description: string = '',
+        public icon: ObjectIcon | string = null
     ) { }
 
 }

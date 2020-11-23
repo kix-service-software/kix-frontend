@@ -26,4 +26,6 @@ export class ComponentInput {
 
     public showText: boolean;
 
+    public showLabel: boolean;
+
 }

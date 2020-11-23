@@ -7,30 +7,30 @@
  * --
  */
 
-import { ComponentState } from './ComponentState';
-import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
-import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
-import { KIXObject } from '../../../../../model/kix/KIXObject';
-
-import { Label } from '../../../../base-components/webapp/core/Label';
-import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
-import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
 import { RoutingConfiguration } from '../../../../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../../../../model/ContextMode';
-import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
-import { RoutingService } from '../../../../base-components/webapp/core/RoutingService';
-
-import { LabelService } from '../../../../base-components/webapp/core/LabelService';
-import { TicketProperty } from '../../../../ticket/model/TicketProperty';
-import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
+import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
+import { AbstractMarkoComponent } from '../../../../base-components/webapp/core/AbstractMarkoComponent';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
+import { Label } from '../../../../base-components/webapp/core/Label';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { RoutingService } from '../../../../base-components/webapp/core/RoutingService';
+import { ConfigItemProperty } from '../../../../cmdb/model/ConfigItemProperty';
+import { TicketProperty } from '../../../../ticket/model/TicketProperty';
+import { DynamicField } from '../../../model/DynamicField';
+import { DynamicFieldTypes } from '../../../model/DynamicFieldTypes';
+import { DynamicFieldValue } from '../../../model/DynamicFieldValue';
+import { ComponentState } from './ComponentState';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
     private name: string;
     private object: KIXObject;
+    private field: DynamicField;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -63,8 +63,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         if (this.name && this.object) {
             this.state.field = await KIXObjectService.loadDynamicField(this.name);
-            this.createDynamicFieldInfos();
+            await this.createDynamicFieldInfos();
         }
+        this.state.prepared = true;
     }
 
     private async createDynamicFieldInfos(): Promise<void> {

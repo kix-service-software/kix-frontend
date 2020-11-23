@@ -2,7 +2,6 @@
     "dependencies": [
         "require ./faq-article-content-widget",
         "require ./faq-article-history-widget",
-        "require ./faq-article-info-widget",
         "require ./faq-article-list-widget",
         "require ./faq-category-explorer"
     ]

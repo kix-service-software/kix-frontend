@@ -7,17 +7,16 @@
  * --
  */
 
-import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-
+import { Label } from '../../../../base-components/webapp/core/Label';
+import { DynamicField } from '../../../model/DynamicField';
 
 export class ComponentState {
 
     public constructor(
-        public propertyDisplayText: string = null,
-        public propertyName: string = '',
-        public propertyIcon: string | ObjectIcon = null,
-        public hasText: boolean = true,
-        public showLabel: boolean = true
+        public labels: Label[] = [],
+        public checklist: any = null,
+        public prepared: boolean = false,
+        public field: DynamicField = null
     ) { }
 
 }

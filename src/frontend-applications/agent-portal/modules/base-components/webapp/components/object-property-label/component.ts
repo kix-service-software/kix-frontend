@@ -12,6 +12,7 @@ import { ComponentInput } from './ComponentInput';
 
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { LabelService } from '../../core/LabelService';
+import { ContextService } from '../../core/ContextService';
 
 export class ObjectPropertyLabelComponent {
 
@@ -27,6 +28,7 @@ export class ObjectPropertyLabelComponent {
     public onInput(input: ComponentInput): void {
         this.property = input.property;
         this.state.hasText = typeof input.showText !== 'undefined' ? input.showText : true;
+        this.state.showLabel = typeof input.showLabel !== 'undefined' ? input.showLabel : true;
         if (this.object !== input.object) {
             this.object = input.object;
             this.prepareDisplayText();
@@ -45,6 +47,11 @@ export class ObjectPropertyLabelComponent {
 
     private async preparePropertyName(): Promise<void> {
         if (this.property) {
+            if (!this.object) {
+                const context = ContextService.getInstance().getActiveContext();
+                this.object = await context.getObject();
+            }
+
             let name = await LabelService.getInstance().getPropertyText(this.property, this.object.KIXObjectType);
             if (name === null) {
                 name = this.property;
@@ -56,6 +63,11 @@ export class ObjectPropertyLabelComponent {
     private async getIcon(): Promise<string | ObjectIcon> {
         let icon: string | ObjectIcon;
         if (this.property) {
+            if (!this.object) {
+                const context = ContextService.getInstance().getActiveContext();
+                this.object = await context.getObject();
+            }
+
             const icons = await LabelService.getInstance().getIcons(this.object, this.property);
             if (icons && icons.length) {
                 icon = icons[0];
@@ -65,6 +77,11 @@ export class ObjectPropertyLabelComponent {
     }
 
     private async getPropertyDisplayText(): Promise<string> {
+        if (!this.object) {
+            const context = ContextService.getInstance().getActiveContext();
+            this.object = await context.getObject();
+        }
+
         if (this.object && this.property) {
             let displayText = await LabelService.getInstance().getDisplayText(this.object, this.property);
             if (displayText === null) {

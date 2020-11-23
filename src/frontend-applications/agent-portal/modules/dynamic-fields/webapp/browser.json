@@ -11,6 +11,7 @@
         "require ./components/edit-dynamic-field-dialog",
         "require ./components/dynamic-field-checklist-cell",
         "require ./components/dynamic-field-checklist-progress",
+        "require ./components/dynamic-field-value",
         "./static/jsoneditor.min.js"
     ]
 }
