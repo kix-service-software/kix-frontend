@@ -43,9 +43,13 @@ export class Component implements IActionListener {
     }
 
     private async initActionList(input: any): Promise<void> {
-        await this.setActionList(input.list);
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.state.prepared = true;
+
+        if (Array.isArray(input.list) && input.list.length) {
+            await this.setActionList(input.list);
+        }
+
         setTimeout(() => this.prepareActionLists(), 100);
     }
 
