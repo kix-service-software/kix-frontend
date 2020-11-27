@@ -117,19 +117,7 @@ export class AgentService extends KIXObjectService<User> {
     public async prepareFullTextFilter(searchValue: string): Promise<FilterCriteria[]> {
         return [
             new FilterCriteria(
-                UserProperty.USER_LOGIN, SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
-            ),
-            new FilterCriteria(
-                'UserFullname', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
-            ),
-            new FilterCriteria(
-                'UserFirstname', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
-            ),
-            new FilterCriteria(
-                'UserLastname', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
-            ),
-            new FilterCriteria(
-                'UserEmail', SearchOperator.LIKE, FilterDataType.STRING, FilterType.OR, `*${searchValue}*`
+                UserProperty.USER_LOGIN, SearchOperator.CONTAINS, FilterDataType.STRING, FilterType.OR, searchValue
             )
         ];
     }

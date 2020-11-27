@@ -288,7 +288,7 @@ class Extension extends KIXExtension implements IConfigurationExtension {
                                 )
                             ], undefined, undefined, undefined, undefined,
                             [
-                                ['requiredPermission', 'TicketRead,TicketUpdate']
+                                ['requiredPermission', 'TicketRead,TicketCreate']
                             ]
                         )
                     )
