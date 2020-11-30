@@ -26,7 +26,7 @@ export class Component implements IImageDialogListener {
         DialogService.getInstance().registerImageDialogListener(this);
 
         this.state.translations = await TranslationService.createTranslationObject([
-            'Translatable#Next Image', 'Translatable#Previous Image'
+            'Translatable#Next Image', 'Translatable#Previous Image', 'Translatable#Download'
         ]);
     }
 
@@ -38,6 +38,14 @@ export class Component implements IImageDialogListener {
             (id) => id.imageId === showImageId
         ) : 0;
         this.state.image = this.state.imageDescriptions[this.currImageIndex];
+    }
+
+    public preventPropagation(event: any): void {
+        if (event) {
+            event.stopPropagation();
+            // do not use preventDefault, or "download"-click will not work
+            // event.preventDefault();
+        }
     }
 
     public close(): void {

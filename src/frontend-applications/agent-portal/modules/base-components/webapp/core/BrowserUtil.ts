@@ -86,6 +86,18 @@ export class BrowserUtil {
         }
     }
 
+    public static openPDF(content: string, name?: string): void {
+        const pdfWindow = window.open(
+            '', '_blank', 'menubar=no,toolbar=no,location=no,status=no,scrollbars=yes'
+        );
+        if (name) {
+            pdfWindow.document.title = name;
+        }
+        pdfWindow.document.body.innerHTML
+            = '<embed style="height:100%; width:100%" type="application/pdf" src="data:application/pdf;'
+            + ';base64,' + content + '" />';
+    }
+
     public static readFile(file: File): Promise<string> {
         return new Promise((resolve, reject) => {
             if (file instanceof File) {

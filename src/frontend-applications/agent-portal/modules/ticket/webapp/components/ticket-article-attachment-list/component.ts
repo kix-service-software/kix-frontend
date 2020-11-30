@@ -9,6 +9,8 @@
 
 import { ComponentState } from './ComponentState';
 import { Attachment } from '../../../../../model/kix/Attachment';
+import { DisplayImageDescription } from '../../../../base-components/webapp/core/DisplayImageDescription';
+import { TicketService } from '../../core';
 
 class TicketArticleAttchementListComponent {
 
@@ -23,9 +25,32 @@ class TicketArticleAttchementListComponent {
             this.state.article = input.article;
             const attachments: Attachment[] = input.article.Attachments;
             this.state.attachments = attachments.filter((a) => a.Disposition !== 'inline');
+            this.prepareImages();
         }
     }
 
+    private async prepareImages() {
+        const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
+        const imageAttachments = this.state.attachments.filter((a) => a.ContentType.match(/^image\//));
+        if (imageAttachments && imageAttachments.length) {
+            for (const imageAttachment of imageAttachments) {
+                attachmentPromises.push(new Promise<DisplayImageDescription>(async (resolve, reject) => {
+                    const attachment = await TicketService.getInstance().loadArticleAttachment(
+                        this.state.article.TicketID, this.state.article.ArticleID, imageAttachment.ID
+                    ).catch(() => null);
+
+                    if (attachment) {
+                        const content = `data:${attachment.ContentType};base64,${attachment.Content}`;
+                        resolve(new DisplayImageDescription(
+                            attachment.ID, content, attachment.Comment ? attachment.Comment : attachment.Filename
+                        ));
+                    }
+                    resolve();
+                }));
+            }
+        }
+        this.state.images = (await Promise.all(attachmentPromises)).filter((i) => i);
+    }
 }
 
 module.exports = TicketArticleAttchementListComponent;

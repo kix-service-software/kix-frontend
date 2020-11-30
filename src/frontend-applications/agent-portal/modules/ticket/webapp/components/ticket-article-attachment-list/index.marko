@@ -6,12 +6,11 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.article)>
     <ul.attachment-list>
         <for|attachment| of=state.attachments>
             <li>
-                <ticket-article-attachment article=state.article attachment=attachment/>
+                <ticket-article-attachment article=state.article attachment=attachment images=state.images/>
             </li>
         </for>
     </ul>

@@ -9,10 +9,12 @@
 
 import { Article } from '../../../model/Article';
 import { Attachment } from '../../../../../model/kix/Attachment';
+import { DisplayImageDescription } from '../../../../base-components/webapp/core/DisplayImageDescription';
 
 export class ComponentState {
 
     public article: Article = null;
     public attachments: Attachment[] = [];
+    public images: DisplayImageDescription[] = [];
 
 }
