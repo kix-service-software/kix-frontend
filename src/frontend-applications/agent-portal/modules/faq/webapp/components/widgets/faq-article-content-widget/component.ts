@@ -27,6 +27,8 @@ import { TranslationService } from '../../../../../../modules/translation/webapp
 import { KIXObjectService } from '../../../../../../modules/base-components/webapp/core/KIXObjectService';
 import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../../model/Context';
+import { DisplayImageDescription } from '../../../../../base-components/webapp/core/DisplayImageDescription';
+import { DialogService } from '../../../../../base-components/webapp/core/DialogService';
 
 class Component {
 
@@ -37,6 +39,7 @@ class Component {
 
     public stars: Array<string | ObjectIcon> = [];
     public rating: number;
+    private images: DisplayImageDescription[];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -85,11 +88,32 @@ class Component {
         if (faqArticle && faqArticle.Attachments) {
             this.state.attachments = faqArticle.Attachments.filter((a) => a.Disposition !== 'inline');
             this.state.inlineContent = await FAQService.getInstance().getFAQArticleInlineContent(faqArticle);
+            this.prepareImages();
 
             this.stars = await LabelService.getInstance().getIcons(faqArticle, FAQArticleProperty.VOTES);
             this.rating = BrowserUtil.calculateAverage(faqArticle.Votes.map((v) => v.Rating));
             this.prepareActions();
         }
+    }
+
+    private async prepareImages() {
+        const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
+        const imageAttachments = this.state.attachments.filter((a) => a.ContentType.match(/^image\//));
+        if (imageAttachments && imageAttachments.length) {
+            for (const imageAttachment of imageAttachments) {
+                attachmentPromises.push(new Promise<DisplayImageDescription>(async (resolve, reject) => {
+                    const attachment = await this.loadAttachment(imageAttachment, true).catch(() => null);
+                    if (attachment) {
+                        const content = `data:${attachment.ContentType};base64,${attachment.Content}`;
+                        resolve(new DisplayImageDescription(
+                            attachment.ID, content, attachment.Comment ? attachment.Comment : attachment.Filename
+                        ));
+                    }
+                    resolve();
+                }));
+            }
+        }
+        this.images = (await Promise.all(attachmentPromises)).filter((i) => i);
     }
 
     private async prepareActions(): Promise<void> {
@@ -116,19 +140,32 @@ class Component {
     }
 
     public async download(attachment: Attachment): Promise<void> {
+        if (this.images && this.images.some((i) => i.imageId === attachment.ID)) {
+            DialogService.getInstance().openImageDialog(this.images, attachment.ID);
+        } else {
+            const attachmentWithContent = await this.loadAttachment(attachment);
+            if (attachmentWithContent) {
+                if (attachmentWithContent.ContentType === 'application/pdf') {
+                    BrowserUtil.openPDF(attachmentWithContent.Content, attachmentWithContent.Filename);
+                } else {
+                    BrowserUtil.startBrowserDownload(
+                        attachmentWithContent.Filename, attachmentWithContent.Content,
+                        attachmentWithContent.ContentType
+                    );
+                }
+            }
+        }
+    }
+
+    private async loadAttachment(attachment: Attachment, silent?: boolean) {
         const loadingOptions = new KIXObjectLoadingOptions(null, null, null, ['Content']);
         const faqArticleAttachmentOptions = new FAQArticleAttachmentLoadingOptions(
             this.state.faqArticle.ID, attachment.ID
         );
         const attachments = await KIXObjectService.loadObjects<Attachment>(
-            KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions, faqArticleAttachmentOptions
-        );
-
-        if (attachments && attachments.length) {
-            BrowserUtil.startBrowserDownload(
-                attachments[0].Filename, attachments[0].Content, attachments[0].ContentType
-            );
-        }
+            KIXObjectType.FAQ_ARTICLE_ATTACHMENT, [attachment.ID], loadingOptions, faqArticleAttachmentOptions, silent
+        ).catch(() => [] as Attachment[]);
+        return attachments && attachments.length ? attachments[0] : null;
     }
 }
 

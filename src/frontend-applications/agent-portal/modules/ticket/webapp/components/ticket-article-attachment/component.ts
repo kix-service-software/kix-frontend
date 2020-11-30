@@ -12,10 +12,13 @@ import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { BrowserUtil } from '../../../../../modules/base-components/webapp/core/BrowserUtil';
 import { Attachment } from '../../../../../model/kix/Attachment';
 import { TicketService } from '../../core';
+import { DialogService } from '../../../../base-components/webapp/core/DialogService';
+import { DisplayImageDescription } from '../../../../base-components/webapp/core/DisplayImageDescription';
 
 class ArticleAttachmentComponent {
 
     private state: ComponentState;
+    private images: DisplayImageDescription[];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -28,15 +31,25 @@ class ArticleAttachmentComponent {
         if (this.state.attachment) {
             this.state.icon = new ObjectIcon(null, 'MIMEType', this.state.attachment.ContentType);
         }
+        this.images = Array.isArray(input.images) ? input.images : [];
     }
 
     public async download(): Promise<void> {
-        if (!this.state.progress && this.state.article && this.state.attachment) {
-            this.state.progress = true;
-            const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
-            this.state.progress = false;
+        if (this.state.article && this.state.attachment) {
 
-            BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
+            if (this.images && this.images.some((i) => i.imageId === this.state.attachment.ID)) {
+                DialogService.getInstance().openImageDialog(this.images, this.state.attachment.ID);
+            } else {
+                this.state.progress = true;
+                const attachment = await this.loadArticleAttachment(this.state.attachment.ID);
+                this.state.progress = false;
+
+                if (attachment.ContentType === 'application/pdf') {
+                    BrowserUtil.openPDF(attachment.Content, attachment.Filename);
+                } else {
+                    BrowserUtil.startBrowserDownload(attachment.Filename, attachment.Content, attachment.ContentType);
+                }
+            }
         }
     }
 

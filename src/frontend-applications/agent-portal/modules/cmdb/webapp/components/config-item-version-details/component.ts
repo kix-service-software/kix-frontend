@@ -22,11 +22,14 @@ import { LabelValueGroup } from '../../../../../model/LabelValueGroup';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { DateTimeUtil } from '../../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { AttachmentLoadingOptions } from '../../../model/AttachmentLoadingOptions';
+import { DisplayImageDescription } from '../../../../base-components/webapp/core/DisplayImageDescription';
+import { DialogService } from '../../../../base-components/webapp/core/DialogService';
 import { LabelValueGroupValue } from '../../../../../model/LabelValueGroupValue';
 
 class Component {
 
     private state: ComponentState;
+    private imagesByGroup: Array<number[]> = [];
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -64,6 +67,7 @@ class Component {
 
     private async setVersion(): Promise<void> {
         if (this.state.version && this.state.preparedData) {
+            this.imagesByGroup = [];
             this.state.groups = await this.prepareLabelValueGroups(this.state.preparedData);
         }
     }
@@ -97,21 +101,72 @@ class Component {
 
     public async fileClicked(attachment: ConfigItemAttachment): Promise<void> {
         if (this.state.version) {
-            const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
-                KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.ID], undefined,
-                new AttachmentLoadingOptions(this.state.version.ConfigItemID, this.state.version.VersionID)
-            );
+            let images: DisplayImageDescription[] = [];
+            if (attachment.ContentType.match(/^image\//)) {
+                images = await this.getImages(attachment.ID);
+            }
 
-            if (attachments && attachments.length) {
-                BrowserUtil.startBrowserDownload(
-                    attachments[0].Filename, attachments[0].Content, attachments[0].ContentType
+            if (images.length && images.some((i) => i.imageId === attachment.ID)) {
+                DialogService.getInstance().openImageDialog(images, attachment.ID);
+            } else {
+                const attachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
+                    KIXObjectType.CONFIG_ITEM_ATTACHMENT, [attachment.ID], undefined,
+                    new AttachmentLoadingOptions(this.state.version.ConfigItemID, this.state.version.VersionID)
                 );
+
+                if (attachments && attachments.length) {
+                    if (attachments[0].ContentType === 'application/pdf') {
+                        BrowserUtil.openPDF(attachments[0].Content, attachments[0].Filename);
+                    } else {
+                        BrowserUtil.startBrowserDownload(
+                            attachments[0].Filename, attachments[0].Content, attachments[0].ContentType
+                        );
+                    }
+                }
             }
         }
     }
 
+    private async getImages(attachmentId: number): Promise<DisplayImageDescription[]> {
+        let displayImages: DisplayImageDescription[] = [];
+        if (Array.isArray(this.imagesByGroup)) {
+            for (const imageIds of this.imagesByGroup) {
+                if (imageIds.some((iId) => iId === attachmentId)) {
+                    displayImages = await this.loadImages(imageIds);
+                    break;
+                }
+            }
+        }
+        return displayImages;
+    }
+
+    private async loadImages(imageIds: number[]): Promise<DisplayImageDescription[]> {
+        const attachmentPromises: Array<Promise<DisplayImageDescription>> = [];
+        for (const id of imageIds) {
+            attachmentPromises.push(new Promise<DisplayImageDescription>(async (resolve, reject) => {
+                const imagesAttachments = await KIXObjectService.loadObjects<ConfigItemAttachment>(
+                    KIXObjectType.CONFIG_ITEM_ATTACHMENT, [id], undefined,
+                    new AttachmentLoadingOptions(
+                        this.state.version.ConfigItemID,
+                        this.state.version.VersionID
+                    )
+                ).catch(() => null);
+                if (imagesAttachments) {
+                    const content = `data:${imagesAttachments[0].ContentType};base64,${imagesAttachments[0].Content}`;
+                    resolve(new DisplayImageDescription(
+                        id, content,
+                        imagesAttachments[0].Comment ? imagesAttachments[0].Comment : imagesAttachments[0].Filename
+                    ));
+                }
+                resolve();
+            }));
+        }
+        return (await Promise.all(attachmentPromises)).filter((i) => i);
+    }
+
     private async prepareLabelValueGroups(data: PreparedData[]): Promise<LabelValueGroup[]> {
         const groups = [];
+        const images: number[] = [];
 
         let attachment: ConfigItemAttachment;
         let multiline: boolean;
@@ -122,9 +177,11 @@ class Component {
                 value = await DateTimeUtil.getLocalDateString(value);
             } else if (attr.Type === 'Attachment' && attr.Value) {
                 value = attr.Value.Filename;
-                attachment = attr.Type === 'Attachment'
-                    ? new ConfigItemAttachment(attr.Value)
-                    : null;
+
+                if (attr.Value.ContentType.match(/^image\//)) {
+                    images.push(Number(attr.Value.ID || attr.Value.AttachmentID));
+                }
+                attachment = new ConfigItemAttachment(attr.Value);
             } else if (attr.Type === 'TextArea') {
                 multiline = true;
             }
@@ -138,6 +195,11 @@ class Component {
                 )
             );
         }
+
+        if (images.length) {
+            this.imagesByGroup.push(images);
+        }
+
         return groups;
     }
 

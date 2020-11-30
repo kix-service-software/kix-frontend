@@ -180,7 +180,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 if (this.previewWindow && !this.previewWindow.closed) {
                     this.previewWindow.close();
                 }
-                this.previewWindow = window.open('', 'Preview', 'menubar=no,toolbar=no,location=no,status=no,scrollbars=yes');
+                this.previewWindow = window.open('', '_blank', 'menubar=no,toolbar=no,location=no,status=no,scrollbars=yes');
                 const previewValue = htmlStringValue.value.replace(/<script.*?>.*?<\/script>/gs, '')
                     .replace(/\[%\s+Data\.Subject.+?%\]/gs, 'Lorem ipsum dolor sit amet')
                     .replace(
