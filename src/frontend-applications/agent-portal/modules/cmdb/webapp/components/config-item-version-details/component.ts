@@ -168,10 +168,10 @@ class Component {
         const groups = [];
         const images: number[] = [];
 
-        let attachment: ConfigItemAttachment;
-        let multiline: boolean;
-
         for (const attr of data) {
+            let attachment: ConfigItemAttachment;
+            let multiline: boolean;
+
             let value = await TranslationService.translate(attr.DisplayValue);
             if (attr.Type === 'Date') {
                 value = await DateTimeUtil.getLocalDateString(value);
