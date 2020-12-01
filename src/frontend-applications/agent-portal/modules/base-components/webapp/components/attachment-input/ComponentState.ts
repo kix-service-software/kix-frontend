@@ -14,7 +14,8 @@ export class ComponentState extends FormInputComponentState<any> {
 
     public constructor(
         public attachments: Array<Attachment | File> = [],
-        public options: Array<[string, any]> = []
+        public options: Array<[string, any]> = [],
+        public prepared: boolean = false
 
     ) {
         super();
