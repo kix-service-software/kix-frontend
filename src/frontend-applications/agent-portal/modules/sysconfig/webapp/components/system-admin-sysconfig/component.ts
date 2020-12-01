@@ -37,6 +37,8 @@ import { SysConfigOption } from '../../../model/SysConfigOption';
 import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
 import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AdminContext } from '../../../../admin/webapp/core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -57,6 +59,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#SysConfig']);
+
+        const context = ContextService.getInstance().getActiveContext<AdminContext>();
+        this.filterValue = context.filterValue;
+        this.search();
+
         this.state.prepared = true;
     }
 
@@ -110,6 +117,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public search(): void {
         this.state.filterValue = this.filterValue;
+
+        const context = ContextService.getInstance().getActiveContext<AdminContext>();
+        context.setFilterValue(this.filterValue);
+
         this.state.table.reload(true);
 
     }

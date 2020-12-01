@@ -8,7 +8,6 @@
  */
 
 import { Context } from '../../../../../model/Context';
-import { ConfigItemClass } from '../../../model/ConfigItemClass';
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { ConfigItemProperty } from '../../../model/ConfigItemProperty';
@@ -23,12 +22,13 @@ import { CMDBService } from '..';
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { EventService } from '../../../../base-components/webapp/core/EventService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class CMDBContext extends Context {
 
     public static CONTEXT_ID: string = 'cmdb';
 
-    public currentCIClass: ConfigItemClass;
+    public classId: number;
     public filterValue: string;
 
     public getIcon(): string {
@@ -40,21 +40,50 @@ export class CMDBContext extends Context {
         return title;
     }
 
-    public setCIClass(ciClass: ConfigItemClass): void {
-        if (ciClass) {
-            if (!this.currentCIClass || ciClass.ID !== this.currentCIClass.ID) {
-                this.currentCIClass = ciClass;
-                this.loadConfigItems();
+    public async initContext(urlParams: URLSearchParams): Promise<void> {
+        if (urlParams) {
+            if (urlParams.has('classId') && !isNaN(Number(urlParams.get('classId')))) {
+                this.classId = Number(urlParams.get('classId'));
             }
-        } else if (this.currentCIClass || typeof this.currentCIClass === 'undefined') {
-            this.currentCIClass = null;
+
+            if (urlParams.has('filter')) {
+                this.filterValue = decodeURI(urlParams.get('filter'));
+            }
+        }
+    }
+
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+            const params = [];
+            if (this.classId) {
+                params.push(`classId=${this.classId}`);
+            }
+
+            if (this.filterValue) {
+                params.push(`filter=${this.filterValue}`);
+            }
+
+            if (params.length) {
+                url += `?${params.join('&')}`;
+            }
+        }
+        return url;
+    }
+
+    public setCIClass(classId: number): void {
+        if (!this.classId || this.classId !== classId) {
+            this.classId = classId;
             this.loadConfigItems();
+            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
     }
 
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
         this.loadConfigItems();
+        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
     public async loadConfigItems(): Promise<void> {
@@ -70,10 +99,10 @@ export class CMDBContext extends Context {
             )
         );
 
-        if (this.currentCIClass) {
+        if (this.classId) {
             loadingOptions.filter.push(new FilterCriteria(
                 'ClassIDs', SearchOperator.IN, FilterDataType.NUMERIC,
-                FilterType.AND, [this.currentCIClass.ID]
+                FilterType.AND, [this.classId]
             ));
         }
 
@@ -88,7 +117,7 @@ export class CMDBContext extends Context {
             ));
         }
 
-        if (!this.filterValue && !this.currentCIClass) {
+        if (!this.filterValue && !this.classId) {
             const incidentStates = await CMDBService.getInstance().getAffactedIncidentStates();
             if (incidentStates && incidentStates.length) {
                 loadingOptions.filter.push(new FilterCriteria(
@@ -122,7 +151,7 @@ export class CMDBContext extends Context {
 
     public reset(): void {
         super.reset();
-        this.currentCIClass = null;
+        this.classId = null;
         this.filterValue = null;
         this.loadConfigItems();
     }

@@ -35,7 +35,7 @@ export class EditTicketDialogContext extends Context {
     private organisation: Organisation;
 
     public async initContext(): Promise<void> {
-
+        super.initContext();
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, {
             eventSubscriberId: EditTicketDialogContext.CONTEXT_ID,
             eventPublished: async (data: FormValuesChangedEventData, eventId: string) => {

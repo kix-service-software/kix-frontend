@@ -28,6 +28,10 @@ import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { ToggleOptions } from '../base-components/webapp/core/table';
+import { ContextMode } from '../../model/ContextMode';
+import { FilterType } from '../../model/FilterType';
+import { FilterDataType } from '../../model/FilterDataType';
+import { CacheState } from '../search/model/CacheState';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -445,8 +449,81 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 {
                                     icon: null,
                                     text: '<KIX_CONTACT_Country>',
-                                    // tslint:disable-next-line: max-line-length
                                     linkSrc: 'https://www.google.de/maps/place/<KIX_CONTACT_Street>,+<KIX_CONTACT_Zip>+<KIX_CONTACT_City>'
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        values: [
+                            [
+                                {
+                                    icon: 'kix-icon-ticket',
+                                    text: 'Open Tickets of Contact',
+                                    routingConfiguration: {
+                                        contextId: 'search',
+                                        contextMode: ContextMode.SEARCH,
+                                        externalLink: false,
+                                        params: [
+                                            [
+                                                'search',
+                                                {
+                                                    objectType: KIXObjectType.TICKET,
+                                                    criteria: [
+                                                        {
+                                                            property: TicketProperty.CONTACT_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: 'STRING',
+                                                            filterType: FilterType.AND,
+                                                            value: '<KIX_TICKET_ContactID>'
+                                                        },
+                                                        {
+                                                            property: TicketProperty.STATE_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: FilterDataType.NUMERIC,
+                                                            filterType: FilterType.AND,
+                                                            value: 2
+                                                        }
+                                                    ],
+                                                    status: CacheState.VALID
+                                                }
+                                            ]
+                                        ]
+                                    }
+                                },
+                                {
+                                    icon: 'kix-icon-ticket',
+                                    text: 'Open Tickets of Organisation',
+                                    routingConfiguration: {
+                                        contextId: 'search',
+                                        contextMode: ContextMode.SEARCH,
+                                        externalLink: false,
+                                        params: [
+                                            [
+                                                'search',
+                                                {
+                                                    objectType: KIXObjectType.TICKET,
+                                                    criteria: [
+                                                        {
+                                                            property: TicketProperty.ORGANISATION_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: 'STRING',
+                                                            filterType: FilterType.AND,
+                                                            value: '<KIX_TICKET_OrganisationID>'
+                                                        },
+                                                        {
+                                                            property: TicketProperty.STATE_ID,
+                                                            operator: SearchOperator.EQUALS,
+                                                            type: FilterDataType.NUMERIC,
+                                                            filterType: FilterType.AND,
+                                                            value: 2
+                                                        }
+                                                    ],
+                                                    status: CacheState.VALID
+                                                }
+                                            ]
+                                        ]
+                                    }
                                 }
                             ]
                         ]
