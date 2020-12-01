@@ -111,7 +111,8 @@ export class RoutingService {
             if (context) {
                 await ContextService.getInstance().setContext(
                     context.getDescriptor().contextId, null,
-                    context.getDescriptor().contextMode, objectId, undefined, history, false, true
+                    context.getDescriptor().contextMode, objectId, undefined, history, false, true,
+                    parsedUrl.searchParams
                 );
             } else {
                 if (contextUrl !== 'login') {
@@ -149,17 +150,16 @@ export class RoutingService {
 
     public async routeToContext(
         routingConfiguration: RoutingConfiguration, objectId: string | number, addHistory: boolean = true,
-        reset: boolean = true
+        reset: boolean = true, params?: string
     ): Promise<void> {
         if (routingConfiguration) {
             EventService.getInstance().publish(ApplicationEvent.CLOSE_OVERLAY);
-
             await ContextService.getInstance().setContext(
                 routingConfiguration.contextId,
                 routingConfiguration.objectType,
                 routingConfiguration.contextMode,
                 objectId, reset, routingConfiguration.history,
-                addHistory
+                addHistory, null, new URLSearchParams(params)
             );
         }
     }

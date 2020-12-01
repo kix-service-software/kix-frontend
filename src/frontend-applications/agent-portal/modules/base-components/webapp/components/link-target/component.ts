@@ -14,6 +14,8 @@ import { DialogRoutingConfiguration } from '../../../../../model/configuration/D
 import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { KIXObjectService } from '../../../../../modules/base-components/webapp/core/KIXObjectService';
+import { PlaceholderService } from '../../core/PlaceholderService';
+import { BrowserUtil } from '../../core/BrowserUtil';
 
 class Component {
 
@@ -40,6 +42,14 @@ class Component {
                 : this.state.routingConfiguration.contextType
                     && this.state.routingConfiguration.contextType === ContextType.DIALOG
                     ? '/#' : undefined;
+
+            const params = this.state.routingConfiguration.params;
+            const urlParams = await BrowserUtil.prepareUrlParams(params);
+
+            if (urlParams.length) {
+                this.state.url = `${this.state.url}?${urlParams.join('&')}`;
+            }
+
         } else if (this.state.object) {
             const url = await KIXObjectService.getObjectUrl(this.state.object);
             if (url) {
@@ -87,7 +97,7 @@ class Component {
         );
     }
 
-    private routeTo(event: any): void {
+    private async routeTo(event: any): Promise<void> {
         let externalLink = this.state.routingConfiguration
             ? this.state.routingConfiguration.externalLink
             : undefined;
@@ -101,13 +111,17 @@ class Component {
             if (event.preventDefault) {
                 event.preventDefault();
             }
+
+            const params = this.state.routingConfiguration.params;
+            const urlParams = await BrowserUtil.prepareUrlParams(params);
+
             RoutingService.getInstance().routeToContext(
                 this.state.routingConfiguration, this.state.objectId,
-                undefined, this.state.routingConfiguration.resetContext
+                undefined, this.state.routingConfiguration.resetContext,
+                urlParams.join('&')
             );
         }
     }
-
 }
 
 module.exports = Component;

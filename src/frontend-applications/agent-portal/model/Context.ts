@@ -79,8 +79,19 @@ export abstract class Context {
         }
     }
 
-    public async initContext(): Promise<void> {
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
         return;
+    }
+
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+            if (this.descriptor.contextMode === ContextMode.DETAILS) {
+                url += `/${this.getObjectId()}`;
+            }
+        }
+        return url;
     }
 
     public async getAdditionalActions(object?: KIXObject): Promise<AbstractAction[]> {

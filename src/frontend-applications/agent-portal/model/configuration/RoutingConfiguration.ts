@@ -23,7 +23,8 @@ export class RoutingConfiguration {
         public history: boolean = false,
         public externalLink?: boolean,
         public replaceObjectId?: string | number,
-        public resetContext: boolean = true
+        public resetContext: boolean = true,
+        public params: Array<[string, any]> = null
     ) { }
 
 }

@@ -23,6 +23,7 @@ import { Contact } from '../../../model/Contact';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { OrganisationService } from '../OrganisationService';
 import { ContactService } from '../ContactService';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class OrganisationContext extends Context {
 
@@ -30,9 +31,59 @@ export class OrganisationContext extends Context {
 
     public filterValue: string;
 
+    public async initContext(urlParams: URLSearchParams): Promise<void> {
+        if (urlParams) {
+            if (urlParams.has('dependent')) {
+                this.setAdditionalInformation(
+                    OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING,
+                    Boolean(urlParams.get('dependent'))
+                );
+            }
+
+            if (urlParams.has('filter')) {
+                this.filterValue = decodeURI(urlParams.get('filter'));
+            }
+        } else {
+            this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
+        }
+
+    }
+
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+            const params = [];
+
+            const dependent = this.getAdditionalInformation(
+                OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING
+            );
+            if (typeof dependent !== 'undefined') {
+                params.push(`dependent=${dependent}`);
+            }
+
+            if (this.filterValue) {
+                params.push(`filter=${this.filterValue}`);
+            }
+
+            if (params.length) {
+                url += `?${params.join('&')}`;
+            }
+        }
+        return url;
+    }
+
     public setFilterValue(filterValue: string): void {
         this.filterValue = filterValue;
         this.loadOrganisations();
+        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+    }
+
+    public setAdditionalInformation(key: string, value: any): void {
+        super.setAdditionalInformation(key, value);
+        if (key === OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING) {
+            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
+        }
     }
 
     public getIcon(): string {
@@ -41,10 +92,6 @@ export class OrganisationContext extends Context {
 
     public async getDisplayText(): Promise<string> {
         return await TranslationService.translate('Translatable#Customer Dashboard');
-    }
-
-    public async initContext(): Promise<void> {
-        this.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
     }
 
     public setFilteredObjectList(objectType: KIXObjectType, filteredObjectList: KIXObject[]) {
@@ -114,7 +161,7 @@ export class OrganisationContext extends Context {
     public reset(): void {
         super.reset();
         this.filterValue = null;
-        this.initContext();
+        this.initContext(null);
     }
 
     public reloadObjectList(objectType: KIXObjectType | string): Promise<void> {

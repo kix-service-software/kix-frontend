@@ -35,6 +35,8 @@ import { ContextMode } from '../../../../../model/ContextMode';
 import { DialogRoutingConfiguration } from '../../../../../model/configuration/DialogRoutingConfiguration';
 import { EditTranslationDialogContext } from '../../core/admin/context';
 import { SortOrder } from '../../../../../model/SortOrder';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AdminContext } from '../../../../admin/webapp/core';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -57,8 +59,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         WidgetService.getInstance().registerActions(this.state.instanceId, actions);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
-
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#Translations']);
+
+        const context = ContextService.getInstance().getActiveContext<AdminContext>();
+        this.state.filterValue = context.filterValue;
+        this.search();
 
         this.state.prepared = true;
     }
@@ -114,6 +119,8 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public search(): void {
+        const context = ContextService.getInstance().getActiveContext<AdminContext>();
+        context.setFilterValue(this.state.filterValue);
         this.state.table.reload(true);
     }
 
