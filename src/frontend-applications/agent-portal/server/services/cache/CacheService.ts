@@ -182,6 +182,7 @@ export class CacheService {
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
+            case 'Migration':
                 await this.clearCache();
                 cacheKeyPrefixes = [];
                 break;
