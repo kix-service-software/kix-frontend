@@ -92,10 +92,14 @@ export class FilterUtil {
                 value = value ? value.toString().toLocaleLowerCase() : value;
                 return value === criterionValue;
             case SearchOperator.NOT_EQUALS:
-                value = value !== null ? value.toString().toLocaleLowerCase() : value;
+                value = value !== undefined && value !== null
+                    ? value.toString().toLocaleLowerCase()
+                    : value;
                 return value !== criterionValue;
             case SearchOperator.CONTAINS:
-                value = value !== null ? value : '';
+                value = value !== undefined && value !== null
+                    ? value
+                    : '';
                 return value.toString().toLocaleLowerCase().indexOf(
                     criterion.value.toString().toLocaleLowerCase()
                 ) !== -1;

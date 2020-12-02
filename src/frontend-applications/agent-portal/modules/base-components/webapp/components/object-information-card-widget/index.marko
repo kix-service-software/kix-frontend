@@ -28,7 +28,9 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                         <if(row.title)>
                             <div.info-row-title class={
                                 separator: row.separator
-                            }>${row.title}</div>
+                            }>
+                                <translation-string pattern=row.title/>
+                            </div>
                         </if>
                         <div.info-row-content class={
                             "no-title": !row.title,

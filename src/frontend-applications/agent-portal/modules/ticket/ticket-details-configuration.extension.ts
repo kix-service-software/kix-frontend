@@ -28,6 +28,7 @@ import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { ToggleOptions } from '../base-components/webapp/core/table';
+import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
 import { ContextMode } from '../../model/ContextMode';
 import { FilterType } from '../../model/FilterType';
 import { FilterDataType } from '../../model/FilterDataType';
@@ -50,29 +51,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 avatar: [],
                 rows: [
                     {
-                        title: '',
-                        style: '',
-                        separator: false,
-                        values: [
-                            [
-                                {
-                                    icon: null,
-                                    iconStyle: '',
-                                    text: 'Translatable#Created by {0} at {1}. Last change by {2} at {3}',
-                                    textPlaceholder: [
-                                        '<KIX_TICKET_CreateBy>',
-                                        '<KIX_TICKET_Created>',
-                                        '<KIX_TICKET_ChangeBy>',
-                                        '<KIX_TICKET_Changed>'
-                                    ],
-                                    textStyle: 'color:#5b5b5b;font-style:italic',
-                                    linkSrc: null
-                                }
-                            ]
-                        ]
-                    },
-                    {
-                        title: 'Summary',
+                        title: 'Translatable#Summary',
                         style: '',
                         separator: true,
                         values: [
@@ -81,7 +60,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.ORGANISATION_ID
-                                    }
+                                    },
+                                    routingConfiguration: {
+                                        contextId: 'organisation-details',
+                                        objectType: KIXObjectType.ORGANISATION,
+                                        contextMode: ContextMode.DETAILS,
+                                        objectIdProperty: 'ID',
+                                        history: false,
+                                        resetContext: true,
+                                        contextType: 'MAIN'
+                                    },
+                                    routingObjectId: '<KIX_TICKET_OrganisationID>'
                                 },
                                 {
                                     componentId: 'object-avatar-label',
@@ -95,7 +84,17 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                     componentId: 'object-avatar-label',
                                     componentData: {
                                         property: TicketProperty.CONTACT_ID
-                                    }
+                                    },
+                                    routingConfiguration: {
+                                        contextId: 'contact-details',
+                                        objectType: KIXObjectType.CONTACT,
+                                        contextMode: ContextMode.DETAILS,
+                                        objectIdProperty: 'ID',
+                                        history: false,
+                                        resetContext: true,
+                                        contextType: 'MAIN'
+                                    },
+                                    routingObjectId: '<KIX_TICKET_ContactID>'
                                 },
                                 {
                                     componentId: 'object-avatar-label',
@@ -147,7 +146,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ],
                     },
                     {
-                        title: 'Assignees',
+                        title: 'Translatable#Assignees',
                         style: '',
                         separator: true,
                         values: [
@@ -188,7 +187,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ],
                     },
                     {
-                        title: 'Checklists',
+                        title: 'Translatable#Checklists',
                         style: '',
                         separator: true,
                         values: [
@@ -237,13 +236,13 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         ]
                     },
                     {
-                        title: 'References',
+                        title: 'Translatable#References',
                         style: '',
                         separator: false,
                         values: [
                             [
                                 {
-                                    text: 'Affected Assets',
+                                    text: 'Translatable#Affected Assets',
                                     textStyle: 'font-weight:bold;margin-bottom:0.5rem',
                                     icon: 'kix-icon-ci',
                                     componentId: 'dynamic-field-value',
@@ -269,7 +268,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         values: [
                             [
                                 {
-                                    text: 'Related Tickets',
+                                    text: 'Translatable#Related Tickets',
                                     textStyle: 'font-weight:bold;margin-bottom:0.5rem',
                                     icon: 'kix-icon-ci',
                                     componentId: 'dynamic-field-value',
@@ -290,12 +289,15 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             ]
                         ]
                     }, {
-                        title: 'Scheduling',
+                        title: 'Translatable#Scheduling',
                         separator: false,
                         values: [
                             [
                                 {
-                                    text: 'Accounted Time: <KIX_TICKET_AccountedTime>',
+                                    text: 'Translatable#Accounted Time: {0}',
+                                    textPlaceholder: [
+                                        '<KIX_TICKET_AccountedTime>'
+                                    ],
                                     icon: 'kix-icon-time',
                                     conditions: [
                                         {
@@ -311,7 +313,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             ],
                             [
                                 {
-                                    text: 'Pending until: <KIX_TICKET_PendingTime> (<KIX_TICKET_UntilTime>)',
+                                    text: 'Pending until: {0} ({1})',
+                                    textPlaceholder: [
+                                        '<KIX_TICKET_PendingTime>',
+                                        '<KIX_TICKET_UntilTime>'
+                                    ],
                                     icon: 'kix-icon-time-wait',
                                     conditions: [
                                         {
@@ -327,7 +333,11 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             ],
                             [
                                 {
-                                    text: 'Plan: <KIX_TICKET_DynamicField_PlanBegin> - <KIX_TICKET_DynamicField_PlanEnd>',
+                                    text: 'Translatable#Plan: {0} - {1}',
+                                    textPlaceholder: [
+                                        '<KIX_TICKET_DynamicField_PlanBegin>',
+                                        '<KIX_TICKET_DynamicField_PlanEnd>'
+                                    ],
                                     icon: 'kix-icon-time-back',
                                     conditions: [
                                         {
@@ -342,6 +352,28 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 }
 
                             ],
+                        ]
+                    },
+                    {
+                        title: '',
+                        style: '',
+                        separator: false,
+                        values: [
+                            [
+                                {
+                                    icon: null,
+                                    iconStyle: '',
+                                    text: 'Translatable#Created by {0} at {1}. Last change by {2} at {3}',
+                                    textPlaceholder: [
+                                        '<KIX_TICKET_CreateBy>',
+                                        '<KIX_TICKET_Created>',
+                                        '<KIX_TICKET_ChangeBy>',
+                                        '<KIX_TICKET_Changed>'
+                                    ],
+                                    textStyle: 'color:#5b5b5b;font-style:italic',
+                                    linkSrc: null
+                                }
+                            ]
                         ]
                     }
                 ]
