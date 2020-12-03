@@ -57,16 +57,6 @@ export enum TicketProperty {
 
     LAST_CHANGE_TIME = 'LastChangeTime',
 
-    FROM = 'From',
-
-    TO = 'To',
-
-    CC = 'Cc',
-
-    SUBJECT = 'Subject',
-
-    BODY = 'Body',
-
     ARTICLE_CREATE_TIME = 'ArticleCreateTime',
 
     ATTACHMENT_NAME = 'AttachmentName',

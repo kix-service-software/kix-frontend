@@ -457,6 +457,15 @@ export class TicketAPIService extends KIXObjectAPIService {
             changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
         }
 
+        const visibleCriteria = searchCriteria.find((sc) => sc.property === ArticleProperty.CUSTOMER_VISIBLE);
+        if (
+            visibleCriteria
+            && Array.isArray(visibleCriteria.value)
+            && visibleCriteria.operator === SearchOperator.EQUALS
+        ) {
+            visibleCriteria.value = visibleCriteria.value[0];
+        }
+
         return searchCriteria;
     }
 
@@ -490,23 +499,23 @@ export class TicketAPIService extends KIXObjectAPIService {
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.SUBJECT, SearchOperator.LIKE,
+                ArticleProperty.SUBJECT, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.BODY, SearchOperator.LIKE,
+                ArticleProperty.BODY, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.FROM, SearchOperator.LIKE,
+                ArticleProperty.FROM, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.TO, SearchOperator.LIKE,
+                ArticleProperty.TO, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.CC, SearchOperator.LIKE,
+                ArticleProperty.CC, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             )
         ];

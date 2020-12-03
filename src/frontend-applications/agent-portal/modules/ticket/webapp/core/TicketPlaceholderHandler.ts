@@ -300,11 +300,11 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case TicketProperty.LINKED_AS:
                 case TicketProperty.TICKET_FLAG:
                 case TicketProperty.WATCHERS:
-                case TicketProperty.FROM:
-                case TicketProperty.TO:
-                case TicketProperty.CC:
-                case TicketProperty.SUBJECT:
-                case TicketProperty.BODY:
+                case ArticleProperty.FROM:
+                case ArticleProperty.TO:
+                case ArticleProperty.CC:
+                case ArticleProperty.SUBJECT:
+                case ArticleProperty.BODY:
                     break;
                 default:
                     result = await LabelService.getInstance().getDisplayText(ticket, attribute, undefined, false);
@@ -316,8 +316,11 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private isKnownProperty(property: string): boolean {
-        let knownProperties = Object.keys(TicketProperty).map((p) => TicketProperty[p]);
-        knownProperties = [...knownProperties, ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p])];
+        const knownProperties = [
+            ...Object.keys(TicketProperty).map((p) => TicketProperty[p]),
+            ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
+            ...Object.keys(ArticleProperty).map((p) => ArticleProperty[p])
+        ];
         return knownProperties.some((p) => p === property);
     }
 

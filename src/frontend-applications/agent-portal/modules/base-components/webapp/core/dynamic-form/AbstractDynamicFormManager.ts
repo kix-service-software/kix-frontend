@@ -451,7 +451,6 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
             }
         }
 
-        let isMultiSelect = false;
         const dfName = KIXObjectService.getDynamicFieldName(property);
         if (dfName) {
             const field = await KIXObjectService.loadDynamicField(dfName);
@@ -462,12 +461,12 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     field.FieldType === DynamicFieldTypes.TICKET_REFERENCE ||
                     field.FieldType === DynamicFieldTypes.CI_REFERENCE
                 ) &&
-                field.Config && Number(field.Config.CountMax) > 1
+                field.Config && Number(field.Config.CountMax) === 1
             ) {
-                isMultiSelect = true;
+                return false;
             }
         }
-        return isMultiSelect;
+        return;
     }
 
     protected async getInputTypeForDF(property: string): Promise<InputFieldTypes> {
