@@ -511,7 +511,9 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         switch (property) {
             case TicketProperty.CREATED_PRIORITY_ID:
             case TicketProperty.PRIORITY_ID:
-                icons.push(new ObjectIcon(null, 'Priority', value));
+                if (value) {
+                    icons.push(new ObjectIcon(null, 'Priority', value));
+                }
                 break;
             case TicketProperty.UNSEEN:
                 if (ticket && ticket.Unseen === 1) {
@@ -520,47 +522,89 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 break;
             case TicketProperty.CREATED_TYPE_ID:
             case TicketProperty.TYPE_ID:
-                icons.push(new ObjectIcon(null, 'TicketType', value));
+                if (value) {
+                    icons.push(new ObjectIcon(null, 'TicketType', value));
+                }
                 break;
             case TicketProperty.CONTACT_ID:
             case TicketProperty.CONTACT:
-                icons.push(new ObjectIcon(
-                    null, KIXObjectType.CONTACT, ticket.ContactID, null, null,
-                    LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT)
-                ));
+                if (ticket && ticket.ContactID) {
+                    icons.push(new ObjectIcon(
+                        null, KIXObjectType.CONTACT, ticket.ContactID, null, null,
+                        LabelService.getInstance().getObjectTypeIcon(KIXObjectType.CONTACT)
+                    ));
+                }
                 break;
             case TicketProperty.ORGANISATION_ID:
             case TicketProperty.ORGANISATION:
-                icons.push(new ObjectIcon(
-                    null, KIXObjectType.ORGANISATION, ticket.OrganisationID, null, null,
-                    LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ORGANISATION)
-                ));
+                if (ticket && ticket.OrganisationID) {
+                    icons.push(new ObjectIcon(
+                        null, KIXObjectType.ORGANISATION, ticket.OrganisationID, null, null,
+                        LabelService.getInstance().getObjectTypeIcon(KIXObjectType.ORGANISATION)
+                    ));
+                }
+                break;
+            case TicketProperty.CREATED_USER_ID:
+                if (value) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [value],
+                        new KIXObjectLoadingOptions(
+                            null, null, 1, [UserProperty.CONTACT]
+                        ), null, true, true, true
+                    ).catch((error) => [] as User[]);
+                    if (Array.isArray(users) && users.length) {
+                        icons.push(new ObjectIcon(
+                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
+                            LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
+                        );
+                    }
+                }
                 break;
             case TicketProperty.OWNER_ID:
             case TicketProperty.OWNER:
+                if (ticket && ticket.ResponsibleID) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [ticket.ResponsibleID],
+                        new KIXObjectLoadingOptions(
+                            null, null, 1, [UserProperty.CONTACT]
+                        ), null, true, true, true
+                    ).catch((error) => [] as User[]);
+                    if (Array.isArray(users) && users.length) {
+                        icons.push(new ObjectIcon(
+                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
+                            LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
+                        );
+                    }
+                }
+                break;
             case TicketProperty.RESPONSIBLE_ID:
             case TicketProperty.RESPONSIBLE:
-            case TicketProperty.CREATED_USER_ID:
-                const users = await KIXObjectService.loadObjects<User>(
-                    KIXObjectType.USER, [ticket[property]],
-                    new KIXObjectLoadingOptions(
-                        null, null, 1, [UserProperty.CONTACT]
-                    ), null, true, true, true
-                ).catch((error) => [] as User[]);
-                if (Array.isArray(users) && users.length) {
-                    icons.push(new ObjectIcon(
-                        null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
-                        LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
-                    );
+                if (ticket && ticket.ResponsibleID) {
+                    const users = await KIXObjectService.loadObjects<User>(
+                        KIXObjectType.USER, [ticket.ResponsibleID],
+                        new KIXObjectLoadingOptions(
+                            null, null, 1, [UserProperty.CONTACT]
+                        ), null, true, true, true
+                    ).catch((error) => [] as User[]);
+                    if (Array.isArray(users) && users.length) {
+                        icons.push(new ObjectIcon(
+                            null, KIXObjectType.CONTACT, users[0].Contact.ID, null, null,
+                            LabelService.getInstance().getObjectTypeIcon(KIXObjectType.USER))
+                        );
+                    }
                 }
                 break;
             case TicketProperty.CREATED_QUEUE_ID:
             case TicketProperty.QUEUE_ID:
-                icons.push(new ObjectIcon(null, 'Queue', value));
+                if (value) {
+                    icons.push(new ObjectIcon(null, 'Queue', value));
+                }
                 break;
             case TicketProperty.CREATED_STATE_ID:
             case TicketProperty.STATE_ID:
-                icons.push(new ObjectIcon(null, 'TicketState', value));
+                if (value) {
+                    icons.push(new ObjectIcon(null, 'TicketState', value));
+                }
                 break;
             case TicketProperty.LOCK_ID:
                 value === 2
