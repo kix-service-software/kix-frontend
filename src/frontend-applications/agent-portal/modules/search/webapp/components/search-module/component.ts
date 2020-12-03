@@ -12,6 +12,7 @@ import { IdService } from '../../../../../model/IdService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { SearchService } from '../../core/SearchService';
+import { SearchContext } from '../../core';
 
 class Component {
 
@@ -30,8 +31,14 @@ class Component {
         this.state.history = input.history;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         if (!SearchService.getInstance().getSearchCache()) {
+            const searchContext = await ContextService.getInstance().getContext<SearchContext>(
+                SearchContext.CONTEXT_ID
+            );
+            if (searchContext) {
+                searchContext.setSearchCache(null);
+            }
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
     }
