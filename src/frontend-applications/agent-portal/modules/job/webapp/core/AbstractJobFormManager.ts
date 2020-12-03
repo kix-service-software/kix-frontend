@@ -285,7 +285,8 @@ export class AbstractJobFormManager implements IJobFormManager {
     public async getFormFieldsForAction(
         actionType: string, actionFieldInstanceId: string, jobType: string, action?: MacroAction
     ): Promise<FormFieldConfiguration[]> {
-        const fields: FormFieldConfiguration[] = [];
+        const fieldOrderMap: Map<string, number> = new Map();
+        let fields: FormFieldConfiguration[] = [];
         if (!actionFieldInstanceId) {
             console.error('No "actionFieldInstanceId" given!');
         } else {
@@ -311,6 +312,7 @@ export class AbstractJobFormManager implements IJobFormManager {
                                         const newField = this.getNewOptionField(
                                             actionPropertyField, value, actionFieldInstanceId, option.Name
                                         );
+                                        fieldOrderMap.set(newField.instanceId, option.Order);
                                         fields.push(newField);
                                     }
                                 } else {
@@ -320,6 +322,7 @@ export class AbstractJobFormManager implements IJobFormManager {
                                         `ACTION###${actionFieldInstanceId}###${option.Name}`
                                     );
 
+                                    fieldOrderMap.set(actionPropertyField.instanceId, option.Order);
                                     fields.push(actionPropertyField);
                                 }
                             }
@@ -334,6 +337,8 @@ export class AbstractJobFormManager implements IJobFormManager {
                 fields.unshift(skip);
             }
         }
+
+        fields = fields.sort((a, b) => fieldOrderMap.get(a.instanceId) - fieldOrderMap.get(b.instanceId));
         return fields;
     }
 
