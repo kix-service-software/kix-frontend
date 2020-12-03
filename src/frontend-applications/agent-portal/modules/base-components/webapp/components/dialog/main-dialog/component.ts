@@ -47,7 +47,7 @@ export class MainDialogComponent implements IMainDialogListener {
 
     private handleKeyEvent(event: any): void {
         if (event && event.key === 'Escape') {
-            this.close();
+            this.close(null, true);
         }
     }
 
@@ -70,7 +70,7 @@ export class MainDialogComponent implements IMainDialogListener {
         }
     }
 
-    public close(data?: any): void {
+    public close(data?: any, force: boolean = false): void {
         const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
         if (context) {
             EventService.getInstance().publish(
@@ -79,7 +79,7 @@ export class MainDialogComponent implements IMainDialogListener {
                 context.getDialogSubscriberId()
             );
         }
-        if (data && data.byX) {
+        if ((data && data.byX) || force) {
             ContextService.getInstance().closeDialogContext();
         }
 
