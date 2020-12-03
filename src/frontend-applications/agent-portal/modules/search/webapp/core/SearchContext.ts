@@ -41,7 +41,8 @@ export class SearchContext extends Context {
             url = this.descriptor.urlPaths[0];
             const params = [];
             if (this.searchCache && this.searchCache.status === CacheState.VALID) {
-                params.push(`search=${JSON.stringify(this.searchCache)}`);
+                const cache = JSON.stringify({ ...this.searchCache, result: [] });
+                params.push(`search=${cache}`);
             }
 
             if (params.length) {
