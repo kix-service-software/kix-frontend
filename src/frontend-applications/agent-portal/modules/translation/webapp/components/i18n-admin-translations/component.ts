@@ -37,6 +37,7 @@ import { EditTranslationDialogContext } from '../../core/admin/context';
 import { SortOrder } from '../../../../../model/SortOrder';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { AdminContext } from '../../../../admin/webapp/core';
+import { ContextType } from '../../../../../model/ContextType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -119,7 +120,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public search(): void {
-        const context = ContextService.getInstance().getActiveContext<AdminContext>();
+        const context = ContextService.getInstance().getActiveContext<AdminContext>(ContextType.MAIN);
         context.setFilterValue(this.state.filterValue);
         this.state.table.reload(true);
     }
