@@ -39,8 +39,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        WidgetService.getInstance().setWidgetType('job-exec-plan-group', WidgetType.GROUP);
-
         this.subscriber = {
             eventSubscriberId: 'object-details',
             eventPublished: (data: any, eventId: string) => {

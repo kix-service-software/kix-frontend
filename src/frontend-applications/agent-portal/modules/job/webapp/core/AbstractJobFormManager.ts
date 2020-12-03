@@ -471,4 +471,10 @@ export class AbstractJobFormManager implements IJobFormManager {
         }
         return;
     }
+
+    public async getEventNodes(): Promise<TreeNode[]> {
+        return await JobService.getInstance().getTreeNodes(
+            JobProperty.EXEC_PLAN_EVENTS
+        );
+    }
 }

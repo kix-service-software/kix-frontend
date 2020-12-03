@@ -15,13 +15,9 @@ import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOp
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { Job } from '../../../model/Job';
-import { LabelService } from '../../../../../modules/base-components/webapp/core/LabelService';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
-import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
-import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
 import { SearchOperatorUtil } from '../../../../search/webapp/core';
-import { ArticleProperty } from '../../../../ticket/model/ArticleProperty';
+import { JobFilterTableContentProviderService } from './JobFilterTableContentProviderService';
 
 export class JobFilterTableContentProvider extends TableContentProvider<any> {
 
@@ -44,29 +40,20 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
                 if (filter && Array.isArray(job.Filter[filter])) {
                     const criteria = job.Filter[filter];
                     for (const criterion of criteria) {
-                        let displayKey = criterion.Field;
-                        let displayValuesAndIcons = [];
+                        let displayKey: string = criterion.Field;
+                        let displayValues: any;
+                        let displayIcons: Array<string | ObjectIcon> = [];
+                        let displayString = '';
 
-                        if (KIXObjectService.getDynamicFieldName(displayKey)) {
-                            displayValuesAndIcons = await this.getDFValues(
-                                displayKey, criterion.Value, KIXObjectType.TICKET
-                            );
-                            displayKey = await LabelService.getInstance().getPropertyText(
-                                displayKey, KIXObjectType.TICKET
-                            );
-                        } else {
-                            const isArticleProperty = this.isArticleProperty(displayKey);
-                            displayValuesAndIcons = await this.getValue(
-                                displayKey, criterion.Value,
-                                isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
-                            );
-                            displayKey = await LabelService.getInstance().getPropertyText(
-                                displayKey, isArticleProperty ? KIXObjectType.ARTICLE : KIXObjectType.TICKET
-                            );
+                        const preparedValues = await JobFilterTableContentProviderService.getInstance().getValues(
+                            displayKey, criterion, job, criteria
+                        );
+                        if (Array.isArray(preparedValues)) {
+                            displayKey = preparedValues[0];
+                            displayValues = preparedValues[1];
+                            displayIcons = preparedValues[2];
+                            displayString = preparedValues[3];
                         }
-                        const displayString = Array.isArray(displayValuesAndIcons[0])
-                            ? displayValuesAndIcons[0].join(', ')
-                            : '';
 
                         const operatorLabel = await SearchOperatorUtil.getText(criterion.Operator);
 
@@ -74,8 +61,8 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
                             new TableValue(JobFilterTableProperty.FIELD, criterion.Field, displayKey),
                             new TableValue(JobFilterTableProperty.OPERATOR, criterion.Operator, operatorLabel),
                             new TableValue(
-                                JobFilterTableProperty.VALUE, displayValuesAndIcons[0],
-                                displayString, null, displayValuesAndIcons[1]
+                                JobFilterTableProperty.VALUE, displayValues,
+                                displayString, null, displayIcons
                             )
                         ];
                         rowObjects.push(new RowObject<any>(values));
@@ -85,64 +72,5 @@ export class JobFilterTableContentProvider extends TableContentProvider<any> {
             }
         }
         return rowObjects;
-    }
-
-    private async getValue(
-        property: string, value: string | number | string[] | number[], objectType: KIXObjectType | string
-    ): Promise<[string[], Array<string | ObjectIcon>]> {
-        const displayValues: string[] = [];
-        const displayIcons: Array<string | ObjectIcon> = [];
-        if (Array.isArray(value)) {
-            for (const v of value) {
-                const string = await LabelService.getInstance().getPropertyValueDisplayText(objectType, property, v);
-                if (string) {
-                    displayValues.push(string);
-                    const icons = await LabelService.getInstance().getIconsForType(objectType, null, property, v);
-                    if (icons && !!icons.length) {
-                        displayIcons.push(icons[0]);
-                    } else {
-                        displayIcons.push(null);
-                    }
-                }
-            }
-        } else {
-            displayValues.push(
-                await LabelService.getInstance().getPropertyValueDisplayText(
-                    objectType, property, isNaN(Number(value)) ? value : Number(value)
-                )
-            );
-            const icons = await LabelService.getInstance().getIconsForType(objectType, null, property, value);
-            if (icons && !!icons.length) {
-                displayIcons.push(icons[0]);
-            } else {
-                displayIcons.push(null);
-            }
-        }
-        return [displayValues, displayIcons];
-    }
-
-    private async getDFValues(
-        key: string, value: any, objectType: KIXObjectType
-    ): Promise<[string[], Array<string | ObjectIcon>, string]> {
-        const dfName = key.replace(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`), '$1');
-        let displayValues: string[] = [];
-        let displayString: string = '';
-        if (dfName) {
-            const preparedValue = await LabelService.getInstance().getDFDisplayValues(
-                objectType,
-                new DynamicFieldValue({
-                    Name: dfName,
-                    Value: value
-                } as DynamicFieldValue)
-            );
-            displayValues = preparedValue ? preparedValue[0] : Array.isArray(value) ? value : [value];
-            displayString = preparedValue ? preparedValue[1] : '';
-        }
-        return [displayValues, null, displayString];
-    }
-
-    private isArticleProperty(property: string): boolean {
-        const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
-        return property === 'ID' || articleProperty.some((p) => p === property);
     }
 }
