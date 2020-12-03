@@ -168,7 +168,7 @@ export class Ticket extends KIXObject {
             Property: TicketProperty.AGE,
             Operations: Ticket.NUMBER_OPERATORS,
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.TEXT
+            InputType: InputFieldTypes.NUMBER
         },
         {
             Property: TicketProperty.ARTICLE_CREATE_TIME,

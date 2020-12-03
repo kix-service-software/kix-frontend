@@ -32,10 +32,7 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public createFormManager(ignoreProperties: string[] = []): SearchFormManager {
-        const newManager = new TicketSearchFormManager(ignoreProperties);
-
-        this.formManager.getExtendedFormManager().forEach((m) => newManager.addExtendedFormManager(m));
-        return newManager;
+        return new TicketSearchFormManager(ignoreProperties);
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {

@@ -96,23 +96,22 @@ export abstract class AbstractDynamicFormManager implements IDynamicFormManager 
                     )
                 ]
             );
-            const fields = await KIXObjectService.loadObjects<DynamicField>(
+            const dynamicFields = await KIXObjectService.loadObjects<DynamicField>(
                 KIXObjectType.DYNAMIC_FIELD, null, loadingOptions
-            );
+            ).catch(() => [] as DynamicField[]);
 
-            if (fields) {
-                for (const field of fields) {
+            if (dynamicFields && dynamicFields.length) {
+                for (const df of dynamicFields) {
                     if (
-                        field.FieldType === DynamicFieldTypes.CI_REFERENCE
+                        df.FieldType === DynamicFieldTypes.CI_REFERENCE
                         && !await this.checkReadPermissions('/cmdb/configitems')
                     ) { continue; }
                     if (
-                        field.FieldType === DynamicFieldTypes.TICKET_REFERENCE
+                        df.FieldType === DynamicFieldTypes.TICKET_REFERENCE
                         && !await this.checkReadPermissions('/tickets')
                     ) { continue; }
-
-                    const translated = await TranslationService.translate(field.Label);
-                    properties.push([KIXObjectProperty.DYNAMIC_FIELDS + '.' + field.Name, translated]);
+                    const label = await TranslationService.translate(df.Label);
+                    properties.push([`${KIXObjectProperty.DYNAMIC_FIELDS}.${df.Name}`, label]);
                 }
             }
         }
