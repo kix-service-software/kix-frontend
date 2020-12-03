@@ -175,7 +175,13 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 );
                 break;
             default:
-                displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
+                if (this.isArticleProperty(property)) {
+                    displayValue = await LabelService.getInstance().getPropertyValueDisplayText(
+                        KIXObjectType.ARTICLE, property, value, false
+                    );
+                } else {
+                    displayValue = await super.getPropertyValueDisplayText(property, value, translatable);
+                }
         }
 
         if (displayValue) {
@@ -289,14 +295,14 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
             case TicketProperty.WATCH_USER_ID:
                 displayValue = 'Translatable#Watch User';
                 break;
-            case ArticleProperty.CHANNEL_ID:
-                displayValue = 'Translatable#Channel';
-                break;
-            case ArticleProperty.SENDER_TYPE_ID:
-                displayValue = 'Translatable#Sender Type';
-                break;
             default:
-                displayValue = await super.getPropertyText(property, short, translatable);
+                if (this.isArticleProperty(property)) {
+                    displayValue = await LabelService.getInstance().getPropertyText(
+                        property, KIXObjectType.ARTICLE, null, false
+                    );
+                } else {
+                    displayValue = await super.getPropertyText(property, short, translatable);
+                }
         }
 
         if (displayValue) {
@@ -306,6 +312,11 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
         }
 
         return displayValue ? displayValue.toString() : '';
+    }
+
+    private isArticleProperty(property: string): boolean {
+        const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
+        return articleProperty.some((p) => p === property);
     }
 
     public async getPropertyIcon(property: string): Promise<string | ObjectIcon> {
