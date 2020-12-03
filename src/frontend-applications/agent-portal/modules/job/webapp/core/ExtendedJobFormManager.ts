@@ -57,7 +57,8 @@ export class ExtendedJobFormManager implements IJobFormManager {
         return null;
     }
 
-    public prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public prepareCreateValue(property: string, formField: FormFieldConfiguration, value: any):
+        Promise<Array<[string, any]>> {
         return null;
     }
 
