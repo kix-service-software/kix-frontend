@@ -134,12 +134,12 @@ export class JobFilterTableContentProviderService {
         const dfName = key.replace(new RegExp(`${KIXObjectProperty.DYNAMIC_FIELDS}?\.(.+)`), '$1');
         let displayValues: string[] = [];
         let displayString: string = '';
-        if (dfName) {
+        if (dfName && value) {
             const preparedValue = await LabelService.getInstance().getDFDisplayValues(
                 objectType,
                 new DynamicFieldValue({
                     Name: dfName,
-                    Value: value
+                    Value: Array.isArray(value) ? value : [value]
                 } as DynamicFieldValue)
             );
             displayValues = preparedValue ? preparedValue[0] : Array.isArray(value) ? value : [value];
