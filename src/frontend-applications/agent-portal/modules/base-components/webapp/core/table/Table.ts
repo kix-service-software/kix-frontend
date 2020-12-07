@@ -110,6 +110,15 @@ export class Table implements Table {
             if (this.sortColumnId && this.sortOrder) {
                 await this.sort(this.sortColumnId, this.sortOrder);
             }
+
+            if (this.tableConfiguration &&
+                this.tableConfiguration.toggle &&
+                this.tableConfiguration.toggleOptions &&
+                this.tableConfiguration.toggleOptions.toggleFirst &&
+                this.rows.length
+            ) {
+                this.rows[0].expand(true);
+            }
         }
     }
 
@@ -122,15 +131,6 @@ export class Table implements Table {
             const rows = [];
             data.forEach((d) => rows.push(this.createRow(d)));
             this.rows = rows;
-
-            if (this.tableConfiguration &&
-                this.tableConfiguration.toggle &&
-                this.tableConfiguration.toggleOptions &&
-                this.tableConfiguration.toggleOptions.toggleFirst &&
-                this.rows.length
-            ) {
-                this.rows[0].expand(true);
-            }
         }
     }
 
