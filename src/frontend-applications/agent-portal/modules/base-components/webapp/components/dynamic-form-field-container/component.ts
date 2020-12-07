@@ -152,6 +152,12 @@ class Component {
         this.provideValue(value);
     }
 
+    public setCheckboxValue(value: DynamicFormFieldValue, event: any): void {
+        const newValue = event.target.value;
+        value.setValue(newValue);
+        this.provideValue(value);
+    }
+
     public setSpecificValue(value: DynamicFormFieldValue, emittedValue: any): void {
         value.setValue(emittedValue);
         this.provideValue(value);

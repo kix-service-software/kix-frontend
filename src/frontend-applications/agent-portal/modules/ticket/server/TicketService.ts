@@ -117,7 +117,7 @@ export class TicketAPIService extends KIXObjectAPIService {
             }
 
             const articleParameter = await this.prepareArticleData(
-                token, clientRequestId, parameter, queueId, contactId
+                token, null, parameter, queueId, contactId
             );
 
             const ticketParameter = articleParameter ? parameter.filter(
@@ -150,7 +150,7 @@ export class TicketAPIService extends KIXObjectAPIService {
                 queueId = tickets[0].QueueID;
             }
 
-            const articleParameter = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
+            const articleParameter = await this.prepareArticleData(token, options.ticketId, parameter, queueId);
             if (articleParameter) {
                 const articleUri = this.buildUri(this.RESOURCE_URI, tickets[0].TicketID, 'articles');
                 const articleId = await super.executeUpdateOrCreateRequest<number>(
@@ -180,10 +180,10 @@ export class TicketAPIService extends KIXObjectAPIService {
 
     public async updateObject(
         token: string, clientRequestId: string, objectType: KIXObjectType,
-        parameter: Array<[string, any]>, objectId: number | string
+        parameter: Array<[string, any]>, objectId: number
     ): Promise<string | number> {
         const queueId = this.getParameterValue(parameter, TicketProperty.QUEUE_ID);
-        const articleParameter = await this.prepareArticleData(token, clientRequestId, parameter, queueId);
+        const articleParameter = await this.prepareArticleData(token, objectId, parameter, queueId);
 
         const ticketParameter = articleParameter ? parameter.filter(
             (p) => !articleParameter.some((ap) => ap[0] === p[0])
@@ -213,7 +213,7 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     private async prepareArticleData(
-        token: string, clientRequestId: string, parameter: Array<[string, any]>, queueId: number, contactId?: number
+        token: string, ticketId: number, parameter: Array<[string, any]>, queueId: number, contactId?: number
     ): Promise<Array<[string, any]>> {
 
         const channelId = this.getParameterValue(parameter, ArticleProperty.CHANNEL_ID);
@@ -256,11 +256,16 @@ export class TicketAPIService extends KIXObjectAPIService {
             articleParameter.push([ArticleProperty.TO, to]);
             articleParameter.push([ArticleProperty.CC, this.getParameterValue(parameter, ArticleProperty.CC)]);
             articleParameter.push([ArticleProperty.BCC, this.getParameterValue(parameter, ArticleProperty.BCC)]);
-            articleParameter.push([
-                ArticleProperty.CUSTOMER_VISIBLE, this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE)]
+            articleParameter.push(
+                [ArticleProperty.IN_REPLY_TO, this.getParameterValue(parameter, ArticleProperty.IN_REPLY_TO)]
+            );
+            articleParameter.push(
+                [ArticleProperty.CUSTOMER_VISIBLE, this.getParameterValue(parameter, ArticleProperty.CUSTOMER_VISIBLE)]
             );
 
-            const attachments = this.createAttachments(this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS));
+            const attachments = await this.createAttachments(
+                token, this.getParameterValue(parameter, ArticleProperty.ATTACHMENTS), ticketId
+            );
             articleParameter.push(
                 [ArticleProperty.ATTACHMENTS, attachments.length ? attachments : null]
             );
@@ -287,10 +292,32 @@ export class TicketAPIService extends KIXObjectAPIService {
         return articleParameter;
     }
 
-    private createAttachments(attachments: Attachment[]): RequestObject[] {
+    private async createAttachments(
+        token: string, attachments: Attachment[], ticketId: number
+    ): Promise<RequestObject[]> {
         const result = [];
-        if (attachments) {
-            attachments.forEach(
+        if (Array.isArray(attachments)) {
+            const newAttachments = [
+                ...attachments.filter((a) => a.Content)
+            ];
+
+            const referencedAttachments = attachments.filter(
+                (a) => (!a.Content || a.Content === '') && a['ReferencedArticleId']
+            );
+            for (const a of referencedAttachments) {
+                const uri = this.buildUri(
+                    'tickets', ticketId, 'articles', a['ReferencedArticleId'], 'attachments', a.ID
+                );
+
+                const referedAttachments = await super.load<Attachment>(
+                    token, KIXObjectType.ATTACHMENT, uri,
+                    new KIXObjectLoadingOptions(null, null, null, ['Content']), null, 'Attachment'
+                );
+
+                newAttachments.push(referedAttachments[0]);
+            }
+
+            newAttachments.forEach(
                 (a) => result.push(
                     new RequestObject([
                         ['Content', a.Content],
@@ -430,6 +457,15 @@ export class TicketAPIService extends KIXObjectAPIService {
             changedCriteria.property = KIXObjectProperty.CHANGE_TIME;
         }
 
+        const visibleCriteria = searchCriteria.find((sc) => sc.property === ArticleProperty.CUSTOMER_VISIBLE);
+        if (
+            visibleCriteria
+            && Array.isArray(visibleCriteria.value)
+            && visibleCriteria.operator === SearchOperator.EQUALS
+        ) {
+            visibleCriteria.value = visibleCriteria.value[0];
+        }
+
         return searchCriteria;
     }
 
@@ -463,23 +499,23 @@ export class TicketAPIService extends KIXObjectAPIService {
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.SUBJECT, SearchOperator.LIKE,
+                ArticleProperty.SUBJECT, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.BODY, SearchOperator.LIKE,
+                ArticleProperty.BODY, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.FROM, SearchOperator.LIKE,
+                ArticleProperty.FROM, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.TO, SearchOperator.LIKE,
+                ArticleProperty.TO, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             ),
             new FilterCriteria(
-                TicketProperty.CC, SearchOperator.LIKE,
+                ArticleProperty.CC, SearchOperator.LIKE,
                 FilterDataType.STRING, FilterType.OR, `*${fulltextFilter.value}*`
             )
         ];

@@ -69,7 +69,7 @@ export class ContextService {
         this.serviceListener.delete(listenerId);
     }
 
-    public async registerContext(contextDescriptor: ContextDescriptor): Promise<void> {
+    public registerContext(contextDescriptor: ContextDescriptor): void {
         ContextFactory.getInstance().registerContext(contextDescriptor);
         this.serviceListener.forEach((l) => l.contextRegistered(contextDescriptor));
     }
@@ -77,7 +77,7 @@ export class ContextService {
     public async setContext(
         contextId: string, kixObjectType: KIXObjectType | string, contextMode: ContextMode,
         objectId?: string | number, reset?: boolean, history: boolean = false,
-        addHistory: boolean = true, replaceHistory: boolean = false
+        addHistory: boolean = true, replaceHistory: boolean = false, urlParams?: URLSearchParams
     ): Promise<void> {
 
         const oldContext = this.getActiveContext();
@@ -92,7 +92,7 @@ export class ContextService {
                 context.setObjectId(objectId, kixObjectType);
             }
 
-            await context.initContext();
+            await context.initContext(urlParams);
 
             this.setDocumentHistory(addHistory, replaceHistory, oldContext, context, objectId);
 
@@ -111,22 +111,22 @@ export class ContextService {
         }
     }
 
-    private async setDocumentHistory(
+    public async setDocumentHistory(
         addHistory: boolean, replaceHistory: boolean, oldContext: Context, context: Context, objectId: string | number
     ): Promise<void> {
-        const state = new BrowserHistoryState(context.getDescriptor().contextId, objectId);
+
         const displayText = await context.getDisplayText();
 
-        const routingConfiguration = new RoutingConfiguration(
-            context.getDescriptor().contextId, null, null, null
-        );
-        const url = await RoutingService.getInstance().buildUrl(routingConfiguration, objectId);
-
-        if (addHistory && oldContext && window && window.history) {
-            window.history.pushState(state, displayText, '/' + url);
-            ContextHistory.getInstance().addHistoryEntry(oldContext);
-        } else if (replaceHistory) {
-            window.history.replaceState(state, displayText, '/' + url);
+        if (window && window.history) {
+            let url = await context.getUrl();
+            url = encodeURI(url);
+            const state = new BrowserHistoryState(context.getDescriptor().contextId, objectId);
+            if (addHistory && oldContext) {
+                window.history.pushState(state, displayText, '/' + url);
+                ContextHistory.getInstance().addHistoryEntry(oldContext);
+            } else if (replaceHistory) {
+                window.history.replaceState(state, displayText, '/' + url);
+            }
         }
 
         if (document) {
@@ -216,9 +216,11 @@ export class ContextService {
         ContextFactory.getInstance().resetDialogContexts();
     }
 
-    public getActiveContext(contextType?: ContextType): Context {
+    public getActiveContext<T extends Context = Context>(contextType?: ContextType): T {
         const type = contextType ? contextType : this.activeContextType;
-        return type === ContextType.MAIN ? this.activeMainContext : this.activeDialogContext;
+        return type === ContextType.MAIN
+            ? this.activeMainContext as any
+            : this.activeDialogContext;
     }
 
     public async getContext<T extends Context = Context>(contextId: string, objectId?: string | number): Promise<T> {

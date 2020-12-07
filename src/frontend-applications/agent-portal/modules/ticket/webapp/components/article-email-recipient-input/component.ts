@@ -124,7 +124,11 @@ class Component extends FormInputComponent<string[], ComponentState> {
 
                     ), null, true
                 );
+
                 mailNodes = await this.createTreeNodes(mailContacts);
+
+                const unknownMailAddresses = emailAddresses.filter((ea) => !mailContacts.some((c) => c.Email === ea));
+                mailNodes = [...mailNodes, ...unknownMailAddresses.map((ma) => new TreeNode(ma, ma))];
             }
 
             nodes = [...nodes, ...mailNodes];

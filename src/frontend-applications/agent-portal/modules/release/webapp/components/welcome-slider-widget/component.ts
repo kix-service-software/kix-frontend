@@ -39,7 +39,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             this.state.userString = currentUser.Contact ? currentUser.Contact.Fullname : currentUser.UserLogin;
         }
 
-        this.prepareSliderList(currentUser.UserID);
+        await this.prepareSliderList(currentUser.UserID);
 
         this.state.translations = await TranslationService.createTranslationObject([
             'Translatable#Welcome to KIX 18', 'Translatable#No, thank you', 'Translatable#Yes, please',
@@ -98,10 +98,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         }
     }
 
-    private prepareSliderList(userId: number): void {
+    private async prepareSliderList(userId: number): Promise<void> {
         const currentContext = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         this.state.widgetConfiguration = currentContext
-            ? currentContext.getWidgetConfiguration(this.state.instanceId)
+            ? await currentContext.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         if (this.state.widgetConfiguration) {

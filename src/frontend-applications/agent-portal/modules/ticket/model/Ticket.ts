@@ -168,7 +168,7 @@ export class Ticket extends KIXObject {
             Property: TicketProperty.AGE,
             Operations: Ticket.NUMBER_OPERATORS,
             DataType: FilterDataType.NUMERIC,
-            InputType: InputFieldTypes.TEXT
+            InputType: InputFieldTypes.NUMBER
         },
         {
             Property: TicketProperty.ARTICLE_CREATE_TIME,
@@ -183,13 +183,13 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.TEXT
         },
         {
-            Property: TicketProperty.BODY,
+            Property: ArticleProperty.BODY,
             Operations: Ticket.STRING_OPERATORS,
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.TEXT
         },
         {
-            Property: TicketProperty.CC,
+            Property: ArticleProperty.CC,
             Operations: Ticket.STRING_OPERATORS,
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.TEXT
@@ -249,7 +249,7 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DATE_TIME
         },
         {
-            Property: TicketProperty.FROM,
+            Property: ArticleProperty.FROM,
             Operations: Ticket.STRING_OPERATORS,
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.TEXT
@@ -315,7 +315,7 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.DROPDOWN
         },
         {
-            Property: TicketProperty.SUBJECT,
+            Property: ArticleProperty.SUBJECT,
             Operations: Ticket.STRING_OPERATORS,
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.TEXT
@@ -333,7 +333,7 @@ export class Ticket extends KIXObject {
             InputType: InputFieldTypes.TEXT
         },
         {
-            Property: TicketProperty.TO,
+            Property: ArticleProperty.TO,
             Operations: Ticket.STRING_OPERATORS,
             DataType: FilterDataType.STRING,
             InputType: InputFieldTypes.TEXT
@@ -359,6 +359,12 @@ export class Ticket extends KIXObject {
         {
             Property: ArticleProperty.SENDER_TYPE_ID,
             Operations: [SearchOperator.IN],
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.DROPDOWN
+        },
+        {
+            Property: ArticleProperty.CUSTOMER_VISIBLE,
+            Operations: [SearchOperator.EQUALS],
             DataType: FilterDataType.NUMERIC,
             InputType: InputFieldTypes.DROPDOWN
         }

@@ -45,8 +45,12 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
 
     public useOwnSearch: boolean = true;
 
+    public constructor(public ignoreProperties: string[] = []) {
+        super();
+    }
+
     public async getProperties(): Promise<Array<[string, string]>> {
-        const properties: Array<[string, string]> = [
+        let properties: Array<[string, string]> = [
             [SearchProperty.FULLTEXT, null],
             [ConfigItemProperty.NAME, null],
             [VersionProperty.NUMBER, null],
@@ -69,6 +73,8 @@ export class ConfigItemSearchFormManager extends AbstractDynamicFormManager {
         if (await this.checkReadPermissions('system/users')) {
             properties.push([KIXObjectProperty.CHANGE_BY, null]);
         }
+
+        properties = properties.filter((p) => !this.ignoreProperties.some((ip) => ip === p[0]));
 
         for (const p of properties) {
             const label = await LabelService.getInstance().getPropertyText(p[0], KIXObjectType.CONFIG_ITEM);

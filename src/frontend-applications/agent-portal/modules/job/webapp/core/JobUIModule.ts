@@ -35,6 +35,8 @@ import { AbstractJobFormManager } from './AbstractJobFormManager';
 import { FetchAssetAttributes } from './extended-form-manager/FetchAssetAttributes';
 import { TicketArticleCreateBody } from './extended-form-manager/TicketArticleCreateBody';
 import { TicketCreateDynamicFields } from './extended-form-manager/TicketCreateDynamicFields';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -64,9 +66,12 @@ export class UIModule implements IUIModule {
         const jobDetailsContext = new ContextDescriptor(
             JobDetailsContext.CONTEXT_ID, [KIXObjectType.JOB],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['jobs'], JobDetailsContext
+            true, 'object-details-page', ['jobs'], JobDetailsContext,
+            [
+                new UIComponentPermission('system/automation/jobs', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(jobDetailsContext);
+        ContextService.getInstance().registerContext(jobDetailsContext);
 
         ActionFactory.getInstance().registerAction('job-execute-action', JobExecuteAction);
 
@@ -74,17 +79,23 @@ export class UIModule implements IUIModule {
         const newJobDialogContext = new ContextDescriptor(
             NewJobDialogContext.CONTEXT_ID, [KIXObjectType.JOB],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-job-dialog', ['jobs'], NewJobDialogContext
+            false, 'new-job-dialog', ['jobs'], NewJobDialogContext,
+            [
+                new UIComponentPermission('system/automation/jobs', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newJobDialogContext);
+        ContextService.getInstance().registerContext(newJobDialogContext);
 
         ActionFactory.getInstance().registerAction('job-edit-action', JobEditAction);
         const editJobDialogContext = new ContextDescriptor(
             EditJobDialogContext.CONTEXT_ID, [KIXObjectType.JOB],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-job-dialog', ['jobs'], EditJobDialogContext
+            false, 'edit-job-dialog', ['jobs'], EditJobDialogContext,
+            [
+                new UIComponentPermission('system/automation/jobs', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editJobDialogContext);
+        ContextService.getInstance().registerContext(editJobDialogContext);
 
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
         JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());

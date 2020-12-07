@@ -23,6 +23,10 @@ import { ActionFactory } from '../../../base-components/webapp/core/ActionFactor
 import { SysconfigTableResetAction } from './SysconfigTableResetAction';
 import { ReloadConfigurationCacheAction } from './ReloadConfigurationCacheAction';
 import { SysconfigEditAction } from './SysconfigEditAction';
+import { PlaceholderService } from '../../../base-components/webapp/core/PlaceholderService';
+import { SysConfigPlaceholderHandler } from './SysConfigPlaceholderHandler';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 
 export class UIModule implements IUIModule {
 
@@ -47,13 +51,18 @@ export class UIModule implements IUIModule {
         const editSysConfigDialogContext = new ContextDescriptor(
             EditSysConfigDialogContext.CONTEXT_ID, [KIXObjectType.SYS_CONFIG_OPTION_DEFINITION],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-sysconfig-dialog', ['sysconfig'], EditSysConfigDialogContext
+            false, 'edit-sysconfig-dialog', ['sysconfig'], EditSysConfigDialogContext,
+            [
+                new UIComponentPermission('system/config/FQDN', [CRUD.UPDATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editSysConfigDialogContext);
+        ContextService.getInstance().registerContext(editSysConfigDialogContext);
 
         ActionFactory.getInstance().registerAction('sysconfig-edit-action', SysconfigEditAction);
         ActionFactory.getInstance().registerAction('sysconfig-reset-action', SysconfigTableResetAction);
         ActionFactory.getInstance().registerAction('activate-configuration', ReloadConfigurationCacheAction);
+
+        PlaceholderService.getInstance().registerPlaceholderHandler(new SysConfigPlaceholderHandler());
     }
 
 }

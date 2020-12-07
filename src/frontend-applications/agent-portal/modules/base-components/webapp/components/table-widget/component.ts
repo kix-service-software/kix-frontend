@@ -67,11 +67,12 @@ class Component {
 
         if (this.useContext) {
             this.state.widgetConfiguration = context
-                ? context.getWidgetConfiguration(this.state.instanceId)
+                ? await context.getWidgetConfiguration(this.state.instanceId)
                 : undefined;
         }
 
         if (this.state.widgetConfiguration) {
+            this.state.show = true;
             const settings: TableWidgetConfiguration = this.state.widgetConfiguration.configuration;
 
             context.addObjectDependency(settings.objectType);

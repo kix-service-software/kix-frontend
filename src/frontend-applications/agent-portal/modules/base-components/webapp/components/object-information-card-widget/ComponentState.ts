@@ -14,9 +14,10 @@ import { IInformationRow } from './IConfiguration';
 export class ComponentState extends WidgetComponentState {
 
     public constructor(
-        public avatar: ObjectIcon | string = null,
+        public avatar: Array<ObjectIcon | string> = [],
         public information: IInformationRow[] = [],
-        public prepared: boolean = false
+        public prepared: boolean = false,
+        public templates: any = {}
     ) {
         super();
     }

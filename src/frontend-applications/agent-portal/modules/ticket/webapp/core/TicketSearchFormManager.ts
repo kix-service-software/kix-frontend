@@ -26,6 +26,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { QueueService } from './admin';
 import { QueueProperty } from '../../model/QueueProperty';
 import { Ticket } from '../../model/Ticket';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
@@ -133,8 +135,18 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        return await super.isMultiselect(property)
-            || (property !== TicketProperty.LOCK_ID && property !== 'Queue.FollowUpID');
+        const result = await super.isMultiselect(property);
+        if (result !== null && typeof result !== 'undefined') {
+            return result;
+        }
+        if (
+            property === TicketProperty.LOCK_ID
+            || property === 'Queue.FollowUpID'
+            || property === ArticleProperty.CUSTOMER_VISIBLE
+        ) {
+            return false;
+        }
+        return true;
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
@@ -153,6 +165,14 @@ export class TicketSearchFormManager extends SearchFormManager {
                     );
                     nodes = await KIXObjectService.prepareTree(organisations);
                 }
+                break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                const no = await TranslationService.translate('No');
+                const yes = await TranslationService.translate('Yes');
+                nodes = [
+                    new TreeNode(0, no),
+                    new TreeNode(1, yes)
+                ];
                 break;
             default:
                 nodes = await super.getTreeNodes(property);

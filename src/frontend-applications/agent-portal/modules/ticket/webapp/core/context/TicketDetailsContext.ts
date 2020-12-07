@@ -82,7 +82,7 @@ export class TicketDetailsContext extends Context {
 
     private async loadTicket(changedProperties: string[] = [], cache: boolean = true): Promise<Ticket> {
         const loadingOptions = new KIXObjectLoadingOptions(
-            null, null, null, ['ObjectActions']
+            null, null, null, ['StateType', 'ObjectActions']
         );
 
         const ticket: Ticket = await this.loadDetailsObject<Ticket>(KIXObjectType.TICKET, loadingOptions);
@@ -95,7 +95,7 @@ export class TicketDetailsContext extends Context {
             objects = await KIXObjectService.loadObjects<Article>(
                 KIXObjectType.ARTICLE, null,
                 new KIXObjectLoadingOptions(
-                    null, null, null, [ArticleProperty.FLAGS, ArticleProperty.ATTACHMENTS]
+                    null, null, null, [ArticleProperty.ATTACHMENTS, ArticleProperty.FLAGS, 'ObjectActions']
                 ), new ArticleLoadingOptions(this.objectId)
             ).catch(() => [] as Article[]) || [];
         } else if (objectType === KIXObjectType.TICKET_HISTORY) {

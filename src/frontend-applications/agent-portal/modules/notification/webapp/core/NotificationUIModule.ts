@@ -51,26 +51,35 @@ export class UIModule implements IUIModule {
         const newNotificationDialogContext = new ContextDescriptor(
             NewNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-notification-dialog', ['notifications'], NewNotificationDialogContext
+            false, 'new-notification-dialog', ['notifications'], NewNotificationDialogContext,
+            [
+                new UIComponentPermission('system/communication/notifications', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newNotificationDialogContext);
+        ContextService.getInstance().registerContext(newNotificationDialogContext);
 
         ActionFactory.getInstance().registerAction('notification-edit', NotificationEditAction);
         const editNotificationDialogContext = new ContextDescriptor(
             EditNotificationDialogContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-notification-dialog', ['notifications'], EditNotificationDialogContext
+            false, 'edit-notification-dialog', ['notifications'], EditNotificationDialogContext,
+            [
+                new UIComponentPermission('system/communication/notifications', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editNotificationDialogContext);
+        ContextService.getInstance().registerContext(editNotificationDialogContext);
 
         const notificationDetailsContext = new ContextDescriptor(
             NotificationDetailsContext.CONTEXT_ID, [KIXObjectType.NOTIFICATION],
             ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['notifications'], NotificationDetailsContext
+            false, 'object-details-page', ['notifications'], NotificationDetailsContext,
+            [
+                new UIComponentPermission('system/communication/notifications', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(notificationDetailsContext);
+        ContextService.getInstance().registerContext(notificationDetailsContext);
 
-        await SetupService.getInstance().registerSetupStep(
+        SetupService.getInstance().registerSetupStep(
             new SetupStep('setup-notification-template', 'Translatable#Notification Template', 'setup-notification-template',
                 [
                     new UIComponentPermission('system/config', [CRUD.READ])

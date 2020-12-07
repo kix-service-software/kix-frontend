@@ -52,7 +52,11 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'job-run-log-download-cell', '/kix-module-job$0/webapp/components/job-run-log-download-cell', []
         ),
-        new UIComponent('job-run-logs', '/kix-module-job$0/webapp/components/job-run-logs', [])
+        new UIComponent('job-run-logs', '/kix-module-job$0/webapp/components/job-run-logs', []),
+        new UIComponent(
+            'job-filter-cell-content',
+            '/kix-module-job$0/webapp/components/job-filter-cell-content', []
+        ),
     ];
 
     public webDependencies: string[] = [

@@ -13,6 +13,9 @@ import { AgentService } from '../../../user/webapp/core/AgentService';
 import { SearchOperator } from '../../../search/model/SearchOperator';
 import { KIXObject } from '../../../../model/kix/KIXObject';
 import { PlaceholderService } from './PlaceholderService';
+import { KIXObjectService } from './KIXObjectService';
+import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
+import { KIXObjectProperty } from '../../../../model/kix/KIXObjectProperty';
 
 export class FilterUtil {
 
@@ -39,6 +42,7 @@ export class FilterUtil {
                     );
                 } else {
                     value = object[criterion.property];
+                    value = await this.getDynamicFieldValue(object, criterion, value);
                 }
 
                 match = await FilterUtil.checkUIFilterCriterion(criterion, value);
@@ -50,23 +54,52 @@ export class FilterUtil {
         return match;
     }
 
+    private static async getDynamicFieldValue(
+        object: KIXObject, criterion: UIFilterCriterion, defaultValue: any
+    ): Promise<any> {
+        let dfValue = null;
+        const dfName = KIXObjectService.getDynamicFieldName(criterion.property);
+        if (dfName) {
+            const objects = await KIXObjectService.loadObjects(
+                object.KIXObjectType, [object.ObjectId],
+                new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+            );
+            if (Array.isArray(objects) && objects.length && Array.isArray(objects[0].DynamicFields)) {
+                const dynamicField = objects[0].DynamicFields.find((d) => d.Name === dfName);
+                if (dynamicField) {
+                    dfValue = dynamicField.Value;
+                }
+            }
+        } else {
+            dfValue = defaultValue;
+        }
+
+        return dfValue;
+    }
+
     public static async checkUIFilterCriterion(criterion: UIFilterCriterion, value: any): Promise<boolean> {
         if (criterion.value === KIXObjectType.CURRENT_USER) {
             const currentUser = await AgentService.getInstance().getCurrentUser();
             criterion.value = currentUser.UserID;
         }
 
-        const criterionValue = criterion.value ? criterion.value.toString().toLocaleLowerCase() : criterion.value;
+        const criterionValue = criterion.value !== null
+            ? criterion.value.toString().toLocaleLowerCase()
+            : criterion.value;
 
         switch (criterion.operator) {
             case SearchOperator.EQUALS:
-                value = value ? value : '';
-                return value.toString().toLocaleLowerCase() === criterionValue;
+                value = value ? value.toString().toLocaleLowerCase() : value;
+                return value === criterionValue;
             case SearchOperator.NOT_EQUALS:
-                value = value ? value : '';
-                return value.toString().toLocaleLowerCase() !== criterionValue;
+                value = value !== undefined && value !== null
+                    ? value.toString().toLocaleLowerCase()
+                    : value;
+                return value !== criterionValue;
             case SearchOperator.CONTAINS:
-                value = value ? value : '';
+                value = value !== undefined && value !== null
+                    ? value
+                    : '';
                 return value.toString().toLocaleLowerCase().indexOf(
                     criterion.value.toString().toLocaleLowerCase()
                 ) !== -1;

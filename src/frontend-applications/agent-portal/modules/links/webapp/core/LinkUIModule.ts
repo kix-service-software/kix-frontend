@@ -23,6 +23,8 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { LinkFormService } from './LinkFormService';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -46,16 +48,22 @@ export class UIModule implements IUIModule {
         const linkObjectDialogContext = new ContextDescriptor(
             LinkObjectDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
             ContextType.DIALOG, ContextMode.CREATE_LINK,
-            false, 'link-objects-dialog', ['links'], LinkObjectDialogContext
+            false, 'link-objects-dialog', ['links'], LinkObjectDialogContext,
+            [
+                new UIComponentPermission('links', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(linkObjectDialogContext);
+        ContextService.getInstance().registerContext(linkObjectDialogContext);
 
         const editLinkObjectDialogContext = new ContextDescriptor(
             EditLinkedObjectsDialogContext.CONTEXT_ID, [KIXObjectType.LINK],
             ContextType.DIALOG, ContextMode.EDIT_LINKS,
-            false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext
+            false, 'edit-linked-objects-dialog', ['links'], EditLinkedObjectsDialogContext,
+            [
+                new UIComponentPermission('links', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editLinkObjectDialogContext);
+        ContextService.getInstance().registerContext(editLinkObjectDialogContext);
     }
 
 }

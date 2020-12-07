@@ -18,6 +18,7 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { MacroActionTypeOption } from '../../model/MacroActionTypeOption';
 import { FormFieldValue } from '../../../../model/configuration/FormFieldValue';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 // tslint:enable
 
 export class ExtendedJobFormManager implements IJobFormManager {
@@ -57,7 +58,8 @@ export class ExtendedJobFormManager implements IJobFormManager {
         return null;
     }
 
-    public prepareCreateValue(property: string, value: any): Promise<Array<[string, any]>> {
+    public prepareCreateValue(property: string, formField: FormFieldConfiguration, value: any):
+        Promise<Array<[string, any]>> {
         return null;
     }
 
@@ -93,5 +95,9 @@ export class ExtendedJobFormManager implements IJobFormManager {
             action.Parameters[optionName].push(value);
             return action.Parameters[optionName];
         }
+    }
+
+    public async getEventNodes(): Promise<TreeNode[]> {
+        return [];
     }
 }

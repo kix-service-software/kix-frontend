@@ -21,6 +21,9 @@ import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 import { ConfigurationDefinition } from '../../model/configuration/ConfigurationDefinition';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { OrganisationProperty } from './model/OrganisationProperty';
+import { SortOrder } from '../../model/SortOrder';
+import { ContactProperty } from './model/ContactProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -39,7 +42,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const organsiationTableWidget = new TableWidgetConfiguration(
             'customer-dashboard-table-widget', 'Organisation Table Widget', ConfigurationType.TableWidget,
-            KIXObjectType.ORGANISATION, null,
+            KIXObjectType.ORGANISATION, [OrganisationProperty.NAME, SortOrder.UP],
             new ConfigurationDefinition('customer-dashboard-table', ConfigurationType.Table), null,
             null, true, null, null, false
         );
@@ -62,7 +65,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
         const contactTableWidget = new TableWidgetConfiguration(
             'customer-dashboard-contacts-table-widget', 'Contacts Table Widget', ConfigurationType.TableWidget,
-            KIXObjectType.CONTACT, null,
+            KIXObjectType.CONTACT, [ContactProperty.LASTNAME, SortOrder.UP],
             new ConfigurationDefinition('customer-dashboard-contacts-table', ConfigurationType.Table), null,
             null, true, null, null, null, false
         );

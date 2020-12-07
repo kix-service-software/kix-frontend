@@ -41,35 +41,27 @@ export class Component {
 
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         if (context) {
-            this.state.filterValue = context.getAdditionalInformation('EXPLORER_FILTER_CI_CLASSES');
-            if (this.state.filterValue) {
-                const filter = (this as any).getComponent('ci-class-explorer-filter');
-                if (filter) {
-                    filter.textFilterValueChanged(null, this.state.filterValue);
-                }
-            }
-            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
-
-            this.setActiveNode(context.currentCIClass);
+            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
+            this.setActiveNode(context.classId);
         } else {
             this.showAll();
         }
     }
 
-    private setActiveNode(category: ConfigItemClass): void {
-        if (category) {
-            this.state.activeNode = this.getActiveNode(category);
+    private setActiveNode(classId: number): void {
+        if (classId) {
+            this.activeNodeChanged(this.getActiveNode(classId));
         } else {
             this.showAll();
         }
     }
 
-    private getActiveNode(category: ConfigItemClass, nodes: TreeNode[] = this.state.nodes
+    private getActiveNode(classId: number, nodes: TreeNode[] = this.state.nodes
     ): TreeNode {
-        let activeNode = nodes.find((n) => n.id.ID === category.ID);
+        let activeNode = nodes.find((n) => n.id === classId);
         if (!activeNode) {
             for (const node of nodes) {
-                activeNode = this.getActiveNode(category, node.children);
+                activeNode = this.getActiveNode(classId, node.children);
                 if (activeNode) {
                     node.expanded = true;
                     break;
@@ -93,7 +85,7 @@ export class Component {
                 const properties = [new TreeNodeProperty(count, text)];
                 const name = await TranslationService.translate(c.Name, []);
                 const icon = LabelService.getInstance().getObjectIcon(c);
-                nodes.push(new TreeNode(c, name, icon, null, null, null, null, null, properties));
+                nodes.push(new TreeNode(c.ID, name, icon, null, null, null, null, null, properties));
             }
         }
         return nodes;
@@ -101,10 +93,9 @@ export class Component {
 
     public async activeNodeChanged(node: TreeNode): Promise<void> {
         this.state.activeNode = node;
-        const ciClass = node.id as ConfigItemClass;
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
-        context.setAdditionalInformation('STRUCTURE', [ciClass.Name]);
-        context.setCIClass(ciClass);
+        context.setAdditionalInformation('STRUCTURE', [node.label]);
+        context.setCIClass(node.id);
     }
 
     public async showAll(): Promise<void> {
@@ -122,7 +113,7 @@ export class Component {
         this.state.filterValue = textFilterValue;
         const context = await ContextService.getInstance().getContext<CMDBContext>(CMDBContext.CONTEXT_ID);
         if (context) {
-            context.setAdditionalInformation('EXPLORER_FILTER_CI_CLASSES', this.state.filterValue);
+            context.setFilterValue(this.state.filterValue);
         }
     }
 

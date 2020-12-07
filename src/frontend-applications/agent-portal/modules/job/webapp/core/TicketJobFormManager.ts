@@ -19,6 +19,16 @@ export class TicketJobFormManager extends AbstractJobFormManager {
         const searchDefinition = SearchService.getInstance().getSearchDefinition(KIXObjectType.TICKET);
         if (searchDefinition) {
             this.filterManager = searchDefinition.createFormManager([SearchProperty.FULLTEXT]);
+            this.filterManager.init = () => {
+
+                // get extended managers on init because they could be added after filterManager was created
+                if (searchDefinition) {
+                    this.filterManager['extendedFormManager'] = [];
+                    searchDefinition.formManager.getExtendedFormManager().forEach(
+                        (m) => this.filterManager.addExtendedFormManager(m)
+                    );
+                }
+            };
         }
     }
 }

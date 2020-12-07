@@ -7,10 +7,10 @@
  * --
  */
 
-import cleanupJobFormConfig = require('./3364-cleanup-job-form-config');
-import resetFormFieldConfigurations = require('./3402-reset-form-field-configurations');
+import { Cell } from '../../../../base-components/webapp/core/table/Cell';
 
-module.exports = [
-    cleanupJobFormConfig,
-    resetFormFieldConfigurations
-];
+export class ComponentState {
+
+    public cell: Cell = null;
+    public isLabelCell: boolean = true;
+}

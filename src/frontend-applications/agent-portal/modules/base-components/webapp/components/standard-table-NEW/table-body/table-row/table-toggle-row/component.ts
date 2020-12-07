@@ -99,11 +99,19 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
     }
 
     public async setToggleActions(): Promise<void> {
-        const actions = this.toggleOptions && this.state.row
+        let actions = this.toggleOptions && this.state.row
             ? await ActionFactory.getInstance().generateActions(
                 this.toggleOptions.actions, [this.state.row.getRowObject().getObject()]
             )
             : [];
+
+        if (this.state.row) {
+            const context = ContextService.getInstance().getActiveContext();
+            const object = this.state.row.getRowObject().getObject();
+            const objectActions = await context.getAdditionalActions(object);
+
+            actions = [...objectActions, ...actions];
+        }
         const filteredActions = [];
         for (const a of actions) {
             if (await a.canShow()) {

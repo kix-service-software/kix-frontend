@@ -341,7 +341,7 @@ export class FormInstance {
             return [formField ? formField.instanceId : null, v[1]];
         });
 
-        this.provideFormFieldValues(instanceValues, originInstanceId, silent);
+        this.provideFormFieldValues(instanceValues.filter((iv) => iv[0] !== null), originInstanceId, silent);
     }
 
     public async provideFormFieldValues<T>(

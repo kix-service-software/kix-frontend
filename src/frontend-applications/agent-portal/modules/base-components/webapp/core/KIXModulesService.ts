@@ -31,13 +31,14 @@ export class KIXModulesService {
         this.tags = new Map();
 
         const start = Date.now();
-        this.modules = await KIXModulesSocketClient.getInstance().loadModules();
-        const end = Date.now();
-        console.debug(`Modules loaded: ${end - start}ms`);
 
+        this.modules = await KIXModulesSocketClient.getInstance().loadModules();
         this.modules.forEach((m) => {
             m.uiComponents.forEach((c) => this.tags.set(c.tagId, c.componentPath));
         });
+
+        const end = Date.now();
+        console.debug(`Modules loaded: ${end - start}ms`);
     }
 
     public getModules(): IKIXModuleExtension[] {

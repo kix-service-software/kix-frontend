@@ -20,13 +20,14 @@ import { KIXObjectService } from '../../../../../modules/base-components/webapp/
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { ContextUIEvent } from '../../../../base-components/webapp/core/ContextUIEvent';
 import { SearchProperty } from '../../../../search/model/SearchProperty';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 
 export class TicketContext extends Context {
 
     public static CONTEXT_ID: string = 'tickets';
 
     public queueId: number;
-    public filtervalue: string;
+    public filterValue: string;
 
     public getIcon(): string {
         return 'kix-icon-ticket';
@@ -36,21 +37,50 @@ export class TicketContext extends Context {
         return 'Ticket Dashboard';
     }
 
-    public setQueue(queueId: number): void {
-        if (queueId) {
-            if (queueId !== this.queueId) {
-                this.queueId = queueId;
-                this.loadTickets();
+    public async initContext(urlParams: URLSearchParams): Promise<void> {
+        if (urlParams) {
+            if (urlParams.has('queueId') && !isNaN(Number(urlParams.get('queueId')))) {
+                this.queueId = Number(urlParams.get('queueId'));
             }
-        } else if (this.queueId || typeof this.queueId === 'undefined') {
-            this.queueId = null;
+
+            if (urlParams.has('filter')) {
+                this.filterValue = decodeURI(urlParams.get('filter'));
+            }
+        }
+    }
+
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+            const params = [];
+            if (this.queueId) {
+                params.push(`queueId=${this.queueId}`);
+            }
+
+            if (this.filterValue) {
+                params.push(`filter=${this.filterValue}`);
+            }
+
+            if (params.length) {
+                url += `?${params.join('&')}`;
+            }
+        }
+        return url;
+    }
+
+    public setQueue(queueId: number): void {
+        if (!this.queueId || this.queueId !== queueId) {
+            this.queueId = queueId;
             this.loadTickets();
+            ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
         }
     }
 
     public setFilterValue(filterValue: string): void {
-        this.filtervalue = filterValue;
+        this.filterValue = filterValue;
         this.loadTickets();
+        ContextService.getInstance().setDocumentHistory(true, false, this, this, null);
     }
 
     private async loadTickets(): Promise<void> {
@@ -68,15 +98,15 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(queueFilter);
         }
 
-        if (this.filtervalue) {
+        if (this.filterValue) {
             const fulltextFilter = new FilterCriteria(
                 SearchProperty.FULLTEXT, SearchOperator.EQUALS, FilterDataType.STRING,
-                FilterType.AND, this.filtervalue
+                FilterType.AND, this.filterValue
             );
             loadingOptions.filter.push(fulltextFilter);
         }
 
-        if (!this.filtervalue && !this.queueId) {
+        if (!this.filterValue && !this.queueId) {
             loadingOptions.limit = 30;
             loadingOptions.sortOrder = '-Ticket.Age:numeric';
             loadingOptions.filter.push(new FilterCriteria(
@@ -104,7 +134,7 @@ export class TicketContext extends Context {
     public reset(): void {
         super.reset();
         this.queueId = null;
-        this.filtervalue = null;
+        this.filterValue = null;
     }
 
     public reloadObjectList(objectType: KIXObjectType): Promise<void> {

@@ -9,10 +9,11 @@
 
 import { Context } from './Context';
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
+import { KIXObject } from './kix/KIXObject';
 
 export class ContextExtension {
 
-    public async getAdditionalActions(context: Context): Promise<AbstractAction[]> {
+    public async getAdditionalActions(context: Context, object?: KIXObject): Promise<AbstractAction[]> {
         return;
     }
 

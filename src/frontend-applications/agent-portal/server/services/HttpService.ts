@@ -38,6 +38,7 @@ export class HttpService {
     private request: any;
     private apiURL: string;
     private backendCertificate: any;
+    private requestCounter = 0;
 
     private requestPromises: Map<string, Promise<any>> = new Map();
 
@@ -48,6 +49,13 @@ export class HttpService {
 
         const certPath = ConfigurationService.getInstance().certDirectory + '/backend.pem';
         this.backendCertificate = fs.readFileSync(certPath);
+
+        if (serverConfig.LOG_REQUEST_QUEUES_INTERVAL) {
+            setInterval(
+                () => LoggingService.getInstance().info(`HTTP Request Queue Length: ${this.requestCounter}`),
+                serverConfig.LOG_REQUEST_QUEUES_INTERVAL
+            );
+        }
     }
 
     public async get<T>(
@@ -99,7 +107,7 @@ export class HttpService {
             body: content
         };
 
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options, undefined, logError);
+        const response = await this.executeRequest<T>(resource, token, clientRequestId, options, undefined, logError);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix).catch(() => null);
         return response;
     }
@@ -112,13 +120,14 @@ export class HttpService {
             body: content
         };
 
-        const response = this.executeRequest<T>(resource, token, clientRequestId, options);
+        const response = await this.executeRequest<T>(resource, token, clientRequestId, options);
         await CacheService.getInstance().deleteKeys(cacheKeyPrefix);
         return response;
     }
 
     public async delete<T>(
-        resources: string[], token: any, clientRequestId: string, cacheKeyPrefix: string = ''
+        resources: string[], token: any, clientRequestId: string, cacheKeyPrefix: string = '',
+        logError: boolean = true
     ): Promise<Error[]> {
         const options = {
             method: RequestMethod.DELETE,
@@ -127,7 +136,7 @@ export class HttpService {
         const errors = [];
         const executePromises = [];
         resources.forEach((resource) => executePromises.push(
-            this.executeRequest<T>(resource, token, clientRequestId, options)
+            this.executeRequest<T>(resource, token, clientRequestId, options, null, logError)
                 .catch((error: Error) => errors.push(error))
         ));
 
@@ -196,12 +205,14 @@ export class HttpService {
                 a: options,
                 b: parameter
             });
+        this.requestCounter++;
 
         return new Promise((resolve, reject) => {
             this.request(options)
                 .then((response) => {
                     resolve(response);
                     ProfilingService.getInstance().stop(profileTaskId, response);
+                    this.requestCounter--;
                 }).catch((error) => {
                     if (logError) {
                         LoggingService.getInstance().error(
@@ -209,6 +220,7 @@ export class HttpService {
                         );
                     }
                     ProfilingService.getInstance().stop(profileTaskId, 'Error');
+                    this.requestCounter--;
                     if (error.statusCode === 403) {
                         reject(new PermissionError(this.createError(error), resource, options.method));
                     } else {

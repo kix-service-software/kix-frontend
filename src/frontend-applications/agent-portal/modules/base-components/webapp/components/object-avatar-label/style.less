@@ -1,0 +1,41 @@
+/**
+ * Copyright (C) 2006-2020 c.a.p.e. IT GmbH, https://www.cape-it.de
+ * --
+ * This software comes with ABSOLUTELY NO WARRANTY. For details, see
+ * the enclosed file LICENSE for license information (GPL3). If you
+ * did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
+ * --
+ */
+
+.user-avatar-label {
+    display: grid;
+    grid-template-columns: minmax(0, 4rem) auto;
+    align-content: center;
+
+    .user-avatar-icon {
+        grid-column: 1;
+        grid-row: 1 /span 2;
+        align-self: center;
+        justify-self: center;
+
+        font-size: 3rem;
+        height: 3rem;
+
+        >.icon {
+            >.svg-icon {
+                height: 3rem;
+                width: auto;
+            }
+        }
+    }
+
+    .user-avatar-text {
+        align-self: start;
+    }
+
+    .user-avatar-description {
+        font-style: italic;
+        color: @secondary-0;
+        align-self: end;
+    }
+}

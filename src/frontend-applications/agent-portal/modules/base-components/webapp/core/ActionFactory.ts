@@ -16,6 +16,7 @@ export class ActionFactory<T extends AbstractAction> {
 
     private actions: Map<string, new () => T> = new Map();
     private actionInstances: Map<string, T> = new Map();
+    private blacklist: string[] = [];
 
     private static INSTANCE: ActionFactory<AbstractAction> = null;
 
@@ -34,8 +35,12 @@ export class ActionFactory<T extends AbstractAction> {
         this.actions.set(actionId, action);
     }
 
+    public blacklistActions(actionsIds: string[]): void {
+        actionsIds.forEach((a) => this.blacklist.push(a));
+    }
+
     public hasAction(actionId: string): boolean {
-        return this.actions.has(actionId);
+        return this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId);
     }
 
     public async generateActions(actionIds: string[] = [], data?: any): Promise<AbstractAction[]> {
@@ -43,7 +48,7 @@ export class ActionFactory<T extends AbstractAction> {
         for (const actionId of actionIds) {
             if (this.actionInstances.has(actionId)) {
                 actions.push(this.actionInstances.get(actionId));
-            } else if (this.actions.has(actionId)) {
+            } else if (this.actions.has(actionId) && !this.blacklist.some((a) => a === actionId)) {
                 const actionPrototype = this.actions.get(actionId);
                 let action: IAction = new actionPrototype();
                 action.id = actionId;

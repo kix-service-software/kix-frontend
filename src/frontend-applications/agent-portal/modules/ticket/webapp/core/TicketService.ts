@@ -203,7 +203,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 break;
             case TicketProperty.STATE_TYPE:
-                let stateTypes = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE);
+                let stateTypes = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE_TYPE);
                 if (!showInvalid) {
                     stateTypes = stateTypes.filter((s) => s.ValidID === 1);
                 }
@@ -239,14 +239,14 @@ export class TicketService extends KIXObjectService<Ticket> {
                     }
 
                     if (Array.isArray(loadingOptions.query)) {
-                        loadingOptions.query.push(['requiredPermission', 'TicketRead,TicketUpdate']);
+                        loadingOptions.query.push(['requiredPermission', 'TicketRead,TicketCreate']);
                     } else {
-                        loadingOptions.query = [['requiredPermission', 'TicketRead,TicketUpdate']];
+                        loadingOptions.query = [['requiredPermission', 'TicketRead,TicketCreate']];
                     }
                 } else {
                     loadingOptions = new KIXObjectLoadingOptions(
                         null, null, null, [UserProperty.CONTACT], null,
-                        [['requiredPermission', 'TicketRead,TicketUpdate']]
+                        [['requiredPermission', 'TicketRead,TicketCreate']]
                     );
                 }
                 let users = await KIXObjectService.loadObjects<User>(

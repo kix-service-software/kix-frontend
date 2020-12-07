@@ -29,6 +29,7 @@ export class DynamicFormFieldValue {
     public isDate: boolean = false;
     public isDateTime: boolean = false;
     public isTextarea: boolean = false;
+    public isCheckbox: boolean = false;
     public isSpecificInput: boolean = false;
     public isNumber: boolean = false;
     public specificInputType: string = null;
@@ -108,7 +109,7 @@ export class DynamicFormFieldValue {
                 }
             }
 
-            await this.setCurrentValue();
+            await this.setCurrentValue(undefined, true);
         }
 
         const propertiesPlaceholder = await this.manager.getPropertiesPlaceholder();
@@ -249,6 +250,7 @@ export class DynamicFormFieldValue {
             }
 
             this.isTextarea = inputType === InputFieldTypes.TEXT_AREA;
+            this.isCheckbox = inputType === InputFieldTypes.CHECKBOX;
 
             this.isSpecificInput = inputType === 'SPECIFIC';
             if (this.isSpecificInput) {
@@ -273,7 +275,7 @@ export class DynamicFormFieldValue {
         }
     }
 
-    public async setCurrentValue(silent: boolean = true): Promise<void> {
+    public async setCurrentValue(silent: boolean = true, init?: boolean): Promise<void> {
         let currentValues: TreeNode[] = [];
         if (this.value.value) {
             if (this.isDropdown && !this.isAutocomplete) {
@@ -303,15 +305,24 @@ export class DynamicFormFieldValue {
                     const date = new Date(this.value.value[0]);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
+                        if (init) {
+                            this.startDateSet = true;
+                        }
                     }
                     const endDate = new Date(this.value.value[1]);
                     if (!isNaN(endDate.getTime())) {
                         this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
+                        if (init) {
+                            this.endDateSet = true;
+                        }
                     }
                 } else {
                     const date = new Date(Array.isArray(this.value.value) ? this.value.value[0] : this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
+                        if (init) {
+                            this.startDateSet = true;
+                        }
                     }
                 }
             } else if (this.isDateTime) {
@@ -320,17 +331,29 @@ export class DynamicFormFieldValue {
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                         this.time = DateTimeUtil.getKIXTimeString(date);
+                        if (init) {
+                            this.startDateSet = true;
+                            this.startTimeSet = true;
+                        }
                     }
                     const endDate = new Date(this.value.value[1]);
                     if (!isNaN(endDate.getTime())) {
                         this.betweenEndDate = DateTimeUtil.getKIXDateString(endDate);
                         this.betweenEndTime = DateTimeUtil.getKIXTimeString(endDate);
+                        if (init) {
+                            this.endDateSet = true;
+                            this.endTimeSet = true;
+                        }
                     }
                 } else {
                     const date = new Date(Array.isArray(this.value.value) ? this.value.value[0] : this.value.value);
                     if (!isNaN(date.getTime())) {
                         this.date = DateTimeUtil.getKIXDateString(date);
                         this.time = DateTimeUtil.getKIXTimeString(date);
+                        if (init) {
+                            this.startTimeSet = true;
+                            this.startDateSet = true;
+                        }
                     }
                 }
             } else if (!this.isDropdown && this.value.objectType) {
@@ -367,20 +390,21 @@ export class DynamicFormFieldValue {
         this.value.value = value;
     }
 
-    private endDateManuell: boolean = false;
-    private startDateManuell: boolean = false;
+    private endDateSet: boolean = false;
+    private startDateSet: boolean = false;
     public setDateValue(value: string): void {
         this.date = value;
-        this.startDateManuell = true;
+        this.startDateSet = true;
 
-        if (this.date && this.isBetween && (!this.betweenEndDate || !this.endDateManuell)) {
+        // set end date if no value already set or value was not initial value and not set by user
+        if (this.date && this.isBetween && (!this.betweenEndDate || !this.endDateSet)) {
             const asDate = new Date(this.date);
             if (typeof asDate.getTime === 'function') {
                 this.betweenEndDate = DateTimeUtil.getKIXDateString(new Date(asDate.getTime() + 1000 * 60 * 60 * 24));
             } else {
                 this.betweenEndDate = this.date;
             }
-            this.endDateManuell = false;
+            this.endDateSet = false;
         }
 
         if (this.isDateTime) {
@@ -393,40 +417,41 @@ export class DynamicFormFieldValue {
         }
     }
 
-    private endTimeManuell: boolean = false;
-    private startTimeManuell: boolean = false;
+    private endTimeSet: boolean = false;
+    private startTimeSet: boolean = false;
     public setTimeValue(value: string): void {
         this.time = value;
-        this.startTimeManuell = true;
+        this.startTimeSet = true;
 
-        if (this.time && ((this.isBetween && !this.betweenEndTime) || !this.endTimeManuell)) {
+        if (this.time && ((this.isBetween && !this.betweenEndTime) || !this.endTimeSet)) {
             this.betweenEndTime = this.time;
-            this.endTimeManuell = false;
+            this.endTimeSet = false;
         }
     }
 
     public setBetweenEndDateValue(value: string): void {
         this.betweenEndDate = value;
-        this.endDateManuell = true;
+        this.endDateSet = true;
 
-        if (this.betweenEndDate && (!this.date || !this.startDateManuell)) {
+        // set start date if no value already set or value was not initial value and not set by user
+        if (this.betweenEndDate && (!this.date || !this.startDateSet)) {
             const endAsDate = new Date(this.betweenEndDate);
             if (typeof endAsDate.getTime === 'function') {
                 this.date = DateTimeUtil.getKIXDateString(new Date(endAsDate.getTime() - 1000 * 60 * 60 * 24));
             } else {
                 this.date = this.betweenEndDate;
             }
-            this.startDateManuell = false;
+            this.startDateSet = false;
         }
     }
 
     public setBetweenEndTimeValue(value: string): void {
         this.betweenEndTime = value;
-        this.endTimeManuell = true;
+        this.endTimeSet = true;
 
-        if (this.betweenEndTime && (!this.time || !this.startTimeManuell)) {
+        if (this.betweenEndTime && (!this.time || !this.startTimeSet)) {
             this.time = this.betweenEndTime;
-            this.startTimeManuell = false;
+            this.startTimeSet = false;
         }
     }
 

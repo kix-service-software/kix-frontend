@@ -24,6 +24,8 @@ import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { TextModuleDuplicateAction } from './actions';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -49,14 +51,20 @@ export class UIModule implements IUIModule {
         const newTextModuleDialogContext = new ContextDescriptor(
             NewTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext
+            false, 'new-text-module-dialog', ['text-modules'], NewTextModuleDialogContext,
+            [
+                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newTextModuleDialogContext);
+        ContextService.getInstance().registerContext(newTextModuleDialogContext);
         const editTextModuleDialogContext = new ContextDescriptor(
             EditTextModuleDialogContext.CONTEXT_ID, [KIXObjectType.TEXT_MODULE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext
+            false, 'edit-text-module-dialog', ['text-modules'], EditTextModuleDialogContext,
+            [
+                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editTextModuleDialogContext);
+        ContextService.getInstance().registerContext(editTextModuleDialogContext);
     }
 }

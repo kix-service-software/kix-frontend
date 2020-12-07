@@ -33,6 +33,8 @@ export enum AgentPortalExtensions {
 
     EXTENDED_FORM_CONFIGURATION = 'kix:exended-form-configuration',
 
-    MODIFY_CONFIGURATION = 'kix:modify-configuration'
+    MODIFY_CONFIGURATION = 'kix:modify-configuration',
+
+    MIGRATION = 'kix:migration'
 
 }

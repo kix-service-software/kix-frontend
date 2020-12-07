@@ -52,16 +52,20 @@ export class Component {
 
     public getGroupStyle(groupIndex: number): string {
         const group = this.state.groups[groupIndex];
-        let columnString = `grid-template-columns: ${16 - (this.state.level * 1.75)}rem`;
-        if (group && typeof group.value !== 'undefined' && group.value !== null && group.value !== '') {
-            columnString += ' minmax(auto,min-content)';
+        let columnString = `grid-template-columns: ${16 + (this.state.level * 1.75)}rem`;
+        if (group
+            && typeof group.value.value !== 'undefined'
+            && group.value.value !== null
+            && group.value.value !== ''
+        ) {
+            columnString += ' auto';
         }
         return columnString + ';';
     }
 
     public fileClicked(groupIndex: number = null, attachment: any = null): void {
         if (groupIndex !== null && this.state.groups[groupIndex]) {
-            (this as any).emit('fileClicked', this.state.groups[groupIndex].attachment);
+            (this as any).emit('fileClicked', this.state.groups[groupIndex].value.attachment);
         } else if (attachment) {
             (this as any).emit('fileClicked', attachment);
         }

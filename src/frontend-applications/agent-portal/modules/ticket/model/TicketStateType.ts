@@ -27,6 +27,8 @@ export class TicketStateType extends KIXObject {
             this.ObjectId = this.ID;
             this.Name = state.Name;
         }
+
+        this.ValidID = 1;
     }
 
     public equals(state: TicketStateType): boolean {

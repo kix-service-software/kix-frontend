@@ -184,6 +184,17 @@ export abstract class SearchDefinition {
         ];
     }
 
+    public static getNumberOperators(): SearchOperator[] {
+        return [
+            SearchOperator.EQUALS,
+            SearchOperator.LESS_THAN,
+            SearchOperator.GREATER_THAN,
+            SearchOperator.LESS_THAN_OR_EQUAL,
+            SearchOperator.GREATER_THAN_OR_EQUAL,
+            SearchOperator.BETWEEN
+        ];
+    }
+
     public getFilterCriteria(searchValue: ObjectPropertyValue): FilterCriteria {
         const property = searchValue.property;
         const operator = searchValue.operator;

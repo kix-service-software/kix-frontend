@@ -39,7 +39,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         if (context) {
-            context.setAdditionalInformation(OrganisationAdditionalInformationKeys.ORGANISATION_DEPENDING, false);
             context.registerListener('contact-list-widget', {
                 sidebarToggled: () => { return; },
                 scrollInformationChanged: () => { return; },

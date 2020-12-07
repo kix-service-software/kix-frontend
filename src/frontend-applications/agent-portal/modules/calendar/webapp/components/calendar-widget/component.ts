@@ -48,7 +48,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            const widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            const widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
             if (widgetConfiguration && widgetConfiguration.configuration) {
                 this.calendarConfig = (widgetConfiguration.configuration as CalendarConfiguration);
                 this.initWidget();
@@ -72,7 +72,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const tickets = await KIXObjectService.loadObjects<Ticket>(
             KIXObjectType.TICKET, null, new KIXObjectLoadingOptions(
-                ticketFilter, null, null, [TicketProperty.STATE_TYPE]
+                ticketFilter, null, null, [TicketProperty.STATE_TYPE, KIXObjectProperty.DYNAMIC_FIELDS]
             )
         );
 

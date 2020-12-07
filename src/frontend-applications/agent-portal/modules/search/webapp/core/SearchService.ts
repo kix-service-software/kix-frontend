@@ -105,6 +105,10 @@ export class SearchService {
                 ? this.searchCache.name
                 : null;
             this.searchCache = new SearchCache<T>(objectType, criteria, [], null, CacheState.VALID, cacheName);
+
+            const context = await ContextService.getInstance().getContext<SearchContext>(SearchContext.CONTEXT_ID);
+            context.setSearchCache(this.searchCache);
+
             objects = await this.doSearch();
             this.provideResult(objectType);
         } else {
@@ -326,9 +330,9 @@ export class SearchService {
         }
     }
 
-    public async loadSearch(name: string): Promise<void> {
+    public async loadSearch(name?: string, cache?: SearchCache): Promise<void> {
         const search = await SearchSocketClient.getInstance().loadSearch();
-        const searchCache = search.find((s) => s.name === name);
+        const searchCache = cache || search.find((s) => s.name === name);
         if (searchCache) {
             this.searchCache = new SearchCache(
                 searchCache.objectType, searchCache.criteria, [], searchCache.fulltextValue, CacheState.VALID, name

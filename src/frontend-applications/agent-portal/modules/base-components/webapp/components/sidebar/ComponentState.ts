@@ -13,7 +13,7 @@ import { ContextType } from '../../../../../model/ContextType';
 
 export class ComponentState {
 
-    public sidebars: ConfiguredWidget[] = [];
+    public sidebars: Array<[string, any]> = [];
     public showIconBar: boolean = true;
     public rows: string[] = [];
     public context: string = 'dashboard';

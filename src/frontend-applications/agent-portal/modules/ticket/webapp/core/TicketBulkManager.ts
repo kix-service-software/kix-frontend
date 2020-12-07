@@ -183,7 +183,7 @@ export class TicketBulkManager extends BulkManager {
                         )
                     ], undefined, undefined, undefined, undefined,
                     [
-                        ['requiredPermission', 'TicketRead,TicketUpdate']
+                        ['requiredPermission', 'TicketRead,TicketCreate']
                     ]
                 );
                 nodes = await TicketService.getInstance().getTreeNodes(

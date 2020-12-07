@@ -42,7 +42,7 @@ import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
-    public name: string = 'UserUIUIModule';
+    public name: string = 'UserUIModule';
 
     public priority: number = 50;
 
@@ -75,14 +75,14 @@ export class UIModule implements IUIModule {
             ContextType.DIALOG, ContextMode.PERSONAL_SETTINGS,
             false, 'personal-settings-dialog', ['personal-settings'], PersonalSettingsDialogContext
         );
-        await ContextService.getInstance().registerContext(settingsDialogContext);
+        ContextService.getInstance().registerContext(settingsDialogContext);
 
-        await this.registerUser();
-        await this.registerRole();
+        this.registerUser();
+        this.registerRole();
 
         FormValidationService.getInstance().registerValidator(new UserPasswordValidator());
 
-        await SetupService.getInstance().registerSetupStep(
+        SetupService.getInstance().registerSetupStep(
             new SetupStep(
                 'SuperUserAccount', 'Translatable#Superuser Account', 'setup-superuser',
                 [
@@ -94,7 +94,7 @@ export class UIModule implements IUIModule {
             )
         );
 
-        await SetupService.getInstance().registerSetupStep(
+        SetupService.getInstance().registerSetupStep(
             new SetupStep(
                 'Mail', 'Translatable#Admin Password', 'setup-admin-password',
                 [
@@ -106,44 +106,56 @@ export class UIModule implements IUIModule {
         );
     }
 
-    private async registerUser(): Promise<void> {
+    private registerUser(): void {
         ActionFactory.getInstance().registerAction('user-admin-user-create-action', UserCreateAction);
         ActionFactory.getInstance().registerAction('user-admin-user-edit-action', UserEditAction);
 
         const userDetailsContextDescriptor = new ContextDescriptor(
             UserDetailsContext.CONTEXT_ID, [KIXObjectType.USER, KIXObjectType.CONTACT],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['users'], UserDetailsContext
+            true, 'object-details-page', ['users'], UserDetailsContext,
+            [
+                new UIComponentPermission('system/users', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(userDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(userDetailsContextDescriptor);
     }
 
-    private async registerRole(): Promise<void> {
+    private registerRole(): void {
 
         ActionFactory.getInstance().registerAction('user-admin-role-create-action', UserRoleCreateAction);
 
         const newUserRoleContext = new ContextDescriptor(
             NewUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext
+            false, 'new-user-role-dialog', ['roles'], NewUserRoleDialogContext,
+            [
+                new UIComponentPermission('system/roles', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newUserRoleContext);
+        ContextService.getInstance().registerContext(newUserRoleContext);
 
         ActionFactory.getInstance().registerAction('user-admin-role-edit-action', UserRoleEditAction);
 
         const editUserRoleContext = new ContextDescriptor(
             EditUserRoleDialogContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext
+            false, 'edit-user-role-dialog', ['roles'], EditUserRoleDialogContext,
+            [
+                new UIComponentPermission('system/roles', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editUserRoleContext);
+        ContextService.getInstance().registerContext(editUserRoleContext);
 
         const roleDetailsContextDescriptor = new ContextDescriptor(
             RoleDetailsContext.CONTEXT_ID, [KIXObjectType.ROLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['roles'], RoleDetailsContext
+            true, 'object-details-page', ['roles'], RoleDetailsContext,
+            [
+                new UIComponentPermission('system/roles', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(roleDetailsContextDescriptor);
     }
 
 }

@@ -15,6 +15,7 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextType } from '../../../../model/ContextType';
 import { Context } from '../../../../model/Context';
+import { AuthenticationSocketClient } from './AuthenticationSocketClient';
 
 export class ContextFactory {
 
@@ -79,8 +80,10 @@ export class ContextFactory {
         return descriptor;
     }
 
-    public getContextDescriptors(contextMode: ContextMode, objectType?: KIXObjectType | string): ContextDescriptor[] {
-        let descriptors = [];
+    public async getContextDescriptors(
+        contextMode: ContextMode, objectType?: KIXObjectType | string
+    ): Promise<ContextDescriptor[]> {
+        let descriptors: ContextDescriptor[] = [];
         if (contextMode && !objectType) {
             descriptors = this.registeredDescriptors.filter((c) => c.contextMode === contextMode);
         } else if (contextMode && objectType) {
@@ -88,7 +91,17 @@ export class ContextFactory {
                 (c) => c.contextMode === contextMode && c.kixObjectTypes.some((ot) => ot === objectType)
             );
         }
-        return descriptors;
+
+        const allowedDescriptors: ContextDescriptor[] = [];
+
+        for (const desc of descriptors) {
+            const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(desc.permissions);
+            if (allowed) {
+                allowedDescriptors.push(desc);
+            }
+        }
+
+        return allowedDescriptors;
     }
 
     public static async getContextForUrl(
@@ -151,13 +164,17 @@ export class ContextFactory {
 
             let context: Context;
             if (descriptor) {
-                const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
-                    descriptor.contextId
-                ).catch(
-                    (error) => { reject(error); }
-                );
-                if (configuration) {
-                    context = new descriptor.contextClass(descriptor, objectId, configuration);
+                const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(descriptor.permissions);
+
+                if (allowed) {
+                    const configuration = await ContextSocketClient.getInstance().loadContextConfiguration(
+                        descriptor.contextId
+                    ).catch(
+                        (error) => { reject(error); }
+                    );
+                    if (configuration) {
+                        context = new descriptor.contextClass(descriptor, objectId, configuration);
+                    }
                 }
             }
 

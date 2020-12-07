@@ -9,16 +9,17 @@
 
 import { Attachment } from './kix/Attachment';
 import { ObjectIcon } from '../modules/icon/model/ObjectIcon';
+import { LabelValueGroupValue } from './LabelValueGroupValue';
 
 export class LabelValueGroup {
 
     public constructor(
         public label: string,
-        public value: string,
+        public value: LabelValueGroupValue,
         public icon: string | ObjectIcon = null,
         public secondaryIcon: string | ObjectIcon = null,
         public sub: LabelValueGroup[] = null,
-        public attachment?: Attachment
+        public multiline: boolean = false
     ) { }
 
 }

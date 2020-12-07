@@ -34,6 +34,8 @@ class Component {
         this.state.placeholder = await TranslationService.translate(
             'Translatable#Please enter a search term for a organisation.'
         );
+        this.state.filterValue = context.filterValue;
+        this.search();
     }
 
     public keyUp(event: any): void {

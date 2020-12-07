@@ -26,6 +26,7 @@ export class StateType extends KIXObject {
             this.ID = Number(stateType.ID);
             this.ObjectId = this.ID;
             this.Name = stateType.Name;
+            this.ValidID = 1;
         }
     }
 

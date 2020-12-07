@@ -15,6 +15,8 @@ import { PlaceholderService } from '../../core/PlaceholderService';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { IdService } from '../../../../../model/IdService';
 import { FilterUtil } from '../../core/FilterUtil';
+import { KIXModulesService } from '../../core/KIXModulesService';
+import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 
 class Component {
 
@@ -56,13 +58,19 @@ class Component {
     private async initWidget(): Promise<void> {
         this.state.prepared = false;
         const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         const object = await context.getObject();
 
         if (this.state.widgetConfiguration.configuration) {
             const config = this.state.widgetConfiguration.configuration as IConfiguration;
-            this.state.avatar = config.avatar;
+            if (Array.isArray(config.avatar)) {
+                this.state.avatar = config.avatar;
+            } else if (config.avatar) {
+                this.state.avatar = [config.avatar];
+            }
             await this.prepareInformation(config.rows, object);
         }
 
@@ -77,48 +85,96 @@ class Component {
             for (const row of rows) {
                 if (Array.isArray(row.values)) {
                     const infoRow: IInformationRow = {
-                        margin: row.margin,
+                        title: row.title,
+                        style: row.style,
+                        separator: row.separator,
                         values: []
                     };
 
-                    for (const info of row.values) {
-                        if (Array.isArray(info.conditions)) {
-                            const match = await FilterUtil.checkCriteriaByPropertyValue(info.conditions, object);
-                            if (!match) {
-                                continue;
+                    for (const value of row.values) {
+                        if (Array.isArray(value)) {
+                            const group: IInformation[] = [];
+                            for (const v of value) {
+                                const infoValue = await this.createInfoValue(v, object);
+                                if (infoValue) {
+                                    group.push(infoValue);
+                                }
+                            }
+
+                            if (group.length) {
+                                infoRow.values.push(group);
+                            }
+                        } else {
+                            const infoValue = await this.createInfoValue(value, object);
+                            if (infoValue) {
+                                infoRow.values.push([infoValue]);
                             }
                         }
-
-                        const infoValue: IInformation = {
-                            conditions: [],
-                            icon: info.icon,
-                            linkSrc: info.linkSrc,
-                            preparedLinkSrc: '',
-                            preparedText: '',
-                            routingConfiguration: info.routingConfiguration,
-                            routingObjectId: info.routingObjectId,
-                            text: info.text
-                        };
-
-                        const text = await PlaceholderService.getInstance().replacePlaceholders(info.text, object);
-                        infoValue.preparedText = text;
-
-                        const link = await PlaceholderService.getInstance().replacePlaceholders(info.linkSrc, object);
-                        infoValue.preparedLinkSrc = link;
-
-                        if (info.routingConfiguration) {
-                            infoValue.routingObjectId = await PlaceholderService.getInstance().replacePlaceholders(
-                                info.routingObjectId
-                            );
-                        }
-                        infoRow.values.push(infoValue);
                     }
-                    information.push(infoRow);
+                    if (infoRow.values.length) {
+                        information.push(infoRow);
+                    }
                 }
             }
         }
 
         this.state.information = information;
+    }
+
+    private async createInfoValue(value: IInformation, object: KIXObject): Promise<IInformation> {
+        if (Array.isArray(value.conditions)) {
+            const match = await FilterUtil.checkCriteriaByPropertyValue(value.conditions, object);
+            if (!match) {
+                return null;
+            }
+        }
+
+        const infoValue: IInformation = {
+            conditions: [],
+            icon: value.icon,
+            linkSrc: value.linkSrc,
+            preparedLinkSrc: '',
+            preparedText: '',
+            routingConfiguration: value.routingConfiguration,
+            routingObjectId: value.routingObjectId,
+            text: value.text,
+            iconStyle: value.iconStyle,
+            textStyle: value.textStyle,
+            textPlaceholder: value.textPlaceholder,
+            componentId: value.componentId,
+            componentData: value.componentData ? value.componentData : {}
+        };
+
+        if (infoValue.componentId) {
+            this.state.templates[infoValue.componentId] = await KIXModulesService.getComponentTemplate(
+                infoValue.componentId
+            );
+        }
+
+        const placeholders = [];
+        if (Array.isArray(value.textPlaceholder)) {
+            for (const placeholder of value.textPlaceholder) {
+                const placeholderValue = await PlaceholderService.getInstance().replacePlaceholders(
+                    placeholder, object
+                );
+                placeholders.push(placeholderValue);
+            }
+        }
+
+        let text = await PlaceholderService.getInstance().replacePlaceholders(value.text, object);
+        text = await TranslationService.translate(text, placeholders);
+        infoValue.preparedText = text;
+
+        const link = await PlaceholderService.getInstance().replacePlaceholders(value.linkSrc, object);
+        infoValue.preparedLinkSrc = link;
+
+        if (value.routingConfiguration) {
+            infoValue.routingObjectId = await PlaceholderService.getInstance().replacePlaceholders(
+                value.routingObjectId
+            );
+        }
+
+        return infoValue;
     }
 }
 

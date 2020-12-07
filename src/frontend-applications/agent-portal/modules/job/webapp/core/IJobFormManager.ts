@@ -14,6 +14,7 @@ import { FormFieldConfiguration } from '../../../../model/configuration/FormFiel
 import { AbstractDynamicFormManager } from '../../../base-components/webapp/core/dynamic-form';
 import { ExecPlanTypes } from '../../model/ExecPlanTypes';
 import { FormContext } from '../../../../model/configuration/FormContext';
+import { TreeNode } from '../../../base-components/webapp/core/tree';
 
 export interface IJobFormManager {
 
@@ -42,5 +43,7 @@ export interface IJobFormManager {
     updateFields(fields: FormFieldConfiguration[]): Promise<void>;
 
     reset(): void;
+
+    getEventNodes(): Promise<TreeNode[]>;
 
 }

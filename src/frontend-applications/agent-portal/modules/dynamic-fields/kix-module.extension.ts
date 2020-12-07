@@ -71,6 +71,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         ),
         new UIComponent(
             'edit-dynamic-field-dialog', '/kix-module-dynamic-fields$0/webapp/components/edit-dynamic-field-dialog', []
+        ),
+        new UIComponent(
+            'dynamic-field-value', '/kix-module-dynamic-fields$0/webapp/components/dynamic-field-value', []
         )
     ];
 

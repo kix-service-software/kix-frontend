@@ -22,6 +22,8 @@ import { EventService } from './EventService';
 import { ApplicationEvent } from './ApplicationEvent';
 import { LoadingShieldEventData } from './LoadingShieldEventData';
 import { ContextHistory } from './ContextHistory';
+import { ContextService } from './ContextService';
+import { PlaceholderService } from './PlaceholderService';
 
 
 export class BrowserUtil {
@@ -84,6 +86,18 @@ export class BrowserUtil {
             const file = new File([blob], fileName, { type: contentType });
             FileSaver.saveAs(file);
         }
+    }
+
+    public static openPDF(content: string, name?: string): void {
+        const pdfWindow = window.open(
+            '', '_blank', 'menubar=no,toolbar=no,location=no,status=no,scrollbars=yes'
+        );
+        if (name) {
+            pdfWindow.document.title = name;
+        }
+        pdfWindow.document.body.innerHTML
+            = '<embed style="height:100%; width:100%" type="application/pdf" src="data:application/pdf;'
+            + ';base64,' + content + '" />';
     }
 
     public static readFile(file: File): Promise<string> {
@@ -245,6 +259,22 @@ export class BrowserUtil {
     public static logout(): void {
         ContextHistory.getInstance().removeBrowserListener();
         window.location.replace('/auth/logout');
+    }
+
+    public static async prepareUrlParams(params: Array<[string, any]>): Promise<string[]> {
+        const urlParams = [];
+        if (Array.isArray(params)) {
+            const context = ContextService.getInstance().getActiveContext();
+            const contextObject = await context.getObject();
+
+            for (const param of params) {
+                let paramValue = JSON.stringify(param[1]);
+                paramValue = await PlaceholderService.getInstance().replacePlaceholders(paramValue, contextObject);
+                paramValue = encodeURI(paramValue);
+                urlParams.push(`${param[0]}=${paramValue}`);
+            }
+        }
+        return urlParams;
     }
 
 }

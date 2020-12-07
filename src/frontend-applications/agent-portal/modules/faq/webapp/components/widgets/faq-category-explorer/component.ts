@@ -41,7 +41,9 @@ export class Component {
 
     public async onMount(): Promise<void> {
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         const categoryFilter = [
             new FilterCriteria(
@@ -58,23 +60,23 @@ export class Component {
 
         this.state.nodes = await this.prepareTreeNodes(faqCategories);
 
-        this.setActiveNode(context.faqCategory);
+        this.setActiveNode(context.categoryId);
     }
 
-    private setActiveNode(category: FAQCategory): void {
-        if (category) {
-            this.activeNodeChanged(this.getActiveNode(category));
+    private setActiveNode(categoryId: number): void {
+        if (categoryId) {
+            this.activeNodeChanged(this.getActiveNode(categoryId));
         } else {
             this.showAll();
         }
     }
 
-    private getActiveNode(category: FAQCategory, nodes: TreeNode[] = this.state.nodes
+    private getActiveNode(categoryId: number, nodes: TreeNode[] = this.state.nodes
     ): TreeNode {
-        let activeNode = nodes.find((n) => n.id.ID === category.ID);
+        let activeNode = nodes.find((n) => n.id === categoryId);
         if (!activeNode) {
             for (const node of nodes) {
-                activeNode = this.getActiveNode(category, node.children);
+                activeNode = this.getActiveNode(categoryId, node.children);
                 if (activeNode) {
                     node.expanded = true;
                     break;
@@ -92,7 +94,7 @@ export class Component {
                 const children = await this.prepareTreeNodes(category.SubCategories);
                 const icon = LabelService.getInstance().getObjectIcon(category);
                 nodes.push(new TreeNode(
-                    category, label, icon, null, children, null, null, null, null, null, null, null,
+                    category.ID, label, icon, null, children, null, null, null, null, null, null, null,
                     category.ValidID === 1
                 ));
             }
@@ -121,9 +123,8 @@ export class Component {
         this.state.activeNode = node;
 
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
-        const category = node.id as FAQCategory;
-        context.setAdditionalInformation('STRUCTURE', [category.Name]);
-        context.setFAQCategory(node.id);
+        context.setAdditionalInformation('STRUCTURE', [node.label]);
+        context.setFAQCategoryId(node.id);
     }
 
     public async showAll(): Promise<void> {
@@ -131,7 +132,7 @@ export class Component {
         this.state.activeNode = null;
         const allText = await TranslationService.translate('Translatable#All');
         context.setAdditionalInformation('STRUCTURE', [allText]);
-        context.setFAQCategory(null);
+        context.setFAQCategoryId(null);
     }
 
 }

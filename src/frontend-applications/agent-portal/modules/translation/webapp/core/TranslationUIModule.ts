@@ -24,6 +24,8 @@ import { NewTranslationDialogContext, EditTranslationDialogContext } from './adm
 import { TranslationFormService } from './admin/TranslationFormService';
 import { TranslationPatternTableFactory, TranslationLanguageTableFactory } from './admin/table';
 import { TranslationService } from './TranslationService';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -51,15 +53,21 @@ export class UIModule implements IUIModule {
         const newTranslationDialogContext = new ContextDescriptor(
             NewTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext
+            false, 'new-translation-dialog', ['translations'], NewTranslationDialogContext,
+            [
+                new UIComponentPermission('system/i18n/translations', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newTranslationDialogContext);
+        ContextService.getInstance().registerContext(newTranslationDialogContext);
 
         const editTranslationDialogContext = new ContextDescriptor(
             EditTranslationDialogContext.CONTEXT_ID, [KIXObjectType.TRANSLATION_PATTERN],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext
+            false, 'edit-translation-dialog', ['translations'], EditTranslationDialogContext,
+            [
+                new UIComponentPermission('system/i18n/translations', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editTranslationDialogContext);
+        ContextService.getInstance().registerContext(editTranslationDialogContext);
     }
 }

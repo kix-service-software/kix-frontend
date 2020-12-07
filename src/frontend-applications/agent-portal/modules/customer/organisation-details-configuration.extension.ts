@@ -31,6 +31,7 @@ import { UIComponentPermission } from '../../model/UIComponentPermission';
 import { CRUD } from '../../../../server/model/rest/CRUD';
 import { UserProperty } from '../user/model/UserProperty';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
+import { ObjectIcon } from '../icon/model/ObjectIcon';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -40,35 +41,153 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
 
     public async getDefaultConfiguration(): Promise<IConfiguration[]> {
         const configurations = [];
-        const infoConfig = new ObjectInformationWidgetConfiguration(
-            'organisation-details-object-information-config',
-            'Organisation Information', ConfigurationType.ObjectInformation,
-            KIXObjectType.ORGANISATION,
-            [
-                OrganisationProperty.NAME,
-                OrganisationProperty.NUMBER,
-                OrganisationProperty.URL,
-                OrganisationProperty.STREET,
-                OrganisationProperty.ZIP,
-                OrganisationProperty.CITY,
-                OrganisationProperty.COUNTRY,
-                OrganisationProperty.COMMENT,
-                KIXObjectProperty.VALID_ID,
-                KIXObjectProperty.CREATE_BY,
-                KIXObjectProperty.CREATE_TIME,
-                KIXObjectProperty.CHANGE_BY,
-                KIXObjectProperty.CHANGE_TIME
-            ]
-        );
-        configurations.push(infoConfig);
 
         const organisationInfoLane = new WidgetConfiguration(
             'organisation-details-info-widget', 'Organisation Info Widget', ConfigurationType.Widget,
-            'object-information-widget', 'Translatable#Organisation Information', [],
-            new ConfigurationDefinition(
-                'organisation-details-object-information-config', ConfigurationType.ObjectInformation
-            ),
-            null, false, true, null, false
+            'object-information-card-widget', 'Translatable#Organisation Information', [],
+            null,
+            {
+                avatar: [],
+                rows: [
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'icon',
+                                    componentData: {
+                                        icon: new ObjectIcon(
+                                            null, KIXObjectType.ORGANISATION, '<KIX_ORGANISATION_ID>', null, null, 'kix-icon-man-house'
+                                        ),
+                                        style: 'width: 5rem;height:5rem;font-size:5rem;'
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.NUMBER
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.NAME
+                                    }
+                                },
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.URL
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.VALID_ID
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.STREET
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.ZIP
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.CITY
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.COUNTRY
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: true,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CREATE_TIME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CREATE_BY
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CHANGE_TIME
+                                    }
+                                }
+                            ],
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: KIXObjectProperty.CHANGE_BY
+                                    }
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        style: '',
+                        separator: false,
+                        values: [
+                            [
+                                {
+                                    componentId: 'object-avatar-label',
+                                    componentData: {
+                                        property: OrganisationProperty.COMMENT
+                                    }
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            }, false, true, null, false
         );
         configurations.push(organisationInfoLane);
 

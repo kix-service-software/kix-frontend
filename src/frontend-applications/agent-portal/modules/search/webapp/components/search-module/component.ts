@@ -7,19 +7,14 @@
  * --
  */
 
-import { IContextServiceListener } from '../../../../../modules/base-components/webapp/core/IContextServiceListener';
 import { ComponentState } from './ComponentState';
 import { IdService } from '../../../../../model/IdService';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ContextMode } from '../../../../../model/ContextMode';
-import { Context } from 'vm';
-import { ContextType } from '../../../../../model/ContextType';
-import { SearchContext } from '../../core/SearchContext';
 import { SearchService } from '../../core/SearchService';
-import { CacheState } from '../../../model/CacheState';
-import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
+import { SearchContext } from '../../core';
 
-class Component implements IContextServiceListener {
+class Component {
 
     public listenerId: string;
     public constexServiceListenerId: string;
@@ -36,32 +31,16 @@ class Component implements IContextServiceListener {
         this.state.history = input.history;
     }
 
-    public onMount(): void {
-        if (!this.state.history) {
-            ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
-        }
-        ContextService.getInstance().registerListener(this);
-    }
-
-    public onDestroy(): void {
-        ContextService.getInstance().unregisterListener(this.constexServiceListenerId);
-    }
-
-    public contextChanged(
-        contextId: string, context: Context, type: ContextType, history: boolean
-    ): void {
-        if (contextId === SearchContext.CONTEXT_ID && !history) {
-            const cache = SearchService.getInstance().getSearchCache();
-            if (cache) {
-                cache.status = CacheState.INVALID;
+    public async onMount(): Promise<void> {
+        if (!SearchService.getInstance().getSearchCache()) {
+            const searchContext = await ContextService.getInstance().getContext<SearchContext>(
+                SearchContext.CONTEXT_ID
+            );
+            if (searchContext) {
+                searchContext.setSearchCache(null);
             }
-
             ContextService.getInstance().setDialogContext(null, null, ContextMode.SEARCH);
         }
-    }
-
-    public contextRegistered(descriptor: ContextDescriptor): void {
-        return;
     }
 }
 
