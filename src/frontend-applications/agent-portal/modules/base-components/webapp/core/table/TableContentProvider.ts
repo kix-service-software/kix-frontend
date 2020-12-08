@@ -19,6 +19,8 @@ import { KIXObjectService } from '../KIXObjectService';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { DynamicFieldValue } from '../../../../dynamic-fields/model/DynamicFieldValue';
 import { LabelService } from '../LabelService';
+import { PlaceholderService } from '../PlaceholderService';
+import { FilterCriteria } from '../../../../../model/FilterCriteria';
 
 export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
@@ -95,8 +97,9 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
             objects = context ? await context.getObjectList(this.objectType) : [];
         } else if (!this.objectIds || (this.objectIds && this.objectIds.length > 0)) {
             const forceIds = (this.objectIds && this.objectIds.length > 0) ? true : false;
+            const loadingOptions = await this.prepareLoadingOptions();
             objects = await KIXObjectService.loadObjects<KIXObject>(
-                this.objectType, this.objectIds, this.loadingOptions, null, forceIds, this.useCache
+                this.objectType, this.objectIds, loadingOptions, null, forceIds, this.useCache
             );
         }
 
@@ -157,5 +160,35 @@ export class TableContentProvider<T = any> implements ITableContentProvider<T> {
 
     protected async addChildRows(rowObject: RowObject): Promise<void> {
         return;
+    }
+
+    protected async prepareLoadingOptions(): Promise<KIXObjectLoadingOptions> {
+        const loadingOptions = new KIXObjectLoadingOptions(
+            [],
+            this.loadingOptions ? this.loadingOptions.sortOrder : null,
+            this.loadingOptions ? this.loadingOptions.limit : null,
+            this.loadingOptions ? this.loadingOptions.includes : null,
+            this.loadingOptions ? this.loadingOptions.expands : null,
+            this.loadingOptions ? this.loadingOptions.query : null
+        );
+
+        if (this.loadingOptions && Array.isArray(this.loadingOptions.filter)) {
+            const context = ContextService.getInstance().getActiveContext();
+            const contextObject = await context.getObject();
+            for (const criterion of this.loadingOptions.filter) {
+                if (typeof criterion.value === 'string') {
+                    const value = await PlaceholderService.getInstance().replacePlaceholders(
+                        criterion.value, contextObject
+                    );
+                    const preparedCriterion = new FilterCriteria(
+                        criterion.property, criterion.operator, criterion.type, criterion.filterType, value
+                    );
+                    loadingOptions.filter.push(preparedCriterion);
+                } else {
+                    loadingOptions.filter.push(criterion);
+                }
+            }
+        }
+        return loadingOptions;
     }
 }

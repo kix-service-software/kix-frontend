@@ -165,6 +165,12 @@ export class Ticket extends KIXObject {
     // tslint:disable: max-line-length
     public static SEARCH_PROPERTIES = [
         {
+            Property: TicketProperty.TICKET_ID,
+            Operations: Ticket.NUMBER_OPERATORS,
+            DataType: FilterDataType.NUMERIC,
+            InputType: InputFieldTypes.NUMBER
+        },
+        {
             Property: TicketProperty.AGE,
             Operations: Ticket.NUMBER_OPERATORS,
             DataType: FilterDataType.NUMERIC,

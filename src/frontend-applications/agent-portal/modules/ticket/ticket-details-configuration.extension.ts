@@ -28,11 +28,16 @@ import { ObjectIcon } from '../icon/model/ObjectIcon';
 import { SearchOperator } from '../search/model/SearchOperator';
 import { TableConfiguration } from '../../model/configuration/TableConfiguration';
 import { ToggleOptions } from '../base-components/webapp/core/table';
-import { RoutingConfiguration } from '../../model/configuration/RoutingConfiguration';
+import { FilterCriteria } from '../../model/FilterCriteria';
+import { KIXObjectLoadingOptions } from '../../model/KIXObjectLoadingOptions';
+import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 import { ContextMode } from '../../model/ContextMode';
 import { FilterType } from '../../model/FilterType';
 import { FilterDataType } from '../../model/FilterDataType';
 import { CacheState } from '../search/model/CacheState';
+import { Ticket } from './model/Ticket';
+import { KIXObjectProperty } from '../../model/kix/KIXObjectProperty';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -566,30 +571,6 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(contactInfoCard);
 
-        const ticketsForAssetsWidget = new WidgetConfiguration(
-            'ticket-details-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
-            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
-            new ObjectReferenceWidgetConfiguration(
-                'ticket-details-object-reference-widget-config', 'Tickets for Assets',
-                'TicketsForAssetsHandler',
-                {
-                    properties: [
-                        'DynamicFields.AffectedAsset'
-                    ]
-                },
-                [
-                    new DefaultColumnConfiguration(
-                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
-                    ),
-                    new DefaultColumnConfiguration(
-                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
-                    ),
-                ]
-            ),
-            false, false, 'kix-icon-ticket'
-        );
-        configurations.push(ticketsForAssetsWidget);
-
         const suggestedFAQWidget = new WidgetConfiguration(
             'ticket-details-dialog-suggested-faq-widget', 'Suggested FAQ', ConfigurationType.Widget,
             'referenced-objects-widget', 'Translatable#Suggested FAQ', [], null,
@@ -604,7 +585,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 },
                 [
                     new DefaultColumnConfiguration(
-                        null, null, null, 'Title', true, false, true, false, 130, true, false
+                        null, null, null, 'Title', true, false, true, false, 180, true, true
                     ),
                     new DefaultColumnConfiguration(
                         null, null, null, 'Votes', true, false, false, false, 50, true, false
@@ -667,6 +648,84 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         );
         configurations.push(articleListWidget);
 
+        const ticketsForAssetsWidget = new WidgetConfiguration(
+            'ticket-details-affected-asset-tickets', 'Tickets for Assets', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Tickets for Assets', [], null,
+            new TableWidgetConfiguration(
+                'ticket-details-ticket-affected-asset-table-widget', 'Asset Tickets',
+                ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null,
+                new TableConfiguration(
+                    'ticket-details-affected-assets-table-config', 'Asset Tickets', ConfigurationType.Table,
+                    KIXObjectType.TICKET,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                TicketProperty.STATE_TYPE, SearchOperator.EQUALS,
+                                FilterDataType.STRING, FilterType.AND, 'Open'
+                            ),
+                            new FilterCriteria(
+                                'DynamicFields.AffectedAsset', SearchOperator.IN,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_DynamicField_AffectedAsset_ObjectValue>'
+                            ),
+                            new FilterCriteria(
+                                TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
+                            )
+                        ]
+                    ), 10,
+                    [
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TITLE, true, false, true, false, 320, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, true, true
+                        )
+                    ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ), null, false, false, null
+            ),
+            false, true, 'kix-icon-ticket', false, true
+        );
+        configurations.push(ticketsForAssetsWidget);
+
+        const ticketsForContactWidget = new WidgetConfiguration(
+            'ticket-details-contact-tickets', 'Tickets for Contact', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Tickets for Contact', [], null,
+            new TableWidgetConfiguration(
+                'ticket-details-contact-ticket-widget', 'Contact Tickets',
+                ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null,
+                new TableConfiguration(
+                    'ticket-details-contact-tickets-table-config', 'Contact Tickets', ConfigurationType.Table,
+                    KIXObjectType.TICKET,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                TicketProperty.STATE_TYPE, SearchOperator.EQUALS,
+                                FilterDataType.STRING, FilterType.AND, 'Open'
+                            ),
+                            new FilterCriteria(
+                                TicketProperty.CONTACT_ID, SearchOperator.EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_ContactID>'
+                            ),
+                            new FilterCriteria(
+                                TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
+                            )
+                        ]
+                    ), 10,
+                    [
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TITLE, true, false, true, false, 320, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, true, true
+                        )
+                    ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ), null, false, false, null
+            ),
+            false, true, 'kix-icon-ticket', false, true
+        );
+        configurations.push(ticketsForContactWidget);
+
         configurations.push(
             new ContextConfiguration(
                 this.getModuleId(), 'Ticket Details', ConfigurationType.Context,
@@ -676,11 +735,12 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         'ticket-details-contact-card-widget', 'ticket-details-contact-card-widget'
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-object-reference-widget', 'ticket-details-object-reference-widget'
+                        'ticket-details-dialog-suggested-faq-widget', 'ticket-details-dialog-suggested-faq-widget'
                     ),
                     new ConfiguredWidget(
-                        'ticket-details-dialog-suggested-faq-widget', 'ticket-details-dialog-suggested-faq-widget'
-                    )
+                        'ticket-details-affected-asset-tickets', 'ticket-details-affected-asset-tickets'
+                    ),
+                    new ConfiguredWidget('ticket-details-contact-tickets', 'ticket-details-contact-tickets')
                 ],
                 [],
                 [

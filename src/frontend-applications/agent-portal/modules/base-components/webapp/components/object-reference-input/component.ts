@@ -31,6 +31,8 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { EventService } from '../../core/EventService';
 import { FormEvent } from '../../core/FormEvent';
 import { IEventSubscriber } from '../../core/IEventSubscriber';
+import { ContextService } from '../../core/ContextService';
+import { PlaceholderService } from '../../core/PlaceholderService';
 
 class Component extends FormInputComponent<string | number | string[] | number[], ComponentState> {
 
@@ -301,8 +303,9 @@ class Component extends FormInputComponent<string | number | string[] | number[]
                 }
                 loadingOptions.limit = limit;
 
+                const preparedOptions = await this.prepareLoadingOptions(loadingOptions);
                 this.objects = await KIXObjectService.loadObjects<KIXObject>(
-                    objectType, null, loadingOptions, null, false
+                    objectType, null, preparedOptions, null, false
                 );
 
                 if (searchValue && searchValue !== '') {
@@ -355,6 +358,36 @@ class Component extends FormInputComponent<string | number | string[] | number[]
 
     public async focusLost(event: any): Promise<void> {
         await super.focusLost();
+    }
+
+    protected async prepareLoadingOptions(loadingOptions: KIXObjectLoadingOptions): Promise<KIXObjectLoadingOptions> {
+        const lo = new KIXObjectLoadingOptions(
+            [],
+            loadingOptions.sortOrder,
+            loadingOptions.limit,
+            loadingOptions.includes,
+            loadingOptions.expands,
+            loadingOptions.query
+        );
+
+        if (Array.isArray(loadingOptions.filter)) {
+            const context = ContextService.getInstance().getActiveContext();
+            const contextObject = await context.getObject();
+            for (const criterion of loadingOptions.filter) {
+                if (typeof criterion.value === 'string') {
+                    const value = await PlaceholderService.getInstance().replacePlaceholders(
+                        criterion.value, contextObject
+                    );
+                    const preparedCriterion = new FilterCriteria(
+                        criterion.property, criterion.operator, criterion.type, criterion.filterType, value
+                    );
+                    lo.filter.push(preparedCriterion);
+                } else {
+                    lo.filter.push(criterion);
+                }
+            }
+        }
+        return loadingOptions;
     }
 
 }

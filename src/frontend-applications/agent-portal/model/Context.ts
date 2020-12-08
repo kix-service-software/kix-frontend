@@ -113,6 +113,10 @@ export abstract class Context {
         }
     }
 
+    public async setFormObject(overwrite: boolean = true): Promise<void> {
+        return;
+    }
+
     public getIcon(): string | ObjectIcon {
         return 'kix-icon-unknown';
     }
