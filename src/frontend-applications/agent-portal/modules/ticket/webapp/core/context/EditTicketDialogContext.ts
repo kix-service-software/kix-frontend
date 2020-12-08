@@ -67,7 +67,7 @@ export class EditTicketDialogContext extends Context {
         }
     }
 
-    private async setFormObject(overwrite: boolean = true): Promise<void> {
+    public async setFormObject(overwrite: boolean = true): Promise<void> {
         const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.TICKET, ServiceType.FORM

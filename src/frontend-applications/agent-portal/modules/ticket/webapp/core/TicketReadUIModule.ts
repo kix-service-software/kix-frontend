@@ -37,7 +37,6 @@ import { TicketLabelProvider } from './TicketLabelProvider';
 import { ChannelService } from './ChannelService';
 import { TicketPlaceholderHandler } from './TicketPlaceholderHandler';
 import { TicketPrintAction } from './actions/TicketPrintAction';
-import { TicketsForAssetsHandler } from './TicketsForAssetsHandler';
 import { SuggestedFAQHandler } from './SuggestedFAQHandler';
 import { TicketHistoryTableFactory } from './table';
 import { FormService } from '../../../base-components/webapp/core/FormService';
@@ -93,7 +92,6 @@ export class UIModule implements IUIModule {
             KIXObjectType.ARTICLE, new ArticleTableCSSHandler()
         );
 
-        ServiceRegistry.registerObjectReferenceHandler('TicketsForAssetsHandler', new TicketsForAssetsHandler());
         ServiceRegistry.registerObjectReferenceHandler('SuggestedFAQHandler', new SuggestedFAQHandler());
 
         FormService.getInstance().addFormFieldValueHandler(new TicketFormFieldValueHandler());

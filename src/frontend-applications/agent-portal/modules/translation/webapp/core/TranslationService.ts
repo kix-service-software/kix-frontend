@@ -147,7 +147,7 @@ export class TranslationService extends KIXObjectService<TranslationPattern> {
         pattern: string = '', placeholderValues: Array<string | number> = [], language?: string,
         getOnlyPattern: boolean = false
     ): Promise<string> {
-        let translationValue = pattern;
+        let translationValue = pattern ? pattern : '';
         if (translationValue !== null) {
 
             translationValue = this.prepareValue(translationValue);

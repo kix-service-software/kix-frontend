@@ -424,7 +424,6 @@ export class TicketAPIService extends KIXObjectAPIService {
             TicketProperty.STATE,
             KIXObjectProperty.CREATE_BY,
             KIXObjectProperty.CHANGE_BY,
-            TicketProperty.TICKET_ID,
             'Queue.FollowUpID'
         ];
 
@@ -434,9 +433,9 @@ export class TicketAPIService extends KIXObjectAPIService {
     }
 
     public async prepareAPISearch(criteria: FilterCriteria[], token: string): Promise<FilterCriteria[]> {
-        let searchCriteria = criteria.filter(
-            (f) => Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property)
-                && f.operator !== SearchOperator.NOT_EQUALS
+        let searchCriteria = criteria.filter((f) =>
+            Ticket.SEARCH_PROPERTIES.some((sp) => sp.Property === f.property)
+            && f.operator !== SearchOperator.NOT_EQUALS
         );
 
         await this.setUserID(searchCriteria, token);

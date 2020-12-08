@@ -43,7 +43,6 @@ import { ConfigItem } from '../../../cmdb/model/ConfigItem';
 import { RoutingConfiguration } from '../../../../model/configuration/RoutingConfiguration';
 import { SysConfigOption } from '../../../sysconfig/model/SysConfigOption';
 import { SysConfigKey } from '../../../sysconfig/model/SysConfigKey';
-import { DataType } from '../../../../model/DataType';
 import { ExtendedKIXObjectService } from './ExtendedKIXObjectService';
 import { TicketProperty } from '../../../ticket/model/TicketProperty';
 import { ContactProperty } from '../../../customer/model/ContactProperty';

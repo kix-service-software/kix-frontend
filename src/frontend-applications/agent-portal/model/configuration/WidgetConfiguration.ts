@@ -28,7 +28,10 @@ export class WidgetConfiguration implements IConfiguration {
         public minimized: boolean = false,
         public minimizable: boolean = true,
         public icon: string | ObjectIcon = '',
-        public contextDependent: boolean = false
+        public contextDependent: boolean = false,
+        public contextObjectDependent: boolean = false,
+        public formDependent: boolean = false,
+        public formDependencyProperties: string[] = []
     ) { }
 
 }
