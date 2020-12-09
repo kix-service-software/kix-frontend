@@ -53,6 +53,9 @@ msgstr "Zugriff verweigert"
 msgid "Access Level"
 msgstr "Zugriffsebene"
 
+msgid "Accounted Time: {0}"
+msgstr ""
+
 msgid "Account Information"
 msgstr "Kontoinformationen"
 
@@ -103,6 +106,9 @@ msgstr "Admin Passwort"
 
 msgid "Advanced Search"
 msgstr "Komplexsuche"
+
+msgid "Affected Assets"
+msgstr ""
 
 msgid "after"
 msgstr "nach/größer als"
@@ -251,6 +257,9 @@ msgstr "Zugeordnete Kunden"
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
+msgid "Assignees"
+msgstr ""
+
 msgid "Assign Link"
 msgstr "Verknüpfung hinzufügen"
 
@@ -389,6 +398,9 @@ msgstr "Kanäle"
 
 msgid "Charset"
 msgstr "Zeichensatz"
+
+msgid "Checklists"
+msgstr ""
 
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
@@ -597,6 +609,9 @@ msgstr "Erstellt am"
 
 msgid "Created by"
 msgstr "Erstellt von"
+
+msgid "Created by {0} at {1}. Last change by {2} at {3}"
+msgstr ""
 
 msgid "Created with Priority"
 msgstr "Erstellt mit der Priorität"
@@ -935,11 +950,17 @@ msgstr "E-Mail Informationen"
 msgid "Enable attachments"
 msgstr "Anlagen zulassen"
 
+msgid "End date/time is not given"
+msgstr ""
+
 msgid "ends with"
 msgstr "endet mit"
 
 msgid "End time"
 msgstr "Endzeitpunkt"
+
+msgid "End value is not given"
+msgstr ""
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
@@ -3224,6 +3245,9 @@ msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
 
+msgid "Plan: {0} - {1}"
+msgstr ""
+
 msgid "Plan Begin"
 msgstr "Plan Beginn"
 
@@ -3384,8 +3408,14 @@ msgstr "Empfänger"
 msgid "Recipient: To"
 msgstr "Empfänger: An"
 
+msgid "References"
+msgstr ""
+
 msgid "Refresh Page"
 msgstr "Seite neu laden"
+
+msgid "Related Tickets"
+msgstr ""
 
 msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
@@ -3534,6 +3564,9 @@ msgstr "Suche speichern"
 
 msgid "Save Settings"
 msgstr "Einstellungen werden gespeichert."
+
+msgid "Scheduling"
+msgstr ""
 
 msgid "Search"
 msgstr "Suche"
@@ -3713,11 +3746,17 @@ msgstr "Sortieren"
 msgid "Source"
 msgstr "Quelle"
 
+msgid "Source Message"
+msgstr ""
+
 msgid "Split Option"
 msgstr "Trennoptionen"
 
 msgid "Start by"
 msgstr "Gestartet von"
+
+msgid "Start date/time is not given"
+msgstr ""
 
 msgid "Start Import"
 msgstr "Import starten"
@@ -3736,6 +3775,12 @@ msgstr "Startzeitpunkt"
 
 msgid "Start time has to be before end time"
 msgstr "Der Startzeitpunkt muss vor dem Endzeitpunkt liegen."
+
+msgid "Start value is greate than end value"
+msgstr ""
+
+msgid "Start value is not given"
+msgstr ""
 
 msgid "State"
 msgstr "Status"
@@ -3787,6 +3832,9 @@ msgstr "Bewertung erfolgreich."
 
 msgid "Suggested FAQ"
 msgstr "Empfohlene FAQ"
+
+msgid "Summary"
+msgstr ""
 
 msgid "Sunday"
 msgstr "Sonntag"

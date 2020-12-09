@@ -53,6 +53,9 @@ msgstr ""
 msgid "Access Level"
 msgstr ""
 
+msgid "Accounted Time: {0}"
+msgstr ""
+
 msgid "Account Information"
 msgstr ""
 
@@ -102,6 +105,9 @@ msgid "Admin Password"
 msgstr ""
 
 msgid "Advanced Search"
+msgstr ""
+
+msgid "Affected Assets"
 msgstr ""
 
 msgid "after"
@@ -243,6 +249,9 @@ msgstr ""
 msgid "Assigned Roles"
 msgstr ""
 
+msgid "Assignees"
+msgstr ""
+
 msgid "Assign Link"
 msgstr ""
 
@@ -376,6 +385,9 @@ msgid "Channels"
 msgstr ""
 
 msgid "Charset"
+msgstr ""
+
+msgid "Checklists"
 msgstr ""
 
 msgid "Choose a command"
@@ -582,6 +594,9 @@ msgid "Created at"
 msgstr ""
 
 msgid "Created by"
+msgstr ""
+
+msgid "Created by {0} at {1}. Last change by {2} at {3}"
 msgstr ""
 
 msgid "Created with Priority"
@@ -920,11 +935,17 @@ msgstr ""
 msgid "Enable attachments"
 msgstr ""
 
+msgid "End date/time is not given"
+msgstr ""
+
 msgid "ends with"
 msgstr ""
 
 msgid "End time"
 msgstr "End Time"
+
+msgid "End value is not given"
+msgstr ""
 
 msgid "Enter search value"
 msgstr ""
@@ -3084,6 +3105,9 @@ msgstr ""
 msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 
+msgid "Plan: {0} - {1}"
+msgstr ""
+
 msgid "Plan Begin"
 msgstr ""
 
@@ -3240,7 +3264,13 @@ msgstr ""
 msgid "Recipient: To"
 msgstr ""
 
+msgid "References"
+msgstr ""
+
 msgid "Refresh Page"
+msgstr ""
+
+msgid "Related Tickets"
 msgstr ""
 
 msgid "Reload Agent Portal Configurations"
@@ -3385,6 +3415,9 @@ msgid "Save Search"
 msgstr ""
 
 msgid "Save Settings"
+msgstr ""
+
+msgid "Scheduling"
 msgstr ""
 
 msgid "Search"
@@ -3564,10 +3597,16 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
+msgid "Source Message"
+msgstr ""
+
 msgid "Split Option"
 msgstr ""
 
 msgid "Start by"
+msgstr ""
+
+msgid "Start date/time is not given"
 msgstr ""
 
 msgid "Start Import"
@@ -3586,6 +3625,12 @@ msgid "Start time"
 msgstr ""
 
 msgid "Start time has to be before end time"
+msgstr ""
+
+msgid "Start value is greate than end value"
+msgstr ""
+
+msgid "Start value is not given"
 msgstr ""
 
 msgid "State"
@@ -3637,6 +3682,9 @@ msgid "Successfully rated."
 msgstr ""
 
 msgid "Suggested FAQ"
+msgstr ""
+
+msgid "Summary"
 msgstr ""
 
 msgid "Sunday"
