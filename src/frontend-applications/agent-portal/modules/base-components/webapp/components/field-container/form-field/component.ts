@@ -16,6 +16,7 @@ import { KIXModulesService } from '../../../../../../modules/base-components/web
 import { EventService } from '../../../core/EventService';
 import { FormEvent } from '../../../core/FormEvent';
 import { IEventSubscriber } from '../../../core/IEventSubscriber';
+import { LabelService } from '../../../core/LabelService';
 
 class Component {
 
@@ -42,8 +43,18 @@ class Component {
 
     private async update(): Promise<void> {
         this.state.translations = await TranslationService.createTranslationObject(
-            [this.state.field.label, 'Translatable#Sort']
+            ['Translatable#Sort']
         );
+
+        if (this.state.field.property === this.state.field.label) {
+            const form = await FormService.getInstance().getForm(this.state.formId);
+            this.state.label = await LabelService.getInstance().getPropertyText(
+                this.state.field.property, form.objectType
+            );
+        } else {
+            this.state.label = await TranslationService.translate(this.state.field.label);
+        }
+
         const hint = await TranslationService.translate(this.state.field.hint);
         this.state.hint = hint
             ? (hint.startsWith('Helptext_') ? null : hint)
