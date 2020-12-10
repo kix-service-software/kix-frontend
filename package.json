@@ -52,6 +52,7 @@
     "express": "4.16.4",
     "express-force-ssl": "0.3.2",
     "file-saver": "2.0.2",
+    "iconv": "3.0.0",
     "js-plugins": "1.0.0",
     "jsonfile": "5.0.0",
     "jsonwebtoken": "8.5.0",
