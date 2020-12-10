@@ -29,7 +29,10 @@ class Component {
     }
 
     public onInput(input: any): void {
-        this.state.instanceId = input.instanceId;
+        if (this.state.instanceId !== input.instanceId) {
+            this.state.instanceId = input.instanceId;
+            this.initWidget();
+        }
     }
 
     public async onMount(): Promise<void> {

@@ -35,17 +35,14 @@ export class FilterUtil {
         let match = true;
         if (Array.isArray(criteria)) {
             for (const criterion of criteria) {
-                let value = null;
-                if (criterion.propertyValue) {
-                    value = await PlaceholderService.getInstance().replacePlaceholders(
-                        criterion.propertyValue, object
-                    );
-                } else {
-                    value = object[criterion.property];
-                    value = await this.getDynamicFieldValue(object, criterion, value);
-                }
+                const value = typeof criterion.value === 'string'
+                    ? await PlaceholderService.getInstance().replacePlaceholders(criterion.value, object)
+                    : criterion.value;
 
-                match = await FilterUtil.checkUIFilterCriterion(criterion, value);
+                let objectValue = object[criterion.property];
+                objectValue = await this.getDynamicFieldValue(object, criterion, objectValue);
+
+                match = await FilterUtil.checkUIFilterCriterion(objectValue, criterion.operator, value);
                 if (!match) {
                     break;
                 }
@@ -77,60 +74,65 @@ export class FilterUtil {
         return dfValue;
     }
 
-    public static async checkUIFilterCriterion(criterion: UIFilterCriterion, value: any): Promise<boolean> {
-        if (criterion.value === KIXObjectType.CURRENT_USER) {
+    public static async checkUIFilterCriterion(
+        objectValue: any, operator: SearchOperator, filterValue: any
+    ): Promise<boolean> {
+        if (filterValue === KIXObjectType.CURRENT_USER) {
             const currentUser = await AgentService.getInstance().getCurrentUser();
-            criterion.value = currentUser.UserID;
+            objectValue = currentUser.UserID;
         }
 
-        const criterionValue = criterion.value !== null
-            ? criterion.value.toString().toLocaleLowerCase()
-            : criterion.value;
+        const criterionValue = objectValue !== null && typeof objectValue !== 'undefined'
+            ? objectValue.toString().toLocaleLowerCase()
+            : objectValue;
 
-        switch (criterion.operator) {
+        switch (operator) {
             case SearchOperator.EQUALS:
-                value = value ? value.toString().toLocaleLowerCase() : value;
-                return value === criterionValue;
+                filterValue = filterValue ? filterValue.toString().toLocaleLowerCase() : filterValue;
+                return filterValue === criterionValue;
             case SearchOperator.NOT_EQUALS:
-                value = value !== undefined && value !== null
-                    ? value.toString().toLocaleLowerCase()
-                    : value;
-                return value !== criterionValue;
+                filterValue = filterValue !== undefined && filterValue !== null
+                    ? filterValue.toString().toLocaleLowerCase()
+                    : filterValue;
+                return filterValue !== criterionValue;
             case SearchOperator.CONTAINS:
-                value = value !== undefined && value !== null
-                    ? value
+                filterValue = filterValue !== undefined && filterValue !== null
+                    ? filterValue
                     : '';
-                return value.toString().toLocaleLowerCase().indexOf(
-                    criterion.value.toString().toLocaleLowerCase()
+                return objectValue.toString().toLocaleLowerCase().indexOf(
+                    filterValue.toString().toLocaleLowerCase()
                 ) !== -1;
             case SearchOperator.LESS_THAN:
-                return Number(value) < criterion.value;
+                return objectValue < Number(filterValue);
             case SearchOperator.LESS_THAN_OR_EQUAL:
-                return Number(value) <= criterion.value;
+                return objectValue <= Number(filterValue);
             case SearchOperator.GREATER_THAN:
-                return Number(value) > criterion.value;
+                return objectValue > Number(filterValue);
             case SearchOperator.GREATER_THAN_OR_EQUAL:
-                return Number(value) >= criterion.value;
+                return objectValue >= Number(filterValue);
             case SearchOperator.IN:
-                return (criterion.value as any[]).some((cv) => {
+                return (objectValue as any[]).some((cv) => {
                     if (typeof cv === 'undefined') {
-                        return typeof value === 'undefined';
+                        return typeof filterValue === 'undefined';
                     } else if (cv === null) {
-                        return value === null || (Array.isArray(value) && value.some((v) => v === null));
+                        return filterValue === null ||
+                            (Array.isArray(filterValue) && filterValue.some((v) => v === null));
                     } else {
                         if (cv instanceof KIXObject) {
-                            if (Array.isArray(value)) {
-                                return value.some((v) => v.equals(cv));
+                            if (Array.isArray(filterValue)) {
+                                return filterValue.some((v) => v.equals(cv));
                             }
                         }
-                        if (typeof value === 'number') {
-                            return value === cv;
-                        } else if (Array.isArray(value)) {
-                            return value.some((v) => v.toString() === cv.toString());
-                        } else if (typeof value === 'boolean') {
-                            return Boolean(cv) === value;
+                        if (typeof filterValue === 'number') {
+                            return filterValue === cv;
+                        } else if (Array.isArray(filterValue)) {
+                            return filterValue.some((v) => v.toString() === cv.toString());
+                        } else if (typeof filterValue === 'boolean') {
+                            return Boolean(cv) === filterValue;
                         } else {
-                            return value ? value.toString().split(',').some((v) => v === cv.toString()) : false;
+                            return filterValue
+                                ? filterValue.toString().split(',').some((v) => v === cv.toString())
+                                : false;
                         }
                     }
                 });

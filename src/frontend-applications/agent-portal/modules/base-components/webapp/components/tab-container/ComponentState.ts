@@ -8,16 +8,16 @@
  */
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
-import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
 import { ContextType } from '../../../../../model/ContextType';
 import { IAction } from '../../../../../modules/base-components/webapp/core/IAction';
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 
 export class ComponentState extends AbstractComponentState {
 
     public constructor(
-        public tabWidgets: WidgetConfiguration[] = [],
+        public tabWidgets: ConfiguredWidget[] = [],
         public tabId: string = null,
-        public activeTab: WidgetConfiguration = null,
+        public activeTab: ConfiguredWidget = null,
         public activeTabTitle: string = '',
         public minimizable: boolean = true,
         public hasSidebars: boolean = false,
