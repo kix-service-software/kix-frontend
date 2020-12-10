@@ -203,6 +203,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 break;
             case TicketProperty.STATE_TYPE:
+            case TicketProperty.STATE_TYPE_ID:
                 let stateTypes = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE_TYPE);
                 if (!showInvalid) {
                     stateTypes = stateTypes.filter((s) => s.ValidID === 1);
@@ -213,7 +214,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                     );
                     const text = await LabelService.getInstance().getObjectText(s);
                     nodes.push(new TreeNode(
-                        s.Name, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        property === TicketProperty.STATE_TYPE ? s.Name : s.ID,
+                        text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,
                         s.ValidID === 1 || invalidClickable,
                         undefined, undefined, undefined, undefined,
