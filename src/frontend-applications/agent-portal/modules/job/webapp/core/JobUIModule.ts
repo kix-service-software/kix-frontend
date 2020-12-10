@@ -37,6 +37,8 @@ import { TicketArticleCreateBody } from './extended-form-manager/TicketArticleCr
 import { TicketCreateDynamicFields } from './extended-form-manager/TicketCreateDynamicFields';
 import { UIComponentPermission } from '../../../../model/UIComponentPermission';
 import { CRUD } from '../../../../../../server/model/rest/CRUD';
+import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
+import { JobFilterValidator } from './form/validators/JobFilterValidator';
 
 export class UIModule implements IUIModule {
 
@@ -97,6 +99,7 @@ export class UIModule implements IUIModule {
         );
         ContextService.getInstance().registerContext(editJobDialogContext);
 
+        FormValidationService.getInstance().registerValidator(new JobFilterValidator());
         JobFormService.getInstance().registerJobFormManager(JobTypes.TICKET, new TicketJobFormManager());
         JobFormService.getInstance().registerJobFormManager(JobTypes.SYNCHRONISATION, new SyncJobFormManager());
 

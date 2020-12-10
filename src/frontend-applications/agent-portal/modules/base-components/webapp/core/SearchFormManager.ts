@@ -17,14 +17,18 @@ export class SearchFormManager extends AbstractDynamicFormManager {
 
     public objectType: string;
 
+    public ignoreProperties: string[] = [];
+
+    public setIgnoreProperties(properties: string[] = []): void {
+        this.ignoreProperties = properties;
+    }
+
     public async getOperations(property: string): Promise<Array<string | SearchOperator>> {
         let operations: Array<string | SearchOperator> = [];
 
-        for (const manager of this.extendedFormManager) {
-            const extendedOperations = await manager.getOperations(property);
-            if (extendedOperations) {
-                operations = [...operations, ...extendedOperations];
-            }
+        const superOperations = await super.getOperations(property);
+        if (superOperations) {
+            operations = superOperations;
         }
 
         const dfName = KIXObjectService.getDynamicFieldName(property);

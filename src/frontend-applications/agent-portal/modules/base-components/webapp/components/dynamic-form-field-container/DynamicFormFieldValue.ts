@@ -152,6 +152,9 @@ export class DynamicFormFieldValue {
             }
         }
 
+        const objectType = this.value.objectType ? this.value.objectType : this.manager.objectType;
+        this.label = await LabelService.getInstance().getPropertyText(this.value.property, objectType);
+
         await this.manager.setValue(this.value, silent);
 
         await this.setPropertyTree();
