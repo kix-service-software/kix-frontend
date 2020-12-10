@@ -63,6 +63,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 }
                 break;
             case TicketProperty.STATE_TYPE:
+            case TicketProperty.STATE_TYPE_ID:
                 if (value) {
                     const stateTypes = await KIXObjectService.loadObjects<StateType>(
                         KIXObjectType.TICKET_STATE_TYPE, [value], null, null, true
@@ -220,6 +221,7 @@ export class TicketLabelProvider extends LabelProvider<Ticket> {
                 displayValue = 'Translatable#State';
                 break;
             case TicketProperty.STATE_TYPE:
+            case TicketProperty.STATE_TYPE_ID:
                 displayValue = 'Translatable#State Type';
                 break;
             case TicketProperty.SERVICE_ID:
