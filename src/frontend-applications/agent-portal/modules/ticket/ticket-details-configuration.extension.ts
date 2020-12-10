@@ -124,10 +124,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'DynamicFields.CloseCode',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: null,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: null
                                         }
                                     ]
                                 },
@@ -140,10 +137,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'DynamicFields.AnonymiseTicket',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: null,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: null
                                         }
                                     ]
                                 }
@@ -181,10 +175,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: TicketProperty.OWNER_ID,
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: 1,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: 1
                                         }
                                     ]
                                 }
@@ -209,10 +200,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'DynamicFields.MobileProcessingChecklist010',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: null,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: null
                                         }
                                     ]
                                 }
@@ -230,10 +218,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'DynamicFields.MobileProcessingChecklist020',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: null,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: null
                                         }
                                     ]
                                 }
@@ -258,10 +243,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'DynamicFields.AffectedAsset',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: null,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: null
                                         }
                                     ]
                                 }
@@ -284,10 +266,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'DynamicFields.RelatedTickets',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: null,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: null
                                         }
                                     ]
                                 }
@@ -308,10 +287,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'AccountedTime',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: 0,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: 0
                                         }
                                     ]
                                 }
@@ -328,10 +304,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: TicketProperty.STATE_TYPE,
                                             operator: SearchOperator.CONTAINS,
-                                            value: 'pending',
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: 'pending'
                                         }
                                     ]
                                 }
@@ -348,10 +321,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                         {
                                             property: 'DynamicFields.PlanBegin',
                                             operator: SearchOperator.NOT_EQUALS,
-                                            value: null,
-                                            useObjectService: true,
-                                            useDisplayValue: null,
-                                            propertyValue: null
+                                            value: null
                                         }
                                     ]
                                 }

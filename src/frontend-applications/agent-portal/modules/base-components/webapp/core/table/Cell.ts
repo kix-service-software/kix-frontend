@@ -111,11 +111,11 @@ export class Cell {
         let match = false;
 
         const matchPromises = [];
-        filterCriteria.forEach(
-            (c) => matchPromises.push(FilterUtil.checkUIFilterCriterion(
-                c, c.useDisplayValue ? this.tableValue.displayValue : this.tableValue.objectValue
-            ))
-        );
+        filterCriteria.forEach((c) => matchPromises.push(
+            FilterUtil.checkUIFilterCriterion(
+                c.value, c.operator, c.useDisplayValue ? this.tableValue.displayValue : this.tableValue.objectValue
+            )
+        ));
 
         const result = await Promise.all<boolean>(matchPromises);
         match = result.every((r) => r);
