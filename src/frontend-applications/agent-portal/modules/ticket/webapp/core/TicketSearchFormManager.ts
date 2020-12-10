@@ -33,7 +33,7 @@ export class TicketSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public constructor(public ignoreProperties: string[] = []) {
+    public constructor(public ignorePropertiesFixed: string[] = []) {
         super();
     }
 
@@ -65,7 +65,10 @@ export class TicketSearchFormManager extends SearchFormManager {
         const superProperties = await super.getProperties();
         properties = [...properties, ...superProperties];
 
-        properties = properties.filter((p) => !this.ignoreProperties.some((ip) => ip === p[0]));
+        properties = properties.filter(
+            (p) => !this.ignorePropertiesFixed.some((ip) => ip === p[0])
+                && !this.ignoreProperties.some((ip) => ip === p[0])
+        );
 
         return properties.sort((a, b) => a[1].localeCompare(b[1]));
     }
