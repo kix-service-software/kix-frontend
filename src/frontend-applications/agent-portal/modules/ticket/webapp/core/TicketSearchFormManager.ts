@@ -45,7 +45,9 @@ export class TicketSearchFormManager extends SearchFormManager {
         ];
 
         for (const prop of Ticket.SEARCH_PROPERTIES) {
-            properties.push([prop.Property, null]);
+            if (prop.Property !== TicketProperty.STATE_TYPE) {
+                properties.push([prop.Property, null]);
+            }
         }
 
         const context = ContextService.getInstance().getActiveContext();

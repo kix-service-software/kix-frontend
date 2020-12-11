@@ -389,8 +389,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             ? filterCriteria.filter((c) => {
                 if (c.property === SearchProperty.FULLTEXT) {
                     return false;
-                } else if (c.operator === SearchOperator.IN && Array.isArray(c.value) && !c.value.length) {
-                    return false;
                 }
                 return true;
             })
@@ -422,13 +420,6 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
             if (fulltextCriterion) {
                 fulltextCriterion.property = 'Fulltext';
             }
-
-            searchCriteria = searchCriteria.filter((c) => {
-                if (c.operator === SearchOperator.IN && Array.isArray(c.value) && !c.value.length) {
-                    return false;
-                }
-                return true;
-            });
 
             const apiSearch = {};
             apiSearch[objectProperty] = this.prepareObjectFilter(searchCriteria);
