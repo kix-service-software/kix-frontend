@@ -113,7 +113,8 @@ export class Cell {
         const matchPromises = [];
         filterCriteria.forEach((c) => matchPromises.push(
             FilterUtil.checkUIFilterCriterion(
-                c.value, c.operator, c.useDisplayValue ? this.tableValue.displayValue : this.tableValue.objectValue
+                c.useDisplayValue || this.tableValue.objectValue === null || typeof this.tableValue.objectValue === 'undefined'
+                    ? this.tableValue.displayValue : this.tableValue.objectValue, c.operator, c.value
             )
         ));
 
