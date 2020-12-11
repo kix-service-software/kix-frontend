@@ -103,10 +103,10 @@ export abstract class TableFactory implements ITableFactory {
                 const cellValue = cell.getValue();
                 if (Array.isArray(cellValue.objectValue)) {
                     cellValues = cellValue.objectValue;
+                } else if (cellValue.objectValue !== null && typeof cellValue.objectValue !== 'undefined') {
+                    cellValues.push(cellValue.objectValue);
                 } else if (cellValue.displayValue) {
                     cellValues.push(cellValue.displayValue);
-                } else {
-                    cellValues.push(cellValue.objectValue);
                 }
 
                 cellValues.forEach((value) => {

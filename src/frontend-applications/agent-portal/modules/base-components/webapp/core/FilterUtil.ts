@@ -111,31 +111,31 @@ export class FilterUtil {
             case SearchOperator.GREATER_THAN_OR_EQUAL:
                 return objectValue >= Number(filterValue);
             case SearchOperator.IN:
-                return (objectValue as any[]).some((cv) => {
+                return Array.isArray(filterValue) ? (filterValue as any[]).some((cv) => {
                     if (typeof cv === 'undefined') {
-                        return typeof filterValue === 'undefined';
+                        return typeof objectValue === 'undefined';
                     } else if (cv === null) {
-                        return filterValue === null ||
-                            (Array.isArray(filterValue) && filterValue.some((v) => v === null));
+                        return objectValue === null ||
+                            (Array.isArray(objectValue) && objectValue.some((v) => v === null));
                     } else {
                         if (cv instanceof KIXObject) {
-                            if (Array.isArray(filterValue)) {
-                                return filterValue.some((v) => v.equals(cv));
+                            if (Array.isArray(objectValue)) {
+                                return objectValue.some((v) => v.equals(cv));
                             }
                         }
-                        if (typeof filterValue === 'number') {
-                            return filterValue === cv;
-                        } else if (Array.isArray(filterValue)) {
-                            return filterValue.some((v) => v.toString() === cv.toString());
-                        } else if (typeof filterValue === 'boolean') {
-                            return Boolean(cv) === filterValue;
+                        if (typeof objectValue === 'number') {
+                            return objectValue === cv;
+                        } else if (Array.isArray(objectValue)) {
+                            return objectValue.some((v) => v.toString() === cv.toString());
+                        } else if (typeof objectValue === 'boolean') {
+                            return Boolean(cv) === objectValue;
                         } else {
-                            return filterValue
-                                ? filterValue.toString().split(',').some((v) => v === cv.toString())
+                            return objectValue
+                                ? objectValue.toString().split(',').some((v) => v === cv.toString())
                                 : false;
                         }
                     }
-                });
+                }) : false;
             default:
         }
     }
