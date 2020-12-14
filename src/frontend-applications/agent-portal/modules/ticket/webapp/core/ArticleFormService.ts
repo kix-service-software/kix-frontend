@@ -43,6 +43,7 @@ import { FormConfiguration } from '../../../../model/configuration/FormConfigura
 import { ServiceType } from '../../../base-components/webapp/core/ServiceType';
 import { ServiceRegistry } from '../../../base-components/webapp/core/ServiceRegistry';
 import { TicketFormService } from './TicketFormService';
+import { AdditionalContextInformation } from '../../../base-components/webapp/core/AdditionalContextInformation';
 
 export class ArticleFormService extends KIXObjectFormService {
 
@@ -491,15 +492,24 @@ export class ArticleFormService extends KIXObjectFormService {
     private async getQueueID(
         createOptions: CreateTicketArticleOptions, parameter: Array<[string, any]>
     ): Promise<number> {
-        if (createOptions && createOptions.ticketId) {
+        let queueId = null;
+        const queueParam = parameter.find((p) => p[0] === TicketProperty.QUEUE_ID);
+        if (queueParam && queueParam[1]) {
+            queueId = queueParam[1];
+        } else {
+            const context = ContextService.getInstance().getActiveContext(ContextType.DIALOG);
+            if (context) {
+                const ticket = context.getAdditionalInformation(AdditionalContextInformation.FORM_OBJECT);
+                queueId = ticket ? ticket.QueueID : null;
+            }
+        }
+        if (!queueId && createOptions && createOptions.ticketId) {
             const tickets = await KIXObjectService.loadObjects<Ticket>(
                 KIXObjectType.TICKET, [createOptions.ticketId], null, null, true
             ).catch(() => [] as Ticket[]);
-            return tickets && !!tickets.length ? tickets[0].QueueID : null;
-        } else {
-            const queueParam = parameter.find((p) => p[0] === TicketProperty.QUEUE_ID);
-            return queueParam ? queueParam[1] : null;
+            queueId = tickets && !!tickets.length ? tickets[0].QueueID : null;
         }
+        return queueId;
     }
 
     public async createFormFieldConfigurations(
