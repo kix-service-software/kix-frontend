@@ -7,15 +7,17 @@
  * --
  */
 
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { TableValue } from './TableValue';
 import { ValueState } from './ValueState';
 
 export class RowObject<T = any> {
 
     private children: RowObject[] = [];
-    private rowValueState: ValueState;
 
-    public constructor(private values: TableValue[], private object?: T) { }
+    public constructor(
+        private values: TableValue[], private object?: T, public rowValueState?: ValueState
+    ) { }
 
     public getValues(): TableValue[] {
         return this.values;
@@ -45,5 +47,9 @@ export class RowObject<T = any> {
 
     public addChild(rowObject: RowObject): void {
         this.children.push(rowObject);
+    }
+
+    public updateObject(object: T): void {
+        this.object = object;
     }
 }

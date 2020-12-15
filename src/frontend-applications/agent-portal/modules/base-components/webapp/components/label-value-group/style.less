@@ -38,40 +38,41 @@
                 resize: none;
             }
         }
-    }
 
-    >.label {
-        font-weight: bold;
-        display: grid;
-        grid-template-columns: minmax(auto, min-content) max-content;
+        >.label {
+            font-weight: bold;
+            display: grid;
+            grid-template-columns: minmax(auto, min-content) max-content;
 
-        &::after {
-            content: ':';
+            &::after {
+                content: ':';
+            }
         }
-    }
 
-    >.file-entry {
-        grid-template-columns: 1rem minmax(10rem, auto) minmax(10rem, auto);
-    }
+        >.file-entry {
+            grid-template-columns: 1rem minmax(10rem, auto) minmax(10rem, auto);
+        }
 
-    >.toggle {
-        .icon-font-size-normal;
-        display: grid;
-        grid-template-columns: auto max-content;
-        grid-gap: @margin-small;
-        align-items: center;
-        color: @secondary-0;
+        >.toggle {
+            .icon-font-size-normal;
+            display: grid;
+            grid-template-columns: auto max-content;
+            grid-gap: @margin-small;
+            align-items: center;
+            color: @secondary-0;
 
-        >.line {
-            height: 1px;
-            background-color: @secondary-3;
-            min-width: 5rem;
+            >.line {
+                height: 1px;
+                background-color: @secondary-3;
+                min-width: 5rem;
 
-            &.minimized {
-                background-color: @secondary-1;
+                &.minimized {
+                    background-color: @secondary-1;
+                }
             }
         }
     }
+
 }
 
 >.sub {

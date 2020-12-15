@@ -58,7 +58,7 @@ export class MainDialogComponent implements IMainDialogListener {
             this.dialogTitle = dialogTitle;
             this.dialogIcon = dialogIcon;
             this.dialogWidgets = dialogs || [];
-            this.state.dialogWidgets = dialogs ? dialogs.map((d) => d.configuration) : [];
+            this.state.dialogWidgets = dialogs || [];
             this.dialogId = dialogId;
             document.body.style.overflow = 'hidden';
             this.state.show = true;

@@ -40,6 +40,10 @@ import { ObjectReferenceWidgetConfiguration } from '../base-components/webapp/co
 import { DefaultColumnConfiguration } from '../../model/configuration/DefaultColumnConfiguration';
 import { KIXExtension } from '../../../../server/model/KIXExtension';
 import { ObjectIcon } from '../icon/model/ObjectIcon';
+import { TableWidgetConfiguration } from '../../model/configuration/TableWidgetConfiguration';
+import { TableConfiguration } from '../../model/configuration/TableConfiguration';
+import { TableHeaderHeight } from '../../model/configuration/TableHeaderHeight';
+import { TableRowHeight } from '../../model/configuration/TableRowHeight';
 
 export class Extension extends KIXExtension implements IConfigurationExtension {
 
@@ -146,26 +150,41 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
         configurations.push(helpSettings);
 
         const ticketsForAssetsWidget = new WidgetConfiguration(
-            'ticket-edit-dialog-object-reference-widget', 'Tickets for Assets', ConfigurationType.Widget,
-            'referenced-objects-widget', 'Translatable#Tickets for Assets', [], null,
-            new ObjectReferenceWidgetConfiguration(
-                'ticket-edit-object-reference-widget-config', 'Tickets for Assets',
-                'TicketsForAssetsHandler',
-                {
-                    properties: [
-                        'DynamicFields.AffectedAsset'
-                    ]
-                },
-                [
-                    new DefaultColumnConfiguration(
-                        null, null, null, TicketProperty.TITLE, true, false, true, false, 130, true, false
-                    ),
-                    new DefaultColumnConfiguration(
-                        null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, false
-                    ),
-                ]
+            'ticket-edit-affected-asset-tickets', 'Tickets for Assets', ConfigurationType.Widget,
+            'table-widget', 'Translatable#Tickets for Assets', [], null,
+            new TableWidgetConfiguration(
+                'ticket-edit-ticket-affected-asset-table-widget', 'Asset Tickets',
+                ConfigurationType.TableWidget, KIXObjectType.TICKET, null, null,
+                new TableConfiguration(
+                    'ticket-edit-affected-assets-table-config', 'Asset Tickets', ConfigurationType.Table,
+                    KIXObjectType.TICKET,
+                    new KIXObjectLoadingOptions(
+                        [
+                            new FilterCriteria(
+                                TicketProperty.STATE_TYPE, SearchOperator.EQUALS,
+                                FilterDataType.STRING, FilterType.AND, 'Open'
+                            ),
+                            new FilterCriteria(
+                                'DynamicFields.AffectedAsset', SearchOperator.IN,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_DynamicField_AffectedAsset_ObjectValue>'
+                            ),
+                            new FilterCriteria(
+                                TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
+                                FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
+                            )
+                        ], null, 30
+                    ), 10,
+                    [
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TITLE, true, false, true, false, 320, true, true
+                        ),
+                        new DefaultColumnConfiguration(
+                            null, null, null, TicketProperty.TYPE_ID, false, true, true, false, 50, true, true, true
+                        )
+                    ], null, false, false, null, null, TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                ), null, false, false, null
             ),
-            false, false, 'kix-icon-ticket'
+            false, true, 'kix-icon-ticket', false, false, true, ['DynamicFields.AffectedAsset']
         );
         configurations.push(ticketsForAssetsWidget);
 
@@ -208,7 +227,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 [
                     new ConfiguredWidget('ticket-edit-contact-card-widget', 'ticket-edit-contact-card-widget'),
                     new ConfiguredWidget(
-                        'ticket-edit-dialog-object-reference-widget', 'ticket-edit-dialog-object-reference-widget'
+                        'ticket-edit-affected-asset-tickets', 'ticket-edit-affected-asset-tickets'
                     ),
                     new ConfiguredWidget(
                         'ticket-edit-dialog-suggested-faq-widget', 'ticket-edit-dialog-suggested-faq-widget'

@@ -46,6 +46,7 @@ class Component {
                     existingValue.setValue(cv.value);
                     existingValue.setCurrentValue(true);
                 }
+                existingValue.required = cv.required;
                 values.push(existingValue);
             } else {
                 const value = new DynamicFormFieldValue(this.manager, cv);

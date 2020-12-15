@@ -33,6 +33,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 this.showIcons = config.showIcon;
                 this.showText = config.showText;
             }
+            (this as any).setStateDirty();
         }
     }
 

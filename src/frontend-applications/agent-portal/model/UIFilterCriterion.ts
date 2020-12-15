@@ -16,8 +16,7 @@ export class UIFilterCriterion {
         public operator: SearchOperator,
         public value: string | number | string[] | number[],
         public useObjectService: boolean = false,
-        public useDisplayValue: boolean = false,
-        public propertyValue?: string,
+        public useDisplayValue: boolean = false
     ) { }
 
 }

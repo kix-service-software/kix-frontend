@@ -151,11 +151,6 @@ class Component {
 
     }
 
-    public filter(filterValue: string): void {
-        this.state.table.setFilter(filterValue);
-        this.state.table.filter();
-    }
-
 }
 
 module.exports = Component;

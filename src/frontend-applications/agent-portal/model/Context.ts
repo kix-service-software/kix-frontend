@@ -113,6 +113,10 @@ export abstract class Context {
         }
     }
 
+    public async setFormObject(overwrite: boolean = true): Promise<void> {
+        return;
+    }
+
     public getIcon(): string | ObjectIcon {
         return 'kix-icon-unknown';
     }
@@ -336,7 +340,7 @@ export abstract class Context {
         return sidebars ? sidebars.length > 0 : false;
     }
 
-    public async getWidgetConfiguration(instanceId: string): Promise<WidgetConfiguration> {
+    public async getConfiguredWidget(instanceId: string): Promise<ConfiguredWidget> {
         let configuration: ConfiguredWidget;
 
         if (this.configuration) {
@@ -370,7 +374,11 @@ export abstract class Context {
             }
         }
 
-        return configuration ? configuration.configuration : null;
+        return configuration;
+    }
+    public async getWidgetConfiguration(instanceId: string): Promise<WidgetConfiguration> {
+        const configuredWidget = await this.getConfiguredWidget(instanceId);
+        return configuredWidget ? configuredWidget.configuration : null;
     }
 
     public getContextSpecificWidgetType(instanceId: string): WidgetType {

@@ -385,7 +385,14 @@ export abstract class KIXObjectAPIService implements IKIXObjectService {
         }
 
         // ignore fulltext property
-        filterCriteria = filterCriteria ? filterCriteria.filter((c) => c.property !== SearchProperty.FULLTEXT) : [];
+        filterCriteria = filterCriteria
+            ? filterCriteria.filter((c) => {
+                if (c.property === SearchProperty.FULLTEXT) {
+                    return false;
+                }
+                return true;
+            })
+            : [];
 
         if (filterCriteria && filterCriteria.length) {
             const apiFilter = {};

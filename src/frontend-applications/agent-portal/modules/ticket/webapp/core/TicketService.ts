@@ -203,6 +203,7 @@ export class TicketService extends KIXObjectService<Ticket> {
                 }
                 break;
             case TicketProperty.STATE_TYPE:
+            case TicketProperty.STATE_TYPE_ID:
                 let stateTypes = await KIXObjectService.loadObjects<TicketState>(KIXObjectType.TICKET_STATE_TYPE);
                 if (!showInvalid) {
                     stateTypes = stateTypes.filter((s) => s.ValidID === 1);
@@ -213,7 +214,8 @@ export class TicketService extends KIXObjectService<Ticket> {
                     );
                     const text = await LabelService.getInstance().getObjectText(s);
                     nodes.push(new TreeNode(
-                        s.Name, text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
+                        property === TicketProperty.STATE_TYPE ? s.Name : s.ID,
+                        text, (icons && icons.length) ? icons[0] : null, undefined, undefined, undefined,
                         undefined, undefined, undefined, undefined, undefined, undefined,
                         s.ValidID === 1 || invalidClickable,
                         undefined, undefined, undefined, undefined,
@@ -389,7 +391,7 @@ export class TicketService extends KIXObjectService<Ticket> {
     public async getPreparedArticleBodyContent(article: Article): Promise<[string, InlineContent[]]> {
         if (article.bodyAttachment) {
 
-            const AttachmentWithContent = await this.loadArticleAttachment(
+            const attachmentWithContent = await this.loadArticleAttachment(
                 article.TicketID, article.ArticleID, article.bodyAttachment.ID
             );
 
@@ -408,10 +410,16 @@ export class TicketService extends KIXObjectService<Ticket> {
                 (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
             );
 
-            let content = Buffer.from(AttachmentWithContent.Content, 'base64').toString('utf8');
+            let buffer = Buffer.from(attachmentWithContent.Content, 'base64');
+            const encoding = attachmentWithContent.charset ? attachmentWithContent.charset : 'utf8';
+            if (encoding !== 'utf8' && encoding !== 'utf-8') {
+                const iconv = require('iconv-lite');
+                buffer = iconv.decode(buffer, encoding);
+            }
+
+            let content = buffer.toString('utf8');
             const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
             if (match && match.length >= 3) {
-                console.table(match);
                 content = match[2];
             }
 

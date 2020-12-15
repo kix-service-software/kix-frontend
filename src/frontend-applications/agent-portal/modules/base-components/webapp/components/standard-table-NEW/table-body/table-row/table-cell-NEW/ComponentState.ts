@@ -17,7 +17,8 @@ export class ComponentState {
         public object: any = null,
         public objectId: string | number = null,
         public showDefaultCell: boolean = true,
-        public stateClasses: string[] = null
+        public stateClasses: string[] = null,
+        public loading: boolean = false
     ) { }
 
 }

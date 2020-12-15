@@ -86,9 +86,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
                 }
 
                 const dfValue = dfName ? objectWithDF.DynamicFields.find((dfv) => dfv.Name === dfName) : null;
-                if (dfValue) {
-                    result = await this.getDFDisplayValue(objectWithDF, dfValue, dfValueOptions);
-                }
+                result = await this.getDFDisplayValue(objectWithDF, dfValue, dfValueOptions);
             }
         }
         return result;
@@ -96,7 +94,7 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
 
     private async getDFDisplayValue(
         object: KIXObject, dfValue: DynamicFieldValue, dfOptions: string = ''
-    ): Promise<string> {
+    ): Promise<string | any> {
         for (const extendedHandler of this.extendedPlaceholderHandler) {
             const value = await extendedHandler.getDFDisplayValue(object, dfValue, dfOptions);
             if (value) {
@@ -104,19 +102,19 @@ export class DynamicFieldValuePlaceholderHandler extends AbstractPlaceholderHand
             }
         }
 
-        let result = '';
-        if (!dfValue.Value) {
-            dfValue.Value = [];
-        } else if (!Array.isArray(dfValue.Value)) {
+        let result: string | any = '';
+        if (dfValue && !Array.isArray(dfValue.Value)) {
             dfValue.Value = [dfValue.Value];
         }
-        if (dfOptions && dfOptions.match(/^Key$/i)) {
+        if (dfValue && dfOptions && dfOptions.match(/^Key$/i)) {
             result = await this.handleKey(object, dfValue);
-        } else if (dfOptions && dfOptions.match(/^HTML$/i)) {
+        } else if (dfValue && dfOptions && dfOptions.match(/^HTML$/i)) {
             result = await this.handleHTMLValue(object, dfValue);
-        } else if (dfOptions && dfOptions.match(/^Short$/i)) {
+        } else if (dfValue && dfOptions && dfOptions.match(/^Short$/i)) {
             result = await this.handleShortValue(object, dfValue);
-        } else if (dfOptions === '' || dfOptions.match(/^Value$/i)) {
+        } else if (dfOptions && dfOptions.match(/^ObjectValue$/i)) {
+            result = dfValue ? dfValue.Value : [];
+        } else if (dfValue && (dfOptions === '' || dfOptions.match(/^Value$/i))) {
             result = await this.handleValue(object, dfValue);
         }
         return result;
