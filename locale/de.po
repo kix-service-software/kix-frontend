@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-12-14 11:01+0000\n"
-"Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
+"PO-Revision-Date: 2020-12-15 11:01+0000\n"
+"Last-Translator: skriegel <Steffen.Kriegel@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
 "Language: de\n"
@@ -283,9 +283,8 @@ msgstr "Name des Anhangs"
 msgid "Attachments"
 msgstr "Anlagen"
 
-#, fuzzy
 msgid "Attribut"
-msgstr "Attribut"
+msgstr "Offene Tickets des Kontaktes"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -576,9 +575,8 @@ msgstr "Kopie von {0}"
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
-#, fuzzy
 msgid "Could not load file {0}."
-msgstr "Datei '{0}' konnte nicht geladen werden."
+msgstr "Offene Tickets des Kunden"
 
 msgid "Country"
 msgstr "Land"
