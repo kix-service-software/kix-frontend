@@ -31,6 +31,7 @@ import { FilterCriteria } from '../../../../../model/FilterCriteria';
 import { DynamicFieldProperty } from '../../../../dynamic-fields/model/DynamicFieldProperty';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
+import { KIXObject } from '../../../../../model/kix/KIXObject';
 
 
 export class Table implements Table {
@@ -532,15 +533,29 @@ export class Table implements Table {
             this.getColumns().some((c) => c.isFiltered());
     }
 
-    public setRowObjectValues(values: Array<[any, [string, any]]>): void {
-        values.forEach((v) => {
+    public async updateRowObject(object: KIXObject): Promise<void> {
+        const row = this.getRowByObject(object);
+        if (row) {
+            row.getRowObject().updateObject(object);
+            for (const c of row.getCells()) {
+                await c.getDisplayValue(true);
+            }
+            EventService.getInstance().publish(
+                TableEvent.ROW_VALUE_CHANGED,
+                new TableEventData(this.getTableId(), row.getRowId())
+            );
+        }
+    }
+
+    public async setRowObjectValues(values: Array<[any, [string, any]]>): Promise<void> {
+        for (const v of values) {
             const row = this.getRowByObject(v[0]);
             if (row) {
                 const value = v[1];
                 row.getRowObject().addValue(new TableValue(value[0], value[1]));
                 const cell = row.getCell(value[0]);
                 if (cell) {
-                    cell.setValue(new TableValue(value[0], value[1], value[1]));
+                    await cell.setValue(new TableValue(value[0], value[1]));
                 } else {
                     row.addCell(new TableValue(value[0], value[1], value[1]));
                 }
@@ -549,7 +564,7 @@ export class Table implements Table {
                     new TableEventData(this.getTableId(), row.getRowId())
                 );
             }
-        });
+        }
     }
 
     public setRowObjectValueState(objects: any[], state: ValueState): void {

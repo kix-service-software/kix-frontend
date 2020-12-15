@@ -73,12 +73,14 @@ export class DynamicFieldFormService extends KIXObjectFormService {
                     value = Object.assign({}, value);
                     if (dynamicField.FieldType === DynamicFieldTypes.SELECTION) {
                         const possibleValueArray = [];
-                        Object.keys(value.PossibleValues).forEach((key) => {
-                            const newPossibleValues = {};
-                            newPossibleValues['Key'] = key;
-                            newPossibleValues['Value'] = value.PossibleValues[key];
-                            possibleValueArray.push(newPossibleValues);
-                        });
+                        if (value.possibleValues) {
+                            Object.keys(value.PossibleValues).forEach((key) => {
+                                const newPossibleValues = {};
+                                newPossibleValues['Key'] = key;
+                                newPossibleValues['Value'] = value.PossibleValues[key];
+                                possibleValueArray.push(newPossibleValues);
+                            });
+                        }
                         value.PossibleValues = possibleValueArray;
                         value.TranslatableValues = Boolean(value.TranslatableValues === '1');
                     } else if (dynamicField.FieldType === DynamicFieldTypes.CHECK_LIST) {

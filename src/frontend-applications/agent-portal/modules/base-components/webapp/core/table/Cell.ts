@@ -39,12 +39,13 @@ export class Cell {
         return this.tableValue;
     }
 
-    public setValue(value: TableValue): void {
+    public async setValue(value: TableValue): Promise<void> {
         this.tableValue = value;
+        await this.getDisplayValue(true);
     }
 
-    public async getDisplayValue(): Promise<string> {
-        if (this.getValue().displayValue) {
+    public async getDisplayValue(changed: boolean = false): Promise<string> {
+        if (!changed && this.getValue().displayValue) {
             return this.getValue().displayValue;
         }
 
