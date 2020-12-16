@@ -466,7 +466,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                             [
                                 {
                                     icon: 'kix-icon-ticket',
-                                    text: 'Open Tickets of Contact',
+                                    text: 'Translatable#Open Tickets of Contact',
                                     routingConfiguration: {
                                         contextId: 'search',
                                         contextMode: ContextMode.SEARCH,
@@ -500,7 +500,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 },
                                 {
                                     icon: 'kix-icon-ticket',
-                                    text: 'Open Tickets of Organisation',
+                                    text: 'Translatable#Open Tickets of Organisation',
                                     routingConfiguration: {
                                         contextId: 'search',
                                         contextMode: ContextMode.SEARCH,

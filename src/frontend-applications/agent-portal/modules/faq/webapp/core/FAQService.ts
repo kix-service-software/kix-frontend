@@ -131,7 +131,11 @@ export class FAQService extends KIXObjectService {
                     KIXObjectType.TRANSLATION_PATTERN
                 );
                 const languages = await translationService.getLanguages();
-                nodes = languages.map((l) => new TreeNode(l[0], l[1]));
+                nodes = [];
+                for (const lang of languages) {
+                    const displayValue = await TranslationService.translate(lang[1]);
+                    nodes.push(new TreeNode(lang[0], displayValue));
+                }
                 break;
             case FAQArticleProperty.KEYWORDS:
                 const keywords = await this.loadObjects(KIXObjectType.FAQ_KEYWORD, null);
