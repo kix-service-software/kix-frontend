@@ -4031,6 +4031,9 @@ msgstr "Fehler bei der Ticketsuche!"
 msgid "Tickets for Assets"
 msgstr "Tickets zu Assets"
 
+msgid "Tickets for Contact"
+msgstr ""
+
 msgid "Ticket: States"
 msgstr "Ticket: Status"
 
@@ -4141,6 +4144,9 @@ msgstr "Ungelesen"
 
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
+
+msgid "Unsupported dynamic field type {0}."
+msgstr ""
 
 msgid "until"
 msgstr "bis/gleich oder weniger"
