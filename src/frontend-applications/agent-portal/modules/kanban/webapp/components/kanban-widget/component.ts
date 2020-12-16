@@ -15,7 +15,6 @@ import { SearchOperator } from '../../../../search/model/SearchOperator';
 import { FilterDataType } from '../../../../../model/FilterDataType';
 import { FilterType } from '../../../../../model/FilterType';
 import { KIXObjectService } from '../../../../base-components/webapp/core/KIXObjectService';
-import { Ticket } from '../../../../ticket/model/Ticket';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { KIXObjectLoadingOptions } from '../../../../../model/KIXObjectLoadingOptions';
 import { AgentService } from '../../../../user/webapp/core/AgentService';
@@ -26,9 +25,13 @@ import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUt
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KanbanConfiguration } from '../../core/KanbanConfiguration';
 import { KanbanEvent } from '../../core/KanbanEvent';
-import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { TicketState } from '../../../../ticket/model/TicketState';
 import { TicketStateProperty } from '../../../../ticket/model/TicketStateProperty';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { ContextType } from '../../../../../model/ContextType';
+import { Ticket } from '../../../../ticket/model/Ticket';
+import { LabelService } from '../../../../base-components/webapp/core/LabelService';
+import { SortUtil } from '../../../../../model/SortUtil';
 
 declare const jKanban: any;
 
@@ -37,7 +40,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private dragTo: string[];
 
     private boards: any[] = [];
+    private widgetConfiguration: WidgetConfiguration;
     private kanbanConfig: KanbanConfiguration;
+    private contextListenerId: string;
+
+    private isCreatingBoard: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -50,16 +57,52 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            const widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
-            if (widgetConfiguration && widgetConfiguration.configuration) {
-                this.kanbanConfig = (widgetConfiguration.configuration as KanbanConfiguration);
+            this.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
+            if (this.widgetConfiguration && this.widgetConfiguration.configuration) {
+                this.kanbanConfig = (this.widgetConfiguration.configuration as KanbanConfiguration);
                 this.state.prepared = true;
                 setTimeout(() => this.createKanbanBoard(), 50);
             }
+
+            if (this.widgetConfiguration.contextDependent) {
+                this.contextListenerId = 'kanban-widget' + this.widgetConfiguration.instanceId;
+                context.registerListener(this.contextListenerId, {
+                    additionalInformationChanged: () => null,
+                    explorerBarToggled: () => null,
+                    filteredObjectListChanged: () => {
+                        this.state.prepared = false;
+
+                        setTimeout(() => {
+                            this.state.prepared = true;
+                            setTimeout(() => {
+                                this.createKanbanBoard();
+                            }, 50);
+                        }, 50);
+
+                    },
+                    objectChanged: () => null,
+                    objectListChanged: () => null,
+                    scrollInformationChanged: () => null,
+                    sidebarToggled: () => null
+                });
+            }
+
+        }
+    }
+
+    public onDestroy(): void {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            context.unregisterListener(this.contextListenerId);
         }
     }
 
     private async createKanbanBoard(): Promise<void> {
+        if (this.isCreatingBoard) {
+            return;
+        }
+
+        this.isCreatingBoard = true;
         this.dragTo = [];
         this.boards = [];
 
@@ -79,17 +122,38 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         }
 
-        const teamTickets = await this.createTicketBoard(false, 'new', 'team-backlog', 'Translatable#Team Backlog');
-        const personalTickets = await this.createTicketBoard(
-            true, 'new', 'personal-backlog', 'Translatable#Personal Backlog'
-        );
-        const wipTickets = await this.createTicketBoard(true, 'open', 'wip', 'Translatable#Work in Progress');
-        const pendingTickets = await this.createTicketBoard(
-            true, 'pending reminder', 'pending', 'Translatable#Pending'
-        );
-        const closedTickets = await this.createTicketBoard(
-            true, 'closed', 'closed', 'Translatable#Recently Closed', true
-        );
+        let teamTickets: Ticket[];
+        if (this.kanbanConfig.columns.some((c) => c.id === 'team-backlog')) {
+            teamTickets = await this.createTicketBoard(false, 'new', 'team-backlog', 'Translatable#Team Backlog');
+        }
+
+        let personalTickets: Ticket[];
+        if (this.kanbanConfig.columns.some((c) => c.id === 'personal-backlog')) {
+            personalTickets = await this.createTicketBoard(
+                !this.widgetConfiguration.contextDependent, 'new', 'personal-backlog', 'Translatable#Personal Backlog'
+            );
+        }
+
+        let wipTickets: Ticket[];
+        if (this.kanbanConfig.columns.some((c) => c.id === 'wip')) {
+            wipTickets = await this.createTicketBoard(
+                !this.widgetConfiguration.contextDependent, 'open', 'wip', 'Translatable#Work in Progress'
+            );
+        }
+
+        let pendingTickets: Ticket[];
+        if (this.kanbanConfig.columns.some((c) => c.id === 'pending')) {
+            pendingTickets = await this.createTicketBoard(
+                !this.widgetConfiguration.contextDependent, 'pending reminder', 'pending', 'Translatable#Pending'
+            );
+        }
+
+        let closedTickets: Ticket[];
+        if (this.kanbanConfig.columns.some((c) => c.id === 'closes')) {
+            closedTickets = await this.createTicketBoard(
+                !this.widgetConfiguration.contextDependent, 'closed', 'closed', 'Translatable#Recently Closed', true
+            );
+        }
 
         // tslint:disable-next-line: no-unused-expression
         new jKanban({
@@ -107,12 +171,28 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             dropEl: this.dropTicket.bind(this)
         });
 
-        setTimeout(() => {
-            teamTickets.forEach((t) => this.createItem(t));
-            personalTickets.forEach((t) => this.createItem(t));
-            wipTickets.forEach((t) => this.createItem(t));
-            pendingTickets.forEach((t) => this.createItem(t));
-            closedTickets.forEach((t) => this.createItem(t));
+        setTimeout(async () => {
+            if (Array.isArray(teamTickets)) {
+                teamTickets.forEach((t) => this.createItem(t));
+            }
+
+            if (Array.isArray(personalTickets)) {
+                personalTickets.forEach((t) => this.createItem(t));
+            }
+
+            if (Array.isArray(wipTickets)) {
+                wipTickets.forEach((t) => this.createItem(t));
+            }
+
+            if (Array.isArray(pendingTickets)) {
+                pendingTickets.forEach((t) => this.createItem(t));
+            }
+
+            if (Array.isArray(closedTickets)) {
+                closedTickets.forEach((t) => this.createItem(t));
+            }
+
+            this.isCreatingBoard = false;
         }, 50);
     }
 
@@ -146,6 +226,13 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         await KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, ticketId)
             .catch(() => null);
 
+        if (this.widgetConfiguration.contextDependent) {
+            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            if (context) {
+                context.reloadObjectList(KIXObjectType.TICKET, false);
+            }
+        }
+
         EventService.getInstance().publish(
             KanbanEvent.TICKET_CHANGED, { ticketId }
         );
@@ -154,7 +241,23 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     private async createTicketBoard(
         useUser: boolean, stateType: string, boardId: string, title: string, oneDay?: boolean
     ): Promise<Ticket[]> {
-        const tickets = await this.loadBoardTickets(useUser, stateType, oneDay);
+        let tickets: Ticket[] = [];
+
+        if (this.widgetConfiguration.contextDependent) {
+            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            const alltickets = context.getFilteredObjectList<Ticket>(KIXObjectType.TICKET);
+            tickets = alltickets.filter((t) => t.StateType === stateType);
+        } else {
+            tickets = await this.loadBoardTickets(useUser, stateType, oneDay);
+        }
+
+        tickets = tickets.sort((a, b) => {
+            if (a.OwnerID === b.OwnerID) {
+                return b.PriorityID - a.PriorityID;
+            }
+            return b.OwnerID - a.OwnerID;
+        });
+
         await this.createBoard(boardId, title, tickets);
         return tickets;
     }

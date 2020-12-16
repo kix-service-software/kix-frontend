@@ -213,13 +213,17 @@ export abstract class Context {
         return this.objectId;
     }
 
-    public getFilteredObjectList(objectType: KIXObjectType | string): KIXObject[] {
-        return this.filteredObjectLists.get(objectType);
+    public getFilteredObjectList<T extends KIXObject = KIXObject>(objectType: KIXObjectType | string): T[] {
+        return this.filteredObjectLists.get(objectType) as any[];
     }
 
-    public setFilteredObjectList(objectType: KIXObjectType | string, filteredObjectList: KIXObject[]) {
+    public setFilteredObjectList(
+        objectType: KIXObjectType | string, filteredObjectList: KIXObject[], silent: boolean = false
+    ) {
         this.filteredObjectLists.set(objectType, filteredObjectList);
-        this.listeners.forEach((l) => l.filteredObjectListChanged(objectType, filteredObjectList));
+        if (!silent) {
+            this.listeners.forEach((l) => l.filteredObjectListChanged(objectType, filteredObjectList));
+        }
     }
 
     public registerListener(listenerId: string, listener: IContextListener): void {
@@ -451,7 +455,7 @@ export abstract class Context {
         return await FormService.getInstance().getFormIdByContext(formContext, objectType);
     }
 
-    public async reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         return;
     }
 

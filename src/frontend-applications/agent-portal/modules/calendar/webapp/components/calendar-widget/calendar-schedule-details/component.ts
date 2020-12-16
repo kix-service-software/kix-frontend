@@ -14,6 +14,17 @@ import { TicketProperty } from '../../../../../ticket/model/TicketProperty';
 import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { ContextMode } from '../../../../../../model/ContextMode';
 import { RoutingConfiguration } from '../../../../../../model/configuration/RoutingConfiguration';
+import { FilterCriteria } from '../../../../../../model/FilterCriteria';
+import { FilterDataType } from '../../../../../../model/FilterDataType';
+import { FilterType } from '../../../../../../model/FilterType';
+import { KIXObjectLoadingOptions } from '../../../../../../model/KIXObjectLoadingOptions';
+import { ObjectIconLoadingOptions } from '../../../../../../server/model/ObjectIconLoadingOptions';
+import { KIXObjectService } from '../../../../../base-components/webapp/core/KIXObjectService';
+import { Contact } from '../../../../../customer/model/Contact';
+import { ContactProperty } from '../../../../../customer/model/ContactProperty';
+import { ObjectIcon } from '../../../../../icon/model/ObjectIcon';
+import { SearchOperator } from '../../../../../search/model/SearchOperator';
+import { BrowserUtil } from '../../../../../base-components/webapp/core/BrowserUtil';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -50,7 +61,38 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.icon = icons && icons.length ? icons[0] : 'kix-icon-unknown';
 
+        await this.prepareAvatar();
+
         this.state.prepared = true;
+    }
+
+    private async prepareAvatar(): Promise<void> {
+        const contacts = await KIXObjectService.loadObjects<Contact>(
+            KIXObjectType.CONTACT, null, new KIXObjectLoadingOptions([
+                new FilterCriteria(
+                    ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC,
+                    FilterType.AND, this.state.ticket.OwnerID
+                )
+            ])
+        );
+
+        if (Array.isArray(contacts) && contacts.length) {
+            const avatars = await KIXObjectService.loadObjects<ObjectIcon>(
+                KIXObjectType.OBJECT_ICON, null, null,
+                new ObjectIconLoadingOptions(KIXObjectType.CONTACT, contacts[0].ID)
+            ).catch((e): ObjectIcon[] => []);
+
+            if (Array.isArray(avatars) && avatars.length) {
+                this.state.avatar = avatars[0];
+            } else {
+                this.state.initials =
+                    contacts[0].Firstname.substr(0, 1).toLocaleUpperCase() +
+                    contacts[0].Lastname.substr(0, 1).toLocaleUpperCase();
+            }
+
+            this.state.contactTooltip = contacts[0].Fullname;
+            this.state.userColor = BrowserUtil.getUserColor(this.state.ticket.OwnerID);
+        }
     }
 
 }

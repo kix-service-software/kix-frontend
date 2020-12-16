@@ -28,6 +28,8 @@ import { PlaceholderService } from './PlaceholderService';
 
 export class BrowserUtil {
 
+    private static userColors: Map<number, string> = new Map();
+
     public static openErrorOverlay(error: string): void {
         OverlayService.getInstance().openOverlay(
             OverlayType.WARNING, null, new StringContent(error), 'Translatable#Error!', null, true
@@ -259,6 +261,27 @@ export class BrowserUtil {
     public static logout(): void {
         ContextHistory.getInstance().removeBrowserListener();
         window.location.replace('/auth/logout');
+    }
+
+    public static getRandomColor(): string {
+        const letters = '0123456789ABCDEF';
+        let color = '#';
+        for (let i = 0; i < 6; i++) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    }
+
+    public static getUserColor(userId: number): string {
+        if (!this.userColors.has(userId)) {
+            let color = this.getRandomColor();
+            if (userId === 1) {
+                color = '#e31e24';
+            }
+            this.userColors.set(userId, color);
+        }
+
+        return this.userColors.get(userId);
     }
 
     public static async prepareUrlParams(params: Array<[string, any]>): Promise<string[]> {
