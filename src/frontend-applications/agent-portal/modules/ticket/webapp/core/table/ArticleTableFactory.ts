@@ -56,7 +56,7 @@ export class ArticleTableFactory extends TableFactory {
                 ArticleProperty.NUMBER, true, false, true, false, 60, true, true, false, DataType.STRING, false
             ),
             new DefaultColumnConfiguration(null, null, null,
-                ArticleProperty.ARTICLE_INFORMATION, false, false, true, false, 60,
+                ArticleProperty.ARTICLE_INFORMATION, false, true, true, false, 60,
                 false, false, false, DataType.STRING, false
             ),
             new DefaultColumnConfiguration(null, null, null,
