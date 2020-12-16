@@ -9,11 +9,11 @@
 
 .calendar-container {
 
-    .tui-full-calendar-time-schedule,
-    .tui-full-calendar-popup-top-line,
-    .tui-full-calendar-weekday-schedule {
-        background-color: @primary-5  !important;
-        color: @secondary-7;
+    div.kix-calendar-schedule .calendar-header {
+        padding: 0;
+        align-items: start;
+        background: unset;
+        color: unset;
     }
 
     .tui-full-calendar-dayname-name,
@@ -21,11 +21,23 @@
         font-size: 1.25rem !important;
     }
 
-    .widget-header {
-        display: none;
+    .tui-full-calendar-popup-container {
+        padding: @margin-small;
+    }
+
+    .content-widget {
+        .widget-header {
+            display: none;
+        }
+
+        .widget-content {
+            display: grid;
+            grid-template-columns: 6fr 1fr;
+        }
     }
 
     .calendar-header {
+        grid-column: 1 /span 2;
         padding: 1rem;
         display: grid;
         display: grid;
@@ -64,7 +76,32 @@
                     display: grid;
                     grid-auto-flow: column;
                     align-items: center;
-                    grid-column-gap: 0.5rem;
+                    grid-column-gap: @margin-small;
+                }
+            }
+        }
+    }
+
+    .calendar-legend {
+        grid-column: 2;
+        padding: 1rem 0.5rem;
+
+        >ul {
+            list-style: none;
+            margin-top: 1rem;
+
+            li {
+                border-left: 1rem solid;
+                margin-bottom: @margin-small;
+                padding-left: @margin-small;
+
+                &.inactive {
+                    opacity: 0.5;
+                }
+
+                &:hover {
+                    cursor: pointer;
+                    background-color: @secondary-3;
                 }
             }
         }
