@@ -485,6 +485,9 @@ msgstr ""
 msgid "Communication: Email: Inbox"
 msgstr ""
 
+msgid "Communication: Email: Outbox"
+msgstr ""
+
 msgid "Communication: Webform"
 msgstr ""
 
@@ -2983,6 +2986,12 @@ msgid "Open Sidebars"
 msgstr ""
 
 msgid "Open Tickets"
+msgstr ""
+
+msgid "Open Tickets of Contact"
+msgstr ""
+
+msgid "Open Tickets of Organisation"
 msgstr ""
 
 msgid "Operator"

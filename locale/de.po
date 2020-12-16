@@ -497,6 +497,9 @@ msgstr "Kommunikation: E-Mail: E-Mail Filter"
 msgid "Communication: Email: Inbox"
 msgstr "Kommunikation: E-Mail: Posteingang"
 
+msgid "Communication: Email: Outbox"
+msgstr ""
+
 msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
 
@@ -3121,6 +3124,12 @@ msgstr "Geöffnete Sidebars"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
+
+msgid "Open Tickets of Contact"
+msgstr ""
+
+msgid "Open Tickets of Organisation"
+msgstr ""
 
 msgid "Operator"
 msgstr ""
