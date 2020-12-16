@@ -3285,6 +3285,9 @@ msgstr ""
 msgid "Reload Agent Portal Configurations"
 msgstr "Reload Frontend Configurations"
 
+msgid "Reload Calendar Data ..."
+msgstr ""
+
 msgid "Reload Frontend Configurations"
 msgstr ""
 
