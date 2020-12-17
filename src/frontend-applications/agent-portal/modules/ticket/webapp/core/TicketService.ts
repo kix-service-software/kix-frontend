@@ -414,7 +414,11 @@ export class TicketService extends KIXObjectService<Ticket> {
             const encoding = attachmentWithContent.charset ? attachmentWithContent.charset : 'utf8';
             if (encoding !== 'utf8' && encoding !== 'utf-8') {
                 const iconv = require('iconv-lite');
-                buffer = iconv.decode(buffer, encoding);
+                try {
+                    buffer = iconv.decode(buffer, encoding);
+                } catch (e) {
+                    // do nothing
+                }
             }
 
             let content = buffer.toString('utf8');

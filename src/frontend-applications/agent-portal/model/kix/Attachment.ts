@@ -60,7 +60,7 @@ export class Attachment extends KIXObject {
             if (attributes.length) {
                 this.ContentType = attributes[0].trim();
                 if (attributes[1]) {
-                    this.charset = attributes[1].trim().replace(/charset="(.+)"/, '$1');
+                    this.charset = attributes[1].trim().replace(/charset=['"]?(.+)['"]?/, '$1');
                 }
             }
         }
