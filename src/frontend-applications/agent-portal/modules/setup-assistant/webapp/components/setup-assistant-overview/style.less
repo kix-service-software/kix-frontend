@@ -18,8 +18,7 @@
 .setup-steps {
     margin: @margin-small;
     display: grid;
-    grid-auto-flow: column;
-    grid-auto-columns: @step-width;
+    grid-template-columns: repeat(auto-fill, 12rem);
     justify-content: center;
 
     .step {
