@@ -106,12 +106,16 @@ export class TicketContext extends Context {
             loadingOptions.filter.push(fulltextFilter);
         }
 
-        if (!this.filterValue && !this.queueId) {
-            loadingOptions.limit = 30;
+        if (!this.queueId) {
+            loadingOptions.limit = 100;
             loadingOptions.sortOrder = '-Ticket.Age:numeric';
-            loadingOptions.filter.push(new FilterCriteria(
-                TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
-            ));
+
+            if (!this.filterValue) {
+                loadingOptions.filter.push(new FilterCriteria(
+                    TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.NUMERIC, FilterType.AND, 1
+                ));
+            }
+
             loadingOptions.filter.push(new FilterCriteria(
                 TicketProperty.STATE_TYPE, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND, 'new'
             ));

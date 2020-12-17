@@ -641,7 +641,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
                             )
-                        ]
+                        ], null, 100
                     ), 10,
                     [
                         new DefaultColumnConfiguration(
@@ -680,7 +680,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                                 TicketProperty.TICKET_ID, SearchOperator.NOT_EQUALS,
                                 FilterDataType.NUMERIC, FilterType.AND, '<KIX_TICKET_TicketID>'
                             )
-                        ]
+                        ], null, 100
                     ), 10,
                     [
                         new DefaultColumnConfiguration(

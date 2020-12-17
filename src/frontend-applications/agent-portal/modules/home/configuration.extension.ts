@@ -216,7 +216,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         FilterDataType.STRING, FilterType.OR, KIXObjectType.CURRENT_USER
                     ),
                     stateTypeFilterCriteria
-                ], 'Ticket.-Age:numeric', 500, [TicketProperty.WATCHERS]
+                ], 'Ticket.-Age:numeric', 100, [TicketProperty.WATCHERS]
             ), null, null, null, true, true, new ToggleOptions('ticket-article-details', 'article', [], true)
         );
         configurations.push(tableMyOpenTicketsConfiguration);
@@ -247,7 +247,7 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                         TicketProperty.STATE_ID, SearchOperator.EQUALS,
                         FilterDataType.NUMERIC, FilterType.OR, 1
                     )
-                ], 'Ticket.Age:numeric', 500, [TicketProperty.WATCHERS]
+                ], 'Ticket.Age:numeric', 100, [TicketProperty.WATCHERS]
             ),
             null,
             [
@@ -263,10 +263,10 @@ export class Extension extends KIXExtension implements IConfigurationExtension {
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.QUEUE_ID, true, false, true, true, 175, true, true, true
                 ),
-                new DefaultColumnConfiguration(null, null, null,
-                    'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
-                    'label-list-cell-content'
-                ),
+                // new DefaultColumnConfiguration(null, null, null,
+                //     'DynamicFields.AffectedAsset', true, false, true, false, 200, true, true, true, undefined, true,
+                //     'label-list-cell-content'
+                // ),
                 new DefaultColumnConfiguration(null, null, null,
                     TicketProperty.ORGANISATION_ID, true, false, true, true, 225, true, true
                 ),
