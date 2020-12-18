@@ -21,10 +21,12 @@ import { JobType } from '../../model/JobType';
 import { KIXObjectSpecificLoadingOptions } from '../../../../model/KIXObjectSpecificLoadingOptions';
 import { KIXObjectLoadingOptions } from '../../../../model/KIXObjectLoadingOptions';
 import { JobRun } from '../../model/JobRun';
+import { JobTypes } from '../../model/JobTypes';
 
 export class JobService extends KIXObjectService<Job> {
 
     private static INSTANCE: JobService = null;
+    private typeMapping: {} = {};
 
     public static getInstance(): JobService {
         if (!JobService.INSTANCE) {
@@ -42,6 +44,17 @@ export class JobService extends KIXObjectService<Job> {
         this.objectConstructors.set(KIXObjectType.EXEC_PLAN, [ExecPlan]);
         this.objectConstructors.set(KIXObjectType.MACRO, [Macro]);
         this.objectConstructors.set(KIXObjectType.MACRO_ACTION_TYPE, [MacroActionType]);
+    }
+
+    public addTypeMapping(jobType: JobTypes | string, kixObjectType: KIXObjectType | string): void {
+        if (!this.typeMapping) {
+            this.typeMapping = {};
+        }
+        this.typeMapping[jobType] = kixObjectType;
+    }
+
+    public getObjectTypeForJobType(jobType: JobTypes | string): KIXObjectType {
+        return this.typeMapping[jobType] || KIXObjectType.TICKET;
     }
 
     public isServiceFor(kixObjectType: KIXObjectType) {

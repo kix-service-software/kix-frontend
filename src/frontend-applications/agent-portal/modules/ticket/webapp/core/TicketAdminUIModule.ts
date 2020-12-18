@@ -27,6 +27,8 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
 import { QueueDuplicateAction } from './admin';
 import { UIModule as TicketReadUIModule } from './TicketReadUIModule';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule extends TicketReadUIModule {
 
@@ -63,26 +65,35 @@ export class UIModule extends TicketReadUIModule {
         const newTicketTypeContext = new ContextDescriptor(
             NewTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketTypeDialogContext
+            false, 'new-ticket-type-dialog', ['tickettypes'], NewTicketTypeDialogContext,
+            [
+                new UIComponentPermission('system/ticket/types', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newTicketTypeContext);
+        ContextService.getInstance().registerContext(newTicketTypeContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-type-edit', TicketTypeEditAction);
         const editTicketTypeContext = new ContextDescriptor(
             EditTicketTypeDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-type-dialog', ['tickettypes'], EditTicketTypeDialogContext
+            false, 'edit-ticket-type-dialog', ['tickettypes'], EditTicketTypeDialogContext,
+            [
+                new UIComponentPermission('system/ticket/types', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editTicketTypeContext);
+        ContextService.getInstance().registerContext(editTicketTypeContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-type-table-delete', TicketTypeTableDeleteAction);
 
         const ticketTypeDetailsContextDescriptor = new ContextDescriptor(
             TicketTypeDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_TYPE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['tickettypes'], TicketTypeDetailsContext
+            true, 'object-details-page', ['tickettypes'], TicketTypeDetailsContext,
+            [
+                new UIComponentPermission('system/ticket/types', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(ticketTypeDetailsContextDescriptor);
     }
 
     private async registerTicketStatesAdmin(): Promise<void> {
@@ -92,27 +103,36 @@ export class UIModule extends TicketReadUIModule {
         const newTicketStateContext = new ContextDescriptor(
             NewTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-state-dialog', ['ticketstates'], NewTicketStateDialogContext
+            false, 'new-ticket-state-dialog', ['ticketstates'], NewTicketStateDialogContext,
+            [
+                new UIComponentPermission('system/ticket/states', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newTicketStateContext);
+        ContextService.getInstance().registerContext(newTicketStateContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-state-edit', TicketStateEditAction);
 
         const editTicketStateContext = new ContextDescriptor(
             EditTicketStateDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-state-dialog', ['ticketstates'], EditTicketStateDialogContext
+            false, 'edit-ticket-state-dialog', ['ticketstates'], EditTicketStateDialogContext,
+            [
+                new UIComponentPermission('system/ticket/states', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editTicketStateContext);
+        ContextService.getInstance().registerContext(editTicketStateContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-state-table-delete', TicketStateTableDeleteAction);
 
         const ticketStateDetailsContextDescriptor = new ContextDescriptor(
             TicketStateDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_STATE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['ticketstates'], TicketStateDetailsContext
+            true, 'object-details-page', ['ticketstates'], TicketStateDetailsContext,
+            [
+                new UIComponentPermission('system/ticket/states', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(ticketStateDetailsContextDescriptor);
     }
 
     private async registerTicketPrioritiesAdmin(): Promise<void> {
@@ -122,18 +142,24 @@ export class UIModule extends TicketReadUIModule {
         const newTicketPriorityContext = new ContextDescriptor(
             NewTicketPriorityDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-priority-dialog', ['priorities'], NewTicketPriorityDialogContext
+            false, 'new-ticket-priority-dialog', ['priorities'], NewTicketPriorityDialogContext,
+            [
+                new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newTicketPriorityContext);
+        ContextService.getInstance().registerContext(newTicketPriorityContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-priority-edit', TicketPriorityEditAction);
 
         const editTicketPriorityContext = new ContextDescriptor(
             EditTicketPriorityDialogContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext
+            false, 'edit-ticket-priority-dialog', ['priorities'], EditTicketPriorityDialogContext,
+            [
+                new UIComponentPermission('system/ticket/priorities', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editTicketPriorityContext);
+        ContextService.getInstance().registerContext(editTicketPriorityContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-priority-table-delete',
             TicketPriorityTableDeleteAction
@@ -142,9 +168,12 @@ export class UIModule extends TicketReadUIModule {
         const ticketPriorityDetailsContextDescriptor = new ContextDescriptor(
             TicketPriorityDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET_PRIORITY],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['priorities'], TicketPriorityDetailsContext
+            true, 'object-details-page', ['priorities'], TicketPriorityDetailsContext,
+            [
+                new UIComponentPermission('system/ticket/priorities', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(ticketPriorityDetailsContextDescriptor);
     }
 
     private async registerTicketQueuesAdmin(): Promise<void> {
@@ -154,26 +183,35 @@ export class UIModule extends TicketReadUIModule {
         const newQueueContext = new ContextDescriptor(
             NewQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-ticket-queue-dialog', ['queues'], NewQueueDialogContext
+            false, 'new-ticket-queue-dialog', ['queues'], NewQueueDialogContext,
+            [
+                new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newQueueContext);
+        ContextService.getInstance().registerContext(newQueueContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-queue-edit', TicketQueueEditAction);
 
         const editQueueContext = new ContextDescriptor(
             EditQueueDialogContext.CONTEXT_ID, [KIXObjectType.QUEUE],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext
+            false, 'edit-ticket-queue-dialog', ['queues'], EditQueueDialogContext,
+            [
+                new UIComponentPermission('system/ticket/queues', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editQueueContext);
+        ContextService.getInstance().registerContext(editQueueContext);
 
         ActionFactory.getInstance().registerAction('ticket-admin-queue-duplicate', QueueDuplicateAction);
 
         const ticketQueueDetailsContextDescriptor = new ContextDescriptor(
             QueueDetailsContext.CONTEXT_ID, [KIXObjectType.QUEUE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['queues'], QueueDetailsContext
+            true, 'object-details-page', ['queues'], QueueDetailsContext,
+            [
+                new UIComponentPermission('system/ticket/queues', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(ticketQueueDetailsContextDescriptor);
     }
 }

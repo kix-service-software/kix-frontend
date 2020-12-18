@@ -74,22 +74,31 @@ export class UIModule implements IUIModule {
         const faqContextDescriptor = new ContextDescriptor(
             FAQContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE],
             ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'faq', ['faqarticles'], FAQContext
+            false, 'faq', ['faqarticles'], FAQContext,
+            [
+                new UIComponentPermission('faq/articles', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(faqContextDescriptor);
+        ContextService.getInstance().registerContext(faqContextDescriptor);
 
         const faqDetailsContextDescriptor = new ContextDescriptor(
             FAQDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['faqarticles'], FAQDetailsContext
+            true, 'object-details-page', ['faqarticles'], FAQDetailsContext,
+            [
+                new UIComponentPermission('faq/articles', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(faqDetailsContextDescriptor);
 
         const searchFAQArticleContext = new ContextDescriptor(
             FAQArticleSearchContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.SEARCH,
-            false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext
+            false, 'search-faq-article-dialog', ['faqarticles'], FAQArticleSearchContext,
+            [
+                new UIComponentPermission('faq/articles', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(searchFAQArticleContext);
+        ContextService.getInstance().registerContext(searchFAQArticleContext);
     }
 
     private registerActions(): void {

@@ -25,7 +25,11 @@ export class ComponentState {
         public prepared: boolean = false,
         public labelProvider: TicketLabelProvider = new TicketLabelProvider(),
         public icon: string | ObjectIcon = null,
-        public properties: string[] = []
+        public properties: string[] = [],
+        public avatar: ObjectIcon | string = null,
+        public initials: string = '',
+        public contactTooltip: string = '',
+        public userColor: string = ''
     ) { }
 
 }

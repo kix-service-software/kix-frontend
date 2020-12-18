@@ -22,6 +22,8 @@ import { ContextDescriptor } from '../../../../../model/ContextDescriptor';
 import { ContextType } from '../../../../../model/ContextType';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -47,25 +49,34 @@ export class UIModule implements IUIModule {
         const newFAQCategoryContext = new ContextDescriptor(
             NewFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
             ContextMode.CREATE_ADMIN, false, 'new-faq-category-dialog', ['faqcategories'],
-            NewFAQCategoryDialogContext
+            NewFAQCategoryDialogContext,
+            [
+                new UIComponentPermission('faq/categories', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newFAQCategoryContext);
+        ContextService.getInstance().registerContext(newFAQCategoryContext);
 
         ActionFactory.getInstance().registerAction('faq-admin-category-edit-action', FAQCategoryEditAction);
 
         const editFAQCategoryContext = new ContextDescriptor(
             EditFAQCategoryDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY], ContextType.DIALOG,
             ContextMode.EDIT_ADMIN, false, 'edit-faq-category-dialog', ['faqcategories'],
-            EditFAQCategoryDialogContext
+            EditFAQCategoryDialogContext,
+            [
+                new UIComponentPermission('faq/categories', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editFAQCategoryContext);
+        ContextService.getInstance().registerContext(editFAQCategoryContext);
 
         const faqCategoryDetailsContextDescriptor = new ContextDescriptor(
             FAQCategoryDetailsContext.CONTEXT_ID, [KIXObjectType.FAQ_CATEGORY],
             ContextType.MAIN, ContextMode.DETAILS,
-            true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext
+            true, 'object-details-page', ['faqcategories'], FAQCategoryDetailsContext,
+            [
+                new UIComponentPermission('faq/categories', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
+        ContextService.getInstance().registerContext(faqCategoryDetailsContextDescriptor);
 
     }
 

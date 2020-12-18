@@ -713,7 +713,7 @@ TicketDetailsContext.CONTEXT_ID, [KIXObjectType.TICKET, KIXObjectType.ARTICLE],
 ContextType.MAIN, ContextMode.DETAILS,
 true, &#39;object-details-page&#39;, [&#39;tickets&#39;], TicketDetailsContext
 );
-await ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
+ContextService.getInstance().registerContext(ticketDetailsContextDescriptor);
 </code></pre><h3 id="functionality">Functionality</h3><p>If a page should be shown in the agent portal the context is always the required base for it. The application loads the context and its configuration from the configuration cache The component which is defined in the <code>ContextDescriptor</code> is loaded and included in the web application content area. After the configuration is loaded the context get initialized and the context is now responsible to load objects or execute other needed functionality.</p><p>Components can register a listener on the context to get notified about changes to update theirself.</p><p>The main application reacts on the context changing and updates the main template. The explorer and the sidebar also reacts on this change and load the components from the context configuration.</p><p><img src="static/ticket-details.png" alt="Context"></p></div><div class="chapter"><h2 id="configuration"><a href="#configuration">Configuration</a></h2><p>The configuration is the base for main composition of components in the agent portal. Configurations are stored in the Sysconfig. There are different types of configurations possible:</p><pre><code class="lang-typescript">export enum ConfigurationType {
 Context = &#39;Context&#39;,
 Widget = &#39;Widget&#39;,

@@ -69,20 +69,30 @@ class Component {
     }
 
     private updateSidebars(context: Context): void {
-        setTimeout(() => {
+        this.state.loading = true;
+        this.state.sidebars = [];
+        setTimeout(async () => {
             this.state.showSidebar = context ? context.areSidebarsShown() : false;
             if (this.state.showSidebar) {
-                this.state.sidebars = [...context.getSidebars(true)] || [];
+                const sidebars = context.getSidebars(true);
+                if (Array.isArray(sidebars)) {
+                    for (const cw of sidebars) {
+                        const template = await this.getSidebarTemplate(cw.instanceId);
+                        this.state.sidebars.push([cw.instanceId, template]);
+                    }
+                }
+
                 this.setShieldHeight(context);
             } else {
                 this.state.sidebars = [];
             }
+            this.state.loading = false;
         }, 100);
     }
 
-    public getSidebarTemplate(instanceId: string): any {
+    public async getSidebarTemplate(instanceId: string): Promise<any> {
         const context = ContextService.getInstance().getActiveContext(this.state.contextType);
-        const config = context ? context.getWidgetConfiguration(instanceId) : undefined;
+        const config = context ? await context.getWidgetConfiguration(instanceId) : undefined;
         return config ? KIXModulesService.getComponentTemplate(config.widgetId) : undefined;
     }
 

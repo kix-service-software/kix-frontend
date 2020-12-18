@@ -41,6 +41,8 @@ import {
 import { AbstractPlaceholderHandler } from '../../../../modules/base-components/webapp/core/AbstractPlaceholderHandler';
 import { Article } from '../../model/Article';
 import { ArticleLoadingOptions } from '../../model/ArticleLoadingOptions';
+import { Contact } from '../../../customer/model/Contact';
+import { Organisation } from '../../../customer/model/Organisation';
 
 export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
 
@@ -177,27 +179,39 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                         }
                         break;
                     case 'CONTACT':
+                        let contact: Contact;
                         if (ticket.ContactID) {
                             const contacts = await KIXObjectService.loadObjects(
                                 KIXObjectType.CONTACT, [ticket.ContactID], null, null, true
                             ).catch((error) => []);
                             if (contacts && !!contacts.length) {
-                                result = await ContactPlaceholderHandler.prototype.replace(
-                                    placeholder, contacts[0], language
-                                );
+                                contact = contacts[0];
                             }
+                        } else if (ticket instanceof Contact) {
+                            contact = ticket;
+                        }
+                        if (contact) {
+                            result = await ContactPlaceholderHandler.prototype.replace(
+                                placeholder, contact, language
+                            );
                         }
                         break;
                     case 'ORG':
+                        let organisation: Organisation;
                         if (ticket.OrganisationID) {
                             const organisations = await KIXObjectService.loadObjects(
                                 KIXObjectType.ORGANISATION, [ticket.OrganisationID], null, null, true
                             ).catch((error) => []);
                             if (organisations && !!organisations.length) {
-                                result = await OrganisationPlaceholderHandler.prototype.replace(
-                                    placeholder, organisations[0], language
-                                );
+                                organisation = organisations[0];
                             }
+                        } else if (ticket instanceof Organisation) {
+                            organisation = ticket;
+                        }
+                        if (organisation) {
+                            result = await OrganisationPlaceholderHandler.prototype.replace(
+                                placeholder, organisation, language
+                            );
                         }
                         break;
                     case 'QUEUE':
@@ -286,11 +300,11 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
                 case TicketProperty.LINKED_AS:
                 case TicketProperty.TICKET_FLAG:
                 case TicketProperty.WATCHERS:
-                case TicketProperty.FROM:
-                case TicketProperty.TO:
-                case TicketProperty.CC:
-                case TicketProperty.SUBJECT:
-                case TicketProperty.BODY:
+                case ArticleProperty.FROM:
+                case ArticleProperty.TO:
+                case ArticleProperty.CC:
+                case ArticleProperty.SUBJECT:
+                case ArticleProperty.BODY:
                     break;
                 default:
                     result = await LabelService.getInstance().getDisplayText(ticket, attribute, undefined, false);
@@ -302,8 +316,11 @@ export class TicketPlaceholderHandler extends AbstractPlaceholderHandler {
     }
 
     private isKnownProperty(property: string): boolean {
-        let knownProperties = Object.keys(TicketProperty).map((p) => TicketProperty[p]);
-        knownProperties = [...knownProperties, ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p])];
+        const knownProperties = [
+            ...Object.keys(TicketProperty).map((p) => TicketProperty[p]),
+            ...Object.keys(KIXObjectProperty).map((p) => KIXObjectProperty[p]),
+            ...Object.keys(ArticleProperty).map((p) => ArticleProperty[p])
+        ];
         return knownProperties.some((p) => p === property);
     }
 

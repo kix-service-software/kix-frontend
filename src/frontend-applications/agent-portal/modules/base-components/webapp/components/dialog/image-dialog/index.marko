@@ -6,9 +6,8 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <if(state.show)>
-    <div.image-dialog-container>
+    <div.image-dialog-container on-click("preventPropagation")>
         <div.image-shield/>
         <div.image-dialog>
             <div.image-dialog-header>
@@ -23,7 +22,12 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
                 </div>
                 <div.image>
                     <if(state.image)>
-                        <img alt=state.imageTitle src=state.image.content/>
+                        <a
+                            href=state.image.content
+                            download=state.image.title
+                            title=(state.translations["Translatable#Download"] + " (" + state.image.title + ")")>
+                            <img alt=state.image.title src=state.image.content/>
+                        </a>
                     </if>
                 </div>
                 <div.next-image on-click("nextImage") title=state.translations["Translatable#Next Image"]>

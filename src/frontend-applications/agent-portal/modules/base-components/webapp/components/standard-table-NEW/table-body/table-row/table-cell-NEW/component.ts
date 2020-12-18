@@ -35,6 +35,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             eventPublished: (data: string, eventId: string) => {
                 if (this.cell && data === this.cell.getValue().instanceId) {
                     (this as any).setStateDirty();
+                    setTimeout(() => this.state.loading = false, 5);
                 }
             }
         };

@@ -26,6 +26,7 @@ class IconComponent {
     public onInput(input: any): void {
         this.state.icon = input.icon;
         this.state.showUnknown = typeof input.showUnknown !== 'undefined' ? input.showUnknown : false;
+        this.state.tooltip = input.tooltip;
         this.setIcon(this.state.icon);
     }
 
@@ -38,14 +39,21 @@ class IconComponent {
             this.state.base64 = false;
             this.state.content = icon;
         } else if (icon) {
+
+            const context = ContextService.getInstance().getActiveContext();
+            const contextObject = await context.getObject();
+
+            if (icon.tooltip) {
+                this.state.tooltip = await PlaceholderService.getInstance().replacePlaceholders(
+                    icon.tooltip, contextObject
+                );
+            }
+
             if (icon.Content) {
                 this.state.base64 = true;
                 this.state.content = icon.Content;
                 this.state.contentType = icon.ContentType;
             } else {
-
-                const context = ContextService.getInstance().getActiveContext();
-                const contextObject = await context.getObject();
                 const object = await PlaceholderService.getInstance().replacePlaceholders(
                     icon.Object, contextObject
                 );

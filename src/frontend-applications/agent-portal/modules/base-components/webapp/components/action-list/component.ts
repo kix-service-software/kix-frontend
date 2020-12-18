@@ -19,7 +19,6 @@ import { IContextListener } from '../../../../../modules/base-components/webapp/
 import { KIXObject } from '../../../../../model/kix/KIXObject';
 import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 import { Context } from '../../../../../model/Context';
-import { AbstractAction } from '../../core/AbstractAction';
 import { IAction } from '../../core/IAction';
 
 export class Component implements IActionListener {
@@ -39,10 +38,18 @@ export class Component implements IActionListener {
         this.initActionList(input);
     }
 
+    public onInput(input: any): void {
+        this.initActionList(input);
+    }
+
     private async initActionList(input: any): Promise<void> {
-        await this.setActionList(input.list);
         this.state.displayText = typeof input.displayText !== 'undefined' ? input.displayText : true;
         this.state.prepared = true;
+
+        if (Array.isArray(input.list) && input.list.length) {
+            await this.setActionList(input.list);
+        }
+
         setTimeout(() => this.prepareActionLists(), 100);
     }
 

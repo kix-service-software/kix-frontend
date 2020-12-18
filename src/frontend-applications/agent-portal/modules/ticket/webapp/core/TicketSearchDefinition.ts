@@ -32,10 +32,7 @@ export class TicketSearchDefinition extends SearchDefinition {
     }
 
     public createFormManager(ignoreProperties: string[] = []): SearchFormManager {
-        const newManager = new TicketSearchFormManager(ignoreProperties);
-
-        this.formManager.getExtendedFormManager().forEach((m) => newManager.addExtendedFormManager(m));
-        return newManager;
+        return new TicketSearchFormManager(ignoreProperties);
     }
 
     public getLoadingOptionsForResultList(): KIXObjectLoadingOptions {
@@ -152,16 +149,15 @@ export class TicketSearchDefinition extends SearchDefinition {
                 && c.property !== TicketProperty.CREATED_STATE_ID
                 && c.property !== TicketProperty.ARTICLE_CREATE_TIME
                 && c.property !== TicketProperty.ATTACHMENT_NAME
-                && c.property !== TicketProperty.BODY
-                && c.property !== TicketProperty.SUBJECT
-                && c.property !== TicketProperty.CC
-                && c.property !== TicketProperty.FROM
-                && c.property !== TicketProperty.TO
-                && c.property !== ArticleProperty.CHANNEL_ID
-                && c.property !== ArticleProperty.SENDER_TYPE_ID
                 && c.property !== TicketProperty.WATCH_USER_ID
                 && c.property !== TicketProperty.STATE_TYPE
                 && c.property !== TicketProperty.LAST_CHANGE_TIME
+                && !this.isArticleProperty(c.property)
         );
+    }
+
+    private isArticleProperty(property: string): boolean {
+        const articleProperty = Object.keys(ArticleProperty).map((p) => ArticleProperty[p]);
+        return articleProperty.some((p) => p === property);
     }
 }

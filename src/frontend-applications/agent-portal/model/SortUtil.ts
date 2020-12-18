@@ -9,7 +9,6 @@
 
 import { SortOrder } from './SortOrder';
 import { DataType } from './DataType';
-import { DateTimeUtil } from '../modules/base-components/webapp/core/DateTimeUtil';
 
 export class SortUtil {
 

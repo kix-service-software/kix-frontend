@@ -70,7 +70,6 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent(
             'config-item-version-details', '/kix-module-cmdb$0/webapp/components/config-item-version-details', []
         ),
-        new UIComponent('config-item-info-widget', '/kix-module-cmdb$0/webapp/components/config-item-info-widget', []),
         new UIComponent(
             'config-item-history-widget', '/kix-module-cmdb$0/webapp/components/config-item-history-widget', []
         ),

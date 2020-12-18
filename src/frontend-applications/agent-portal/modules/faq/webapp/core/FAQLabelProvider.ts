@@ -245,6 +245,11 @@ export class FAQLabelProvider extends LabelProvider<FAQArticle> {
                     icons.push('kix-icon-close');
                 }
                 break;
+            case FAQArticleProperty.CATEGORY_ID:
+                if (faqArticle) {
+                    icons.push(new ObjectIcon(null, KIXObjectType.FAQ_CATEGORY, faqArticle.CategoryID));
+                }
+                break;
             default:
         }
 

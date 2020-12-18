@@ -20,7 +20,6 @@ import { KIXObjectType } from '../../../../../../model/kix/KIXObjectType';
 import { FAQArticleProperty } from '../../../../model/FAQArticleProperty';
 import { SearchOperator } from '../../../../../search/model/SearchOperator';
 import { ActionFactory } from '../../../../../../modules/base-components/webapp/core/ActionFactory';
-import { FAQCategory } from '../../../../model/FAQCategory';
 import { TranslationService } from '../../../../../../modules/translation/webapp/core/TranslationService';
 
 class Component {
@@ -42,7 +41,9 @@ class Component {
     public async onMount(): Promise<void> {
         this.additionalFilterCriteria = [];
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         if (this.state.widgetConfiguration.contextDependent) {
             context.registerListener('faq-article-list-context-listener', {
@@ -102,7 +103,7 @@ class Component {
         this.state.table = table;
 
         const context = await ContextService.getInstance().getContext<FAQContext>(FAQContext.CONTEXT_ID);
-        this.setCategoryFilter(context.faqCategory);
+        this.setCategoryFilter(context.categoryId);
         if (this.state.widgetConfiguration.contextDependent && context) {
             const objects = await context.getObjectList(KIXObjectType.FAQ_ARTICLE);
             this.setTitle(objects.length);
@@ -134,12 +135,12 @@ class Component {
         }
     }
 
-    private setCategoryFilter(category: FAQCategory): void {
+    private setCategoryFilter(categoryId: number): void {
         this.additionalFilterCriteria = [];
 
-        if (category) {
+        if (categoryId) {
             this.additionalFilterCriteria = [
-                new UIFilterCriterion(FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, category.ID)
+                new UIFilterCriterion(FAQArticleProperty.CATEGORY_ID, SearchOperator.EQUALS, categoryId)
             ];
         }
 

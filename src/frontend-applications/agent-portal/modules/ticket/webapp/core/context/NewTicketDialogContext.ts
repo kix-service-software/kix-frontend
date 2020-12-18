@@ -29,6 +29,7 @@ export class NewTicketDialogContext extends Context {
     private organisation: any;
 
     public async initContext(): Promise<void> {
+        super.initContext();
         this.contact = null;
         this.organisation = null;
 
@@ -36,7 +37,7 @@ export class NewTicketDialogContext extends Context {
             eventSubscriberId: NewTicketDialogContext.CONTEXT_ID,
             eventPublished: (data: FormValuesChangedEventData, eventId: string) => {
                 const form = data.formInstance.getForm();
-                this.setFormObject(data.formInstance.getForm().id);
+                this.setFormObject();
                 if (form.objectType === KIXObjectType.TICKET && form.formContext === FormContext.NEW) {
                     const organisationValue = data.changedValues.find(
                         (cv) => cv[0] && cv[0].property === TicketProperty.ORGANISATION_ID
@@ -56,11 +57,12 @@ export class NewTicketDialogContext extends Context {
         });
     }
 
-    private async setFormObject(formId: string): Promise<void> {
+    public async setFormObject(overwrite: boolean = true): Promise<void> {
         const service = ServiceRegistry.getServiceInstance<KIXObjectFormService>(
             KIXObjectType.TICKET, ServiceType.FORM
         );
         if (service) {
+            const formId = this.getAdditionalInformation(AdditionalContextInformation.FORM_ID);
             const newObject = {};
             const parameter = await service.getFormParameter(formId);
             parameter.forEach((p) => {

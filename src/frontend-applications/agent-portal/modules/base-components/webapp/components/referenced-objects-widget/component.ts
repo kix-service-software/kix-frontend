@@ -51,9 +51,11 @@ class Component {
         this.state.instanceId = input.instanceId;
     }
 
-    public onMount(): void {
+    public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         if (this.state.widgetConfiguration.configuration) {
             this.initWidget(context);
@@ -147,11 +149,6 @@ class Component {
             this.state.table = table;
         }, 10);
 
-    }
-
-    public filter(filterValue: string): void {
-        this.state.table.setFilter(filterValue);
-        this.state.table.filter();
     }
 
 }

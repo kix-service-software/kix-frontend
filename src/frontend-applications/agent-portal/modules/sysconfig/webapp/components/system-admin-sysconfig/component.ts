@@ -35,6 +35,11 @@ import { SysconfigEvent } from '../../core/SysconfigEvent';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { SysConfigOption } from '../../../model/SysConfigOption';
 import { SysConfigOptionType } from '../../../model/SysConfigOptionType';
+import { SysConfigOptionProperty } from '../../../model/SysConfigOptionProperty';
+import { SortOrder } from '../../../../../model/SortOrder';
+import { ContextService } from '../../../../base-components/webapp/core/ContextService';
+import { AdminContext } from '../../../../admin/webapp/core';
+import { ContextType } from '../../../../../model/ContextType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -55,6 +60,11 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
         this.state.translations = await TranslationService.createTranslationObject(['Translatable#SysConfig']);
+
+        const context = ContextService.getInstance().getActiveContext<AdminContext>();
+        this.filterValue = context.filterValue;
+        this.search();
+
         this.state.prepared = true;
     }
 
@@ -78,6 +88,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         this.state.table.setContentProvider(new SysConfigContentProvider(this));
+        this.state.table.sort(SysConfigOptionProperty.NAME, SortOrder.UP);
 
         this.subscriber = {
             eventSubscriberId: 'admin-sysconfig',
@@ -107,6 +118,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public search(): void {
         this.state.filterValue = this.filterValue;
+
+        const context = ContextService.getInstance().getActiveContext<AdminContext>(ContextType.MAIN);
+        context.setFilterValue(this.filterValue);
+
         this.state.table.reload(true);
 
     }

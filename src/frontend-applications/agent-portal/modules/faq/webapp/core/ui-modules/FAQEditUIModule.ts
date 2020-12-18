@@ -16,6 +16,8 @@ import { ContextType } from '../../../../../model/ContextType';
 import { ContextMode } from '../../../../../model/ContextMode';
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { ActionFactory } from '../../../../../modules/base-components/webapp/core/ActionFactory';
+import { UIComponentPermission } from '../../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -35,15 +37,21 @@ export class UIModule implements IUIModule {
     private async registerContexts(): Promise<void> {
         const newFAQArticleContext = new ContextDescriptor(
             NewFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.CREATE,
-            false, 'new-faq-article-dialog', ['faqarticles'], NewFAQArticleDialogContext
+            false, 'new-faq-article-dialog', ['faqarticles'], NewFAQArticleDialogContext,
+            [
+                new UIComponentPermission('faq/articles', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newFAQArticleContext);
+        ContextService.getInstance().registerContext(newFAQArticleContext);
 
         const editFAQArticleContext = new ContextDescriptor(
             EditFAQArticleDialogContext.CONTEXT_ID, [KIXObjectType.FAQ_ARTICLE], ContextType.DIALOG, ContextMode.EDIT,
-            false, 'edit-faq-article-dialog', ['faqarticles'], EditFAQArticleDialogContext
+            false, 'edit-faq-article-dialog', ['faqarticles'], EditFAQArticleDialogContext,
+            [
+                new UIComponentPermission('faq/articles', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editFAQArticleContext);
+        ContextService.getInstance().registerContext(editFAQArticleContext);
     }
 
     private registerActions(): void {

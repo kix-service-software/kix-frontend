@@ -24,10 +24,10 @@ class Component extends FormInputComponent<any, ComponentState> {
 
     public async onMount(): Promise<void> {
         await super.onMount();
-        this.state.options = [];
         if (Array.isArray(this.state.field.options)) {
             this.state.field.options.forEach((o) => this.state.options.push([o.option, o.value]));
         }
+        this.state.prepared = true;
     }
 
     public async setCurrentValue(): Promise<void> {

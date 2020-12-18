@@ -46,6 +46,7 @@ class Component {
                     existingValue.setValue(cv.value);
                     existingValue.setCurrentValue(true);
                 }
+                existingValue.required = cv.required;
                 values.push(existingValue);
             } else {
                 const value = new DynamicFormFieldValue(this.manager, cv);
@@ -149,6 +150,12 @@ class Component {
     public setBetweenEndTimeValue(value: DynamicFormFieldValue, event: any): void {
         const time = event.target.value;
         value.setBetweenEndTimeValue(time);
+        this.provideValue(value);
+    }
+
+    public setCheckboxValue(value: DynamicFormFieldValue, event: any): void {
+        const newValue = event.target.value;
+        value.setValue(newValue);
         this.provideValue(value);
     }
 

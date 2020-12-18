@@ -26,6 +26,8 @@ import { ContextService } from '../../../../modules/base-components/webapp/core/
 import { FormValidationService } from '../../../base-components/webapp/core/FormValidationService';
 import { MailFilterMatchValidator } from './MailFilterMatchValidator';
 import { MailFilterTableDeleteAction } from './actions/MailFilterTableDeleteAction';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 
 export class UIModule implements IUIModule {
@@ -54,9 +56,12 @@ export class UIModule implements IUIModule {
         const newMailFilterDialogContext = new ContextDescriptor(
             NewMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext
+            false, 'new-mail-account-dialog', ['mail-filters'], NewMailFilterDialogContext,
+            [
+                new UIComponentPermission('system/communication/mailfilter', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newMailFilterDialogContext);
+        ContextService.getInstance().registerContext(newMailFilterDialogContext);
 
         ActionFactory.getInstance().registerAction('mail-filter-edit', MailFilterEditAction);
 
@@ -65,15 +70,21 @@ export class UIModule implements IUIModule {
         const editMailFilterDialogContext = new ContextDescriptor(
             EditMailFilterDialogContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext
+            false, 'edit-mail-filter-dialog', ['mail-filters'], EditMailFilterDialogContext,
+            [
+                new UIComponentPermission('system/communication/mailfilter', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editMailFilterDialogContext);
+        ContextService.getInstance().registerContext(editMailFilterDialogContext);
 
         const mailFilterDetailsContext = new ContextDescriptor(
             MailFilterDetailsContext.CONTEXT_ID, [KIXObjectType.MAIL_FILTER],
             ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['mail-filters'], MailFilterDetailsContext
+            false, 'object-details-page', ['mail-filters'], MailFilterDetailsContext,
+            [
+                new UIComponentPermission('system/communication/mailfilter', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(mailFilterDetailsContext);
+        ContextService.getInstance().registerContext(mailFilterDetailsContext);
     }
 }

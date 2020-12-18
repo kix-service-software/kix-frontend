@@ -30,14 +30,14 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(this.contextType);
         this.state.widgetConfiguration = context
-            ? context.getWidgetConfiguration(this.state.instanceId)
+            ? await context.getWidgetConfiguration(this.state.instanceId)
             : undefined;
 
         if (this.state.widgetConfiguration) {
             const settings: TabWidgetConfiguration = this.state.widgetConfiguration.configuration;
             const widgets = [];
-            settings.widgets.forEach((w) => {
-                const config = context.getWidgetConfiguration(w);
+            settings.widgets.forEach(async (w) => {
+                const config = await context.getConfiguredWidget(w);
                 if (config) {
                     widgets.push(config);
                 }

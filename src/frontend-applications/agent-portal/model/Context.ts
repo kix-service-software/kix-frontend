@@ -31,6 +31,7 @@ import { ContextService } from '../modules/base-components/webapp/core/ContextSe
 import { AbstractAction } from '../modules/base-components/webapp/core/AbstractAction';
 import { SortUtil } from './SortUtil';
 import { SortOrder } from './SortOrder';
+import { AuthenticationSocketClient } from '../modules/base-components/webapp/core/AuthenticationSocketClient';
 
 export abstract class Context {
 
@@ -78,14 +79,25 @@ export abstract class Context {
         }
     }
 
-    public async initContext(): Promise<void> {
+    public async initContext(urlParams?: URLSearchParams): Promise<void> {
         return;
     }
 
-    public async getAdditionalActions(): Promise<AbstractAction[]> {
+    public async getUrl(): Promise<string> {
+        let url: string = '';
+        if (Array.isArray(this.descriptor.urlPaths) && this.descriptor.urlPaths.length) {
+            url = this.descriptor.urlPaths[0];
+            if (this.descriptor.contextMode === ContextMode.DETAILS) {
+                url += `/${this.getObjectId()}`;
+            }
+        }
+        return url;
+    }
+
+    public async getAdditionalActions(object?: KIXObject): Promise<AbstractAction[]> {
         let actions: AbstractAction[] = [];
         for (const extension of ContextService.getInstance().getContextExtensions(this.descriptor.contextId)) {
-            const extendedActions = await extension.getAdditionalActions(this);
+            const extendedActions = await extension.getAdditionalActions(this, object);
             if (Array.isArray(extendedActions)) {
                 actions = [...actions, ...extendedActions];
             }
@@ -99,6 +111,10 @@ export abstract class Context {
         if (!type) {
             this.descriptor.kixObjectTypes.push(objectType);
         }
+    }
+
+    public async setFormObject(overwrite: boolean = true): Promise<void> {
+        return;
     }
 
     public getIcon(): string | ObjectIcon {
@@ -197,13 +213,17 @@ export abstract class Context {
         return this.objectId;
     }
 
-    public getFilteredObjectList(objectType: KIXObjectType | string): KIXObject[] {
-        return this.filteredObjectLists.get(objectType);
+    public getFilteredObjectList<T extends KIXObject = KIXObject>(objectType: KIXObjectType | string): T[] {
+        return this.filteredObjectLists.get(objectType) as any[];
     }
 
-    public setFilteredObjectList(objectType: KIXObjectType | string, filteredObjectList: KIXObject[]) {
+    public setFilteredObjectList(
+        objectType: KIXObjectType | string, filteredObjectList: KIXObject[], silent: boolean = false
+    ) {
         this.filteredObjectLists.set(objectType, filteredObjectList);
-        this.listeners.forEach((l) => l.filteredObjectListChanged(objectType, filteredObjectList));
+        if (!silent) {
+            this.listeners.forEach((l) => l.filteredObjectListChanged(objectType, filteredObjectList));
+        }
     }
 
     public registerListener(listenerId: string, listener: IContextListener): void {
@@ -324,40 +344,45 @@ export abstract class Context {
         return sidebars ? sidebars.length > 0 : false;
     }
 
-    public getWidgetConfiguration(instanceId: string): WidgetConfiguration {
-        let configuration: WidgetConfiguration;
+    public async getConfiguredWidget(instanceId: string): Promise<ConfiguredWidget> {
+        let configuration: ConfiguredWidget;
 
         if (this.configuration) {
-            const explorer = this.configuration.explorer.find((e) => e.instanceId === instanceId);
-            configuration = explorer ? explorer.configuration : undefined;
+            configuration = this.configuration.explorer.find((e) => e.instanceId === instanceId);
 
             if (!configuration) {
-                const sidebar = this.configuration.sidebars.find((e) => e.instanceId === instanceId);
-                configuration = sidebar ? sidebar.configuration : undefined;
+                configuration = this.configuration.sidebars.find((e) => e.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const overlay = this.configuration.overlays.find((o) => o.instanceId === instanceId);
-                configuration = overlay ? overlay.configuration : undefined;
+                configuration = this.configuration.overlays.find((o) => o.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const laneWidget = this.configuration.lanes.find((lw) => lw.instanceId === instanceId);
-                configuration = laneWidget ? laneWidget.configuration : undefined;
+                configuration = this.configuration.lanes.find((lw) => lw.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const contentWidget = this.configuration.content.find((cw) => cw.instanceId === instanceId);
-                configuration = contentWidget ? contentWidget.configuration : undefined;
+                configuration = this.configuration.content.find((cw) => cw.instanceId === instanceId);
             }
 
             if (!configuration) {
-                const otherWidget = this.configuration.others.find((cw) => cw.instanceId === instanceId);
-                configuration = otherWidget ? otherWidget.configuration : undefined;
+                configuration = this.configuration.others.find((cw) => cw.instanceId === instanceId);
+            }
+        }
+
+        if (configuration && Array.isArray(configuration.permissions)) {
+            const allowed = await AuthenticationSocketClient.getInstance().checkPermissions(configuration.permissions);
+            if (!allowed) {
+                return null;
             }
         }
 
         return configuration;
+    }
+    public async getWidgetConfiguration(instanceId: string): Promise<WidgetConfiguration> {
+        const configuredWidget = await this.getConfiguredWidget(instanceId);
+        return configuredWidget ? configuredWidget.configuration : null;
     }
 
     public getContextSpecificWidgetType(instanceId: string): WidgetType {
@@ -430,7 +455,7 @@ export abstract class Context {
         return await FormService.getInstance().getFormIdByContext(formContext, objectType);
     }
 
-    public async reloadObjectList(objectType: KIXObjectType | string): Promise<void> {
+    public async reloadObjectList(objectType: KIXObjectType | string, silent: boolean = false): Promise<void> {
         return;
     }
 

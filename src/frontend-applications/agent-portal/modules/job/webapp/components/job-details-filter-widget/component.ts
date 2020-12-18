@@ -39,8 +39,6 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     }
 
     public async onMount(): Promise<void> {
-        WidgetService.getInstance().setWidgetType('job-exec-plan-group', WidgetType.GROUP);
-
         this.subscriber = {
             eventSubscriberId: 'object-details',
             eventPublished: (data: any, eventId: string) => {
@@ -53,7 +51,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
         if (context) {
-            this.state.widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
+            this.state.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
             this.initWidget();
         }
         this.state.prepared = true;
@@ -85,13 +83,17 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async prepareTable(): Promise<void> {
         if (this.state.widgetConfiguration) {
-            this.state.table = await TableFactoryService.getInstance().createTable(
-                'job-assigned-filter', KIXObjectType.JOB_FILTER,
-                new TableConfiguration(
-                    null, null, null, KIXObjectType.JOB_FILTER, null, null, null, null, null, null, null, null,
-                    TableHeaderHeight.SMALL, TableRowHeight.SMALL
-                ), null, null, true, false, false, true, true
-            );
+            if (!this.state.table) {
+                this.state.table = await TableFactoryService.getInstance().createTable(
+                    'job-assigned-filter', KIXObjectType.JOB_FILTER,
+                    new TableConfiguration(
+                        null, null, null, KIXObjectType.JOB_FILTER, null, null, null, null, null, null, null, null,
+                        TableHeaderHeight.SMALL, TableRowHeight.SMALL
+                    ), null, null, true, false, false, true, true
+                );
+            } else {
+                this.state.table.reload();
+            }
         }
     }
 

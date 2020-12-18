@@ -326,13 +326,15 @@ export class Row<T = any> {
         return count;
     }
 
-    public sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): void {
+    public async sortChildren(columnId: string, sortOrder: SortOrder, dataType: DataType): Promise<void> {
         if (this.children && this.children.length) {
-            this.children = TableSortUtil.sort(this.children, columnId, sortOrder, dataType);
+            this.children = await TableSortUtil.sort(this.children, columnId, sortOrder, dataType);
 
+            const sortPromises = [];
             for (const row of this.children) {
-                row.sortChildren(columnId, sortOrder, dataType);
+                sortPromises.push(row.sortChildren(columnId, sortOrder, dataType));
             }
+            await Promise.all(sortPromises);
         }
     }
 }

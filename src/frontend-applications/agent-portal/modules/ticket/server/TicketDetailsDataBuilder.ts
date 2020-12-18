@@ -402,7 +402,7 @@ export class TicketDetailsDataBuilder {
     ): Promise<[string, InlineContent[]]> {
         if (article.bodyAttachment) {
 
-            const AttachmentWithContent = await this.loadArticleAttachment(
+            const attachmentWithContent = await this.loadArticleAttachment(
                 token, article.TicketID, article.ArticleID, article.bodyAttachment.ID
             );
 
@@ -420,7 +420,21 @@ export class TicketDetailsDataBuilder {
             inlineAttachments.forEach(
                 (a) => inlineContent.push(new InlineContent(a.ContentID, a.Content, a.ContentType))
             );
-            return [Buffer.from(AttachmentWithContent.Content, 'base64').toString('utf8'), inlineContent];
+
+            let buffer = Buffer.from(attachmentWithContent.Content, 'base64');
+            const encoding = attachmentWithContent.charset ? attachmentWithContent.charset : 'utf8';
+            if (encoding !== 'utf8' && encoding !== 'utf-8') {
+                const iconv = require('iconv-lite');
+                buffer = iconv.decode(buffer, encoding);
+            }
+
+            let content = buffer.toString('utf8');
+            const match = content.match(/(<body[^>]*>)([\w|\W]*)(<\/body>)/);
+            if (match && match.length >= 3) {
+                content = match[2];
+            }
+
+            return [content, inlineContent];
         } else {
             const body = article.Body.replace(/(\n|\r)/g, '<br>');
             return [body, null];

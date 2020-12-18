@@ -6,7 +6,6 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <div.form-field
     class={
         additionalFieldControlsNeeded: input.additionalFieldControlsNeeded,
@@ -16,20 +15,20 @@ did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
     on-dragstart("handleDragStart")
     on-dragend("handleDragEnd")>
     <div.field-label class={
-        "no-label": !state.field.label || !state.field.showLabel
+        "no-label": !state.label || !state.field.showLabel
     }>
-        <span.label-text title=state.translations[state.field.label]>
+        <span.label-text title=state.label>
             <if(state.field.required)>
                 <span.required-field>*</span>
             </if>
             <if(state.field.showLabel)>
-                <translation-string pattern=state.field.label/>
+                <translation-string pattern=state.label/>
             </if>
         </span>
     </div>
     <div.field-icon>
         <if(state.hint)>
-            <overlay-icon isHint=true content=state.hint title=state.translations[state.field.label]/>
+            <overlay-icon isHint=true content=state.hint title=state.label/>
         </if>
     </div>
     <div.field-input style={

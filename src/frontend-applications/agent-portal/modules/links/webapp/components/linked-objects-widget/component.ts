@@ -43,7 +43,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
-        this.state.widgetConfiguration = context ? context.getWidgetConfiguration(this.state.instanceId) : undefined;
+        this.state.widgetConfiguration = context
+            ? await context.getWidgetConfiguration(this.state.instanceId)
+            : undefined;
 
         context.registerListener('kix-object-linked-objects-widget', {
             objectChanged: (id: string | number, object: KIXObject, type: KIXObjectType) => {

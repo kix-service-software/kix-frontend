@@ -133,6 +133,7 @@ export class CacheService {
                 cacheKeyPrefixes.push(KIXObjectType.TICKET);
                 break;
             case KIXObjectType.TICKET:
+                cacheKeyPrefixes.push(KIXObjectType.ARTICLE);
                 cacheKeyPrefixes.push(KIXObjectType.ORGANISATION);
                 cacheKeyPrefixes.push(KIXObjectType.CONTACT);
                 cacheKeyPrefixes.push(KIXObjectType.QUEUE);
@@ -182,6 +183,7 @@ export class CacheService {
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
+            case 'Migration':
                 await this.clearCache();
                 cacheKeyPrefixes = [];
                 break;

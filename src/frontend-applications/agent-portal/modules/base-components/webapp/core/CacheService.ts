@@ -187,6 +187,7 @@ export class BrowserCacheService {
                 break;
             case KIXObjectType.PERMISSION:
             case KIXObjectType.ROLE:
+            case 'Migration':
                 this.clear();
                 cacheKeyPrefixes = [];
                 break;

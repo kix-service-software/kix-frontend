@@ -49,7 +49,7 @@ export class DateTimeUtil {
         return string;
     }
 
-    public static calculateTimeInterval(seconds: number): string {
+    public static calculateTimeInterval(seconds: number, noDays?: boolean): string {
         let isNegative = false;
         if (seconds < 0) {
             isNegative = true;
@@ -60,7 +60,7 @@ export class DateTimeUtil {
         const hoursInSeconds = 60 * 60;
         const daysInSeconds = 24 * hoursInSeconds;
 
-        const days = Math.floor(seconds / daysInSeconds);
+        const days = !noDays ? Math.floor(seconds / daysInSeconds) : 0;
         const hours = Math.floor((seconds - (days * daysInSeconds)) / hoursInSeconds);
         const minutes = Math.round((seconds - (days * daysInSeconds) - (hours * hoursInSeconds)) / 60);
 

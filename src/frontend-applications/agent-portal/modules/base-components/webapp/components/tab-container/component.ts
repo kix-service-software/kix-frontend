@@ -23,6 +23,7 @@ import { TabContainerEventData } from '../../../../../modules/base-components/we
 import { TranslationService } from '../../../../../modules/translation/webapp/core/TranslationService';
 import { ObjectIcon } from '../../../../icon/model/ObjectIcon';
 import { Context } from '../../../../../model/Context';
+import { ConfiguredWidget } from '../../../../../model/configuration/ConfiguredWidget';
 
 class TabLaneComponent implements IEventSubscriber {
 
@@ -63,7 +64,7 @@ class TabLaneComponent implements IEventSubscriber {
     public async onMount(): Promise<void> {
         if (this.state.tabWidgets.length) {
             this.state.translations = await TranslationService.createTranslationObject(
-                this.state.tabWidgets.map((t) => t.title)
+                this.state.tabWidgets.map((t) => t.configuration ? t.configuration.title : '')
             );
 
             if (this.initialTabId) {
@@ -125,16 +126,18 @@ class TabLaneComponent implements IEventSubscriber {
         }
     }
 
-    public async tabClicked(tab: WidgetConfiguration, silent?: boolean): Promise<void> {
+    public async tabClicked(tab: ConfiguredWidget, silent?: boolean): Promise<void> {
         this.state.activeTab = tab;
-        this.state.activeTabTitle = this.state.activeTab ? this.state.activeTab.title : '';
+        this.state.activeTabTitle = this.state.activeTab && this.state.activeTab.configuration
+            ? this.state.activeTab.configuration.title
+            : '';
         if (tab) {
             const context = ContextService.getInstance().getActiveContext(this.state.contextType);
             if (context) {
                 const object = await context.getObject(context.getDescriptor().kixObjectTypes[0]);
 
                 this.state.contentActions = await ActionFactory.getInstance().generateActions(
-                    tab.actions, [object]
+                    tab.configuration ? tab.configuration.actions : [], [object]
                 );
             }
         }
@@ -144,8 +147,8 @@ class TabLaneComponent implements IEventSubscriber {
     }
 
     public getWidgetTemplate(): any {
-        return this.state.activeTab
-            ? KIXModulesService.getComponentTemplate(this.state.activeTab.widgetId)
+        return this.state.activeTab && this.state.activeTab.configuration
+            ? KIXModulesService.getComponentTemplate(this.state.activeTab.configuration.widgetId)
             : undefined;
     }
 
@@ -203,7 +206,7 @@ class TabLaneComponent implements IEventSubscriber {
             }
         }
         if (eventId === TabContainerEvent.CHANGE_TAB) {
-            const tab = this.state.tabWidgets.find((t) => t.widgetId === data.tabId);
+            const tab = this.state.tabWidgets.find((t) => t.configuration && t.configuration.widgetId === data.tabId);
             if (tab) {
                 this.tabClicked(tab);
             }
@@ -213,13 +216,13 @@ class TabLaneComponent implements IEventSubscriber {
     public getTitle(tab: WidgetConfiguration): string {
         return this.tabTitles.has(tab.instanceId)
             ? this.tabTitles.get(tab.instanceId)
-            : this.state.translations[tab.title];
+            : this.state.translations[tab.configuration ? tab.configuration.title : ''];
     }
 
     public getIcon(tab: WidgetConfiguration): string | ObjectIcon {
         return this.tabIcons.has(tab.instanceId)
             ? this.tabIcons.get(tab.instanceId)
-            : tab.icon;
+            : tab.configuration ? tab.configuration.icon : null;
     }
 
     public keydown(event: any): void {
@@ -229,7 +232,7 @@ class TabLaneComponent implements IEventSubscriber {
             && event.ctrlKey
         ) {
             const index = this.state.tabWidgets.findIndex((tw) => tw.instanceId === this.state.activeTab.instanceId);
-            let nextTab: WidgetConfiguration;
+            let nextTab: ConfiguredWidget;
 
             if (event.key === 'ArrowUp') {
                 nextTab = index > 0

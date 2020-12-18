@@ -53,35 +53,34 @@ class Component extends FormInputComponent<{}, ComponentState> {
                     await this.setCurrentValue();
                 }
 
-                const eventValue = data.changedValues.find(
-                    (cv) => cv[0] && cv[0].property === JobProperty.EXEC_PLAN_EVENTS
-                );
-                if (eventValue) {
-                    const context = ContextService.getInstance().getActiveContext();
-                    if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
-                        const selectedEvents = context.getAdditionalInformation(JobProperty.EXEC_PLAN_EVENTS);
-                        const hasArticleEvent = selectedEvents
-                            ? await JobService.getInstance().hasArticleEvent(selectedEvents)
-                            : false;
-
-                        if (hasArticleEvent) {
-                            await this.addRequiredArticleProperties();
-                        } else {
-                            await this.removeArticleProperties();
-                        }
-
-                        const dynamicFormComponent = (this as any).getComponent('job-filter-dynamic-form');
-                        if (dynamicFormComponent) {
-                            dynamicFormComponent.updateValues();
-                        }
-
-                    }
-                }
+                await this.handleArticleProperties();
             }
         };
         EventService.getInstance().subscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
 
         this.state.prepared = true;
+    }
+
+    private async handleArticleProperties() {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context && context.getDescriptor().contextType === ContextType.DIALOG) {
+            const selectedEvents = context.getAdditionalInformation(JobProperty.EXEC_PLAN_EVENTS);
+            const hasArticleEvent = selectedEvents
+                ? await JobService.getInstance().hasArticleEvent(selectedEvents)
+                : false;
+
+            if (hasArticleEvent) {
+                await this.addRequiredArticleProperties();
+            } else {
+                await this.unrequireArticleProperties();
+            }
+
+            const dynamicFormComponent = (this as any).getComponent('job-filter-dynamic-form');
+            if (dynamicFormComponent) {
+                dynamicFormComponent.updateValues();
+            }
+
+        }
     }
 
     private async setManager(): Promise<void> {
@@ -137,20 +136,24 @@ class Component extends FormInputComponent<{}, ComponentState> {
         }
     }
 
-    private async removeArticleProperties(): Promise<void> {
+    private async unrequireArticleProperties(): Promise<void> {
         const values = this.state.manager.getValues();
-        if (values) {
-            const articleValues = values.filter((v) => {
-                return v.property === ArticleProperty.SENDER_TYPE_ID
-                    || v.property === ArticleProperty.CHANNEL_ID
-                    || v.property === ArticleProperty.TO
-                    || v.property === ArticleProperty.CC
-                    || v.property === ArticleProperty.FROM
-                    || v.property === ArticleProperty.SUBJECT
-                    || v.property === ArticleProperty.BODY;
-            });
-            for (const av of articleValues) {
-                await this.state.manager.removeValue(av);
+
+        const channelValue = values.find((v) => v.property === ArticleProperty.CHANNEL_ID);
+        if (channelValue) {
+            if (Array.isArray(channelValue.value) && channelValue.value.length) {
+                channelValue.required = false;
+            } else {
+                this.state.manager.removeValue(channelValue);
+            }
+        }
+
+        const senderTypeValue = values.find((v) => v.property === ArticleProperty.SENDER_TYPE_ID);
+        if (senderTypeValue) {
+            if (Array.isArray(senderTypeValue.value) && senderTypeValue.value.length) {
+                senderTypeValue.required = false;
+            } else {
+                this.state.manager.removeValue(senderTypeValue);
             }
         }
     }
@@ -158,6 +161,7 @@ class Component extends FormInputComponent<{}, ComponentState> {
     public async onDestroy(): Promise<void> {
         if (this.state.manager) {
             this.state.manager.unregisterListener(this.listenerId);
+            this.state.manager.reset(false);
         }
         EventService.getInstance().unsubscribe(FormEvent.VALUES_CHANGED, this.formSubscriber);
     }

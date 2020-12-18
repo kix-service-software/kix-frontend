@@ -27,7 +27,8 @@ export class ComponentState extends WidgetComponentState {
         public showFilter: boolean = true,
         public isFiltering: boolean = false,
         public loading: boolean = true,
-        public filterValue: string = null
+        public filterValue: string = null,
+        public show: boolean = false
     ) {
         super();
     }

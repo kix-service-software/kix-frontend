@@ -8,10 +8,15 @@
  */
 
 import { AbstractComponentState } from '../../../../../modules/base-components/webapp/core/AbstractComponentState';
+import { DynamicField } from '../../../model/DynamicField';
 
 export class ComponentState extends AbstractComponentState {
 
-    public constructor() {
+    public constructor(
+        public prepared: boolean = false,
+        public isSupportedType: boolean = true,
+        public dynamicField: DynamicField = null
+    ) {
         super();
     }
 

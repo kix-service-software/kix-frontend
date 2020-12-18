@@ -26,12 +26,14 @@ import { ContextMode } from '../../../../model/ContextMode';
 import { QueueService } from './admin';
 import { QueueProperty } from '../../model/QueueProperty';
 import { Ticket } from '../../model/Ticket';
+import { ArticleProperty } from '../../model/ArticleProperty';
+import { TranslationService } from '../../../translation/webapp/core/TranslationService';
 
 export class TicketSearchFormManager extends SearchFormManager {
 
     public objectType: KIXObjectType = KIXObjectType.TICKET;
 
-    public constructor(public ignoreProperties: string[] = []) {
+    public constructor(public ignorePropertiesFixed: string[] = []) {
         super();
     }
 
@@ -43,7 +45,9 @@ export class TicketSearchFormManager extends SearchFormManager {
         ];
 
         for (const prop of Ticket.SEARCH_PROPERTIES) {
-            properties.push([prop.Property, null]);
+            if (prop.Property !== TicketProperty.STATE_TYPE) {
+                properties.push([prop.Property, null]);
+            }
         }
 
         const context = ContextService.getInstance().getActiveContext();
@@ -63,7 +67,10 @@ export class TicketSearchFormManager extends SearchFormManager {
         const superProperties = await super.getProperties();
         properties = [...properties, ...superProperties];
 
-        properties = properties.filter((p) => !this.ignoreProperties.some((ip) => ip === p[0]));
+        properties = properties.filter(
+            (p) => !this.ignorePropertiesFixed.some((ip) => ip === p[0])
+                && !this.ignoreProperties.some((ip) => ip === p[0])
+        );
 
         return properties.sort((a, b) => a[1].localeCompare(b[1]));
     }
@@ -133,8 +140,18 @@ export class TicketSearchFormManager extends SearchFormManager {
     }
 
     public async isMultiselect(property: string): Promise<boolean> {
-        return await super.isMultiselect(property)
-            || (property !== TicketProperty.LOCK_ID && property !== 'Queue.FollowUpID');
+        const result = await super.isMultiselect(property);
+        if (result !== null && typeof result !== 'undefined') {
+            return result;
+        }
+        if (
+            property === TicketProperty.LOCK_ID
+            || property === 'Queue.FollowUpID'
+            || property === ArticleProperty.CUSTOMER_VISIBLE
+        ) {
+            return false;
+        }
+        return true;
     }
 
     public async getTreeNodes(property: string, objectIds?: Array<string | number>): Promise<TreeNode[]> {
@@ -153,6 +170,14 @@ export class TicketSearchFormManager extends SearchFormManager {
                     );
                     nodes = await KIXObjectService.prepareTree(organisations);
                 }
+                break;
+            case ArticleProperty.CUSTOMER_VISIBLE:
+                const no = await TranslationService.translate('No');
+                const yes = await TranslationService.translate('Yes');
+                nodes = [
+                    new TreeNode(0, no),
+                    new TreeNode(1, yes)
+                ];
                 break;
             default:
                 nodes = await super.getTreeNodes(property);

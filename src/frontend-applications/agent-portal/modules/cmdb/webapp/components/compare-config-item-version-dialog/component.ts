@@ -34,7 +34,7 @@ class Component {
         this.context = await ContextService.getInstance().getContext<CompareConfigItemVersionDialogContext>(
             CompareConfigItemVersionDialogContext.CONTEXT_ID
         );
-        this.state.compareWidget = this.context.getWidgetConfiguration('compare-ci-version-widget');
+        this.state.compareWidget = await this.context.getWidgetConfiguration('compare-ci-version-widget');
 
         const versions = await this.context.getObjectList(KIXObjectType.CONFIG_ITEM_VERSION);
         if (versions) {

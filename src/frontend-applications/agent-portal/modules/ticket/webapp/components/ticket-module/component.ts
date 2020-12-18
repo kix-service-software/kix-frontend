@@ -29,6 +29,7 @@ class Component {
         ]);
 
         this.state.placeholder = await TranslationService.translate('Translatable#Please enter a search term.');
+        this.state.filterValue = context.filterValue;
     }
 
     public keyUp(event: any): void {

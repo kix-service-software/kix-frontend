@@ -22,13 +22,15 @@ import { AgentService } from '../../../../user/webapp/core';
 import { KIXObjectProperty } from '../../../../../model/kix/KIXObjectProperty';
 import { LabelService } from '../../../../base-components/webapp/core/LabelService';
 import { DateTimeUtil } from '../../../../base-components/webapp/core/DateTimeUtil';
-
-
 import { CalendarConfiguration } from '../../core/CalendarConfiguration';
 import { ContextService } from '../../../../base-components/webapp/core/ContextService';
 import { KIXModulesService } from '../../../../base-components/webapp/core/KIXModulesService';
 import { TranslationService } from '../../../../translation/webapp/core/TranslationService';
 import { BrowserUtil } from '../../../../base-components/webapp/core/BrowserUtil';
+import { ContextType } from '../../../../../model/ContextType';
+import { WidgetConfiguration } from '../../../../../model/configuration/WidgetConfiguration';
+import { Contact } from '../../../../customer/model/Contact';
+import { ContactProperty } from '../../../../customer/model/ContactProperty';
 
 declare const tui: any;
 
@@ -36,6 +38,9 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private calendar: any;
     private calendarConfig: CalendarConfiguration;
+    private contextListenerId: string;
+    private widgetConfiguration: WidgetConfiguration;
+    private creatingCalendar: boolean;
 
     public onCreate(): void {
         this.state = new ComponentState();
@@ -48,44 +53,120 @@ class Component extends AbstractMarkoComponent<ComponentState> {
     public async onMount(): Promise<void> {
         const context = ContextService.getInstance().getActiveContext();
         if (context) {
-            const widgetConfiguration = context.getWidgetConfiguration(this.state.instanceId);
-            if (widgetConfiguration && widgetConfiguration.configuration) {
-                this.calendarConfig = (widgetConfiguration.configuration as CalendarConfiguration);
+            this.widgetConfiguration = await context.getWidgetConfiguration(this.state.instanceId);
+            if (this.widgetConfiguration && this.widgetConfiguration.configuration) {
+                this.calendarConfig = (this.widgetConfiguration.configuration as CalendarConfiguration);
                 this.initWidget();
+
+                if (this.widgetConfiguration.contextDependent) {
+                    this.contextListenerId = 'calendar widget' + this.widgetConfiguration.instanceId;
+                    context.registerListener(this.contextListenerId, {
+                        additionalInformationChanged: () => null,
+                        explorerBarToggled: () => null,
+                        filteredObjectListChanged: () => {
+                            this.state.prepared = false;
+                            setTimeout(() => this.initWidget(), 50);
+                        },
+                        objectChanged: () => null,
+                        objectListChanged: () => null,
+                        scrollInformationChanged: () => null,
+                        sidebarToggled: () => null
+                    });
+                }
+
             }
         }
     }
 
+    public onDestroy(): void {
+        const context = ContextService.getInstance().getActiveContext();
+        if (context) {
+            context.unregisterListener(this.contextListenerId);
+        }
+    }
+
     private async initWidget(): Promise<void> {
+        if (this.creatingCalendar) {
+            return;
+        }
+
+        this.creatingCalendar = true;
+
         const user = await AgentService.getInstance().getCurrentUser();
+        let tickets = [];
 
-        const ticketFilter = [
-            new FilterCriteria(
-                TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
-                user.UserID
-            ),
-            new FilterCriteria(
-                TicketProperty.STATE_TYPE, SearchOperator.NOT_EQUALS, FilterDataType.STRING, FilterType.AND,
-                ['closed']
-            )
-        ];
+        if (this.widgetConfiguration.contextDependent) {
+            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+            tickets = context.getFilteredObjectList(KIXObjectType.TICKET);
+        } else {
+            const ticketFilter = [
+                new FilterCriteria(
+                    TicketProperty.OWNER_ID, SearchOperator.EQUALS, FilterDataType.STRING, FilterType.AND,
+                    user.UserID
+                ),
+                new FilterCriteria(
+                    TicketProperty.STATE_TYPE, SearchOperator.NOT_EQUALS, FilterDataType.STRING, FilterType.AND,
+                    ['closed']
+                )
+            ];
 
-        const tickets = await KIXObjectService.loadObjects<Ticket>(
-            KIXObjectType.TICKET, null, new KIXObjectLoadingOptions(
-                ticketFilter, null, null, [TicketProperty.STATE_TYPE]
-            )
-        );
+            tickets = await KIXObjectService.loadObjects<Ticket>(
+                KIXObjectType.TICKET, null, new KIXObjectLoadingOptions(
+                    ticketFilter, null, null, [TicketProperty.STATE_TYPE, KIXObjectProperty.DYNAMIC_FIELDS]
+                )
+            );
+        }
 
         this.state.prepared = true;
 
-        setTimeout(() => this.createCalendar(tickets), 50);
+        setTimeout(async () => {
+            await this.createCalendar(tickets);
+            this.creatingCalendar = false;
+        }, 50);
     }
 
     private async createCalendar(tickets: Ticket[]): Promise<void> {
+        const userIds: Map<number, string> = new Map();
+        for (const t of tickets) {
+            if (!userIds.has(t.OwnerID)) {
+                const contacts = await KIXObjectService.loadObjects<Contact>(
+                    KIXObjectType.CONTACT, null,
+                    new KIXObjectLoadingOptions([
+                        new FilterCriteria(
+                            ContactProperty.ASSIGNED_USER_ID, SearchOperator.EQUALS,
+                            FilterDataType.NUMERIC, FilterType.AND, t.OwnerID
+                        )
+                    ])
+                );
+
+                const fullName = Array.isArray(contacts) && contacts.length
+                    ? contacts[0].Fullname
+                    : t.OwnerID.toString();
+
+                userIds.set(t.OwnerID, fullName);
+            }
+        }
+
+        const calendars = [];
+        userIds.forEach((fullName: string, uid: number) => {
+            const bgColor = BrowserUtil.getUserColor(uid);
+            calendars.push({
+                id: uid,
+                name: fullName,
+                color: '#ffffff',
+                bgColor,
+                borderColor: bgColor,
+                visible: true
+            });
+        });
+
+        this.state.calendars = calendars;
+
         this.calendar = new tui.Calendar('#calendar', {
             defaultView: 'month',
             useDetailPopup: true,
             taskView: [],
+            calendars,
             month: {
                 moreLayerSize: {
                     height: 'auto'
@@ -106,8 +187,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
             }
         });
 
+        this.state.loading = true;
         const schedules = await this.createSchedules(tickets);
         this.calendar.createSchedules(schedules);
+        this.state.loading = false;
 
         this.setCurrentDate();
 
@@ -121,17 +204,27 @@ class Component extends AbstractMarkoComponent<ComponentState> {
 
     private async createSchedules(tickets: Ticket[]): Promise<any[]> {
         const schedules = [];
+
+        const ticketsWithDF = await KIXObjectService.loadObjects<Ticket>(
+            KIXObjectType.TICKET, tickets.map((t) => t.TicketID),
+            new KIXObjectLoadingOptions(null, null, null, [KIXObjectProperty.DYNAMIC_FIELDS])
+        );
+
+        if (Array.isArray(ticketsWithDF) && ticketsWithDF.length) {
+            tickets = ticketsWithDF;
+        }
+
         for (const ticket of tickets) {
             const title = await LabelService.getInstance().getObjectText(ticket, true);
-
             const isPending = ticket.StateType === 'pending reminder';
-
+            const bgColor = BrowserUtil.getUserColor(ticket.OwnerID);
             const schedule: any = {
                 id: ticket.TicketID,
-                calendarId: 'tickets',
+                calendarId: ticket.OwnerID,
                 title,
                 category: 'time',
-                raw: ticket
+                raw: ticket,
+                borderColor: bgColor,
             };
 
             if (isPending) {
@@ -147,7 +240,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 schedules.push(pendingSchedule);
             }
 
-            if (this.setScheduleDates(ticket, schedule)) {
+            if (await this.setScheduleDates(ticket, schedule)) {
                 schedules.push(schedule);
             }
         }
@@ -155,7 +248,7 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         return schedules;
     }
 
-    private setScheduleDates(ticket: Ticket, schedule: any): boolean {
+    private async setScheduleDates(ticket: Ticket, schedule: any): Promise<boolean> {
         const planStart = ticket.DynamicFields.find((df) => df.Name === this.calendarConfig.startDateProperty);
         const planEnd = ticket.DynamicFields.find((df) => df.Name === this.calendarConfig.endDateProperty);
 
@@ -165,21 +258,25 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         const startValue = hasStart ? new Date(planStart.Value[0]) : new Date();
         const endValue = hasEnd ? new Date(planEnd.Value[0]) : new Date();
 
+        let isSchedule = false;
+
         if (!hasStart && !hasEnd) {
-            return false;
+            isSchedule = false;
         } else if (hasStart && hasEnd) {
             schedule.start = startValue;
             schedule.end = endValue;
+            isSchedule = true;
         } else if (((hasStart && !hasEnd) || (!hasStart && hasEnd))) {
             schedule.isAllDay = true;
             schedule.start = hasStart ? startValue : endValue;
             schedule.end = hasEnd ? endValue : startValue;
+            isSchedule = true;
         }
 
-        return true;
+        return isSchedule;
     }
 
-    private scheduleChanged(event) {
+    private async scheduleChanged(event) {
         const schedule = event.schedule;
         const changes = event.changes;
 
@@ -227,6 +324,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
                 KIXObjectService.updateObject(KIXObjectType.TICKET, parameter, schedule.id)
                     .then(() => {
                         this.calendar.updateSchedule(schedule.id, schedule.calendarId, changes);
+                        if (this.widgetConfiguration.contextDependent) {
+                            const context = ContextService.getInstance().getActiveContext(ContextType.MAIN);
+                            if (context) {
+                                context.reloadObjectList(KIXObjectType.TICKET, true);
+                            }
+                        }
                     })
                     .catch(() => null);
             }
@@ -309,6 +412,12 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         this.state.currentDate = `${monthLabel} ${currentDate.getFullYear()} | ${calendarWeekLabel}`;
     }
 
+    public toggleCalendar(calendar: any): void {
+        const cal = this.state.calendars.find((c) => c.id === calendar.id);
+        cal.visible = !cal.visible;
+        (this as any).setStateDirty('calendars');
+        this.calendar.toggleSchedules(cal.id, !cal.visible);
+    }
 
 }
 

@@ -63,6 +63,9 @@ class Extension extends KIXExtension implements IKIXModuleExtension {
         new UIComponent('notes-widget', '/kix-module-base-components$0/webapp/components/notes-widget', []),
         new UIComponent('number-input', '/kix-module-base-components$0/webapp/components/number-input', []),
         new UIComponent(
+            'object-avatar-label', '/kix-module-base-components$0/webapp/components/object-avatar-label', []
+        ),
+        new UIComponent(
             'object-details-page', '/kix-module-base-components$0/webapp/components/object-details-page', []
         ),
         new UIComponent('object-information', '/kix-module-base-components$0/webapp/components/object-information', []),

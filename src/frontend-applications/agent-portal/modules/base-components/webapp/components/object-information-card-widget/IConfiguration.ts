@@ -21,9 +21,13 @@ export interface IConfiguration {
 
 export interface IInformationRow {
 
-    margin: boolean;
+    values: Array<IInformation[]>;
 
-    values: IInformation[];
+    title: string;
+
+    style: string;
+
+    separator: boolean;
 
 }
 
@@ -31,7 +35,13 @@ export interface IInformation {
 
     icon: ObjectIcon | string;
 
+    iconStyle: string;
+
     text: string;
+
+    textPlaceholder: string[];
+
+    textStyle: string;
 
     linkSrc: string;
 
@@ -44,6 +54,10 @@ export interface IInformation {
     preparedText: string;
 
     preparedLinkSrc: string;
+
+    componentId: string;
+
+    componentData: any;
 
 }
 

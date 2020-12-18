@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2019-02-14 13:12+0200\n"
-"PO-Revision-Date: 2020-10-27 13:32+0000\n"
+"PO-Revision-Date: 2020-12-16 13:35+0000\n"
 "Last-Translator: bpohlers <Beate.Pohlers@cape-it.de>\n"
 "Language-Team: German <http://weblate.vm.devel.cape-it.de/projects/kix18/"
 "frontend-app/de/>\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.3\n"
+"X-Generator: Weblate 4.4\n"
 
 msgid "{0}/{1} {2} imported"
 msgstr "{0}/{1} {2} importiert"
@@ -52,6 +52,9 @@ msgstr "Zugriff verweigert"
 
 msgid "Access Level"
 msgstr "Zugriffsebene"
+
+msgid "Accounted Time: {0}"
+msgstr "Zeitbuchung: {0}"
 
 msgid "Account Information"
 msgstr "Kontoinformationen"
@@ -103,6 +106,9 @@ msgstr "Admin Passwort"
 
 msgid "Advanced Search"
 msgstr "Komplexsuche"
+
+msgid "Affected Assets"
+msgstr "Betroffene Assets"
 
 msgid "after"
 msgstr "nach/größer als"
@@ -251,6 +257,9 @@ msgstr "Zugeordnete Kunden"
 msgid "Assigned Roles"
 msgstr "Zugeordnete Rollen"
 
+msgid "Assignees"
+msgstr "Verantwortlichkeiten"
+
 msgid "Assign Link"
 msgstr "Verknüpfung hinzufügen"
 
@@ -274,9 +283,8 @@ msgstr "Name des Anhangs"
 msgid "Attachments"
 msgstr "Anlagen"
 
-#, fuzzy
 msgid "Attribut"
-msgstr "Attribut"
+msgstr "Offene Tickets des Kontaktes"
 
 msgid "Attribute"
 msgstr "Attribut"
@@ -390,6 +398,9 @@ msgstr "Kanäle"
 msgid "Charset"
 msgstr "Zeichensatz"
 
+msgid "Checklists"
+msgstr ""
+
 msgid "Choose a command"
 msgstr "Wählen Sie ein Kommando"
 
@@ -486,6 +497,9 @@ msgstr "Kommunikation: E-Mail: E-Mail Filter"
 msgid "Communication: Email: Inbox"
 msgstr "Kommunikation: E-Mail: Posteingang"
 
+msgid "Communication: Email: Outbox"
+msgstr "Kommunikation: E-Mail: Postausgang"
+
 msgid "Communication: Webform"
 msgstr "Kommunikation: Webformular"
 
@@ -564,9 +578,8 @@ msgstr "Kopie von {0}"
 msgid "Could not handle request."
 msgstr "Anfrage konnte nicht bearbeitet werden."
 
-#, fuzzy
 msgid "Could not load file {0}."
-msgstr "Datei '{0}' konnte nicht geladen werden."
+msgstr "Offene Tickets des Kunden"
 
 msgid "Country"
 msgstr "Land"
@@ -597,6 +610,9 @@ msgstr "Erstellt am"
 
 msgid "Created by"
 msgstr "Erstellt von"
+
+msgid "Created by {0} at {1}. Last change by {2} at {3}"
+msgstr "Erstellt von {0} um {1}. Zuletzt geändert von {2} um {3}"
 
 msgid "Created with Priority"
 msgstr "Erstellt mit der Priorität"
@@ -686,10 +702,10 @@ msgid "Current deployment state"
 msgstr "Aktueller Verwendungsstatus"
 
 msgid "Current incident state"
-msgstr "Aktueller Vorfallstatus"
+msgstr "Aktueller Vorfallsstatus"
 
 msgid "Current Incident state"
-msgstr "Aktueller Vorfallstatus"
+msgstr "Aktueller Vorfallsstatus"
 
 msgid "Current Password"
 msgstr "Aktuelles Passwort"
@@ -935,11 +951,17 @@ msgstr "E-Mail Informationen"
 msgid "Enable attachments"
 msgstr "Anlagen zulassen"
 
+msgid "End date/time is not given"
+msgstr ""
+
 msgid "ends with"
 msgstr "endet mit"
 
 msgid "End time"
 msgstr "Endzeitpunkt"
+
+msgid "End value is not given"
+msgstr ""
 
 msgid "Enter search value"
 msgstr "Suchbegriff eingeben"
@@ -2596,13 +2618,13 @@ msgid "Inbox"
 msgstr "Posteingang"
 
 msgid "Incident"
-msgstr "Vorfall"
+msgstr "Störung"
 
 msgid "Incident state"
-msgstr "Vorfallstatus"
+msgstr "Vorfallsstatus"
 
 msgid "Incident State"
-msgstr "Vorfallstatus"
+msgstr "Vorfallsstatus"
 
 msgid "Include this code into the <head> area of your webpage."
 msgstr "Binden Sie diesen Code in den <head>-Bereich Ihrer Webseite ein."
@@ -2623,7 +2645,7 @@ msgid "insert filter value"
 msgstr "Filterwert eingeben"
 
 msgid "Internal Field"
-msgstr "Internes Feld"
+msgstr "Intern"
 
 msgid "Internationalisation"
 msgstr "Internationalisierung"
@@ -3062,7 +3084,7 @@ msgid "Number of Config Items"
 msgstr "Anzahl Assets"
 
 msgid "Number of Config Items in critical incident state"
-msgstr "Anzahl Assets mit kritischem Vorfallstatus"
+msgstr "Anzahl Assets mit kritischem Vorfallsstatus"
 
 msgid "Number of ratings"
 msgstr "Anzahl Bewertungen"
@@ -3102,6 +3124,12 @@ msgstr "Geöffnete Sidebars"
 
 msgid "Open Tickets"
 msgstr "Offene Tickets"
+
+msgid "Open Tickets of Contact"
+msgstr "Offene Tickets des Kontaktes"
+
+msgid "Open Tickets of Organisation"
+msgstr "Offene Tickets des Kunden"
 
 msgid "Operator"
 msgstr ""
@@ -3223,6 +3251,9 @@ msgstr "Telefon"
 msgid "Place this code wherever you want to open the webform dialog."
 msgstr ""
 "Platzieren Sie diesen Code dort, wo das Webformular geöffnet werden soll."
+
+msgid "Plan: {0} - {1}"
+msgstr ""
 
 msgid "Plan Begin"
 msgstr "Plan Beginn"
@@ -3384,11 +3415,20 @@ msgstr "Empfänger"
 msgid "Recipient: To"
 msgstr "Empfänger: An"
 
+msgid "References"
+msgstr "Verweise"
+
 msgid "Refresh Page"
 msgstr "Seite neu laden"
 
+msgid "Related Tickets"
+msgstr ""
+
 msgid "Reload Agent Portal Configurations"
 msgstr "Frontend-Konfigurationen neu laden"
+
+msgid "Reload Calendar Data ..."
+msgstr ""
 
 msgid "Reload Frontend Configurations"
 msgstr "Lade Frontend-Konfigurationen neu"
@@ -3534,6 +3574,9 @@ msgstr "Suche speichern"
 
 msgid "Save Settings"
 msgstr "Einstellungen werden gespeichert."
+
+msgid "Scheduling"
+msgstr "Zeitplanung"
 
 msgid "Search"
 msgstr "Suche"
@@ -3713,11 +3756,17 @@ msgstr "Sortieren"
 msgid "Source"
 msgstr "Quelle"
 
+msgid "Source Message"
+msgstr "Quelltext"
+
 msgid "Split Option"
 msgstr "Trennoptionen"
 
 msgid "Start by"
 msgstr "Gestartet von"
+
+msgid "Start date/time is not given"
+msgstr ""
 
 msgid "Start Import"
 msgstr "Import starten"
@@ -3736,6 +3785,12 @@ msgstr "Startzeitpunkt"
 
 msgid "Start time has to be before end time"
 msgstr "Der Startzeitpunkt muss vor dem Endzeitpunkt liegen."
+
+msgid "Start value is greate than end value"
+msgstr ""
+
+msgid "Start value is not given"
+msgstr ""
 
 msgid "State"
 msgstr "Status"
@@ -3787,6 +3842,9 @@ msgstr "Bewertung erfolgreich."
 
 msgid "Suggested FAQ"
 msgstr "Empfohlene FAQ"
+
+msgid "Summary"
+msgstr "Zusammenfassung"
 
 msgid "Sunday"
 msgstr "Sonntag"
@@ -3929,7 +3987,7 @@ msgid "Ticket"
 msgstr "Ticket"
 
 msgid "Ticket Attributes"
-msgstr "Ticket Attribute"
+msgstr "Ticketattribute"
 
 msgid "Ticket Data"
 msgstr "Ticketdaten"
@@ -3984,6 +4042,9 @@ msgstr "Fehler bei der Ticketsuche!"
 
 msgid "Tickets for Assets"
 msgstr "Tickets zu Assets"
+
+msgid "Tickets for Contact"
+msgstr ""
 
 msgid "Ticket: States"
 msgstr "Ticket: Status"
@@ -4095,6 +4156,9 @@ msgstr "Ungelesen"
 
 msgid "Unread Articles"
 msgstr "Ungelesene Artikel"
+
+msgid "Unsupported dynamic field type {0}."
+msgstr ""
 
 msgid "until"
 msgstr "bis/gleich oder weniger"

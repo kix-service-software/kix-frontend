@@ -6,15 +6,18 @@ the enclosed file LICENSE for license information (GPL3). If you
 did not receive this file, see https://www.gnu.org/licenses/gpl-3.0.txt.
 --
 -->
-
 <span.icon>
     <if(state.content)>
         <if(state.base64)>
-            <img.svg-icon src=((("data:" + state.contentType) + ";base64,") + state.content) title=input.title key=state.iconId
-                alt=input.title/>
+            <img.svg-icon
+                style=input.style
+                src=("data:" + state.contentType + ";base64," + state.content)
+                title=state.title
+                key=state.iconId
+                alt=state.title/>
         </if>
         <else>
-            <span class=state.content title=input.title key=state.iconId>
+            <span style=input.style class=state.content title=state.tooltip key=state.iconId>
                 <span.path1/>
                 <span.path2/>
                 <span.path3/>

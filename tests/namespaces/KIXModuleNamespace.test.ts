@@ -76,33 +76,33 @@ describe('KIXModuleNamespace', () => {
             expect(socketRespopnse.data.modules.length).equals(extensions.length);
         });
 
-        it('TestExtension1 should contain 1 initialization component.', () => {
+        it('TestExtension1 should contain 2 initialization component.', () => {
             const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension1');
             expect(uiModule).exist;
-            expect(uiModule.initComponents).exist;
-            expect(uiModule.initComponents).an('array');
-            expect(uiModule.initComponents.length).equals(1);
-        });
-
-        it('TestExtension1 should contain 2 ui components.', () => {
-            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension1');
-            expect(uiModule.uiComponents).exist;
-            expect(uiModule.uiComponents).an('array');
-            expect(uiModule.uiComponents.length).equals(2);
-        });
-
-        it('TestExtension2 should contain 2 init components.', () => {
-            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension2');
             expect(uiModule.initComponents).exist;
             expect(uiModule.initComponents).an('array');
             expect(uiModule.initComponents.length).equals(2);
         });
 
-        it('TestExtension2 should contain 3 ui components.', () => {
+        it('TestExtension1 should contain 4 ui components.', () => {
+            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension1');
+            expect(uiModule.uiComponents).exist;
+            expect(uiModule.uiComponents).an('array');
+            expect(uiModule.uiComponents.length).equals(4);
+        });
+
+        it('TestExtension2 should contain 3 init components.', () => {
+            const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension2');
+            expect(uiModule.initComponents).exist;
+            expect(uiModule.initComponents).an('array');
+            expect(uiModule.initComponents.length).equals(3);
+        });
+
+        it('TestExtension2 should contain 6 ui components.', () => {
             const uiModule = socketRespopnse.data.modules.find((m) => m.id === 'TestExtension2');
             expect(uiModule.uiComponents).exist;
             expect(uiModule.uiComponents).an('array');
-            expect(uiModule.uiComponents.length).equals(3);
+            expect(uiModule.uiComponents.length).equals(6);
         });
     });
 

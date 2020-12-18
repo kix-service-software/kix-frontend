@@ -113,6 +113,9 @@ export class JobTableFactory extends TableFactory {
                     DataType.STRING, true, null, null, false
                 );
                 break;
+            case JobProperty.NAME:
+                config = super.getDefaultColumnConfiguration(property, false);
+                break;
             default:
                 config = super.getDefaultColumnConfiguration(property);
         }

@@ -24,6 +24,7 @@ import { SenderType } from '../../model/SenderType';
 import { ContextType } from '../../../../model/ContextType';
 import { Attachment } from '../../../../model/kix/Attachment';
 import { BrowserUtil } from '../../../../modules/base-components/webapp/core/BrowserUtil';
+import { Article } from '../../model/Article';
 
 export class TicketParameterUtil {
 
@@ -31,6 +32,7 @@ export class TicketParameterUtil {
         property: string, value: any, forUpdate: boolean = false
     ): Promise<Array<[string, any]>> {
         const parameter: Array<[string, any]> = [];
+        const context = ContextService.getInstance().getActiveContext();
         if (value) {
             if (property === TicketProperty.PENDING_TIME) {
                 if (value) {
@@ -54,7 +56,6 @@ export class TicketParameterUtil {
                 }
             } else if (property === TicketProperty.OWNER_ID) {
                 if (forUpdate) {
-                    const context = ContextService.getInstance().getActiveContext();
                     if (context) {
                         const ticket = context.getObject<Ticket>();
 
@@ -105,6 +106,18 @@ export class TicketParameterUtil {
         } else {
             parameter.push([property, value]);
         }
+
+        const referencedArticleID = context.getAdditionalInformation('REFERENCED_ARTICLE_ID');
+        if (referencedArticleID) {
+            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+            if (Array.isArray(articles)) {
+                const article = articles.find((a) => a.ArticleID === referencedArticleID);
+                if (article) {
+                    parameter.push([ArticleProperty.IN_REPLY_TO, article.MessageID]);
+                }
+            }
+        }
+
         return parameter;
     }
 

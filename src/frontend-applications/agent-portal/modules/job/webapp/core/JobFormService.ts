@@ -76,7 +76,7 @@ export class JobFormService extends KIXObjectFormService {
         return this.jobFormManager.get(type);
     }
 
-    public registerJobFormManager(type: JobTypes, manager: IJobFormManager): void {
+    public registerJobFormManager(type: JobTypes | string, manager: IJobFormManager): void {
         this.jobFormManager.set(type, manager);
     }
 

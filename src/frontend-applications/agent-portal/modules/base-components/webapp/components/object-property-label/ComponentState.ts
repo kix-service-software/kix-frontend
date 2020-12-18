@@ -16,7 +16,8 @@ export class ComponentState {
         public propertyDisplayText: string = null,
         public propertyName: string = '',
         public propertyIcon: string | ObjectIcon = null,
-        public hasText: boolean = true
+        public hasText: boolean = true,
+        public showLabel: boolean = true
     ) { }
 
 }

@@ -11,6 +11,8 @@ import { IMigration } from './IMigration';
 import { ReleaseInfoUtil } from '../../../server/ReleaseInfoUtil';
 import { LoggingService } from '../../../server/services/LoggingService';
 import { ConfigurationService } from '../../../server/services/ConfigurationService';
+import { PluginService } from '../../../server/services/PluginService';
+import { AgentPortalExtensions } from '../server/extensions/AgentPortalExtensions';
 
 export class MigrationService {
 
@@ -28,7 +30,8 @@ export class MigrationService {
     public async startMigration(): Promise<boolean> {
         const serverConfig = ConfigurationService.getInstance().getServerConfiguration();
         const releaseInfo = await ReleaseInfoUtil.getInstance().getReleaseInfo();
-        const migrations: IMigration[] = require('./index');
+
+        const migrations = await PluginService.getInstance().getExtensions<IMigration>(AgentPortalExtensions.MIGRATION);
 
         const migrationsList = migrations.filter(
             (m) => m.buildNumber > serverConfig.INSTALLED_BUILD && m.buildNumber <= releaseInfo.buildNumber

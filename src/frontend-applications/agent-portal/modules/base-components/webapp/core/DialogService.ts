@@ -181,7 +181,7 @@ export class DialogService {
     ): Promise<ConfiguredDialogWidget[]> {
         let dialogs = [];
 
-        const descriptors = ContextFactory.getInstance().getContextDescriptors(contextMode, objectType);
+        const descriptors = await ContextFactory.getInstance().getContextDescriptors(contextMode, objectType);
         if (descriptors) {
             EventService.getInstance().publish(ApplicationEvent.APP_LOADING, {
                 loading: true, hint: ''

@@ -22,6 +22,8 @@ import {
     SystemAddressLabelProvider, SystemAddressCreateAction, NewSystemAddressDialogContext, SystemAddressEditAction,
     EditSystemAddressDialogContext, SystemAddressDetailsContext
 } from '.';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -44,24 +46,33 @@ export class UIModule implements IUIModule {
         const newSystemAddressDialogContext = new ContextDescriptor(
             NewSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
             ContextType.DIALOG, ContextMode.CREATE_ADMIN,
-            false, 'new-system-address-dialog', ['system-addresses'], NewSystemAddressDialogContext
+            false, 'new-system-address-dialog', ['system-addresses'], NewSystemAddressDialogContext,
+            [
+                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(newSystemAddressDialogContext);
+        ContextService.getInstance().registerContext(newSystemAddressDialogContext);
 
         ActionFactory.getInstance().registerAction('system-address-edit', SystemAddressEditAction);
 
         const editSystemAddressDialogContext = new ContextDescriptor(
             EditSystemAddressDialogContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
             ContextType.DIALOG, ContextMode.EDIT_ADMIN,
-            false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext
+            false, 'edit-system-address-dialog', ['system-addresses'], EditSystemAddressDialogContext,
+            [
+                new UIComponentPermission('system/communication/systemaddresses', [CRUD.CREATE])
+            ]
         );
-        await ContextService.getInstance().registerContext(editSystemAddressDialogContext);
+        ContextService.getInstance().registerContext(editSystemAddressDialogContext);
 
         const systemAddressDetailsContext = new ContextDescriptor(
             SystemAddressDetailsContext.CONTEXT_ID, [KIXObjectType.SYSTEM_ADDRESS],
             ContextType.MAIN, ContextMode.DETAILS,
-            false, 'object-details-page', ['system-addresses'], SystemAddressDetailsContext
+            false, 'object-details-page', ['system-addresses'], SystemAddressDetailsContext,
+            [
+                new UIComponentPermission('system/communication/systemaddresses', [CRUD.READ])
+            ]
         );
-        await ContextService.getInstance().registerContext(systemAddressDetailsContext);
+        ContextService.getInstance().registerContext(systemAddressDetailsContext);
     }
 }

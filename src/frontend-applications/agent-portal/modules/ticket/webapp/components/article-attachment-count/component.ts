@@ -12,6 +12,8 @@ import { AbstractMarkoComponent } from '../../../../../modules/base-components/w
 import { ContextService } from '../../../../../modules/base-components/webapp/core/ContextService';
 import { TicketDetailsContext } from '../../core';
 import { Ticket } from '../../../model/Ticket';
+import { Article } from '../../../model/Article';
+import { KIXObjectType } from '../../../../../model/kix/KIXObjectType';
 
 class Component extends AbstractMarkoComponent<ComponentState> {
 
@@ -25,10 +27,10 @@ class Component extends AbstractMarkoComponent<ComponentState> {
         );
 
         if (context) {
-            const ticket = await context.getObject<Ticket>();
-            if (ticket) {
+            const articles = await context.getObjectList<Article>(KIXObjectType.ARTICLE);
+            if (Array.isArray(articles)) {
                 let count = 0;
-                ticket.Articles.forEach((article) => {
+                articles.forEach((article) => {
                     if (article.Attachments) {
                         const attachments = article.Attachments.filter((a) => a.Disposition !== 'inline');
                         if (attachments.length > 0) {

@@ -14,6 +14,8 @@ import { KIXObjectType } from '../../../../model/kix/KIXObjectType';
 import { ContextType } from '../../../../model/ContextType';
 import { ContextMode } from '../../../../model/ContextMode';
 import { ContextService } from '../../../../modules/base-components/webapp/core/ContextService';
+import { UIComponentPermission } from '../../../../model/UIComponentPermission';
+import { CRUD } from '../../../../../../server/model/rest/CRUD';
 
 export class UIModule implements IUIModule {
 
@@ -28,9 +30,13 @@ export class UIModule implements IUIModule {
     public async register(): Promise<void> {
         const organisationListContext = new ContextDescriptor(
             OrganisationContext.CONTEXT_ID, [KIXObjectType.ORGANISATION], ContextType.MAIN, ContextMode.DASHBOARD,
-            false, 'organisations-module', ['organisations', 'contacts'], OrganisationContext
+            false, 'organisations-module', ['organisations', 'contacts'], OrganisationContext,
+            [
+                new UIComponentPermission('organisations', [CRUD.READ], true),
+                new UIComponentPermission('contacts', [CRUD.READ], true)
+            ]
         );
-        await ContextService.getInstance().registerContext(organisationListContext);
+        ContextService.getInstance().registerContext(organisationListContext);
     }
 
 }

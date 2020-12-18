@@ -34,6 +34,8 @@ export class Attachment extends KIXObject {
 
     public Disposition: string;
 
+    public charset: string;
+
     public constructor(attachment?: Attachment) {
         super(attachment);
         if (attachment) {
@@ -57,6 +59,9 @@ export class Attachment extends KIXObject {
             const attributes = this.ContentType.split(';');
             if (attributes.length) {
                 this.ContentType = attributes[0].trim();
+                if (attributes[1]) {
+                    this.charset = attributes[1].trim().replace(/charset=['"]?(.+)['"]?/, '$1');
+                }
             }
         }
     }

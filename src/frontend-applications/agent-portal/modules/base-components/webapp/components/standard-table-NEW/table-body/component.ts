@@ -61,6 +61,7 @@ class Component extends AbstractMarkoComponent<ComponentState> implements IEvent
                 if (this.table.isFiltered()) {
                     this.table.filter();
                 }
+                this.state.rows = this.table.getRows();
                 this.state.loading = false;
             } else {
                 this.state.rows = this.table.getRows();

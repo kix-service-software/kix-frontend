@@ -32,12 +32,17 @@ import { Contact } from '../../../customer/model/Contact';
 import { DateTimeUtil } from '../../../../modules/base-components/webapp/core/DateTimeUtil';
 import { InputDefinition } from '../../model/InputDefinition';
 import { GeneralCatalogItem } from '../../../general-catalog/model/GeneralCatalogItem';
+import { SearchFormManager } from '../../../base-components/webapp/core/SearchFormManager';
 
 export class ConfigItemSearchDefinition extends SearchDefinition {
 
     public constructor() {
         super(KIXObjectType.CONFIG_ITEM);
         this.formManager = new ConfigItemSearchFormManager();
+    }
+
+    public createFormManager(ignoreProperties: string[] = []): SearchFormManager {
+        return new ConfigItemSearchFormManager(ignoreProperties);
     }
 
     public getLoadingOptions(criteria: FilterCriteria[]): KIXObjectLoadingOptions {
